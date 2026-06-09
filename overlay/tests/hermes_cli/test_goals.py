@@ -366,9 +366,9 @@ class TestGoalManager:
             "first_principles_model": ["A service is healthy only if dependencies are ready before traffic"],
             "existing_solution_scan": ["systemd ordering and readiness checks"],
             "research_findings": [
-                {"source_type": "docs", "title": "systemd readiness docs", "locator": "man:systemd.service"},
-                {"source_type": "github", "title": "service readiness examples", "locator": "https://github.com/example/readiness"},
-                {"source_type": "benchmark", "title": "startup healthcheck trace", "locator": "/tmp/trace.log"},
+                {"source_type": "docs", "title": "systemd readiness docs", "locator": "man:systemd.service", "tool_call_id": "tc-docs", "evidence_quote_or_hash": "READY=1"},
+                {"source_type": "github", "title": "service readiness examples", "locator": "https://github.com/example/readiness", "tool_call_id": "tc-gh", "evidence_quote_or_hash": "healthcheck pattern"},
+                {"source_type": "benchmark", "title": "startup healthcheck trace", "locator": "/tmp/trace.log", "tool_call_id": "tc-bench", "evidence_quote_or_hash": "trace hash"},
             ],
             "build_vs_reuse_decision": "reuse: systemd readiness primitives before custom watchdogs",
             "literalism_risk": "low",
@@ -444,7 +444,7 @@ class TestGoalManager:
         assert state.research_sufficiency == "thin"
         assert state.replan_count == 1
         assert any("literalism risk" in r for r in state.risks)
-        assert any("existing-solution research is thin" in r for r in state.risks)
+        assert any("tool-backed research ledger is thin" in r for r in state.risks)
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
         assert "inferred root intent" in decision["continuation_prompt"]
         assert "reuse of existing solutions" in decision["continuation_prompt"]
@@ -468,9 +468,118 @@ class TestGoalManager:
             decision = mgr.evaluate_after_turn("I found one paper but no implementation survey yet")
 
         assert mgr.state is not None
-        assert mgr.state.research_sufficiency == "thin"
+        assert mgr.state.research_sufficiency == "missing"
         assert mgr.state.research_findings[0].source_type == "paper"
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+
+    def test_supergoal_research_sufficiency_requires_tool_backed_provenance(self, hermes_home):
+        """Critic-listed URLs are visible but cannot pass research gate without tool provenance."""
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-tool-backed-research-sid")
+        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "research_sufficiency": "sufficient",
+                 "progress": "real",
+                 "strategy_health": "good",
+                 "research_findings": [
+                     {"source_type": "paper", "title": "Paper", "locator": "arxiv:1"},
+                     {"source_type": "github", "title": "Repo", "locator": "https://github.com/x/y"},
+                     {"source_type": "docs", "title": "Docs", "locator": "https://docs.example"},
+                 ],
+             }):
+            decision = mgr.evaluate_after_turn("I listed sources from memory but did not call tools")
+
+        assert mgr.state is not None
+        assert mgr.state.research_sufficiency == "missing"
+        assert "paper/critic" in decision["continuation_prompt"]
+        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+
+    def test_supergoal_tool_backed_research_can_pass_gate(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-tool-backed-pass-sid")
+        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "inferred_user_intent": "Pick a proven architecture",
+                 "success_definition": "External evidence plus verified artifact",
+                 "research_sufficiency": "sufficient",
+                 "progress": "weak",
+                 "strategy_health": "good",
+                 "research_findings": [
+                     {"source_type": "paper", "title": "Paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
+                     {"source_type": "github", "title": "Repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
+                 ],
+             }):
+            mgr.evaluate_after_turn("I used tools to inspect paper and repo")
+
+        assert mgr.state is not None
+        assert mgr.state.research_sufficiency == "sufficient"
+        assert any(g.id == "G2" and g.status == "passed" for g in mgr.state.gates)
+
+    def test_supergoal_strategy_gates_block_infra_inertia(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-inertia-guard-sid")
+        mgr.set("产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告", max_turns=20, mode="supergoal")
+        assert any(g.id == "SG-1" for g in mgr.state.gates)
+        for i in range(3):
+            with patch.object(goals, "judge_goal", return_value=("continue", "subgoal unmet", False)), \
+                 patch.object(goals, "critic_supergoal", return_value={
+                     "progress": "real",
+                     "strategy_health": "good",
+                     "current_action_class": "infra_engineering",
+                     "next_best_action": "add another validator checker module",
+                     "research_findings": [
+                         {"source_type": "paper", "title": "Market paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
+                         {"source_type": "github", "title": "Backtest repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
+                     ],
+                 }):
+                decision = mgr.evaluate_after_turn(f"turn {i}: I added another validator")
+
+        assert mgr.state is not None
+        assert mgr.state.hard_gate_reason
+        assert "SG-1" in mgr.state.hard_gate_reason
+        assert mgr.state.plan_steps[0].status == "in_progress"  # real progress alone cannot mark done
+        assert "HARD GATE / INERTIA GUARD" in decision["continuation_prompt"]
+        assert "Generate a 3-item hypothesis portfolio" in decision["continuation_prompt"]
+
+    def test_supergoal_hypothesis_portfolio_passes_strategy_gates(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-portfolio-gates-sid")
+        mgr.set("产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告", max_turns=20, mode="supergoal")
+        portfolio = [
+            {"id": "H1", "claim": "funding mean reversion", "baseline": "sma_trend", "experiment": "rolling backtest", "kill_criteria": "underperform baseline", "artifacts": ["reports/h1.json"], "status": "failed", "verdict_reason": "no edge"},
+            {"id": "H2", "claim": "breakout after funding reset", "baseline": "sma_trend", "experiment": "rolling backtest", "kill_criteria": "fees erase edge", "artifacts": ["reports/h2.json"], "status": "failed", "verdict_reason": "fees erase"},
+            {"id": "H3", "claim": "vol carry filter", "baseline": "sma_trend", "experiment": "rolling backtest", "kill_criteria": "drawdown too high", "artifacts": ["reports/h3.json"], "status": "killed", "verdict_reason": "risk too high"},
+        ]
+        with patch.object(goals, "judge_goal", return_value=("continue", "needs final report", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "inferred_user_intent": "Find trading edge or prove none",
+                 "success_definition": "3 hypotheses tested against baseline with no-edge report",
+                 "progress": "real",
+                 "strategy_health": "good",
+                 "current_action_class": "reporting",
+                 "hypothesis_portfolio": portfolio,
+                 "no_edge_report": "All tested hypotheses failed same-cost baseline after fees/funding.",
+                 "research_findings": [
+                     {"source_type": "paper", "title": "Market paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
+                     {"source_type": "github", "title": "Backtest repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
+                 ],
+             }):
+            decision = mgr.evaluate_after_turn("I tested all hypotheses and wrote no-edge attribution")
+
+        assert mgr.state is not None
+        passed = {g.id for g in mgr.state.gates if g.status == "passed"}
+        assert {"SG-1", "SG-2", "SG-3", "SG-4"}.issubset(passed)
+        assert "hypothesis_portfolio" in decision["continuation_prompt"]
 
     def test_goal_state_migrates_across_compression_session_split(self, hermes_home):
         """Compression is a session-id rotation, not the end of a logical goal loop."""
@@ -513,8 +622,8 @@ class TestGoalManager:
                  "progress": "real",
                  "strategy_health": "good",
                  "research_findings": [
-                     {"source_type": "paper", "title": "architecture paper", "locator": "arxiv:1"},
-                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo"},
+                     {"source_type": "paper", "title": "architecture paper", "locator": "arxiv:1", "tool_call_id": "tc-paper", "evidence_quote_or_hash": "quote"},
+                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo", "tool_call_id": "tc-gh", "evidence_quote_or_hash": "quote"},
                  ],
              }):
             d1 = mgr.evaluate_after_turn("step 1")
@@ -546,6 +655,52 @@ class TestGoalManager:
         assert '"progress": "real|weak|none|regressed"' in user_prompt
         assert user_prompt.count("{") >= 1
         assert user_prompt.count("}") >= 1
+
+
+    def test_supergoal_subgoal_adds_strategy_gates_incrementally(self, hermes_home):
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-subgoal-gates-sid")
+        mgr.set("improve the runtime", max_turns=20, mode="supergoal")
+        assert not any(g.id == "SG-1" for g in mgr.state.gates)
+
+        mgr.add_subgoal("必须产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告")
+
+        assert any(g.id == "SG-1" for g in mgr.state.gates)
+        assert any(g.id == "SG-2" for g in mgr.state.gates)
+        assert "gates=0/" in mgr.status_line()
+        assert "first_gate=G1" in mgr.status_line()
+
+    def test_supergoal_done_judge_cannot_bypass_open_gates(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-done-gate-override-sid")
+        mgr.set("产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("done", "agent claimed finished", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "real",
+                 "strategy_health": "good",
+             }):
+            decision = mgr.evaluate_after_turn("All done.")
+
+        assert decision["verdict"] == "continue"
+        assert decision["should_continue"] is True
+        assert mgr.state.status == "active"
+        assert "gate G1 remains open" in decision["reason"]
+        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+
+    def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-message-label-sid")
+        mgr.set("ship a big thing", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "more work", False)), \
+             patch.object(goals, "critic_supergoal", return_value={"progress": "weak", "strategy_health": "good"}):
+            decision = mgr.evaluate_after_turn("partial")
+
+        assert "Continuing toward supergoal" in decision["message"]
 
     def test_evaluate_after_turn_done(self, hermes_home):
         """Judge says done → status=done, no continuation."""

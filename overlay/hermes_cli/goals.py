@@ -135,7 +135,16 @@ SUPERGOAL_REPLAN_BLOCK = (
     "- Restate the inferred root intent and first-principles problem model.\n"
     "- Briefly compare at least 2 plausible strategies or hypotheses, including reuse of existing solutions if applicable.\n"
     "- Pick the best path by ROI, risk, maintainability, and verifiability.\n"
-    "- Then execute one concrete tool-backed step on the selected path."
+    "- Then execute one concrete tool-backed step on the selected path.\n"
+    "- If a hard gate is open, satisfy that gate first; do not choose infrastructure work unless it is a proven dependency.\n"
+    "- End with: Changed / Verified / Evidence / Remaining gates / Next action class / Why not the tempting alternative."
+)
+
+SUPERGOAL_HARD_GATE_BLOCK_TEMPLATE = (
+    "\n\nHARD GATE / INERTIA GUARD:\n"
+    "{reason}\n"
+    "You are not allowed to continue the blocked action class by inertia. Work on the first failed gate instead. "
+    "If the gate cannot be satisfied with available tools, produce a concise blocked or no-edge report with evidence."
 )
 
 SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
@@ -215,7 +224,10 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
     "  \"success_definition\": \"what would actually satisfy the user\",\n"
     "  \"first_principles_model\": [\"load-bearing truths or constraints\"],\n"
     "  \"existing_solution_scan\": [\"mature tools/APIs/projects/patterns checked or to check\"],\n"
-    "  \"research_findings\": [{{\"source_type\": \"paper|github|web|docs|benchmark|local|other\", \"title\": \"short name\", \"locator\": \"url/path/id\", \"claim\": \"what this source changes\"}}],\n"
+    "  \"research_findings\": [{{\"source_type\": \"paper|github|web|docs|benchmark|local|other\", \"title\": \"short name\", \"locator\": \"url/path/id\", \"claim\": \"what this source changes\", \"tool_call_id\": \"only if from actual tool provenance\", \"retrieved_at\": \"timestamp if known\", \"evidence_quote_or_hash\": \"quote/hash if known\"}}],\n"
+    "  \"hypothesis_portfolio\": [{{\"id\": \"H1\", \"claim\": \"testable hypothesis\", \"why_plausible\": \"...\", \"data_needed\": \"...\", \"baseline\": \"...\", \"experiment\": \"...\", \"kill_criteria\": \"...\", \"expected_edge\": \"...\", \"risk\": \"...\", \"status\": \"proposed|running|passed|failed|killed\", \"artifacts\": [\"path/url/log\"], \"verdict_reason\": \"...\"}}],\n"
+    "  \"current_action_class\": \"research|hypothesis_generation|experiment_execution|validation|infra_engineering|reporting|safety|unknown\",\n"
+    "  \"no_edge_report\": \"short attribution if tested hypotheses show no edge\",\n"
     "  \"build_vs_reuse_decision\": \"reuse|build|hybrid|unknown: rationale\",\n"
     "  \"literalism_risk\": \"low|medium|high\",\n"
     "  \"research_sufficiency\": \"sufficient|thin|missing\",\n"
@@ -321,15 +333,30 @@ class GoalEvent:
 
 @dataclass
 class ResearchFinding:
-    """Provenanced research/evidence item for /supergoal."""
+    """Provenanced research/evidence item for /supergoal.
+
+    Critic-extracted findings are allowed into the board as hints, but they are
+    not allowed to satisfy research gates unless a tool wrapper supplied durable
+    provenance (tool_call_id or retrieved_at + quote/hash).
+    """
 
     source_type: str
     title: str
     locator: str = ""
     claim: str = ""
+    retrieved_at: str = ""
+    tool_call_id: str = ""
+    query: str = ""
+    evidence_quote_or_hash: str = ""
+    relevance_score: float = 0.0
+    contradiction: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
+
+    @property
+    def is_tool_backed(self) -> bool:
+        return bool(self.tool_call_id or (self.retrieved_at and self.evidence_quote_or_hash))
 
     @classmethod
     def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
@@ -347,6 +374,97 @@ class ResearchFinding:
             title=_truncate(" ".join(title.split()), 160),
             locator=_truncate(" ".join(str(data.get("locator") or data.get("url_or_path") or "").split()), 240),
             claim=_truncate(" ".join(str(data.get("claim") or "").split()), 240),
+            retrieved_at=_truncate(" ".join(str(data.get("retrieved_at") or "").split()), 80),
+            tool_call_id=_truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120),
+            query=_truncate(" ".join(str(data.get("query") or "").split()), 240),
+            evidence_quote_or_hash=_truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400),
+            relevance_score=_coerce_float(data.get("relevance_score"), 0.0),
+            contradiction=bool(data.get("contradiction", False)),
+        )
+
+
+@dataclass
+class HypothesisRecord:
+    """Portfolio entry for research/trading/science-style supergoals."""
+
+    id: str
+    claim: str
+    why_plausible: str = ""
+    data_needed: str = ""
+    baseline: str = ""
+    experiment: str = ""
+    kill_criteria: str = ""
+    expected_edge: str = ""
+    risk: str = ""
+    status: str = "proposed"  # proposed | running | passed | failed | killed
+    verdict_reason: str = ""
+    artifacts: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Any) -> Optional["HypothesisRecord"]:
+        if isinstance(data, str):
+            text = " ".join(data.split())
+            if not text:
+                return None
+            return cls(id="H?", claim=_truncate(text, 240))
+        if not isinstance(data, dict):
+            return None
+        claim = str(data.get("claim") or data.get("hypothesis") or "").strip()
+        if not claim:
+            return None
+        hid = str(data.get("id") or data.get("name") or "H?").strip() or "H?"
+        status = str(data.get("status") or "proposed").strip().lower()
+        if status not in {"proposed", "running", "passed", "failed", "killed"}:
+            status = "proposed"
+        return cls(
+            id=_truncate(hid, 32),
+            claim=_truncate(" ".join(claim.split()), 240),
+            why_plausible=_truncate(" ".join(str(data.get("why_plausible") or "").split()), 240),
+            data_needed=_truncate(" ".join(str(data.get("data_needed") or "").split()), 240),
+            baseline=_truncate(" ".join(str(data.get("baseline") or "").split()), 240),
+            experiment=_truncate(" ".join(str(data.get("experiment") or "").split()), 300),
+            kill_criteria=_truncate(" ".join(str(data.get("kill_criteria") or "").split()), 240),
+            expected_edge=_truncate(" ".join(str(data.get("expected_edge") or "").split()), 160),
+            risk=_truncate(" ".join(str(data.get("risk") or "").split()), 160),
+            status=status,
+            verdict_reason=_truncate(" ".join(str(data.get("verdict_reason") or "").split()), 240),
+            artifacts=_clean_string_list(data.get("artifacts") or [], limit=8, item_limit=180),
+        )
+
+
+@dataclass
+class GoalGate:
+    """Deterministic gate that must pass before a supergoal can converge."""
+
+    id: str
+    description: str
+    status: str = "pending"  # pending | passed | failed | blocked
+    verifier: str = ""
+    evidence: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Any) -> Optional["GoalGate"]:
+        if not isinstance(data, dict):
+            return None
+        gid = str(data.get("id") or "").strip()
+        desc = str(data.get("description") or data.get("title") or "").strip()
+        if not gid or not desc:
+            return None
+        status = str(data.get("status") or "pending").strip().lower()
+        if status not in {"pending", "passed", "failed", "blocked"}:
+            status = "pending"
+        return cls(
+            id=_truncate(gid, 40),
+            description=_truncate(" ".join(desc.split()), 240),
+            status=status,
+            verifier=_truncate(" ".join(str(data.get("verifier") or "").split()), 240),
+            evidence=_truncate(" ".join(str(data.get("evidence") or "").split()), 300),
         )
 
 
@@ -380,6 +498,12 @@ class GoalState:
     first_principles_model: List[str] = field(default_factory=list)
     existing_solution_scan: List[str] = field(default_factory=list)
     research_findings: List[ResearchFinding] = field(default_factory=list)
+    hypothesis_portfolio: List[HypothesisRecord] = field(default_factory=list)
+    gates: List[GoalGate] = field(default_factory=list)
+    action_history: List[str] = field(default_factory=list)
+    current_action_class: str = "unknown"
+    hard_gate_reason: str = ""
+    no_edge_report: str = ""
     build_vs_reuse_decision: str = ""
     literalism_risk: str = "unknown"
     research_sufficiency: str = "unknown"
@@ -404,6 +528,8 @@ class GoalState:
         data = asdict(self)
         data["plan_steps"] = [step.to_dict() for step in self.plan_steps]
         data["research_findings"] = [finding.to_dict() for finding in self.research_findings]
+        data["hypothesis_portfolio"] = [h.to_dict() for h in self.hypothesis_portfolio]
+        data["gates"] = [g.to_dict() for g in self.gates]
         return json.dumps(data, ensure_ascii=False)
 
     @classmethod
@@ -427,6 +553,20 @@ class GoalState:
                 finding = ResearchFinding.from_dict(raw_finding)
                 if finding is not None:
                     research_findings.append(finding)
+        raw_portfolio = data.get("hypothesis_portfolio") or data.get("hypotheses_detail") or []
+        hypothesis_portfolio: List[HypothesisRecord] = []
+        if isinstance(raw_portfolio, list):
+            for raw_hypothesis in raw_portfolio:
+                hypothesis = HypothesisRecord.from_dict(raw_hypothesis)
+                if hypothesis is not None:
+                    hypothesis_portfolio.append(hypothesis)
+        raw_gates = data.get("gates") or []
+        gates: List[GoalGate] = []
+        if isinstance(raw_gates, list):
+            for raw_gate in raw_gates:
+                gate = GoalGate.from_dict(raw_gate)
+                if gate is not None:
+                    gates.append(gate)
         return cls(
             goal=data.get("goal", ""),
             mode=data.get("mode", "goal") or "goal",
@@ -453,6 +593,12 @@ class GoalState:
             first_principles_model=_clean_string_list(data.get("first_principles_model") or []),
             existing_solution_scan=_clean_string_list(data.get("existing_solution_scan") or []),
             research_findings=research_findings,
+            hypothesis_portfolio=hypothesis_portfolio,
+            gates=gates,
+            action_history=_clean_string_list(data.get("action_history") or [], limit=12, item_limit=80),
+            current_action_class=str(data.get("current_action_class") or "unknown").strip() or "unknown",
+            hard_gate_reason=str(data.get("hard_gate_reason") or "").strip(),
+            no_edge_report=str(data.get("no_edge_report") or "").strip(),
             build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
             literalism_risk=str(data.get("literalism_risk") or "unknown").strip() or "unknown",
             research_sufficiency=str(data.get("research_sufficiency") or "unknown").strip() or "unknown",
@@ -497,8 +643,27 @@ class GoalState:
             rendered_findings = []
             for finding in self.research_findings[-8:]:
                 locator = f" <{finding.locator}>" if finding.locator else ""
-                rendered_findings.append(f"{finding.source_type}:{finding.title}{locator}")
+                backed = "tool" if finding.is_tool_backed else "critic"
+                rendered_findings.append(f"{finding.source_type}/{backed}:{finding.title}{locator}")
             parts.append("research_findings: " + "; ".join(rendered_findings))
+        if self.hypothesis_portfolio:
+            rendered_h = []
+            for h in self.hypothesis_portfolio[-8:]:
+                verdict = f" -> {h.verdict_reason}" if h.verdict_reason else ""
+                rendered_h.append(f"{h.id}:{h.status}:{h.claim}{verdict}")
+            parts.append("hypothesis_portfolio: " + "; ".join(rendered_h))
+        if self.gates:
+            first_failed = _first_failed_gate(self)
+            rendered_g = [f"{g.id}{'*' if first_failed and g.id == first_failed.id else ''}:{g.status}:{g.description}" for g in self.gates[:8]]
+            parts.append("gates: " + "; ".join(rendered_g))
+        if self.action_history:
+            parts.append("action_history: " + " -> ".join(self.action_history[-8:]))
+        if self.current_action_class and self.current_action_class != "unknown":
+            parts.append("current_action_class: " + self.current_action_class)
+        if self.hard_gate_reason:
+            parts.append("hard_gate: " + self.hard_gate_reason)
+        if self.no_edge_report:
+            parts.append("no_edge_report: " + self.no_edge_report)
         if self.build_vs_reuse_decision:
             parts.append("build_vs_reuse_decision: " + self.build_vs_reuse_decision)
         if self.acceptance_criteria:
@@ -823,12 +988,18 @@ def _merge_research_findings(existing: List[ResearchFinding], new_items: Any, *,
     return merged[-max_items:]
 
 
+def _tool_backed_research_findings(state: GoalState) -> List[ResearchFinding]:
+    return [f for f in getattr(state, "research_findings", []) or [] if getattr(f, "is_tool_backed", False)]
+
+
 def _research_finding_types(state: GoalState) -> set:
-    return {f.source_type for f in getattr(state, "research_findings", []) or []}
+    # Gate only on tool-backed provenance. Critic-extracted source hints stay visible
+    # on the board but cannot make research "sufficient" by themselves.
+    return {f.source_type for f in _tool_backed_research_findings(state)}
 
 
 def _research_sufficiency_from_findings(state: GoalState, critic_value: str = "") -> str:
-    """Gate research sufficiency on source diversity, not just critic prose."""
+    """Gate research sufficiency on tool-backed source diversity, not critic prose."""
     types = _research_finding_types(state)
     external_types = types.intersection({"paper", "github", "web", "docs", "benchmark"})
     if {"paper", "github"}.issubset(types) or len(external_types) >= 3:
@@ -838,6 +1009,154 @@ def _research_sufficiency_from_findings(state: GoalState, critic_value: str = ""
     if critic_value in {"thin", "missing"}:
         return critic_value
     return "missing"
+
+
+def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
+    merged = list(existing or [])
+    seen = {(h.id.lower(), h.claim.lower()) for h in merged}
+    if isinstance(new_items, (dict, str)):
+        new_items = [new_items]
+    if not isinstance(new_items, list):
+        return merged[-max_items:]
+    next_num = len(merged) + 1
+    for item in new_items:
+        hypothesis = HypothesisRecord.from_dict(item)
+        if hypothesis is None:
+            continue
+        if hypothesis.id == "H?":
+            hypothesis.id = f"H{next_num}"
+            next_num += 1
+        key = (hypothesis.id.lower(), hypothesis.claim.lower())
+        claim_seen = {h.claim.lower() for h in merged}
+        if key in seen or hypothesis.claim.lower() in claim_seen:
+            continue
+        seen.add(key)
+        merged.append(hypothesis)
+    return merged[-max_items:]
+
+
+def _default_supergoal_gates(goal: str = "") -> List[GoalGate]:
+    text = (goal or "").lower()
+    gates = [
+        GoalGate("G1", "Intent contract captured: root intent, success criteria, anti-goals/constraints", verifier="state.inferred_user_intent and state.success_definition"),
+        GoalGate("G2", "Research ledger has sufficient tool-backed external provenance", verifier="paper+github or 3 external tool-backed source types"),
+        GoalGate("G3", "At least one concrete execution artifact is verified", verifier="evidence/artifact/log/test recorded"),
+        GoalGate("G4", "Final report maps evidence to success criteria or blocked/no-edge outcome", verifier="done verdict or no_edge_report"),
+    ]
+    if any(k in text for k in ["策略", "strategy", "trading", "交易", "edge", "hypothesis", "假设"]):
+        gates.insert(2, GoalGate("SG-1", "Hypothesis portfolio contains at least 3 strategy hypotheses", verifier="len(hypothesis_portfolio) >= 3"))
+        gates.insert(3, GoalGate("SG-2", "Each active hypothesis has baseline, experiment, kill criteria, artifact, and verdict", verifier="portfolio completeness + verdicts"))
+        gates.insert(4, GoalGate("SG-3", "If no hypothesis passes, a no-edge attribution report exists", verifier="no_edge_report when all tested hypotheses fail/kill"))
+        gates.insert(5, GoalGate("SG-4", "Infrastructure work is allowed only when it proves dependency on a failed gate", verifier="infra dependency proof"))
+    return gates
+
+
+def _ensure_supergoal_gates_for_text(state: GoalState, text: str = "") -> None:
+    """Ensure the gate set matches the latest goal/subgoal intent.
+
+    Subgoals can introduce a strategy/hypothesis requirement after the original
+    /supergoal was created. Gate creation must therefore be incremental rather
+    than a one-shot at set().
+    """
+    if getattr(state, "mode", "goal") != "supergoal":
+        return
+    combined = " ".join([state.goal, text or "", " ".join(state.subgoals or [])])
+    defaults = _default_supergoal_gates(combined)
+    existing = {g.id for g in state.gates or []}
+    for gate in defaults:
+        if gate.id not in existing:
+            state.gates.append(gate)
+            existing.add(gate.id)
+
+
+def _first_failed_gate(state: GoalState) -> Optional[GoalGate]:
+    for gate in getattr(state, "gates", []) or []:
+        if gate.status != "passed":
+            return gate
+    return None
+
+
+def _hypothesis_complete(h: HypothesisRecord) -> bool:
+    return bool(h.baseline and h.experiment and h.kill_criteria and h.artifacts and h.status in {"passed", "failed", "killed"})
+
+
+def _classify_action_text(text: str) -> str:
+    t = (text or "").lower()
+    if any(k in t for k in ["no-edge", "no edge", "归因", "report", "总结", "报告"]):
+        return "reporting"
+    if any(k in t for k in ["hypothesis", "hypotheses", "假设", "portfolio", "策略候选"]):
+        return "hypothesis_generation"
+    if any(k in t for k in ["experiment", "backtest", "验证策略", "baseline", "ledger", "acceptance", "run test"]):
+        return "experiment_execution"
+    if any(k in t for k in ["verify", "test", "pytest", "lint", "validate", "验证", "artifact"]):
+        return "validation"
+    if any(k in t for k in ["search", "survey", "paper", "github", "docs", "web", "研究", "调研", "检索"]):
+        return "research"
+    if any(k in t for k in ["validator", "checker", "audit", "infra", "pipeline", "framework", "tool", "script", "模块", "平台", "基础设施"]):
+        return "infra_engineering"
+    if any(k in t for k in ["permission", "scope", "policy", "destructive", "安全"]):
+        return "safety"
+    return "unknown"
+
+
+def _update_supergoal_gates(state: GoalState) -> None:
+    if getattr(state, "mode", "goal") != "supergoal":
+        return
+    if not state.gates:
+        state.gates = _default_supergoal_gates(state.goal)
+    _ensure_supergoal_gates_for_text(state)
+    tool_backed = _tool_backed_research_findings(state)
+    for gate in state.gates:
+        if gate.id == "G1" and state.inferred_user_intent and state.success_definition:
+            gate.status, gate.evidence = "passed", "intent + success_definition populated"
+        elif gate.id == "G2" and state.research_sufficiency == "sufficient":
+            gate.status, gate.evidence = "passed", f"{len(tool_backed)} tool-backed findings"
+        elif gate.id == "SG-1" and len(state.hypothesis_portfolio) >= 3:
+            gate.status, gate.evidence = "passed", f"{len(state.hypothesis_portfolio)} hypotheses"
+        elif gate.id == "SG-2" and state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
+            gate.status, gate.evidence = "passed", "all hypotheses have experiment artifacts and verdicts"
+        elif gate.id == "SG-3":
+            tested = [h for h in state.hypothesis_portfolio if h.status in {"passed", "failed", "killed"}]
+            has_pass = any(h.status == "passed" for h in state.hypothesis_portfolio)
+            if has_pass or (state.no_edge_report and tested and len(tested) == len(state.hypothesis_portfolio)):
+                gate.status, gate.evidence = "passed", "passed hypothesis or no-edge attribution exists"
+        elif gate.id == "SG-4" and state.current_action_class != "infra_engineering":
+            gate.status, gate.evidence = "passed", "current action is not infrastructure"
+        elif gate.id == "G3" and (state.evidence or any(h.artifacts for h in state.hypothesis_portfolio)):
+            gate.status, gate.evidence = "passed", "evidence/artifacts recorded"
+        elif gate.id == "G4" and (state.no_edge_report or state.last_verdict == "done"):
+            gate.status, gate.evidence = "passed", "final/blocked/no-edge outcome recorded"
+
+
+def _apply_inertia_guard(state: GoalState) -> None:
+    state.hard_gate_reason = ""
+    proposed = state.current_action_class or _classify_action_text(state.next_best_action)
+    state.current_action_class = proposed
+    if proposed and proposed != "unknown":
+        hist = list(state.action_history or [])
+        hist.append(proposed)
+        state.action_history = hist[-12:]
+    first_failed = _first_failed_gate(state)
+    if proposed == "infra_engineering":
+        first_failed = next((g for g in state.gates if g.id.startswith("SG-") and g.status != "passed"), first_failed)
+    if not first_failed:
+        return
+    recent = state.action_history[-5:]
+    infra_streak = len(recent) >= 3 and all(a == "infra_engineering" for a in recent[-3:])
+    strategy_gate_open = first_failed.id.startswith("SG-")
+    if proposed == "infra_engineering" and strategy_gate_open:
+        state.hard_gate_reason = f"blocked infra_engineering while {first_failed.id} is open: {first_failed.description}"
+    elif infra_streak and any(g.id.startswith("SG-") and g.status != "passed" for g in state.gates):
+        state.hard_gate_reason = "blocked infra inertia: recent turns are infrastructure while strategy gates remain open"
+    if state.hard_gate_reason:
+        state.should_replan = True
+        state.replan_count += 1
+        if first_failed.id == "SG-1":
+            state.next_best_action = "Generate a 3-item hypothesis portfolio with baseline, experiment design, kill criteria, and expected edge; do not build more infrastructure."
+        elif first_failed.id == "SG-2":
+            state.next_best_action = "Execute or verify the open hypotheses against their baselines and acceptance criteria; do not build more infrastructure unless it is a proven dependency."
+        elif first_failed.id == "SG-3":
+            state.next_best_action = "Produce a no-edge attribution report or identify the next hypothesis family; do not add more validators/checkers."
 
 
 def _default_supergoal_plan() -> List[PlanStep]:
@@ -880,9 +1199,10 @@ def _ensure_current_step(state: GoalState) -> None:
 
 
 def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> None:
-    """Small deterministic task-graph maintenance based on critic/judge state."""
+    """Maintain plan by deterministic gate/artifact verification, not progress prose."""
     if getattr(state, "mode", "goal") != "supergoal" or not state.plan_steps:
         return
+    _update_supergoal_gates(state)
     _ensure_current_step(state)
     current = _current_or_next_step(state)
     if current is None:
@@ -893,16 +1213,28 @@ def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> N
         for step in state.plan_steps:
             if step.status in {"pending", "in_progress"}:
                 step.status = "done"
+        for gate in state.gates:
+            if gate.status != "passed":
+                gate.status = "passed"
+                gate.evidence = gate.evidence or "completion judge marked goal done"
         state.current_step_id = ""
         return
     if state.strategy_health == "blocked":
         current.status = "blocked"
         current.summary = state.last_reason or state.next_best_action
         return
-    if state.should_replan:
+    if state.should_replan or state.hard_gate_reason:
         current.status = "in_progress"
-        current.summary = "Replan requested before continuing this step"
+        current.summary = state.hard_gate_reason or "Replan requested before continuing this step"
         return
+
+    first_failed = _first_failed_gate(state)
+    if first_failed is not None:
+        current.status = "in_progress"
+        current.summary = f"Waiting on gate {first_failed.id}: {first_failed.description}"
+        return
+
+    # Only when all gates pass may ordinary real progress advance the current step.
     if state.progress == "real" and current.status == "in_progress":
         current.status = "done"
         current.summary = state.last_reason or state.next_best_action
@@ -1202,6 +1534,17 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> 
         state.research_findings, data.get("research_findings")
     )
     state.research_sufficiency = _research_sufficiency_from_findings(state, research)
+    state.hypothesis_portfolio = _merge_hypothesis_portfolio(
+        state.hypothesis_portfolio, data.get("hypothesis_portfolio") or data.get("new_hypotheses")
+    )
+    action_class = str(data.get("current_action_class") or "").strip().lower()
+    allowed_actions = {"research", "hypothesis_generation", "experiment_execution", "validation", "infra_engineering", "reporting", "safety", "unknown"}
+    if action_class not in allowed_actions:
+        action_class = _classify_action_text(str(data.get("next_best_action") or ""))
+    state.current_action_class = action_class or "unknown"
+    no_edge = str(data.get("no_edge_report") or "").strip()
+    if no_edge:
+        state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
 
     progress = str(data.get("progress") or "").strip().lower()
     if progress in {"real", "weak", "none", "regressed"}:
@@ -1248,9 +1591,11 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> 
     if state.research_sufficiency in {"thin", "missing"}:
         state.risks = _merge_compact_list(
             state.risks,
-            [f"existing-solution research is {state.research_sufficiency}"],
+            [f"tool-backed research ledger is {state.research_sufficiency}"],
             max_items=20,
         )
+    _update_supergoal_gates(state)
+    _apply_inertia_guard(state)
 
 
 # ──────────────────────────────────────────────────────────────────────
@@ -1356,6 +1701,14 @@ class GoalManager:
             current = _current_or_next_step(s)
             if current is not None:
                 diagnostics.append(f"step={current.id}:{current.status}")
+            if getattr(s, "gates", None):
+                passed = sum(1 for g in s.gates if g.status == "passed")
+                diagnostics.append(f"gates={passed}/{len(s.gates)}")
+                first_gate = _first_failed_gate(s)
+                if first_gate is not None:
+                    diagnostics.append(f"first_gate={first_gate.id}")
+            if getattr(s, "hard_gate_reason", ""):
+                diagnostics.append(f"hard_gate={_truncate(s.hard_gate_reason, 80)}")
             if getattr(s, "event_count", 0):
                 diagnostics.append(f"events={s.event_count}")
         diag = f"; {'; '.join(diagnostics)}" if diagnostics else ""
@@ -1386,6 +1739,7 @@ class GoalManager:
             last_turn_at=0.0,
             plan_steps=_default_supergoal_plan() if normalized_mode == "supergoal" else [],
             current_step_id="S1" if normalized_mode == "supergoal" else "",
+            gates=_default_supergoal_gates(goal) if normalized_mode == "supergoal" else [],
         )
         self._state = state
         save_goal(self.session_id, state)
@@ -1470,6 +1824,7 @@ class GoalManager:
         if not text:
             raise ValueError("subgoal text is empty")
         self._state.subgoals.append(text)
+        _ensure_supergoal_gates_for_text(self._state, text)
         save_goal(self.session_id, self._state)
         return text
 
@@ -1556,7 +1911,13 @@ class GoalManager:
                     state.replan_count += 1
                     if not state.next_best_action:
                         state.next_best_action = "Run a strategic replan before the next concrete step."
-                _update_supergoal_plan_from_progress(state, verdict=verdict)
+                if verdict == "done":
+                    # Do not let the completion judge mark every supergoal gate
+                    # passed before the deterministic gate override below gets
+                    # a chance to inspect open gates.
+                    _update_supergoal_gates(state)
+                else:
+                    _update_supergoal_plan_from_progress(state, verdict=verdict)
                 self._record_event(
                     "critic",
                     summary=f"progress={state.progress}; strategy={state.strategy_health}; replan={state.should_replan}",
@@ -1578,6 +1939,20 @@ class GoalManager:
             state.consecutive_parse_failures += 1
         else:
             state.consecutive_parse_failures = 0
+
+        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
+            _update_supergoal_gates(state)
+            first_gate = _first_failed_gate(state)
+            if first_gate is not None:
+                verdict = "continue"
+                reason = f"completion judge said done, but supergoal gate {first_gate.id} remains open: {first_gate.description}"
+                state.last_verdict = verdict
+                state.last_reason = reason
+                state.should_replan = True
+                state.replan_count += 1
+                if not state.next_best_action:
+                    state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
+                _update_supergoal_plan_from_progress(state, verdict="continue")
 
         if verdict == "done":
             state.status = "done"
@@ -1667,7 +2042,7 @@ class GoalManager:
             "verdict": "continue",
             "reason": reason,
             "message": (
-                f"↻ Continuing toward goal ({state.turns_used}/{state.max_turns}): {reason}"
+                f"↻ Continuing toward {'supergoal' if getattr(state, 'mode', 'goal') == 'supergoal' else 'goal'} ({state.turns_used}/{state.max_turns}): {reason}"
             ),
         }
 
@@ -1685,6 +2060,8 @@ class GoalManager:
             prompt += SUPERGOAL_BOARD_BLOCK_TEMPLATE.format(
                 board=self._state.render_supergoal_board()
             )
+            if self._state.hard_gate_reason:
+                prompt += SUPERGOAL_HARD_GATE_BLOCK_TEMPLATE.format(reason=self._state.hard_gate_reason)
             if self._state.should_replan:
                 prompt += SUPERGOAL_REPLAN_BLOCK
                 self._record_event(

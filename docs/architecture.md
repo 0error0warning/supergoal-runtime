@@ -2,61 +2,179 @@
 
 ## Problem
 
-The live run showed that `/supergoal` behaved like a high-budget `/goal`: it kept making local engineering progress, but did not reliably preserve strategic state, external research coverage, or runtime continuity across context compression.
+The live `/supergoal` run showed that a high-budget loop can make a lot of local progress while failing the real mission.
 
-The failure was architectural, not scenario-specific:
+The observed failure was not “the model was not smart enough.” It was architectural:
 
-- Goal state was keyed by physical `session_id`, while compression rotates `session_id` for the same logical conversation.
-- Research sufficiency was a critic assertion, not an evidence-backed runtime property.
-- Replanning was prompt-level guidance without enough durable state to break path inertia.
+- state was keyed by physical `session_id`, while context compression rotates sessions for the same logical run;
+- research sufficiency was based on critic assertion rather than tool provenance;
+- replanning was prompt guidance, not an action constraint;
+- plan steps could be marked done by generic `progress=real` even when acceptance artifacts were missing;
+- there was no first-class hypothesis portfolio for research/trading missions;
+- infrastructure work could repeat because no action taxonomy or inertia guard blocked it;
+- judge and critic shared the same auxiliary route by default;
+- permission/scope/safety policy was not yet a first-class runtime layer.
 
-## Design principles
+This patch moves `/supergoal` toward a Mission Control architecture: explicit state, gates, ledgers, portfolios, verifiers, action classes, and hard stops.
 
-1. **Runtime state must follow logical conversation boundaries**
+## Target model
 
-Compression should be treated like a session-id rotation, not a fresh goal lifecycle. Anything that is part of the long-running runtime — goal state, event log, current plan, research ledger — must migrate when the transcript migrates.
+```text
+GoalRun / Mission
+  IntentContract
+    root_intent
+    success_criteria
+    anti_goals
+    constraints
+    permissions
+    stop_conditions
 
-2. **Research quality needs a ledger, not an adjective**
+  ResearchLedger
+    findings[]  # tool-backed provenance, quote/hash, relevance, contradiction
 
-`research_sufficiency = sufficient` is only meaningful if it is derived from provenance. The patch adds compact `ResearchFinding` records and derives sufficiency from source diversity.
+  HypothesisPortfolio
+    hypotheses[]
+      claim
+      baseline
+      experiment
+      kill_criteria
+      artifacts
+      verdict
 
-3. **Replanning must change the search space**
+  PlanDAG / PlanSurface
+    tasks[]
+      action_type
+      dependencies
+      required_artifacts
+      verifier
 
-A replan should not mean "continue with a slightly different local task". The state board now exposes root intent, first principles, existing solution scan, build/reuse decision, and research findings so future continuations can choose a genuinely different next step.
+  ExecutionLedger
+    tool_calls
+    file_changes
+    tests
+    logs
+    costs
+    risk_events
 
-4. **Patch surface should be small and reviewable**
+  Evaluator
+    deterministic_gates
+    completion_judge
+    strategic_critic
+    policy_guard
+    artifact_verifier
+```
 
-This is not a fork. The package is a patchset with overlay files, tests, and docs. It can be converted into an upstream PR or maintained as a local customization.
+The runtime should find the first failed gate, choose the next action class, execute only work that advances that gate, verify artifacts, and stop/branch/report when evidence says the path is exhausted.
 
 ## Main implementation points
 
-### `ResearchFinding`
-
-A small dataclass stored in `GoalState.research_findings`:
-
-- `source_type`: `paper`, `github`, `web`, `docs`, `repo`, `benchmark`, `local`, or `other`
-- `title`
-- `locator`: URL, arXiv ID, path, or other stable handle
-- `claim`: short statement of what the source changes
-
-### Evidence-gated research sufficiency
-
-The critic can emit `research_sufficiency`, but the runtime derives the effective value:
-
-- `sufficient`: `paper + github`, or at least 3 external evidence types
-- `thin`: some external evidence, not enough diversity
-- `missing`: no external evidence
-
 ### Compression migration
 
-`migrate_goal_state()` copies runtime state from old session to new session and marks the old state as `migrated`. This preserves auditability without leaving two active goal states.
+`migrate_goal_state(old_session_id, new_session_id, reason="compression")` copies runtime state across session splits and leaves the old state as a `migrated` audit tombstone.
 
-### Tests
+This is a transitional fix. The long-term model should use a stable `goal_run_id`, with `session_id` treated as only one physical context version.
 
-The test additions cover:
+### Mission Control state
 
-- critic board updates for new state fields
-- forced replan on literalism/thin research
-- source-diversity gate for research sufficiency
-- goal-state migration across compression session split
-- existing supergoal prompt/status/event behavior
+The patch adds or extends these runtime objects:
+
+- `PlanStep` — compact plan surface;
+- `GoalEvent` — append-only audit events;
+- `ResearchFinding` — provenanced research/evidence item;
+- `HypothesisRecord` — executable hypothesis portfolio entry;
+- `GoalGate` — deterministic gate with verifier and evidence;
+- `GoalState` — stores ledgers, gates, portfolio, action history, hard-gate reason, and no-edge report.
+
+### Tool-backed research sufficiency
+
+`ResearchFinding` now supports:
+
+- `source_type`
+- `title`
+- `locator`
+- `claim`
+- `retrieved_at`
+- `tool_call_id`
+- `query`
+- `evidence_quote_or_hash`
+- `relevance_score`
+- `contradiction`
+
+The effective `research_sufficiency` is derived from tool-backed findings only. Critic-only findings remain visible but cannot pass the gate.
+
+### Hard gates
+
+Default gates:
+
+- `G1` — intent contract captured;
+- `G2` — tool-backed research ledger sufficient;
+- `G3` — verified execution artifact exists;
+- `G4` — final evidence/no-edge/blocked outcome exists.
+
+Strategy/trading-style goals add:
+
+- `SG-1` — at least 3 hypotheses;
+- `SG-2` — each hypothesis has baseline, experiment, kill criteria, artifact, verdict;
+- `SG-3` — if none pass, no-edge attribution report exists;
+- `SG-4` — infrastructure work requires dependency proof.
+
+Subgoals can add strategy gates incrementally after the run starts.
+
+### Action taxonomy and inertia guard
+
+The runtime classifies actions as:
+
+- `research`
+- `hypothesis_generation`
+- `experiment_execution`
+- `validation`
+- `infra_engineering`
+- `reporting`
+- `safety`
+- `unknown`
+
+If strategy gates are open and the agent keeps proposing infrastructure work, the hard gate blocks that action class and forces work back to the first failed strategy gate.
+
+### Verifier-backed plan progression
+
+Plan steps no longer advance just because the critic says `progress=real`.
+
+Open gates keep the current step in progress. A completion judge cannot mark the supergoal done while deterministic gates remain open.
+
+### Normal `/goal` isolation
+
+The new machinery is guarded by `mode == "supergoal"`. Normal `/goal` remains lightweight and uses its original continuation prompt and basic judge flow.
+
+## Tests
+
+The current patch adds or updates tests for:
+
+- supergoal prompt/status/event behavior;
+- critic board updates;
+- literalism and thin/missing research replans;
+- tool-backed research sufficiency;
+- hypothesis portfolio gates;
+- infrastructure inertia guard;
+- subgoal-triggered strategy gates;
+- completion judge not bypassing open supergoal gates;
+- compression goal-state migration;
+- normal `/goal` regression;
+- gateway continuation label and enqueue behavior.
+
+Verified locally:
+
+```text
+tests/hermes_cli/test_goals.py: 68 passed, 1 warning
+goal/gateway/TUI/CLI regression subset: 100 passed
+kanban goal-mode regression: 12 passed
+py_compile + git diff --check: passed
+```
+
+## Remaining architectural work
+
+1. Stable logical `goal_run_id`.
+2. Tool wrappers that write ledgers directly.
+3. Dedicated model roles for judge/critic/planner/policy/verifier.
+4. Pre-execution permission and scope policy.
+5. Full user-facing Mission Control commands.
+6. Trace → feedback → evals → ranked changes → implementation handoff loop.
