@@ -66,6 +66,12 @@ GoalRun / Mission
 
 The runtime should find the first failed gate, choose the next action class, execute only work that advances that gate, verify artifacts, and stop/branch/report when evidence says the path is exhausted.
 
+Three reasoning principles sit above the mechanics:
+
+1. **First-principles reduction** — repeatedly reduce the mission to root intent, causal model, constraints, and failure modes before spending another turn.
+2. **Critical/questioning stance** — treat plans, critic outputs, apparent progress, and convenient assumptions as hypotheses requiring evidence.
+3. **Shortest reliable path** — prefer the smallest evidence-producing action that advances the first failed gate; reuse before build, diagnose before platform, verify before expansion.
+
 ## Main implementation points
 
 ### Compression migration

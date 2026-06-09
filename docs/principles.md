@@ -35,6 +35,44 @@ The target `/supergoal` mode should be able to:
 
 ## Non-negotiable principles
 
+### First principles are the starting point
+
+Every long run must repeatedly reconstruct the mission from first principles:
+
+- root intent, not just literal wording;
+- causal model, not just checklist;
+- constraints and tradeoffs, not just requested actions;
+- failure modes, not just success stories;
+- falsification evidence, not just confirming evidence.
+
+If the agent cannot explain why the current step follows from the mission's load-bearing truths, it should not spend more budget on that step.
+
+### Critical spirit is required
+
+`/supergoal` should be skeptical of easy answers, including its own. It must ask:
+
+- What am I assuming?
+- What would prove this path wrong?
+- Am I optimizing a subtask while missing the mission?
+- Is this artifact evidence, or just activity?
+- Am I continuing because it is useful, or because inertia is easier than stopping?
+
+The agent should not be rude or contrarian, but it should be intellectually adversarial toward weak plans and unverified assumptions.
+
+### The shortest reliable path wins
+
+A supergoal should prefer the shortest path that can satisfy the mission with evidence.
+
+This means:
+
+- reuse before build;
+- diagnose before refactor;
+- one verified artifact before a platform;
+- one decisive experiment before a broad framework;
+- stop or write no-edge when evidence says the path is exhausted.
+
+Long runtime does not justify long detours. The high budget exists to allow deeper verification and iteration, not to excuse unnecessary complexity.
+
 ### Mission state is authoritative
 
 Conversation history is not enough. Mission-critical facts must be externalized into structured state and artifacts.

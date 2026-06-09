@@ -21,7 +21,10 @@ The long-term target is different:
 - **self-maintaining** — the runtime tracks its own state, errors, gates, costs, risks, and regressions;
 - **self-improving** — failures from traces become tests, gates, skills, and runtime changes;
 - **self-iterating** — the agent can branch hypotheses, validate them, kill bad paths, and write no-edge/blocked reports instead of spinning forever;
-- **evidence-first** — progress is backed by tools, files, logs, tests, citations, ledgers, and verifiers, not just fluent summaries.
+- **evidence-first** — progress is backed by tools, files, logs, tests, citations, ledgers, and verifiers, not just fluent summaries;
+- **first-principles by default** — every long run must repeatedly reduce the mission to load-bearing truths, constraints, causal mechanisms, and failure modes instead of copying surface instructions;
+- **critical and questioning** — the agent must challenge its own assumptions, challenge weak user phrasing when needed, seek disconfirming evidence, and treat easy-looking paths as hypotheses to test rather than facts;
+- **shortest reliable path** — the runtime should prefer the smallest action that advances the first failed gate, reusing mature tools and existing work before building new infrastructure.
 
 In short: `/supergoal` should not mean “continue until the judge says done.” It should mean:
 
@@ -33,7 +36,45 @@ In short: `/supergoal` should not mean “continue until the judge says done.”
 
 Large budgets are only useful if the runtime can spend them well. `/supergoal` must therefore optimize for convergence, not activity. It should prefer the highest information-gain action, not the safest-looking busywork.
 
-### 2. State beats prompt length
+### 2. First principles before execution
+
+`/supergoal` should not blindly execute the literal wording of a request. It should first ask:
+
+- What is the user actually trying to achieve?
+- What must be true for this mission to succeed?
+- What are the load-bearing constraints, causal mechanisms, and failure modes?
+- Which assumptions are unverified?
+- What evidence would falsify the current direction?
+
+First-principles reasoning is not extra philosophy. It is how a long-running agent avoids optimizing a local subtask while missing the global mission.
+
+### 3. Critical spirit and questioning are mandatory
+
+A long-running agent must be willing to question:
+
+- its own plan;
+- the critic's JSON;
+- previous summaries;
+- apparent progress;
+- convenient assumptions;
+- whether the requested implementation is even the right path.
+
+This does **not** mean being argumentative with the user. It means treating every major action as a falsifiable hypothesis and actively looking for counterevidence before spending more budget.
+
+### 4. Shortest reliable path beats heroic autonomy
+
+The best supergoal step is usually not the most impressive step. It is the shortest reliable step that advances the first failed gate.
+
+Preferred order:
+
+1. Reuse existing mature solutions if they satisfy the mission.
+2. Make the smallest tool-backed diagnostic that reduces uncertainty.
+3. Verify one artifact before expanding scope.
+4. Build new infrastructure only when it is proven to be a dependency.
+
+A supergoal that builds a large platform before testing the smallest viable hypothesis is failing the shortest-path principle.
+
+### 5. State beats prompt length
 
 A long prompt is not a durable runtime. Important mission facts must live in structured state:
 
@@ -45,13 +86,13 @@ A long prompt is not a durable runtime. Important mission facts must live in str
 - tool calls, artifacts, logs, costs, and risk events;
 - blockers, no-edge conclusions, and reusable lessons.
 
-### 3. Evidence beats self-report
+### 6. Evidence beats self-report
 
 LLM critic JSON is useful for diagnosis, but it is not proof. Research sufficiency and plan progress must be derived from tool-backed evidence where possible.
 
 This patch extends `ResearchFinding` with provenance fields such as `tool_call_id`, `retrieved_at`, `query`, `evidence_quote_or_hash`, relevance, and contradiction flags. Critic-extracted findings can appear on the board as hints, but they cannot satisfy the research gate without provenance.
 
-### 4. Gates beat vibes
+### 7. Gates beat vibes
 
 A supergoal should move through explicit mission gates. For strategy/research tasks, examples include:
 
@@ -62,7 +103,7 @@ A supergoal should move through explicit mission gates. For strategy/research ta
 
 This prevents the classic failure mode: “the agent did real work, therefore the plan is done.” Real work is not enough; the right gate must pass.
 
-### 5. Replan must constrain action
+### 8. Replan must constrain action
 
 A replan prompt that only says “think again” is weak. Replanning must change the action space:
 
@@ -72,7 +113,7 @@ A replan prompt that only says “think again” is weak. Replanning must change
 - avoid infrastructure unless it is a proven dependency;
 - produce a blocked/no-edge report if the gate cannot be satisfied.
 
-### 6. Hypotheses are first-class objects
+### 9. Hypotheses are first-class objects
 
 For trading, research, debugging, and scientific exploration, a flat list of “hypotheses” is not enough. `/supergoal` needs a portfolio:
 
@@ -90,15 +131,15 @@ For trading, research, debugging, and scientific exploration, a flat list of “
 
 This is what prevents “I built another validator” from masquerading as “I tested a strategy.”
 
-### 7. Stop conditions are features, not failures
+### 10. Stop conditions are features, not failures
 
 A good long-running agent must know when to stop, branch, ask, or write a no-edge report. Infinite continuation is not autonomy; it is control failure.
 
-### 8. Normal `/goal` must stay simple
+### 11. Normal `/goal` must stay simple
 
 `/supergoal` should not pollute ordinary `/goal`. The lightweight path should remain fast, predictable, and easy to reason about. Supergoal-only machinery is guarded by `mode == "supergoal"`, with regression tests proving normal goal behavior still works.
 
-### 9. Safety must become a first-class runtime layer
+### 12. Safety must become a first-class runtime layer
 
 Long-running agents with shell, file, network, API, database, or trading permissions need pre-execution policy, not only post-hoc judging. This patch adds gates/inertia guards, but a full permission/scope/destructive-action policy is still future work.
 
