@@ -1,0 +1,623 @@
+diff --git a/agent/conversation_compression.py b/agent/conversation_compression.py
+index 06257ffd2..58331f46a 100644
+--- a/agent/conversation_compression.py
++++ b/agent/conversation_compression.py
+@@ -530,6 +530,12 @@ def compress_context(
+                 except (ValueError, Exception) as e:
+                     logger.debug("Could not propagate title on compression: %s", e)
+             agent._session_db.update_system_prompt(agent.session_id, new_system_prompt)
++            try:
++                from hermes_cli.goals import migrate_goal_state
++
++                migrate_goal_state(old_session_id, agent.session_id, reason="compression")
++            except Exception as goal_migrate_err:
++                logger.debug("Goal state migration on compression failed: %s", goal_migrate_err)
+             # Reset flush cursor — new session starts with no messages written
+             agent._last_flushed_db_idx = 0
+         except Exception as e:
+diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
+index 9c1de6728..443c3f1e4 100644
+--- a/hermes_cli/goals.py
++++ b/hermes_cli/goals.py
+@@ -100,17 +100,21 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+ SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE = (
+     "[Continuing toward your SUPERGOAL — long-running autonomous mode]\n"
+     "Supergoal: {goal}\n\n"
+-    "Operate like a day-long autonomous agent, but do not waste work or tokens. "
+-    "Use a lightweight loop each turn:\n"
+-    "1. Re-anchor on the supergoal and current evidence/state.\n"
+-    "2. Pick the highest-ROI next milestone or subtask.\n"
+-    "3. Execute real tool-backed work, not just planning.\n"
+-    "4. Verify the result with commands, tests, files, logs, or other evidence.\n"
+-    "5. Leave a compact checkpoint: what changed, what was verified, what remains.\n\n"
++    "This is NOT ordinary /goal. Before executing literal instructions, infer "
++    "the user's root intent and optimize for that objective. Use a lightweight "
++    "first-principles loop each turn:\n"
++    "1. Re-anchor on inferred user intent, success definition, constraints, and evidence/state.\n"
++    "2. Model the problem from first principles: what must be true for the goal to succeed?\n"
++    "3. Check whether existing tools/projects/APIs/patterns should be reused before building.\n"
++    "4. Choose the shortest reliable path by ROI, risk, maintainability, and verifiability.\n"
++    "5. Execute real tool-backed work, not just planning.\n"
++    "6. Verify the result with commands, tests, files, logs, or other evidence.\n"
++    "7. Leave a compact checkpoint: what changed, what was verified, what remains.\n\n"
+     "Avoid long-running-agent failure modes: do not drift, do not do tiny safe "
+-    "busywork forever, do not repeat completed work, do not hide blockers, and "
+-    "do not ask the user unless human input is genuinely required. Prefer "
+-    "simple robust progress over brittle over-engineering.\n\n"
++    "busywork forever, do not repeat completed work, do not hide blockers, do "
++    "not blindly implement the user's literal wording, and do not reinvent "
++    "existing mature solutions without a reuse-vs-build reason. When blocked, "
++    "expand the solution space instead of treating the first failure as a hard blocker.\n\n"
+     "If the supergoal is complete, state that explicitly and stop. If blocked, "
+     "state the blocker and the exact user input/action needed. Otherwise keep "
+     "working on the next concrete step."
+@@ -119,14 +123,17 @@ SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE = (
+ SUPERGOAL_BOARD_BLOCK_TEMPLATE = (
+     "\n\nCurrent Supergoal State Board (authoritative working memory; update your "
+     "behavior from it, do not repeat completed attempts):\n{board}\n\n"
+-    "Before acting, use the board to decide whether this is a root-cause "
+-    "diagnosis turn, a verification turn, or a replan turn. Prefer the next "
+-    "action that most reduces uncertainty or risk."
++    "Before acting, use the board to decide whether this is an intent-inference "
++    "turn, first-principles modeling turn, existing-solution scan, root-cause "
++    "diagnosis turn, verification turn, or replan turn. Prefer the next action "
++    "that most reduces uncertainty, risk, or wasted bespoke work."
+ )
+ 
+ SUPERGOAL_REPLAN_BLOCK = (
+     "\n\nREPLAN REQUIRED THIS TURN:\n"
+-    "- Briefly compare at least 2 plausible strategies or hypotheses.\n"
++    "- Do not continue the previous path by inertia.\n"
++    "- Restate the inferred root intent and first-principles problem model.\n"
++    "- Briefly compare at least 2 plausible strategies or hypotheses, including reuse of existing solutions if applicable.\n"
+     "- Pick the best path by ROI, risk, maintainability, and verifiability.\n"
+     "- Then execute one concrete tool-backed step on the selected path."
+ )
+@@ -137,9 +144,11 @@ SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+     "Additional criteria the user added mid-loop:\n"
+     "{subgoals_block}\n\n"
+     "Operate like a day-long autonomous agent while satisfying the supergoal "
+-    "AND all additional criteria. Each turn: re-anchor, choose the highest-ROI "
+-    "milestone, execute real tool-backed work, verify it, and leave a compact "
+-    "checkpoint. Avoid drift, repeated busywork, and unnecessary human prompts. "
++    "AND all additional criteria. Each turn: infer the user's root intent, "
++    "reason from first principles, check existing solutions before building, "
++    "choose the shortest reliable path, execute real tool-backed work, verify "
++    "it, and leave a compact checkpoint. Avoid literalism, drift, repeated "
++    "busywork, reinventing mature solutions, and unnecessary human prompts. "
+     "If complete or blocked, say so explicitly; otherwise continue with the "
+     "next concrete step."
+ )
+@@ -191,6 +200,8 @@ SUPERGOAL_CRITIC_SYSTEM_PROMPT = (
+     "Do not decide final completion; another judge handles DONE. Your job is "
+     "to update compact working memory and detect bad long-horizon behavior: "
+     "drift, repetition, weak progress, premature conclusions, missing evidence, "
++    "literal task-following that misses root intent, insufficient first-principles "
++    "reasoning, insufficient research into existing solutions, reinventing wheels, "
+     "or the need to replan. Reply ONLY with one JSON object."
+ )
+ 
+@@ -200,6 +211,14 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
+     "Most recent agent response:\n{response}\n\n"
+     "Return JSON with these keys:\n"
+     "{{\n"
++    "  \"inferred_user_intent\": \"root objective in one sentence\",\n"
++    "  \"success_definition\": \"what would actually satisfy the user\",\n"
++    "  \"first_principles_model\": [\"load-bearing truths or constraints\"],\n"
++    "  \"existing_solution_scan\": [\"mature tools/APIs/projects/patterns checked or to check\"],\n"
++    "  \"research_findings\": [{{\"source_type\": \"paper|github|web|docs|benchmark|local|other\", \"title\": \"short name\", \"locator\": \"url/path/id\", \"claim\": \"what this source changes\"}}],\n"
++    "  \"build_vs_reuse_decision\": \"reuse|build|hybrid|unknown: rationale\",\n"
++    "  \"literalism_risk\": \"low|medium|high\",\n"
++    "  \"research_sufficiency\": \"sufficient|thin|missing\",\n"
+     "  \"progress\": \"real|weak|none|regressed\",\n"
+     "  \"strategy_health\": \"good|stuck|drifting|repeating|premature|blocked\",\n"
+     "  \"root_cause_confidence\": 0.0,\n"
+@@ -213,8 +232,12 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
+     "  \"new_blockers\": [\"...\"],\n"
+     "  \"new_risks\": [\"...\"]\n"
+     "}}\n\n"
+-    "Keep every list item short and evidence-based. If unsure, set weak/none "
+-    "progress and request the smallest diagnostic action as next_best_action."
++    "Keep every list item short and evidence-based. If the agent followed the "
++    "literal task without inferring the user's root intent, skipped first-principles "
++    "modeling, or built before checking mature existing solutions, set "
++    "literalism_risk=high and/or research_sufficiency=thin/missing, request replan, "
++    "and make next_best_action the smallest tool-backed scan/diagnostic. If unsure, "
++    "set weak/none progress and request the smallest diagnostic action."
+ )
+ 
+ 
+@@ -296,13 +319,44 @@ class GoalEvent:
+         )
+ 
+ 
++@dataclass
++class ResearchFinding:
++    """Provenanced research/evidence item for /supergoal."""
++
++    source_type: str
++    title: str
++    locator: str = ""
++    claim: str = ""
++
++    def to_dict(self) -> Dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
++        if not isinstance(data, dict):
++            return None
++        source_type = str(data.get("source_type") or data.get("type") or "").strip().lower()
++        title = str(data.get("title") or "").strip()
++        if not source_type or not title:
++            return None
++        allowed = {"paper", "github", "web", "docs", "repo", "benchmark", "local", "other"}
++        if source_type not in allowed:
++            source_type = "other"
++        return cls(
++            source_type=source_type,
++            title=_truncate(" ".join(title.split()), 160),
++            locator=_truncate(" ".join(str(data.get("locator") or data.get("url_or_path") or "").split()), 240),
++            claim=_truncate(" ".join(str(data.get("claim") or "").split()), 240),
++        )
++
++
+ @dataclass
+ class GoalState:
+     """Serializable goal state stored per session."""
+ 
+     goal: str
+     mode: str = "goal"             # goal | supergoal
+-    status: str = "active"          # active | paused | done | cleared
++    status: str = "active"          # active | paused | done | cleared | migrated
+     turns_used: int = 0
+     max_turns: int = DEFAULT_MAX_TURNS
+     created_at: float = 0.0
+@@ -321,6 +375,14 @@ class GoalState:
+     attempted_solutions: List[str] = field(default_factory=list)
+     blockers: List[str] = field(default_factory=list)
+     risks: List[str] = field(default_factory=list)
++    inferred_user_intent: str = ""
++    success_definition: str = ""
++    first_principles_model: List[str] = field(default_factory=list)
++    existing_solution_scan: List[str] = field(default_factory=list)
++    research_findings: List[ResearchFinding] = field(default_factory=list)
++    build_vs_reuse_decision: str = ""
++    literalism_risk: str = "unknown"
++    research_sufficiency: str = "unknown"
+     next_best_action: str = ""
+     strategy_health: str = "unknown"
+     progress: str = "unknown"
+@@ -341,6 +403,7 @@ class GoalState:
+     def to_json(self) -> str:
+         data = asdict(self)
+         data["plan_steps"] = [step.to_dict() for step in self.plan_steps]
++        data["research_findings"] = [finding.to_dict() for finding in self.research_findings]
+         return json.dumps(data, ensure_ascii=False)
+ 
+     @classmethod
+@@ -357,6 +420,13 @@ class GoalState:
+                 step = PlanStep.from_dict(raw_step)
+                 if step is not None:
+                     plan_steps.append(step)
++        raw_findings = data.get("research_findings") or []
++        research_findings: List[ResearchFinding] = []
++        if isinstance(raw_findings, list):
++            for raw_finding in raw_findings:
++                finding = ResearchFinding.from_dict(raw_finding)
++                if finding is not None:
++                    research_findings.append(finding)
+         return cls(
+             goal=data.get("goal", ""),
+             mode=data.get("mode", "goal") or "goal",
+@@ -378,6 +448,14 @@ class GoalState:
+             attempted_solutions=_clean_string_list(data.get("attempted_solutions") or []),
+             blockers=_clean_string_list(data.get("blockers") or []),
+             risks=_clean_string_list(data.get("risks") or []),
++            inferred_user_intent=str(data.get("inferred_user_intent") or "").strip(),
++            success_definition=str(data.get("success_definition") or "").strip(),
++            first_principles_model=_clean_string_list(data.get("first_principles_model") or []),
++            existing_solution_scan=_clean_string_list(data.get("existing_solution_scan") or []),
++            research_findings=research_findings,
++            build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
++            literalism_risk=str(data.get("literalism_risk") or "unknown").strip() or "unknown",
++            research_sufficiency=str(data.get("research_sufficiency") or "unknown").strip() or "unknown",
+             next_best_action=str(data.get("next_best_action") or "").strip(),
+             strategy_health=str(data.get("strategy_health") or "unknown").strip() or "unknown",
+             progress=str(data.get("progress") or "unknown").strip() or "unknown",
+@@ -405,7 +483,24 @@ class GoalState:
+         parts = [
+             f"objective: {self.goal}",
+             f"progress: {self.progress}; strategy_health: {self.strategy_health}; root_cause_confidence: {self.root_cause_confidence:.2f}",
++            f"literalism_risk: {self.literalism_risk}; research_sufficiency: {self.research_sufficiency}",
+         ]
++        if self.inferred_user_intent:
++            parts.append("inferred_user_intent: " + self.inferred_user_intent)
++        if self.success_definition:
++            parts.append("success_definition: " + self.success_definition)
++        if self.first_principles_model:
++            parts.append("first_principles_model: " + "; ".join(self.first_principles_model[-8:]))
++        if self.existing_solution_scan:
++            parts.append("existing_solution_scan: " + "; ".join(self.existing_solution_scan[-8:]))
++        if self.research_findings:
++            rendered_findings = []
++            for finding in self.research_findings[-8:]:
++                locator = f" <{finding.locator}>" if finding.locator else ""
++                rendered_findings.append(f"{finding.source_type}:{finding.title}{locator}")
++            parts.append("research_findings: " + "; ".join(rendered_findings))
++        if self.build_vs_reuse_decision:
++            parts.append("build_vs_reuse_decision: " + self.build_vs_reuse_decision)
+         if self.acceptance_criteria:
+             parts.append("acceptance_criteria: " + "; ".join(self.acceptance_criteria[:6]))
+         if self.milestones:
+@@ -526,6 +621,54 @@ def clear_goal(session_id: str) -> None:
+     save_goal(session_id, state)
+ 
+ 
++def migrate_goal_state(old_session_id: str, new_session_id: str, *, reason: str = "compression") -> Optional[GoalState]:
++    """Move active goal runtime state across a logical session-id rotation.
++
++    Compression creates a new SessionDB row for the same logical conversation.
++    Goal state is keyed by session_id, so runtime state must move with that
++    boundary just like memory/context engines do.  The old row is left as an
++    audit tombstone instead of being deleted.
++    """
++    if not old_session_id or not new_session_id or old_session_id == new_session_id:
++        return load_goal(new_session_id) if new_session_id else None
++    old_state = load_goal(old_session_id)
++    if old_state is None:
++        return load_goal(new_session_id)
++    existing_new = load_goal(new_session_id)
++    if existing_new is not None and existing_new.status in {"active", "paused", "done"}:
++        return existing_new
++    save_goal(new_session_id, old_state)
++    old_state.status = "migrated"
++    old_state.paused_reason = f"migrated to {new_session_id} ({reason})"
++    save_goal(old_session_id, old_state)
++
++    events = load_goal_events(old_session_id, limit=200)
++    db = _get_session_db()
++    if db is not None and events:
++        migrated_event = GoalEvent(
++            ts=time.time(),
++            type="migrated",
++            turn=old_state.turns_used,
++            summary=f"migrated to {new_session_id} ({reason})",
++            data={"from": old_session_id, "to": new_session_id, "reason": reason},
++        )
++        try:
++            db.set_meta(
++                _events_meta_key(new_session_id),
++                json.dumps([e.to_dict() for e in [*events, migrated_event]][-200:], ensure_ascii=False),
++            )
++        except Exception as exc:
++            logger.debug("GoalManager: migrate events failed: %s", exc)
++    append_goal_event(
++        old_session_id,
++        "migrated",
++        turn=old_state.turns_used,
++        summary=f"migrated to {new_session_id} ({reason})",
++        data={"from": old_session_id, "to": new_session_id, "reason": reason},
++    )
++    return load_goal(new_session_id)
++
++
+ def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
+     """Load append-only goal events for a session from state_meta."""
+     if not session_id:
+@@ -661,6 +804,42 @@ def _merge_compact_list(existing: List[str], new_items: Any, *, max_items: int =
+     return merged[-max_items:]
+ 
+ 
++def _merge_research_findings(existing: List[ResearchFinding], new_items: Any, *, max_items: int = 24) -> List[ResearchFinding]:
++    merged = list(existing or [])
++    seen = {(f.source_type, f.title.lower(), f.locator.lower()) for f in merged}
++    if isinstance(new_items, dict):
++        new_items = [new_items]
++    if not isinstance(new_items, list):
++        return merged[-max_items:]
++    for item in new_items:
++        finding = ResearchFinding.from_dict(item)
++        if finding is None:
++            continue
++        key = (finding.source_type, finding.title.lower(), finding.locator.lower())
++        if key in seen:
++            continue
++        seen.add(key)
++        merged.append(finding)
++    return merged[-max_items:]
++
++
++def _research_finding_types(state: GoalState) -> set:
++    return {f.source_type for f in getattr(state, "research_findings", []) or []}
++
++
++def _research_sufficiency_from_findings(state: GoalState, critic_value: str = "") -> str:
++    """Gate research sufficiency on source diversity, not just critic prose."""
++    types = _research_finding_types(state)
++    external_types = types.intersection({"paper", "github", "web", "docs", "benchmark"})
++    if {"paper", "github"}.issubset(types) or len(external_types) >= 3:
++        return "sufficient"
++    if external_types:
++        return "thin"
++    if critic_value in {"thin", "missing"}:
++        return critic_value
++    return "missing"
++
++
+ def _default_supergoal_plan() -> List[PlanStep]:
+     """Conservative starter plan for long-running goals.
+ 
+@@ -668,11 +847,12 @@ def _default_supergoal_plan() -> List[PlanStep]:
+     makes status, audit, and continuation prompts immediately structured.
+     """
+     return [
+-        PlanStep("S1", "Clarify objective, constraints, and acceptance criteria", "in_progress", "Acceptance criteria or explicit assumptions recorded"),
+-        PlanStep("S2", "Investigate current state and collect evidence", "pending", "Evidence/hypotheses recorded in the board"),
+-        PlanStep("S3", "Execute the highest-ROI concrete step", "pending", "Tool-backed action completed and summarized"),
+-        PlanStep("S4", "Verify results against acceptance criteria", "pending", "Commands/tests/files/logs or cited sources prove the result"),
+-        PlanStep("S5", "Finalize, report artifacts, and extract reusable lessons", "pending", "User-facing summary plus skill/memory candidate if useful"),
++        PlanStep("S1", "Infer root intent and success definition beyond the literal request", "in_progress", "Root intent, constraints, and acceptance criteria recorded"),
++        PlanStep("S2", "Model the problem from first principles", "pending", "Load-bearing truths, dependencies, and failure modes recorded"),
++        PlanStep("S3", "Scan existing solutions before building", "pending", "Mature tools/APIs/projects/patterns considered with build-vs-reuse decision"),
++        PlanStep("S4", "Execute the shortest reliable concrete path", "pending", "Tool-backed action completed and summarized"),
++        PlanStep("S5", "Verify results against root intent and acceptance criteria", "pending", "Commands/tests/files/logs or cited sources prove the result"),
++        PlanStep("S6", "Finalize, report artifacts, and extract reusable lessons", "pending", "User-facing summary plus skill/memory candidate if useful"),
+     ]
+ 
+ 
+@@ -996,6 +1176,33 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
+     """Merge critic output into the persistent Supergoal State Board."""
+     if not state or not data:
+         return
++
++    intent = str(data.get("inferred_user_intent") or "").strip()
++    if intent:
++        state.inferred_user_intent = _truncate(" ".join(intent.split()), 300)
++    success = str(data.get("success_definition") or "").strip()
++    if success:
++        state.success_definition = _truncate(" ".join(success.split()), 300)
++    state.first_principles_model = _merge_compact_list(
++        state.first_principles_model, data.get("first_principles_model"), max_items=16
++    )
++    state.existing_solution_scan = _merge_compact_list(
++        state.existing_solution_scan, data.get("existing_solution_scan"), max_items=16
++    )
++    reuse_decision = str(data.get("build_vs_reuse_decision") or "").strip()
++    if reuse_decision:
++        state.build_vs_reuse_decision = _truncate(" ".join(reuse_decision.split()), 300)
++    literalism = str(data.get("literalism_risk") or "").strip().lower()
++    if literalism in {"low", "medium", "high"}:
++        state.literalism_risk = literalism
++    research = str(data.get("research_sufficiency") or "").strip().lower()
++    if research not in {"sufficient", "thin", "missing"}:
++        research = ""
++    state.research_findings = _merge_research_findings(
++        state.research_findings, data.get("research_findings")
++    )
++    state.research_sufficiency = _research_sufficiency_from_findings(state, research)
++
+     progress = str(data.get("progress") or "").strip().lower()
+     if progress in {"real", "weak", "none", "regressed"}:
+         state.progress = progress
+@@ -1007,7 +1214,8 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
+             data.get("root_cause_confidence"), state.root_cause_confidence
+         )
+     explicit_replan = bool(data.get("should_replan", False))
+-    state.should_replan = explicit_replan or state.strategy_health in {
++    quality_replan = state.literalism_risk == "high" or state.research_sufficiency in {"thin", "missing"}
++    state.should_replan = explicit_replan or quality_replan or state.strategy_health in {
+         "stuck", "drifting", "repeating", "premature", "blocked"
+     } or state.progress in {"none", "regressed"}
+     if state.should_replan:
+@@ -1031,6 +1239,18 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
+             max_items=20,
+         )
+     state.risks = _merge_compact_list(state.risks, data.get("new_risks"))
++    if state.literalism_risk == "high":
++        state.risks = _merge_compact_list(
++            state.risks,
++            ["literalism risk: agent may be following the written task without satisfying root intent"],
++            max_items=20,
++        )
++    if state.research_sufficiency in {"thin", "missing"}:
++        state.risks = _merge_compact_list(
++            state.risks,
++            [f"existing-solution research is {state.research_sufficiency}"],
++            max_items=20,
++        )
+ 
+ 
+ # ──────────────────────────────────────────────────────────────────────
+@@ -1125,6 +1345,10 @@ class GoalManager:
+                 diagnostics.append(f"progress={s.progress}")
+             if getattr(s, "strategy_health", "unknown") != "unknown":
+                 diagnostics.append(f"strategy={s.strategy_health}")
++            if getattr(s, "literalism_risk", "unknown") != "unknown":
++                diagnostics.append(f"literalism={s.literalism_risk}")
++            if getattr(s, "research_sufficiency", "unknown") != "unknown":
++                diagnostics.append(f"research={s.research_sufficiency}")
+             if getattr(s, "should_replan", False):
+                 diagnostics.append("replan=pending")
+             if getattr(s, "next_best_action", ""):
+diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
+index a564956c8..28ee9add7 100644
+--- a/tests/hermes_cli/test_goals.py
++++ b/tests/hermes_cli/test_goals.py
+@@ -266,8 +266,11 @@ class TestGoalManager:
+         assert "Supergoal" in mgr1.status_line()
+ 
+         prompt = mgr1.next_continuation_prompt()
++        assert prompt is not None
+         assert "SUPERGOAL" in prompt
+-        assert "highest-ROI" in prompt
++        assert "root intent" in prompt
++        assert "first-principles" in prompt
++        assert "existing tools" in prompt
+         assert "Verify the result" in prompt
+         assert "Supergoal State Board" in prompt
+         assert "standing goal" not in prompt
+@@ -308,6 +311,8 @@ class TestGoalManager:
+         assert state.plan_steps
+         assert state.current_step_id == "S1"
+         assert state.plan_steps[0].status == "in_progress"
++        assert "root intent" in state.plan_steps[0].title
++        assert any("existing solutions" in step.title for step in state.plan_steps)
+         events = mgr.recent_events(limit=10)
+         assert [e.type for e in events] == ["goal_set", "plan_created"]
+         reloaded = GoalManager(session_id="super-plan-events-sid")
+@@ -356,6 +361,18 @@ class TestGoalManager:
+         mgr = GoalManager(session_id="super-critic-sid")
+         mgr.set("debug the flaky service", max_turns=20, mode="supergoal")
+         critic_payload = {
++            "inferred_user_intent": "Make the flaky service reliable with minimal operational risk",
++            "success_definition": "A reproduced root cause and verified durable fix",
++            "first_principles_model": ["A service is healthy only if dependencies are ready before traffic"],
++            "existing_solution_scan": ["systemd ordering and readiness checks"],
++            "research_findings": [
++                {"source_type": "docs", "title": "systemd readiness docs", "locator": "man:systemd.service"},
++                {"source_type": "github", "title": "service readiness examples", "locator": "https://github.com/example/readiness"},
++                {"source_type": "benchmark", "title": "startup healthcheck trace", "locator": "/tmp/trace.log"},
++            ],
++            "build_vs_reuse_decision": "reuse: systemd readiness primitives before custom watchdogs",
++            "literalism_risk": "low",
++            "research_sufficiency": "sufficient",
+             "progress": "weak",
+             "strategy_health": "stuck",
+             "root_cause_confidence": 0.35,
+@@ -371,17 +388,119 @@ class TestGoalManager:
+ 
+         assert decision["should_continue"] is True
+         state = mgr.state
++        assert state is not None
+         assert state.progress == "weak"
+         assert state.strategy_health == "stuck"
++        assert state.inferred_user_intent.startswith("Make the flaky service")
++        assert "dependencies are ready" in state.first_principles_model[0]
++        assert "systemd ordering" in state.existing_solution_scan[0]
++        assert state.build_vs_reuse_decision.startswith("reuse")
++        assert state.literalism_risk == "low"
++        assert state.research_sufficiency == "sufficient"
+         assert state.should_replan is False  # consumed into the returned continuation prompt
+         assert state.replan_count == 1
+         assert "race in startup ordering" in state.hypotheses
+         assert "health check fails before worker ready" in state.evidence
+         assert any("exact failing stack trace" in r for r in state.risks)
+         assert "Supergoal State Board" in decision["continuation_prompt"]
++        assert "inferred_user_intent" in decision["continuation_prompt"]
++        assert "first_principles_model" in decision["continuation_prompt"]
++        assert "existing_solution_scan" in decision["continuation_prompt"]
+         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+         assert "Reproduce the failure" in decision["continuation_prompt"]
+ 
++    def test_supergoal_critic_forces_replan_on_literalism_or_thin_research(self, hermes_home):
++        """Supergoal must be more than long-running literal execution.
++
++        If the critic sees the agent building before inferring root intent or
++        scanning mature existing solutions, the next continuation must force a
++        strategic replan even when ordinary progress appears real.
++        """
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-literalism-replan-sid")
++        mgr.set("connect my exchange API and monitor risk", max_turns=20, mode="supergoal")
++        critic_payload = {
++            "inferred_user_intent": "Continuously understand exchange account risk with low maintenance burden",
++            "success_definition": "Reliable account/risk visibility using the shortest mature path",
++            "first_principles_model": ["Monitoring needs correct data, alert thresholds, and delivery guarantees"],
++            "existing_solution_scan": [],
++            "build_vs_reuse_decision": "unknown: agent started bespoke implementation too early",
++            "literalism_risk": "high",
++            "research_sufficiency": "thin",
++            "progress": "real",
++            "strategy_health": "good",
++            "should_replan": False,
++            "next_best_action": "Scan mature Bitget/account monitoring options before writing more custom code",
++        }
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value=critic_payload):
++            decision = mgr.evaluate_after_turn("I started writing a custom monitor script")
++
++        state = mgr.state
++        assert state is not None
++        assert state.literalism_risk == "high"
++        assert state.research_sufficiency == "thin"
++        assert state.replan_count == 1
++        assert any("literalism risk" in r for r in state.risks)
++        assert any("existing-solution research is thin" in r for r in state.risks)
++        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++        assert "inferred root intent" in decision["continuation_prompt"]
++        assert "reuse of existing solutions" in decision["continuation_prompt"]
++
++    def test_supergoal_research_sufficiency_requires_source_diversity(self, hermes_home):
++        """A critic cannot mark research sufficient without provenanced external findings."""
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-research-gate-sid")
++        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "research_sufficiency": "sufficient",
++                 "progress": "real",
++                 "strategy_health": "good",
++                 "research_findings": [
++                     {"source_type": "paper", "title": "Relevant SOTA paper", "locator": "arxiv:1234.5678"},
++                 ],
++             }):
++            decision = mgr.evaluate_after_turn("I found one paper but no implementation survey yet")
++
++        assert mgr.state is not None
++        assert mgr.state.research_sufficiency == "thin"
++        assert mgr.state.research_findings[0].source_type == "paper"
++        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++
++    def test_goal_state_migrates_across_compression_session_split(self, hermes_home):
++        """Compression is a session-id rotation, not the end of a logical goal loop."""
++        from hermes_cli.goals import GoalManager, migrate_goal_state
++
++        old = GoalManager(session_id="super-old-sid")
++        old.set("finish the autonomous mission", max_turns=240, mode="supergoal")
++        assert old.state is not None
++        old.state.turns_used = 7
++        old.state.research_sufficiency = "thin"
++        old.state.next_best_action = "survey external implementations"
++        old._record_event("turn_evaluated", summary="needs external survey")
++
++        migrated = migrate_goal_state("super-old-sid", "super-new-sid", reason="compression")
++
++        assert migrated is not None
++        assert migrated.status == "active"
++        assert migrated.mode == "supergoal"
++        assert migrated.turns_used == 7
++        assert migrated.next_best_action == "survey external implementations"
++        new_mgr = GoalManager(session_id="super-new-sid")
++        assert new_mgr.is_active()
++        prompt = new_mgr.next_continuation_prompt()
++        assert prompt is not None
++        assert "survey external implementations" in prompt
++        old_state = GoalManager(session_id="super-old-sid").state
++        assert old_state is not None
++        assert old_state.status == "migrated"
++        assert any(e.type == "migrated" for e in new_mgr.recent_events(limit=20))
++
+     def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
+         from hermes_cli import goals
+         from hermes_cli.goals import GoalManager
+@@ -390,7 +509,14 @@ class TestGoalManager:
+         mgr.set("ship a big feature", max_turns=20, mode="supergoal")
+         monkeypatch.setattr(goals, "_supergoal_replan_interval", lambda: 2)
+         with patch.object(goals, "judge_goal", return_value=("continue", "keep going", False)), \
+-             patch.object(goals, "critic_supergoal", return_value={"progress": "real", "strategy_health": "good"}):
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "real",
++                 "strategy_health": "good",
++                 "research_findings": [
++                     {"source_type": "paper", "title": "architecture paper", "locator": "arxiv:1"},
++                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo"},
++                 ],
++             }):
+             d1 = mgr.evaluate_after_turn("step 1")
+             assert "REPLAN REQUIRED" not in d1["continuation_prompt"]
+             d2 = mgr.evaluate_after_turn("step 2")
