@@ -66,6 +66,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
 # exhausted with every reply shaped like `judge returned empty response` or
 # `judge reply was not JSON`.
 DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES = 3
+DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES = 5  # auto-pause after this many consecutive API errors
+DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES = 3  # after this many board/critic failures, degrade to deterministic board updates
+DEFAULT_MAX_SAME_GATE_STALLS = 3  # pause instead of looping forever on the same deterministic gate veto
 
 
 CONTINUATION_PROMPT_TEMPLATE = (
@@ -331,6 +334,183 @@ class GoalEvent:
         )
 
 
+@dataclass(frozen=True)
+class GoalStatusField:
+    label: str
+    value: str
+    level: str = "info"
+
+
+@dataclass(frozen=True)
+class GoalStatusControl:
+    id: str
+    label: str
+    command: str
+    style: str = "secondary"
+    enabled: bool = True
+
+
+@dataclass(frozen=True)
+class GoalStatusCard:
+    """Platform-neutral status surface for /goal and /supergoal UIs."""
+
+    title: str
+    status: str
+    level: str
+    color: str
+    summary: str
+    fields: List[GoalStatusField] = field(default_factory=list)
+    controls: List[GoalStatusControl] = field(default_factory=list)
+    debug: List[str] = field(default_factory=list)
+    updated_at: float = 0.0
+    session_short_id: str = ""
+    plain_text: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "title": self.title,
+            "status": self.status,
+            "level": self.level,
+            "color": self.color,
+            "summary": self.summary,
+            "fields": [asdict(field) for field in self.fields],
+            "controls": [asdict(control) for control in self.controls],
+            "debug": list(self.debug),
+            "updated_at": self.updated_at,
+            "session_short_id": self.session_short_id,
+            "plain_text": self.plain_text,
+        }
+
+
+def _short_session_id(session_id: str) -> str:
+    clean = re.sub(r"[^A-Za-z0-9]", "", session_id or "")
+    return clean[-8:] if clean else ""
+
+
+def _goal_status_level(status: str, state: "GoalState") -> Tuple[str, str]:
+    if status == "done":
+        return "success", "green"
+    if status == "paused":
+        return "paused", "grey"
+    if getattr(state, "blockers", None) or getattr(state, "hard_gate_reason", ""):
+        return "blocked", "red"
+    if getattr(state, "same_gate_stall_count", 0) >= 2:
+        return "stalled", "orange"
+    if getattr(state, "should_replan", False):
+        return "needs_replan", "orange"
+    if status == "active":
+        return "running", "blue"
+    return "info", "grey"
+
+
+def _goal_status_controls(state: "GoalState") -> List[GoalStatusControl]:
+    command = "/supergoal" if getattr(state, "mode", "goal") == "supergoal" else "/goal"
+    level, _ = _goal_status_level(getattr(state, "status", ""), state)
+    if state.status == "active":
+        return [
+            GoalStatusControl("pause", "Pause", f"{command} pause", "primary"),
+            GoalStatusControl("refresh", "Refresh", f"{command} status"),
+            GoalStatusControl("details", "Details", f"{command} status"),
+            GoalStatusControl("mute", "Quiet", f"{command} status"),
+            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
+        ]
+    if state.status == "paused":
+        return [
+            GoalStatusControl("resume", "Resume", f"{command} resume", "primary"),
+            GoalStatusControl("refresh", "Refresh", f"{command} status"),
+            GoalStatusControl("details", "Details", f"{command} status"),
+            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
+        ]
+    if level in {"blocked", "stalled", "needs_replan"}:
+        return [
+            GoalStatusControl("resume", "Continue once", f"{command} resume", "primary"),
+            GoalStatusControl("replan", "Replan", f"{command} replan", "secondary"),
+            GoalStatusControl("details", "Details", f"{command} status"),
+            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
+        ]
+    if state.status == "done":
+        return [
+            GoalStatusControl("details", "Final report", f"{command} status"),
+            GoalStatusControl("clear", "Archive", f"{command} clear", "secondary"),
+        ]
+    return [GoalStatusControl("refresh", "Refresh", f"{command} status")]
+
+
+def build_goal_status_card(
+    state: Optional["GoalState"],
+    *,
+    session_id: str = "",
+    compact_text: str = "",
+    include_debug: bool = False,
+) -> GoalStatusCard:
+    if state is None:
+        return GoalStatusCard(
+            title="No active goal",
+            status="none",
+            level="info",
+            color="grey",
+            summary="Set one with /goal <text>.",
+            updated_at=time.time(),
+            session_short_id=_short_session_id(session_id),
+            plain_text=compact_text or "No active goal. Set one with /goal <text>.",
+        )
+
+    label = "Supergoal" if getattr(state, "mode", "goal") == "supergoal" else "Goal"
+    level, color = _goal_status_level(state.status, state)
+    first_gate = _first_failed_gate(state) if getattr(state, "mode", "goal") == "supergoal" else None
+    current_step = _current_or_next_step(state) if getattr(state, "mode", "goal") == "supergoal" else None
+    fields: List[GoalStatusField] = [
+        GoalStatusField("Progress", f"{state.turns_used}/{state.max_turns} turns", "info"),
+    ]
+    if state.last_verdict or state.last_reason:
+        verdict = state.last_verdict or "last"
+        reason = f": {_truncate(state.last_reason, 120)}" if state.last_reason else ""
+        fields.append(GoalStatusField("Last check", f"{verdict}{reason}", "info"))
+    if current_step is not None:
+        fields.append(GoalStatusField("Step", f"{current_step.id}: {current_step.title}", current_step.status))
+    if first_gate is not None:
+        fields.append(GoalStatusField("Gate", f"{first_gate.id}: {_truncate(first_gate.description, 120)}", first_gate.status))
+    if state.next_best_action:
+        fields.append(GoalStatusField("Next", _truncate(state.next_best_action, 160), "info"))
+    if state.blockers:
+        fields.append(GoalStatusField("Blocker", _truncate(state.blockers[-1], 160), "blocked"))
+    if state.subgoals:
+        fields.append(GoalStatusField("Subgoals", str(len(state.subgoals)), "info"))
+
+    debug: List[str] = []
+    if include_debug:
+        debug = [
+            f"status={state.status}",
+            f"mode={state.mode}",
+            f"strategy={state.strategy_health}",
+            f"progress={state.progress}",
+            f"critic_failures={state.consecutive_critic_failures}",
+        ]
+        if state.last_failed_gate_id:
+            debug.append(f"gate_stall={state.last_failed_gate_id}:{state.same_gate_stall_count}")
+
+    summary = _truncate(" ".join((state.goal or "").split()), 220)
+    plain_lines = [
+        f"{label} {state.status} · {state.turns_used}/{state.max_turns} turns",
+        summary,
+    ]
+    for field in fields[1:5]:
+        plain_lines.append(f"{field.label}: {field.value}")
+    return GoalStatusCard(
+        title=f"{label} status",
+        status=state.status,
+        level=level,
+        color=color,
+        summary=summary,
+        fields=fields,
+        controls=_goal_status_controls(state),
+        debug=debug,
+        updated_at=time.time(),
+        session_short_id=_short_session_id(session_id),
+        plain_text=compact_text or "\n".join(line for line in plain_lines if line),
+    )
+
+
 @dataclass
 class ResearchFinding:
     """Provenanced research/evidence item for /supergoal.
@@ -483,6 +663,10 @@ class GoalState:
     last_reason: Optional[str] = None
     paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
     consecutive_parse_failures: int = 0       # judge-output parse failures in a row
+    consecutive_judge_api_failures: int = 0   # judge API/server errors in a row
+    consecutive_critic_failures: int = 0      # supergoal critic parse/API/no-op failures in a row
+    last_failed_gate_id: str = ""
+    same_gate_stall_count: int = 0
     last_continuation_enqueued_at: float = 0.0
     last_continuation_kind: Optional[str] = None
     # /supergoal structured working memory. Normal /goal ignores these fields.
@@ -517,6 +701,7 @@ class GoalState:
     current_step_id: str = ""
     event_count: int = 0
     last_event_type: Optional[str] = None
+    status_card_message_ids: Dict[str, str] = field(default_factory=dict)
     # User-added criteria appended mid-loop via the /subgoal command.
     # When non-empty the judge prompt and continuation prompt both
     # include them so the agent works toward them and the judge factors
@@ -579,6 +764,10 @@ class GoalState:
             last_reason=data.get("last_reason"),
             paused_reason=data.get("paused_reason"),
             consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
+            consecutive_judge_api_failures=int(data.get("consecutive_judge_api_failures", 0) or 0),
+            consecutive_critic_failures=int(data.get("consecutive_critic_failures", 0) or 0),
+            last_failed_gate_id=str(data.get("last_failed_gate_id") or "").strip(),
+            same_gate_stall_count=int(data.get("same_gate_stall_count", 0) or 0),
             last_continuation_enqueued_at=float(data.get("last_continuation_enqueued_at", 0.0) or 0.0),
             last_continuation_kind=data.get("last_continuation_kind"),
             acceptance_criteria=_clean_string_list(data.get("acceptance_criteria") or []),
@@ -612,6 +801,11 @@ class GoalState:
             current_step_id=str(data.get("current_step_id") or "").strip(),
             event_count=int(data.get("event_count", 0) or 0),
             last_event_type=data.get("last_event_type"),
+            status_card_message_ids={
+                str(k): str(v)
+                for k, v in (data.get("status_card_message_ids") or {}).items()
+                if str(k).strip() and str(v).strip()
+            } if isinstance(data.get("status_card_message_ids"), dict) else {},
             subgoals=subgoals,
         )
 
@@ -735,7 +929,11 @@ def _get_session_db() -> Optional[Any]:
     if cached is not None:
         return cached
     try:
-        db = SessionDB()
+        # Pass the path explicitly instead of relying on hermes_state.DEFAULT_DB_PATH.
+        # DEFAULT_DB_PATH is computed at hermes_state import time; gateway tests and
+        # long-lived processes can import it before HERMES_HOME/profile overrides are
+        # applied, which makes goal state bleed into the wrong profile/session DB.
+        db = SessionDB(db_path=get_hermes_home() / "state.db")
     except Exception as exc:  # pragma: no cover
         logger.debug("GoalManager: SessionDB() raised (%s)", exc)
         return None
@@ -1076,6 +1274,229 @@ def _first_failed_gate(state: GoalState) -> Optional[GoalGate]:
     return None
 
 
+def _passed_gate_ids(state: GoalState) -> set[str]:
+    return {g.id for g in getattr(state, "gates", []) or [] if g.status == "passed"}
+
+
+_COMPLETION_MARKERS = (
+    "complete",
+    "completed",
+    "done",
+    "finished",
+    "resolved",
+    "shipped",
+    "final report",
+    "goal achieved",
+    "mission accomplished",
+)
+_EVIDENCE_MARKERS = (
+    "verified",
+    "verification",
+    "tested",
+    "tests pass",
+    "pytest",
+    "artifact",
+    "artifacts",
+    "evidence",
+    "changed:",
+    "verified:",
+    "evidence:",
+    "created",
+    "wrote",
+    "saved",
+    "report",
+    "log",
+    "logs",
+)
+_ARTIFACT_PATH_RE = re.compile(
+    r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))",
+    re.IGNORECASE,
+)
+
+
+def _has_explicit_final_evidence(last_response: str, judge_reason: str = "") -> bool:
+    """True only for final-looking responses with concrete verification/artifact language."""
+    text = " ".join([last_response or "", judge_reason or ""]).strip()
+    if not text:
+        return False
+    low = text.lower()
+    has_completion = any(marker in low for marker in _COMPLETION_MARKERS)
+    if not has_completion:
+        return False
+    has_evidence = any(marker in low for marker in _EVIDENCE_MARKERS) or bool(_ARTIFACT_PATH_RE.search(text))
+    if not has_evidence:
+        return False
+    # Avoid treating a bare "done, see above" as proof. A credible final report
+    # usually names at least two concrete dimensions: change, verification,
+    # evidence, artifact, or residual state.
+    marker_hits = sum(1 for marker in _EVIDENCE_MARKERS if marker in low)
+    if marker_hits >= 2:
+        return True
+    return bool(_ARTIFACT_PATH_RE.search(text)) and any(k in low for k in ("verified", "tested", "evidence", "report"))
+
+
+def _reconcile_done_evidence_gates(state: GoalState, last_response: str, judge_reason: str) -> List[str]:
+    """Pass stale generic gates when a done verdict is backed by final evidence.
+
+    This intentionally runs only after the completion judge says ``done``. It
+    does not infer completion from arbitrary assistant prose, and it does not
+    satisfy domain-specific strategy/research gates that still need structured
+    proof.
+    """
+    if getattr(state, "mode", "goal") != "supergoal":
+        return []
+    if not _has_explicit_final_evidence(last_response, judge_reason):
+        return []
+    passed: List[str] = []
+    for gate in state.gates:
+        if gate.status == "passed":
+            continue
+        if gate.id == "G1":
+            gate.status = "passed"
+            gate.evidence = "completion report states final outcome with verification evidence"
+            if not state.inferred_user_intent:
+                state.inferred_user_intent = _truncate(state.goal, 300)
+            if not state.success_definition:
+                state.success_definition = "final response explicitly reports completion with evidence/artifacts"
+            passed.append(gate.id)
+        elif gate.id == "G3":
+            gate.status = "passed"
+            gate.evidence = "final response includes concrete verification/artifact evidence"
+            state.evidence = _merge_compact_list(
+                state.evidence,
+                [_truncate(" ".join((last_response or "").split()), 300)],
+                max_items=20,
+            )
+            passed.append(gate.id)
+        elif gate.id == "G4":
+            gate.status = "passed"
+            gate.evidence = "completion judge plus explicit final report"
+            passed.append(gate.id)
+    return passed
+
+
+def _reset_gate_stall(state: GoalState) -> None:
+    state.last_failed_gate_id = ""
+    state.same_gate_stall_count = 0
+
+
+def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "") -> bool:
+    """Populate the minimal intent contract deterministically when critic is down.
+
+    G1 is a prerequisite for useful autonomous work. It should not depend only
+    on an auxiliary critic that can timeout; if the supergoal text exists, the
+    runner can at least preserve a conservative intent/success contract and let
+    later critic calls refine it.
+    """
+    if getattr(state, "mode", "goal") != "supergoal":
+        return False
+    changed = False
+    goal_text = " ".join((state.goal or "").split())
+    if goal_text and not state.inferred_user_intent:
+        state.inferred_user_intent = _truncate(goal_text, 300)
+        changed = True
+    if not state.success_definition:
+        response_low = (last_response or "").lower()
+        if any(k in response_low for k in ("verified", "tested", "pytest", "evidence", "artifact", "report")):
+            state.success_definition = "produce a verified outcome with concrete tool-backed evidence/artifacts"
+        else:
+            state.success_definition = "make measurable progress toward the stated supergoal and report evidence, blockers, or a final outcome"
+        changed = True
+    _update_supergoal_gates(state)
+    return changed
+
+
+def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
+    """Bring old persisted supergoal states under the current deterministic guards."""
+    if state is None or getattr(state, "mode", "goal") != "supergoal":
+        return False
+    should_backfill_contract = bool(
+        state.turns_used > 0
+        or state.last_failed_gate_id
+        or state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+    )
+    changed = _infer_supergoal_contract_from_turn(state, "") if should_backfill_contract else False
+    stale_gate_id = state.last_failed_gate_id
+    if stale_gate_id:
+        gate = next((g for g in state.gates or [] if g.id == stale_gate_id), None)
+        if gate is not None and gate.status == "passed":
+            _reset_gate_stall(state)
+            changed = True
+    else:
+        # Older states may have stale G1 text in last_reason/next_best_action
+        # even after deterministic normalization passes G1.
+        for gate in state.gates or []:
+            if gate.status == "passed" and (
+                f"gate {gate.id} remains open" in (state.last_reason or "")
+                or f"Satisfy gate {gate.id}:" in (state.next_best_action or "")
+            ):
+                stale_gate_id = gate.id
+                break
+    if stale_gate_id:
+        gate = next((g for g in state.gates or [] if g.id == stale_gate_id), None)
+        if gate is not None and gate.status == "passed":
+            first_failed = _first_failed_gate(state)
+            if f"gate {gate.id} remains open" in (state.last_reason or ""):
+                if first_failed is not None:
+                    state.last_reason = f"supergoal paused after stale gate {gate.id} was normalized; next open gate is {first_failed.id}: {first_failed.description}"
+                else:
+                    state.last_reason = "supergoal paused after stale gate state was normalized"
+                changed = True
+            if f"Satisfy gate {gate.id}:" in (state.next_best_action or ""):
+                if first_failed is not None:
+                    state.next_best_action = f"Satisfy gate {first_failed.id}: {first_failed.description}"
+                else:
+                    state.next_best_action = "Review normalized supergoal state and decide whether to resume or finalize."
+                changed = True
+    if state.status == "active" and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES:
+        # Critic failures should degrade strategy quality, not make the loop look
+        # stuck.  Deterministic gates/artifact extraction still provide a safe
+        # control loop, so keep the supergoal runnable and force a replan instead
+        # of pausing before the agent can act.
+        state.should_replan = True
+        state.strategy_health = "blocked" if state.strategy_health == "unknown" else state.strategy_health
+        state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
+        changed = True
+    return changed
+
+
+def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bool:
+    """Conservatively mirror visible turn output into board evidence/action state.
+
+    Critic JSON is best-effort. The deterministic state machine still needs a
+    minimal audit trail so G3/action_history do not stay empty while the agent
+    is actually running commands/tests/reports.
+    """
+    if getattr(state, "mode", "goal") != "supergoal" or not (last_response or "").strip():
+        return False
+    changed = False
+    normalized = " ".join(last_response.split())
+    action = _classify_action_text(normalized)
+    if action and action != "unknown":
+        before = list(state.action_history or [])
+        state.action_history = (before + [action])[-12:]
+        changed = state.action_history != before or changed
+        if state.current_action_class in {"", "unknown"}:
+            state.current_action_class = action
+            changed = True
+    low = normalized.lower()
+    evidence_markers = (
+        "verified", "tested", "pytest", "test passed", "tests passed", "artifact",
+        "evidence", "report", "log", "wrote", "saved", "created", "backtest", "baseline",
+        "验证", "测试", "证据", "日志", "报告", "回测",
+    )
+    if any(marker in low for marker in evidence_markers) or _ARTIFACT_PATH_RE.search(normalized):
+        before = list(state.evidence or [])
+        state.evidence = _merge_compact_list(
+            state.evidence,
+            [_truncate(normalized, 300)],
+            max_items=20,
+        )
+        changed = state.evidence != before or changed
+    _update_supergoal_gates(state)
+    return changed
+
+
 def _hypothesis_complete(h: HypothesisRecord) -> bool:
     return bool(h.baseline and h.experiment and h.kill_criteria and h.artifacts and h.status in {"passed", "failed", "killed"})
 
@@ -1109,8 +1530,11 @@ def _update_supergoal_gates(state: GoalState) -> None:
     for gate in state.gates:
         if gate.id == "G1" and state.inferred_user_intent and state.success_definition:
             gate.status, gate.evidence = "passed", "intent + success_definition populated"
-        elif gate.id == "G2" and state.research_sufficiency == "sufficient":
-            gate.status, gate.evidence = "passed", f"{len(tool_backed)} tool-backed findings"
+        elif gate.id == "G2" and state.research_sufficiency in {"sufficient", "thin"}:
+            # Thin but real tool-backed provenance is enough for generic
+            # debugging/maintenance supergoals to keep moving.  Strategy/trading
+            # supergoals still get stricter domain gates below.
+            gate.status, gate.evidence = "passed", f"research_sufficiency={state.research_sufficiency}; {len(tool_backed)} tool-backed findings"
         elif gate.id == "SG-1" and len(state.hypothesis_portfolio) >= 3:
             gate.status, gate.evidence = "passed", f"{len(state.hypothesis_portfolio)} hypotheses"
         elif gate.id == "SG-2" and state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
@@ -1134,7 +1558,8 @@ def _apply_inertia_guard(state: GoalState) -> None:
     state.current_action_class = proposed
     if proposed and proposed != "unknown":
         hist = list(state.action_history or [])
-        hist.append(proposed)
+        if not hist or hist[-1] != proposed:
+            hist.append(proposed)
         state.action_history = hist[-12:]
     first_failed = _first_failed_gate(state)
     if proposed == "infra_engineering":
@@ -1624,6 +2049,8 @@ class GoalManager:
         self.session_id = session_id
         self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
         self._state: Optional[GoalState] = load_goal(session_id)
+        if self._state is not None and _normalize_loaded_supergoal_state(self._state):
+            save_goal(self.session_id, self._state)
 
     def _record_event(
         self,
@@ -1665,12 +2092,37 @@ class GoalManager:
     def has_goal(self) -> bool:
         return self._state is not None and self._state.status in {"active", "paused"}
 
-    def status_line(self) -> str:
+    def status_line(self, *, compact: bool = False) -> str:
         s = self._state
         if s is None or s.status in {"cleared",}:
             return "No active goal. Set one with /goal <text>."
         turns = f"{s.turns_used}/{s.max_turns} turns"
         label = "Supergoal" if getattr(s, "mode", "goal") == "supergoal" else "Goal"
+        if compact:
+            # Mobile/chat friendly: keep the live status to a few short,
+            # scannable lines. Native status cards already expose controls, and
+            # repeating a full controls row on every forced status/update makes
+            # supergoal output feel noisy.
+            lines = [f"{label} {s.status} · {s.turns_used}/{s.max_turns}"]
+            if s.last_verdict or s.last_reason:
+                verdict = s.last_verdict or "last"
+                reason = f" — {_truncate(s.last_reason, 88)}" if s.last_reason else ""
+                lines.append(f"last: {verdict}{reason}")
+            if getattr(s, "mode", "goal") == "supergoal":
+                flag = ""
+                if getattr(s, "same_gate_stall_count", 0) and getattr(s, "last_failed_gate_id", ""):
+                    flag = f"gate {s.last_failed_gate_id}×{s.same_gate_stall_count}"
+                elif getattr(s, "consecutive_critic_failures", 0):
+                    flag = f"critic×{s.consecutive_critic_failures}"
+                else:
+                    first_gate = _first_failed_gate(s)
+                    if first_gate is not None:
+                        flag = f"gate {first_gate.id}"
+                if flag:
+                    lines.append(f"flag: {flag}")
+                if getattr(s, "next_best_action", ""):
+                    lines.append(f"next: {_truncate(s.next_best_action, 92)}")
+            return "\n".join(lines)
         sub = f", {len(s.subgoals)} subgoal{'s' if len(s.subgoals) != 1 else ''}" if s.subgoals else ""
         diagnostics = []
         if s.last_verdict:
@@ -1696,6 +2148,10 @@ class GoalManager:
                 diagnostics.append(f"research={s.research_sufficiency}")
             if getattr(s, "should_replan", False):
                 diagnostics.append("replan=pending")
+            if getattr(s, "consecutive_critic_failures", 0):
+                diagnostics.append(f"critic_failures={s.consecutive_critic_failures}")
+            if getattr(s, "same_gate_stall_count", 0) and getattr(s, "last_failed_gate_id", ""):
+                diagnostics.append(f"gate_stall={s.last_failed_gate_id}:{s.same_gate_stall_count}")
             if getattr(s, "next_best_action", ""):
                 diagnostics.append(f"next={_truncate(s.next_best_action, 80)}")
             current = _current_or_next_step(s)
@@ -1721,6 +2177,38 @@ class GoalManager:
         if s.status == "done":
             return f"✓ {label} done ({turns}{sub}{diag}): {s.goal}{reason}"
         return f"{label} ({s.status}, {turns}{sub}{diag}): {s.goal}{reason}"
+
+    def status_card(self, *, include_debug: bool = False) -> GoalStatusCard:
+        """Return a platform-neutral goal status card plus text fallback."""
+        return build_goal_status_card(
+            self._state,
+            session_id=self.session_id,
+            compact_text=self.status_line(compact=True),
+            include_debug=include_debug,
+        )
+
+    def get_status_card_message_id(self, platform_key: str) -> str:
+        if not self._state:
+            return ""
+        return (self._state.status_card_message_ids or {}).get(str(platform_key), "")
+
+    def set_status_card_message_id(self, platform_key: str, message_id: str) -> None:
+        if not self._state:
+            return
+        key = str(platform_key or "").strip()
+        mid = str(message_id or "").strip()
+        if not key or not mid:
+            return
+        self._state.status_card_message_ids[key] = mid
+        save_goal(self.session_id, self._state)
+
+    def clear_status_card_message_id(self, platform_key: str) -> None:
+        if not self._state:
+            return
+        key = str(platform_key or "").strip()
+        if key and key in self._state.status_card_message_ids:
+            self._state.status_card_message_ids.pop(key, None)
+            save_goal(self.session_id, self._state)
 
     # --- mutation -----------------------------------------------------
 
@@ -1772,8 +2260,29 @@ class GoalManager:
         self._state.paused_reason = None
         if reset_budget:
             self._state.turns_used = 0
+        # Explicit resume is a user decision to retry after a pause. Reset
+        # consecutive failure latches here; otherwise save/record_event paths
+        # reload the state, _normalize_loaded_supergoal_state() immediately
+        # re-pauses supergoals with stale critic_failures>=threshold, and the
+        # freshly queued continuation is then dropped as "stale" before the
+        # agent can run.
+        self._state.consecutive_critic_failures = 0
+        self._state.consecutive_judge_api_failures = 0
+        self._state.consecutive_parse_failures = 0
+        # Older supergoal states created before Mission Control gates existed
+        # can be resumed after a gateway restart. Backfill gates here so the
+        # resumed loop is governed by the current deterministic runtime rather
+        # than appearing active while missing hard gates.
+        backfilled_gates = False
+        if self._state.mode == "supergoal" and not self._state.gates:
+            self._state.gates = _default_supergoal_gates(self._state.goal)
+            backfilled_gates = True
         save_goal(self.session_id, self._state)
-        self._record_event("resumed", summary="goal resumed", data={"reset_budget": reset_budget})
+        self._record_event(
+            "resumed",
+            summary="goal resumed",
+            data={"reset_budget": reset_budget, "backfilled_gates": backfilled_gates},
+        )
         return self._state
 
     def clear(self) -> None:
@@ -1850,6 +2359,18 @@ class GoalManager:
         save_goal(self.session_id, self._state)
         return prev
 
+    def request_replan(self, reason: str = "user-requested") -> Optional[GoalState]:
+        if self._state is None or not self.has_goal():
+            return None
+        if self._state.mode != "supergoal":
+            return self._state
+        self._state.should_replan = True
+        self._state.next_best_action = self._state.next_best_action or "Run a strategic replan before the next concrete step."
+        self._state.replan_count += 1
+        save_goal(self.session_id, self._state)
+        self._record_event("replan_requested", summary=reason, data={"reason": reason})
+        return self._state
+
     def render_subgoals(self) -> str:
         """Public helper for the /subgoal slash command."""
         if self._state is None:
@@ -1902,22 +2423,39 @@ class GoalManager:
         state.last_reason = reason
 
         if getattr(state, "mode", "goal") == "supergoal":
+            gate_ids_before_critic = _passed_gate_ids(state)
+            _infer_supergoal_contract_from_turn(state, last_response)
+            _record_supergoal_turn_artifacts(state, last_response)
             try:
                 critic_data = critic_supergoal(state, last_response)
-                apply_supergoal_critic(state, critic_data)
-                interval = _supergoal_replan_interval()
-                if interval and state.turns_used > 0 and state.turns_used % interval == 0:
-                    state.should_replan = True
-                    state.replan_count += 1
-                    if not state.next_best_action:
-                        state.next_best_action = "Run a strategic replan before the next concrete step."
-                if verdict == "done":
-                    # Do not let the completion judge mark every supergoal gate
-                    # passed before the deterministic gate override below gets
-                    # a chance to inspect open gates.
-                    _update_supergoal_gates(state)
+                if critic_data:
+                    apply_supergoal_critic(state, critic_data)
+                    state.consecutive_critic_failures = 0
+                    if _passed_gate_ids(state) != gate_ids_before_critic:
+                        _reset_gate_stall(state)
+                    interval = _supergoal_replan_interval()
+                    if interval and state.turns_used > 0 and state.turns_used % interval == 0:
+                        state.should_replan = True
+                        state.replan_count += 1
+                        if not state.next_best_action:
+                            state.next_best_action = "Run a strategic replan before the next concrete step."
+                    if verdict == "done":
+                        # Do not let the completion judge mark every supergoal gate
+                        # passed before the deterministic gate override below gets
+                        # a chance to inspect open gates.
+                        _update_supergoal_gates(state)
+                    else:
+                        _update_supergoal_plan_from_progress(state, verdict=verdict)
                 else:
-                    _update_supergoal_plan_from_progress(state, verdict=verdict)
+                    # If the strict judge API itself is down, don't also count
+                    # the optional critic path as a board failure; the separate
+                    # judge_api_failures guard owns that fail-closed path.
+                    if not (reason and reason.startswith("judge error:")):
+                        state.consecutive_critic_failures += 1
+                    if verdict == "done":
+                        _update_supergoal_gates(state)
+                    else:
+                        _update_supergoal_plan_from_progress(state, verdict=verdict)
                 self._record_event(
                     "critic",
                     summary=f"progress={state.progress}; strategy={state.strategy_health}; replan={state.should_replan}",
@@ -1927,10 +2465,13 @@ class GoalManager:
                         "root_cause_confidence": state.root_cause_confidence,
                         "should_replan": state.should_replan,
                         "next_best_action": state.next_best_action,
+                        "critic_failed": not bool(critic_data),
+                        "consecutive_critic_failures": state.consecutive_critic_failures,
                     },
                 )
             except Exception as exc:
                 logger.debug("supergoal critic merge failed: %s", exc)
+                state.consecutive_critic_failures += 1
 
         # Track consecutive judge parse failures. Reset on any usable reply,
         # including API / transport errors (parse_failed=False) so a flaky
@@ -1940,10 +2481,41 @@ class GoalManager:
         else:
             state.consecutive_parse_failures = 0
 
+        # Track consecutive judge API/transport errors separately.
+        # "judge error: ..." in the reason signals an API call failure.
+        if reason and reason.startswith("judge error:"):
+            state.consecutive_judge_api_failures += 1
+        else:
+            state.consecutive_judge_api_failures = 0
+
+        gate_vetoed = False
         if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
+            _update_supergoal_gates(state)
+            gate_ids_before_reconcile = _passed_gate_ids(state)
+            # Cache the stall identity before reconcile so ancillary gate
+            # auto-pass (G1/G3/G4) does not silently reset the stall
+            # counter for the gate that is fundamentally still blocking.
+            _stall_gate_id = state.last_failed_gate_id
+            _stall_count = state.same_gate_stall_count
+            _reconcile_done_evidence_gates(state, last_response, reason)
+            if _passed_gate_ids(state) != gate_ids_before_reconcile:
+                _reset_gate_stall(state)
             _update_supergoal_gates(state)
             first_gate = _first_failed_gate(state)
             if first_gate is not None:
+                gate_vetoed = True
+                if state.last_failed_gate_id == first_gate.id:
+                    state.same_gate_stall_count += 1
+                elif _stall_gate_id and first_gate.id == _stall_gate_id:
+                    # Ancillary gates passed during reconcile but the same
+                    # gate is still the first failure.  Restore the saved
+                    # stall identity and advance the counter so the stall
+                    # guard accurately tracks consecutive same-gate vetoes.
+                    state.last_failed_gate_id = _stall_gate_id
+                    state.same_gate_stall_count = _stall_count + 1
+                else:
+                    state.last_failed_gate_id = first_gate.id
+                    state.same_gate_stall_count = 1
                 verdict = "continue"
                 reason = f"completion judge said done, but supergoal gate {first_gate.id} remains open: {first_gate.description}"
                 state.last_verdict = verdict
@@ -1953,9 +2525,37 @@ class GoalManager:
                 if not state.next_best_action:
                     state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
                 _update_supergoal_plan_from_progress(state, verdict="continue")
+                if state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS:
+                    state.status = "paused"
+                    state.paused_reason = (
+                        f"supergoal gate {first_gate.id} is stalled after "
+                        f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
+                    )
+                    save_goal(self.session_id, state)
+                    self._record_event(
+                        "paused",
+                        summary=state.paused_reason,
+                        data={
+                            "reason": state.paused_reason,
+                            "trigger": "same_gate_stall",
+                            "gate_id": first_gate.id,
+                            "same_gate_stall_count": state.same_gate_stall_count,
+                        },
+                    )
+                    return {
+                        "status": "paused",
+                        "should_continue": False,
+                        "continuation_prompt": None,
+                        "verdict": "continue",
+                        "reason": reason,
+                        "message": f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}",
+                    }
+            else:
+                _reset_gate_stall(state)
 
         if verdict == "done":
             state.status = "done"
+            _reset_gate_stall(state)
             _update_supergoal_plan_from_progress(state, verdict="done")
             save_goal(self.session_id, state)
             self._record_event("done", summary=reason, data={"reason": reason})
@@ -2003,6 +2603,48 @@ class GoalManager:
                 ),
             }
 
+        # Auto-pause when the judge API keeps failing (e.g. CPA exhausted,
+        # endpoint down, auth errors).  Without this guard, a dead judge
+        # endpoint causes the supergoal to loop forever with
+        # verdict="continue" from the fallback in judge_goal().
+        if state.consecutive_judge_api_failures >= DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES:
+            state.status = "paused"
+            state.paused_reason = (
+                f"judge API failed {state.consecutive_judge_api_failures} turns in a row "
+                f"(last: {state.last_reason})"
+            )
+            save_goal(self.session_id, state)
+            self._record_event(
+                "paused",
+                summary=state.paused_reason,
+                data={"reason": state.paused_reason, "trigger": "judge_api_failures"},
+            )
+            return {
+                "status": "paused",
+                "should_continue": False,
+                "continuation_prompt": None,
+                "verdict": "continue",
+                "reason": reason,
+                "message": (
+                    f"⏸ Goal paused — the judge API failed "
+                    f"{state.consecutive_judge_api_failures} turns in a row. "
+                    "Check CPA quota / endpoint health, then /goal resume."
+                ),
+            }
+
+        # Supergoal critic is an auxiliary quality layer.  If it fails, keep
+        # the loop alive on deterministic board/gate updates instead of pausing
+        # the user's long-running task.  Judge API/parse failures above still
+        # fail closed because they break the core continuation contract.
+        if (
+            getattr(state, "mode", "goal") == "supergoal"
+            and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+        ):
+            state.should_replan = True
+            if state.strategy_health == "unknown":
+                state.strategy_health = "blocked"
+            state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
+
         if state.turns_used >= state.max_turns:
             state.status = "paused"
             state.paused_reason = f"turn budget exhausted ({state.turns_used}/{state.max_turns})"
@@ -2023,6 +2665,9 @@ class GoalManager:
                     "Use /goal resume to keep going, or /goal clear to stop."
                 ),
             }
+
+        if not gate_vetoed:
+            _reset_gate_stall(state)
 
         save_goal(self.session_id, state)
         self._record_event(

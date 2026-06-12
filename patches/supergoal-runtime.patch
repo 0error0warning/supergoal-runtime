@@ -1,8 +1,362 @@
+diff --git a/gateway/run.py b/gateway/run.py
+index 817c8441b..97e369b87 100644
+--- a/gateway/run.py
++++ b/gateway/run.py
+@@ -9377,6 +10056,41 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+         except Exception:
+             return 20
+ 
++    def _supergoal_ui_config(self) -> Dict[str, Any]:
++        defaults = {
++            "enabled": True,
++            "native_controls": True,
++            "verbosity": "normal",
++            "update_existing_card": True,
++            "checkpoint_interval_turns": 1,
++            "checkpoint_interval_minutes": 0,
++            "terminal_notices": True,
++            "auto_thread_discord": False,
++            "details_default_collapsed": True,
++        }
++        try:
++            goals_cfg = (
++                (self.config or {}).get("goals", {})
++                if isinstance(self.config, dict)
++                else getattr(self.config, "goals", {}) or {}
++            )
++            if not goals_cfg:
++                from hermes_cli.config import load_config
++
++                goals_cfg = (load_config() or {}).get("goals") or {}
++            raw = goals_cfg.get("supergoal_ui") or {}
++            if isinstance(raw, dict):
++                defaults.update(raw)
++        except Exception:
++            pass
++        return defaults
++
++    def _goal_status_card_platform_key(self, source: Any) -> str:
++        platform = getattr(getattr(source, "platform", None), "value", None) or str(getattr(source, "platform", "") or "")
++        chat_id = str(getattr(source, "chat_id", "") or "")
++        thread_id = str(getattr(source, "thread_id", "") or "")
++        return ":".join(part for part in [platform, chat_id, thread_id] if part)
++
+     def _get_goal_manager_for_event(self, event: "MessageEvent"):
+         """Return a GoalManager bound to the session for this gateway event.
+ 
+@@ -9396,10 +10110,304 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+         sid = getattr(session_entry, "session_id", None) or ""
+         if not sid:
+             return None, None
+-        max_turns = self._goal_max_turns_from_config()
+-        return GoalManager(session_id=sid, default_max_turns=max_turns), session_entry
++        # Walk the compression-continuation chain to the tip so /goal and
++        # /supergoal commands always operate on the canonical child session
++        # after context compression migration (cf _handle_message_with_agent
++        # L8560-8590 and #20470/#29712/#33414).
++        _session_db = getattr(self, "_session_db", None)
++        if _session_db is not None:
++            try:
++                canonical_sid = _session_db.get_compression_tip(sid)
++            except Exception:
++                logger.debug(
++                    "compression-tip lookup failed for %s", sid, exc_info=True,
++                )
++                canonical_sid = sid
++            if canonical_sid and canonical_sid != sid:
++                sid = canonical_sid
++                # Re-bind the session key to the canonical child so the
++                # persisted binding is healed; the next dispatch resolves
++                # to the child without repeating this walk.
++                try:
++                    session_key = self._session_key_for_source(event.source) if event.source else None
++                except Exception:
++                    session_key = None
++                if session_key:
++                    switched = self.session_store.switch_session(session_key, canonical_sid)
++                    if switched is not None:
++                        session_entry = switched
++        max_turns = self._goal_max_turns_from_config()
++        return GoalManager(session_id=sid, default_max_turns=max_turns), session_entry
++
++    def _goal_lock_for_session(self, session_id: str) -> asyncio.Lock:
++        # Some tests instantiate GatewayRunner via __new__ to avoid heavy
++        # startup wiring. Lazily create the lock map so those focused tests and
++        # any partially-constructed runner paths keep working.
++        if not hasattr(self, "_goal_session_locks"):
++            self._goal_session_locks = {}
++        lock = self._goal_session_locks.get(session_id)
++        if lock is None:
++            lock = asyncio.Lock()
++            self._goal_session_locks[session_id] = lock
++        return lock
++
++    async def _handle_goal_command(self, event: "MessageEvent", *, super_mode: bool = False) -> str:
++        """Handle /goal or /supergoal for gateway platforms.
++
++        Subcommands: ``/goal`` / ``/goal status`` / ``/goal pause`` /
++        ``/goal resume`` / ``/goal clear``. Any other text becomes the
++        new goal.
++
++        Setting a new goal queues the goal text as the next turn so the
++        agent starts working on it immediately — the post-turn
++        continuation hook then takes over from there.
++        """
++        args = (event.get_command_args() or "").strip()
++        lower = args.lower()
++
++        mgr, session_entry = self._get_goal_manager_for_event(event)
++        if mgr is None:
++            return t("gateway.goal.unavailable")
++        sid = getattr(session_entry, "session_id", "") if session_entry is not None else ""
++
++        async with self._goal_lock_for_session(sid):
+ 
++            requested_mode = "supergoal" if super_mode else "goal"
++            requested_label = "supergoal" if super_mode else "goal"
++            other_label = "goal" if super_mode else "supergoal"
+ 
++            def _state_mode() -> str:
++                state = getattr(mgr, "state", None)
++                return getattr(state, "mode", "goal") if state is not None else "goal"
++
++            def _has_control_state(allowed_statuses: Optional[set[str]] = None) -> bool:
++                state = getattr(mgr, "state", None)
++                statuses = allowed_statuses or {"active", "paused"}
++                return (
++                    state is not None
++                    and getattr(state, "mode", "goal") == requested_mode
++                    and getattr(state, "status", "") in statuses
++                )
++
++            def _mode_mismatch_message() -> str:
++                state = getattr(mgr, "state", None)
++                if state is not None and getattr(state, "status", "") in {"active", "paused"}:
++                    actual_mode = getattr(state, "mode", "goal")
++                    if actual_mode != requested_mode:
++                        return f"A {other_label} is active; use /{other_label} status."
++                return f"No active {requested_label}."
++
++            if not args or lower == "status":
++                state = getattr(mgr, "state", None)
++                if state is not None and getattr(state, "mode", "goal") == requested_mode and getattr(state, "status", "") != "cleared":
++                    if super_mode:
++                        await self._update_supergoal_status_card(event.source, mgr, force=True)
++                    return mgr.status_line(compact=True)
++                if super_mode and not args:
++                    return (
++                        "No active supergoal. Start one explicitly with "
++                        "/supergoal start <goal>."
++                    )
++                return _mode_mismatch_message()
++
++            if lower == "pause":
++                if not _has_control_state():
++                    return _mode_mismatch_message()
++                state = mgr.pause(reason="user-paused")
++                if state is None:
++                    return f"No active {requested_label}."
++                try:
++                    adapter = self.adapters.get(event.source.platform) if event.source else None
++                    _quick_key = self._session_key_for_source(event.source) if event.source else None
++                    if adapter and _quick_key:
++                        self._clear_goal_pending_continuations(_quick_key, adapter)
++                except Exception as exc:
++                    logger.debug("goal pause: pending continuation cleanup failed: %s", exc)
++                if super_mode:
++                    await self._update_supergoal_status_card(event.source, mgr, force=True)
++                return t("gateway.goal.paused", goal=state.goal)
++
++            if lower == "resume":
++                if not _has_control_state():
++                    return _mode_mismatch_message()
++                state = mgr.resume()
++                if state is None:
++                    return f"No active {requested_label}."
++                # Resuming must restart the autonomous loop, not just flip the
++                # persisted status bit. Without this, /goal resume and
++                # /supergoal resume leave state=active but no FIFO event exists,
++                # so the agent never wakes up.
++                try:
++                    adapter = self.adapters.get(event.source.platform) if event.source else None
++                    _quick_key = self._session_key_for_source(event.source) if event.source else None
++                    if adapter and _quick_key:
++                        prompt = mgr.next_continuation_prompt() if state.mode == "supergoal" else state.goal
++                        resume_event = MessageEvent(
++                            text=prompt,
++                            message_type=MessageType.TEXT,
++                            source=event.source,
++                            message_id=event.message_id,
++                            channel_prompt=event.channel_prompt,
++                        )
++                        self._enqueue_fifo(_quick_key, resume_event, adapter)
++                        if state.mode == "supergoal":
++                            mgr.record_continuation_enqueued(kind="gateway-resume")
++                        logger.info(
++                            "%s resume enqueued: session=%s key=%s prompt_chars=%s",
++                            "supergoal" if state.mode == "supergoal" else "goal",
++                            getattr(session_entry, "session_id", ""),
++                            _quick_key,
++                            len(prompt or ""),
++                        )
++                except Exception as exc:
++                    logger.debug("goal resume enqueue failed: %s", exc)
++                if super_mode:
++                    await self._update_supergoal_status_card(event.source, mgr, force=True)
++                return t("gateway.goal.resumed", goal=state.goal)
++
++            if lower == "replan":
++                if not super_mode:
++                    return "Replan is available for /supergoal."
++                if not _has_control_state():
++                    return _mode_mismatch_message()
++                state = mgr.request_replan(reason="user-requested")
++                if state is None:
++                    return f"No active {requested_label}."
++                await self._update_supergoal_status_card(event.source, mgr, force=True)
++                return "Supergoal replan requested. The next continuation will re-evaluate strategy."
++
++            if lower in {"clear", "stop", "done"}:
++                if not _has_control_state({"active", "paused", "done"}):
++                    return _mode_mismatch_message()
++                state_before_clear = getattr(mgr, "state", None)
++                had = state_before_clear is not None and _state_mode() == requested_mode
++                if super_mode:
++                    await self._archive_supergoal_status_card(event.source, mgr, state_before_clear)
++                mgr.clear()
++                try:
++                    adapter = self.adapters.get(event.source.platform) if event.source else None
++                    _quick_key = self._session_key_for_source(event.source) if event.source else None
++                    if adapter and _quick_key:
++                        self._clear_goal_pending_continuations(_quick_key, adapter)
++                except Exception as exc:
++                    logger.debug("goal clear: pending continuation cleanup failed: %s", exc)
++                return t("gateway.goal_cleared") if had else f"No active {requested_label}."
++
++            # Otherwise — treat the remaining text as the new goal.  For gateway
++            # /supergoal specifically, require an explicit creation verb so an
++            # accidental Discord slash invocation like `/supergoal 再检查一下` does
++            # not silently launch a long-running autonomous loop.
++            goal_text = args
++            if super_mode:
++                verb, _, rest = args.partition(" ")
++                if verb.lower() not in {"start", "set", "new", "create"} or not rest.strip():
++                    return (
++                        "To start a long-running supergoal, use "
++                        "/supergoal start <goal>. Plain /supergoal text is ignored "
++                        "to prevent accidental autonomous loops."
++                    )
++                goal_text = rest.strip()
++            try:
++                state = mgr.set(
++                    goal_text,
++                    max_turns=self._goal_super_max_turns_from_config() if super_mode else None,
++                    mode="supergoal" if super_mode else "goal",
++                )
++                logger.info(
++                    "%s set: session=%s max_turns=%s goal_preview=%r",
++                    "supergoal" if super_mode else "goal",
++                    getattr(session_entry, "session_id", ""),
++                    state.max_turns,
++                    state.goal[:120],
++                )
++            except ValueError as exc:
++                return t("gateway.goal.invalid", error=str(exc))
++
++            # Queue the goal text as an immediate first turn so the agent
++            # starts making progress. The post-turn hook takes over after.
++            adapter = self.adapters.get(event.source.platform) if event.source else None
++            _quick_key = self._session_key_for_source(event.source) if event.source else None
++            if adapter and _quick_key:
++                try:
++                    kickoff_event = MessageEvent(
++                        text=state.goal,
++                        message_type=MessageType.TEXT,
++                        source=event.source,
++                        message_id=event.message_id,
++                        channel_prompt=event.channel_prompt,
++                    )
++                    self._enqueue_fifo(_quick_key, kickoff_event, adapter)
++                    logger.info(
++                        "%s kickoff enqueued: session=%s key=%s",
++                        "supergoal" if super_mode else "goal",
++                        getattr(session_entry, "session_id", ""),
++                        _quick_key,
++                    )
++                except Exception as exc:
++                    logger.debug("goal kickoff enqueue failed: %s", exc)
++
++            if super_mode:
++                await self._update_supergoal_status_card(event.source, mgr, force=True)
++            return t("gateway.goal.set", budget=state.max_turns, goal=state.goal)
++
++    async def _handle_subgoal_command(self, event: "MessageEvent") -> str:
++        """Handle /subgoal for gateway platforms (mirror of CLI handler).
++
++        Subgoals are extra criteria appended to the active goal mid-loop.
++        They modify state read at the next turn boundary, so this is safe
++        to invoke while the agent is running.
++        """
++        args = (event.get_command_args() or "").strip()
++        mgr, session_entry = self._get_goal_manager_for_event(event)
++        if mgr is None:
++            return t("gateway.goal.unavailable")
++        sid = getattr(session_entry, "session_id", "") if session_entry is not None else ""
++
++        async with self._goal_lock_for_session(sid):
++            # Reload under the same lock used by post-turn judging so subgoal
++            # edits cannot be overwritten by a concurrent judge thread.
++            mgr, _session_entry = self._get_goal_manager_for_event(event)
++            if mgr is None:
++                return t("gateway.goal.unavailable")
++            if not mgr.has_goal():
++                return "No active goal. Set one with /goal <text>."
++
++            # No args → list current subgoals.
++            if not args:
++                return f"{mgr.status_line()}\n{mgr.render_subgoals()}"
++
++            tokens = args.split(None, 1)
++            verb = tokens[0].lower()
++            rest = tokens[1].strip() if len(tokens) > 1 else ""
++
++            if verb == "remove":
++                if not rest:
++                    return "Usage: /subgoal remove <n>"
++                try:
++                    idx = int(rest.split()[0])
++                except ValueError:
++                    return "/subgoal remove: <n> must be an integer (1-based index)."
++                try:
++                    removed = mgr.remove_subgoal(idx)
++                except (IndexError, RuntimeError) as exc:
++                    return f"/subgoal remove: {exc}"
++                return f"✓ Removed subgoal {idx}: {removed}"
++
++            if verb == "clear":
++                try:
++                    prev = mgr.clear_subgoals()
++                except RuntimeError as exc:
++                    return f"/subgoal clear: {exc}"
++                if prev:
++                    return f"✓ Cleared {prev} subgoal{'s' if prev != 1 else ''}."
++                return "No subgoals to clear."
++
++            try:
++                text = mgr.add_subgoal(args)
++            except (ValueError, RuntimeError) as exc:
++                return f"/subgoal: {exc}"
++            idx = len(mgr.state.subgoals) if mgr.state else 0
++            return f"✓ Added subgoal {idx}: {text}"
+ 
+     async def _send_goal_status_notice(self, source: Any, message: str) -> None:
+         """Send a /goal judge status line back to the originating chat/thread."""
+
 diff --git a/agent/conversation_compression.py b/agent/conversation_compression.py
-index 06257ffd2..58331f46a 100644
+index 913c0e25d..343af6b7c 100644
 --- a/agent/conversation_compression.py
 +++ b/agent/conversation_compression.py
-@@ -530,6 +530,12 @@ def compress_context(
+@@ -547,6 +547,12 @@ def compress_context(
                  except (ValueError, Exception) as e:
                      logger.debug("Could not propagate title on compression: %s", e)
              agent._session_db.update_system_prompt(agent.session_id, new_system_prompt)
@@ -16,20 +370,32 @@ index 06257ffd2..58331f46a 100644
              agent._last_flushed_db_idx = 0
          except Exception as e:
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index 9c1de6728..875258466 100644
+index a6a28deaf..bfc323241 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
-@@ -100,17 +100,21 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
- SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE = (
-     "[Continuing toward your SUPERGOAL — long-running autonomous mode]\n"
-     "Supergoal: {goal}\n\n"
--    "Operate like a day-long autonomous agent, but do not waste work or tokens. "
--    "Use a lightweight loop each turn:\n"
--    "1. Re-anchor on the supergoal and current evidence/state.\n"
--    "2. Pick the highest-ROI next milestone or subtask.\n"
--    "3. Execute real tool-backed work, not just planning.\n"
--    "4. Verify the result with commands, tests, files, logs, or other evidence.\n"
--    "5. Leave a compact checkpoint: what changed, what was verified, what remains.\n\n"
+@@ -66,6 +66,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
+ # exhausted with every reply shaped like `judge returned empty response` or
+ # `judge reply was not JSON`.
+ DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES = 3
++DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES = 5  # auto-pause after this many consecutive API errors
++DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES = 3  # after this many board/critic failures, degrade to deterministic board updates
++DEFAULT_MAX_SAME_GATE_STALLS = 3  # pause instead of looping forever on the same deterministic gate veto
+ 
+ 
+ CONTINUATION_PROMPT_TEMPLATE = (
+@@ -91,6 +94,77 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+     "and stop."
+ )
+ 
++# High-budget continuation prompt for /supergoal. Keep this in goals.py rather
++# than sprinkling logic through CLI/gateway so the product behavior is owned by
++# the same orchestration module as /goal. The design intentionally stays simple:
++# a planner/executor/judge mindset, explicit verification, compact checkpoints,
++# and recovery when stuck — enough structure to avoid drift without adding a
++# brittle coordinator.
++SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE = (
++    "[Continuing toward your SUPERGOAL — long-running autonomous mode]\n"
++    "Supergoal: {goal}\n\n"
 +    "This is NOT ordinary /goal. Before executing literal instructions, infer "
 +    "the user's root intent and optimize for that objective. Use a lightweight "
 +    "first-principles loop each turn:\n"
@@ -40,38 +406,31 @@ index 9c1de6728..875258466 100644
 +    "5. Execute real tool-backed work, not just planning.\n"
 +    "6. Verify the result with commands, tests, files, logs, or other evidence.\n"
 +    "7. Leave a compact checkpoint: what changed, what was verified, what remains.\n\n"
-     "Avoid long-running-agent failure modes: do not drift, do not do tiny safe "
--    "busywork forever, do not repeat completed work, do not hide blockers, and "
--    "do not ask the user unless human input is genuinely required. Prefer "
--    "simple robust progress over brittle over-engineering.\n\n"
++    "Avoid long-running-agent failure modes: do not drift, do not do tiny safe "
 +    "busywork forever, do not repeat completed work, do not hide blockers, do "
 +    "not blindly implement the user's literal wording, and do not reinvent "
 +    "existing mature solutions without a reuse-vs-build reason. When blocked, "
 +    "expand the solution space instead of treating the first failure as a hard blocker.\n\n"
-     "If the supergoal is complete, state that explicitly and stop. If blocked, "
-     "state the blocker and the exact user input/action needed. Otherwise keep "
-     "working on the next concrete step."
-@@ -119,16 +123,28 @@ SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE = (
- SUPERGOAL_BOARD_BLOCK_TEMPLATE = (
-     "\n\nCurrent Supergoal State Board (authoritative working memory; update your "
-     "behavior from it, do not repeat completed attempts):\n{board}\n\n"
--    "Before acting, use the board to decide whether this is a root-cause "
--    "diagnosis turn, a verification turn, or a replan turn. Prefer the next "
--    "action that most reduces uncertainty or risk."
++    "If the supergoal is complete, state that explicitly and stop. If blocked, "
++    "state the blocker and the exact user input/action needed. Otherwise keep "
++    "working on the next concrete step."
++)
++
++SUPERGOAL_BOARD_BLOCK_TEMPLATE = (
++    "\n\nCurrent Supergoal State Board (authoritative working memory; update your "
++    "behavior from it, do not repeat completed attempts):\n{board}\n\n"
 +    "Before acting, use the board to decide whether this is an intent-inference "
 +    "turn, first-principles modeling turn, existing-solution scan, root-cause "
 +    "diagnosis turn, verification turn, or replan turn. Prefer the next action "
 +    "that most reduces uncertainty, risk, or wasted bespoke work."
- )
- 
- SUPERGOAL_REPLAN_BLOCK = (
-     "\n\nREPLAN REQUIRED THIS TURN:\n"
--    "- Briefly compare at least 2 plausible strategies or hypotheses.\n"
++)
++
++SUPERGOAL_REPLAN_BLOCK = (
++    "\n\nREPLAN REQUIRED THIS TURN:\n"
 +    "- Do not continue the previous path by inertia.\n"
 +    "- Restate the inferred root intent and first-principles problem model.\n"
 +    "- Briefly compare at least 2 plausible strategies or hypotheses, including reuse of existing solutions if applicable.\n"
-     "- Pick the best path by ROI, risk, maintainability, and verifiability.\n"
--    "- Then execute one concrete tool-backed step on the selected path."
++    "- Pick the best path by ROI, risk, maintainability, and verifiability.\n"
 +    "- Then execute one concrete tool-backed step on the selected path.\n"
 +    "- If a hard gate is open, satisfy that gate first; do not choose infrastructure work unless it is a proven dependency.\n"
 +    "- End with: Changed / Verified / Evidence / Remaining gates / Next action class / Why not the tempting alternative."
@@ -82,37 +441,46 @@ index 9c1de6728..875258466 100644
 +    "{reason}\n"
 +    "You are not allowed to continue the blocked action class by inertia. Work on the first failed gate instead. "
 +    "If the gate cannot be satisfied with available tools, produce a concise blocked or no-edge report with evidence."
- )
- 
- SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
-@@ -137,9 +153,11 @@ SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
-     "Additional criteria the user added mid-loop:\n"
-     "{subgoals_block}\n\n"
-     "Operate like a day-long autonomous agent while satisfying the supergoal "
--    "AND all additional criteria. Each turn: re-anchor, choose the highest-ROI "
--    "milestone, execute real tool-backed work, verify it, and leave a compact "
--    "checkpoint. Avoid drift, repeated busywork, and unnecessary human prompts. "
++)
++
++SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
++    "[Continuing toward your SUPERGOAL — long-running autonomous mode]\n"
++    "Supergoal: {goal}\n\n"
++    "Additional criteria the user added mid-loop:\n"
++    "{subgoals_block}\n\n"
++    "Operate like a day-long autonomous agent while satisfying the supergoal "
 +    "AND all additional criteria. Each turn: infer the user's root intent, "
 +    "reason from first principles, check existing solutions before building, "
 +    "choose the shortest reliable path, execute real tool-backed work, verify "
 +    "it, and leave a compact checkpoint. Avoid literalism, drift, repeated "
 +    "busywork, reinventing mature solutions, and unnecessary human prompts. "
-     "If complete or blocked, say so explicitly; otherwise continue with the "
-     "next concrete step."
- )
-@@ -191,6 +209,8 @@ SUPERGOAL_CRITIC_SYSTEM_PROMPT = (
-     "Do not decide final completion; another judge handles DONE. Your job is "
-     "to update compact working memory and detect bad long-horizon behavior: "
-     "drift, repetition, weak progress, premature conclusions, missing evidence, "
-+    "literal task-following that misses root intent, insufficient first-principles "
-+    "reasoning, insufficient research into existing solutions, reinventing wheels, "
-     "or the need to replan. Reply ONLY with one JSON object."
++    "If complete or blocked, say so explicitly; otherwise continue with the "
++    "next concrete step."
++)
++
+ 
+ JUDGE_SYSTEM_PROMPT = (
+     "You are a strict judge evaluating whether an autonomous agent has "
+@@ -133,18 +207,454 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+     "Is the goal AND every additional criterion satisfied?"
  )
  
-@@ -200,6 +220,17 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
-     "Most recent agent response:\n{response}\n\n"
-     "Return JSON with these keys:\n"
-     "{{\n"
++SUPERGOAL_CRITIC_SYSTEM_PROMPT = (
++    "You are a strategic critic for a long-running autonomous agent. "
++    "Do not decide final completion; another judge handles DONE. Your job is "
++    "to update compact working memory and detect bad long-horizon behavior: "
++    "drift, repetition, weak progress, premature conclusions, missing evidence, "
++    "literal task-following that misses root intent, insufficient first-principles "
++    "reasoning, insufficient research into existing solutions, reinventing wheels, "
++    "or the need to replan. Reply ONLY with one JSON object."
++)
++
++SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
++    "Supergoal:\n{goal}\n\n"
++    "Existing state board:\n{board}\n\n"
++    "Most recent agent response:\n{response}\n\n"
++    "Return JSON with these keys:\n"
++    "{{\n"
 +    "  \"inferred_user_intent\": \"root objective in one sentence\",\n"
 +    "  \"success_definition\": \"what would actually satisfy the user\",\n"
 +    "  \"first_principles_model\": [\"load-bearing truths or constraints\"],\n"
@@ -124,28 +492,284 @@ index 9c1de6728..875258466 100644
 +    "  \"build_vs_reuse_decision\": \"reuse|build|hybrid|unknown: rationale\",\n"
 +    "  \"literalism_risk\": \"low|medium|high\",\n"
 +    "  \"research_sufficiency\": \"sufficient|thin|missing\",\n"
-     "  \"progress\": \"real|weak|none|regressed\",\n"
-     "  \"strategy_health\": \"good|stuck|drifting|repeating|premature|blocked\",\n"
-     "  \"root_cause_confidence\": 0.0,\n"
-@@ -213,8 +244,12 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
-     "  \"new_blockers\": [\"...\"],\n"
-     "  \"new_risks\": [\"...\"]\n"
-     "}}\n\n"
--    "Keep every list item short and evidence-based. If unsure, set weak/none "
--    "progress and request the smallest diagnostic action as next_best_action."
++    "  \"progress\": \"real|weak|none|regressed\",\n"
++    "  \"strategy_health\": \"good|stuck|drifting|repeating|premature|blocked\",\n"
++    "  \"root_cause_confidence\": 0.0,\n"
++    "  \"should_replan\": false,\n"
++    "  \"next_best_action\": \"one concrete next action\",\n"
++    "  \"missing_evidence\": [\"...\"],\n"
++    "  \"new_milestones\": [\"...\"],\n"
++    "  \"new_hypotheses\": [\"...\"],\n"
++    "  \"new_evidence\": [\"...\"],\n"
++    "  \"new_attempted_solutions\": [\"...\"],\n"
++    "  \"new_blockers\": [\"...\"],\n"
++    "  \"new_risks\": [\"...\"]\n"
++    "}}\n\n"
 +    "Keep every list item short and evidence-based. If the agent followed the "
 +    "literal task without inferring the user's root intent, skipped first-principles "
 +    "modeling, or built before checking mature existing solutions, set "
 +    "literalism_risk=high and/or research_sufficiency=thin/missing, request replan, "
 +    "and make next_best_action the smallest tool-backed scan/diagnostic. If unsure, "
 +    "set weak/none progress and request the smallest diagnostic action."
- )
++)
++
+ 
+ # ──────────────────────────────────────────────────────────────────────
+-# Dataclass
++# Dataclasses
+ # ──────────────────────────────────────────────────────────────────────
  
  
-@@ -296,13 +331,150 @@ class GoalEvent:
-         )
- 
- 
++@dataclass
++class PlanStep:
++    """A compact, durable plan step for /supergoal runs.
++
++    This is intentionally small: it gives the loop a productized task graph
++    surface without turning /goal into a project-management system.
++    """
++
++    id: str
++    title: str
++    status: str = "pending"  # pending | in_progress | done | failed | blocked | skipped
++    verification: str = ""
++    summary: str = ""
++
++    def to_dict(self) -> Dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_dict(cls, data: Any) -> Optional["PlanStep"]:
++        if not isinstance(data, dict):
++            return None
++        step_id = str(data.get("id") or "").strip()
++        title = str(data.get("title") or "").strip()
++        if not step_id or not title:
++            return None
++        status = str(data.get("status") or "pending").strip() or "pending"
++        if status not in {"pending", "in_progress", "done", "failed", "blocked", "skipped"}:
++            status = "pending"
++        return cls(
++            id=step_id,
++            title=title,
++            status=status,
++            verification=str(data.get("verification") or "").strip(),
++            summary=str(data.get("summary") or "").strip(),
++        )
++
++
++@dataclass
++class GoalEvent:
++    """Append-only audit event for a goal/supergoal run."""
++
++    ts: float
++    type: str
++    turn: int = 0
++    summary: str = ""
++    data: Dict[str, Any] = field(default_factory=dict)
++
++    def to_dict(self) -> Dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_dict(cls, data: Any) -> Optional["GoalEvent"]:
++        if not isinstance(data, dict):
++            return None
++        event_type = str(data.get("type") or "").strip()
++        if not event_type:
++            return None
++        maybe_data = data.get("data")
++        raw_data: Dict[str, Any] = maybe_data if isinstance(maybe_data, dict) else {}
++        raw_ts = data.get("ts")
++        try:
++            ts = float(raw_ts) if raw_ts is not None else time.time()
++        except Exception:
++            ts = time.time()
++        return cls(
++            ts=ts,
++            type=event_type,
++            turn=int(data.get("turn", 0) or 0),
++            summary=str(data.get("summary") or "").strip(),
++            data=raw_data,
++        )
++
++
++@dataclass(frozen=True)
++class GoalStatusField:
++    label: str
++    value: str
++    level: str = "info"
++
++
++@dataclass(frozen=True)
++class GoalStatusControl:
++    id: str
++    label: str
++    command: str
++    style: str = "secondary"
++    enabled: bool = True
++
++
++@dataclass(frozen=True)
++class GoalStatusCard:
++    """Platform-neutral status surface for /goal and /supergoal UIs."""
++
++    title: str
++    status: str
++    level: str
++    color: str
++    summary: str
++    fields: List[GoalStatusField] = field(default_factory=list)
++    controls: List[GoalStatusControl] = field(default_factory=list)
++    debug: List[str] = field(default_factory=list)
++    updated_at: float = 0.0
++    session_short_id: str = ""
++    plain_text: str = ""
++
++    def to_dict(self) -> Dict[str, Any]:
++        return {
++            "title": self.title,
++            "status": self.status,
++            "level": self.level,
++            "color": self.color,
++            "summary": self.summary,
++            "fields": [asdict(field) for field in self.fields],
++            "controls": [asdict(control) for control in self.controls],
++            "debug": list(self.debug),
++            "updated_at": self.updated_at,
++            "session_short_id": self.session_short_id,
++            "plain_text": self.plain_text,
++        }
++
++
++def _short_session_id(session_id: str) -> str:
++    clean = re.sub(r"[^A-Za-z0-9]", "", session_id or "")
++    return clean[-8:] if clean else ""
++
++
++def _goal_status_level(status: str, state: "GoalState") -> Tuple[str, str]:
++    if status == "done":
++        return "success", "green"
++    if status == "paused":
++        return "paused", "grey"
++    if getattr(state, "blockers", None) or getattr(state, "hard_gate_reason", ""):
++        return "blocked", "red"
++    if getattr(state, "same_gate_stall_count", 0) >= 2:
++        return "stalled", "orange"
++    if getattr(state, "should_replan", False):
++        return "needs_replan", "orange"
++    if status == "active":
++        return "running", "blue"
++    return "info", "grey"
++
++
++def _goal_status_controls(state: "GoalState") -> List[GoalStatusControl]:
++    command = "/supergoal" if getattr(state, "mode", "goal") == "supergoal" else "/goal"
++    level, _ = _goal_status_level(getattr(state, "status", ""), state)
++    if state.status == "active":
++        return [
++            GoalStatusControl("pause", "Pause", f"{command} pause", "primary"),
++            GoalStatusControl("refresh", "Refresh", f"{command} status"),
++            GoalStatusControl("details", "Details", f"{command} status"),
++            GoalStatusControl("mute", "Quiet", f"{command} status"),
++            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
++        ]
++    if state.status == "paused":
++        return [
++            GoalStatusControl("resume", "Resume", f"{command} resume", "primary"),
++            GoalStatusControl("refresh", "Refresh", f"{command} status"),
++            GoalStatusControl("details", "Details", f"{command} status"),
++            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
++        ]
++    if level in {"blocked", "stalled", "needs_replan"}:
++        return [
++            GoalStatusControl("resume", "Continue once", f"{command} resume", "primary"),
++            GoalStatusControl("replan", "Replan", f"{command} replan", "secondary"),
++            GoalStatusControl("details", "Details", f"{command} status"),
++            GoalStatusControl("clear", "Clear", f"{command} clear", "danger"),
++        ]
++    if state.status == "done":
++        return [
++            GoalStatusControl("details", "Final report", f"{command} status"),
++            GoalStatusControl("clear", "Archive", f"{command} clear", "secondary"),
++        ]
++    return [GoalStatusControl("refresh", "Refresh", f"{command} status")]
++
++
++def build_goal_status_card(
++    state: Optional["GoalState"],
++    *,
++    session_id: str = "",
++    compact_text: str = "",
++    include_debug: bool = False,
++) -> GoalStatusCard:
++    if state is None:
++        return GoalStatusCard(
++            title="No active goal",
++            status="none",
++            level="info",
++            color="grey",
++            summary="Set one with /goal <text>.",
++            updated_at=time.time(),
++            session_short_id=_short_session_id(session_id),
++            plain_text=compact_text or "No active goal. Set one with /goal <text>.",
++        )
++
++    label = "Supergoal" if getattr(state, "mode", "goal") == "supergoal" else "Goal"
++    level, color = _goal_status_level(state.status, state)
++    first_gate = _first_failed_gate(state) if getattr(state, "mode", "goal") == "supergoal" else None
++    current_step = _current_or_next_step(state) if getattr(state, "mode", "goal") == "supergoal" else None
++    fields: List[GoalStatusField] = [
++        GoalStatusField("Progress", f"{state.turns_used}/{state.max_turns} turns", "info"),
++    ]
++    if state.last_verdict or state.last_reason:
++        verdict = state.last_verdict or "last"
++        reason = f": {_truncate(state.last_reason, 120)}" if state.last_reason else ""
++        fields.append(GoalStatusField("Last check", f"{verdict}{reason}", "info"))
++    if current_step is not None:
++        fields.append(GoalStatusField("Step", f"{current_step.id}: {current_step.title}", current_step.status))
++    if first_gate is not None:
++        fields.append(GoalStatusField("Gate", f"{first_gate.id}: {_truncate(first_gate.description, 120)}", first_gate.status))
++    if state.next_best_action:
++        fields.append(GoalStatusField("Next", _truncate(state.next_best_action, 160), "info"))
++    if state.blockers:
++        fields.append(GoalStatusField("Blocker", _truncate(state.blockers[-1], 160), "blocked"))
++    if state.subgoals:
++        fields.append(GoalStatusField("Subgoals", str(len(state.subgoals)), "info"))
++
++    debug: List[str] = []
++    if include_debug:
++        debug = [
++            f"status={state.status}",
++            f"mode={state.mode}",
++            f"strategy={state.strategy_health}",
++            f"progress={state.progress}",
++            f"critic_failures={state.consecutive_critic_failures}",
++        ]
++        if state.last_failed_gate_id:
++            debug.append(f"gate_stall={state.last_failed_gate_id}:{state.same_gate_stall_count}")
++
++    summary = _truncate(" ".join((state.goal or "").split()), 220)
++    plain_lines = [
++        f"{label} {state.status} · {state.turns_used}/{state.max_turns} turns",
++        summary,
++    ]
++    for field in fields[1:5]:
++        plain_lines.append(f"{field.label}: {field.value}")
++    return GoalStatusCard(
++        title=f"{label} status",
++        status=state.status,
++        level=level,
++        color=color,
++        summary=summary,
++        fields=fields,
++        controls=_goal_status_controls(state),
++        debug=debug,
++        updated_at=time.time(),
++        session_short_id=_short_session_id(session_id),
++        plain_text=compact_text or "\n".join(line for line in plain_lines if line),
++    )
++
++
 +@dataclass
 +class ResearchFinding:
 +    """Provenanced research/evidence item for /supergoal.
@@ -288,16 +912,30 @@ index 9c1de6728..875258466 100644
      """Serializable goal state stored per session."""
  
      goal: str
-     mode: str = "goal"             # goal | supergoal
 -    status: str = "active"          # active | paused | done | cleared
++    mode: str = "goal"             # goal | supergoal
 +    status: str = "active"          # active | paused | done | cleared | migrated
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -321,6 +493,20 @@ class GoalState:
-     attempted_solutions: List[str] = field(default_factory=list)
-     blockers: List[str] = field(default_factory=list)
-     risks: List[str] = field(default_factory=list)
+@@ -153,6 +663,45 @@ class GoalState:
+     last_reason: Optional[str] = None
+     paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
+     consecutive_parse_failures: int = 0       # judge-output parse failures in a row
++    consecutive_judge_api_failures: int = 0   # judge API/server errors in a row
++    consecutive_critic_failures: int = 0      # supergoal critic parse/API/no-op failures in a row
++    last_failed_gate_id: str = ""
++    same_gate_stall_count: int = 0
++    last_continuation_enqueued_at: float = 0.0
++    last_continuation_kind: Optional[str] = None
++    # /supergoal structured working memory. Normal /goal ignores these fields.
++    acceptance_criteria: List[str] = field(default_factory=list)
++    milestones: List[str] = field(default_factory=list)
++    hypotheses: List[str] = field(default_factory=list)
++    evidence: List[str] = field(default_factory=list)
++    attempted_solutions: List[str] = field(default_factory=list)
++    blockers: List[str] = field(default_factory=list)
++    risks: List[str] = field(default_factory=list)
 +    inferred_user_intent: str = ""
 +    success_definition: str = ""
 +    first_principles_model: List[str] = field(default_factory=list)
@@ -312,23 +950,45 @@ index 9c1de6728..875258466 100644
 +    build_vs_reuse_decision: str = ""
 +    literalism_risk: str = "unknown"
 +    research_sufficiency: str = "unknown"
-     next_best_action: str = ""
-     strategy_health: str = "unknown"
-     progress: str = "unknown"
-@@ -341,6 +527,9 @@ class GoalState:
++    next_best_action: str = ""
++    strategy_health: str = "unknown"
++    progress: str = "unknown"
++    root_cause_confidence: float = 0.0
++    should_replan: bool = False
++    replan_count: int = 0
++    plan_steps: List[PlanStep] = field(default_factory=list)
++    current_step_id: str = ""
++    event_count: int = 0
++    last_event_type: Optional[str] = None
++    status_card_message_ids: Dict[str, str] = field(default_factory=dict)
+     # User-added criteria appended mid-loop via the /subgoal command.
+     # When non-empty the judge prompt and continuation prompt both
+     # include them so the agent works toward them and the judge factors
+@@ -161,7 +710,12 @@ class GoalState:
+     subgoals: List[str] = field(default_factory=list)
+ 
      def to_json(self) -> str:
-         data = asdict(self)
-         data["plan_steps"] = [step.to_dict() for step in self.plan_steps]
+-        return json.dumps(asdict(self), ensure_ascii=False)
++        data = asdict(self)
++        data["plan_steps"] = [step.to_dict() for step in self.plan_steps]
 +        data["research_findings"] = [finding.to_dict() for finding in self.research_findings]
 +        data["hypothesis_portfolio"] = [h.to_dict() for h in self.hypothesis_portfolio]
 +        data["gates"] = [g.to_dict() for g in self.gates]
-         return json.dumps(data, ensure_ascii=False)
++        return json.dumps(data, ensure_ascii=False)
  
      @classmethod
-@@ -357,6 +546,27 @@ class GoalState:
-                 step = PlanStep.from_dict(raw_step)
-                 if step is not None:
-                     plan_steps.append(step)
+     def from_json(cls, raw: str) -> "GoalState":
+@@ -170,8 +724,37 @@ class GoalState:
+         subgoals: List[str] = []
+         if isinstance(raw_subgoals, list):
+             subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
++        raw_steps = data.get("plan_steps") or []
++        plan_steps: List[PlanStep] = []
++        if isinstance(raw_steps, list):
++            for raw_step in raw_steps:
++                step = PlanStep.from_dict(raw_step)
++                if step is not None:
++                    plan_steps.append(step)
 +        raw_findings = data.get("research_findings") or []
 +        research_findings: List[ResearchFinding] = []
 +        if isinstance(raw_findings, list):
@@ -352,11 +1012,27 @@ index 9c1de6728..875258466 100644
 +                    gates.append(gate)
          return cls(
              goal=data.get("goal", ""),
-             mode=data.get("mode", "goal") or "goal",
-@@ -378,6 +588,20 @@ class GoalState:
-             attempted_solutions=_clean_string_list(data.get("attempted_solutions") or []),
-             blockers=_clean_string_list(data.get("blockers") or []),
-             risks=_clean_string_list(data.get("risks") or []),
++            mode=data.get("mode", "goal") or "goal",
+             status=data.get("status", "active"),
+             turns_used=int(data.get("turns_used", 0) or 0),
+             max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
+@@ -181,6 +764,48 @@ class GoalState:
+             last_reason=data.get("last_reason"),
+             paused_reason=data.get("paused_reason"),
+             consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
++            consecutive_judge_api_failures=int(data.get("consecutive_judge_api_failures", 0) or 0),
++            consecutive_critic_failures=int(data.get("consecutive_critic_failures", 0) or 0),
++            last_failed_gate_id=str(data.get("last_failed_gate_id") or "").strip(),
++            same_gate_stall_count=int(data.get("same_gate_stall_count", 0) or 0),
++            last_continuation_enqueued_at=float(data.get("last_continuation_enqueued_at", 0.0) or 0.0),
++            last_continuation_kind=data.get("last_continuation_kind"),
++            acceptance_criteria=_clean_string_list(data.get("acceptance_criteria") or []),
++            milestones=_clean_string_list(data.get("milestones") or []),
++            hypotheses=_clean_string_list(data.get("hypotheses") or []),
++            evidence=_clean_string_list(data.get("evidence") or []),
++            attempted_solutions=_clean_string_list(data.get("attempted_solutions") or []),
++            blockers=_clean_string_list(data.get("blockers") or []),
++            risks=_clean_string_list(data.get("risks") or []),
 +            inferred_user_intent=str(data.get("inferred_user_intent") or "").strip(),
 +            success_definition=str(data.get("success_definition") or "").strip(),
 +            first_principles_model=_clean_string_list(data.get("first_principles_model") or []),
@@ -371,15 +1047,35 @@ index 9c1de6728..875258466 100644
 +            build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
 +            literalism_risk=str(data.get("literalism_risk") or "unknown").strip() or "unknown",
 +            research_sufficiency=str(data.get("research_sufficiency") or "unknown").strip() or "unknown",
-             next_best_action=str(data.get("next_best_action") or "").strip(),
-             strategy_health=str(data.get("strategy_health") or "unknown").strip() or "unknown",
-             progress=str(data.get("progress") or "unknown").strip() or "unknown",
-@@ -405,7 +629,43 @@ class GoalState:
-         parts = [
-             f"objective: {self.goal}",
-             f"progress: {self.progress}; strategy_health: {self.strategy_health}; root_cause_confidence: {self.root_cause_confidence:.2f}",
++            next_best_action=str(data.get("next_best_action") or "").strip(),
++            strategy_health=str(data.get("strategy_health") or "unknown").strip() or "unknown",
++            progress=str(data.get("progress") or "unknown").strip() or "unknown",
++            root_cause_confidence=_coerce_float(data.get("root_cause_confidence"), 0.0),
++            should_replan=bool(data.get("should_replan", False)),
++            replan_count=int(data.get("replan_count", 0) or 0),
++            plan_steps=plan_steps,
++            current_step_id=str(data.get("current_step_id") or "").strip(),
++            event_count=int(data.get("event_count", 0) or 0),
++            last_event_type=data.get("last_event_type"),
++            status_card_message_ids={
++                str(k): str(v)
++                for k, v in (data.get("status_card_message_ids") or {}).items()
++                if str(k).strip() and str(v).strip()
++            } if isinstance(data.get("status_card_message_ids"), dict) else {},
+             subgoals=subgoals,
+         )
+ 
+@@ -193,6 +818,78 @@ class GoalState:
+             return ""
+         return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
+ 
++    def render_supergoal_board(self) -> str:
++        """Compact persistent board injected into /supergoal continuations."""
++        parts = [
++            f"objective: {self.goal}",
++            f"progress: {self.progress}; strategy_health: {self.strategy_health}; root_cause_confidence: {self.root_cause_confidence:.2f}",
 +            f"literalism_risk: {self.literalism_risk}; research_sufficiency: {self.research_sufficiency}",
-         ]
++        ]
 +        if self.inferred_user_intent:
 +            parts.append("inferred_user_intent: " + self.inferred_user_intent)
 +        if self.success_definition:
@@ -415,10 +1111,64 @@ index 9c1de6728..875258466 100644
 +            parts.append("no_edge_report: " + self.no_edge_report)
 +        if self.build_vs_reuse_decision:
 +            parts.append("build_vs_reuse_decision: " + self.build_vs_reuse_decision)
-         if self.acceptance_criteria:
-             parts.append("acceptance_criteria: " + "; ".join(self.acceptance_criteria[:6]))
-         if self.milestones:
-@@ -526,6 +786,54 @@ def clear_goal(session_id: str) -> None:
++        if self.acceptance_criteria:
++            parts.append("acceptance_criteria: " + "; ".join(self.acceptance_criteria[:6]))
++        if self.milestones:
++            parts.append("milestones: " + "; ".join(self.milestones[-8:]))
++        if self.hypotheses:
++            parts.append("hypotheses: " + "; ".join(self.hypotheses[-8:]))
++        if self.evidence:
++            parts.append("evidence: " + "; ".join(self.evidence[-10:]))
++        if self.attempted_solutions:
++            parts.append("attempted_solutions: " + "; ".join(self.attempted_solutions[-8:]))
++        if self.blockers:
++            parts.append("blockers: " + "; ".join(self.blockers[-6:]))
++        if self.risks:
++            parts.append("risks: " + "; ".join(self.risks[-6:]))
++        if self.plan_steps:
++            rendered_steps = []
++            for step in self.plan_steps[:8]:
++                marker = "*" if step.id == self.current_step_id else ""
++                rendered_steps.append(f"{step.id}{marker}:{step.status}:{step.title}")
++            parts.append("plan_steps: " + "; ".join(rendered_steps))
++        if self.next_best_action:
++            parts.append("next_best_action: " + self.next_best_action)
++        if self.should_replan:
++            parts.append("replan: required")
++        if self.replan_count:
++            parts.append(f"replan_count: {self.replan_count}")
++        if self.event_count:
++            parts.append(f"events: {self.event_count}; last_event: {self.last_event_type or 'unknown'}")
++        return "\n".join(parts)
++
+ 
+ # ──────────────────────────────────────────────────────────────────────
+ # Persistence (SessionDB state_meta)
+@@ -203,6 +900,10 @@ def _meta_key(session_id: str) -> str:
+     return f"goal:{session_id}"
+ 
+ 
++def _events_meta_key(session_id: str) -> str:
++    return f"goal_events:{session_id}"
++
++
+ _DB_CACHE: Dict[str, Any] = {}
+ 
+ 
+@@ -228,7 +929,11 @@ def _get_session_db() -> Optional[Any]:
+     if cached is not None:
+         return cached
+     try:
+-        db = SessionDB()
++        # Pass the path explicitly instead of relying on hermes_state.DEFAULT_DB_PATH.
++        # DEFAULT_DB_PATH is computed at hermes_state import time; gateway tests and
++        # long-lived processes can import it before HERMES_HOME/profile overrides are
++        # applied, which makes goal state bleed into the wrong profile/session DB.
++        db = SessionDB(db_path=get_hermes_home() / "state.db")
+     except Exception as exc:  # pragma: no cover
+         logger.debug("GoalManager: SessionDB() raised (%s)", exc)
+         return None
+@@ -279,6 +984,125 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -470,13 +1220,135 @@ index 9c1de6728..875258466 100644
 +    return load_goal(new_session_id)
 +
 +
- def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
-     """Load append-only goal events for a session from state_meta."""
-     if not session_id:
-@@ -661,6 +969,196 @@ def _merge_compact_list(existing: List[str], new_items: Any, *, max_items: int =
-     return merged[-max_items:]
++def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
++    """Load append-only goal events for a session from state_meta."""
++    if not session_id:
++        return []
++    db = _get_session_db()
++    if db is None:
++        return []
++    try:
++        raw = db.get_meta(_events_meta_key(session_id))
++    except Exception as exc:
++        logger.debug("GoalManager: get events meta failed: %s", exc)
++        return []
++    if not raw:
++        return []
++    try:
++        decoded = json.loads(raw)
++    except Exception as exc:
++        logger.debug("GoalManager: could not parse events for %s: %s", session_id, exc)
++        return []
++    if not isinstance(decoded, list):
++        return []
++    events: List[GoalEvent] = []
++    for item in decoded[-max(1, int(limit or 100)):]:
++        event = GoalEvent.from_dict(item)
++        if event is not None:
++            events.append(event)
++    return events
++
++
++def append_goal_event(
++    session_id: str,
++    event_type: str,
++    *,
++    turn: int = 0,
++    summary: str = "",
++    data: Optional[Dict[str, Any]] = None,
++    max_events: int = 200,
++) -> Optional[GoalEvent]:
++    """Append an audit event and update lightweight counters on GoalState."""
++    if not session_id or not event_type:
++        return None
++    db = _get_session_db()
++    if db is None:
++        return None
++    event = GoalEvent(
++        ts=time.time(),
++        type=str(event_type).strip(),
++        turn=int(turn or 0),
++        summary=_truncate(" ".join(str(summary or "").split()), 500),
++        data=data or {},
++    )
++    events = load_goal_events(session_id, limit=max_events)
++    events.append(event)
++    events = events[-max_events:]
++    try:
++        db.set_meta(
++            _events_meta_key(session_id),
++            json.dumps([e.to_dict() for e in events], ensure_ascii=False),
++        )
++    except Exception as exc:
++        logger.debug("GoalManager: set events meta failed: %s", exc)
++        return event
++
++    state = load_goal(session_id)
++    if state is not None:
++        state.event_count = len(events)
++        state.last_event_type = event.type
++        save_goal(session_id, state)
++    return event
++
++
+ # ──────────────────────────────────────────────────────────────────────
+ # Judge
+ # ──────────────────────────────────────────────────────────────────────
+@@ -292,6 +1116,556 @@ def _truncate(text: str, limit: int) -> str:
+     return text[:limit] + "… [truncated]"
  
  
++def _clean_string_list(value: Any, *, limit: int = 12, item_limit: int = 220) -> List[str]:
++    """Normalize model/user supplied list-ish values into compact strings."""
++    if value is None:
++        return []
++    if isinstance(value, str):
++        value = [value]
++    if not isinstance(value, list):
++        return []
++    out: List[str] = []
++    seen = set()
++    for item in value:
++        text = str(item or "").strip()
++        if not text:
++            continue
++        text = " ".join(text.split())
++        if len(text) > item_limit:
++            text = text[:item_limit].rstrip() + "…"
++        key = text.lower()
++        if key in seen:
++            continue
++        seen.add(key)
++        out.append(text)
++        if len(out) >= limit:
++            break
++    return out
++
++
++def _coerce_float(value: Any, default: float = 0.0) -> float:
++    try:
++        parsed = float(value)
++    except Exception:
++        return default
++    if parsed < 0:
++        return 0.0
++    if parsed > 1:
++        return 1.0
++    return parsed
++
++
++def _merge_compact_list(existing: List[str], new_items: Any, *, max_items: int = 20) -> List[str]:
++    merged = list(existing or [])
++    seen = {str(x).strip().lower() for x in merged if str(x).strip()}
++    for item in _clean_string_list(new_items, limit=20):
++        key = item.lower()
++        if key in seen:
++            continue
++        seen.add(key)
++        merged.append(item)
++    return merged[-max_items:]
++
++
 +def _merge_research_findings(existing: List[ResearchFinding], new_items: Any, *, max_items: int = 24) -> List[ResearchFinding]:
 +    merged = list(existing or [])
 +    seen = {(f.source_type, f.title.lower(), f.locator.lower()) for f in merged}
@@ -584,6 +1456,229 @@ index 9c1de6728..875258466 100644
 +    return None
 +
 +
++def _passed_gate_ids(state: GoalState) -> set[str]:
++    return {g.id for g in getattr(state, "gates", []) or [] if g.status == "passed"}
++
++
++_COMPLETION_MARKERS = (
++    "complete",
++    "completed",
++    "done",
++    "finished",
++    "resolved",
++    "shipped",
++    "final report",
++    "goal achieved",
++    "mission accomplished",
++)
++_EVIDENCE_MARKERS = (
++    "verified",
++    "verification",
++    "tested",
++    "tests pass",
++    "pytest",
++    "artifact",
++    "artifacts",
++    "evidence",
++    "changed:",
++    "verified:",
++    "evidence:",
++    "created",
++    "wrote",
++    "saved",
++    "report",
++    "log",
++    "logs",
++)
++_ARTIFACT_PATH_RE = re.compile(
++    r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))",
++    re.IGNORECASE,
++)
++
++
++def _has_explicit_final_evidence(last_response: str, judge_reason: str = "") -> bool:
++    """True only for final-looking responses with concrete verification/artifact language."""
++    text = " ".join([last_response or "", judge_reason or ""]).strip()
++    if not text:
++        return False
++    low = text.lower()
++    has_completion = any(marker in low for marker in _COMPLETION_MARKERS)
++    if not has_completion:
++        return False
++    has_evidence = any(marker in low for marker in _EVIDENCE_MARKERS) or bool(_ARTIFACT_PATH_RE.search(text))
++    if not has_evidence:
++        return False
++    # Avoid treating a bare "done, see above" as proof. A credible final report
++    # usually names at least two concrete dimensions: change, verification,
++    # evidence, artifact, or residual state.
++    marker_hits = sum(1 for marker in _EVIDENCE_MARKERS if marker in low)
++    if marker_hits >= 2:
++        return True
++    return bool(_ARTIFACT_PATH_RE.search(text)) and any(k in low for k in ("verified", "tested", "evidence", "report"))
++
++
++def _reconcile_done_evidence_gates(state: GoalState, last_response: str, judge_reason: str) -> List[str]:
++    """Pass stale generic gates when a done verdict is backed by final evidence.
++
++    This intentionally runs only after the completion judge says ``done``. It
++    does not infer completion from arbitrary assistant prose, and it does not
++    satisfy domain-specific strategy/research gates that still need structured
++    proof.
++    """
++    if getattr(state, "mode", "goal") != "supergoal":
++        return []
++    if not _has_explicit_final_evidence(last_response, judge_reason):
++        return []
++    passed: List[str] = []
++    for gate in state.gates:
++        if gate.status == "passed":
++            continue
++        if gate.id == "G1":
++            gate.status = "passed"
++            gate.evidence = "completion report states final outcome with verification evidence"
++            if not state.inferred_user_intent:
++                state.inferred_user_intent = _truncate(state.goal, 300)
++            if not state.success_definition:
++                state.success_definition = "final response explicitly reports completion with evidence/artifacts"
++            passed.append(gate.id)
++        elif gate.id == "G3":
++            gate.status = "passed"
++            gate.evidence = "final response includes concrete verification/artifact evidence"
++            state.evidence = _merge_compact_list(
++                state.evidence,
++                [_truncate(" ".join((last_response or "").split()), 300)],
++                max_items=20,
++            )
++            passed.append(gate.id)
++        elif gate.id == "G4":
++            gate.status = "passed"
++            gate.evidence = "completion judge plus explicit final report"
++            passed.append(gate.id)
++    return passed
++
++
++def _reset_gate_stall(state: GoalState) -> None:
++    state.last_failed_gate_id = ""
++    state.same_gate_stall_count = 0
++
++
++def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "") -> bool:
++    """Populate the minimal intent contract deterministically when critic is down.
++
++    G1 is a prerequisite for useful autonomous work. It should not depend only
++    on an auxiliary critic that can timeout; if the supergoal text exists, the
++    runner can at least preserve a conservative intent/success contract and let
++    later critic calls refine it.
++    """
++    if getattr(state, "mode", "goal") != "supergoal":
++        return False
++    changed = False
++    goal_text = " ".join((state.goal or "").split())
++    if goal_text and not state.inferred_user_intent:
++        state.inferred_user_intent = _truncate(goal_text, 300)
++        changed = True
++    if not state.success_definition:
++        response_low = (last_response or "").lower()
++        if any(k in response_low for k in ("verified", "tested", "pytest", "evidence", "artifact", "report")):
++            state.success_definition = "produce a verified outcome with concrete tool-backed evidence/artifacts"
++        else:
++            state.success_definition = "make measurable progress toward the stated supergoal and report evidence, blockers, or a final outcome"
++        changed = True
++    _update_supergoal_gates(state)
++    return changed
++
++
++def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
++    """Bring old persisted supergoal states under the current deterministic guards."""
++    if state is None or getattr(state, "mode", "goal") != "supergoal":
++        return False
++    should_backfill_contract = bool(
++        state.turns_used > 0
++        or state.last_failed_gate_id
++        or state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
++    )
++    changed = _infer_supergoal_contract_from_turn(state, "") if should_backfill_contract else False
++    stale_gate_id = state.last_failed_gate_id
++    if stale_gate_id:
++        gate = next((g for g in state.gates or [] if g.id == stale_gate_id), None)
++        if gate is not None and gate.status == "passed":
++            _reset_gate_stall(state)
++            changed = True
++    else:
++        # Older states may have stale G1 text in last_reason/next_best_action
++        # even after deterministic normalization passes G1.
++        for gate in state.gates or []:
++            if gate.status == "passed" and (
++                f"gate {gate.id} remains open" in (state.last_reason or "")
++                or f"Satisfy gate {gate.id}:" in (state.next_best_action or "")
++            ):
++                stale_gate_id = gate.id
++                break
++    if stale_gate_id:
++        gate = next((g for g in state.gates or [] if g.id == stale_gate_id), None)
++        if gate is not None and gate.status == "passed":
++            first_failed = _first_failed_gate(state)
++            if f"gate {gate.id} remains open" in (state.last_reason or ""):
++                if first_failed is not None:
++                    state.last_reason = f"supergoal paused after stale gate {gate.id} was normalized; next open gate is {first_failed.id}: {first_failed.description}"
++                else:
++                    state.last_reason = "supergoal paused after stale gate state was normalized"
++                changed = True
++            if f"Satisfy gate {gate.id}:" in (state.next_best_action or ""):
++                if first_failed is not None:
++                    state.next_best_action = f"Satisfy gate {first_failed.id}: {first_failed.description}"
++                else:
++                    state.next_best_action = "Review normalized supergoal state and decide whether to resume or finalize."
++                changed = True
++    if state.status == "active" and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES:
++        # Critic failures should degrade strategy quality, not make the loop look
++        # stuck.  Deterministic gates/artifact extraction still provide a safe
++        # control loop, so keep the supergoal runnable and force a replan instead
++        # of pausing before the agent can act.
++        state.should_replan = True
++        state.strategy_health = "blocked" if state.strategy_health == "unknown" else state.strategy_health
++        state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
++        changed = True
++    return changed
++
++
++def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bool:
++    """Conservatively mirror visible turn output into board evidence/action state.
++
++    Critic JSON is best-effort. The deterministic state machine still needs a
++    minimal audit trail so G3/action_history do not stay empty while the agent
++    is actually running commands/tests/reports.
++    """
++    if getattr(state, "mode", "goal") != "supergoal" or not (last_response or "").strip():
++        return False
++    changed = False
++    normalized = " ".join(last_response.split())
++    action = _classify_action_text(normalized)
++    if action and action != "unknown":
++        before = list(state.action_history or [])
++        state.action_history = (before + [action])[-12:]
++        changed = state.action_history != before or changed
++        if state.current_action_class in {"", "unknown"}:
++            state.current_action_class = action
++            changed = True
++    low = normalized.lower()
++    evidence_markers = (
++        "verified", "tested", "pytest", "test passed", "tests passed", "artifact",
++        "evidence", "report", "log", "wrote", "saved", "created", "backtest", "baseline",
++        "验证", "测试", "证据", "日志", "报告", "回测",
++    )
++    if any(marker in low for marker in evidence_markers) or _ARTIFACT_PATH_RE.search(normalized):
++        before = list(state.evidence or [])
++        state.evidence = _merge_compact_list(
++            state.evidence,
++            [_truncate(normalized, 300)],
++            max_items=20,
++        )
++        changed = state.evidence != before or changed
++    _update_supergoal_gates(state)
++    return changed
++
++
 +def _hypothesis_complete(h: HypothesisRecord) -> bool:
 +    return bool(h.baseline and h.experiment and h.kill_criteria and h.artifacts and h.status in {"passed", "failed", "killed"})
 +
@@ -617,8 +1712,11 @@ index 9c1de6728..875258466 100644
 +    for gate in state.gates:
 +        if gate.id == "G1" and state.inferred_user_intent and state.success_definition:
 +            gate.status, gate.evidence = "passed", "intent + success_definition populated"
-+        elif gate.id == "G2" and state.research_sufficiency == "sufficient":
-+            gate.status, gate.evidence = "passed", f"{len(tool_backed)} tool-backed findings"
++        elif gate.id == "G2" and state.research_sufficiency in {"sufficient", "thin"}:
++            # Thin but real tool-backed provenance is enough for generic
++            # debugging/maintenance supergoals to keep moving.  Strategy/trading
++            # supergoals still get stricter domain gates below.
++            gate.status, gate.evidence = "passed", f"research_sufficiency={state.research_sufficiency}; {len(tool_backed)} tool-backed findings"
 +        elif gate.id == "SG-1" and len(state.hypothesis_portfolio) >= 3:
 +            gate.status, gate.evidence = "passed", f"{len(state.hypothesis_portfolio)} hypotheses"
 +        elif gate.id == "SG-2" and state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
@@ -642,7 +1740,8 @@ index 9c1de6728..875258466 100644
 +    state.current_action_class = proposed
 +    if proposed and proposed != "unknown":
 +        hist = list(state.action_history or [])
-+        hist.append(proposed)
++        if not hist or hist[-1] != proposed:
++            hist.append(proposed)
 +        state.action_history = hist[-12:]
 +    first_failed = _first_failed_gate(state)
 +    if proposed == "infra_engineering":
@@ -667,59 +1766,74 @@ index 9c1de6728..875258466 100644
 +            state.next_best_action = "Produce a no-edge attribution report or identify the next hypothesis family; do not add more validators/checkers."
 +
 +
- def _default_supergoal_plan() -> List[PlanStep]:
-     """Conservative starter plan for long-running goals.
- 
-@@ -668,11 +1166,12 @@ def _default_supergoal_plan() -> List[PlanStep]:
-     makes status, audit, and continuation prompts immediately structured.
-     """
-     return [
--        PlanStep("S1", "Clarify objective, constraints, and acceptance criteria", "in_progress", "Acceptance criteria or explicit assumptions recorded"),
--        PlanStep("S2", "Investigate current state and collect evidence", "pending", "Evidence/hypotheses recorded in the board"),
--        PlanStep("S3", "Execute the highest-ROI concrete step", "pending", "Tool-backed action completed and summarized"),
--        PlanStep("S4", "Verify results against acceptance criteria", "pending", "Commands/tests/files/logs or cited sources prove the result"),
--        PlanStep("S5", "Finalize, report artifacts, and extract reusable lessons", "pending", "User-facing summary plus skill/memory candidate if useful"),
++def _default_supergoal_plan() -> List[PlanStep]:
++    """Conservative starter plan for long-running goals.
++
++    The LLM can refine this via future plan events, but a deterministic skeleton
++    makes status, audit, and continuation prompts immediately structured.
++    """
++    return [
 +        PlanStep("S1", "Infer root intent and success definition beyond the literal request", "in_progress", "Root intent, constraints, and acceptance criteria recorded"),
 +        PlanStep("S2", "Model the problem from first principles", "pending", "Load-bearing truths, dependencies, and failure modes recorded"),
 +        PlanStep("S3", "Scan existing solutions before building", "pending", "Mature tools/APIs/projects/patterns considered with build-vs-reuse decision"),
 +        PlanStep("S4", "Execute the shortest reliable concrete path", "pending", "Tool-backed action completed and summarized"),
 +        PlanStep("S5", "Verify results against root intent and acceptance criteria", "pending", "Commands/tests/files/logs or cited sources prove the result"),
 +        PlanStep("S6", "Finalize, report artifacts, and extract reusable lessons", "pending", "User-facing summary plus skill/memory candidate if useful"),
-     ]
- 
- 
-@@ -700,9 +1199,10 @@ def _ensure_current_step(state: GoalState) -> None:
- 
- 
- def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> None:
--    """Small deterministic task-graph maintenance based on critic/judge state."""
++    ]
++
++
++def _current_or_next_step(state: GoalState) -> Optional[PlanStep]:
++    if not state.plan_steps:
++        return None
++    if state.current_step_id:
++        for step in state.plan_steps:
++            if step.id == state.current_step_id and step.status not in {"done", "skipped"}:
++                return step
++    for step in state.plan_steps:
++        if step.status in {"pending", "in_progress", "failed", "blocked"}:
++            return step
++    return None
++
++
++def _ensure_current_step(state: GoalState) -> None:
++    step = _current_or_next_step(state)
++    if step is None:
++        state.current_step_id = ""
++        return
++    state.current_step_id = step.id
++    if step.status == "pending":
++        step.status = "in_progress"
++
++
++def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> None:
 +    """Maintain plan by deterministic gate/artifact verification, not progress prose."""
-     if getattr(state, "mode", "goal") != "supergoal" or not state.plan_steps:
-         return
++    if getattr(state, "mode", "goal") != "supergoal" or not state.plan_steps:
++        return
 +    _update_supergoal_gates(state)
-     _ensure_current_step(state)
-     current = _current_or_next_step(state)
-     if current is None:
-@@ -713,16 +1213,28 @@ def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> N
-         for step in state.plan_steps:
-             if step.status in {"pending", "in_progress"}:
-                 step.status = "done"
++    _ensure_current_step(state)
++    current = _current_or_next_step(state)
++    if current is None:
++        return
++    if verdict == "done":
++        current.status = "done"
++        current.summary = state.last_reason or "Goal completed"
++        for step in state.plan_steps:
++            if step.status in {"pending", "in_progress"}:
++                step.status = "done"
 +        for gate in state.gates:
 +            if gate.status != "passed":
 +                gate.status = "passed"
 +                gate.evidence = gate.evidence or "completion judge marked goal done"
-         state.current_step_id = ""
-         return
-     if state.strategy_health == "blocked":
-         current.status = "blocked"
-         current.summary = state.last_reason or state.next_best_action
-         return
--    if state.should_replan:
++        state.current_step_id = ""
++        return
++    if state.strategy_health == "blocked":
++        current.status = "blocked"
++        current.summary = state.last_reason or state.next_best_action
++        return
 +    if state.should_replan or state.hard_gate_reason:
-         current.status = "in_progress"
--        current.summary = "Replan requested before continuing this step"
++        current.status = "in_progress"
 +        current.summary = state.hard_gate_reason or "Replan requested before continuing this step"
-         return
++        return
 +
 +    first_failed = _first_failed_gate(state)
 +    if first_failed is not None:
@@ -728,13 +1842,122 @@ index 9c1de6728..875258466 100644
 +        return
 +
 +    # Only when all gates pass may ordinary real progress advance the current step.
-     if state.progress == "real" and current.status == "in_progress":
-         current.status = "done"
-         current.summary = state.last_reason or state.next_best_action
-@@ -996,6 +1508,44 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
-     """Merge critic output into the persistent Supergoal State Board."""
-     if not state or not data:
-         return
++    if state.progress == "real" and current.status == "in_progress":
++        current.status = "done"
++        current.summary = state.last_reason or state.next_best_action
++        _ensure_current_step(state)
++
++
+ _JSON_OBJECT_RE = re.compile(r"\{.*?\}", re.DOTALL)
+ 
+ 
+@@ -319,6 +1693,18 @@ def _goal_judge_max_tokens() -> int:
+     return DEFAULT_JUDGE_MAX_TOKENS
+ 
+ 
++def _supergoal_replan_interval() -> int:
++    """Resolve goals.super_replan_interval. 0 disables periodic replans."""
++    try:
++        from hermes_cli.config import load_config
++
++        value = ((load_config() or {}).get("goals") or {}).get("super_replan_interval", 5)
++        value = int(value)
++        return max(0, value)
++    except Exception:
++        return 5
++
++
+ def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
+     """Parse the judge's reply. Fail-open to ``(False, "<reason>", parse_failed)``.
+ 
+@@ -463,6 +1849,180 @@ def judge_goal(
+     return verdict, reason, parse_failed
+ 
+ 
++def _parse_json_object(raw: str) -> Optional[Dict[str, Any]]:
++    if not raw:
++        return None
++    text = raw.strip()
++    if text.startswith("```"):
++        text = text.strip("`")
++        nl = text.find("\n")
++        if nl != -1:
++            text = text[nl + 1:]
++    try:
++        data = json.loads(text)
++        return data if isinstance(data, dict) else None
++    except Exception:
++        match = _JSON_OBJECT_RE.search(text)
++        if not match:
++            return None
++        try:
++            data = json.loads(match.group(0))
++            return data if isinstance(data, dict) else None
++        except Exception:
++            return None
++
++
++def critic_supergoal(state: GoalState, last_response: str, *, timeout: float = DEFAULT_JUDGE_TIMEOUT) -> Optional[Dict[str, Any]]:
++    """Ask an auxiliary critic to update /supergoal working memory.
++
++    Fail-closed for orchestration: any error returns None and the normal
++    done/continue judge still drives the loop. This critic improves strategy
++    quality but must never wedge progress.
++    """
++    if not state or getattr(state, "mode", "goal") != "supergoal" or not last_response.strip():
++        return None
++    try:
++        from agent.auxiliary_client import get_auxiliary_extra_body, get_text_auxiliary_client
++    except Exception as exc:
++        logger.debug("supergoal critic: auxiliary client import failed: %s", exc)
++        return None
++
++    # Use the same auxiliary route as the strict completion judge by default.
++    # This avoids requiring users to configure a brand-new auxiliary task just
++    # to get strategic feedback; a future dedicated supergoal_critic override
++    # can be added once auxiliary task registration exposes it consistently.
++    try:
++        client, model = get_text_auxiliary_client("goal_judge")
++    except Exception as exc:
++        logger.debug("supergoal critic: goal_judge client unavailable: %s", exc)
++        return None
++
++    if client is None or not model:
++        return None
++
++    prompt = SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE.format(
++        goal=_truncate(state.goal, 2000),
++        board=_truncate(state.render_supergoal_board(), 4000),
++        response=_truncate(last_response, _JUDGE_RESPONSE_SNIPPET_CHARS),
++    )
++    try:
++        resp = client.chat.completions.create(
++            model=model,
++            messages=[
++                {"role": "system", "content": SUPERGOAL_CRITIC_SYSTEM_PROMPT},
++                {"role": "user", "content": prompt},
++            ],
++            temperature=0,
++            max_tokens=_goal_judge_max_tokens(),
++            timeout=timeout,
++            extra_body=get_auxiliary_extra_body() or None,
++        )
++        raw = resp.choices[0].message.content or ""
++    except Exception as exc:
++        logger.info("supergoal critic: API call failed (%s) — skipping", exc)
++        return None
++
++    data = _parse_json_object(raw)
++    if data is None:
++        logger.info("supergoal critic: reply was not JSON: %r", _truncate(raw, 200))
++        return None
++    return data
++
++
++def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> None:
++    """Merge critic output into the persistent Supergoal State Board."""
++    if not state or not data:
++        return
 +
 +    intent = str(data.get("inferred_user_intent") or "").strip()
 +    if intent:
@@ -773,23 +1996,42 @@ index 9c1de6728..875258466 100644
 +    if no_edge:
 +        state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
 +
-     progress = str(data.get("progress") or "").strip().lower()
-     if progress in {"real", "weak", "none", "regressed"}:
-         state.progress = progress
-@@ -1007,7 +1557,8 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
-             data.get("root_cause_confidence"), state.root_cause_confidence
-         )
-     explicit_replan = bool(data.get("should_replan", False))
--    state.should_replan = explicit_replan or state.strategy_health in {
++    progress = str(data.get("progress") or "").strip().lower()
++    if progress in {"real", "weak", "none", "regressed"}:
++        state.progress = progress
++    health = str(data.get("strategy_health") or "").strip().lower()
++    if health in {"good", "stuck", "drifting", "repeating", "premature", "blocked"}:
++        state.strategy_health = health
++    if "root_cause_confidence" in data:
++        state.root_cause_confidence = _coerce_float(
++            data.get("root_cause_confidence"), state.root_cause_confidence
++        )
++    explicit_replan = bool(data.get("should_replan", False))
 +    quality_replan = state.literalism_risk == "high" or state.research_sufficiency in {"thin", "missing"}
 +    state.should_replan = explicit_replan or quality_replan or state.strategy_health in {
-         "stuck", "drifting", "repeating", "premature", "blocked"
-     } or state.progress in {"none", "regressed"}
-     if state.should_replan:
-@@ -1031,6 +1582,20 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) ->
-             max_items=20,
-         )
-     state.risks = _merge_compact_list(state.risks, data.get("new_risks"))
++        "stuck", "drifting", "repeating", "premature", "blocked"
++    } or state.progress in {"none", "regressed"}
++    if state.should_replan:
++        state.replan_count += 1
++    nba = str(data.get("next_best_action") or "").strip()
++    if nba:
++        state.next_best_action = _truncate(" ".join(nba.split()), 300)
++
++    state.milestones = _merge_compact_list(state.milestones, data.get("new_milestones"))
++    state.hypotheses = _merge_compact_list(state.hypotheses, data.get("new_hypotheses"))
++    state.evidence = _merge_compact_list(state.evidence, data.get("new_evidence"))
++    state.attempted_solutions = _merge_compact_list(
++        state.attempted_solutions, data.get("new_attempted_solutions")
++    )
++    state.blockers = _merge_compact_list(state.blockers, data.get("new_blockers"))
++    missing = _clean_string_list(data.get("missing_evidence"), limit=8)
++    if missing:
++        state.risks = _merge_compact_list(
++            state.risks,
++            [f"missing evidence: {item}" for item in missing],
++            max_items=20,
++        )
++    state.risks = _merge_compact_list(state.risks, data.get("new_risks"))
 +    if state.literalism_risk == "high":
 +        state.risks = _merge_compact_list(
 +            state.risks,
@@ -804,24 +2046,118 @@ index 9c1de6728..875258466 100644
 +        )
 +    _update_supergoal_gates(state)
 +    _apply_inertia_guard(state)
- 
- 
++
++
  # ──────────────────────────────────────────────────────────────────────
-@@ -1125,6 +1690,10 @@ class GoalManager:
-                 diagnostics.append(f"progress={s.progress}")
-             if getattr(s, "strategy_health", "unknown") != "unknown":
-                 diagnostics.append(f"strategy={s.strategy_health}")
+ # GoalManager — the orchestration surface CLI + gateway talk to
+ # ──────────────────────────────────────────────────────────────────────
+@@ -489,6 +2049,36 @@ class GoalManager:
+         self.session_id = session_id
+         self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
+         self._state: Optional[GoalState] = load_goal(session_id)
++        if self._state is not None and _normalize_loaded_supergoal_state(self._state):
++            save_goal(self.session_id, self._state)
++
++    def _record_event(
++        self,
++        event_type: str,
++        *,
++        summary: str = "",
++        data: Optional[Dict[str, Any]] = None,
++    ) -> Optional[GoalEvent]:
++        """Append a durable audit event and mirror counters into local state."""
++        turn = self._state.turns_used if self._state else 0
++        event = append_goal_event(
++            self.session_id,
++            event_type,
++            turn=turn,
++            summary=summary,
++            data=data or {},
++        )
++        if event is not None and self._state is not None:
++            # append_goal_event updates the persisted state from disk; mirror
++            # counters onto this in-memory object and save it so later local
++            # mutations do not accidentally revert event metadata.
++            self._state.event_count = len(load_goal_events(self.session_id, limit=200))
++            self._state.last_event_type = event.type
++            save_goal(self.session_id, self._state)
++        return event
++
++    def recent_events(self, *, limit: int = 20) -> List[GoalEvent]:
++        return load_goal_events(self.session_id, limit=limit)
+ 
+     # --- introspection ------------------------------------------------
+ 
+@@ -502,37 +2092,156 @@ class GoalManager:
+     def has_goal(self) -> bool:
+         return self._state is not None and self._state.status in {"active", "paused"}
+ 
+-    def status_line(self) -> str:
++    def status_line(self, *, compact: bool = False) -> str:
+         s = self._state
+         if s is None or s.status in {"cleared",}:
+             return "No active goal. Set one with /goal <text>."
+         turns = f"{s.turns_used}/{s.max_turns} turns"
++        label = "Supergoal" if getattr(s, "mode", "goal") == "supergoal" else "Goal"
++        if compact:
++            # Mobile/chat friendly: keep the live status to a few short,
++            # scannable lines. Native status cards already expose controls, and
++            # repeating a full controls row on every forced status/update makes
++            # supergoal output feel noisy.
++            lines = [f"{label} {s.status} · {s.turns_used}/{s.max_turns}"]
++            if s.last_verdict or s.last_reason:
++                verdict = s.last_verdict or "last"
++                reason = f" — {_truncate(s.last_reason, 88)}" if s.last_reason else ""
++                lines.append(f"last: {verdict}{reason}")
++            if getattr(s, "mode", "goal") == "supergoal":
++                flag = ""
++                if getattr(s, "same_gate_stall_count", 0) and getattr(s, "last_failed_gate_id", ""):
++                    flag = f"gate {s.last_failed_gate_id}×{s.same_gate_stall_count}"
++                elif getattr(s, "consecutive_critic_failures", 0):
++                    flag = f"critic×{s.consecutive_critic_failures}"
++                else:
++                    first_gate = _first_failed_gate(s)
++                    if first_gate is not None:
++                        flag = f"gate {first_gate.id}"
++                if flag:
++                    lines.append(f"flag: {flag}")
++                if getattr(s, "next_best_action", ""):
++                    lines.append(f"next: {_truncate(s.next_best_action, 92)}")
++            return "\n".join(lines)
+         sub = f", {len(s.subgoals)} subgoal{'s' if len(s.subgoals) != 1 else ''}" if s.subgoals else ""
++        diagnostics = []
++        if s.last_verdict:
++            diagnostics.append(f"last={s.last_verdict}")
++        if s.last_turn_at:
++            diagnostics.append(
++                "turn_at=" + datetime.fromtimestamp(s.last_turn_at, tz=timezone.utc).strftime("%m-%d %H:%MZ")
++            )
++        if s.last_continuation_enqueued_at:
++            diagnostics.append(
++                "queued=" + datetime.fromtimestamp(s.last_continuation_enqueued_at, tz=timezone.utc).strftime("%m-%d %H:%MZ")
++            )
++        if s.last_continuation_kind:
++            diagnostics.append(f"kind={s.last_continuation_kind}")
++        if getattr(s, "mode", "goal") == "supergoal":
++            if getattr(s, "progress", "unknown") != "unknown":
++                diagnostics.append(f"progress={s.progress}")
++            if getattr(s, "strategy_health", "unknown") != "unknown":
++                diagnostics.append(f"strategy={s.strategy_health}")
 +            if getattr(s, "literalism_risk", "unknown") != "unknown":
 +                diagnostics.append(f"literalism={s.literalism_risk}")
 +            if getattr(s, "research_sufficiency", "unknown") != "unknown":
 +                diagnostics.append(f"research={s.research_sufficiency}")
-             if getattr(s, "should_replan", False):
-                 diagnostics.append("replan=pending")
-             if getattr(s, "next_best_action", ""):
-@@ -1132,6 +1701,14 @@ class GoalManager:
-             current = _current_or_next_step(s)
-             if current is not None:
-                 diagnostics.append(f"step={current.id}:{current.status}")
++            if getattr(s, "should_replan", False):
++                diagnostics.append("replan=pending")
++            if getattr(s, "consecutive_critic_failures", 0):
++                diagnostics.append(f"critic_failures={s.consecutive_critic_failures}")
++            if getattr(s, "same_gate_stall_count", 0) and getattr(s, "last_failed_gate_id", ""):
++                diagnostics.append(f"gate_stall={s.last_failed_gate_id}:{s.same_gate_stall_count}")
++            if getattr(s, "next_best_action", ""):
++                diagnostics.append(f"next={_truncate(s.next_best_action, 80)}")
++            current = _current_or_next_step(s)
++            if current is not None:
++                diagnostics.append(f"step={current.id}:{current.status}")
 +            if getattr(s, "gates", None):
 +                passed = sum(1 for g in s.gates if g.status == "passed")
 +                diagnostics.append(f"gates={passed}/{len(s.gates)}")
@@ -830,18 +2166,164 @@ index 9c1de6728..875258466 100644
 +                    diagnostics.append(f"first_gate={first_gate.id}")
 +            if getattr(s, "hard_gate_reason", ""):
 +                diagnostics.append(f"hard_gate={_truncate(s.hard_gate_reason, 80)}")
-             if getattr(s, "event_count", 0):
-                 diagnostics.append(f"events={s.event_count}")
-         diag = f"; {'; '.join(diagnostics)}" if diagnostics else ""
-@@ -1162,6 +1739,7 @@ class GoalManager:
++            if getattr(s, "event_count", 0):
++                diagnostics.append(f"events={s.event_count}")
++        diag = f"; {'; '.join(diagnostics)}" if diagnostics else ""
++        reason = f" — {s.last_reason}" if s.last_reason else ""
+         if s.status == "active":
+-            return f"⊙ Goal (active, {turns}{sub}): {s.goal}"
++            return f"⊙ {label} (active, {turns}{sub}{diag}): {s.goal}{reason}"
+         if s.status == "paused":
+             extra = f" — {s.paused_reason}" if s.paused_reason else ""
+-            return f"⏸ Goal (paused, {turns}{sub}{extra}): {s.goal}"
++            return f"⏸ {label} (paused, {turns}{sub}{diag}{extra}): {s.goal}{reason}"
+         if s.status == "done":
+-            return f"✓ Goal done ({turns}{sub}): {s.goal}"
+-        return f"Goal ({s.status}, {turns}{sub}): {s.goal}"
++            return f"✓ {label} done ({turns}{sub}{diag}): {s.goal}{reason}"
++        return f"{label} ({s.status}, {turns}{sub}{diag}): {s.goal}{reason}"
++
++    def status_card(self, *, include_debug: bool = False) -> GoalStatusCard:
++        """Return a platform-neutral goal status card plus text fallback."""
++        return build_goal_status_card(
++            self._state,
++            session_id=self.session_id,
++            compact_text=self.status_line(compact=True),
++            include_debug=include_debug,
++        )
++
++    def get_status_card_message_id(self, platform_key: str) -> str:
++        if not self._state:
++            return ""
++        return (self._state.status_card_message_ids or {}).get(str(platform_key), "")
++
++    def set_status_card_message_id(self, platform_key: str, message_id: str) -> None:
++        if not self._state:
++            return
++        key = str(platform_key or "").strip()
++        mid = str(message_id or "").strip()
++        if not key or not mid:
++            return
++        self._state.status_card_message_ids[key] = mid
++        save_goal(self.session_id, self._state)
++
++    def clear_status_card_message_id(self, platform_key: str) -> None:
++        if not self._state:
++            return
++        key = str(platform_key or "").strip()
++        if key and key in self._state.status_card_message_ids:
++            self._state.status_card_message_ids.pop(key, None)
++            save_goal(self.session_id, self._state)
+ 
+     # --- mutation -----------------------------------------------------
+ 
+-    def set(self, goal: str, *, max_turns: Optional[int] = None) -> GoalState:
++    def set(self, goal: str, *, max_turns: Optional[int] = None, mode: str = "goal") -> GoalState:
+         goal = (goal or "").strip()
+         if not goal:
+             raise ValueError("goal text is empty")
++        normalized_mode = "supergoal" if mode == "supergoal" else "goal"
+         state = GoalState(
+             goal=goal,
++            mode=normalized_mode,
+             status="active",
+             turns_used=0,
+             max_turns=int(max_turns) if max_turns else self.default_max_turns,
+             created_at=time.time(),
              last_turn_at=0.0,
-             plan_steps=_default_supergoal_plan() if normalized_mode == "supergoal" else [],
-             current_step_id="S1" if normalized_mode == "supergoal" else "",
++            plan_steps=_default_supergoal_plan() if normalized_mode == "supergoal" else [],
++            current_step_id="S1" if normalized_mode == "supergoal" else "",
 +            gates=_default_supergoal_gates(goal) if normalized_mode == "supergoal" else [],
          )
          self._state = state
          save_goal(self.session_id, state)
-@@ -1246,6 +1824,7 @@ class GoalManager:
++        self._record_event(
++            "goal_set",
++            summary=goal,
++            data={"mode": normalized_mode, "max_turns": state.max_turns},
++        )
++        if normalized_mode == "supergoal":
++            self._record_event(
++                "plan_created",
++                summary="Default supergoal plan initialized",
++                data={"steps": [step.to_dict() for step in state.plan_steps]},
++            )
+         return state
+ 
+     def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
+@@ -541,6 +2250,7 @@ class GoalManager:
+         self._state.status = "paused"
+         self._state.paused_reason = reason
+         save_goal(self.session_id, self._state)
++        self._record_event("paused", summary=reason, data={"reason": reason})
+         return self._state
+ 
+     def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
+@@ -550,7 +2260,29 @@ class GoalManager:
+         self._state.paused_reason = None
+         if reset_budget:
+             self._state.turns_used = 0
++        # Explicit resume is a user decision to retry after a pause. Reset
++        # consecutive failure latches here; otherwise save/record_event paths
++        # reload the state, _normalize_loaded_supergoal_state() immediately
++        # re-pauses supergoals with stale critic_failures>=threshold, and the
++        # freshly queued continuation is then dropped as "stale" before the
++        # agent can run.
++        self._state.consecutive_critic_failures = 0
++        self._state.consecutive_judge_api_failures = 0
++        self._state.consecutive_parse_failures = 0
++        # Older supergoal states created before Mission Control gates existed
++        # can be resumed after a gateway restart. Backfill gates here so the
++        # resumed loop is governed by the current deterministic runtime rather
++        # than appearing active while missing hard gates.
++        backfilled_gates = False
++        if self._state.mode == "supergoal" and not self._state.gates:
++            self._state.gates = _default_supergoal_gates(self._state.goal)
++            backfilled_gates = True
+         save_goal(self.session_id, self._state)
++        self._record_event(
++            "resumed",
++            summary="goal resumed",
++            data={"reset_budget": reset_budget, "backfilled_gates": backfilled_gates},
++        )
+         return self._state
+ 
+     def clear(self) -> None:
+@@ -558,6 +2290,7 @@ class GoalManager:
+             return
+         self._state.status = "cleared"
+         save_goal(self.session_id, self._state)
++        self._record_event("cleared", summary="goal cleared")
+         self._state = None
+ 
+     def mark_done(self, reason: str) -> None:
+@@ -566,7 +2299,25 @@ class GoalManager:
+         self._state.status = "done"
+         self._state.last_verdict = "done"
+         self._state.last_reason = reason
++        _update_supergoal_plan_from_progress(self._state, verdict="done")
+         save_goal(self.session_id, self._state)
++        self._record_event("done", summary=reason, data={"reason": reason})
++
++    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
++        """Record that the gateway/CLI queued a synthetic continuation turn.
++
++        This is observability-only state; it lets `/goal status` and logs show
++        whether the loop actually progressed past judge evaluation into a
++        queued continuation.  It deliberately does not change `turns_used` —
++        that is counted only after a turn completes.
++        """
++        if not self._state:
++            return None
++        self._state.last_continuation_enqueued_at = time.time()
++        self._state.last_continuation_kind = kind
++        save_goal(self.session_id, self._state)
++        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
++        return self._state
+ 
+     # --- /subgoal user controls ---------------------------------------
+ 
+@@ -582,6 +2333,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -849,29 +2331,122 @@ index 9c1de6728..875258466 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -1332,7 +1911,13 @@ class GoalManager:
-                     state.replan_count += 1
-                     if not state.next_best_action:
-                         state.next_best_action = "Run a strategic replan before the next concrete step."
--                _update_supergoal_plan_from_progress(state, verdict=verdict)
-+                if verdict == "done":
-+                    # Do not let the completion judge mark every supergoal gate
-+                    # passed before the deterministic gate override below gets
-+                    # a chance to inspect open gates.
-+                    _update_supergoal_gates(state)
+@@ -607,6 +2359,18 @@ class GoalManager:
+         save_goal(self.session_id, self._state)
+         return prev
+ 
++    def request_replan(self, reason: str = "user-requested") -> Optional[GoalState]:
++        if self._state is None or not self.has_goal():
++            return None
++        if self._state.mode != "supergoal":
++            return self._state
++        self._state.should_replan = True
++        self._state.next_best_action = self._state.next_best_action or "Run a strategic replan before the next concrete step."
++        self._state.replan_count += 1
++        save_goal(self.session_id, self._state)
++        self._record_event("replan_requested", summary=reason, data={"reason": reason})
++        return self._state
++
+     def render_subgoals(self) -> str:
+         """Public helper for the /subgoal slash command."""
+         if self._state is None:
+@@ -658,6 +2422,57 @@ class GoalManager:
+         state.last_verdict = verdict
+         state.last_reason = reason
+ 
++        if getattr(state, "mode", "goal") == "supergoal":
++            gate_ids_before_critic = _passed_gate_ids(state)
++            _infer_supergoal_contract_from_turn(state, last_response)
++            _record_supergoal_turn_artifacts(state, last_response)
++            try:
++                critic_data = critic_supergoal(state, last_response)
++                if critic_data:
++                    apply_supergoal_critic(state, critic_data)
++                    state.consecutive_critic_failures = 0
++                    if _passed_gate_ids(state) != gate_ids_before_critic:
++                        _reset_gate_stall(state)
++                    interval = _supergoal_replan_interval()
++                    if interval and state.turns_used > 0 and state.turns_used % interval == 0:
++                        state.should_replan = True
++                        state.replan_count += 1
++                        if not state.next_best_action:
++                            state.next_best_action = "Run a strategic replan before the next concrete step."
++                    if verdict == "done":
++                        # Do not let the completion judge mark every supergoal gate
++                        # passed before the deterministic gate override below gets
++                        # a chance to inspect open gates.
++                        _update_supergoal_gates(state)
++                    else:
++                        _update_supergoal_plan_from_progress(state, verdict=verdict)
 +                else:
-+                    _update_supergoal_plan_from_progress(state, verdict=verdict)
-                 self._record_event(
-                     "critic",
-                     summary=f"progress={state.progress}; strategy={state.strategy_health}; replan={state.should_replan}",
-@@ -1355,6 +1940,20 @@ class GoalManager:
++                    # If the strict judge API itself is down, don't also count
++                    # the optional critic path as a board failure; the separate
++                    # judge_api_failures guard owns that fail-closed path.
++                    if not (reason and reason.startswith("judge error:")):
++                        state.consecutive_critic_failures += 1
++                    if verdict == "done":
++                        _update_supergoal_gates(state)
++                    else:
++                        _update_supergoal_plan_from_progress(state, verdict=verdict)
++                self._record_event(
++                    "critic",
++                    summary=f"progress={state.progress}; strategy={state.strategy_health}; replan={state.should_replan}",
++                    data={
++                        "progress": state.progress,
++                        "strategy_health": state.strategy_health,
++                        "root_cause_confidence": state.root_cause_confidence,
++                        "should_replan": state.should_replan,
++                        "next_best_action": state.next_best_action,
++                        "critic_failed": not bool(critic_data),
++                        "consecutive_critic_failures": state.consecutive_critic_failures,
++                    },
++                )
++            except Exception as exc:
++                logger.debug("supergoal critic merge failed: %s", exc)
++                state.consecutive_critic_failures += 1
++
+         # Track consecutive judge parse failures. Reset on any usable reply,
+         # including API / transport errors (parse_failed=False) so a flaky
+         # network doesn't trip the auto-pause meant for bad judge models.
+@@ -666,9 +2481,84 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
++        # Track consecutive judge API/transport errors separately.
++        # "judge error: ..." in the reason signals an API call failure.
++        if reason and reason.startswith("judge error:"):
++            state.consecutive_judge_api_failures += 1
++        else:
++            state.consecutive_judge_api_failures = 0
++
++        gate_vetoed = False
 +        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
++            _update_supergoal_gates(state)
++            gate_ids_before_reconcile = _passed_gate_ids(state)
++            # Cache the stall identity before reconcile so ancillary gate
++            # auto-pass (G1/G3/G4) does not silently reset the stall
++            # counter for the gate that is fundamentally still blocking.
++            _stall_gate_id = state.last_failed_gate_id
++            _stall_count = state.same_gate_stall_count
++            _reconcile_done_evidence_gates(state, last_response, reason)
++            if _passed_gate_ids(state) != gate_ids_before_reconcile:
++                _reset_gate_stall(state)
 +            _update_supergoal_gates(state)
 +            first_gate = _first_failed_gate(state)
 +            if first_gate is not None:
++                gate_vetoed = True
++                if state.last_failed_gate_id == first_gate.id:
++                    state.same_gate_stall_count += 1
++                elif _stall_gate_id and first_gate.id == _stall_gate_id:
++                    # Ancillary gates passed during reconcile but the same
++                    # gate is still the first failure.  Restore the saved
++                    # stall identity and advance the counter so the stall
++                    # guard accurately tracks consecutive same-gate vetoes.
++                    state.last_failed_gate_id = _stall_gate_id
++                    state.same_gate_stall_count = _stall_count + 1
++                else:
++                    state.last_failed_gate_id = first_gate.id
++                    state.same_gate_stall_count = 1
 +                verdict = "continue"
 +                reason = f"completion judge said done, but supergoal gate {first_gate.id} remains open: {first_gate.description}"
 +                state.last_verdict = verdict
@@ -881,11 +2456,135 @@ index 9c1de6728..875258466 100644
 +                if not state.next_best_action:
 +                    state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
 +                _update_supergoal_plan_from_progress(state, verdict="continue")
++                if state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS:
++                    state.status = "paused"
++                    state.paused_reason = (
++                        f"supergoal gate {first_gate.id} is stalled after "
++                        f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
++                    )
++                    save_goal(self.session_id, state)
++                    self._record_event(
++                        "paused",
++                        summary=state.paused_reason,
++                        data={
++                            "reason": state.paused_reason,
++                            "trigger": "same_gate_stall",
++                            "gate_id": first_gate.id,
++                            "same_gate_stall_count": state.same_gate_stall_count,
++                        },
++                    )
++                    return {
++                        "status": "paused",
++                        "should_continue": False,
++                        "continuation_prompt": None,
++                        "verdict": "continue",
++                        "reason": reason,
++                        "message": f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}",
++                    }
++            else:
++                _reset_gate_stall(state)
 +
          if verdict == "done":
              state.status = "done"
-             _update_supergoal_plan_from_progress(state, verdict="done")
-@@ -1443,7 +2042,7 @@ class GoalManager:
++            _reset_gate_stall(state)
++            _update_supergoal_plan_from_progress(state, verdict="done")
+             save_goal(self.session_id, state)
++            self._record_event("done", summary=reason, data={"reason": reason})
+             return {
+                 "status": "done",
+                 "should_continue": False,
+@@ -690,6 +2580,11 @@ class GoalManager:
+                 f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
+             )
+             save_goal(self.session_id, state)
++            self._record_event(
++                "paused",
++                summary=state.paused_reason,
++                data={"reason": state.paused_reason, "trigger": "parse_failures"},
++            )
+             return {
+                 "status": "paused",
+                 "should_continue": False,
+@@ -708,10 +2603,57 @@ class GoalManager:
+                 ),
+             }
+ 
++        # Auto-pause when the judge API keeps failing (e.g. CPA exhausted,
++        # endpoint down, auth errors).  Without this guard, a dead judge
++        # endpoint causes the supergoal to loop forever with
++        # verdict="continue" from the fallback in judge_goal().
++        if state.consecutive_judge_api_failures >= DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES:
++            state.status = "paused"
++            state.paused_reason = (
++                f"judge API failed {state.consecutive_judge_api_failures} turns in a row "
++                f"(last: {state.last_reason})"
++            )
++            save_goal(self.session_id, state)
++            self._record_event(
++                "paused",
++                summary=state.paused_reason,
++                data={"reason": state.paused_reason, "trigger": "judge_api_failures"},
++            )
++            return {
++                "status": "paused",
++                "should_continue": False,
++                "continuation_prompt": None,
++                "verdict": "continue",
++                "reason": reason,
++                "message": (
++                    f"⏸ Goal paused — the judge API failed "
++                    f"{state.consecutive_judge_api_failures} turns in a row. "
++                    "Check CPA quota / endpoint health, then /goal resume."
++                ),
++            }
++
++        # Supergoal critic is an auxiliary quality layer.  If it fails, keep
++        # the loop alive on deterministic board/gate updates instead of pausing
++        # the user's long-running task.  Judge API/parse failures above still
++        # fail closed because they break the core continuation contract.
++        if (
++            getattr(state, "mode", "goal") == "supergoal"
++            and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
++        ):
++            state.should_replan = True
++            if state.strategy_health == "unknown":
++                state.strategy_health = "blocked"
++            state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
++
+         if state.turns_used >= state.max_turns:
+             state.status = "paused"
+             state.paused_reason = f"turn budget exhausted ({state.turns_used}/{state.max_turns})"
+             save_goal(self.session_id, state)
++            self._record_event(
++                "paused",
++                summary=state.paused_reason,
++                data={"reason": state.paused_reason, "trigger": "budget"},
++            )
+             return {
+                 "status": "paused",
+                 "should_continue": False,
+@@ -724,7 +2666,20 @@ class GoalManager:
+                 ),
+             }
+ 
++        if not gate_vetoed:
++            _reset_gate_stall(state)
++
+         save_goal(self.session_id, state)
++        self._record_event(
++            "turn_evaluated",
++            summary=reason,
++            data={
++                "verdict": verdict,
++                "reason": reason,
++                "turns_used": state.turns_used,
++                "current_step_id": state.current_step_id,
++            },
++        )
+         return {
+             "status": "active",
+             "should_continue": True,
+@@ -732,13 +2687,39 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -894,58 +2593,832 @@ index 9c1de6728..875258466 100644
              ),
          }
  
-@@ -1461,6 +2060,8 @@ class GoalManager:
-             prompt += SUPERGOAL_BOARD_BLOCK_TEMPLATE.format(
-                 board=self._state.render_supergoal_board()
-             )
+     def next_continuation_prompt(self) -> Optional[str]:
+         if not self._state or self._state.status != "active":
+             return None
++        if getattr(self._state, "mode", "goal") == "supergoal":
++            if self._state.subgoals:
++                prompt = SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
++                    goal=self._state.goal,
++                    subgoals_block=self._state.render_subgoals_block(),
++                )
++            else:
++                prompt = SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE.format(goal=self._state.goal)
++            prompt += SUPERGOAL_BOARD_BLOCK_TEMPLATE.format(
++                board=self._state.render_supergoal_board()
++            )
 +            if self._state.hard_gate_reason:
 +                prompt += SUPERGOAL_HARD_GATE_BLOCK_TEMPLATE.format(reason=self._state.hard_gate_reason)
-             if self._state.should_replan:
-                 prompt += SUPERGOAL_REPLAN_BLOCK
-                 self._record_event(
++            if self._state.should_replan:
++                prompt += SUPERGOAL_REPLAN_BLOCK
++                self._record_event(
++                    "replan_prompted",
++                    summary=self._state.next_best_action or "replan requested",
++                    data={"replan_count": self._state.replan_count},
++                )
++                # Consume the replan flag once it has been injected. If the
++                # critic still sees drift/stuck behavior after the next turn it
++                # will set the flag again.
++                self._state.should_replan = False
++                save_goal(self.session_id, self._state)
++            return prompt
+         if self._state.subgoals:
+             return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
+                 goal=self._state.goal,
+@@ -899,6 +2880,8 @@ __all__ = [
+     "GoalManager",
+     "CONTINUATION_PROMPT_TEMPLATE",
+     "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
++    "SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE",
++    "SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
+     "JUDGE_USER_PROMPT_TEMPLATE",
+     "JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE",
+     "KANBAN_GOAL_CONTINUATION_TEMPLATE",
+diff --git a/tests/gateway/test_goal_status_notice.py b/tests/gateway/test_goal_status_notice.py
+index a45958cf9..4cd0d7118 100644
+--- a/tests/gateway/test_goal_status_notice.py
++++ b/tests/gateway/test_goal_status_notice.py
+@@ -8,7 +8,7 @@ from gateway.config import Platform
+ from gateway.platforms.base import MessageEvent, MessageType
+ from gateway.run import GatewayRunner
+ from gateway.session import SessionSource
+-from hermes_cli.goals import CONTINUATION_PROMPT_TEMPLATE
++from hermes_cli.goals import CONTINUATION_PROMPT_TEMPLATE, SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE
+ 
+ 
+ class FakeAdapter:
+@@ -40,6 +40,14 @@ def _goal_continuation_event(source, goal="finish the task"):
+     )
+ 
+ 
++def _supergoal_continuation_event(source, goal="finish the big task"):
++    return MessageEvent(
++        text=SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE.format(goal=goal),
++        message_type=MessageType.TEXT,
++        source=source,
++    )
++
++
+ @pytest.mark.asyncio
+ async def test_goal_status_notice_uses_adapter_send_with_thread_metadata():
+     """Regression: /goal judge status must use BasePlatformAdapter.send().
+@@ -145,3 +153,35 @@ def test_clear_goal_pending_continuations_removes_slot_and_overflow_only():
+     assert removed == 2
+     assert adapter._pending_messages.get(session_key) is None
+     assert runner._queued_events[session_key] == [normal_event]
++
++
++def test_clear_goal_pending_continuations_removes_supergoal_continuations():
++    """Regression: /supergoal pause/clear must cancel queued self-continuations too."""
++    runner = GatewayRunner.__new__(GatewayRunner)
++    adapter = FakeAdapter()
++    adapter._pending_messages = {}
++    runner._queued_events = {}
++
++    source = SessionSource(
++        platform=Platform.DISCORD,
++        chat_id="parent-channel",
++        thread_id="thread-123",
++    )
++    session_key = "discord:parent-channel:thread-123"
++    normal_event = MessageEvent(
++        text="normal queued user message",
++        message_type=MessageType.TEXT,
++        source=source,
++    )
++
++    adapter._pending_messages[session_key] = _supergoal_continuation_event(source)
++    runner._queued_events[session_key] = [
++        normal_event,
++        _supergoal_continuation_event(source, goal="second continuation"),
++    ]
++
++    removed = runner._clear_goal_pending_continuations(session_key, adapter)
++
++    assert removed == 2
++    assert adapter._pending_messages.get(session_key) is None
++    assert runner._queued_events[session_key] == [normal_event]
 diff --git a/tests/gateway/test_goal_verdict_send.py b/tests/gateway/test_goal_verdict_send.py
-index a23212c11..777c075c1 100644
+index 14f536aa4..310cd508f 100644
 --- a/tests/gateway/test_goal_verdict_send.py
 +++ b/tests/gateway/test_goal_verdict_send.py
-@@ -174,7 +174,7 @@ async def test_supergoal_verdict_continue_enqueues_supergoal_continuation_and_up
-         await asyncio.sleep(0.05)
+@@ -50,6 +50,8 @@ class _RecordingAdapter:
+     def __init__(self) -> None:
+         self._pending_messages: dict = {}
+         self.sends: list[dict] = []
++        self.status_cards: list[dict] = []
++        self.goal_callback = None
  
-     assert len(adapter.sends) == 1
--    assert "Continuing toward goal" in adapter.sends[0]["content"]
-+    assert "Continuing toward supergoal" in adapter.sends[0]["content"]
+     async def send(self, chat_id: str, content: str, reply_to=None, metadata=None):
+         self.sends.append({"chat_id": chat_id, "content": content, "metadata": metadata})
+@@ -60,6 +62,38 @@ class _RecordingAdapter:
  
-     session_key = build_session_key(src)
-     pending = adapter._pending_messages.get(session_key)
+         return _R()
+ 
++    def register_goal_control_callback(self, callback):
++        self.goal_callback = callback
++
++    async def send_goal_status_card(
++        self,
++        chat_id: str,
++        message: str,
++        *,
++        card=None,
++        message_id=None,
++        source=None,
++        metadata=None,
++        native_controls=True,
++    ):
++        if card is None:
++            return await self.send(chat_id, message, metadata=metadata)
++        self.status_cards.append({
++            "chat_id": chat_id,
++            "message": message,
++            "card": card,
++            "message_id": message_id,
++            "metadata": metadata,
++            "native_controls": native_controls,
++        })
++
++        class _R:
++            success = True
++
++        result = _R()
++        result.message_id = message_id or "status-card-msg"
++        return result
++
+ 
+ def _make_runner_with_adapter(session_id: str = None):
+     from gateway.run import GatewayRunner
+@@ -90,6 +124,8 @@ def _make_runner_with_adapter(session_id: str = None):
+     runner.session_store = MagicMock()
+     runner.session_store.get_or_create_session.return_value = session_entry
+     runner.session_store._generate_session_key.return_value = build_session_key(src)
++    runner.session_store.switch_session.return_value = session_entry
++    runner._session_db = None
+ 
+     adapter = _RecordingAdapter()
+     runner.adapters[Platform.TELEGRAM] = adapter
+@@ -151,6 +187,82 @@ async def test_goal_verdict_continue_enqueues_continuation(hermes_home):
+     assert adapter._pending_messages, "continuation prompt must be enqueued in pending_messages"
+ 
+ 
++@pytest.mark.asyncio
++async def test_supergoal_verdict_continue_enqueues_supergoal_continuation_and_updates_state(hermes_home):
++    """Supergoal post-turn hook must count the turn and enqueue the SUPERGOAL prompt.
++
++    This catches regressions where `/supergoal` state is created but the actual
++    continuation loop does not visibly progress beyond the kickoff turn.
++    """
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++
++    from hermes_cli.goals import GoalManager
++
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++
++    with patch("hermes_cli.goals.judge_goal", return_value=("continue", "needs more verified work", False)):
++        await runner._post_turn_goal_continuation(
++            session_entry=session_entry,
++            source=src,
++            final_response="round one checkpoint",
++        )
++        await asyncio.sleep(0.05)
++
++    assert adapter.sends == []
++
++    session_key = build_session_key(src)
++    pending = adapter._pending_messages.get(session_key)
++    assert pending is not None, "supergoal continuation prompt must be enqueued"
++    assert pending.text.startswith("[Continuing toward your SUPERGOAL")
++    assert "Supergoal: run the long benchmark" in pending.text
++
++    updated = GoalManager(session_entry.session_id).state
++    assert updated is not None
++    assert updated.mode == "supergoal"
++    assert updated.turns_used == 1
++    assert updated.last_verdict == "continue"
++    assert updated.last_continuation_kind == "gateway-fifo"
++    assert updated.last_continuation_enqueued_at > 0
++
++
++@pytest.mark.asyncio
++async def test_supergoal_continue_notice_is_quiet_but_pause_is_visible(hermes_home):
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++
++    from hermes_cli.goals import GoalManager, save_goal
++
++    mgr = GoalManager(session_entry.session_id)
++    state = mgr.set("run the long benchmark", max_turns=2, mode="supergoal")
++
++    with patch("hermes_cli.goals.judge_goal", return_value=("continue", "still working", False)):
++        await runner._post_turn_goal_continuation(
++            session_entry=session_entry,
++            source=src,
++            final_response="round one checkpoint",
++        )
++
++    assert adapter.sends == []
++    assert adapter._pending_messages
++
++    adapter._pending_messages.clear()
++    adapter.sends.clear()
++    state = GoalManager(session_entry.session_id).state
++    state.turns_used = 1
++    save_goal(session_entry.session_id, state)
++
++    with patch("hermes_cli.goals.judge_goal", return_value=("continue", "still working", False)):
++        await runner._post_turn_goal_continuation(
++            session_entry=session_entry,
++            source=src,
++            final_response="round two checkpoint",
++        )
++
++    assert len(adapter.sends) == 1
++    assert "paused" in adapter.sends[0]["content"].lower()
++    assert not adapter._pending_messages
++
++
+ @pytest.mark.asyncio
+ async def test_goal_verdict_budget_exhausted_sends_pause(hermes_home):
+     """When the budget is exhausted, a '⏸ Goal paused' message must be sent
+@@ -180,6 +292,371 @@ async def test_goal_verdict_budget_exhausted_sends_pause(hermes_home):
+     assert not adapter._pending_messages
+ 
+ 
++@pytest.mark.asyncio
++async def test_gateway_supergoal_requires_explicit_start_verb(hermes_home):
++    """Gateway /supergoal must not treat arbitrary text as a new long loop."""
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    event = MessageEvent(
++        text="/supergoal 再做一轮全面检查。",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="accidental-supergoal-msg",
++    )
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "/supergoal start <goal>" in response
++    assert GoalManager(session_entry.session_id).state is None
++    assert adapter._pending_messages == {}
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_start_sets_and_enqueues(hermes_home):
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    event = MessageEvent(
++        text="/supergoal start run the long benchmark",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="start-supergoal-msg",
++    )
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "run the long benchmark" in response
++    state = GoalManager(session_entry.session_id).state
++    assert state is not None
++    assert state.mode == "supergoal"
++    assert state.goal == "run the long benchmark"
++    assert adapter._pending_messages
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_resume_follows_compression_tip(hermes_home):
++    """`/supergoal resume` should target the migrated compression child.
++
++    Compression migrates GoalManager state from parent -> child.  If the
++    gateway's session-key binding is still on the parent, resume used to load
++    the parent's migrated tombstone and refuse to wake the loop.  The command
++    path now resolves SessionDB.get_compression_tip() first, rewrites the
++    session-key binding, and enqueues the continuation under the child state.
++    """
++    from gateway.platforms.base import MessageEvent, MessageType
++    from hermes_cli.goals import GoalManager, save_goal
++
++    runner, adapter, parent_entry, src = _make_runner_with_adapter(session_id="goal-parent")
++    child_entry = SessionEntry(
++        session_key=parent_entry.session_key,
++        session_id="goal-child",
++        created_at=datetime.now(),
++        updated_at=datetime.now(),
++        platform=Platform.TELEGRAM,
++        chat_type="dm",
++        origin=src,
++    )
++
++    class _TipDB:
++        def get_compression_tip(self, session_id):
++            return "goal-child" if session_id == "goal-parent" else session_id
++
++    runner._session_db = _TipDB()
++    runner.session_store.switch_session.return_value = child_entry
++
++    mgr = GoalManager("goal-child")
++    mgr.set("continue after compression", max_turns=5, mode="supergoal")
++    assert mgr.pause(reason="test-paused") is not None
++    save_goal("goal-child", mgr.state)
++
++    # Parent has only the migration tombstone, which must not control resume.
++    parent_mgr = GoalManager("goal-parent")
++    parent_mgr.set("stale parent", max_turns=5, mode="supergoal")
++    parent_state = parent_mgr.state
++    parent_state.status = "migrated"
++    parent_state.paused_reason = "migrated to goal-child (compression)"
++    save_goal("goal-parent", parent_state)
++
++    event = MessageEvent(
++        text="/supergoal resume",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="resume-after-compression-msg",
++    )
++
++    from gateway.run import GatewayRunner
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "resumed" in response.lower()
++    runner.session_store.switch_session.assert_called_once_with(parent_entry.session_key, "goal-child")
++    assert GoalManager("goal-child").state.status == "active"
++    assert GoalManager("goal-parent").state.status == "migrated"
++    assert adapter._pending_messages, "resume should enqueue continuation on the migrated child"
++    queued = next(iter(adapter._pending_messages.values()))
++    assert "continue after compression" in queued.text
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_resume_enqueues_continuation(hermes_home):
++    """`/supergoal resume` must wake the loop, not only set status=active."""
++    from gateway.platforms.base import MessageEvent, MessageType
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++    mgr.pause()
++    # Regression: critic-failure auto-pause stores a failure latch. Resume must
++    # clear it, otherwise state reload during record_continuation_enqueued()
++    # normalizes back to paused and the queued synthetic turn gets dropped.
++    mgr.state.consecutive_critic_failures = 3
++    from hermes_cli.goals import save_goal
++    save_goal(session_entry.session_id, mgr.state)
++
++    event = MessageEvent(
++        text="/supergoal resume",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="resume-msg",
++    )
++
++    from gateway.run import GatewayRunner
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "resumed" in response.lower()
++    session_key = build_session_key(src)
++    pending = adapter._pending_messages.get(session_key)
++    assert pending is not None, "resume must enqueue the next supergoal turn"
++    assert pending.text.startswith("[Continuing toward your SUPERGOAL")
++    assert "Supergoal: run the long benchmark" in pending.text
++
++    updated = GoalManager(session_entry.session_id).state
++    assert updated is not None
++    assert updated.status == "active"
++    assert updated.last_continuation_kind == "gateway-resume"
++    assert updated.last_continuation_enqueued_at > 0
++
++
++@pytest.mark.asyncio
++async def test_gateway_goal_and_supergoal_controls_do_not_cross_talk(hermes_home):
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("polish the docs")
++
++    super_status = MessageEvent(
++        text="/supergoal status",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="super-status-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, super_status, super_mode=True)
++    assert response == "A goal is active; use /goal status."
++
++    super_pause = MessageEvent(
++        text="/supergoal pause",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="super-pause-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, super_pause, super_mode=True)
++    assert response == "A goal is active; use /goal status."
++    assert GoalManager(session_entry.session_id).state.status == "active"
++
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++
++    goal_status = MessageEvent(
++        text="/goal status",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="goal-status-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, goal_status)
++    assert response == "A supergoal is active; use /supergoal status."
++
++    goal_clear = MessageEvent(
++        text="/goal clear",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="goal-clear-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, goal_clear)
++    assert response == "A supergoal is active; use /supergoal status."
++    state = GoalManager(session_entry.session_id).state
++    assert state is not None
++    assert state.mode == "supergoal"
++    assert state.status == "active"
++
++    super_clear = MessageEvent(
++        text="/supergoal clear",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="super-clear-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, super_clear, super_mode=True)
++    assert "cleared" in response.lower()
++    cleared_mgr = GoalManager(session_entry.session_id)
++    assert cleared_mgr.state is not None
++    assert cleared_mgr.state.status == "cleared"
++    assert cleared_mgr.has_goal() is False
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_clear_archives_existing_native_card(hermes_home):
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++    mgr.set_status_card_message_id("telegram:c1", "card-123")
++
++    event = MessageEvent(
++        text="/supergoal clear",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="super-clear-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "cleared" in response.lower()
++    assert adapter.status_cards, "clear should edit/archive the existing card before state removal"
++    archived = adapter.status_cards[-1]
++    assert archived["message_id"] == "card-123"
++    assert archived["native_controls"] is False
++    assert archived["card"].controls == []
++    assert "archived" in archived["message"].lower()
++    assert GoalManager(session_entry.session_id).get_status_card_message_id("telegram:c1") == ""
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_archive_control_works_after_done(hermes_home):
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++    mgr.set_status_card_message_id("telegram:c1", "card-456")
++    mgr.mark_done("verified complete")
++
++    event = MessageEvent(
++        text="/supergoal clear",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="super-archive-msg",
++    )
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    assert "cleared" in response.lower()
++    assert adapter.status_cards[-1]["message_id"] == "card-456"
++    assert adapter.status_cards[-1]["native_controls"] is False
++    assert GoalManager(session_entry.session_id).has_goal() is False
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_control_callback_registered_on_connect(hermes_home):
++    from gateway.run import GatewayRunner
++
++    runner, adapter, _session_entry, _src = _make_runner_with_adapter()
++    adapter.goal_callback = None
++
++    GatewayRunner._register_supergoal_control_callback(runner, adapter)
++
++    assert adapter.goal_callback == runner._handle_supergoal_ui_action
++
++
++@pytest.mark.asyncio
++async def test_stale_synthetic_supergoal_continuation_dropped_before_agent_run(hermes_home, monkeypatch):
++    """A queued continuation must not run after the supergoal was paused/cleared.
++
++    The post-turn drain path already had this guard; this locks the separate
++    adapter-started background path that calls _handle_message_with_agent
++    directly for a pending event.
++    """
++    from gateway.platforms.base import MessageEvent, MessageType
++    from gateway.run import GatewayRunner
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    runner._session_db = None
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("run the long benchmark", max_turns=240, mode="supergoal")
++    mgr.pause("test pause before queued continuation starts")
++
++    called = False
++
++    async def _should_not_run(*args, **kwargs):
++        nonlocal called
++        called = True
++        return {"final_response": "should not run"}
++
++    monkeypatch.setattr(GatewayRunner, "_run_agent", _should_not_run, raising=False)
++    event = MessageEvent(
++        text="[Continuing toward your SUPERGOAL — long-running autonomous mode]\nSupergoal: run the long benchmark",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id=None,
++    )
++
++    result = await GatewayRunner._handle_message_with_agent(
++        runner,
++        event,
++        src,
++        session_entry.session_key,
++        1,
++    )
++
++    assert result is None
++    assert called is False
++
++
++@pytest.mark.asyncio
++async def test_gateway_goal_resume_enqueues_goal_text(hermes_home):
++    """Plain `/goal resume` should also wake a paused goal."""
++    from gateway.platforms.base import MessageEvent, MessageType
++    from hermes_cli.goals import GoalManager
++
++    runner, adapter, session_entry, src = _make_runner_with_adapter()
++    mgr = GoalManager(session_entry.session_id)
++    mgr.set("polish the docs")
++    mgr.pause()
++
++    event = MessageEvent(
++        text="/goal resume",
++        message_type=MessageType.TEXT,
++        source=src,
++        message_id="resume-msg",
++    )
++
++    from gateway.run import GatewayRunner
++
++    response = await GatewayRunner._handle_goal_command(runner, event)
++
++    assert "resumed" in response.lower()
++    session_key = build_session_key(src)
++    pending = adapter._pending_messages.get(session_key)
++    assert pending is not None, "resume must enqueue the next goal turn"
++    assert pending.text == "polish the docs"
++
++    updated = GoalManager(session_entry.session_id).state
++    assert updated is not None
++    assert updated.status == "active"
++
++
+ @pytest.mark.asyncio
+ async def test_goal_verdict_skipped_when_no_active_goal(hermes_home):
+     """No goal set → the hook is a no-op. Nothing is sent, nothing enqueued."""
+diff --git a/tests/gateway/test_supergoal_max_turns_config.py b/tests/gateway/test_supergoal_max_turns_config.py
+new file mode 100644
+index 000000000..91e9aff9f
+--- /dev/null
++++ b/tests/gateway/test_supergoal_max_turns_config.py
+@@ -0,0 +1,63 @@
++import pytest
++
++from gateway.config import GatewayConfig, Platform, PlatformConfig
++from gateway.platforms.base import MessageEvent, MessageType
++from gateway.run import GatewayRunner
++from gateway.session import SessionSource
++from hermes_cli import goals
++
++
++class _FakeSessionEntry:
++    session_id = "sid-gateway-supergoal-config"
++
++
++class _FakeSessionStore:
++    def __init__(self):
++        self.entry = _FakeSessionEntry()
++
++    def get_or_create_session(self, source):
++        return self.entry
++
++    def _generate_session_key(self, source):
++        return "agent:main:discord:channel:supergoal-config"
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_uses_goals_super_max_turns_from_full_config(tmp_path, monkeypatch):
++    """Gateway /supergoal should honor top-level goals.super_max_turns from config.yaml."""
++    home = tmp_path / ".hermes"
++    home.mkdir()
++    (home / "config.yaml").write_text("goals:\n  max_turns: 7\n  super_max_turns: 123\n", encoding="utf-8")
++    monkeypatch.setenv("HERMES_HOME", str(home))
++    goals._DB_CACHE.clear()
++
++    runner = object.__new__(GatewayRunner)
++    runner.config = GatewayConfig(
++        platforms={Platform.DISCORD: PlatformConfig(enabled=True, token="token")}
++    )
++    runner.session_store = _FakeSessionStore()
++    runner.adapters = {}
++    runner._queued_events = {}
++
++    event = MessageEvent(
++        text="/supergoal start ship the benchmark",
++        message_type=MessageType.TEXT,
++        source=SessionSource(
++            platform=Platform.DISCORD,
++            chat_id="chat-supergoal-config",
++            chat_type="channel",
++            user_id="user-supergoal-config",
++        ),
++        message_id="msg-supergoal-config",
++    )
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    try:
++        assert "⊙ Goal set (123-turn budget): ship the benchmark" in response
++        state = goals.GoalManager("sid-gateway-supergoal-config").state
++        assert state is not None
++        assert state.max_turns == 123
++        assert state.mode == "supergoal"
++    finally:
++        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index a564956c8..9c0ae893e 100644
+index 0dae684b6..a2487b255 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -266,8 +266,11 @@ class TestGoalManager:
-         assert "Supergoal" in mgr1.status_line()
+@@ -252,6 +252,620 @@ class TestGoalManager:
+         assert mgr2.state.goal == "do the thing"
+         assert mgr2.is_active()
  
-         prompt = mgr1.next_continuation_prompt()
++    def test_supergoal_mode_persists_and_uses_product_prompt(self, hermes_home):
++        """/supergoal is a separate mode with a long-running-agent prompt.
++
++        This guards the product behavior: normal /goal stays simple, while
++        supergoal gets the higher-structure prompt for long autonomous work.
++        """
++        from hermes_cli.goals import GoalManager
++
++        mgr1 = GoalManager(session_id="super-persist-sid")
++        state = mgr1.set("ship the big project", max_turns=240, mode="supergoal")
++        assert state.mode == "supergoal"
++        assert "Supergoal" in mgr1.status_line()
++
++        prompt = mgr1.next_continuation_prompt()
 +        assert prompt is not None
-         assert "SUPERGOAL" in prompt
--        assert "highest-ROI" in prompt
++        assert "SUPERGOAL" in prompt
 +        assert "root intent" in prompt
 +        assert "first-principles" in prompt
 +        assert "existing tools" in prompt
-         assert "Verify the result" in prompt
-         assert "Supergoal State Board" in prompt
-         assert "standing goal" not in prompt
-@@ -308,6 +311,8 @@ class TestGoalManager:
-         assert state.plan_steps
-         assert state.current_step_id == "S1"
-         assert state.plan_steps[0].status == "in_progress"
++        assert "Verify the result" in prompt
++        assert "Supergoal State Board" in prompt
++        assert "standing goal" not in prompt
++
++        mgr2 = GoalManager(session_id="super-persist-sid")
++        assert mgr2.state is not None
++        assert mgr2.state.mode == "supergoal"
++        assert mgr2.next_continuation_prompt() == prompt
++
++    def test_supergoal_status_includes_diagnostics_after_progress(self, hermes_home):
++        """Status should make it obvious whether a supergoal loop really advanced."""
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-status-sid")
++        mgr.set("ship the big project", max_turns=240, mode="supergoal")
++        with patch.object(goals, "judge_goal", return_value=("continue", "needs more verification", False)):
++            mgr.evaluate_after_turn("partial progress")
++        mgr.record_continuation_enqueued(kind="gateway-fifo")
++
++        line = GoalManager(session_id="super-status-sid").status_line()
++        assert "Supergoal" in line
++        assert "1/240 turns" in line
++        assert "last=continue" in line
++        assert "queued=" in line
++        assert "kind=gateway-fifo" in line
++        assert "step=" in line
++        assert "events=" in line
++        assert "needs more verification" in line
++
++    def test_supergoal_compact_status_is_mobile_friendly(self, hermes_home):
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-compact-status-sid")
++        state = mgr.set("ship the big project", max_turns=240, mode="supergoal")
++        state.turns_used = 3
++        state.last_verdict = "continue"
++        state.last_reason = "needs more verified work before this can be called complete"
++        state.next_best_action = "satisfy the first open gate with concrete evidence"
++        state.consecutive_critic_failures = 2
++
++        line = mgr.status_line(compact=True)
++
++        assert "Supergoal active · 3/240" in line
++        assert "last: continue — needs more verified work" in line
++        assert "flag: critic×2" in line
++        assert "next: satisfy the first open gate" in line
++        assert "Controls:" not in line
++
++    def test_supergoal_initializes_plan_and_event_log(self, hermes_home):
++        """Product invariant: /supergoal starts with durable plan + audit events."""
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-plan-events-sid")
++        state = mgr.set("ship the big project", max_turns=240, mode="supergoal")
++
++        assert state.plan_steps
++        assert state.current_step_id == "S1"
++        assert state.plan_steps[0].status == "in_progress"
 +        assert "root intent" in state.plan_steps[0].title
 +        assert any("existing solutions" in step.title for step in state.plan_steps)
-         events = mgr.recent_events(limit=10)
-         assert [e.type for e in events] == ["goal_set", "plan_created"]
-         reloaded = GoalManager(session_id="super-plan-events-sid")
-@@ -356,6 +361,18 @@ class TestGoalManager:
-         mgr = GoalManager(session_id="super-critic-sid")
-         mgr.set("debug the flaky service", max_turns=20, mode="supergoal")
-         critic_payload = {
++        events = mgr.recent_events(limit=10)
++        assert [e.type for e in events] == ["goal_set", "plan_created"]
++        reloaded = GoalManager(session_id="super-plan-events-sid")
++        assert reloaded.state.event_count == 2
++        assert reloaded.state.last_event_type == "plan_created"
++        assert "plan_steps" in reloaded.state.render_supergoal_board()
++
++    def test_goal_event_log_records_evaluation_and_replan_prompt(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-event-flow-sid")
++        mgr.set("debug the flaky service", max_turns=20, mode="supergoal")
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "weak",
++                 "strategy_health": "stuck",
++                 "should_replan": True,
++                 "next_best_action": "collect exact failing stack trace",
++             }):
++            decision = mgr.evaluate_after_turn("I checked logs but did not reproduce yet")
++
++        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++        events = mgr.recent_events(limit=20)
++        event_types = [e.type for e in events]
++        assert "critic" in event_types
++        assert "turn_evaluated" in event_types
++        assert "replan_prompted" in event_types
++        assert GoalManager(session_id="super-event-flow-sid").state.last_event_type == "replan_prompted"
++
++    def test_normal_goal_prompt_unchanged_by_supergoal(self, hermes_home):
++        """Regression guard: adding /supergoal must not change /goal behavior."""
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="normal-goal-sid")
++        mgr.set("do the normal thing")
++        assert mgr.state.mode == "goal"
++        prompt = mgr.next_continuation_prompt()
++        assert prompt.startswith("[Continuing toward your standing goal]")
++        assert "SUPERGOAL" not in prompt
++
++    def test_supergoal_critic_updates_board_and_requests_replan(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-critic-sid")
++        mgr.set("debug the flaky service", max_turns=20, mode="supergoal")
++        critic_payload = {
 +            "inferred_user_intent": "Make the flaky service reliable with minimal operational risk",
 +            "success_definition": "A reproduced root cause and verified durable fix",
 +            "first_principles_model": ["A service is healthy only if dependencies are ready before traffic"],
@@ -958,34 +3431,42 @@ index a564956c8..9c0ae893e 100644
 +            "build_vs_reuse_decision": "reuse: systemd readiness primitives before custom watchdogs",
 +            "literalism_risk": "low",
 +            "research_sufficiency": "sufficient",
-             "progress": "weak",
-             "strategy_health": "stuck",
-             "root_cause_confidence": 0.35,
-@@ -371,17 +388,228 @@ class TestGoalManager:
- 
-         assert decision["should_continue"] is True
-         state = mgr.state
++            "progress": "weak",
++            "strategy_health": "stuck",
++            "root_cause_confidence": 0.35,
++            "should_replan": True,
++            "next_best_action": "Reproduce the failure with logs enabled",
++            "new_hypotheses": ["race in startup ordering"],
++            "new_evidence": ["health check fails before worker ready"],
++            "missing_evidence": ["exact failing stack trace"],
++        }
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value=critic_payload):
++            decision = mgr.evaluate_after_turn("I checked logs but did not reproduce yet")
++
++        assert decision["should_continue"] is True
++        state = mgr.state
 +        assert state is not None
-         assert state.progress == "weak"
-         assert state.strategy_health == "stuck"
++        assert state.progress == "weak"
++        assert state.strategy_health == "stuck"
 +        assert state.inferred_user_intent.startswith("Make the flaky service")
 +        assert "dependencies are ready" in state.first_principles_model[0]
 +        assert "systemd ordering" in state.existing_solution_scan[0]
 +        assert state.build_vs_reuse_decision.startswith("reuse")
 +        assert state.literalism_risk == "low"
 +        assert state.research_sufficiency == "sufficient"
-         assert state.should_replan is False  # consumed into the returned continuation prompt
-         assert state.replan_count == 1
-         assert "race in startup ordering" in state.hypotheses
-         assert "health check fails before worker ready" in state.evidence
-         assert any("exact failing stack trace" in r for r in state.risks)
-         assert "Supergoal State Board" in decision["continuation_prompt"]
++        assert state.should_replan is False  # consumed into the returned continuation prompt
++        assert state.replan_count == 1
++        assert "race in startup ordering" in state.hypotheses
++        assert "health check fails before worker ready" in state.evidence
++        assert any("exact failing stack trace" in r for r in state.risks)
++        assert "Supergoal State Board" in decision["continuation_prompt"]
 +        assert "inferred_user_intent" in decision["continuation_prompt"]
 +        assert "first_principles_model" in decision["continuation_prompt"]
 +        assert "existing_solution_scan" in decision["continuation_prompt"]
-         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
-         assert "Reproduce the failure" in decision["continuation_prompt"]
- 
++        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++        assert "Reproduce the failure" in decision["continuation_prompt"]
++
 +    def test_supergoal_critic_forces_replan_on_literalism_or_thin_research(self, hermes_home):
 +        """Supergoal must be more than long-running literal execution.
 +
@@ -1187,14 +3668,14 @@ index a564956c8..9c0ae893e 100644
 +        assert old_state.status == "migrated"
 +        assert any(e.type == "migrated" for e in new_mgr.recent_events(limit=20))
 +
-     def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
-         from hermes_cli import goals
-         from hermes_cli.goals import GoalManager
-@@ -390,7 +618,14 @@ class TestGoalManager:
-         mgr.set("ship a big feature", max_turns=20, mode="supergoal")
-         monkeypatch.setattr(goals, "_supergoal_replan_interval", lambda: 2)
-         with patch.object(goals, "judge_goal", return_value=("continue", "keep going", False)), \
--             patch.object(goals, "critic_supergoal", return_value={"progress": "real", "strategy_health": "good"}):
++    def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-periodic-replan-sid")
++        mgr.set("ship a big feature", max_turns=20, mode="supergoal")
++        monkeypatch.setattr(goals, "_supergoal_replan_interval", lambda: 2)
++        with patch.object(goals, "judge_goal", return_value=("continue", "keep going", False)), \
 +             patch.object(goals, "critic_supergoal", return_value={
 +                 "progress": "real",
 +                 "strategy_health": "good",
@@ -1203,13 +3684,36 @@ index a564956c8..9c0ae893e 100644
 +                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo", "tool_call_id": "tc-gh", "evidence_quote_or_hash": "quote"},
 +                 ],
 +             }):
-             d1 = mgr.evaluate_after_turn("step 1")
-             assert "REPLAN REQUIRED" not in d1["continuation_prompt"]
-             d2 = mgr.evaluate_after_turn("step 2")
-@@ -421,6 +656,52 @@ class TestGoalManager:
-         assert user_prompt.count("{") >= 1
-         assert user_prompt.count("}") >= 1
- 
++            d1 = mgr.evaluate_after_turn("step 1")
++            assert "REPLAN REQUIRED" not in d1["continuation_prompt"]
++            d2 = mgr.evaluate_after_turn("step 2")
++            assert "REPLAN REQUIRED" in d2["continuation_prompt"]
++            assert mgr.state.replan_count == 1
++
++    def test_supergoal_critic_prompt_json_schema_escapes_format_braces(self, hermes_home):
++        """Regression: literal JSON schema braces must survive str.format()."""
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-critic-format-sid")
++        state = mgr.set("diagnose the issue", max_turns=20, mode="supergoal")
++        fake_client = MagicMock()
++        fake_client.chat.completions.create.return_value = MagicMock(
++            choices=[MagicMock(message=MagicMock(content='{"progress":"real","strategy_health":"good"}'))]
++        )
++        with patch(
++            "agent.auxiliary_client.get_text_auxiliary_client",
++            return_value=(fake_client, "judge-model"),
++        ):
++            data = goals.critic_supergoal(state, "I reproduced the failure with logs.")
++
++        assert data is not None
++        assert data["progress"] == "real"
++        user_prompt = fake_client.chat.completions.create.call_args.kwargs["messages"][1]["content"]
++        assert '"progress": "real|weak|none|regressed"' in user_prompt
++        assert user_prompt.count("{") >= 1
++        assert user_prompt.count("}") >= 1
++
 +
 +    def test_supergoal_subgoal_adds_strategy_gates_incrementally(self, hermes_home):
 +        from hermes_cli.goals import GoalManager
@@ -1241,8 +3745,153 @@ index a564956c8..9c0ae893e 100644
 +        assert decision["verdict"] == "continue"
 +        assert decision["should_continue"] is True
 +        assert mgr.state.status == "active"
-+        assert "gate G1 remains open" in decision["reason"]
++        assert "gate G2 remains open" in decision["reason"]
 +        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++
++    def test_supergoal_done_with_final_evidence_reconciles_stale_generic_gates(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-done-evidence-reconcile-sid")
++        mgr.set("finish school hub", max_turns=20, mode="supergoal")
++        # Keep the research gate out of scope for this regression: the stale
++        # live-loop failure was G1/G3/G4 remaining pending despite a final
++        # evidenced report and a done judge verdict.
++        for gate in mgr.state.gates:
++            if gate.id == "G2":
++                gate.status = "passed"
++                gate.evidence = "pre-existing tool-backed research"
++
++        final_response = (
++            "Completed the school hub mission.\n"
++            "Changed: created the dashboard and saved docs/school-hub-final.md.\n"
++            "Verified: pytest passed and the generated report was reviewed.\n"
++            "Evidence: artifact docs/school-hub-final.md maps the result to the requested success criteria."
++        )
++        with patch.object(goals, "judge_goal", return_value=("done", "complete with verified artifacts", False)), \
++             patch.object(goals, "critic_supergoal", return_value=None):
++            decision = mgr.evaluate_after_turn(final_response)
++
++        assert decision["verdict"] == "done"
++        assert decision["should_continue"] is False
++        assert mgr.state.status == "done"
++        passed = {g.id for g in mgr.state.gates if g.status == "passed"}
++        assert {"G1", "G2", "G3", "G4"}.issubset(passed)
++        assert mgr.state.consecutive_critic_failures == 1
++        assert mgr.state.same_gate_stall_count == 0
++
++    def test_supergoal_critic_failures_degrade_but_continue_and_reset(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
++
++        mgr = GoalManager(session_id="super-critic-failure-counter-sid")
++        mgr.set("debug the mission", max_turns=20, mode="supergoal")
++
++        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
++             patch.object(goals, "critic_supergoal", return_value=None):
++            decisions = [mgr.evaluate_after_turn("partial") for _ in range(DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES)]
++
++        assert decisions[-1]["should_continue"] is True
++        assert decisions[-1]["status"] == "active"
++        assert mgr.state is not None
++        assert mgr.state.status == "active"
++        assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
++        assert "REPLAN REQUIRED THIS TURN" in decisions[-1]["continuation_prompt"]
++
++        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "weak",
++                 "strategy_health": "good",
++             }):
++            d_ok = mgr.evaluate_after_turn("partial with critic back")
++
++        assert d_ok["should_continue"] is True
++        assert mgr.state.consecutive_critic_failures == 0
++        assert "critic_failures=" not in mgr.status_line()
++
++    def test_supergoal_deterministically_populates_g1_when_critic_fails(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-g1-fallback-sid")
++        mgr.set("find a profitable trading strategy", max_turns=20, mode="supergoal")
++
++        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
++             patch.object(goals, "critic_supergoal", return_value=None):
++            decision = mgr.evaluate_after_turn("I ran a baseline backtest and logged the result.")
++
++        assert decision["should_continue"] is True
++        assert mgr.state is not None
++        assert mgr.state.inferred_user_intent == "find a profitable trading strategy"
++        assert mgr.state.success_definition
++        assert next(g for g in mgr.state.gates if g.id == "G1").status == "passed"
++
++    def test_supergoal_records_action_and_evidence_without_critic_json(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-evidence-fallback-sid")
++        mgr.set("verify the release", max_turns=20, mode="supergoal")
++
++        response = "Verified with pytest tests/gateway/test_goal_verdict_send.py -q; artifact logs/release-check.log saved."
++        with patch.object(goals, "judge_goal", return_value=("continue", "needs review", False)), \
++             patch.object(goals, "critic_supergoal", return_value=None):
++            decision = mgr.evaluate_after_turn(response)
++
++        assert decision["should_continue"] is True
++        assert mgr.state is not None
++        assert mgr.state.action_history
++        assert mgr.state.evidence
++        assert next(g for g in mgr.state.gates if g.id == "G3").status == "passed"
++
++    def test_supergoal_loaded_old_state_normalizes_g1_and_stale_stall(self, hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        sid = "super-loaded-normalize-sid"
++        mgr = GoalManager(session_id=sid)
++        state = mgr.set("debug a long-running mission", max_turns=20, mode="supergoal")
++        state.inferred_user_intent = ""
++        state.success_definition = ""
++        state.last_failed_gate_id = "G1"
++        state.same_gate_stall_count = 1
++        state.last_reason = "completion judge said done, but supergoal gate G1 remains open: Intent contract captured"
++        state.next_best_action = "Satisfy gate G1: Intent contract captured"
++        save_goal(sid, state)
++
++        reloaded = GoalManager(session_id=sid)
++
++        assert reloaded.state is not None
++        assert reloaded.state.inferred_user_intent == "debug a long-running mission"
++        assert reloaded.state.success_definition
++        assert next(g for g in reloaded.state.gates if g.id == "G1").status == "passed"
++        assert reloaded.state.last_failed_gate_id == ""
++        assert reloaded.state.same_gate_stall_count == 0
++        assert "gate G1 remains open" not in (reloaded.state.last_reason or "")
++        assert "Satisfy gate G1" not in reloaded.state.next_best_action
++
++    def test_supergoal_repeated_same_gate_done_veto_pauses(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager, DEFAULT_MAX_SAME_GATE_STALLS
++
++        mgr = GoalManager(session_id="super-same-gate-stall-sid")
++        mgr.set("finish the mission", max_turns=20, mode="supergoal")
++
++        with patch.object(goals, "judge_goal", return_value=("done", "agent claimed finished", False)), \
++             patch.object(goals, "critic_supergoal", return_value=None):
++            for i in range(DEFAULT_MAX_SAME_GATE_STALLS - 1):
++                decision = mgr.evaluate_after_turn(f"Done turn {i}.")
++                assert decision["should_continue"] is True
++                assert mgr.state.status == "active"
++
++            decision = mgr.evaluate_after_turn("Done again.")
++
++        assert decision["should_continue"] is False
++        assert decision["status"] == "paused"
++        assert mgr.state.status == "paused"
++        assert mgr.state.last_failed_gate_id == "G2"
++        assert mgr.state.same_gate_stall_count == DEFAULT_MAX_SAME_GATE_STALLS
++        assert "gate G2 is stalled" in decision["message"]
++        assert "stalled" in mgr.state.paused_reason
 +
 +    def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
 +        from hermes_cli import goals
@@ -1259,3 +3908,92 @@ index a564956c8..9c0ae893e 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
+@@ -479,7 +1093,7 @@ class TestJudgeParseFailureAutoPause:
+             assert mgr.state.consecutive_parse_failures == 0
+ 
+     def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
+-        """API/transport errors must NOT count toward the auto-pause threshold."""
++        """API/transport errors must NOT count toward the parse-failure auto-pause threshold."""
+         from hermes_cli import goals
+         from hermes_cli.goals import GoalManager
+ 
+@@ -489,12 +1103,60 @@ class TestJudgeParseFailureAutoPause:
+         with patch.object(
+             goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
+         ):
+-            for _ in range(5):
++            # Use 4 iterations — under the API-failure threshold (5) so
++            # the separate judge-API-failure auto-pause doesn't trigger.
++            for _ in range(4):
+                 d = mgr.evaluate_after_turn("still going")
+                 assert d["should_continue"] is True
+             assert mgr.state.consecutive_parse_failures == 0
++            assert mgr.state.consecutive_judge_api_failures == 4
+             assert mgr.state.status == "active"
+ 
++    def test_judge_api_failure_auto_pause(self, hermes_home):
++        """Supergoal must auto-pause after N consecutive judge API errors."""
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES
++
++        mgr = GoalManager(session_id="api-fail-sid-1", default_max_turns=240)
++        mgr.set("test supergoal", mode="supergoal")
++
++        with patch.object(
++            goals, "judge_goal", return_value=("continue", "judge error: InternalServerError", False)
++        ):
++            for i in range(DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES - 1):
++                d = mgr.evaluate_after_turn("turn")
++                assert d["should_continue"] is True, f"should continue at turn {i+1}"
++            # The next one should trigger auto-pause
++            d = mgr.evaluate_after_turn("turn")
++            assert d["should_continue"] is False
++            assert d["status"] == "paused"
++            assert "judge API failed" in mgr.state.paused_reason
++            assert mgr.state.consecutive_judge_api_failures == DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES
++
++    def test_judge_api_failure_counter_resets_on_success(self, hermes_home):
++        """A successful judge call must reset the API failure counter."""
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="api-fail-sid-2", default_max_turns=20)
++        mgr.set("goal")
++
++        # 3 API failures
++        with patch.object(
++            goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
++        ):
++            for _ in range(3):
++                mgr.evaluate_after_turn("turn")
++            assert mgr.state.consecutive_judge_api_failures == 3
++
++        # 1 successful call — should reset counter
++        with patch.object(
++            goals, "judge_goal", return_value=("continue", "keep going", False)
++        ):
++            d = mgr.evaluate_after_turn("turn")
++            assert d["should_continue"] is True
++            assert mgr.state.consecutive_judge_api_failures == 0
++
+     def test_consecutive_parse_failures_persists_across_goalmanager_reloads(
+         self, hermes_home
+     ):
+diff --git a/tests/hermes_cli/test_supergoal_command_registry.py b/tests/hermes_cli/test_supergoal_command_registry.py
+new file mode 100644
+index 000000000..b97ecdac2
+--- /dev/null
++++ b/tests/hermes_cli/test_supergoal_command_registry.py
+@@ -0,0 +1,12 @@
++from hermes_cli.commands import resolve_command
++from hermes_cli.config import DEFAULT_CONFIG
++
++
++def test_supergoal_registered_with_alias():
++    assert resolve_command("supergoal").name == "supergoal"
++    assert resolve_command("sgoal").name == "supergoal"
++
++
++def test_supergoal_has_separate_default_budget():
++    assert DEFAULT_CONFIG["goals"]["max_turns"] == 20
++    assert DEFAULT_CONFIG["goals"]["super_max_turns"] == 240

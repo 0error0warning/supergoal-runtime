@@ -193,8 +193,12 @@ patches/supergoal-runtime.patch             # apply this to Hermes Agent
 overlay/                                    # full modified files for review/reference
   hermes_cli/goals.py
   agent/conversation_compression.py
+  gateway/run.py
   tests/hermes_cli/test_goals.py
+  tests/hermes_cli/test_supergoal_command_registry.py
   tests/gateway/test_goal_verdict_send.py
+  tests/gateway/test_goal_status_notice.py
+  tests/gateway/test_supergoal_max_turns_config.py
 docs/run-analysis.md                        # observed failure analysis from the live run
 docs/architecture.md                        # architectural rationale
 docs/principles.md                          # why Supergoal exists and what principles guide it

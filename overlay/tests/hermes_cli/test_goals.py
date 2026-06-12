@@ -301,6 +301,25 @@ class TestGoalManager:
         assert "events=" in line
         assert "needs more verification" in line
 
+    def test_supergoal_compact_status_is_mobile_friendly(self, hermes_home):
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-compact-status-sid")
+        state = mgr.set("ship the big project", max_turns=240, mode="supergoal")
+        state.turns_used = 3
+        state.last_verdict = "continue"
+        state.last_reason = "needs more verified work before this can be called complete"
+        state.next_best_action = "satisfy the first open gate with concrete evidence"
+        state.consecutive_critic_failures = 2
+
+        line = mgr.status_line(compact=True)
+
+        assert "Supergoal active · 3/240" in line
+        assert "last: continue — needs more verified work" in line
+        assert "flag: critic×2" in line
+        assert "next: satisfy the first open gate" in line
+        assert "Controls:" not in line
+
     def test_supergoal_initializes_plan_and_event_log(self, hermes_home):
         """Product invariant: /supergoal starts with durable plan + audit events."""
         from hermes_cli.goals import GoalManager
@@ -687,8 +706,153 @@ class TestGoalManager:
         assert decision["verdict"] == "continue"
         assert decision["should_continue"] is True
         assert mgr.state.status == "active"
-        assert "gate G1 remains open" in decision["reason"]
+        assert "gate G2 remains open" in decision["reason"]
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+
+    def test_supergoal_done_with_final_evidence_reconciles_stale_generic_gates(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-done-evidence-reconcile-sid")
+        mgr.set("finish school hub", max_turns=20, mode="supergoal")
+        # Keep the research gate out of scope for this regression: the stale
+        # live-loop failure was G1/G3/G4 remaining pending despite a final
+        # evidenced report and a done judge verdict.
+        for gate in mgr.state.gates:
+            if gate.id == "G2":
+                gate.status = "passed"
+                gate.evidence = "pre-existing tool-backed research"
+
+        final_response = (
+            "Completed the school hub mission.\n"
+            "Changed: created the dashboard and saved docs/school-hub-final.md.\n"
+            "Verified: pytest passed and the generated report was reviewed.\n"
+            "Evidence: artifact docs/school-hub-final.md maps the result to the requested success criteria."
+        )
+        with patch.object(goals, "judge_goal", return_value=("done", "complete with verified artifacts", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn(final_response)
+
+        assert decision["verdict"] == "done"
+        assert decision["should_continue"] is False
+        assert mgr.state.status == "done"
+        passed = {g.id for g in mgr.state.gates if g.status == "passed"}
+        assert {"G1", "G2", "G3", "G4"}.issubset(passed)
+        assert mgr.state.consecutive_critic_failures == 1
+        assert mgr.state.same_gate_stall_count == 0
+
+    def test_supergoal_critic_failures_degrade_but_continue_and_reset(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+
+        mgr = GoalManager(session_id="super-critic-failure-counter-sid")
+        mgr.set("debug the mission", max_turns=20, mode="supergoal")
+
+        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decisions = [mgr.evaluate_after_turn("partial") for _ in range(DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES)]
+
+        assert decisions[-1]["should_continue"] is True
+        assert decisions[-1]["status"] == "active"
+        assert mgr.state is not None
+        assert mgr.state.status == "active"
+        assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+        assert "REPLAN REQUIRED THIS TURN" in decisions[-1]["continuation_prompt"]
+
+        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "weak",
+                 "strategy_health": "good",
+             }):
+            d_ok = mgr.evaluate_after_turn("partial with critic back")
+
+        assert d_ok["should_continue"] is True
+        assert mgr.state.consecutive_critic_failures == 0
+        assert "critic_failures=" not in mgr.status_line()
+
+    def test_supergoal_deterministically_populates_g1_when_critic_fails(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-g1-fallback-sid")
+        mgr.set("find a profitable trading strategy", max_turns=20, mode="supergoal")
+
+        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn("I ran a baseline backtest and logged the result.")
+
+        assert decision["should_continue"] is True
+        assert mgr.state is not None
+        assert mgr.state.inferred_user_intent == "find a profitable trading strategy"
+        assert mgr.state.success_definition
+        assert next(g for g in mgr.state.gates if g.id == "G1").status == "passed"
+
+    def test_supergoal_records_action_and_evidence_without_critic_json(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-evidence-fallback-sid")
+        mgr.set("verify the release", max_turns=20, mode="supergoal")
+
+        response = "Verified with pytest tests/gateway/test_goal_verdict_send.py -q; artifact logs/release-check.log saved."
+        with patch.object(goals, "judge_goal", return_value=("continue", "needs review", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn(response)
+
+        assert decision["should_continue"] is True
+        assert mgr.state is not None
+        assert mgr.state.action_history
+        assert mgr.state.evidence
+        assert next(g for g in mgr.state.gates if g.id == "G3").status == "passed"
+
+    def test_supergoal_loaded_old_state_normalizes_g1_and_stale_stall(self, hermes_home):
+        from hermes_cli.goals import GoalManager, save_goal
+
+        sid = "super-loaded-normalize-sid"
+        mgr = GoalManager(session_id=sid)
+        state = mgr.set("debug a long-running mission", max_turns=20, mode="supergoal")
+        state.inferred_user_intent = ""
+        state.success_definition = ""
+        state.last_failed_gate_id = "G1"
+        state.same_gate_stall_count = 1
+        state.last_reason = "completion judge said done, but supergoal gate G1 remains open: Intent contract captured"
+        state.next_best_action = "Satisfy gate G1: Intent contract captured"
+        save_goal(sid, state)
+
+        reloaded = GoalManager(session_id=sid)
+
+        assert reloaded.state is not None
+        assert reloaded.state.inferred_user_intent == "debug a long-running mission"
+        assert reloaded.state.success_definition
+        assert next(g for g in reloaded.state.gates if g.id == "G1").status == "passed"
+        assert reloaded.state.last_failed_gate_id == ""
+        assert reloaded.state.same_gate_stall_count == 0
+        assert "gate G1 remains open" not in (reloaded.state.last_reason or "")
+        assert "Satisfy gate G1" not in reloaded.state.next_best_action
+
+    def test_supergoal_repeated_same_gate_done_veto_pauses(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager, DEFAULT_MAX_SAME_GATE_STALLS
+
+        mgr = GoalManager(session_id="super-same-gate-stall-sid")
+        mgr.set("finish the mission", max_turns=20, mode="supergoal")
+
+        with patch.object(goals, "judge_goal", return_value=("done", "agent claimed finished", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            for i in range(DEFAULT_MAX_SAME_GATE_STALLS - 1):
+                decision = mgr.evaluate_after_turn(f"Done turn {i}.")
+                assert decision["should_continue"] is True
+                assert mgr.state.status == "active"
+
+            decision = mgr.evaluate_after_turn("Done again.")
+
+        assert decision["should_continue"] is False
+        assert decision["status"] == "paused"
+        assert mgr.state.status == "paused"
+        assert mgr.state.last_failed_gate_id == "G2"
+        assert mgr.state.same_gate_stall_count == DEFAULT_MAX_SAME_GATE_STALLS
+        assert "gate G2 is stalled" in decision["message"]
+        assert "stalled" in mgr.state.paused_reason
 
     def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
         from hermes_cli import goals
@@ -929,7 +1093,7 @@ class TestJudgeParseFailureAutoPause:
             assert mgr.state.consecutive_parse_failures == 0
 
     def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
-        """API/transport errors must NOT count toward the auto-pause threshold."""
+        """API/transport errors must NOT count toward the parse-failure auto-pause threshold."""
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
 
@@ -939,11 +1103,59 @@ class TestJudgeParseFailureAutoPause:
         with patch.object(
             goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
         ):
-            for _ in range(5):
+            # Use 4 iterations — under the API-failure threshold (5) so
+            # the separate judge-API-failure auto-pause doesn't trigger.
+            for _ in range(4):
                 d = mgr.evaluate_after_turn("still going")
                 assert d["should_continue"] is True
             assert mgr.state.consecutive_parse_failures == 0
+            assert mgr.state.consecutive_judge_api_failures == 4
             assert mgr.state.status == "active"
+
+    def test_judge_api_failure_auto_pause(self, hermes_home):
+        """Supergoal must auto-pause after N consecutive judge API errors."""
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES
+
+        mgr = GoalManager(session_id="api-fail-sid-1", default_max_turns=240)
+        mgr.set("test supergoal", mode="supergoal")
+
+        with patch.object(
+            goals, "judge_goal", return_value=("continue", "judge error: InternalServerError", False)
+        ):
+            for i in range(DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES - 1):
+                d = mgr.evaluate_after_turn("turn")
+                assert d["should_continue"] is True, f"should continue at turn {i+1}"
+            # The next one should trigger auto-pause
+            d = mgr.evaluate_after_turn("turn")
+            assert d["should_continue"] is False
+            assert d["status"] == "paused"
+            assert "judge API failed" in mgr.state.paused_reason
+            assert mgr.state.consecutive_judge_api_failures == DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES
+
+    def test_judge_api_failure_counter_resets_on_success(self, hermes_home):
+        """A successful judge call must reset the API failure counter."""
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="api-fail-sid-2", default_max_turns=20)
+        mgr.set("goal")
+
+        # 3 API failures
+        with patch.object(
+            goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
+        ):
+            for _ in range(3):
+                mgr.evaluate_after_turn("turn")
+            assert mgr.state.consecutive_judge_api_failures == 3
+
+        # 1 successful call — should reset counter
+        with patch.object(
+            goals, "judge_goal", return_value=("continue", "keep going", False)
+        ):
+            d = mgr.evaluate_after_turn("turn")
+            assert d["should_continue"] is True
+            assert mgr.state.consecutive_judge_api_failures == 0
 
     def test_consecutive_parse_failures_persists_across_goalmanager_reloads(
         self, hermes_home
