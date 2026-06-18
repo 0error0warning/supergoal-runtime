@@ -27,6 +27,7 @@ from hermes_cli.supergoal.evaluators import EvaluatorSuite
 LegacyDecisionFn = Callable[..., DecisionDict]
 ObserveEventsFn = Callable[[TurnContext], int]
 ProjectStateFn = Callable[[TurnContext], bool]
+PrepareEvaluationFn = Callable[[TurnContext], bool]
 
 
 @dataclass(frozen=True)
@@ -37,6 +38,7 @@ class SupergoalController:
     legacy_decider: LegacyDecisionFn
     observe_events: ObserveEventsFn | None = None
     project_state: ProjectStateFn | None = None
+    prepare_evaluation: PrepareEvaluationFn | None = None
 
     def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
         snapshots: list[PipelineSnapshot] = []
@@ -93,17 +95,49 @@ class SupergoalController:
             )
         else:
             verdict, reason, parse_failed = "inactive", "no active goal", False
-        evaluation = {"verdict": verdict, "reason": reason, "parse_failed": parse_failed}
+
+        prepared = False
+        critic_data: dict[str, Any] | None = None
+        critic_applied = False
+        critic_error = ""
+        gate_ids_before_critic: set[str] = set()
+        if getattr(state, "status", "") == "active" and getattr(state, "mode", "goal") == "supergoal":
+            prepared = self.prepare_evaluation(ctx) if self.prepare_evaluation else False
+            gate_ids_before_critic = self._passed_gate_ids(state)
+            try:
+                raw_critic_data = self.evaluators.strategic_critic.evaluate(state, ctx.last_response)
+                if raw_critic_data:
+                    critic_data = raw_critic_data
+                    self.evaluators.strategic_critic.apply(state, critic_data)
+                    critic_applied = True
+            except Exception as exc:  # pragma: no cover - fail-closed path is reconciled by legacy guards
+                critic_data = None
+                critic_applied = False
+                critic_error = str(exc)
+
+        evaluation = {
+            "verdict": verdict,
+            "reason": reason,
+            "parse_failed": parse_failed,
+            "prepared": prepared,
+            "critic_data": critic_data,
+            "critic_applied": critic_applied,
+            "critic_error": critic_error,
+            "gate_ids_before_critic": gate_ids_before_critic,
+        }
         snapshots.append(
             PipelineSnapshot(
                 phase="evaluate",
-                summary=f"completion judge verdict={verdict}",
+                summary=f"completion judge verdict={verdict}; critic_applied={critic_applied}",
                 data={
                     "completion_judge": type(self.evaluators.completion_judge).__name__,
                     "strategic_critic": type(self.evaluators.strategic_critic).__name__,
                     "gate_count": len(getattr(state, "gates", []) or []),
                     "verdict": verdict,
                     "parse_failed": parse_failed,
+                    "prepared": prepared,
+                    "critic_applied": critic_applied,
+                    "critic_failed": bool(critic_error) or not bool(critic_data),
                 },
             )
         )
@@ -118,7 +152,12 @@ class SupergoalController:
             user_initiated=ctx.user_initiated,
             supergoal_observed=bool(self.observe_events),
             supergoal_projected=bool(self.project_state),
+            supergoal_evaluated=bool(self.prepare_evaluation),
             judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
+            critic_data=evaluation.get("critic_data"),
+            critic_applied=bool(evaluation.get("critic_applied")),
+            critic_error=str(evaluation.get("critic_error") or ""),
+            gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
         )
         snapshots.append(
             PipelineSnapshot(
@@ -201,6 +240,14 @@ class SupergoalController:
             if locator:
                 refs.append(locator)
         return refs[-24:]
+
+    @staticmethod
+    def _passed_gate_ids(state: Any) -> set[str]:
+        return {
+            str(getattr(gate, "id", ""))
+            for gate in getattr(state, "gates", []) or []
+            if str(getattr(gate, "status", "")) == "passed" and str(getattr(gate, "id", ""))
+        }
 
     @staticmethod
     def _next_action(state: Any) -> ActionProposal | None:

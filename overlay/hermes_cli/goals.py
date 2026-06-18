@@ -35,7 +35,7 @@ import re
 import time
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from hermes_cli.goal_events import (
     GoalEvent,
@@ -2758,6 +2758,7 @@ class GoalManager:
                 legacy_decider=self._evaluate_after_turn_legacy,
                 observe_events=self._observe_supergoal_events_for_controller,
                 project_state=self._project_supergoal_state_for_controller,
+                prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
             )
             return controller.decide_after_turn(
                 TurnContext(
@@ -2786,6 +2787,14 @@ class GoalManager:
             return False
         return _goal_events_state_changed(state, self.recent_events(limit=200))
 
+    def _prepare_supergoal_evaluation_for_controller(self, ctx: Any) -> bool:
+        state = ctx.state
+        if state is None or getattr(state, "status", "") != "active":
+            return False
+        changed = _infer_supergoal_contract_from_turn(state, ctx.last_response)
+        changed = _record_supergoal_turn_artifacts(state, ctx.last_response) or changed
+        return changed
+
     def _evaluate_after_turn_legacy(
         self,
         last_response: str,
@@ -2793,7 +2802,12 @@ class GoalManager:
         user_initiated: bool = True,
         supergoal_observed: bool = False,
         supergoal_projected: bool = False,
+        supergoal_evaluated: bool = False,
         judge_result: Optional[Tuple[str, str, bool]] = None,
+        critic_data: Optional[Dict[str, Any]] = None,
+        critic_applied: bool = False,
+        critic_error: str = "",
+        gate_ids_before_critic: Optional[Set[str]] = None,
     ) -> Dict[str, Any]:
         """Run the judge and update state. Return a decision dict.
 
@@ -2834,18 +2848,26 @@ class GoalManager:
         state.last_reason = reason
 
         if getattr(state, "mode", "goal") == "supergoal":
-            gate_ids_before_critic = _passed_gate_ids(state)
-            _infer_supergoal_contract_from_turn(state, last_response)
-            _record_supergoal_turn_artifacts(state, last_response)
+            if not supergoal_evaluated:
+                gate_ids_before_critic = _passed_gate_ids(state)
+                _infer_supergoal_contract_from_turn(state, last_response)
+                _record_supergoal_turn_artifacts(state, last_response)
+            else:
+                gate_ids_before_critic = set(gate_ids_before_critic or set())
             if not supergoal_observed:
                 for event_type, summary, data in _extract_supergoal_observation_events(last_response):
                     self._record_event(event_type, summary=summary, data=data)
             if not supergoal_projected:
                 _goal_events_state_changed(state, self.recent_events(limit=200))
             try:
-                critic_data = critic_supergoal(state, last_response)
-                if critic_data:
-                    apply_supergoal_critic(state, critic_data)
+                if not supergoal_evaluated:
+                    critic_data = critic_supergoal(state, last_response)
+                    if critic_data:
+                        apply_supergoal_critic(state, critic_data)
+                        critic_applied = True
+                elif critic_error:
+                    logger.debug("supergoal critic merge failed: %s", critic_error)
+                if critic_applied:
                     state.consecutive_critic_failures = 0
                     if _passed_gate_ids(state) != gate_ids_before_critic:
                         _reset_gate_stall(state)

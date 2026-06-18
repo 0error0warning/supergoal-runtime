@@ -4519,13 +4519,16 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..49497acdb 100644
+index a6a28deaf..6288587b6 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
-@@ -37,6 +37,46 @@ from dataclasses import dataclass, field, asdict
+@@ -35,7 +35,47 @@ import re
+ import time
+ from dataclasses import dataclass, field, asdict
  from datetime import datetime, timezone
- from typing import Any, Dict, List, Optional, Tuple
- 
+-from typing import Any, Dict, List, Optional, Tuple
++from typing import Any, Dict, List, Optional, Set, Tuple
++
 +from hermes_cli.goal_events import (
 +    GoalEvent,
 +    append_goal_event as _append_goal_event_record,
@@ -4565,9 +4568,8 @@ index a6a28deaf..49497acdb 100644
 +    classify_action_text as _classify_action_text,
 +    extract_observation_events as _extract_supergoal_observation_events,
 +)
-+
- logger = logging.getLogger(__name__)
  
+ logger = logging.getLogger(__name__)
  
 @@ -56,6 +96,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
  # we've live-tested; override via auxiliary.goal_judge.max_tokens for
@@ -7000,7 +7002,7 @@ index a6a28deaf..49497acdb 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2743,57 @@ class GoalManager:
+@@ -622,6 +2743,71 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7019,6 +7021,7 @@ index a6a28deaf..49497acdb 100644
 +                legacy_decider=self._evaluate_after_turn_legacy,
 +                observe_events=self._observe_supergoal_events_for_controller,
 +                project_state=self._project_supergoal_state_for_controller,
++                prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
 +            )
 +            return controller.decide_after_turn(
 +                TurnContext(
@@ -7047,6 +7050,14 @@ index a6a28deaf..49497acdb 100644
 +            return False
 +        return _goal_events_state_changed(state, self.recent_events(limit=200))
 +
++    def _prepare_supergoal_evaluation_for_controller(self, ctx: Any) -> bool:
++        state = ctx.state
++        if state is None or getattr(state, "status", "") != "active":
++            return False
++        changed = _infer_supergoal_contract_from_turn(state, ctx.last_response)
++        changed = _record_supergoal_turn_artifacts(state, ctx.last_response) or changed
++        return changed
++
 +    def _evaluate_after_turn_legacy(
 +        self,
 +        last_response: str,
@@ -7054,11 +7065,16 @@ index a6a28deaf..49497acdb 100644
 +        user_initiated: bool = True,
 +        supergoal_observed: bool = False,
 +        supergoal_projected: bool = False,
++        supergoal_evaluated: bool = False,
 +        judge_result: Optional[Tuple[str, str, bool]] = None,
++        critic_data: Optional[Dict[str, Any]] = None,
++        critic_applied: bool = False,
++        critic_error: str = "",
++        gate_ids_before_critic: Optional[Set[str]] = None,
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +2824,71 @@ class GoalManager:
+@@ -652,12 +2838,79 @@ class GoalManager:
          state.turns_used += 1
          state.last_turn_at = time.time()
  
@@ -7075,18 +7091,26 @@ index a6a28deaf..49497acdb 100644
          state.last_reason = reason
  
 +        if getattr(state, "mode", "goal") == "supergoal":
-+            gate_ids_before_critic = _passed_gate_ids(state)
-+            _infer_supergoal_contract_from_turn(state, last_response)
-+            _record_supergoal_turn_artifacts(state, last_response)
++            if not supergoal_evaluated:
++                gate_ids_before_critic = _passed_gate_ids(state)
++                _infer_supergoal_contract_from_turn(state, last_response)
++                _record_supergoal_turn_artifacts(state, last_response)
++            else:
++                gate_ids_before_critic = set(gate_ids_before_critic or set())
 +            if not supergoal_observed:
 +                for event_type, summary, data in _extract_supergoal_observation_events(last_response):
 +                    self._record_event(event_type, summary=summary, data=data)
 +            if not supergoal_projected:
 +                _goal_events_state_changed(state, self.recent_events(limit=200))
 +            try:
-+                critic_data = critic_supergoal(state, last_response)
-+                if critic_data:
-+                    apply_supergoal_critic(state, critic_data)
++                if not supergoal_evaluated:
++                    critic_data = critic_supergoal(state, last_response)
++                    if critic_data:
++                        apply_supergoal_critic(state, critic_data)
++                        critic_applied = True
++                elif critic_error:
++                    logger.debug("supergoal critic merge failed: %s", critic_error)
++                if critic_applied:
 +                    state.consecutive_critic_failures = 0
 +                    if _passed_gate_ids(state) != gate_ids_before_critic:
 +                        _reset_gate_stall(state)
@@ -7133,7 +7157,7 @@ index a6a28deaf..49497acdb 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,11 +2897,102 @@ class GoalManager:
+@@ -666,11 +2919,102 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7236,7 +7260,7 @@ index a6a28deaf..49497acdb 100644
                  "should_continue": False,
                  "continuation_prompt": None,
                  "verdict": "done",
-@@ -690,6 +3012,11 @@ class GoalManager:
+@@ -690,6 +3034,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7248,7 +7272,7 @@ index a6a28deaf..49497acdb 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3035,83 @@ class GoalManager:
+@@ -708,10 +3057,83 @@ class GoalManager:
                  ),
              }
  
@@ -7332,7 +7356,7 @@ index a6a28deaf..49497acdb 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3124,20 @@ class GoalManager:
+@@ -724,7 +3146,20 @@ class GoalManager:
                  ),
              }
  
@@ -7353,7 +7377,7 @@ index a6a28deaf..49497acdb 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3145,52 @@ class GoalManager:
+@@ -732,13 +3167,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7407,7 +7431,7 @@ index a6a28deaf..49497acdb 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3351,8 @@ __all__ = [
+@@ -899,6 +3373,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7430,10 +7454,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..efe0fdc8c
+index 000000000..e09314898
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,223 @@
+@@ -0,0 +1,270 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7463,6 +7487,7 @@ index 000000000..efe0fdc8c
 +LegacyDecisionFn = Callable[..., DecisionDict]
 +ObserveEventsFn = Callable[[TurnContext], int]
 +ProjectStateFn = Callable[[TurnContext], bool]
++PrepareEvaluationFn = Callable[[TurnContext], bool]
 +
 +
 +@dataclass(frozen=True)
@@ -7473,6 +7498,7 @@ index 000000000..efe0fdc8c
 +    legacy_decider: LegacyDecisionFn
 +    observe_events: ObserveEventsFn | None = None
 +    project_state: ProjectStateFn | None = None
++    prepare_evaluation: PrepareEvaluationFn | None = None
 +
 +    def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
 +        snapshots: list[PipelineSnapshot] = []
@@ -7529,17 +7555,49 @@ index 000000000..efe0fdc8c
 +            )
 +        else:
 +            verdict, reason, parse_failed = "inactive", "no active goal", False
-+        evaluation = {"verdict": verdict, "reason": reason, "parse_failed": parse_failed}
++
++        prepared = False
++        critic_data: dict[str, Any] | None = None
++        critic_applied = False
++        critic_error = ""
++        gate_ids_before_critic: set[str] = set()
++        if getattr(state, "status", "") == "active" and getattr(state, "mode", "goal") == "supergoal":
++            prepared = self.prepare_evaluation(ctx) if self.prepare_evaluation else False
++            gate_ids_before_critic = self._passed_gate_ids(state)
++            try:
++                raw_critic_data = self.evaluators.strategic_critic.evaluate(state, ctx.last_response)
++                if raw_critic_data:
++                    critic_data = raw_critic_data
++                    self.evaluators.strategic_critic.apply(state, critic_data)
++                    critic_applied = True
++            except Exception as exc:  # pragma: no cover - fail-closed path is reconciled by legacy guards
++                critic_data = None
++                critic_applied = False
++                critic_error = str(exc)
++
++        evaluation = {
++            "verdict": verdict,
++            "reason": reason,
++            "parse_failed": parse_failed,
++            "prepared": prepared,
++            "critic_data": critic_data,
++            "critic_applied": critic_applied,
++            "critic_error": critic_error,
++            "gate_ids_before_critic": gate_ids_before_critic,
++        }
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="evaluate",
-+                summary=f"completion judge verdict={verdict}",
++                summary=f"completion judge verdict={verdict}; critic_applied={critic_applied}",
 +                data={
 +                    "completion_judge": type(self.evaluators.completion_judge).__name__,
 +                    "strategic_critic": type(self.evaluators.strategic_critic).__name__,
 +                    "gate_count": len(getattr(state, "gates", []) or []),
 +                    "verdict": verdict,
 +                    "parse_failed": parse_failed,
++                    "prepared": prepared,
++                    "critic_applied": critic_applied,
++                    "critic_failed": bool(critic_error) or not bool(critic_data),
 +                },
 +            )
 +        )
@@ -7554,7 +7612,12 @@ index 000000000..efe0fdc8c
 +            user_initiated=ctx.user_initiated,
 +            supergoal_observed=bool(self.observe_events),
 +            supergoal_projected=bool(self.project_state),
++            supergoal_evaluated=bool(self.prepare_evaluation),
 +            judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
++            critic_data=evaluation.get("critic_data"),
++            critic_applied=bool(evaluation.get("critic_applied")),
++            critic_error=str(evaluation.get("critic_error") or ""),
++            gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
 +        )
 +        snapshots.append(
 +            PipelineSnapshot(
@@ -7637,6 +7700,14 @@ index 000000000..efe0fdc8c
 +            if locator:
 +                refs.append(locator)
 +        return refs[-24:]
++
++    @staticmethod
++    def _passed_gate_ids(state: Any) -> set[str]:
++        return {
++            str(getattr(gate, "id", ""))
++            for gate in getattr(state, "gates", []) or []
++            if str(getattr(gate, "status", "")) == "passed" and str(getattr(gate, "id", ""))
++        }
 +
 +    @staticmethod
 +    def _next_action(state: Any) -> ActionProposal | None:
@@ -9592,6 +9663,70 @@ index 0618138aa..fae2d6d56 100644
          # Check plugin hooks for a block directive (unless caller already
          # checked — e.g. run_agent._invoke_tool passes skip=True to
          # avoid double-firing the hook).
+diff --git a/tests/gateway/test_goal_status_notice.py b/tests/gateway/test_goal_status_notice.py
+index a45958cf9..4cd0d7118 100644
+--- a/tests/gateway/test_goal_status_notice.py
++++ b/tests/gateway/test_goal_status_notice.py
+@@ -8,7 +8,7 @@ from gateway.config import Platform
+ from gateway.platforms.base import MessageEvent, MessageType
+ from gateway.run import GatewayRunner
+ from gateway.session import SessionSource
+-from hermes_cli.goals import CONTINUATION_PROMPT_TEMPLATE
++from hermes_cli.goals import CONTINUATION_PROMPT_TEMPLATE, SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE
+ 
+ 
+ class FakeAdapter:
+@@ -40,6 +40,14 @@ def _goal_continuation_event(source, goal="finish the task"):
+     )
+ 
+ 
++def _supergoal_continuation_event(source, goal="finish the big task"):
++    return MessageEvent(
++        text=SUPERGOAL_CONTINUATION_PROMPT_TEMPLATE.format(goal=goal),
++        message_type=MessageType.TEXT,
++        source=source,
++    )
++
++
+ @pytest.mark.asyncio
+ async def test_goal_status_notice_uses_adapter_send_with_thread_metadata():
+     """Regression: /goal judge status must use BasePlatformAdapter.send().
+@@ -145,3 +153,35 @@ def test_clear_goal_pending_continuations_removes_slot_and_overflow_only():
+     assert removed == 2
+     assert adapter._pending_messages.get(session_key) is None
+     assert runner._queued_events[session_key] == [normal_event]
++
++
++def test_clear_goal_pending_continuations_removes_supergoal_continuations():
++    """Regression: /supergoal pause/clear must cancel queued self-continuations too."""
++    runner = GatewayRunner.__new__(GatewayRunner)
++    adapter = FakeAdapter()
++    adapter._pending_messages = {}
++    runner._queued_events = {}
++
++    source = SessionSource(
++        platform=Platform.DISCORD,
++        chat_id="parent-channel",
++        thread_id="thread-123",
++    )
++    session_key = "discord:parent-channel:thread-123"
++    normal_event = MessageEvent(
++        text="normal queued user message",
++        message_type=MessageType.TEXT,
++        source=source,
++    )
++
++    adapter._pending_messages[session_key] = _supergoal_continuation_event(source)
++    runner._queued_events[session_key] = [
++        normal_event,
++        _supergoal_continuation_event(source, goal="second continuation"),
++    ]
++
++    removed = runner._clear_goal_pending_continuations(session_key, adapter)
++
++    assert removed == 2
++    assert adapter._pending_messages.get(session_key) is None
++    assert runner._queued_events[session_key] == [normal_event]
 diff --git a/tests/gateway/test_goal_verdict_send.py b/tests/gateway/test_goal_verdict_send.py
 index 14f536aa4..efe242f56 100644
 --- a/tests/gateway/test_goal_verdict_send.py
@@ -10035,11 +10170,80 @@ index 14f536aa4..efe242f56 100644
  @pytest.mark.asyncio
  async def test_goal_verdict_skipped_when_no_active_goal(hermes_home):
      """No goal set → the hook is a no-op. Nothing is sent, nothing enqueued."""
+diff --git a/tests/gateway/test_supergoal_max_turns_config.py b/tests/gateway/test_supergoal_max_turns_config.py
+new file mode 100644
+index 000000000..91e9aff9f
+--- /dev/null
++++ b/tests/gateway/test_supergoal_max_turns_config.py
+@@ -0,0 +1,63 @@
++import pytest
++
++from gateway.config import GatewayConfig, Platform, PlatformConfig
++from gateway.platforms.base import MessageEvent, MessageType
++from gateway.run import GatewayRunner
++from gateway.session import SessionSource
++from hermes_cli import goals
++
++
++class _FakeSessionEntry:
++    session_id = "sid-gateway-supergoal-config"
++
++
++class _FakeSessionStore:
++    def __init__(self):
++        self.entry = _FakeSessionEntry()
++
++    def get_or_create_session(self, source):
++        return self.entry
++
++    def _generate_session_key(self, source):
++        return "agent:main:discord:channel:supergoal-config"
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_uses_goals_super_max_turns_from_full_config(tmp_path, monkeypatch):
++    """Gateway /supergoal should honor top-level goals.super_max_turns from config.yaml."""
++    home = tmp_path / ".hermes"
++    home.mkdir()
++    (home / "config.yaml").write_text("goals:\n  max_turns: 7\n  super_max_turns: 123\n", encoding="utf-8")
++    monkeypatch.setenv("HERMES_HOME", str(home))
++    goals._DB_CACHE.clear()
++
++    runner = object.__new__(GatewayRunner)
++    runner.config = GatewayConfig(
++        platforms={Platform.DISCORD: PlatformConfig(enabled=True, token="token")}
++    )
++    runner.session_store = _FakeSessionStore()
++    runner.adapters = {}
++    runner._queued_events = {}
++
++    event = MessageEvent(
++        text="/supergoal start ship the benchmark",
++        message_type=MessageType.TEXT,
++        source=SessionSource(
++            platform=Platform.DISCORD,
++            chat_id="chat-supergoal-config",
++            chat_type="channel",
++            user_id="user-supergoal-config",
++        ),
++        message_id="msg-supergoal-config",
++    )
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    try:
++        assert "⊙ Goal set (123-turn budget): ship the benchmark" in response
++        state = goals.GoalManager("sid-gateway-supergoal-config").state
++        assert state is not None
++        assert state.max_turns == 123
++        assert state.mode == "supergoal"
++    finally:
++        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..a020263d7 100644
+index 0dae684b6..2c4178098 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1167 @@ class TestGoalManager:
+@@ -252,6 +252,1169 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -10573,7 +10777,7 @@ index 0dae684b6..a020263d7 100644
 +                 "progress": "weak",
 +                 "strategy_health": "good",
 +                 "next_best_action": "collect verifier output",
-+             }):
++             }) as critic_mock:
 +            decision = mgr.evaluate_after_turn("partial progress")
 +
 +        assert decision["status"] == "active"  # legacy compatibility
@@ -10586,7 +10790,9 @@ index 0dae684b6..a020263d7 100644
 +        ]
 +        evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
 +        assert evaluate_phase["data"]["verdict"] == "continue"
++        assert evaluate_phase["data"]["critic_applied"] is True
 +        judge_mock.assert_called_once()
++        critic_mock.assert_called_once()
 +
 +    def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
 +        import json
@@ -11207,7 +11413,7 @@ index 0dae684b6..a020263d7 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1640,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1642,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -11216,7 +11422,7 @@ index 0dae684b6..a020263d7 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1650,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1652,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -11966,6 +12172,271 @@ index 000000000..fcdea9dc7
 +    first_open = next((g for g in state.gates if g.status != "passed" and g.blocking), None)
 +    assert first_open is not None
 +    assert state.action_proposal.target_gate_id == first_open.id or state.hard_gate_reason
+diff --git a/tests/test_model_tools.py b/tests/test_model_tools.py
+index 91e7103aa..39c3fde26 100644
+--- a/tests/test_model_tools.py
++++ b/tests/test_model_tools.py
+@@ -127,25 +127,211 @@ class TestHandleFunctionCall:
+         # pre_tool_call does NOT get duration_ms (nothing has run yet).
+         assert "duration_ms" not in kwargs_by_hook["pre_tool_call"]
+ 
+-    def test_no_listener_skips_post_and_transform_emit(self):
+-        """When no plugin is registered for post_tool_call /
+-        transform_tool_result, the emit path must short-circuit on
+-        ``has_hook`` and never build/dispatch a payload — so the
+-        no-listener hot path stays cheap.  ``pre_tool_call`` is always
+-        polled (block-check), so it may still fire; the observer/transform
+-        emits must not.
+-        """
++    def test_no_listener_skips_post_and_transform_emit_but_records_supergoal_evidence(self):
++        """No plugin listeners should not suppress the supergoal evidence ledger."""
+         with (
+             patch("model_tools.registry.dispatch", return_value='{"ok":true}'),
+             patch("hermes_cli.plugins.has_hook", return_value=False),
+             patch("hermes_cli.plugins.invoke_hook") as mock_invoke_hook,
++            patch("hermes_cli.supergoal.evidence.record_tool_evidence") as mock_record_evidence,
+         ):
+-            result = handle_function_call("web_search", {"q": "test"}, task_id="t1")
++            result = handle_function_call(
++                "web_search",
++                {"q": "test"},
++                task_id="t1",
++                session_id="sid-1",
++                tool_call_id="tc-1",
++                turn_id="turn-1",
++            )
+ 
+         assert result == '{"ok":true}'
+         fired = {c.args[0] for c in mock_invoke_hook.call_args_list}
+         assert "post_tool_call" not in fired
+         assert "transform_tool_result" not in fired
++        mock_record_evidence.assert_called_once()
++        assert mock_record_evidence.call_args.kwargs["session_id"] == "sid-1"
++        assert mock_record_evidence.call_args.kwargs["tool_call_id"] == "tc-1"
++
++    def test_supergoal_policy_blocks_before_registry_dispatch(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-block-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "supervised"
++        state.permission_contract = {
++            "filesystem_allowlist": ["/tmp/allowed"],
++            "destructive_actions": "deny",
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-block-sid", state)
++
++        with patch("model_tools.registry.dispatch") as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/etc/passwd", "content": "x"},
++                session_id="super-policy-block-sid",
++                tool_call_id="tc-policy",
++            )
++
++        parsed = json.loads(result)
++        assert "Supergoal policy" in parsed["error"]
++        mock_dispatch.assert_not_called()
++
++    def test_supergoal_default_ask_mode_preserves_existing_approval_path(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-ask-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "supervised"
++        state.permission_contract = {
++            "destructive_actions": "ask",
++            "requires_human_for": ["destructive_actions"],
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-ask-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/tmp/supergoal-ask.md", "content": "x"},
++                session_id="super-policy-ask-sid",
++                tool_call_id="tc-policy",
++            )
++
++        assert result == '{"ok":true}'
++        mock_dispatch.assert_called_once()
++
++    def test_supergoal_policy_resolves_terminal_relative_paths_against_workdir(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "terminal",
++            {"command": "cat data/input.csv", "workdir": "/tmp/allowed"},
++            contract,
++            mode="supervised",
++        )
++
++        assert result.allows_execution
++
++    def test_supergoal_policy_checks_v4a_patch_body_paths(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "patch",
++            {
++                "mode": "patch",
++                "patch": "*** Begin Patch\n*** Update File: /tmp/outside.txt\n@@\n-old\n+new\n*** End Patch",
++            },
++            contract,
++            mode="supervised",
++        )
++
++        assert not result.allows_execution
++        assert "/tmp/outside.txt" in result.reason
++
++    def test_supergoal_policy_resolves_file_relative_paths_against_terminal_cwd(self, _isolate_hermes_home, monkeypatch):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        monkeypatch.setenv("TERMINAL_CWD", "/tmp/allowed")
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "write_file",
++            {"path": "relative/output.md", "content": "x"},
++            contract,
++            mode="supervised",
++        )
++
++        assert result.allows_execution
++
++    def test_supergoal_policy_enforces_terminal_network_allowlist(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            network_allowlist=["allowed.example"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "terminal",
++            {"command": "curl https://unapproved.example/data.json"},
++            contract,
++            mode="supervised",
++        )
++
++        assert not result.allows_execution
++        assert "unapproved.example" in result.reason
++
++    def test_supergoal_policy_check_receives_handle_function_task_id(self, _isolate_hermes_home, monkeypatch):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        seen = {}
++        def fake_policy(session_id, tool_name, args, *, task_id=""):
++            seen["task_id"] = task_id
++            return None
++
++        import hermes_cli.supergoal.policy as policy_mod
++        monkeypatch.setattr(policy_mod, "pre_tool_policy_block_message", fake_policy)
++
++        mgr = GoalManager(session_id="super-policy-task-id-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        save_goal("super-policy-task-id-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}'):
++            handle_function_call(
++                "write_file",
++                {"path": "relative/out.txt", "content": "x"},
++                session_id="super-policy-task-id-sid",
++                tool_call_id="tc-policy",
++                task_id="workspace-task",
++            )
++
++        assert seen["task_id"] == "workspace-task"
++
++    def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-full-auto-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "full_auto"
++        state.permission_contract = {
++            "filesystem_allowlist": ["/tmp/allowed"],
++            "destructive_actions": "deny",
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-full-auto-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/etc/passwd", "content": "x"},
++                session_id="super-policy-full-auto-sid",
++                tool_call_id="tc-policy",
++            )
++
++        assert result == '{"ok":true}'
++        mock_dispatch.assert_called_once()
+ 
+     def test_tool_request_and_execution_middleware_wrap_registry_dispatch(self, monkeypatch):
+         seen = {}
+diff --git a/tests/tools/test_hardline_blocklist.py b/tests/tools/test_hardline_blocklist.py
+index 8d8062139..32c5a9557 100644
+--- a/tests/tools/test_hardline_blocklist.py
++++ b/tests/tools/test_hardline_blocklist.py
+@@ -256,6 +256,35 @@ def test_hardline_runs_before_dangerous_detection(clean_session):
+     assert result.get("hardline") is True
+ 
+ 
++def test_supergoal_full_auto_bypasses_recoverable_dangerous_approval(clean_session, monkeypatch, _isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, save_goal
++
++    sid = "super-full-auto-approval-sid"
++    mgr = GoalManager(session_id=sid)
++    state = mgr.set("autonomous maintenance", mode="supergoal")
++    state.permission_mode = "full_auto"
++    save_goal(sid, state)
++    monkeypatch.setenv("HERMES_SESSION_ID", sid)
++
++    result = check_dangerous_command("rm -rf /tmp/x", "local")
++    assert result["approved"] is True
++
++
++def test_supergoal_full_auto_cannot_bypass_hardline(clean_session, monkeypatch, _isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, save_goal
++
++    sid = "super-full-auto-hardline-sid"
++    mgr = GoalManager(session_id=sid)
++    state = mgr.set("autonomous maintenance", mode="supergoal")
++    state.permission_mode = "full_auto"
++    save_goal(sid, state)
++    monkeypatch.setenv("HERMES_SESSION_ID", sid)
++
++    result = check_dangerous_command("rm -rf /", "local")
++    assert result["approved"] is False
++    assert result.get("hardline") is True
++
++
+ def test_recoverable_dangerous_commands_still_pass_yolo(clean_session, monkeypatch):
+     """Yolo still bypasses the regular DANGEROUS_PATTERNS list.
+ 
 diff --git a/tools/approval.py b/tools/approval.py
 index 6e4cca276..4a4f4dc51 100644
 --- a/tools/approval.py

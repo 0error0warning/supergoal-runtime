@@ -782,7 +782,7 @@ class TestGoalManager:
                  "progress": "weak",
                  "strategy_health": "good",
                  "next_best_action": "collect verifier output",
-             }):
+             }) as critic_mock:
             decision = mgr.evaluate_after_turn("partial progress")
 
         assert decision["status"] == "active"  # legacy compatibility
@@ -795,7 +795,9 @@ class TestGoalManager:
         ]
         evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
         assert evaluate_phase["data"]["verdict"] == "continue"
+        assert evaluate_phase["data"]["critic_applied"] is True
         judge_mock.assert_called_once()
+        critic_mock.assert_called_once()
 
     def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
         import json
