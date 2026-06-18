@@ -4258,10 +4258,10 @@ index 30d4b0738..dfd16d86a 100644
      # malicious entry. Preserve the stanza for auditability but mark it
 diff --git a/hermes_cli/goal_events.py b/hermes_cli/goal_events.py
 new file mode 100644
-index 000000000..651daedef
+index 000000000..982ef4a69
 --- /dev/null
 +++ b/hermes_cli/goal_events.py
-@@ -0,0 +1,145 @@
+@@ -0,0 +1,136 @@
 +"""Durable GoalEvent storage for /goal and /supergoal.
 +
 +This module owns the append-only event log.  Goal state itself still lives in
@@ -4328,18 +4328,9 @@ index 000000000..651daedef
 +
 +def _get_session_db() -> Optional[Any]:
 +    try:
-+        from hermes_constants import get_hermes_home
-+        from hermes_state import SessionDB
++        from hermes_cli.supergoal.store import get_session_db
 +
-+        # Keep one DB per HERMES_HOME without importing goals.py.
-+        home = str(get_hermes_home())
-+        cache = getattr(_get_session_db, "_cache", {})
-+        if home in cache:
-+            return cache[home]
-+        db = SessionDB()
-+        cache[home] = db
-+        setattr(_get_session_db, "_cache", cache)
-+        return db
++        return get_session_db()
 +    except Exception as exc:  # pragma: no cover - defensive for nonstandard launchers
 +        logger.debug("GoalEvent store bootstrap failed: %s", exc)
 +        return None
@@ -4408,7 +4399,7 @@ index 000000000..651daedef
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..ff659b5a2 100644
+index a6a28deaf..4e9125ec6 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -5137,7 +5128,7 @@ index a6a28deaf..ff659b5a2 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +838,181 @@ class GoalState:
+@@ -193,81 +838,208 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5315,6 +5306,7 @@ index a6a28deaf..ff659b5a2 100644
  
 -def save_goal(session_id: str, state: GoalState) -> None:
 -    """Persist a goal to SessionDB. No-op if DB unavailable."""
+-    if not session_id:
 +def _event_log_id_for_session(session_id: str) -> str:
 +    bound = _get_bound_goal_run_id(session_id)
 +    if bound:
@@ -5325,9 +5317,37 @@ index a6a28deaf..ff659b5a2 100644
 +    return session_id
 +
 +
++def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
++    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
++    if not session_id or not goal_run_id or session_id == goal_run_id:
+         return
++    legacy_events = _load_goal_event_records(session_id, limit=max_events)
++    if not legacy_events:
++        return
++    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
++    merged: List[GoalEvent] = []
++    seen = set()
++    for event in [*current_events, *legacy_events]:
++        key = json.dumps(event.to_dict(), sort_keys=True, ensure_ascii=False)
++        if key in seen:
++            continue
++        seen.add(key)
++        merged.append(event)
++    merged = sorted(merged, key=lambda e: e.ts)[-max_events:]
+     db = _get_session_db()
+     if db is None:
+         return
+     try:
+-        db.set_meta(_meta_key(session_id), state.to_json())
++        db.set_meta(_events_meta_key(goal_run_id), json.dumps([e.to_dict() for e in merged], ensure_ascii=False))
+     except Exception as exc:
+-        logger.debug("GoalManager: set_meta failed: %s", exc)
++        logger.debug("GoalManager: legacy event migration failed: %s", exc)
++
++
 +def load_goal(session_id: str) -> Optional[GoalState]:
 +    """Load the logical goal run bound to a physical session id."""
-     if not session_id:
++    if not session_id:
 +        return None
 +    goal_run_id = _get_bound_goal_run_id(session_id)
 +    state = _load_goal_run(goal_run_id) if goal_run_id else None
@@ -5336,6 +5356,7 @@ index a6a28deaf..ff659b5a2 100644
 +        if state is not None:
 +            # Lazy migration for pre-goal_run_id rows: bind the physical
 +            # session to a stable logical run and materialize goal_run:<id>.
++            _merge_legacy_events_into_goal_run(session_id, state.goal_run_id)
 +            save_goal(session_id, state)
 +    if state is not None and state.goal_run_id:
 +        events = _load_goal_event_records(state.goal_run_id, limit=200)
@@ -5348,14 +5369,7 @@ index a6a28deaf..ff659b5a2 100644
 +def save_goal(session_id: str, state: GoalState) -> None:
 +    """Persist a logical goal run and bind this physical session to it."""
 +    if not session_id or state is None:
-         return
--    db = _get_session_db()
--    if db is None:
--        return
--    try:
--        db.set_meta(_meta_key(session_id), state.to_json())
--    except Exception as exc:
--        logger.debug("GoalManager: set_meta failed: %s", exc)
++        return
 +    if not state.goal_run_id:
 +        state.goal_run_id = _new_goal_run_id()
 +    _bind_session_to_goal_run(session_id, state.goal_run_id)
@@ -5366,7 +5380,7 @@ index a6a28deaf..ff659b5a2 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1024,69 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1051,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5385,6 +5399,14 @@ index a6a28deaf..ff659b5a2 100644
 +    if not state.goal_run_id:
 +        state.goal_run_id = _new_goal_run_id()
 +        save_goal(old_session_id, state)
++    existing_new = load_goal(new_session_id)
++    if (
++        existing_new is not None
++        and existing_new.status in {"active", "paused", "done"}
++        and existing_new.goal_run_id
++        and existing_new.goal_run_id != state.goal_run_id
++    ):
++        return existing_new
 +    _bind_session_to_goal_run(new_session_id, state.goal_run_id, reason=reason)
 +    # Keep a compatibility mirror for tools still looking at goal:<new_session_id>.
 +    save_goal(new_session_id, state)
@@ -5436,7 +5458,7 @@ index a6a28deaf..ff659b5a2 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1100,733 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1135,733 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6170,7 +6192,7 @@ index a6a28deaf..ff659b5a2 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +1834,31 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +1869,31 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6212,7 +6234,7 @@ index a6a28deaf..ff659b5a2 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2005,191 @@ def judge_goal(
+@@ -463,6 +2040,191 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6404,7 +6426,7 @@ index a6a28deaf..ff659b5a2 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2216,41 @@ class GoalManager:
+@@ -489,6 +2251,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6446,7 +6468,7 @@ index a6a28deaf..ff659b5a2 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2264,151 @@ class GoalManager:
+@@ -502,37 +2299,151 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -6604,7 +6626,7 @@ index a6a28deaf..ff659b5a2 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2417,7 @@ class GoalManager:
+@@ -541,6 +2452,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -6612,7 +6634,7 @@ index a6a28deaf..ff659b5a2 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2427,29 @@ class GoalManager:
+@@ -550,7 +2462,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -6642,7 +6664,7 @@ index a6a28deaf..ff659b5a2 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2457,7 @@ class GoalManager:
+@@ -558,6 +2492,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -6650,12 +6672,12 @@ index a6a28deaf..ff659b5a2 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2466,25 @@ class GoalManager:
+@@ -566,7 +2501,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -6670,13 +6692,13 @@ index a6a28deaf..ff659b5a2 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2500,7 @@ class GoalManager:
+@@ -582,6 +2535,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -6684,7 +6706,7 @@ index a6a28deaf..ff659b5a2 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2526,18 @@ class GoalManager:
+@@ -607,6 +2561,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -6703,7 +6725,43 @@ index a6a28deaf..ff659b5a2 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -658,6 +2589,60 @@ class GoalManager:
+@@ -622,6 +2588,35 @@ class GoalManager:
+         last_response: str,
+         *,
+         user_initiated: bool = True,
++    ) -> Dict[str, Any]:
++        """Public facade: delegate post-turn control to the runtime controller."""
++        if self._state is not None and getattr(self._state, "mode", "goal") == "supergoal":
++            from hermes_cli.supergoal.controller import SupergoalController
++            from hermes_cli.supergoal.domain import TurnContext
++            from hermes_cli.supergoal.evaluators import CompletionJudge, EvaluatorSuite, StrategicCritic
++
++            controller = SupergoalController(
++                evaluators=EvaluatorSuite(
++                    completion_judge=CompletionJudge(judge_goal),
++                    strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
++                ),
++                legacy_decider=self._evaluate_after_turn_legacy,
++            )
++            return controller.decide_after_turn(
++                TurnContext(
++                    session_id=self.session_id,
++                    state=self._state,
++                    last_response=last_response,
++                    user_initiated=user_initiated,
++                )
++            ).to_dict()
++        return self._evaluate_after_turn_legacy(last_response, user_initiated=user_initiated)
++
++    def _evaluate_after_turn_legacy(
++        self,
++        last_response: str,
++        *,
++        user_initiated: bool = True,
+     ) -> Dict[str, Any]:
+         """Run the judge and update state. Return a decision dict.
+ 
+@@ -658,6 +2653,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -6764,7 +6822,7 @@ index a6a28deaf..ff659b5a2 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +2651,89 @@ class GoalManager:
+@@ -666,9 +2715,89 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -6854,7 +6912,7 @@ index a6a28deaf..ff659b5a2 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +2755,11 @@ class GoalManager:
+@@ -690,6 +2819,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -6866,7 +6924,7 @@ index a6a28deaf..ff659b5a2 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +2778,83 @@ class GoalManager:
+@@ -708,10 +2842,83 @@ class GoalManager:
                  ),
              }
  
@@ -6950,7 +7008,7 @@ index a6a28deaf..ff659b5a2 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +2867,20 @@ class GoalManager:
+@@ -724,7 +2931,20 @@ class GoalManager:
                  ),
              }
  
@@ -6971,7 +7029,7 @@ index a6a28deaf..ff659b5a2 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +2888,52 @@ class GoalManager:
+@@ -732,13 +2952,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7025,7 +7083,7 @@ index a6a28deaf..ff659b5a2 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3094,8 @@ __all__ = [
+@@ -899,6 +3158,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7046,6 +7104,164 @@ index 000000000..194fb2b68
 +``hermes_cli.goals`` module remains the public compatibility facade for /goal
 +and /supergoal commands.
 +"""
+diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
+new file mode 100644
+index 000000000..fb6e8f68a
+--- /dev/null
++++ b/hermes_cli/supergoal/controller.py
+@@ -0,0 +1,33 @@
++"""Controller boundary for /supergoal post-turn decisions.
++
++This is the first controller extraction: it establishes the platform-agnostic
++entry point and decision DTO while delegating the historical state-machine body
++back to the GoalManager facade.  Follow-up refactors can move gate/replan/
++critic internals behind this boundary without changing CLI/Gateway callers.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Callable, Dict
++
++from hermes_cli.supergoal.domain import ControllerDecision, DecisionDict, TurnContext
++from hermes_cli.supergoal.evaluators import EvaluatorSuite
++
++LegacyDecisionFn = Callable[..., DecisionDict]
++
++
++@dataclass(frozen=True)
++class SupergoalController:
++    """Platform-neutral /supergoal controller boundary."""
++
++    evaluators: EvaluatorSuite
++    legacy_decider: LegacyDecisionFn
++
++    def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
++        # The legacy decider is intentionally injected.  That keeps this module
++        # free of GoalManager/gateway/CLI imports and makes the controller seam
++        # testable before the full state machine is moved here.
++        return ControllerDecision.from_dict(
++            self.legacy_decider(ctx.last_response, user_initiated=ctx.user_initiated)
++        )
+diff --git a/hermes_cli/supergoal/domain.py b/hermes_cli/supergoal/domain.py
+new file mode 100644
+index 000000000..086e54034
+--- /dev/null
++++ b/hermes_cli/supergoal/domain.py
+@@ -0,0 +1,60 @@
++"""Domain DTOs for the /supergoal runtime.
++
++This module is intentionally small for the first extraction pass: it defines
++platform-agnostic data exchanged between the public GoalManager facade and the
++SupergoalController.  The large historical GoalState dataclass still lives in
++``hermes_cli.goals`` until later migration steps move the full domain model.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Callable, Dict, Optional
++
++
++DecisionDict = Dict[str, Any]
++PromptBuilder = Callable[[], Optional[str]]
++EventRecorder = Callable[[str], None]
++
++
++@dataclass(frozen=True)
++class TurnContext:
++    """A completed assistant turn ready for goal/supergoal evaluation."""
++
++    session_id: str
++    state: Any
++    last_response: str
++    user_initiated: bool = True
++
++
++@dataclass(frozen=True)
++class ControllerDecision:
++    """Platform-neutral post-turn control decision."""
++
++    status: Optional[str]
++    should_continue: bool
++    continuation_prompt: Optional[str]
++    verdict: str
++    reason: str
++    message: str = ""
++
++    def to_dict(self) -> DecisionDict:
++        return {
++            "status": self.status,
++            "should_continue": self.should_continue,
++            "continuation_prompt": self.continuation_prompt,
++            "verdict": self.verdict,
++            "reason": self.reason,
++            "message": self.message,
++        }
++
++    @classmethod
++    def from_dict(cls, data: DecisionDict) -> "ControllerDecision":
++        return cls(
++            status=data.get("status"),
++            should_continue=bool(data.get("should_continue", False)),
++            continuation_prompt=data.get("continuation_prompt"),
++            verdict=str(data.get("verdict") or ""),
++            reason=str(data.get("reason") or ""),
++            message=str(data.get("message") or ""),
++        )
+diff --git a/hermes_cli/supergoal/evaluators.py b/hermes_cli/supergoal/evaluators.py
+new file mode 100644
+index 000000000..ce2917e41
+--- /dev/null
++++ b/hermes_cli/supergoal/evaluators.py
+@@ -0,0 +1,47 @@
++"""Evaluator adapters for the /supergoal runtime.
++
++The concrete judge/critic functions remain in ``hermes_cli.goals`` for this
++migration step so existing tests can still monkeypatch them.  These adapters
++make the controller depend on explicit evaluator objects instead of reaching
++through GoalManager for everything.
++"""
++
++from __future__ import annotations
++
++from dataclasses import dataclass
++from typing import Any, Callable, Dict, List, Optional, Tuple
++
++JudgeResult = Tuple[str, str, bool]
++JudgeFn = Callable[[str, str], JudgeResult]
++CriticFn = Callable[[Any, str], Optional[Dict[str, Any]]]
++CriticApplyFn = Callable[[Any, Optional[Dict[str, Any]]], None]
++
++
++@dataclass(frozen=True)
++class CompletionJudge:
++    """Adapter around the completion judge callable."""
++
++    judge_fn: Callable[..., JudgeResult]
++
++    def evaluate(self, goal: str, last_response: str, *, subgoals: Optional[List[str]] = None) -> JudgeResult:
++        return self.judge_fn(goal, last_response, subgoals=subgoals or None)
++
++
++@dataclass(frozen=True)
++class StrategicCritic:
++    """Adapter around the strategic critic + merge callables."""
++
++    critic_fn: Callable[[Any, str], Optional[Dict[str, Any]]]
++    apply_fn: Callable[[Any, Optional[Dict[str, Any]]], None]
++
++    def evaluate(self, state: Any, last_response: str) -> Optional[Dict[str, Any]]:
++        return self.critic_fn(state, last_response)
++
++    def apply(self, state: Any, data: Optional[Dict[str, Any]]) -> None:
++        self.apply_fn(state, data)
++
++
++@dataclass(frozen=True)
++class EvaluatorSuite:
++    completion_judge: CompletionJudge
++    strategic_critic: StrategicCritic
 diff --git a/hermes_cli/supergoal/store.py b/hermes_cli/supergoal/store.py
 new file mode 100644
 index 000000000..b88aed28b
@@ -7955,10 +8171,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..95be65285 100644
+index 0dae684b6..61749b59e 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,874 @@ class TestGoalManager:
+@@ -252,6 +252,959 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -8341,6 +8557,91 @@ index 0dae684b6..95be65285 100644
 +        assert migrated.goal_run_id == new_mgr.state.goal_run_id
 +        assert any(e.type == "session_rotated" for e in new_mgr.recent_events(limit=20))
 +
++
++
++
++    def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
++        import json
++        import time
++        from hermes_cli.goals import GoalManager, GoalState, save_goal, load_goal_events
++        from hermes_cli.goal_events import events_meta_key
++        from hermes_cli.supergoal.store import get_session_db, legacy_goal_key
++
++        legacy = GoalState(goal="legacy mission", mode="supergoal", status="active")
++        db = get_session_db()
++        assert db is not None
++        db.set_meta(legacy_goal_key("legacy-events-sid"), legacy.to_json())
++        db.set_meta(events_meta_key("legacy-events-sid"), json.dumps([
++            {"ts": time.time(), "type": "verification_observed", "turn": 3, "summary": "legacy evidence", "data": {}}
++        ], ensure_ascii=False))
++
++        mgr = GoalManager(session_id="legacy-events-sid")
++
++        assert mgr.state is not None
++        assert mgr.state.goal_run_id.startswith("legacy-")
++        events = load_goal_events("legacy-events-sid", limit=20)
++        assert [e.type for e in events] == ["verification_observed"]
++        assert mgr.state.event_count == 1
++
++    def test_migrate_goal_state_preserves_existing_destination_goal(self, hermes_home):
++        from hermes_cli.goals import GoalManager, migrate_goal_state
++
++        old = GoalManager(session_id="migration-existing-old")
++        old.set("old mission", max_turns=10, mode="supergoal")
++        new = GoalManager(session_id="migration-existing-new")
++        new.set("new mission", max_turns=10, mode="supergoal")
++        assert old.state is not None and new.state is not None
++        new_run_id = new.state.goal_run_id
++
++        result = migrate_goal_state("migration-existing-old", "migration-existing-new", reason="compression")
++
++        assert result is not None
++        assert result.goal == "new mission"
++        assert result.goal_run_id == new_run_id
++        assert GoalManager(session_id="migration-existing-new").state.goal_run_id == new_run_id
++
++    def test_supergoal_evaluate_uses_controller_facade(self, hermes_home, monkeypatch):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++        from hermes_cli.supergoal.domain import ControllerDecision
++
++        mgr = GoalManager(session_id="super-controller-facade-sid")
++        mgr.set("ship via controller", max_turns=5, mode="supergoal")
++        calls = []
++
++        def fake_decide(self, ctx):
++            calls.append((ctx.session_id, ctx.last_response, ctx.state.mode))
++            return ControllerDecision(
++                status="active",
++                should_continue=False,
++                continuation_prompt=None,
++                verdict="continue",
++                reason="controller seam",
++                message="controller used",
++            )
++
++        monkeypatch.setattr("hermes_cli.supergoal.controller.SupergoalController.decide_after_turn", fake_decide)
++        decision = mgr.evaluate_after_turn("latest response")
++
++        assert calls == [("super-controller-facade-sid", "latest response", "supergoal")]
++        assert decision["message"] == "controller used"
++
++    def test_normal_goal_evaluate_skips_supergoal_controller(self, hermes_home, monkeypatch):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="normal-goal-controller-bypass-sid")
++        mgr.set("ordinary goal", max_turns=5, mode="goal")
++
++        def fail_if_called(*args, **kwargs):
++            raise AssertionError("normal /goal must not instantiate SupergoalController")
++
++        monkeypatch.setattr("hermes_cli.supergoal.controller.SupergoalController.decide_after_turn", fail_if_called)
++        with patch.object(goals, "judge_goal", return_value=("done", "ordinary done", False)):
++            decision = mgr.evaluate_after_turn("done")
++
++        assert decision["status"] == "done"
++        assert decision["verdict"] == "done"
 +
 +    def test_goal_run_id_is_stable_across_session_rotation(self, hermes_home):
 +        from hermes_cli.goals import GoalManager, append_goal_event, load_goal_events, migrate_goal_state
@@ -8833,7 +9134,7 @@ index 0dae684b6..95be65285 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1347,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1432,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -8842,7 +9143,7 @@ index 0dae684b6..95be65285 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1357,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1442,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):

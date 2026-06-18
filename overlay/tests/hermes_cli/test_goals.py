@@ -634,6 +634,29 @@ class TestGoalManager:
 
 
 
+
+    def test_supergoal_controller_decision_exposes_pipeline_and_typed_fields(self, hermes_home, monkeypatch):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-controller-pipeline-sid")
+        mgr.set("ship via explicit pipeline", max_turns=5, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "needs evidence", False)),              patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "weak",
+                 "strategy_health": "good",
+                 "next_best_action": "collect verifier output",
+             }):
+            decision = mgr.evaluate_after_turn("partial progress")
+
+        assert decision["status"] == "active"  # legacy compatibility
+        assert decision["control_status"] == "continue"
+        assert decision["next_action"]["text"] == "collect verifier output"
+        assert isinstance(decision["gate_results"], list)
+        assert isinstance(decision["evidence_refs"], list)
+        assert [p["phase"] for p in decision["pipeline"]] == [
+            "observe", "project", "evaluate", "reconcile", "decide", "render"
+        ]
+
     def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
         import json
         import time
@@ -686,12 +709,16 @@ class TestGoalManager:
         def fake_decide(self, ctx):
             calls.append((ctx.session_id, ctx.last_response, ctx.state.mode))
             return ControllerDecision(
-                status="active",
+                status="blocked",
                 should_continue=False,
+                next_action=None,
                 continuation_prompt=None,
+                gate_results=[],
+                evidence_refs=[],
                 verdict="continue",
                 reason="controller seam",
-                message="controller used",
+                user_message="controller used",
+                legacy_status="active",
             )
 
         monkeypatch.setattr("hermes_cli.supergoal.controller.SupergoalController.decide_after_turn", fake_decide)
