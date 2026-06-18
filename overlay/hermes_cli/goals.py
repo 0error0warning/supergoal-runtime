@@ -665,6 +665,7 @@ class DoneGateReconciliationResult:
     done_followup_gate_ids: List[str] = field(default_factory=list)
     paused: bool = False
     paused_gate_id: str = ""
+    paused_reason: str = ""
     paused_message: str = ""
 
 
@@ -1589,6 +1590,7 @@ def _reconcile_done_with_supergoal_gates(
     verdict: str,
     reason: str,
     last_response: str,
+    apply_paused_status: bool = True,
 ) -> DoneGateReconciliationResult:
     if verdict != "done" or getattr(state, "mode", "goal") != "supergoal":
         return DoneGateReconciliationResult(verdict=verdict, reason=reason)
@@ -1641,18 +1643,22 @@ def _reconcile_done_with_supergoal_gates(
         state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
     _update_supergoal_plan_from_progress(state, verdict="continue")
     paused = state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS
+    paused_reason = ""
     if paused:
-        state.status = "paused"
-        state.paused_reason = (
+        paused_reason = (
             f"supergoal gate {first_gate.id} is stalled after "
             f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
         )
+        if apply_paused_status:
+            state.status = "paused"
+            state.paused_reason = paused_reason
     return DoneGateReconciliationResult(
         verdict=verdict,
         reason=reason,
         gate_vetoed=True,
         paused=paused,
         paused_gate_id=first_gate.id if paused else "",
+        paused_reason=paused_reason,
         paused_message=f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}" if paused else "",
     )
 
@@ -2844,6 +2850,7 @@ class GoalManager:
                 observe_events=self._observe_supergoal_events_for_controller,
                 project_state=self._project_supergoal_state_for_controller,
                 prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
+                reconcile_done_gates=self._reconcile_done_gates_for_controller,
             )
             return controller.decide_after_turn(
                 TurnContext(
@@ -2880,6 +2887,27 @@ class GoalManager:
         changed = _record_supergoal_turn_artifacts(state, ctx.last_response) or changed
         return changed
 
+    def _reconcile_done_gates_for_controller(
+        self,
+        ctx: Any,
+        reason: str,
+        last_response: str,
+        gate_ids_before_critic: Any = None,
+        critic_applied: bool = False,
+    ) -> DoneGateReconciliationResult:
+        state = ctx.state
+        if state is None or getattr(state, "status", "") != "active":
+            return DoneGateReconciliationResult(verdict="inactive", reason="no active goal")
+        if critic_applied and _passed_gate_ids(state) != set(gate_ids_before_critic or set()):
+            _reset_gate_stall(state)
+        return _reconcile_done_with_supergoal_gates(
+            state,
+            verdict="done",
+            reason=reason,
+            last_response=last_response,
+            apply_paused_status=False,
+        )
+
     def _evaluate_after_turn_legacy(
         self,
         last_response: str,
@@ -2893,6 +2921,7 @@ class GoalManager:
         critic_applied: bool = False,
         critic_error: str = "",
         gate_ids_before_critic: Optional[Set[str]] = None,
+        done_gate_result: Optional[DoneGateReconciliationResult] = None,
     ) -> Dict[str, Any]:
         """Run the judge and update state. Return a decision dict.
 
@@ -2954,7 +2983,7 @@ class GoalManager:
                     logger.debug("supergoal critic merge failed: %s", critic_error)
                 if critic_applied:
                     state.consecutive_critic_failures = 0
-                    if _passed_gate_ids(state) != gate_ids_before_critic:
+                    if done_gate_result is None and _passed_gate_ids(state) != gate_ids_before_critic:
                         _reset_gate_stall(state)
                     interval = _supergoal_replan_interval()
                     if interval and state.turns_used > 0 and state.turns_used % interval == 0:
@@ -3014,7 +3043,7 @@ class GoalManager:
         else:
             state.consecutive_judge_api_failures = 0
 
-        gate_result = _reconcile_done_with_supergoal_gates(
+        gate_result = done_gate_result or _reconcile_done_with_supergoal_gates(
             state,
             verdict=verdict,
             reason=reason,
@@ -3022,9 +3051,14 @@ class GoalManager:
         )
         verdict = gate_result.verdict
         reason = gate_result.reason
+        if done_gate_result is not None:
+            state.last_verdict = verdict
+            state.last_reason = reason
         gate_vetoed = gate_result.gate_vetoed
         done_followup_gate_ids = gate_result.done_followup_gate_ids
         if gate_result.paused:
+            state.status = "paused"
+            state.paused_reason = state.paused_reason or gate_result.paused_reason
             save_goal(self.session_id, state)
             self._record_event(
                 "paused",

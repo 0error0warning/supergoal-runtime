@@ -29,6 +29,7 @@ LegacyDecisionFn = Callable[..., DecisionDict]
 ObserveEventsFn = Callable[[TurnContext], int]
 ProjectStateFn = Callable[[TurnContext], bool]
 PrepareEvaluationFn = Callable[[TurnContext], bool]
+ReconcileDoneGatesFn = Callable[[TurnContext, str, str, Any, bool], Any]
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,7 @@ class SupergoalController:
     observe_events: ObserveEventsFn | None = None
     project_state: ProjectStateFn | None = None
     prepare_evaluation: PrepareEvaluationFn | None = None
+    reconcile_done_gates: ReconcileDoneGatesFn | None = None
 
     def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
         snapshots: list[PipelineSnapshot] = []
@@ -146,8 +148,24 @@ class SupergoalController:
 
     # 4/5. Reconcile + Decide -------------------------------------------
     def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
-        # Legacy decider currently performs judge, critic, gate reconciliation,
-        # stall/budget guards, persistence, and continuation prompt rendering.
+        # Legacy decider currently performs stall/budget guards, persistence,
+        # and continuation prompt rendering. Gate reconciliation is staged:
+        # controller can precompute the done+gates result and legacy will apply
+        # persistence/return-shaping without recomputing it.
+        done_gate_result = None
+        if self.reconcile_done_gates and evaluation.get("verdict") == "done":
+            # Legacy gate reconciliation used to run after last_verdict/last_reason
+            # were mirrored onto state. Preserve that visible state contract before
+            # moving the reconciliation call into the controller.
+            setattr(ctx.state, "last_verdict", str(evaluation.get("verdict") or ""))
+            setattr(ctx.state, "last_reason", str(evaluation.get("reason") or ""))
+            done_gate_result = self.reconcile_done_gates(
+                ctx,
+                str(evaluation.get("reason") or ""),
+                ctx.last_response,
+                evaluation.get("gate_ids_before_critic"),
+                bool(evaluation.get("critic_applied")),
+            )
         legacy = self.legacy_decider(
             ctx.last_response,
             user_initiated=ctx.user_initiated,
@@ -159,6 +177,7 @@ class SupergoalController:
             critic_applied=bool(evaluation.get("critic_applied")),
             critic_error=str(evaluation.get("critic_error") or ""),
             gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
+            done_gate_result=done_gate_result,
         )
         gate_decision = self._gate_decision(ctx.state, legacy)
         legacy["gate_decision"] = gate_decision.to_dict()
@@ -170,6 +189,7 @@ class SupergoalController:
                     "legacy_status": legacy.get("status"),
                     "verdict": legacy.get("verdict"),
                     "should_continue": bool(legacy.get("should_continue", False)),
+                    "done_gate_precomputed": done_gate_result is not None,
                     "gate_decision": gate_decision.to_dict(),
                 },
             )
