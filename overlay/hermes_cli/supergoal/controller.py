@@ -181,8 +181,17 @@ class SupergoalController:
         text = str(getattr(state, "next_best_action", "") or "").strip()
         if not text:
             return None
+        proposal = getattr(state, "action_proposal", None)
         return ActionProposal(
             text=text,
-            action_class=str(getattr(state, "current_action_class", "unknown") or "unknown"),
+            action_class=str(getattr(proposal, "action_class", "") or getattr(state, "current_action_class", "unknown") or "unknown"),
+            target_gate_id=str(getattr(proposal, "target_gate_id", "") or ""),
+            expected_evidence=list(getattr(proposal, "expected_evidence", []) or []),
+            tools_needed=list(getattr(proposal, "tools_needed", []) or []),
+            max_turn_budget=int(getattr(proposal, "max_turn_budget", 1) or 1),
+            risk_level=str(getattr(proposal, "risk_level", "medium") or "medium"),
+            why_this_gate_first=str(getattr(proposal, "why_this_gate_first", "") or ""),
+            stop_if=list(getattr(proposal, "stop_if", []) or []),
+            override_reason=str(getattr(proposal, "override_reason", "") or ""),
             why=str(getattr(state, "hard_gate_reason", "") or ""),
         )

@@ -4734,7 +4734,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..b6e677cfe 100644
+index a6a28deaf..4ee25b81a 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -4877,7 +4877,7 @@ index a6a28deaf..b6e677cfe 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +245,462 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +245,515 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -4890,6 +4890,9 @@ index a6a28deaf..b6e677cfe 100644
 +    "reasoning, insufficient research into existing solutions, reinventing wheels, "
 +    "or the need to replan. Reply ONLY with one JSON object."
 +)
++
++_ALLOWED_ACTION_CLASSES = {"research", "hypothesis_generation", "experiment_execution", "validation", "infra_engineering", "reporting", "safety", "unknown"}
++
 +
 +SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
 +    "Supergoal:\n{goal}\n\n"
@@ -4904,6 +4907,7 @@ index a6a28deaf..b6e677cfe 100644
 +    "  \"research_findings\": [{{\"source_type\": \"paper|github|web|docs|benchmark|local|other\", \"title\": \"short name\", \"locator\": \"url/path/id\", \"claim\": \"what this source changes\", \"tool_call_id\": \"only if from actual tool provenance\", \"retrieved_at\": \"timestamp if known\", \"evidence_quote_or_hash\": \"quote/hash if known\"}}],\n"
 +    "  \"hypothesis_portfolio\": [{{\"id\": \"H1\", \"claim\": \"testable hypothesis\", \"why_plausible\": \"...\", \"data_needed\": \"...\", \"baseline\": \"...\", \"experiment\": \"...\", \"kill_criteria\": \"...\", \"expected_edge\": \"...\", \"risk\": \"...\", \"status\": \"proposed|running|passed|failed|killed\", \"artifacts\": [\"path/url/log\"], \"verdict_reason\": \"...\"}}],\n"
 +    "  \"current_action_class\": \"research|hypothesis_generation|experiment_execution|validation|infra_engineering|reporting|safety|unknown\",\n"
++    "  \"action_proposal\": {{\"action_class\": \"research|hypothesis_generation|experiment_execution|validation|infra_engineering|reporting|safety|unknown\", \"target_gate_id\": \"first failed blocking gate id\", \"expected_evidence\": [\"specific evidence this action should create\"], \"tools_needed\": [\"tool names\"], \"max_turn_budget\": 1, \"risk_level\": \"low|medium|high\", \"why_this_gate_first\": \"why this gate is next\", \"stop_if\": [\"condition that should stop this path\"], \"override_reason\": \"only if not targeting first failed blocking gate\"}},\n"
 +    "  \"no_edge_report\": \"short attribution if tested hypotheses show no edge\",\n"
 +    "  \"build_vs_reuse_decision\": \"reuse|build|hybrid|unknown: rationale\",\n"
 +    "  \"literalism_risk\": \"low|medium|high\",\n"
@@ -5330,6 +5334,55 @@ index a6a28deaf..b6e677cfe 100644
 +        )
 +
 +
++@dataclass
++class SupergoalActionProposal:
++    """Serializable action proposal reviewed by the supergoal controller."""
++
++    action_class: str = "unknown"
++    target_gate_id: str = ""
++    expected_evidence: List[str] = field(default_factory=list)
++    tools_needed: List[str] = field(default_factory=list)
++    max_turn_budget: int = 1
++    risk_level: str = "medium"
++    why_this_gate_first: str = ""
++    stop_if: List[str] = field(default_factory=list)
++    text: str = ""
++    override_reason: str = ""
++
++    def to_dict(self) -> Dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_dict(cls, data: Any) -> "SupergoalActionProposal":
++        if not isinstance(data, dict):
++            return cls()
++        action_class = str(data.get("action_class") or "unknown").strip().lower() or "unknown"
++        if action_class not in _ALLOWED_ACTION_CLASSES:
++            action_class = "unknown"
++        risk = str(data.get("risk_level") or "medium").strip().lower() or "medium"
++        if risk not in {"low", "medium", "high"}:
++            risk = "medium"
++        try:
++            budget = int(data.get("max_turn_budget", 1) or 1)
++        except Exception:
++            budget = 1
++        return cls(
++            action_class=action_class,
++            target_gate_id=_truncate(" ".join(str(data.get("target_gate_id") or "").split()), 40),
++            expected_evidence=_clean_string_list(data.get("expected_evidence") or [], limit=8, item_limit=120),
++            tools_needed=_clean_string_list(data.get("tools_needed") or [], limit=8, item_limit=80),
++            max_turn_budget=max(1, min(10, budget)),
++            risk_level=risk,
++            why_this_gate_first=_truncate(" ".join(str(data.get("why_this_gate_first") or data.get("why") or "").split()), 240),
++            stop_if=_clean_string_list(data.get("stop_if") or [], limit=8, item_limit=120),
++            text=_truncate(" ".join(str(data.get("text") or data.get("next_best_action") or "").split()), 300),
++            override_reason=_truncate(" ".join(str(data.get("override_reason") or "").split()), 240),
++        )
++
++    def is_empty(self) -> bool:
++        return not (self.action_class != "unknown" or self.target_gate_id or self.text)
++
++
  @dataclass
  class GoalState:
      """Serializable goal state stored per session."""
@@ -5342,7 +5395,7 @@ index a6a28deaf..b6e677cfe 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +709,49 @@ class GoalState:
+@@ -153,6 +762,52 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -5369,6 +5422,9 @@ index a6a28deaf..b6e677cfe 100644
 +    gates: List[GoalGate] = field(default_factory=list)
 +    action_history: List[str] = field(default_factory=list)
 +    current_action_class: str = "unknown"
++    action_proposal: SupergoalActionProposal = field(default_factory=SupergoalActionProposal)
++    last_action_evidence_count: int = 0
++    same_action_no_evidence_count: int = 0
 +    hard_gate_reason: str = ""
 +    no_edge_report: str = ""
 +    build_vs_reuse_decision: str = ""
@@ -5392,7 +5448,7 @@ index a6a28deaf..b6e677cfe 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +760,12 @@ class GoalState:
+@@ -161,7 +816,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -5406,7 +5462,7 @@ index a6a28deaf..b6e677cfe 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +774,38 @@ class GoalState:
+@@ -170,8 +830,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5445,7 +5501,7 @@ index a6a28deaf..b6e677cfe 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +815,60 @@ class GoalState:
+@@ -181,6 +871,63 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5471,6 +5527,9 @@ index a6a28deaf..b6e677cfe 100644
 +            gates=gates,
 +            action_history=_clean_string_list(data.get("action_history") or [], limit=12, item_limit=80),
 +            current_action_class=str(data.get("current_action_class") or "unknown").strip() or "unknown",
++            action_proposal=SupergoalActionProposal.from_dict(data.get("action_proposal") or {}),
++            last_action_evidence_count=int(data.get("last_action_evidence_count", 0) or 0),
++            same_action_no_evidence_count=int(data.get("same_action_no_evidence_count", 0) or 0),
 +            hard_gate_reason=str(data.get("hard_gate_reason") or "").strip(),
 +            no_edge_report=str(data.get("no_edge_report") or "").strip(),
 +            build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
@@ -5506,7 +5565,7 @@ index a6a28deaf..b6e677cfe 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +881,208 @@ class GoalState:
+@@ -193,81 +940,228 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5546,6 +5605,26 @@ index a6a28deaf..b6e677cfe 100644
 +            parts.append("action_history: " + " -> ".join(self.action_history[-8:]))
 +        if self.current_action_class and self.current_action_class != "unknown":
 +            parts.append("current_action_class: " + self.current_action_class)
++        if getattr(self, "action_proposal", None) and not self.action_proposal.is_empty():
++            proposal = self.action_proposal
++            parts.append(
++                "action_proposal: "
++                + json.dumps(
++                    {
++                        "action_class": proposal.action_class,
++                        "target_gate_id": proposal.target_gate_id,
++                        "expected_evidence": proposal.expected_evidence,
++                        "tools_needed": proposal.tools_needed,
++                        "max_turn_budget": proposal.max_turn_budget,
++                        "risk_level": proposal.risk_level,
++                        "why_this_gate_first": proposal.why_this_gate_first,
++                        "stop_if": proposal.stop_if,
++                        "override_reason": proposal.override_reason,
++                        "text": proposal.text,
++                    },
++                    ensure_ascii=False,
++                )
++            )
 +        if self.hard_gate_reason:
 +            parts.append("hard_gate: " + self.hard_gate_reason)
 +        if self.no_edge_report:
@@ -5698,10 +5777,10 @@ index a6a28deaf..b6e677cfe 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-+        return
+         return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-         return
++        return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -5758,7 +5837,7 @@ index a6a28deaf..b6e677cfe 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1094,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1173,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5836,7 +5915,7 @@ index a6a28deaf..b6e677cfe 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1178,869 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1257,987 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -5936,6 +6015,49 @@ index a6a28deaf..b6e677cfe 100644
 +    if critic_value in {"thin", "missing"}:
 +        return critic_value
 +    return "missing"
++
++
++def _fallback_action_proposal(state: GoalState, text: str = "") -> SupergoalActionProposal:
++    first_gate = _first_blocking_failed_gate(state)
++    action_text = text or state.next_best_action or (f"Satisfy gate {first_gate.id}: {first_gate.description}" if first_gate else "")
++    return SupergoalActionProposal(
++        action_class=_classify_action_text(action_text),
++        target_gate_id=first_gate.id if first_gate else "",
++        expected_evidence=[first_gate.description] if first_gate else [],
++        tools_needed=[],
++        max_turn_budget=1,
++        risk_level="medium",
++        why_this_gate_first="first failed blocking gate" if first_gate else "fallback action proposal",
++        stop_if=["evidence does not increase after this turn"],
++        text=_truncate(" ".join(action_text.split()), 300),
++    )
++
++
++def _proposal_from_critic_data(state: GoalState, data: Dict[str, Any]) -> SupergoalActionProposal:
++    raw = data.get("action_proposal")
++    if isinstance(raw, dict):
++        proposal = SupergoalActionProposal.from_dict(raw)
++    else:
++        proposal = SupergoalActionProposal()
++    nba = str(data.get("next_best_action") or "").strip()
++    current_action = str(data.get("current_action_class") or "").strip().lower()
++    if proposal.is_empty():
++        proposal = _fallback_action_proposal(state, nba)
++    if current_action in _ALLOWED_ACTION_CLASSES and current_action != "unknown" and proposal.action_class == "unknown":
++        proposal.action_class = current_action
++    if nba and not proposal.text:
++        proposal.text = _truncate(" ".join(nba.split()), 300)
++    first_gate = _first_blocking_failed_gate(state)
++    if first_gate is not None and not proposal.target_gate_id:
++        proposal.target_gate_id = first_gate.id
++        proposal.why_this_gate_first = proposal.why_this_gate_first or "first failed blocking gate"
++        if not proposal.expected_evidence:
++            proposal.expected_evidence = [first_gate.description]
++    return proposal
++
++
++def _evidence_ref_count(state: GoalState) -> int:
++    return sum(len(v or []) for v in (state.evidence_layers or {}).values()) + len(state.evidence or []) + len(state.research_findings or [])
 +
 +
 +def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
@@ -6381,7 +6503,10 @@ index a6a28deaf..b6e677cfe 100644
 +        return False
 +    changed = False
 +    normalized = " ".join(last_response.split())
-+    action = _classify_action_text(normalized)
++    # Text classification is only a fallback.  Once a structured proposal
++    # exists, do not let words like "script/report/validator" overwrite the
++    # controller-approved action class.
++    action = _classify_action_text(normalized) if getattr(state, "action_proposal", SupergoalActionProposal()).is_empty() else "unknown"
 +    if action and action != "unknown":
 +        before = list(state.action_history or [])
 +        state.action_history = (before + [action])[-12:]
@@ -6546,34 +6671,106 @@ index a6a28deaf..b6e677cfe 100644
 +
 +def _apply_inertia_guard(state: GoalState) -> None:
 +    state.hard_gate_reason = ""
-+    proposed = state.current_action_class or _classify_action_text(state.next_best_action)
++    first_failed = _first_blocking_failed_gate(state)
++    if not first_failed:
++        state.same_action_no_evidence_count = 0
++        state.last_action_evidence_count = _evidence_ref_count(state)
++        return
++
++    proposal = state.action_proposal
++    if proposal.is_empty():
++        proposal = _fallback_action_proposal(state, state.next_best_action)
++        state.action_proposal = proposal
++    proposed = proposal.action_class or "unknown"
 +    state.current_action_class = proposed
++    changed_action_class = False
 +    if proposed and proposed != "unknown":
 +        hist = list(state.action_history or [])
 +        if not hist or hist[-1] != proposed:
++            changed_action_class = True
 +            hist.append(proposed)
 +        state.action_history = hist[-12:]
-+    first_failed = _first_failed_gate(state)
++
++    if proposal.target_gate_id and proposal.target_gate_id != first_failed.id and not proposal.override_reason:
++        state.hard_gate_reason = (
++            f"action proposal targets {proposal.target_gate_id}, but first failed blocking gate is "
++            f"{first_failed.id}: {first_failed.description}"
++        )
++
 +    if proposed == "infra_engineering":
-+        first_failed = next((g for g in state.gates if g.id.startswith("SG-") and g.status != "passed"), first_failed)
-+    if not first_failed:
-+        return
++        first_failed = next((g for g in state.gates if g.id.startswith("SG-") and _is_gate_open(g)), first_failed)
++
++    strategy_gate_open = first_failed.id.startswith("SG-")
++    infra_dependency_proof = bool(proposal.override_reason and "depend" in proposal.override_reason.lower())
++    if not state.hard_gate_reason and proposed == "infra_engineering" and strategy_gate_open and not infra_dependency_proof:
++        state.hard_gate_reason = f"blocked infra_engineering while {first_failed.id} is open: {first_failed.description}"
++
 +    recent = state.action_history[-5:]
 +    infra_streak = len(recent) >= 3 and all(a == "infra_engineering" for a in recent[-3:])
-+    strategy_gate_open = first_failed.id.startswith("SG-")
-+    if proposed == "infra_engineering" and strategy_gate_open:
-+        state.hard_gate_reason = f"blocked infra_engineering while {first_failed.id} is open: {first_failed.description}"
-+    elif infra_streak and any(g.id.startswith("SG-") and g.status != "passed" for g in state.gates):
++    if not state.hard_gate_reason and infra_streak and any(g.id.startswith("SG-") and _is_gate_open(g) for g in state.gates):
 +        state.hard_gate_reason = "blocked infra inertia: recent turns are infrastructure while strategy gates remain open"
++
++    evidence_count = _evidence_ref_count(state)
++    if changed_action_class:
++        state.same_action_no_evidence_count = 0
++    elif evidence_count <= int(state.last_action_evidence_count or 0):
++        state.same_action_no_evidence_count += 1
++    else:
++        state.same_action_no_evidence_count = 0
++    state.last_action_evidence_count = evidence_count
++    if not state.hard_gate_reason and state.same_action_no_evidence_count >= DEFAULT_MAX_SAME_GATE_STALLS:
++        state.hard_gate_reason = (
++            f"blocked: gate {first_failed.id} saw no evidence growth for "
++            f"{state.same_action_no_evidence_count} consecutive action approvals"
++        )
++        if first_failed.id.startswith("SG-") and not state.no_edge_report:
++            state.no_edge_report = "No evidence growth after repeated attempts; require new hypothesis family or no-edge attribution before continuing."
++
 +    if state.hard_gate_reason:
 +        state.should_replan = True
 +        state.replan_count += 1
++        proposal.target_gate_id = first_failed.id
++        proposal.expected_evidence = proposal.expected_evidence or [first_failed.description]
++        proposal.stop_if = proposal.stop_if or ["evidence does not increase after this turn"]
 +        if first_failed.id == "SG-1":
 +            state.next_best_action = "Generate a 3-item hypothesis portfolio with baseline, experiment design, kill criteria, and expected edge; do not build more infrastructure."
++            state.action_proposal = SupergoalActionProposal(
++                action_class="hypothesis_generation",
++                target_gate_id="SG-1",
++                expected_evidence=["3 strategy hypotheses"],
++                tools_needed=[],
++                max_turn_budget=1,
++                risk_level="low",
++                why_this_gate_first="SG-1 is the first failed blocking gate",
++                stop_if=["hypothesis portfolio is still below 3 items"],
++                text=state.next_best_action,
++            )
 +        elif first_failed.id == "SG-2":
 +            state.next_best_action = "Execute or verify the open hypotheses against their baselines and acceptance criteria; do not build more infrastructure unless it is a proven dependency."
++            state.action_proposal = SupergoalActionProposal(
++                action_class="experiment_execution",
++                target_gate_id="SG-2",
++                expected_evidence=["baseline", "experiment artifact", "verdict"],
++                tools_needed=["terminal", "read_file"],
++                max_turn_budget=1,
++                risk_level="medium",
++                why_this_gate_first="SG-2 is the first failed blocking gate",
++                stop_if=["no artifact/verdict is produced"],
++                text=state.next_best_action,
++            )
 +        elif first_failed.id == "SG-3":
 +            state.next_best_action = "Produce a no-edge attribution report or identify the next hypothesis family; do not add more validators/checkers."
++            state.action_proposal = SupergoalActionProposal(
++                action_class="reporting",
++                target_gate_id="SG-3",
++                expected_evidence=["no_edge_report or passed hypothesis"],
++                tools_needed=["read_file"],
++                max_turn_budget=1,
++                risk_level="low",
++                why_this_gate_first="SG-3 is the first failed blocking gate",
++                stop_if=["no attribution report is produced"],
++                text=state.next_best_action,
++            )
 +
 +
 +def _default_supergoal_plan() -> List[PlanStep]:
@@ -6706,7 +6903,7 @@ index a6a28deaf..b6e677cfe 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2048,31 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2245,31 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6748,7 +6945,7 @@ index a6a28deaf..b6e677cfe 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2219,191 @@ def judge_goal(
+@@ -463,6 +2416,189 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6876,11 +7073,9 @@ index a6a28deaf..b6e677cfe 100644
 +    state.hypothesis_portfolio = _merge_hypothesis_portfolio(
 +        state.hypothesis_portfolio, data.get("hypothesis_portfolio") or data.get("new_hypotheses")
 +    )
-+    action_class = str(data.get("current_action_class") or "").strip().lower()
-+    allowed_actions = {"research", "hypothesis_generation", "experiment_execution", "validation", "infra_engineering", "reporting", "safety", "unknown"}
-+    if action_class not in allowed_actions:
-+        action_class = _classify_action_text(str(data.get("next_best_action") or ""))
-+    state.current_action_class = action_class or "unknown"
++    proposal = _proposal_from_critic_data(state, data)
++    state.action_proposal = proposal
++    state.current_action_class = proposal.action_class or "unknown"
 +    no_edge = str(data.get("no_edge_report") or "").strip()
 +    if no_edge:
 +        state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
@@ -6902,7 +7097,7 @@ index a6a28deaf..b6e677cfe 100644
 +    } or state.progress in {"none", "regressed"}
 +    if state.should_replan:
 +        state.replan_count += 1
-+    nba = str(data.get("next_best_action") or "").strip()
++    nba = proposal.text or str(data.get("next_best_action") or "").strip()
 +    if nba:
 +        state.next_best_action = _truncate(" ".join(nba.split()), 300)
 +
@@ -6940,7 +7135,7 @@ index a6a28deaf..b6e677cfe 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2430,41 @@ class GoalManager:
+@@ -489,6 +2625,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6982,7 +7177,7 @@ index a6a28deaf..b6e677cfe 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2478,151 @@ class GoalManager:
+@@ -502,37 +2673,151 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7140,7 +7335,7 @@ index a6a28deaf..b6e677cfe 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2631,7 @@ class GoalManager:
+@@ -541,6 +2826,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7148,7 +7343,7 @@ index a6a28deaf..b6e677cfe 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2641,29 @@ class GoalManager:
+@@ -550,7 +2836,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7178,7 +7373,7 @@ index a6a28deaf..b6e677cfe 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2671,7 @@ class GoalManager:
+@@ -558,6 +2866,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7186,12 +7381,12 @@ index a6a28deaf..b6e677cfe 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2680,25 @@ class GoalManager:
+@@ -566,7 +2875,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7206,13 +7401,13 @@ index a6a28deaf..b6e677cfe 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2714,7 @@ class GoalManager:
+@@ -582,6 +2909,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7220,7 +7415,7 @@ index a6a28deaf..b6e677cfe 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2740,18 @@ class GoalManager:
+@@ -607,6 +2935,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7239,7 +7434,7 @@ index a6a28deaf..b6e677cfe 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2767,35 @@ class GoalManager:
+@@ -622,6 +2962,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7275,7 +7470,7 @@ index a6a28deaf..b6e677cfe 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +2832,60 @@ class GoalManager:
+@@ -658,6 +3027,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7336,7 +7531,7 @@ index a6a28deaf..b6e677cfe 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +2894,92 @@ class GoalManager:
+@@ -666,9 +3089,92 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7429,7 +7624,7 @@ index a6a28deaf..b6e677cfe 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +3001,11 @@ class GoalManager:
+@@ -690,6 +3196,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7441,7 +7636,7 @@ index a6a28deaf..b6e677cfe 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3024,83 @@ class GoalManager:
+@@ -708,10 +3219,83 @@ class GoalManager:
                  ),
              }
  
@@ -7525,7 +7720,7 @@ index a6a28deaf..b6e677cfe 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3113,20 @@ class GoalManager:
+@@ -724,7 +3308,20 @@ class GoalManager:
                  ),
              }
  
@@ -7546,7 +7741,7 @@ index a6a28deaf..b6e677cfe 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3134,52 @@ class GoalManager:
+@@ -732,13 +3329,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7600,7 +7795,7 @@ index a6a28deaf..b6e677cfe 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3340,8 @@ __all__ = [
+@@ -899,6 +3535,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7623,10 +7818,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..87d319a3b
+index 000000000..b636ba0da
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,188 @@
+@@ -0,0 +1,197 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7810,17 +8005,26 @@ index 000000000..87d319a3b
 +        text = str(getattr(state, "next_best_action", "") or "").strip()
 +        if not text:
 +            return None
++        proposal = getattr(state, "action_proposal", None)
 +        return ActionProposal(
 +            text=text,
-+            action_class=str(getattr(state, "current_action_class", "unknown") or "unknown"),
++            action_class=str(getattr(proposal, "action_class", "") or getattr(state, "current_action_class", "unknown") or "unknown"),
++            target_gate_id=str(getattr(proposal, "target_gate_id", "") or ""),
++            expected_evidence=list(getattr(proposal, "expected_evidence", []) or []),
++            tools_needed=list(getattr(proposal, "tools_needed", []) or []),
++            max_turn_budget=int(getattr(proposal, "max_turn_budget", 1) or 1),
++            risk_level=str(getattr(proposal, "risk_level", "medium") or "medium"),
++            why_this_gate_first=str(getattr(proposal, "why_this_gate_first", "") or ""),
++            stop_if=list(getattr(proposal, "stop_if", []) or []),
++            override_reason=str(getattr(proposal, "override_reason", "") or ""),
 +            why=str(getattr(state, "hard_gate_reason", "") or ""),
 +        )
 diff --git a/hermes_cli/supergoal/domain.py b/hermes_cli/supergoal/domain.py
 new file mode 100644
-index 000000000..753ecd6c2
+index 000000000..6cad603c4
 --- /dev/null
 +++ b/hermes_cli/supergoal/domain.py
-@@ -0,0 +1,185 @@
+@@ -0,0 +1,201 @@
 +"""Domain DTOs for the /supergoal runtime.
 +
 +This module defines platform-agnostic data exchanged between the public
@@ -7854,14 +8058,30 @@ index 000000000..753ecd6c2
 +
 +@dataclass(frozen=True)
 +class ActionProposal:
-+    """A controller-visible next action."""
++    """A controller-visible next action proposal.
++
++    The controller should approve structured proposals rather than infer action
++    semantics from prose. ``text`` is retained as a compact legacy summary.
++    """
 +
 +    text: str
 +    action_class: str = "unknown"
++    target_gate_id: str = ""
++    expected_evidence: List[str] | None = None
++    tools_needed: List[str] | None = None
++    max_turn_budget: int = 1
++    risk_level: str = "medium"
++    why_this_gate_first: str = ""
++    stop_if: List[str] | None = None
++    override_reason: str = ""
 +    why: str = ""
 +
 +    def to_dict(self) -> Dict[str, Any]:
-+        return asdict(self)
++        data = asdict(self)
++        data["expected_evidence"] = list(self.expected_evidence or [])
++        data["tools_needed"] = list(self.tools_needed or [])
++        data["stop_if"] = list(self.stop_if or [])
++        return data
 +
 +
 +GateStatus = Literal["passed", "failed", "blocked", "not_applicable", "followup", "pending"]
@@ -9365,10 +9585,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..480280406 100644
+index 0dae684b6..51c1130e5 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1026 @@ class TestGoalManager:
+@@ -252,6 +252,1091 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -9682,12 +9902,17 @@ index 0dae684b6..480280406 100644
 +                 patch.object(goals, "critic_supergoal", return_value={
 +                     "progress": "real",
 +                     "strategy_health": "good",
-+                     "current_action_class": "infra_engineering",
-+                     "next_best_action": "add another validator checker module",
-+                     "research_findings": [
-+                         {"source_type": "paper", "title": "Market paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
-+                         {"source_type": "github", "title": "Backtest repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
-+                     ],
++                     "action_proposal": {
++                         "action_class": "infra_engineering",
++                         "target_gate_id": "SG-1",
++                         "expected_evidence": ["validator script"],
++                         "tools_needed": ["write_file"],
++                         "max_turn_budget": 1,
++                         "risk_level": "medium",
++                         "why_this_gate_first": "mistaken infra first",
++                         "stop_if": ["no hypotheses produced"],
++                         "text": "add another validator checker module",
++                     },
 +                 }):
 +                decision = mgr.evaluate_after_turn(f"turn {i}: I added another validator")
 +
@@ -9695,8 +9920,68 @@ index 0dae684b6..480280406 100644
 +        assert mgr.state.hard_gate_reason
 +        assert "SG-1" in mgr.state.hard_gate_reason
 +        assert mgr.state.plan_steps[0].status == "in_progress"  # real progress alone cannot mark done
++        assert mgr.state.action_proposal.action_class == "hypothesis_generation"
++        assert mgr.state.action_proposal.target_gate_id == "SG-1"
 +        assert "HARD GATE / INERTIA GUARD" in decision["continuation_prompt"]
 +        assert "Generate a 3-item hypothesis portfolio" in decision["continuation_prompt"]
++
++    def test_supergoal_action_proposal_target_must_match_first_blocking_gate(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-action-target-approval-sid")
++        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "real",
++                 "strategy_health": "good",
++                 "action_proposal": {
++                     "action_class": "validation",
++                     "target_gate_id": "G3",
++                     "expected_evidence": ["test output"],
++                     "tools_needed": ["terminal"],
++                     "max_turn_budget": 1,
++                     "risk_level": "low",
++                     "why_this_gate_first": "validate first",
++                     "stop_if": ["tests fail"],
++                     "text": "run validation report",
++                 },
++             }):
++            decision = mgr.evaluate_after_turn("I will run a validation report")
++
++        assert mgr.state is not None
++        assert mgr.state.hard_gate_reason
++        assert "targets G3" in mgr.state.hard_gate_reason
++        assert "first failed blocking gate is G2" in mgr.state.hard_gate_reason
++        assert "HARD GATE / INERTIA GUARD" in decision["continuation_prompt"]
++
++    def test_supergoal_structured_action_proposal_not_overwritten_by_response_keywords(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++
++        mgr = GoalManager(session_id="super-action-keyword-safe-sid")
++        mgr.set("debug the mission", max_turns=20, mode="supergoal")
++        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "real",
++                 "strategy_health": "good",
++                 "action_proposal": {
++                     "action_class": "validation",
++                     "target_gate_id": "G1",
++                     "expected_evidence": ["acceptance checklist"],
++                     "tools_needed": ["read_file"],
++                     "max_turn_budget": 1,
++                     "risk_level": "low",
++                     "why_this_gate_first": "G1 is first",
++                     "stop_if": ["contract remains unclear"],
++                     "text": "validate contract",
++                 },
++             }):
++            mgr.evaluate_after_turn("This report mentions a script, validator, audit tool, and infra module.")
++
++        assert mgr.state is not None
++        assert mgr.state.current_action_class == "validation"
++        assert mgr.state.action_proposal.action_class == "validation"
 +
 +    def test_supergoal_hypothesis_portfolio_passes_strategy_gates(self, hermes_home):
 +        from hermes_cli import goals
@@ -10395,7 +10680,7 @@ index 0dae684b6..480280406 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1499,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1564,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -10404,7 +10689,7 @@ index 0dae684b6..480280406 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1509,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1574,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):

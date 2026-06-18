@@ -31,14 +31,30 @@ EventRecorder = Callable[[str], None]
 
 @dataclass(frozen=True)
 class ActionProposal:
-    """A controller-visible next action."""
+    """A controller-visible next action proposal.
+
+    The controller should approve structured proposals rather than infer action
+    semantics from prose. ``text`` is retained as a compact legacy summary.
+    """
 
     text: str
     action_class: str = "unknown"
+    target_gate_id: str = ""
+    expected_evidence: List[str] | None = None
+    tools_needed: List[str] | None = None
+    max_turn_budget: int = 1
+    risk_level: str = "medium"
+    why_this_gate_first: str = ""
+    stop_if: List[str] | None = None
+    override_reason: str = ""
     why: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        data = asdict(self)
+        data["expected_evidence"] = list(self.expected_evidence or [])
+        data["tools_needed"] = list(self.tools_needed or [])
+        data["stop_if"] = list(self.stop_if or [])
+        return data
 
 
 GateStatus = Literal["passed", "failed", "blocked", "not_applicable", "followup", "pending"]

@@ -255,6 +255,9 @@ SUPERGOAL_CRITIC_SYSTEM_PROMPT = (
     "or the need to replan. Reply ONLY with one JSON object."
 )
 
+_ALLOWED_ACTION_CLASSES = {"research", "hypothesis_generation", "experiment_execution", "validation", "infra_engineering", "reporting", "safety", "unknown"}
+
+
 SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
     "Supergoal:\n{goal}\n\n"
     "Existing state board:\n{board}\n\n"
@@ -268,6 +271,7 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
     "  \"research_findings\": [{{\"source_type\": \"paper|github|web|docs|benchmark|local|other\", \"title\": \"short name\", \"locator\": \"url/path/id\", \"claim\": \"what this source changes\", \"tool_call_id\": \"only if from actual tool provenance\", \"retrieved_at\": \"timestamp if known\", \"evidence_quote_or_hash\": \"quote/hash if known\"}}],\n"
     "  \"hypothesis_portfolio\": [{{\"id\": \"H1\", \"claim\": \"testable hypothesis\", \"why_plausible\": \"...\", \"data_needed\": \"...\", \"baseline\": \"...\", \"experiment\": \"...\", \"kill_criteria\": \"...\", \"expected_edge\": \"...\", \"risk\": \"...\", \"status\": \"proposed|running|passed|failed|killed\", \"artifacts\": [\"path/url/log\"], \"verdict_reason\": \"...\"}}],\n"
     "  \"current_action_class\": \"research|hypothesis_generation|experiment_execution|validation|infra_engineering|reporting|safety|unknown\",\n"
+    "  \"action_proposal\": {{\"action_class\": \"research|hypothesis_generation|experiment_execution|validation|infra_engineering|reporting|safety|unknown\", \"target_gate_id\": \"first failed blocking gate id\", \"expected_evidence\": [\"specific evidence this action should create\"], \"tools_needed\": [\"tool names\"], \"max_turn_budget\": 1, \"risk_level\": \"low|medium|high\", \"why_this_gate_first\": \"why this gate is next\", \"stop_if\": [\"condition that should stop this path\"], \"override_reason\": \"only if not targeting first failed blocking gate\"}},\n"
     "  \"no_edge_report\": \"short attribution if tested hypotheses show no edge\",\n"
     "  \"build_vs_reuse_decision\": \"reuse|build|hybrid|unknown: rationale\",\n"
     "  \"literalism_risk\": \"low|medium|high\",\n"
@@ -694,6 +698,55 @@ class GoalGate:
 
 
 @dataclass
+class SupergoalActionProposal:
+    """Serializable action proposal reviewed by the supergoal controller."""
+
+    action_class: str = "unknown"
+    target_gate_id: str = ""
+    expected_evidence: List[str] = field(default_factory=list)
+    tools_needed: List[str] = field(default_factory=list)
+    max_turn_budget: int = 1
+    risk_level: str = "medium"
+    why_this_gate_first: str = ""
+    stop_if: List[str] = field(default_factory=list)
+    text: str = ""
+    override_reason: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data: Any) -> "SupergoalActionProposal":
+        if not isinstance(data, dict):
+            return cls()
+        action_class = str(data.get("action_class") or "unknown").strip().lower() or "unknown"
+        if action_class not in _ALLOWED_ACTION_CLASSES:
+            action_class = "unknown"
+        risk = str(data.get("risk_level") or "medium").strip().lower() or "medium"
+        if risk not in {"low", "medium", "high"}:
+            risk = "medium"
+        try:
+            budget = int(data.get("max_turn_budget", 1) or 1)
+        except Exception:
+            budget = 1
+        return cls(
+            action_class=action_class,
+            target_gate_id=_truncate(" ".join(str(data.get("target_gate_id") or "").split()), 40),
+            expected_evidence=_clean_string_list(data.get("expected_evidence") or [], limit=8, item_limit=120),
+            tools_needed=_clean_string_list(data.get("tools_needed") or [], limit=8, item_limit=80),
+            max_turn_budget=max(1, min(10, budget)),
+            risk_level=risk,
+            why_this_gate_first=_truncate(" ".join(str(data.get("why_this_gate_first") or data.get("why") or "").split()), 240),
+            stop_if=_clean_string_list(data.get("stop_if") or [], limit=8, item_limit=120),
+            text=_truncate(" ".join(str(data.get("text") or data.get("next_best_action") or "").split()), 300),
+            override_reason=_truncate(" ".join(str(data.get("override_reason") or "").split()), 240),
+        )
+
+    def is_empty(self) -> bool:
+        return not (self.action_class != "unknown" or self.target_gate_id or self.text)
+
+
+@dataclass
 class GoalState:
     """Serializable goal state stored per session."""
 
@@ -732,6 +785,9 @@ class GoalState:
     gates: List[GoalGate] = field(default_factory=list)
     action_history: List[str] = field(default_factory=list)
     current_action_class: str = "unknown"
+    action_proposal: SupergoalActionProposal = field(default_factory=SupergoalActionProposal)
+    last_action_evidence_count: int = 0
+    same_action_no_evidence_count: int = 0
     hard_gate_reason: str = ""
     no_edge_report: str = ""
     build_vs_reuse_decision: str = ""
@@ -837,6 +893,9 @@ class GoalState:
             gates=gates,
             action_history=_clean_string_list(data.get("action_history") or [], limit=12, item_limit=80),
             current_action_class=str(data.get("current_action_class") or "unknown").strip() or "unknown",
+            action_proposal=SupergoalActionProposal.from_dict(data.get("action_proposal") or {}),
+            last_action_evidence_count=int(data.get("last_action_evidence_count", 0) or 0),
+            same_action_no_evidence_count=int(data.get("same_action_no_evidence_count", 0) or 0),
             hard_gate_reason=str(data.get("hard_gate_reason") or "").strip(),
             no_edge_report=str(data.get("no_edge_report") or "").strip(),
             build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
@@ -917,6 +976,26 @@ class GoalState:
             parts.append("action_history: " + " -> ".join(self.action_history[-8:]))
         if self.current_action_class and self.current_action_class != "unknown":
             parts.append("current_action_class: " + self.current_action_class)
+        if getattr(self, "action_proposal", None) and not self.action_proposal.is_empty():
+            proposal = self.action_proposal
+            parts.append(
+                "action_proposal: "
+                + json.dumps(
+                    {
+                        "action_class": proposal.action_class,
+                        "target_gate_id": proposal.target_gate_id,
+                        "expected_evidence": proposal.expected_evidence,
+                        "tools_needed": proposal.tools_needed,
+                        "max_turn_budget": proposal.max_turn_budget,
+                        "risk_level": proposal.risk_level,
+                        "why_this_gate_first": proposal.why_this_gate_first,
+                        "stop_if": proposal.stop_if,
+                        "override_reason": proposal.override_reason,
+                        "text": proposal.text,
+                    },
+                    ensure_ascii=False,
+                )
+            )
         if self.hard_gate_reason:
             parts.append("hard_gate: " + self.hard_gate_reason)
         if self.no_edge_report:
@@ -1274,6 +1353,49 @@ def _research_sufficiency_from_findings(state: GoalState, critic_value: str = ""
     if critic_value in {"thin", "missing"}:
         return critic_value
     return "missing"
+
+
+def _fallback_action_proposal(state: GoalState, text: str = "") -> SupergoalActionProposal:
+    first_gate = _first_blocking_failed_gate(state)
+    action_text = text or state.next_best_action or (f"Satisfy gate {first_gate.id}: {first_gate.description}" if first_gate else "")
+    return SupergoalActionProposal(
+        action_class=_classify_action_text(action_text),
+        target_gate_id=first_gate.id if first_gate else "",
+        expected_evidence=[first_gate.description] if first_gate else [],
+        tools_needed=[],
+        max_turn_budget=1,
+        risk_level="medium",
+        why_this_gate_first="first failed blocking gate" if first_gate else "fallback action proposal",
+        stop_if=["evidence does not increase after this turn"],
+        text=_truncate(" ".join(action_text.split()), 300),
+    )
+
+
+def _proposal_from_critic_data(state: GoalState, data: Dict[str, Any]) -> SupergoalActionProposal:
+    raw = data.get("action_proposal")
+    if isinstance(raw, dict):
+        proposal = SupergoalActionProposal.from_dict(raw)
+    else:
+        proposal = SupergoalActionProposal()
+    nba = str(data.get("next_best_action") or "").strip()
+    current_action = str(data.get("current_action_class") or "").strip().lower()
+    if proposal.is_empty():
+        proposal = _fallback_action_proposal(state, nba)
+    if current_action in _ALLOWED_ACTION_CLASSES and current_action != "unknown" and proposal.action_class == "unknown":
+        proposal.action_class = current_action
+    if nba and not proposal.text:
+        proposal.text = _truncate(" ".join(nba.split()), 300)
+    first_gate = _first_blocking_failed_gate(state)
+    if first_gate is not None and not proposal.target_gate_id:
+        proposal.target_gate_id = first_gate.id
+        proposal.why_this_gate_first = proposal.why_this_gate_first or "first failed blocking gate"
+        if not proposal.expected_evidence:
+            proposal.expected_evidence = [first_gate.description]
+    return proposal
+
+
+def _evidence_ref_count(state: GoalState) -> int:
+    return sum(len(v or []) for v in (state.evidence_layers or {}).values()) + len(state.evidence or []) + len(state.research_findings or [])
 
 
 def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
@@ -1719,7 +1841,10 @@ def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bo
         return False
     changed = False
     normalized = " ".join(last_response.split())
-    action = _classify_action_text(normalized)
+    # Text classification is only a fallback.  Once a structured proposal
+    # exists, do not let words like "script/report/validator" overwrite the
+    # controller-approved action class.
+    action = _classify_action_text(normalized) if getattr(state, "action_proposal", SupergoalActionProposal()).is_empty() else "unknown"
     if action and action != "unknown":
         before = list(state.action_history or [])
         state.action_history = (before + [action])[-12:]
@@ -1884,34 +2009,106 @@ def _update_supergoal_gates(state: GoalState) -> None:
 
 def _apply_inertia_guard(state: GoalState) -> None:
     state.hard_gate_reason = ""
-    proposed = state.current_action_class or _classify_action_text(state.next_best_action)
+    first_failed = _first_blocking_failed_gate(state)
+    if not first_failed:
+        state.same_action_no_evidence_count = 0
+        state.last_action_evidence_count = _evidence_ref_count(state)
+        return
+
+    proposal = state.action_proposal
+    if proposal.is_empty():
+        proposal = _fallback_action_proposal(state, state.next_best_action)
+        state.action_proposal = proposal
+    proposed = proposal.action_class or "unknown"
     state.current_action_class = proposed
+    changed_action_class = False
     if proposed and proposed != "unknown":
         hist = list(state.action_history or [])
         if not hist or hist[-1] != proposed:
+            changed_action_class = True
             hist.append(proposed)
         state.action_history = hist[-12:]
-    first_failed = _first_failed_gate(state)
+
+    if proposal.target_gate_id and proposal.target_gate_id != first_failed.id and not proposal.override_reason:
+        state.hard_gate_reason = (
+            f"action proposal targets {proposal.target_gate_id}, but first failed blocking gate is "
+            f"{first_failed.id}: {first_failed.description}"
+        )
+
     if proposed == "infra_engineering":
-        first_failed = next((g for g in state.gates if g.id.startswith("SG-") and g.status != "passed"), first_failed)
-    if not first_failed:
-        return
+        first_failed = next((g for g in state.gates if g.id.startswith("SG-") and _is_gate_open(g)), first_failed)
+
+    strategy_gate_open = first_failed.id.startswith("SG-")
+    infra_dependency_proof = bool(proposal.override_reason and "depend" in proposal.override_reason.lower())
+    if not state.hard_gate_reason and proposed == "infra_engineering" and strategy_gate_open and not infra_dependency_proof:
+        state.hard_gate_reason = f"blocked infra_engineering while {first_failed.id} is open: {first_failed.description}"
+
     recent = state.action_history[-5:]
     infra_streak = len(recent) >= 3 and all(a == "infra_engineering" for a in recent[-3:])
-    strategy_gate_open = first_failed.id.startswith("SG-")
-    if proposed == "infra_engineering" and strategy_gate_open:
-        state.hard_gate_reason = f"blocked infra_engineering while {first_failed.id} is open: {first_failed.description}"
-    elif infra_streak and any(g.id.startswith("SG-") and g.status != "passed" for g in state.gates):
+    if not state.hard_gate_reason and infra_streak and any(g.id.startswith("SG-") and _is_gate_open(g) for g in state.gates):
         state.hard_gate_reason = "blocked infra inertia: recent turns are infrastructure while strategy gates remain open"
+
+    evidence_count = _evidence_ref_count(state)
+    if changed_action_class:
+        state.same_action_no_evidence_count = 0
+    elif evidence_count <= int(state.last_action_evidence_count or 0):
+        state.same_action_no_evidence_count += 1
+    else:
+        state.same_action_no_evidence_count = 0
+    state.last_action_evidence_count = evidence_count
+    if not state.hard_gate_reason and state.same_action_no_evidence_count >= DEFAULT_MAX_SAME_GATE_STALLS:
+        state.hard_gate_reason = (
+            f"blocked: gate {first_failed.id} saw no evidence growth for "
+            f"{state.same_action_no_evidence_count} consecutive action approvals"
+        )
+        if first_failed.id.startswith("SG-") and not state.no_edge_report:
+            state.no_edge_report = "No evidence growth after repeated attempts; require new hypothesis family or no-edge attribution before continuing."
+
     if state.hard_gate_reason:
         state.should_replan = True
         state.replan_count += 1
+        proposal.target_gate_id = first_failed.id
+        proposal.expected_evidence = proposal.expected_evidence or [first_failed.description]
+        proposal.stop_if = proposal.stop_if or ["evidence does not increase after this turn"]
         if first_failed.id == "SG-1":
             state.next_best_action = "Generate a 3-item hypothesis portfolio with baseline, experiment design, kill criteria, and expected edge; do not build more infrastructure."
+            state.action_proposal = SupergoalActionProposal(
+                action_class="hypothesis_generation",
+                target_gate_id="SG-1",
+                expected_evidence=["3 strategy hypotheses"],
+                tools_needed=[],
+                max_turn_budget=1,
+                risk_level="low",
+                why_this_gate_first="SG-1 is the first failed blocking gate",
+                stop_if=["hypothesis portfolio is still below 3 items"],
+                text=state.next_best_action,
+            )
         elif first_failed.id == "SG-2":
             state.next_best_action = "Execute or verify the open hypotheses against their baselines and acceptance criteria; do not build more infrastructure unless it is a proven dependency."
+            state.action_proposal = SupergoalActionProposal(
+                action_class="experiment_execution",
+                target_gate_id="SG-2",
+                expected_evidence=["baseline", "experiment artifact", "verdict"],
+                tools_needed=["terminal", "read_file"],
+                max_turn_budget=1,
+                risk_level="medium",
+                why_this_gate_first="SG-2 is the first failed blocking gate",
+                stop_if=["no artifact/verdict is produced"],
+                text=state.next_best_action,
+            )
         elif first_failed.id == "SG-3":
             state.next_best_action = "Produce a no-edge attribution report or identify the next hypothesis family; do not add more validators/checkers."
+            state.action_proposal = SupergoalActionProposal(
+                action_class="reporting",
+                target_gate_id="SG-3",
+                expected_evidence=["no_edge_report or passed hypothesis"],
+                tools_needed=["read_file"],
+                max_turn_budget=1,
+                risk_level="low",
+                why_this_gate_first="SG-3 is the first failed blocking gate",
+                stop_if=["no attribution report is produced"],
+                text=state.next_best_action,
+            )
 
 
 def _default_supergoal_plan() -> List[PlanStep]:
@@ -2343,11 +2540,9 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> 
     state.hypothesis_portfolio = _merge_hypothesis_portfolio(
         state.hypothesis_portfolio, data.get("hypothesis_portfolio") or data.get("new_hypotheses")
     )
-    action_class = str(data.get("current_action_class") or "").strip().lower()
-    allowed_actions = {"research", "hypothesis_generation", "experiment_execution", "validation", "infra_engineering", "reporting", "safety", "unknown"}
-    if action_class not in allowed_actions:
-        action_class = _classify_action_text(str(data.get("next_best_action") or ""))
-    state.current_action_class = action_class or "unknown"
+    proposal = _proposal_from_critic_data(state, data)
+    state.action_proposal = proposal
+    state.current_action_class = proposal.action_class or "unknown"
     no_edge = str(data.get("no_edge_report") or "").strip()
     if no_edge:
         state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
@@ -2369,7 +2564,7 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> 
     } or state.progress in {"none", "regressed"}
     if state.should_replan:
         state.replan_count += 1
-    nba = str(data.get("next_best_action") or "").strip()
+    nba = proposal.text or str(data.get("next_best_action") or "").strip()
     if nba:
         state.next_best_action = _truncate(" ".join(nba.split()), 300)
 

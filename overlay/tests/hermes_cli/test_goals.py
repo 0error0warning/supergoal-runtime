@@ -562,12 +562,17 @@ class TestGoalManager:
                  patch.object(goals, "critic_supergoal", return_value={
                      "progress": "real",
                      "strategy_health": "good",
-                     "current_action_class": "infra_engineering",
-                     "next_best_action": "add another validator checker module",
-                     "research_findings": [
-                         {"source_type": "paper", "title": "Market paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
-                         {"source_type": "github", "title": "Backtest repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
-                     ],
+                     "action_proposal": {
+                         "action_class": "infra_engineering",
+                         "target_gate_id": "SG-1",
+                         "expected_evidence": ["validator script"],
+                         "tools_needed": ["write_file"],
+                         "max_turn_budget": 1,
+                         "risk_level": "medium",
+                         "why_this_gate_first": "mistaken infra first",
+                         "stop_if": ["no hypotheses produced"],
+                         "text": "add another validator checker module",
+                     },
                  }):
                 decision = mgr.evaluate_after_turn(f"turn {i}: I added another validator")
 
@@ -575,8 +580,68 @@ class TestGoalManager:
         assert mgr.state.hard_gate_reason
         assert "SG-1" in mgr.state.hard_gate_reason
         assert mgr.state.plan_steps[0].status == "in_progress"  # real progress alone cannot mark done
+        assert mgr.state.action_proposal.action_class == "hypothesis_generation"
+        assert mgr.state.action_proposal.target_gate_id == "SG-1"
         assert "HARD GATE / INERTIA GUARD" in decision["continuation_prompt"]
         assert "Generate a 3-item hypothesis portfolio" in decision["continuation_prompt"]
+
+    def test_supergoal_action_proposal_target_must_match_first_blocking_gate(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-action-target-approval-sid")
+        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "real",
+                 "strategy_health": "good",
+                 "action_proposal": {
+                     "action_class": "validation",
+                     "target_gate_id": "G3",
+                     "expected_evidence": ["test output"],
+                     "tools_needed": ["terminal"],
+                     "max_turn_budget": 1,
+                     "risk_level": "low",
+                     "why_this_gate_first": "validate first",
+                     "stop_if": ["tests fail"],
+                     "text": "run validation report",
+                 },
+             }):
+            decision = mgr.evaluate_after_turn("I will run a validation report")
+
+        assert mgr.state is not None
+        assert mgr.state.hard_gate_reason
+        assert "targets G3" in mgr.state.hard_gate_reason
+        assert "first failed blocking gate is G2" in mgr.state.hard_gate_reason
+        assert "HARD GATE / INERTIA GUARD" in decision["continuation_prompt"]
+
+    def test_supergoal_structured_action_proposal_not_overwritten_by_response_keywords(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-action-keyword-safe-sid")
+        mgr.set("debug the mission", max_turns=20, mode="supergoal")
+        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "real",
+                 "strategy_health": "good",
+                 "action_proposal": {
+                     "action_class": "validation",
+                     "target_gate_id": "G1",
+                     "expected_evidence": ["acceptance checklist"],
+                     "tools_needed": ["read_file"],
+                     "max_turn_budget": 1,
+                     "risk_level": "low",
+                     "why_this_gate_first": "G1 is first",
+                     "stop_if": ["contract remains unclear"],
+                     "text": "validate contract",
+                 },
+             }):
+            mgr.evaluate_after_turn("This report mentions a script, validator, audit tool, and infra module.")
+
+        assert mgr.state is not None
+        assert mgr.state.current_action_class == "validation"
+        assert mgr.state.action_proposal.action_class == "validation"
 
     def test_supergoal_hypothesis_portfolio_passes_strategy_gates(self, hermes_home):
         from hermes_cli import goals
