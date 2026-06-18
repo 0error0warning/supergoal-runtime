@@ -415,7 +415,7 @@ class TestGoalManager:
         assert "systemd ordering" in state.existing_solution_scan[0]
         assert state.build_vs_reuse_decision.startswith("reuse")
         assert state.literalism_risk == "low"
-        assert state.research_sufficiency == "sufficient"
+        assert state.research_sufficiency == "missing"  # critic claims are not tool-backed evidence
         assert state.should_replan is False  # consumed into the returned continuation prompt
         assert state.replan_count == 1
         assert "race in startup ordering" in state.hypotheses
@@ -516,23 +516,33 @@ class TestGoalManager:
         assert "paper/critic" in decision["continuation_prompt"]
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
 
-    def test_supergoal_tool_backed_research_can_pass_gate(self, hermes_home):
+    def test_supergoal_tool_evidence_research_can_pass_gate(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
+        from hermes_cli.supergoal.evidence import record_tool_evidence
 
         mgr = GoalManager(session_id="super-tool-backed-pass-sid")
         mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
+        record_tool_evidence(
+            session_id="super-tool-backed-pass-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://arxiv.org/abs/1234.5678"]},
+            result="paper quote about architecture",
+            tool_call_id="tc-paper",
+        )
+        record_tool_evidence(
+            session_id="super-tool-backed-pass-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://github.com/x/y"]},
+            result="github implementation details",
+            tool_call_id="tc-gh",
+        )
         with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
              patch.object(goals, "critic_supergoal", return_value={
                  "inferred_user_intent": "Pick a proven architecture",
                  "success_definition": "External evidence plus verified artifact",
-                 "research_sufficiency": "sufficient",
                  "progress": "weak",
                  "strategy_health": "good",
-                 "research_findings": [
-                     {"source_type": "paper", "title": "Paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
-                     {"source_type": "github", "title": "Repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
-                 ],
              }):
             mgr.evaluate_after_turn("I used tools to inspect paper and repo")
 
@@ -768,18 +778,29 @@ class TestGoalManager:
     def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
+        from hermes_cli.supergoal.evidence import record_tool_evidence
 
         mgr = GoalManager(session_id="super-periodic-replan-sid")
         mgr.set("ship a big feature", max_turns=20, mode="supergoal")
+        record_tool_evidence(
+            session_id="super-periodic-replan-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://arxiv.org/abs/1"]},
+            result="paper quote",
+            tool_call_id="tc-paper",
+        )
+        record_tool_evidence(
+            session_id="super-periodic-replan-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://github.com/example/repo"]},
+            result="repo quote",
+            tool_call_id="tc-gh",
+        )
         monkeypatch.setattr(goals, "_supergoal_replan_interval", lambda: 2)
         with patch.object(goals, "judge_goal", return_value=("continue", "keep going", False)), \
              patch.object(goals, "critic_supergoal", return_value={
                  "progress": "real",
                  "strategy_health": "good",
-                 "research_findings": [
-                     {"source_type": "paper", "title": "architecture paper", "locator": "arxiv:1", "tool_call_id": "tc-paper", "evidence_quote_or_hash": "quote"},
-                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo", "tool_call_id": "tc-gh", "evidence_quote_or_hash": "quote"},
-                 ],
              }):
             d1 = mgr.evaluate_after_turn("step 1")
             assert "REPLAN REQUIRED" not in d1["continuation_prompt"]
@@ -914,7 +935,7 @@ class TestGoalManager:
         assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
         assert mgr.state.evidence
         assert mgr.state.research_findings
-        assert mgr.state.research_sufficiency in {"thin", "sufficient"}
+        assert mgr.state.research_sufficiency == "missing"  # assistant-observed research is claim-level only
 
         mgr.resume(reset_budget=False)
         with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
@@ -985,8 +1006,9 @@ class TestGoalManager:
         assert "DO NOT RUN ANOTHER ORDINARY BENCHMARK" in prompt
         assert "independent information source" in prompt
 
-    def test_supergoal_g2_requires_event_derived_external_prior_layer(self, hermes_home):
+    def test_supergoal_g2_requires_tool_evidence_events_not_research_claims(self, hermes_home):
         from hermes_cli.goals import GoalManager
+        from hermes_cli.supergoal.evidence import record_tool_evidence
 
         sid = "super-g2-event-layer-sid"
         mgr = GoalManager(session_id=sid)
@@ -997,40 +1019,41 @@ class TestGoalManager:
         for gate in state.gates:
             if gate.id == "G2":
                 gate.status = "pending"
+        # Assistant/critic claim events are allowed on the board but must not
+        # satisfy tool-backed external provenance.
         mgr._record_event(
             "research_observed",
-            summary="local benchmark only",
+            summary="claimed external paper",
             data={
-                "source_type": "benchmark",
-                "title": "Local benchmark",
-                "locator": "/tmp/local.md",
-                "claim": "local result",
+                "source_type": "paper",
+                "title": "Claimed paper",
+                "locator": "assistant_turn",
+                "claim": "assistant claimed paper",
                 "retrieved_at": "2026-06-17T00:00:00+00:00",
-                "tool_call_id": "tool-local",
+                "tool_call_id": "",
                 "evidence_quote_or_hash": "quote",
+                "evidence_source": "assistant_claim",
+                "trust_level": "claim",
             },
         )
 
-        local_only = GoalManager(session_id=sid)
-        assert next(g for g in local_only.state.gates if g.id == "G2").status == "pending"
+        claim_only = GoalManager(session_id=sid)
+        assert next(g for g in claim_only.state.gates if g.id == "G2").status == "pending"
 
-        for source_type, title, locator, tool_id in [
-            ("paper", "External paper prior", "arxiv:1", "tool-paper"),
-            ("github", "External implementation prior", "https://github.com/x/y", "tool-github"),
-        ]:
-            local_only._record_event(
-                "research_observed",
-                summary=title,
-                data={
-                    "source_type": source_type,
-                    "title": title,
-                    "locator": locator,
-                    "claim": "external prior",
-                    "retrieved_at": "2026-06-17T00:00:00+00:00",
-                    "tool_call_id": tool_id,
-                    "evidence_quote_or_hash": "quote",
-                },
-            )
+        record_tool_evidence(
+            session_id=sid,
+            tool_name="web_extract",
+            args={"urls": ["https://arxiv.org/abs/1"]},
+            result="paper quote",
+            tool_call_id="tool-paper",
+        )
+        record_tool_evidence(
+            session_id=sid,
+            tool_name="web_extract",
+            args={"urls": ["https://github.com/x/y"]},
+            result="github quote",
+            tool_call_id="tool-github",
+        )
         with_external = GoalManager(session_id=sid)
         assert next(g for g in with_external.state.gates if g.id == "G2").status == "passed"
 

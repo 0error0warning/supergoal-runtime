@@ -530,6 +530,8 @@ class ResearchFinding:
     tool_call_id: str = ""
     query: str = ""
     evidence_quote_or_hash: str = ""
+    evidence_source: str = "assistant_claim"
+    trust_level: str = "claim"  # claim | observed | verified
     relevance_score: float = 0.0
     contradiction: bool = False
 
@@ -538,7 +540,9 @@ class ResearchFinding:
 
     @property
     def is_tool_backed(self) -> bool:
-        return bool(self.tool_call_id or (self.retrieved_at and self.evidence_quote_or_hash))
+        if self.tool_call_id == "assistant_turn" or self.evidence_source == "assistant_claim" or self.trust_level == "claim":
+            return False
+        return bool(self.tool_call_id and self.trust_level in {"observed", "verified"})
 
     @classmethod
     def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
@@ -560,6 +564,8 @@ class ResearchFinding:
             tool_call_id=_truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120),
             query=_truncate(" ".join(str(data.get("query") or "").split()), 240),
             evidence_quote_or_hash=_truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400),
+            evidence_source=_truncate(" ".join(str(data.get("evidence_source") or data.get("source") or "assistant_claim").split()), 80),
+            trust_level=_truncate(" ".join(str(data.get("trust_level") or "claim").split()), 20),
             relevance_score=_coerce_float(data.get("relevance_score"), 0.0),
             contradiction=bool(data.get("contradiction", False)),
         )
@@ -1570,6 +1576,36 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
             state.research_findings = _merge_research_findings(state.research_findings, data)
             state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
             changed = changed or state.research_findings != before
+        elif etype == "tool_evidence_observed":
+            try:
+                from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
+
+                ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
+            except Exception:
+                ref = None
+                research_finding_from_evidence = None  # type: ignore[assignment]
+            if ref is not None:
+                locator = ref.artifact_path or ref.locator or ref.id
+                layer = "verification" if ref.trust_level == "verified" else "tool_observation"
+                if ref.source.value in {"web_source", "github_source"}:
+                    layer = "external_prior"
+                elif ref.source.value == "file_artifact":
+                    layer = "artifact"
+                elif ref.source.value == "test_run":
+                    layer = "verification"
+                add_layer(layer, locator)
+                before_evidence = list(state.evidence or [])
+                state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
+                changed = changed or state.evidence != before_evidence
+                try:
+                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
+                except Exception:
+                    finding_data = None
+                if finding_data:
+                    before = list(state.research_findings or [])
+                    state.research_findings = _merge_research_findings(state.research_findings, finding_data)
+                    state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
+                    changed = changed or state.research_findings != before
         elif etype == "hypothesis_failed":
             add_layer("failed_hypothesis", event.summary)
             inc_failure(
@@ -1724,8 +1760,10 @@ def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bo
             locator="assistant_turn",
             claim=_truncate(normalized, 240),
             retrieved_at=datetime.now(timezone.utc).isoformat(),
-            tool_call_id="assistant_turn",
+            tool_call_id="",
             evidence_quote_or_hash=_truncate(normalized, 200),
+            evidence_source="assistant_claim",
+            trust_level="claim",
         )
         before_findings = list(state.research_findings or [])
         state.research_findings = _merge_research_findings(state.research_findings, finding.to_dict())

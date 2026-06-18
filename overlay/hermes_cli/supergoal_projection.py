@@ -98,8 +98,10 @@ def extract_observation_events(last_response: str) -> List[Tuple[str, str, Dict[
                 "locator": "assistant_turn",
                 "claim": truncate(normalized, 240),
                 "retrieved_at": datetime.now(timezone.utc).isoformat(),
-                "tool_call_id": "assistant_turn",
+                "tool_call_id": "",
                 "evidence_quote_or_hash": truncate(normalized, 200),
+                "evidence_source": "assistant_claim",
+                "trust_level": "claim",
             },
         ))
 

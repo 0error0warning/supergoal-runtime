@@ -4734,7 +4734,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..7a0d7cb9c 100644
+index a6a28deaf..b6e677cfe 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -4877,7 +4877,7 @@ index a6a28deaf..7a0d7cb9c 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +245,456 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +245,462 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -5167,6 +5167,8 @@ index a6a28deaf..7a0d7cb9c 100644
 +    tool_call_id: str = ""
 +    query: str = ""
 +    evidence_quote_or_hash: str = ""
++    evidence_source: str = "assistant_claim"
++    trust_level: str = "claim"  # claim | observed | verified
 +    relevance_score: float = 0.0
 +    contradiction: bool = False
 +
@@ -5175,7 +5177,9 @@ index a6a28deaf..7a0d7cb9c 100644
 +
 +    @property
 +    def is_tool_backed(self) -> bool:
-+        return bool(self.tool_call_id or (self.retrieved_at and self.evidence_quote_or_hash))
++        if self.tool_call_id == "assistant_turn" or self.evidence_source == "assistant_claim" or self.trust_level == "claim":
++            return False
++        return bool(self.tool_call_id and self.trust_level in {"observed", "verified"})
 +
 +    @classmethod
 +    def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
@@ -5197,6 +5201,8 @@ index a6a28deaf..7a0d7cb9c 100644
 +            tool_call_id=_truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120),
 +            query=_truncate(" ".join(str(data.get("query") or "").split()), 240),
 +            evidence_quote_or_hash=_truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400),
++            evidence_source=_truncate(" ".join(str(data.get("evidence_source") or data.get("source") or "assistant_claim").split()), 80),
++            trust_level=_truncate(" ".join(str(data.get("trust_level") or "claim").split()), 20),
 +            relevance_score=_coerce_float(data.get("relevance_score"), 0.0),
 +            contradiction=bool(data.get("contradiction", False)),
 +        )
@@ -5336,7 +5342,7 @@ index a6a28deaf..7a0d7cb9c 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +703,49 @@ class GoalState:
+@@ -153,6 +709,49 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -5386,7 +5392,7 @@ index a6a28deaf..7a0d7cb9c 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +754,12 @@ class GoalState:
+@@ -161,7 +760,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -5400,7 +5406,7 @@ index a6a28deaf..7a0d7cb9c 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +768,38 @@ class GoalState:
+@@ -170,8 +774,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5439,7 +5445,7 @@ index a6a28deaf..7a0d7cb9c 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +809,60 @@ class GoalState:
+@@ -181,6 +815,60 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5500,7 +5506,7 @@ index a6a28deaf..7a0d7cb9c 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +875,208 @@ class GoalState:
+@@ -193,81 +881,208 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5752,7 +5758,7 @@ index a6a28deaf..7a0d7cb9c 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1088,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1094,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5830,7 +5836,7 @@ index a6a28deaf..7a0d7cb9c 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1172,837 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1178,869 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6232,6 +6238,36 @@ index a6a28deaf..7a0d7cb9c 100644
 +            state.research_findings = _merge_research_findings(state.research_findings, data)
 +            state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
 +            changed = changed or state.research_findings != before
++        elif etype == "tool_evidence_observed":
++            try:
++                from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
++
++                ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
++            except Exception:
++                ref = None
++                research_finding_from_evidence = None  # type: ignore[assignment]
++            if ref is not None:
++                locator = ref.artifact_path or ref.locator or ref.id
++                layer = "verification" if ref.trust_level == "verified" else "tool_observation"
++                if ref.source.value in {"web_source", "github_source"}:
++                    layer = "external_prior"
++                elif ref.source.value == "file_artifact":
++                    layer = "artifact"
++                elif ref.source.value == "test_run":
++                    layer = "verification"
++                add_layer(layer, locator)
++                before_evidence = list(state.evidence or [])
++                state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
++                changed = changed or state.evidence != before_evidence
++                try:
++                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
++                except Exception:
++                    finding_data = None
++                if finding_data:
++                    before = list(state.research_findings or [])
++                    state.research_findings = _merge_research_findings(state.research_findings, finding_data)
++                    state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
++                    changed = changed or state.research_findings != before
 +        elif etype == "hypothesis_failed":
 +            add_layer("failed_hypothesis", event.summary)
 +            inc_failure(
@@ -6386,8 +6422,10 @@ index a6a28deaf..7a0d7cb9c 100644
 +            locator="assistant_turn",
 +            claim=_truncate(normalized, 240),
 +            retrieved_at=datetime.now(timezone.utc).isoformat(),
-+            tool_call_id="assistant_turn",
++            tool_call_id="",
 +            evidence_quote_or_hash=_truncate(normalized, 200),
++            evidence_source="assistant_claim",
++            trust_level="claim",
 +        )
 +        before_findings = list(state.research_findings or [])
 +        state.research_findings = _merge_research_findings(state.research_findings, finding.to_dict())
@@ -6668,7 +6706,7 @@ index a6a28deaf..7a0d7cb9c 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2010,31 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2048,31 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6710,7 +6748,7 @@ index a6a28deaf..7a0d7cb9c 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2181,191 @@ def judge_goal(
+@@ -463,6 +2219,191 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6902,7 +6940,7 @@ index a6a28deaf..7a0d7cb9c 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2392,41 @@ class GoalManager:
+@@ -489,6 +2430,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6944,7 +6982,7 @@ index a6a28deaf..7a0d7cb9c 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2440,151 @@ class GoalManager:
+@@ -502,37 +2478,151 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7102,7 +7140,7 @@ index a6a28deaf..7a0d7cb9c 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2593,7 @@ class GoalManager:
+@@ -541,6 +2631,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7110,7 +7148,7 @@ index a6a28deaf..7a0d7cb9c 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2603,29 @@ class GoalManager:
+@@ -550,7 +2641,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7140,7 +7178,7 @@ index a6a28deaf..7a0d7cb9c 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2633,7 @@ class GoalManager:
+@@ -558,6 +2671,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7148,12 +7186,12 @@ index a6a28deaf..7a0d7cb9c 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2642,25 @@ class GoalManager:
+@@ -566,7 +2680,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7168,13 +7206,13 @@ index a6a28deaf..7a0d7cb9c 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2676,7 @@ class GoalManager:
+@@ -582,6 +2714,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7182,7 +7220,7 @@ index a6a28deaf..7a0d7cb9c 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2702,18 @@ class GoalManager:
+@@ -607,6 +2740,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7201,7 +7239,7 @@ index a6a28deaf..7a0d7cb9c 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2729,35 @@ class GoalManager:
+@@ -622,6 +2767,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7237,7 +7275,7 @@ index a6a28deaf..7a0d7cb9c 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +2794,60 @@ class GoalManager:
+@@ -658,6 +2832,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7298,7 +7336,7 @@ index a6a28deaf..7a0d7cb9c 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +2856,92 @@ class GoalManager:
+@@ -666,9 +2894,92 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7391,7 +7429,7 @@ index a6a28deaf..7a0d7cb9c 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +2963,11 @@ class GoalManager:
+@@ -690,6 +3001,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7403,7 +7441,7 @@ index a6a28deaf..7a0d7cb9c 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +2986,83 @@ class GoalManager:
+@@ -708,10 +3024,83 @@ class GoalManager:
                  ),
              }
  
@@ -7487,7 +7525,7 @@ index a6a28deaf..7a0d7cb9c 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3075,20 @@ class GoalManager:
+@@ -724,7 +3113,20 @@ class GoalManager:
                  ),
              }
  
@@ -7508,7 +7546,7 @@ index a6a28deaf..7a0d7cb9c 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3096,52 @@ class GoalManager:
+@@ -732,13 +3134,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7562,7 +7600,7 @@ index a6a28deaf..7a0d7cb9c 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3302,8 @@ __all__ = [
+@@ -899,6 +3340,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -8021,6 +8059,276 @@ index 000000000..ce2917e41
 +class EvaluatorSuite:
 +    completion_judge: CompletionJudge
 +    strategic_critic: StrategicCritic
+diff --git a/hermes_cli/supergoal/evidence.py b/hermes_cli/supergoal/evidence.py
+new file mode 100644
+index 000000000..ef8444e0a
+--- /dev/null
++++ b/hermes_cli/supergoal/evidence.py
+@@ -0,0 +1,264 @@
++"""Evidence ledger primitives for /supergoal.
++
++The controller must not treat assistant prose as tool-backed provenance.  This
++module records observed tool results as durable goal events and gives projections
++a typed trust boundary: assistant claims are hints, while tool/file/test/web
++observations can satisfy evidence gates.
++"""
++
++from __future__ import annotations
++
++import hashlib
++import json
++import re
++from dataclasses import asdict, dataclass, field
++from datetime import datetime, timezone
++from enum import Enum
++from typing import Any, Literal, Optional
++
++
++TrustLevel = Literal["claim", "observed", "verified"]
++
++
++class EvidenceSource(str, Enum):
++    TOOL_CALL = "tool_call"
++    FILE_ARTIFACT = "file_artifact"
++    TEST_RUN = "test_run"
++    WEB_SOURCE = "web_source"
++    GITHUB_SOURCE = "github_source"
++    HUMAN_INPUT = "human_input"
++    ASSISTANT_CLAIM = "assistant_claim"
++
++
++@dataclass(frozen=True)
++class EvidenceRef:
++    id: str
++    goal_run_id: str
++    turn_id: str
++    source: EvidenceSource
++    tool_call_id: Optional[str]
++    artifact_path: Optional[str]
++    locator: Optional[str]
++    content_hash: Optional[str]
++    observed_at: str
++    claim: str
++    validates: list[str] = field(default_factory=list)
++    trust_level: TrustLevel = "observed"
++
++    def to_dict(self) -> dict[str, Any]:
++        data = asdict(self)
++        data["source"] = self.source.value
++        return data
++
++    @classmethod
++    def from_dict(cls, data: Any) -> Optional["EvidenceRef"]:
++        if not isinstance(data, dict):
++            return None
++        eid = str(data.get("id") or "").strip()
++        claim = str(data.get("claim") or "").strip()
++        if not eid or not claim:
++            return None
++        try:
++            source = EvidenceSource(str(data.get("source") or EvidenceSource.ASSISTANT_CLAIM.value))
++        except Exception:
++            source = EvidenceSource.ASSISTANT_CLAIM
++        trust = str(data.get("trust_level") or "claim").strip().lower()
++        if trust not in {"claim", "observed", "verified"}:
++            trust = "claim"
++        validates = data.get("validates")
++        return cls(
++            id=eid,
++            goal_run_id=str(data.get("goal_run_id") or ""),
++            turn_id=str(data.get("turn_id") or ""),
++            source=source,
++            tool_call_id=str(data.get("tool_call_id") or "") or None,
++            artifact_path=str(data.get("artifact_path") or "") or None,
++            locator=str(data.get("locator") or "") or None,
++            content_hash=str(data.get("content_hash") or "") or None,
++            observed_at=str(data.get("observed_at") or ""),
++            claim=claim[:500],
++            validates=[str(x) for x in validates[:12]] if isinstance(validates, list) else [],
++            trust_level=trust,  # type: ignore[arg-type]
++        )
++
++
++def _text_result(result: Any, *, limit: int = 2000) -> str:
++    if isinstance(result, str):
++        text = result
++    else:
++        try:
++            text = json.dumps(result, ensure_ascii=False, sort_keys=True)
++        except Exception:
++            text = str(result)
++    text = " ".join(text.split())
++    return text[:limit]
++
++
++def _hash_text(text: str) -> str:
++    if not text:
++        return ""
++    return "sha256:" + hashlib.sha256(text.encode("utf-8", errors="ignore")).hexdigest()[:24]
++
++
++_PATH_RE = re.compile(r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))", re.I)
++_URL_RE = re.compile(r"https?://[^\s)\]}>\"']+", re.I)
++
++
++def _first_locator(args: dict[str, Any], result_text: str) -> tuple[str, str]:
++    for key in ("url", "urls", "query", "path", "file_path", "target", "command"):
++        value = args.get(key)
++        if isinstance(value, list) and value:
++            return str(value[0])[:240], ""
++        if value:
++            s = str(value)
++            path_match = _PATH_RE.search(s)
++            return s[:240], path_match.group(0).strip() if path_match else ""
++    url = _URL_RE.search(result_text)
++    if url:
++        return url.group(0)[:240], ""
++    path = _PATH_RE.search(result_text)
++    if path:
++        p = path.group(0).strip()
++        return p[:240], p[:240]
++    return "", ""
++
++
++def classify_tool_evidence(tool_name: str, args: dict[str, Any], result: Any, *, status: str = "") -> tuple[EvidenceSource, TrustLevel, list[str]]:
++    name = (tool_name or "").lower()
++    result_text = _text_result(result, limit=1200).lower()
++    ok = (status or "ok").lower() not in {"error", "blocked", "cancelled"}
++    trust: TrustLevel = "observed" if ok else "claim"
++    validates: list[str] = []
++    if name in {"web_search", "web_extract", "browser_navigate", "browser_snapshot", "browser_get_images", "web"}:
++        source = EvidenceSource.GITHUB_SOURCE if "github.com" in result_text or "github.com" in str(args).lower() else EvidenceSource.WEB_SOURCE
++        validates.append("G2")
++    elif name in {"read_file", "write_file", "patch", "search_files"}:
++        source = EvidenceSource.FILE_ARTIFACT
++        validates.append("G3")
++        if name in {"write_file", "patch"} and ok:
++            trust = "verified"
++    elif name in {"terminal", "execute_code"}:
++        cmd = str(args.get("command") or args.get("code") or "").lower()
++        if any(k in cmd or k in result_text for k in ("pytest", "unittest", "npm test", "pnpm test", "cargo test", "go test", "passed", "failed")):
++            source = EvidenceSource.TEST_RUN
++            validates.extend(["G3", "G4"])
++            trust = "verified" if ok else "observed"
++        else:
++            source = EvidenceSource.TOOL_CALL
++            validates.append("G3")
++    else:
++        source = EvidenceSource.TOOL_CALL
++    return source, trust, validates
++
++
++def evidence_ref_from_tool_call(
++    *,
++    goal_run_id: str,
++    turn_id: str,
++    tool_name: str,
++    args: dict[str, Any],
++    result: Any,
++    tool_call_id: str,
++    status: str = "",
++) -> Optional[EvidenceRef]:
++    if not goal_run_id or not tool_call_id:
++        return None
++    if not isinstance(args, dict):
++        args = {}
++    result_text = _text_result(result)
++    if not result_text:
++        return None
++    source, trust, validates = classify_tool_evidence(tool_name, args, result, status=status)
++    locator, artifact_path = _first_locator(args, result_text)
++    observed_at = datetime.now(timezone.utc).isoformat()
++    basis = "|".join([goal_run_id, turn_id, tool_call_id, tool_name, locator, _hash_text(result_text)])
++    eid = "ev_" + hashlib.sha256(basis.encode("utf-8", errors="ignore")).hexdigest()[:16]
++    claim = f"{tool_name} observed {locator or result_text[:160]}"
++    return EvidenceRef(
++        id=eid,
++        goal_run_id=goal_run_id,
++        turn_id=turn_id,
++        source=source,
++        tool_call_id=tool_call_id,
++        artifact_path=artifact_path or None,
++        locator=locator or None,
++        content_hash=_hash_text(result_text),
++        observed_at=observed_at,
++        claim=claim[:500],
++        validates=validates,
++        trust_level=trust,
++    )
++
++
++def record_tool_evidence(
++    *,
++    session_id: str,
++    tool_name: str,
++    args: dict[str, Any],
++    result: Any,
++    tool_call_id: str,
++    turn_id: str = "",
++    status: str = "",
++) -> Optional[EvidenceRef]:
++    """Write a post-tool result into the bound supergoal event ledger.
++
++    Fail-open by design: tool execution must never depend on supergoal state.
++    """
++    if not session_id or not tool_call_id:
++        return None
++    try:
++        from hermes_cli.goals import append_goal_event, load_goal
++
++        state = load_goal(session_id)
++        if state is None or getattr(state, "mode", "goal") != "supergoal":
++            return None
++        goal_run_id = getattr(state, "goal_run_id", "") or session_id
++        ref = evidence_ref_from_tool_call(
++            goal_run_id=goal_run_id,
++            turn_id=turn_id,
++            tool_name=tool_name,
++            args=args,
++            result=result,
++            tool_call_id=tool_call_id,
++            status=status,
++        )
++        if ref is None:
++            return None
++        append_goal_event(
++            session_id,
++            "tool_evidence_observed",
++            turn=int(getattr(state, "turns_used", 0) or 0),
++            summary=ref.claim,
++            data={"evidence_ref": ref.to_dict()},
++            max_events=300,
++        )
++        return ref
++    except Exception:
++        return None
++
++
++def research_finding_from_evidence(ref: EvidenceRef) -> Optional[dict[str, Any]]:
++    if ref.source not in {EvidenceSource.WEB_SOURCE, EvidenceSource.GITHUB_SOURCE}:
++        return None
++    if ref.trust_level not in {"observed", "verified"} or not ref.tool_call_id:
++        return None
++    locator = (ref.locator or ref.artifact_path or ref.id or "").lower()
++    if ref.source == EvidenceSource.GITHUB_SOURCE or "github.com" in locator:
++        source_type = "github"
++    elif "arxiv" in locator or "paper" in locator:
++        source_type = "paper"
++    elif "docs" in locator or "readthedocs" in locator:
++        source_type = "docs"
++    else:
++        source_type = "web"
++    return {
++        "source_type": source_type,
++        "title": ref.claim[:160],
++        "locator": ref.locator or ref.artifact_path or ref.id,
++        "claim": ref.claim[:240],
++        "retrieved_at": ref.observed_at,
++        "tool_call_id": ref.tool_call_id,
++        "evidence_quote_or_hash": ref.content_hash or ref.id,
++        "evidence_source": ref.source.value,
++        "trust_level": ref.trust_level,
++    }
 diff --git a/hermes_cli/supergoal/store.py b/hermes_cli/supergoal/store.py
 new file mode 100644
 index 000000000..b88aed28b
@@ -8320,10 +8628,10 @@ index 000000000..6521fe2e3
 +    ]
 diff --git a/hermes_cli/supergoal_projection.py b/hermes_cli/supergoal_projection.py
 new file mode 100644
-index 000000000..013440964
+index 000000000..6405f62ce
 --- /dev/null
 +++ b/hermes_cli/supergoal_projection.py
-@@ -0,0 +1,122 @@
+@@ -0,0 +1,124 @@
 +"""Projection helpers for Hermes /supergoal mission control.
 +
 +This module is deliberately independent from ``goals.py``'s GoalState dataclass.
@@ -8424,8 +8732,10 @@ index 000000000..013440964
 +                "locator": "assistant_turn",
 +                "claim": truncate(normalized, 240),
 +                "retrieved_at": datetime.now(timezone.utc).isoformat(),
-+                "tool_call_id": "assistant_turn",
++                "tool_call_id": "",
 +                "evidence_quote_or_hash": truncate(normalized, 200),
++                "evidence_source": "assistant_claim",
++                "trust_level": "claim",
 +            },
 +        ))
 +
@@ -8446,6 +8756,38 @@ index 000000000..013440964
 +        events.append(("hypothesis_failed", truncate(normalized, 180), {"category": failure_category, "reason": truncate(normalized, 240)}))
 +
 +    return events
+diff --git a/model_tools.py b/model_tools.py
+index 0618138aa..18d2f2117 100644
+--- a/model_tools.py
++++ b/model_tools.py
+@@ -848,11 +848,25 @@ def _emit_post_tool_call_hook(
+     listener will actually consume it).
+     """
+     try:
++        if status is None:
++            status, error_type, error_message = _tool_result_observer_fields(result)
++        try:
++            from hermes_cli.supergoal.evidence import record_tool_evidence
++
++            record_tool_evidence(
++                session_id=session_id or "",
++                tool_name=function_name,
++                args=function_args,
++                result=result,
++                tool_call_id=tool_call_id or "",
++                turn_id=turn_id or "",
++                status=status or "",
++            )
++        except Exception:
++            pass
+         from hermes_cli.plugins import has_hook, invoke_hook
+         if not has_hook("post_tool_call"):
+             return
+-        if status is None:
+-            status, error_type, error_message = _tool_result_observer_fields(result)
+         invoke_hook(
+             "post_tool_call",
+             tool_name=function_name,
 diff --git a/tests/gateway/test_goal_status_notice.py b/tests/gateway/test_goal_status_notice.py
 index a45958cf9..4cd0d7118 100644
 --- a/tests/gateway/test_goal_status_notice.py
@@ -9023,10 +9365,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..60548acb2 100644
+index 0dae684b6..480280406 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1003 @@ class TestGoalManager:
+@@ -252,6 +252,1026 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -9193,7 +9535,7 @@ index 0dae684b6..60548acb2 100644
 +        assert "systemd ordering" in state.existing_solution_scan[0]
 +        assert state.build_vs_reuse_decision.startswith("reuse")
 +        assert state.literalism_risk == "low"
-+        assert state.research_sufficiency == "sufficient"
++        assert state.research_sufficiency == "missing"  # critic claims are not tool-backed evidence
 +        assert state.should_replan is False  # consumed into the returned continuation prompt
 +        assert state.replan_count == 1
 +        assert "race in startup ordering" in state.hypotheses
@@ -9294,23 +9636,33 @@ index 0dae684b6..60548acb2 100644
 +        assert "paper/critic" in decision["continuation_prompt"]
 +        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
 +
-+    def test_supergoal_tool_backed_research_can_pass_gate(self, hermes_home):
++    def test_supergoal_tool_evidence_research_can_pass_gate(self, hermes_home):
 +        from hermes_cli import goals
 +        from hermes_cli.goals import GoalManager
++        from hermes_cli.supergoal.evidence import record_tool_evidence
 +
 +        mgr = GoalManager(session_id="super-tool-backed-pass-sid")
 +        mgr.set("discover the best architecture", max_turns=20, mode="supergoal")
++        record_tool_evidence(
++            session_id="super-tool-backed-pass-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://arxiv.org/abs/1234.5678"]},
++            result="paper quote about architecture",
++            tool_call_id="tc-paper",
++        )
++        record_tool_evidence(
++            session_id="super-tool-backed-pass-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://github.com/x/y"]},
++            result="github implementation details",
++            tool_call_id="tc-gh",
++        )
 +        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
 +             patch.object(goals, "critic_supergoal", return_value={
 +                 "inferred_user_intent": "Pick a proven architecture",
 +                 "success_definition": "External evidence plus verified artifact",
-+                 "research_sufficiency": "sufficient",
 +                 "progress": "weak",
 +                 "strategy_health": "good",
-+                 "research_findings": [
-+                     {"source_type": "paper", "title": "Paper", "locator": "arxiv:1", "tool_call_id": "tc1", "evidence_quote_or_hash": "quote"},
-+                     {"source_type": "github", "title": "Repo", "locator": "https://github.com/x/y", "tool_call_id": "tc2", "evidence_quote_or_hash": "quote"},
-+                 ],
 +             }):
 +            mgr.evaluate_after_turn("I used tools to inspect paper and repo")
 +
@@ -9546,18 +9898,29 @@ index 0dae684b6..60548acb2 100644
 +    def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
 +        from hermes_cli import goals
 +        from hermes_cli.goals import GoalManager
++        from hermes_cli.supergoal.evidence import record_tool_evidence
 +
 +        mgr = GoalManager(session_id="super-periodic-replan-sid")
 +        mgr.set("ship a big feature", max_turns=20, mode="supergoal")
++        record_tool_evidence(
++            session_id="super-periodic-replan-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://arxiv.org/abs/1"]},
++            result="paper quote",
++            tool_call_id="tc-paper",
++        )
++        record_tool_evidence(
++            session_id="super-periodic-replan-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://github.com/example/repo"]},
++            result="repo quote",
++            tool_call_id="tc-gh",
++        )
 +        monkeypatch.setattr(goals, "_supergoal_replan_interval", lambda: 2)
 +        with patch.object(goals, "judge_goal", return_value=("continue", "keep going", False)), \
 +             patch.object(goals, "critic_supergoal", return_value={
 +                 "progress": "real",
 +                 "strategy_health": "good",
-+                 "research_findings": [
-+                     {"source_type": "paper", "title": "architecture paper", "locator": "arxiv:1", "tool_call_id": "tc-paper", "evidence_quote_or_hash": "quote"},
-+                     {"source_type": "github", "title": "reference implementation", "locator": "https://github.com/example/repo", "tool_call_id": "tc-gh", "evidence_quote_or_hash": "quote"},
-+                 ],
 +             }):
 +            d1 = mgr.evaluate_after_turn("step 1")
 +            assert "REPLAN REQUIRED" not in d1["continuation_prompt"]
@@ -9692,7 +10055,7 @@ index 0dae684b6..60548acb2 100644
 +        assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
 +        assert mgr.state.evidence
 +        assert mgr.state.research_findings
-+        assert mgr.state.research_sufficiency in {"thin", "sufficient"}
++        assert mgr.state.research_sufficiency == "missing"  # assistant-observed research is claim-level only
 +
 +        mgr.resume(reset_budget=False)
 +        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
@@ -9763,8 +10126,9 @@ index 0dae684b6..60548acb2 100644
 +        assert "DO NOT RUN ANOTHER ORDINARY BENCHMARK" in prompt
 +        assert "independent information source" in prompt
 +
-+    def test_supergoal_g2_requires_event_derived_external_prior_layer(self, hermes_home):
++    def test_supergoal_g2_requires_tool_evidence_events_not_research_claims(self, hermes_home):
 +        from hermes_cli.goals import GoalManager
++        from hermes_cli.supergoal.evidence import record_tool_evidence
 +
 +        sid = "super-g2-event-layer-sid"
 +        mgr = GoalManager(session_id=sid)
@@ -9775,40 +10139,41 @@ index 0dae684b6..60548acb2 100644
 +        for gate in state.gates:
 +            if gate.id == "G2":
 +                gate.status = "pending"
++        # Assistant/critic claim events are allowed on the board but must not
++        # satisfy tool-backed external provenance.
 +        mgr._record_event(
 +            "research_observed",
-+            summary="local benchmark only",
++            summary="claimed external paper",
 +            data={
-+                "source_type": "benchmark",
-+                "title": "Local benchmark",
-+                "locator": "/tmp/local.md",
-+                "claim": "local result",
++                "source_type": "paper",
++                "title": "Claimed paper",
++                "locator": "assistant_turn",
++                "claim": "assistant claimed paper",
 +                "retrieved_at": "2026-06-17T00:00:00+00:00",
-+                "tool_call_id": "tool-local",
++                "tool_call_id": "",
 +                "evidence_quote_or_hash": "quote",
++                "evidence_source": "assistant_claim",
++                "trust_level": "claim",
 +            },
 +        )
 +
-+        local_only = GoalManager(session_id=sid)
-+        assert next(g for g in local_only.state.gates if g.id == "G2").status == "pending"
++        claim_only = GoalManager(session_id=sid)
++        assert next(g for g in claim_only.state.gates if g.id == "G2").status == "pending"
 +
-+        for source_type, title, locator, tool_id in [
-+            ("paper", "External paper prior", "arxiv:1", "tool-paper"),
-+            ("github", "External implementation prior", "https://github.com/x/y", "tool-github"),
-+        ]:
-+            local_only._record_event(
-+                "research_observed",
-+                summary=title,
-+                data={
-+                    "source_type": source_type,
-+                    "title": title,
-+                    "locator": locator,
-+                    "claim": "external prior",
-+                    "retrieved_at": "2026-06-17T00:00:00+00:00",
-+                    "tool_call_id": tool_id,
-+                    "evidence_quote_or_hash": "quote",
-+                },
-+            )
++        record_tool_evidence(
++            session_id=sid,
++            tool_name="web_extract",
++            args={"urls": ["https://arxiv.org/abs/1"]},
++            result="paper quote",
++            tool_call_id="tool-paper",
++        )
++        record_tool_evidence(
++            session_id=sid,
++            tool_name="web_extract",
++            args={"urls": ["https://github.com/x/y"]},
++            result="github quote",
++            tool_call_id="tool-github",
++        )
 +        with_external = GoalManager(session_id=sid)
 +        assert next(g for g in with_external.state.gates if g.id == "G2").status == "passed"
 +
@@ -10030,7 +10395,7 @@ index 0dae684b6..60548acb2 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1476,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1499,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -10039,7 +10404,7 @@ index 0dae684b6..60548acb2 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1486,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1509,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -10119,3 +10484,47 @@ index 000000000..b97ecdac2
 +def test_supergoal_has_separate_default_budget():
 +    assert DEFAULT_CONFIG["goals"]["max_turns"] == 20
 +    assert DEFAULT_CONFIG["goals"]["super_max_turns"] == 240
+diff --git a/tests/test_model_tools.py b/tests/test_model_tools.py
+index 91e7103aa..74bcbf42a 100644
+--- a/tests/test_model_tools.py
++++ b/tests/test_model_tools.py
+@@ -127,25 +127,30 @@ class TestHandleFunctionCall:
+         # pre_tool_call does NOT get duration_ms (nothing has run yet).
+         assert "duration_ms" not in kwargs_by_hook["pre_tool_call"]
+ 
+-    def test_no_listener_skips_post_and_transform_emit(self):
+-        """When no plugin is registered for post_tool_call /
+-        transform_tool_result, the emit path must short-circuit on
+-        ``has_hook`` and never build/dispatch a payload — so the
+-        no-listener hot path stays cheap.  ``pre_tool_call`` is always
+-        polled (block-check), so it may still fire; the observer/transform
+-        emits must not.
+-        """
++    def test_no_listener_skips_post_and_transform_emit_but_records_supergoal_evidence(self):
++        """No plugin listeners should not suppress the supergoal evidence ledger."""
+         with (
+             patch("model_tools.registry.dispatch", return_value='{"ok":true}'),
+             patch("hermes_cli.plugins.has_hook", return_value=False),
+             patch("hermes_cli.plugins.invoke_hook") as mock_invoke_hook,
++            patch("hermes_cli.supergoal.evidence.record_tool_evidence") as mock_record_evidence,
+         ):
+-            result = handle_function_call("web_search", {"q": "test"}, task_id="t1")
++            result = handle_function_call(
++                "web_search",
++                {"q": "test"},
++                task_id="t1",
++                session_id="sid-1",
++                tool_call_id="tc-1",
++                turn_id="turn-1",
++            )
+ 
+         assert result == '{"ok":true}'
+         fired = {c.args[0] for c in mock_invoke_hook.call_args_list}
+         assert "post_tool_call" not in fired
+         assert "transform_tool_result" not in fired
++        mock_record_evidence.assert_called_once()
++        assert mock_record_evidence.call_args.kwargs["session_id"] == "sid-1"
++        assert mock_record_evidence.call_args.kwargs["tool_call_id"] == "tc-1"
+ 
+     def test_tool_request_and_execution_middleware_wrap_registry_dispatch(self, monkeypatch):
+         seen = {}
