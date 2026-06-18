@@ -1410,7 +1410,54 @@ def _proposal_from_critic_data(state: GoalState, data: Dict[str, Any]) -> Superg
 
 
 def _evidence_ref_count(state: GoalState) -> int:
+    """Board-visible evidence count, including claim-level hints.
+
+    Do not use this for stall/inertia progress. It intentionally includes
+    assistant claims so status cards and prompts can show what the model said it
+    did, but claims are not gate-eligible evidence.
+    """
     return sum(len(v or []) for v in (state.evidence_layers or {}).values()) + len(state.evidence or []) + len(state.research_findings or [])
+
+
+def _hypothesis_has_verified_artifact(h: HypothesisRecord) -> bool:
+    if not (h.artifacts and h.status in {"passed", "failed", "killed"}):
+        return False
+    marker_text = " ".join([h.verdict_reason or "", " ".join(h.artifacts or [])]).lower()
+    return any(
+        marker in marker_text
+        for marker in (
+            "tool_evidence",
+            "verified",
+            "verification",
+            "pytest",
+            "test_run",
+            "observed",
+            "human_acceptance",
+            "sha256:",
+        )
+    )
+
+
+def _verified_hypothesis_artifact_count(state: GoalState) -> int:
+    return sum(len(h.artifacts or []) for h in state.hypothesis_portfolio if _hypothesis_has_verified_artifact(h))
+
+
+def _gate_eligible_evidence_count(state: GoalState) -> int:
+    """Evidence growth metric for gates/stall guards.
+
+    Assistant prose may update ``state.evidence`` for board continuity, but it
+    must not reset no-evidence inertia. Count only layers produced by
+    observed/verified tool evidence, explicit human acceptance, or
+    verifier-backed hypothesis artifacts.
+    """
+    layers = state.evidence_layers or {}
+    return (
+        len(layers.get("artifact", []) or [])
+        + len(layers.get("verification", []) or [])
+        + len(layers.get("human_acceptance", []) or [])
+        + len(layers.get("external_prior", []) or [])
+        + _verified_hypothesis_artifact_count(state)
+    )
 
 
 def _has_verified_execution_evidence(state: GoalState) -> bool:
@@ -1424,7 +1471,7 @@ def _has_verified_execution_evidence(state: GoalState) -> bool:
     layers = state.evidence_layers or {}
     if layers.get("artifact") or layers.get("verification"):
         return True
-    if any(h.artifacts and h.status in {"passed", "failed", "killed"} for h in state.hypothesis_portfolio):
+    if any(_hypothesis_has_verified_artifact(h) for h in state.hypothesis_portfolio):
         return True
     if layers.get("human_acceptance"):
         return True
@@ -1730,11 +1777,16 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
             if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
                 add_layer("verification", evidence)
         elif etype == "research_observed":
-            add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
             before = list(state.research_findings or [])
             state.research_findings = _merge_research_findings(state.research_findings, data)
             state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
             changed = changed or state.research_findings != before
+            source = str(data.get("evidence_source") or "").strip()
+            trust = str(data.get("trust_level") or "").strip().lower()
+            tool_call_id = str(data.get("tool_call_id") or "").strip()
+            is_tool_backed = bool(tool_call_id and tool_call_id != "assistant_turn" and source != "assistant_claim" and trust in {"observed", "verified"})
+            if is_tool_backed:
+                add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
         elif etype == "tool_evidence_observed":
             try:
                 from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
@@ -2054,7 +2106,7 @@ def _apply_inertia_guard(state: GoalState) -> None:
     first_failed = _first_blocking_failed_gate(state)
     if not first_failed:
         state.same_action_no_evidence_count = 0
-        state.last_action_evidence_count = _evidence_ref_count(state)
+        state.last_action_evidence_count = _gate_eligible_evidence_count(state)
         return
 
     proposal = state.action_proposal
@@ -2090,7 +2142,7 @@ def _apply_inertia_guard(state: GoalState) -> None:
     if not state.hard_gate_reason and infra_streak and any(g.id.startswith("SG-") and _is_gate_open(g) for g in state.gates):
         state.hard_gate_reason = "blocked infra inertia: recent turns are infrastructure while strategy gates remain open"
 
-    evidence_count = _evidence_ref_count(state)
+    evidence_count = _gate_eligible_evidence_count(state)
     if changed_action_class:
         state.same_action_no_evidence_count = 0
     elif evidence_count <= int(state.last_action_evidence_count or 0):

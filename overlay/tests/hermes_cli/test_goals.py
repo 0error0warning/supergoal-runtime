@@ -1099,6 +1099,8 @@ class TestGoalManager:
                 "claim": "candidate has public prior evidence",
                 "retrieved_at": "2026-06-17T00:00:00+00:00",
                 "tool_call_id": "tool-1",
+                "evidence_source": "tool_call",
+                "trust_level": "observed",
                 "evidence_quote_or_hash": "quote",
             },
         )
