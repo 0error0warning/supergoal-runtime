@@ -93,6 +93,23 @@ class GateResult:
 
 
 @dataclass(frozen=True)
+class GateDecision:
+    """Controller-level summary of how gates affected a post-turn decision."""
+
+    gate_vetoed: bool = False
+    first_blocking_gate_id: str = ""
+    first_blocking_gate_description: str = ""
+    followup_gate_ids: List[str] | None = None
+    done_with_followups: bool = False
+    stalled: bool = False
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = asdict(self)
+        data["followup_gate_ids"] = list(self.followup_gate_ids or [])
+        return data
+
+
+@dataclass(frozen=True)
 class TurnContext:
     """A completed assistant turn ready for goal/supergoal evaluation."""
 

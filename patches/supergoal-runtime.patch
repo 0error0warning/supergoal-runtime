@@ -7454,10 +7454,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..e09314898
+index 000000000..71232ae35
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,270 @@
+@@ -0,0 +1,304 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7478,6 +7478,7 @@ index 000000000..e09314898
 +    ActionProposal,
 +    ControllerDecision,
 +    DecisionDict,
++    GateDecision,
 +    GateResult,
 +    PipelineSnapshot,
 +    TurnContext,
@@ -7619,6 +7620,7 @@ index 000000000..e09314898
 +            critic_error=str(evaluation.get("critic_error") or ""),
 +            gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
 +        )
++        gate_decision = self._gate_decision(ctx.state, legacy)
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="reconcile",
@@ -7627,6 +7629,7 @@ index 000000000..e09314898
 +                    "legacy_status": legacy.get("status"),
 +                    "verdict": legacy.get("verdict"),
 +                    "should_continue": bool(legacy.get("should_continue", False)),
++                    "gate_decision": gate_decision.to_dict(),
 +                },
 +            )
 +        )
@@ -7688,6 +7691,37 @@ index 000000000..e09314898
 +            )
 +        return out
 +
++    def _gate_decision(self, state: Any, legacy: DecisionDict) -> GateDecision:
++        reason = str(legacy.get("reason") or "")
++        message = str(legacy.get("message") or "")
++        control_status = str(legacy.get("control_status") or "")
++        gate_results = self._gate_results(state)
++        followup_gate_ids = [str(g) for g in (legacy.get("followup_gate_ids") or []) if str(g)]
++        for gate in gate_results:
++            if gate.status == "followup" and not gate.blocking and gate.gate_id not in followup_gate_ids:
++                followup_gate_ids.append(gate.gate_id)
++        first_blocking = next(
++            (
++                gate
++                for gate in gate_results
++                if gate.blocking and gate.status not in {"passed", "not_applicable", "followup"}
++            ),
++            None,
++        )
++        gate_vetoed = bool(
++            first_blocking is not None
++            and legacy.get("should_continue")
++            and "blocking supergoal gate" in reason
++        )
++        return GateDecision(
++            gate_vetoed=gate_vetoed,
++            first_blocking_gate_id=first_blocking.gate_id if first_blocking else "",
++            first_blocking_gate_description=first_blocking.description if first_blocking else "",
++            followup_gate_ids=followup_gate_ids,
++            done_with_followups=control_status == "done_with_followups" or bool(followup_gate_ids),
++            stalled="stalled" in f"{reason} {message}".lower(),
++        )
++
 +    @staticmethod
 +    def _evidence_refs(state: Any) -> list[str]:
 +        refs: list[str] = []
@@ -7730,10 +7764,10 @@ index 000000000..e09314898
 +        )
 diff --git a/hermes_cli/supergoal/domain.py b/hermes_cli/supergoal/domain.py
 new file mode 100644
-index 000000000..479fd2b07
+index 000000000..6207c82aa
 --- /dev/null
 +++ b/hermes_cli/supergoal/domain.py
-@@ -0,0 +1,222 @@
+@@ -0,0 +1,239 @@
 +"""Domain DTOs for the /supergoal runtime.
 +
 +This module defines platform-agnostic data exchanged between the public
@@ -7825,6 +7859,23 @@ index 000000000..479fd2b07
 +    def to_dict(self) -> Dict[str, Any]:
 +        data = asdict(self)
 +        data["id"] = self.gate_id  # legacy alias for earlier typed surface
++        return data
++
++
++@dataclass(frozen=True)
++class GateDecision:
++    """Controller-level summary of how gates affected a post-turn decision."""
++
++    gate_vetoed: bool = False
++    first_blocking_gate_id: str = ""
++    first_blocking_gate_description: str = ""
++    followup_gate_ids: List[str] | None = None
++    done_with_followups: bool = False
++    stalled: bool = False
++
++    def to_dict(self) -> Dict[str, Any]:
++        data = asdict(self)
++        data["followup_gate_ids"] = list(self.followup_gate_ids or [])
 +        return data
 +
 +
@@ -10240,10 +10291,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..2c4178098 100644
+index 0dae684b6..a0d3ff424 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1169 @@ class TestGoalManager:
+@@ -252,6 +252,1173 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -10992,6 +11043,10 @@ index 0dae684b6..2c4178098 100644
 +        assert mgr.state.status == "active"
 +        assert "blocking supergoal gate G2 remains open" in decision["reason"]
 +        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++        reconcile_phase = next(p for p in decision["pipeline"] if p["phase"] == "reconcile")
++        gate_decision = reconcile_phase["data"]["gate_decision"]
++        assert gate_decision["gate_vetoed"] is True
++        assert gate_decision["first_blocking_gate_id"] == "G2"
 +        g2 = next(g for g in mgr.state.gates if g.id == "G2")
 +        assert g2.kind == "domain_required"
 +        assert g2.blocking is True
@@ -11413,7 +11468,7 @@ index 0dae684b6..2c4178098 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1642,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1646,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -11422,7 +11477,7 @@ index 0dae684b6..2c4178098 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1652,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1656,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -11677,10 +11732,10 @@ index 000000000..63d363076
 +    assert state.hard_gate_reason or state.no_edge_report
 diff --git a/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
 new file mode 100644
-index 000000000..46eed3879
+index 000000000..33ff3a63e
 --- /dev/null
 +++ b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
-@@ -0,0 +1,80 @@
+@@ -0,0 +1,84 @@
 +def test_replay_completion_done_with_acceptance_gates_does_not_enqueue(trace, replay):
 +    result = replay(trace("ai6_completion_gate_conflict.jsonl"))
 +    decision = result.decisions[-1]
@@ -11736,6 +11791,10 @@ index 000000000..46eed3879
 +    assert decision["control_status"] == "done_with_followups"
 +    assert set(decision["followup_gate_ids"]) == {"G2", "MON-1"}
 +    assert decision["should_continue"] is False
++    reconcile_phase = next(p for p in decision["pipeline"] if p["phase"] == "reconcile")
++    gate_decision = reconcile_phase["data"]["gate_decision"]
++    assert gate_decision["done_with_followups"] is True
++    assert set(gate_decision["followup_gate_ids"]) == {"G2", "MON-1"}
 +    mon = next(g for g in mgr.state.gates if g.id == "MON-1")
 +    assert mon.status == "followup"
 +    assert not mon.evidence

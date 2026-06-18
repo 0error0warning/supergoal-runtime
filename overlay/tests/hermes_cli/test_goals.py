@@ -997,6 +997,10 @@ class TestGoalManager:
         assert mgr.state.status == "active"
         assert "blocking supergoal gate G2 remains open" in decision["reason"]
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+        reconcile_phase = next(p for p in decision["pipeline"] if p["phase"] == "reconcile")
+        gate_decision = reconcile_phase["data"]["gate_decision"]
+        assert gate_decision["gate_vetoed"] is True
+        assert gate_decision["first_blocking_gate_id"] == "G2"
         g2 = next(g for g in mgr.state.gates if g.id == "G2")
         assert g2.kind == "domain_required"
         assert g2.blocking is True

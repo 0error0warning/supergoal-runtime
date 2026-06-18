@@ -18,6 +18,7 @@ from hermes_cli.supergoal.domain import (
     ActionProposal,
     ControllerDecision,
     DecisionDict,
+    GateDecision,
     GateResult,
     PipelineSnapshot,
     TurnContext,
@@ -159,6 +160,7 @@ class SupergoalController:
             critic_error=str(evaluation.get("critic_error") or ""),
             gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
         )
+        gate_decision = self._gate_decision(ctx.state, legacy)
         snapshots.append(
             PipelineSnapshot(
                 phase="reconcile",
@@ -167,6 +169,7 @@ class SupergoalController:
                     "legacy_status": legacy.get("status"),
                     "verdict": legacy.get("verdict"),
                     "should_continue": bool(legacy.get("should_continue", False)),
+                    "gate_decision": gate_decision.to_dict(),
                 },
             )
         )
@@ -227,6 +230,37 @@ class SupergoalController:
                 )
             )
         return out
+
+    def _gate_decision(self, state: Any, legacy: DecisionDict) -> GateDecision:
+        reason = str(legacy.get("reason") or "")
+        message = str(legacy.get("message") or "")
+        control_status = str(legacy.get("control_status") or "")
+        gate_results = self._gate_results(state)
+        followup_gate_ids = [str(g) for g in (legacy.get("followup_gate_ids") or []) if str(g)]
+        for gate in gate_results:
+            if gate.status == "followup" and not gate.blocking and gate.gate_id not in followup_gate_ids:
+                followup_gate_ids.append(gate.gate_id)
+        first_blocking = next(
+            (
+                gate
+                for gate in gate_results
+                if gate.blocking and gate.status not in {"passed", "not_applicable", "followup"}
+            ),
+            None,
+        )
+        gate_vetoed = bool(
+            first_blocking is not None
+            and legacy.get("should_continue")
+            and "blocking supergoal gate" in reason
+        )
+        return GateDecision(
+            gate_vetoed=gate_vetoed,
+            first_blocking_gate_id=first_blocking.gate_id if first_blocking else "",
+            first_blocking_gate_description=first_blocking.description if first_blocking else "",
+            followup_gate_ids=followup_gate_ids,
+            done_with_followups=control_status == "done_with_followups" or bool(followup_gate_ids),
+            stalled="stalled" in f"{reason} {message}".lower(),
+        )
 
     @staticmethod
     def _evidence_refs(state: Any) -> list[str]:
