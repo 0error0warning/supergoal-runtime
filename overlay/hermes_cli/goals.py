@@ -52,6 +52,7 @@ from hermes_cli.supergoal.store import (
     new_goal_run_id as _new_goal_run_id,
 )
 from hermes_cli.supergoal.gates import (
+    evaluate_gates as _gate_evaluate_gates,
     first_blocking_failure as _gate_first_blocking_failure,
     first_failed_gate as _gate_first_failed_gate,
     gate_eligible_evidence_count as _gate_eligible_count,
@@ -1969,75 +1970,11 @@ def _set_gate_open(gate: GoalGate, *, missing: List[str], reason: str) -> None:
 
 
 def _update_supergoal_gates(state: GoalState) -> None:
-    if getattr(state, "mode", "goal") != "supergoal":
-        return
-    if not state.gates:
-        state.gates = _default_supergoal_gates(state.goal)
-    _ensure_supergoal_gates_for_text(state)
-    _sync_evidence_layers_from_findings(state)
-    tool_backed = _tool_backed_research_findings(state)
-    external_prior_count = len(state.evidence_layers.get("external_prior", []))
-    for gate in state.gates:
-        if gate.id == "G1":
-            if state.inferred_user_intent and state.success_definition:
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "intent + success_definition populated", [], ""
-            else:
-                missing = []
-                if not state.inferred_user_intent:
-                    missing.append("inferred_user_intent")
-                if not state.success_definition:
-                    missing.append("success_definition")
-                _set_gate_open(gate, missing=missing, reason="intent contract is incomplete")
-        elif gate.id == "G2":
-            if state.research_sufficiency == "sufficient" and state.evidence_layers.get("external_prior"):
-                gate.status, gate.evidence, gate.missing, gate.reason = (
-                    "passed",
-                    f"{len(tool_backed)} tool-backed findings; external_prior={external_prior_count}",
-                    [],
-                    "",
-                )
-            else:
-                _set_gate_open(
-                    gate,
-                    missing=["tool_backed_external_prior", "research_sufficiency=sufficient"],
-                    reason="tool-backed external provenance is incomplete",
-                )
-        elif gate.id == "SG-1":
-            if len(state.hypothesis_portfolio) >= 3:
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", f"{len(state.hypothesis_portfolio)} hypotheses", [], ""
-            else:
-                _set_gate_open(gate, missing=["3 strategy hypotheses"], reason="hypothesis portfolio is too small")
-        elif gate.id == "SG-2":
-            if state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "all hypotheses have experiment artifacts and verdicts", [], ""
-            else:
-                _set_gate_open(gate, missing=["baseline", "experiment", "kill_criteria", "artifact", "verdict"], reason="hypothesis verification is incomplete")
-        elif gate.id == "SG-3":
-            tested = [h for h in state.hypothesis_portfolio if h.status in {"passed", "failed", "killed"}]
-            has_pass = any(h.status == "passed" for h in state.hypothesis_portfolio)
-            if has_pass or (state.no_edge_report and tested and len(tested) == len(state.hypothesis_portfolio)):
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "passed hypothesis or no-edge attribution exists", [], ""
-            else:
-                _set_gate_open(gate, missing=["passed hypothesis", "no_edge_report if all hypotheses fail"], reason="no edge/outcome attribution is incomplete")
-        elif gate.id == "SG-4":
-            if state.current_action_class != "infra_engineering":
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "current action is not infrastructure", [], ""
-            else:
-                _set_gate_open(gate, missing=["infra dependency proof"], reason="infrastructure work needs dependency proof")
-        elif gate.id == "G3":
-            if _has_verified_execution_evidence(state):
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "verified tool/human artifact or verification evidence recorded", [], ""
-            else:
-                _set_gate_open(
-                    gate,
-                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
-                    reason="no gate-eligible tool/human artifact or verification evidence is recorded",
-                )
-        elif gate.id == "G4":
-            if state.no_edge_report or state.last_verdict == "done":
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
-            else:
-                _set_gate_open(gate, missing=["done verdict", "final evidence mapping"], reason="final evidence/outcome mapping is missing")
+    _gate_evaluate_gates(
+        state,
+        default_gate_builder=_default_supergoal_gates,
+        ensure_gate_set=_ensure_supergoal_gates_for_text,
+    )
 
 
 def _apply_inertia_guard(state: GoalState) -> None:

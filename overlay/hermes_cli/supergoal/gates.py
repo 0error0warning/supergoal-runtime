@@ -9,7 +9,7 @@ move here incrementally.
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Any, Optional, TypeVar
+from typing import Any, Callable, Optional, TypeVar
 
 GateT = TypeVar("GateT")
 
@@ -179,6 +179,92 @@ def sync_evidence_layers_from_findings(state: Any) -> bool:
     if changed:
         state.evidence_layers = layers
     return changed
+
+
+def evaluate_gates(
+    state: Any,
+    *,
+    default_gate_builder: Callable[[str], list[Any]],
+    ensure_gate_set: Callable[[Any], None],
+) -> list[Any]:
+    """Evaluate and mutate /supergoal gate statuses for the current state.
+
+    GoalManager still supplies gate construction/upgrade callbacks during the
+    staged migration, but this module owns the deterministic gate semantics.
+    """
+    if getattr(state, "mode", "goal") != "supergoal":
+        return list(getattr(state, "gates", []) or [])
+    if not getattr(state, "gates", None):
+        state.gates = default_gate_builder(getattr(state, "goal", ""))
+    ensure_gate_set(state)
+    sync_evidence_layers_from_findings(state)
+    tool_backed = tool_backed_research_findings(state)
+    layers = getattr(state, "evidence_layers", {}) or {}
+    external_prior_count = len(layers.get("external_prior", []) or [])
+    hypotheses = list(getattr(state, "hypothesis_portfolio", []) or [])
+    for gate in getattr(state, "gates", []) or []:
+        gate_id = getattr(gate, "id", "")
+        if gate_id == "G1":
+            if getattr(state, "inferred_user_intent", "") and getattr(state, "success_definition", ""):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "intent + success_definition populated", [], ""
+            else:
+                missing = []
+                if not getattr(state, "inferred_user_intent", ""):
+                    missing.append("inferred_user_intent")
+                if not getattr(state, "success_definition", ""):
+                    missing.append("success_definition")
+                set_gate_open(gate, missing=missing, reason="intent contract is incomplete")
+        elif gate_id == "G2":
+            if getattr(state, "research_sufficiency", "") == "sufficient" and layers.get("external_prior"):
+                gate.status, gate.evidence, gate.missing, gate.reason = (
+                    "passed",
+                    f"{len(tool_backed)} tool-backed findings; external_prior={external_prior_count}",
+                    [],
+                    "",
+                )
+            else:
+                set_gate_open(
+                    gate,
+                    missing=["tool_backed_external_prior", "research_sufficiency=sufficient"],
+                    reason="tool-backed external provenance is incomplete",
+                )
+        elif gate_id == "SG-1":
+            if len(hypotheses) >= 3:
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", f"{len(hypotheses)} hypotheses", [], ""
+            else:
+                set_gate_open(gate, missing=["3 strategy hypotheses"], reason="hypothesis portfolio is too small")
+        elif gate_id == "SG-2":
+            if hypotheses and all(hypothesis_complete(h) for h in hypotheses):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "all hypotheses have experiment artifacts and verdicts", [], ""
+            else:
+                set_gate_open(gate, missing=["baseline", "experiment", "kill_criteria", "artifact", "verdict"], reason="hypothesis verification is incomplete")
+        elif gate_id == "SG-3":
+            tested = [h for h in hypotheses if getattr(h, "status", "") in {"passed", "failed", "killed"}]
+            has_pass = any(getattr(h, "status", "") == "passed" for h in hypotheses)
+            if has_pass or (getattr(state, "no_edge_report", "") and tested and len(tested) == len(hypotheses)):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "passed hypothesis or no-edge attribution exists", [], ""
+            else:
+                set_gate_open(gate, missing=["passed hypothesis", "no_edge_report if all hypotheses fail"], reason="no edge/outcome attribution is incomplete")
+        elif gate_id == "SG-4":
+            if getattr(state, "current_action_class", "") != "infra_engineering":
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "current action is not infrastructure", [], ""
+            else:
+                set_gate_open(gate, missing=["infra dependency proof"], reason="infrastructure work needs dependency proof")
+        elif gate_id == "G3":
+            if has_verified_execution_evidence(state):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "verified tool/human artifact or verification evidence recorded", [], ""
+            else:
+                set_gate_open(
+                    gate,
+                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
+                    reason="no gate-eligible tool/human artifact or verification evidence is recorded",
+                )
+        elif gate_id == "G4":
+            if getattr(state, "no_edge_report", "") or getattr(state, "last_verdict", "") == "done":
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
+            else:
+                set_gate_open(gate, missing=["done verdict", "final evidence mapping"], reason="final evidence/outcome mapping is missing")
+    return list(getattr(state, "gates", []) or [])
 
 
 def gate_eligible_evidence_count(state: Any) -> int:
