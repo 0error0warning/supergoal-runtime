@@ -37,18 +37,9 @@ index 318e67d0f..57878e742 100644
      # treat it as provider-reported prompt usage. Schema-heavy rough estimates
      # can remain above threshold even after the next real API request fits.
 diff --git a/gateway/run.py b/gateway/run.py
-index 4b41cfc6a..a41eb658f 100644
+index 4b41cfc6a..5ae6c57b4 100644
 --- a/gateway/run.py
 +++ b/gateway/run.py
-@@ -8,7 +8,7 @@ This module provides:
- Usage:
-     # Start the gateway
-     python -m gateway.run
--    
-+
-     # Or from CLI
-     python cli.py --gateway
- """
 @@ -402,68 +402,6 @@ async def _send_or_update_status_coro(adapter, chat_id, status_key, content, met
      return await adapter.send(chat_id, content, metadata=metadata)
  
@@ -932,15 +923,6 @@ index 4b41cfc6a..a41eb658f 100644
      _session_reasoning_overrides: Dict[str, Dict[str, Any]] = {}
      _startup_restore_in_progress: bool = False
  
-@@ -2288,7 +2800,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         self._restart_via_service = False
-         self._restart_command_source: Optional[SessionSource] = None
-         self._stop_task: Optional[asyncio.Task] = None
--        
-+
-         # Track running agents per session for interrupt support
-         # Key: session_key, Value: AIAgent instance
-         self._running_agents: Dict[str, Any] = {}
 @@ -2330,6 +2842,11 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          # cannot grow unbounded over a long-running gateway lifetime.
          self._session_sources: "OrderedDict[str, SessionSource]" = OrderedDict()
@@ -967,15 +949,6 @@ index 4b41cfc6a..a41eb658f 100644
          # Per-session reasoning effort overrides from /reasoning.
          # Key: session_key, Value: parsed reasoning config dict.
          self._session_reasoning_overrides: Dict[str, Dict[str, Any]] = {}
-@@ -2469,7 +2987,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         # DM pairing store for code-based user authorization
-         from gateway.pairing import PairingStore
-         self.pairing_store = PairingStore()
--        
-+
-         # Event hook system
-         from gateway.hooks import HookRegistry
-         self.hooks = HookRegistry()
 @@ -2485,6 +3003,22 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          self._background_tasks: set = set()
  
@@ -1155,24 +1128,6 @@ index 4b41cfc6a..a41eb658f 100644
  
      def _clear_goal_pending_continuations(self, session_key: str, adapter: Any) -> int:
          """Remove queued synthetic /goal continuations for one session.
-@@ -3483,7 +4148,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-     @staticmethod
-     def _load_prefill_messages() -> List[Dict[str, Any]]:
-         """Load ephemeral prefill messages from config or env var.
--        
-+
-         Checks HERMES_PREFILL_MESSAGES_FILE env var first, then falls back to
-         the top-level prefill_messages_file key in ~/.hermes/config.yaml.
-         agent.prefill_messages_file is accepted as a legacy fallback.
-@@ -3517,7 +4182,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-     @staticmethod
-     def _load_ephemeral_system_prompt() -> str:
-         """Load ephemeral system prompt from config or env var.
--        
-+
-         Checks HERMES_EPHEMERAL_SYSTEM_PROMPT env var first, then falls back to
-         agent.system_prompt in ~/.hermes/config.yaml.
-         """
 @@ -4185,12 +4850,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  logger.debug("Failed interrupting agent during shutdown: %s", e)
  
@@ -1216,7 +1171,7 @@ index 4b41cfc6a..a41eb658f 100644
          for session_key in active:
              source = None
              try:
-@@ -4226,47 +4906,57 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -4226,137 +4906,114 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  chat_id = str(source.chat_id)
                  thread_id = source.thread_id
              else:
@@ -1246,38 +1201,15 @@ index 4b41cfc6a..a41eb658f 100644
 -                adapter = self.adapters.get(platform)
 -                if not adapter:
 -                    continue
-+            except Exception:
-+                continue
-+            adapter = self.adapters.get(platform)
-+            if not adapter:
-+                continue
-+            platform_cfg = self.config.platforms.get(platform)
-+            if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
-+                logger.info(
-+                    "Shutdown notification suppressed for active session: %s has gateway_restart_notification=false",
-+                    platform_str,
-+                )
-+                continue
-+            _add_target(platform, adapter, chat_id, thread_id, source, False)
- 
-+        if not (self._restart_requested and restart_source is not None):
-+            for platform, adapter in list(self.adapters.items()):
-+                home = self.config.get_home_channel(platform)
-+                if not home or not home.chat_id:
-+                    continue
-                 platform_cfg = self.config.platforms.get(platform)
-                 if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
-                     logger.info(
+-
+-                platform_cfg = self.config.platforms.get(platform)
+-                if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
+-                    logger.info(
 -                        "Shutdown notification suppressed for active session: %s has gateway_restart_notification=false",
 -                        platform_str,
-+                        "Shutdown notification suppressed for home channel: %s has gateway_restart_notification=false",
-+                        platform.value,
-                     )
-                     continue
-+                _add_target(platform, adapter, str(home.chat_id), home.thread_id, home, True)
-+        else:
-+            logger.debug("Skipping home-channel shutdown notifications for in-chat restart")
- 
+-                    )
+-                    continue
+-
 -                reply_to_message_id = getattr(source, "message_id", None) if source is not None else None
 -                if reply_to_message_id is None and restart_source is not None:
 -                    try:
@@ -1289,40 +1221,23 @@ index 4b41cfc6a..a41eb658f 100644
 -                    except Exception:
 -                        pass
 -
-+        async def _send_one(platform: Platform, adapter: Any, chat_id: str, thread_id: Optional[str], source: Any, is_home: bool) -> None:
-+            reply_to_message_id = getattr(source, "message_id", None) if source is not None else None
-+            if reply_to_message_id is None and restart_source is not None:
-+                try:
-+                    restart_platform = restart_source.platform.value
-+                    restart_chat_id = str(restart_source.chat_id)
-+                    restart_thread_id = str(restart_source.thread_id) if restart_source.thread_id else None
-+                    if (restart_platform, restart_chat_id, restart_thread_id) == (platform.value, chat_id, thread_id):
-+                        reply_to_message_id = getattr(restart_source, "message_id", None)
-+                except Exception:
-+                    pass
-+            try:
-                 metadata = self._thread_metadata_for_target(
-                     platform,
-                     chat_id,
-@@ -4275,88 +4965,55 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     reply_to_message_id=reply_to_message_id,
-                     adapter=adapter,
-                 )
+-                metadata = self._thread_metadata_for_target(
+-                    platform,
+-                    chat_id,
+-                    thread_id,
+-                    chat_type=getattr(source, "chat_type", None) if source is not None else None,
+-                    reply_to_message_id=reply_to_message_id,
+-                    adapter=adapter,
+-                )
 -
 -                result = await adapter.send(chat_id, msg, metadata=metadata)
-+                if metadata:
-+                    coro = adapter.send(chat_id, msg, metadata=metadata)
-+                else:
-+                    coro = adapter.send(chat_id, msg)
-+                result = await asyncio.wait_for(coro, timeout=per_send_timeout)
-                 if result is not None and getattr(result, "success", True) is False:
-                     logger.debug(
-                         "Failed to send shutdown notification to %s:%s: %s",
+-                if result is not None and getattr(result, "success", True) is False:
+-                    logger.debug(
+-                        "Failed to send shutdown notification to %s:%s: %s",
 -                        platform_str,
-+                        platform.value,
-                         chat_id,
-                         getattr(result, "error", "send returned success=False"),
-                     )
+-                        chat_id,
+-                        getattr(result, "error", "send returned success=False"),
+-                    )
 -                    continue
 -
 -                notified.add(dedup_key)
@@ -1348,52 +1263,96 @@ index 4b41cfc6a..a41eb658f 100644
 -        for platform, adapter in list(self.adapters.items()):
 -            home = self.config.get_home_channel(platform)
 -            if not home or not home.chat_id:
--                continue
++            except Exception:
++                continue
++            adapter = self.adapters.get(platform)
++            if not adapter:
+                 continue
 -
--            platform_cfg = self.config.platforms.get(platform)
--            if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
-+                    return
+             platform_cfg = self.config.platforms.get(platform)
+             if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
                  logger.info(
 -                    "Shutdown notification suppressed for home channel: %s has gateway_restart_notification=false",
-+                    "Sent shutdown notification to %s %s:%s",
-+                    "home channel" if is_home else "active chat",
-                     platform.value,
-+                    chat_id,
+-                    platform.value,
++                    "Shutdown notification suppressed for active session: %s has gateway_restart_notification=false",
++                    platform_str,
                  )
--                continue
--
+                 continue
++            _add_target(platform, adapter, chat_id, thread_id, source, False)
+ 
 -            dedup_key = (platform.value, str(home.chat_id), str(home.thread_id) if home.thread_id else None)
 -            if dedup_key in notified:
 -                continue
--
--            try:
--                metadata = self._thread_metadata_for_target(
--                    platform,
++        if not (self._restart_requested and restart_source is not None):
++            for platform, adapter in list(self.adapters.items()):
++                home = self.config.get_home_channel(platform)
++                if not home or not home.chat_id:
++                    continue
++                platform_cfg = self.config.platforms.get(platform)
++                if platform_cfg is not None and not platform_cfg.gateway_restart_notification:
++                    logger.info(
++                        "Shutdown notification suppressed for home channel: %s has gateway_restart_notification=false",
++                        platform.value,
++                    )
++                    continue
++                _add_target(platform, adapter, str(home.chat_id), home.thread_id, home, True)
++        else:
++            logger.debug("Skipping home-channel shutdown notifications for in-chat restart")
+ 
++        async def _send_one(platform: Platform, adapter: Any, chat_id: str, thread_id: Optional[str], source: Any, is_home: bool) -> None:
++            reply_to_message_id = getattr(source, "message_id", None) if source is not None else None
++            if reply_to_message_id is None and restart_source is not None:
++                try:
++                    restart_platform = restart_source.platform.value
++                    restart_chat_id = str(restart_source.chat_id)
++                    restart_thread_id = str(restart_source.thread_id) if restart_source.thread_id else None
++                    if (restart_platform, restart_chat_id, restart_thread_id) == (platform.value, chat_id, thread_id):
++                        reply_to_message_id = getattr(restart_source, "message_id", None)
++                except Exception:
++                    pass
+             try:
+                 metadata = self._thread_metadata_for_target(
+                     platform,
 -                    home.chat_id,
 -                    home.thread_id,
--                    adapter=adapter,
--                )
--                if metadata:
++                    chat_id,
++                    thread_id,
++                    chat_type=getattr(source, "chat_type", None) if source is not None else None,
++                    reply_to_message_id=reply_to_message_id,
+                     adapter=adapter,
+                 )
+                 if metadata:
 -                    result = await adapter.send(str(home.chat_id), msg, metadata=metadata)
--                else:
++                    coro = adapter.send(chat_id, msg, metadata=metadata)
+                 else:
 -                    result = await adapter.send(str(home.chat_id), msg)
--                if result is not None and getattr(result, "success", True) is False:
--                    logger.debug(
++                    coro = adapter.send(chat_id, msg)
++                result = await asyncio.wait_for(coro, timeout=per_send_timeout)
+                 if result is not None and getattr(result, "success", True) is False:
+                     logger.debug(
 -                        "Failed to send shutdown notification to home channel %s:%s: %s",
--                        platform.value,
++                        "Failed to send shutdown notification to %s:%s: %s",
+                         platform.value,
 -                        home.chat_id,
--                        getattr(result, "error", "send returned success=False"),
--                    )
++                        chat_id,
+                         getattr(result, "error", "send returned success=False"),
+                     )
 -                    continue
 -
 -                notified.add(dedup_key)
--                logger.info(
++                    return
+                 logger.info(
 -                    "Sent shutdown notification to home channel %s:%s",
++                    "Sent shutdown notification to %s %s:%s",
++                    "home channel" if is_home else "active chat",
+                     platform.value,
+-                    home.chat_id,
++                    chat_id,
++                )
 +            except asyncio.TimeoutError:
 +                logger.warning(
 +                    "Shutdown notification to %s:%s timed out after %.1fs; continuing shutdown",
-                     platform.value,
--                    home.chat_id,
++                    platform.value,
 +                    chat_id,
 +                    per_send_timeout,
                  )
@@ -1463,15 +1422,10 @@ index 4b41cfc6a..a41eb658f 100644
      async def _launch_detached_restart_command(self) -> None:
          import shutil
          import subprocess
-@@ -4631,9 +5319,52 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 ["bash", "-lc", shell_cmd],
-                 stdout=subprocess.DEVNULL,
-                 stderr=subprocess.DEVNULL,
--                env=watcher_env,
-+                env=watcher_env,
-+                start_new_session=True,
-+            )
-+
+@@ -4635,6 +5323,49 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+                 start_new_session=True,
+             )
+ 
 +    def _launch_restart_watchdog(self) -> None:
 +        """Launch an out-of-cgroup watchdog for in-chat /restart UX.
 +
@@ -1509,14 +1463,15 @@ index 4b41cfc6a..a41eb658f 100644
 +                ],
 +                stdout=subprocess.DEVNULL,
 +                stderr=subprocess.DEVNULL,
-                 start_new_session=True,
-             )
++                start_new_session=True,
++            )
 +            logger.info("Launched gateway restart watchdog unit=%s", unit_name)
 +        except Exception as e:
 +            logger.debug("Failed to launch gateway restart watchdog: %s", e)
- 
++
      def _launch_systemd_restart_shortcut(self) -> None:
          """Best-effort helper to bypass systemd's automatic restart delay.
+ 
 @@ -4665,49 +5396,61 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  service_name = "hermes-gateway"
  
@@ -1607,33 +1562,6 @@ index 4b41cfc6a..a41eb658f 100644
              )
          except Exception as e:
              logger.debug("Failed to launch systemd planned-restart helper: %s", e)
-@@ -4927,7 +5670,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-     async def start(self) -> bool:
-         """
-         Start the gateway and all configured platform adapters.
--        
-+
-         Returns True if at least one adapter connected successfully.
-         """
-         logger.info("Starting Hermes Gateway...")
-@@ -5029,7 +5772,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 "security advisory check failed at gateway startup",
-                 exc_info=True,
-             )
--        
-+
-         # Warn if no user allowlists are configured and open access is not opted in
-         _builtin_allowed_vars = (
-             "TELEGRAM_ALLOWED_USERS", "DISCORD_ALLOWED_USERS",
-@@ -5095,7 +5838,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 "Set GATEWAY_ALLOW_ALL_USERS=true in ~/.hermes/.env to allow open access, "
-                 "or configure platform allowlists (e.g., TELEGRAM_ALLOWED_USERS=your_id)."
-             )
--        
-+
-         # Discover Python plugins before shell hooks so plugin block
-         # decisions take precedence in tie cases.  The CLI startup path
-         # does this via an explicit call in hermes_cli/main.py; the
 @@ -5110,21 +5853,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  "plugin discovery failed at gateway startup", exc_info=True,
              )
@@ -1656,49 +1584,6 @@ index 4b41cfc6a..a41eb658f 100644
          # Register declarative shell hooks from cli-config.yaml.  Gateway
          # has no TTY, so consent has to come from one of the three opt-in
          # channels (--accept-hooks on launch, HERMES_ACCEPT_HOOKS env var,
-@@ -5147,7 +5875,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         # Discover and load event hooks
-         self.hooks.discover_and_load()
- 
--        
-+
-         # Recover background processes from checkpoint (crash recovery)
-         try:
-             from tools.process_registry import process_registry
-@@ -5205,13 +5933,13 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         enabled_platform_count = 0
-         startup_nonretryable_errors: list[str] = []
-         startup_retryable_errors: list[str] = []
--        
-+
-         # Initialize and connect each configured platform
-         for platform, platform_config in self.config.platforms.items():
-             if not platform_config.enabled:
-                 continue
-             enabled_platform_count += 1
--            
-+
-             adapter = self._create_adapter(platform, platform_config)
-             if not adapter:
-                 # Distinguish between missing builtin deps and missing plugin
-@@ -5226,7 +5954,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 else:
-                     logger.warning("No adapter available for %s", _pval)
-                 continue
--            
-+
-             # Set up message + fatal error handlers
-             adapter.set_message_handler(self._handle_message)
-             adapter.set_fatal_error_handler(self._handle_adapter_fatal_error)
-@@ -5234,7 +5962,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             adapter.set_busy_session_handler(self._handle_active_session_busy_message)
-             adapter.set_topic_recovery_fn(self._recover_telegram_topic_thread_id)
-             adapter._busy_text_mode = self._busy_text_mode
--            
-+
-             # Try to connect
-             logger.info("Connecting to %s...", platform.value)
-             self._update_platform_runtime_status(
 @@ -5248,6 +5976,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  if success:
                      self.adapters[platform] = adapter
@@ -1707,28 +1592,10 @@ index 4b41cfc6a..a41eb658f 100644
                      connected_count += 1
                      self._update_platform_runtime_status(
                          platform.value,
-@@ -5324,7 +6053,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     "attempts": 1,
-                     "next_retry": time.monotonic() + 30,
-                 }
--        
-+
-         if connected_count == 0:
-             if startup_nonretryable_errors:
-                 reason = "; ".join(startup_nonretryable_errors)
-@@ -5378,14 +6107,21 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             else:
-                 logger.warning("No messaging platforms enabled.")
-                 logger.info("Gateway will continue running for cron job execution.")
--        
-+
-         # Update delivery router with adapters
-         self.delivery_router.adapters = self.adapters
-         self._wire_teams_pipeline_runtime()
+@@ -5385,6 +6114,13 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
  
          self._running = True
          self._update_runtime_status("running")
--        
 +        if (_hermes_home / ".restart_phase.jsonl").exists():
 +            _append_restart_phase_marker(
 +                "starting",
@@ -1736,32 +1603,9 @@ index 4b41cfc6a..a41eb658f 100644
 +                active_agents=self._running_agent_count(),
 +                platforms=[p.value for p in self.adapters.keys()],
 +            )
-+
+         
          # Emit gateway:startup hook
          hook_count = len(self.hooks.loaded_hooks)
-         if hook_count:
-@@ -5393,10 +6129,10 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         await self.hooks.emit("gateway:startup", {
-             "platforms": [p.value for p in self.adapters.keys()],
-         })
--        
-+
-         if connected_count > 0:
-             logger.info("Gateway running with %s platform(s)", connected_count)
--        
-+
-         # Build initial channel directory for send_message name resolution
-         try:
-             from gateway.channel_directory import build_channel_directory
-@@ -5405,7 +6141,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             logger.info("Channel directory built: %d target(s)", ch_count)
-         except Exception as e:
-             logger.warning("Channel directory build failed: %s", e)
--        
-+
-         # Check if we're restarting after a /update command. If the update is
-         # still running, keep watching so we notify once it actually finishes.
-         notified = await self._send_update_notification()
 @@ -5423,6 +6159,13 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          # helps Discord thread deliveries right after reconnect.
          if connected_count > 0:
@@ -1776,7 +1620,7 @@ index 4b41cfc6a..a41eb658f 100644
  
          # Notify the chat that initiated /restart that the gateway is back.
          planned_restart_notification_pending = _planned_restart_notification_pending()
-@@ -5496,14 +6239,8 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -5496,12 +6239,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          # turn so the agent kicks off the new chat.
          asyncio.create_task(self._handoff_watcher())
  
@@ -1787,11 +1631,8 @@ index 4b41cfc6a..a41eb658f 100644
 -        asyncio.create_task(self._async_delegation_watcher())
 -
          logger.info("Press Ctrl+C to stop")
--        
-+
+         
          return True
- 
-     async def _handoff_watcher(self, interval: float = 2.0) -> None:
 @@ -5983,6 +6720,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                      if success:
                          self.adapters[platform] = adapter
@@ -1817,16 +1658,16 @@ index 4b41cfc6a..a41eb658f 100644
                  try:
                      from tools.terminal_tool import cleanup_all_environments
                      cleanup_all_environments()
-@@ -6171,6 +6899,9 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -6170,6 +6898,9 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+ 
              self._running = False
              self._draining = True
- 
++            
 +            self._restart_phase_started_at = time.monotonic()
 +            self._write_restart_phase("draining", f"{len(self._running_agents)} active agent(s)", self._restart_phase_started_at)
-+
+ 
              # Notify all chats with active agents BEFORE draining.
              # Adapters are still connected here, so messages can be sent.
-             await self._notify_active_sessions_of_shutdown()
 @@ -6200,6 +6931,11 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
  
              _drain_started_at = time.monotonic()
@@ -1834,7 +1675,7 @@ index 4b41cfc6a..a41eb658f 100644
 +            if timed_out:
 +                self._write_restart_phase("interrupting", f"timed out after {timeout}s", self._restart_phase_started_at)
 +            else:
-+                self._write_restart_phase("interrupting" if timed_out else "draining",
++                self._write_restart_phase("interrupting" if timed_out else "draining", 
 +                    f"completed in {time.monotonic()-self._restart_phase_started_at:.1f}s" if timed_out else f"all {len(active_agents)} agent(s) finished")
              logger.info(
                  "Shutdown phase: drain done at +%.2fs (drain took %.2fs, "
@@ -1871,53 +1712,6 @@ index 4b41cfc6a..a41eb658f 100644
                  self._launch_systemd_restart_shortcut()
                  # systemd units use Restart=always, so a planned restart should
                  # exit cleanly and still be relaunched.  Using TEMPFAIL here
-@@ -6501,8 +7241,8 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         await self._shutdown_event.wait()
- 
-     def _create_adapter(
--        self, 
--        platform: Platform, 
-+        self,
-+        platform: Platform,
-         config: Any
-     ) -> Optional[BasePlatformAdapter]:
-         """Create the appropriate adapter for a platform.
-@@ -6573,7 +7313,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 _notify_mode = "important"
-             adapter._notifications_mode = _notify_mode
-             return adapter
--        
-+
-         elif platform == Platform.WHATSAPP:
-             from gateway.platforms.whatsapp import WhatsAppAdapter, check_whatsapp_requirements
-             if not check_whatsapp_requirements():
-@@ -6592,7 +7332,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 )
-                 return None
-             return WhatsAppCloudAdapter(config)
--        
-+
-         elif platform == Platform.SLACK:
-             from gateway.platforms.slack import SlackAdapter, check_slack_requirements
-             if not check_slack_requirements():
-@@ -6753,7 +7493,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-     async def _handle_message(self, event: MessageEvent) -> Optional[str]:
-         """
-         Handle an incoming message from any platform.
--        
-+
-         This is the core message processing pipeline:
-         1. Check user authorization
-         2. Check for commands (/new, /reset, etc.)
-@@ -6864,7 +7604,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     # Record rate limit so subsequent messages are silently ignored
-                     self.pairing_store._record_rate_limit(platform_name, source.user_id)
-             return None
--        
-+
-         # Intercept messages that are responses to a pending /update prompt.
-         # The update process (detached) wrote .update_prompt.json; the watcher
-         # forwarded it to the user; now the user's reply goes back via
 @@ -7241,6 +7981,9 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
              if _cmd_def_inner and _cmd_def_inner.name == "agents":
                  return await self._handle_agents_command(event)
@@ -1944,55 +1738,6 @@ index 4b41cfc6a..a41eb658f 100644
  
              # /subgoal is safe mid-run — it only modifies the goal's
              # subgoals list, which the judge reads at the next turn
-@@ -7546,7 +8290,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         if canonical == "topic":
-             return await self._handle_topic_command(event)
--        
-+
-         if canonical == "help":
-             return await self._handle_help_command(event)
- 
-@@ -7556,7 +8300,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         if canonical == "commands":
-             return await self._handle_commands_command(event)
--        
-+
-         if canonical == "profile":
-             return await self._handle_profile_command(event)
- 
-@@ -7574,10 +8318,10 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         if canonical == "restart":
-             return await self._handle_restart_command(event)
--        
-+
-         if canonical == "stop":
-             return await self._handle_stop_command(event)
--        
-+
-         if canonical == "reasoning":
-             return await self._handle_reasoning_command(event)
- 
-@@ -7644,7 +8388,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         if canonical == "retry":
-             return await self._handle_retry_command(event)
--        
-+
-         if canonical == "undo":
-             async def _do_undo():
-                 return await self._handle_undo_command(event)
-@@ -7667,7 +8411,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 detail=_undo_detail,
-                 execute=_do_undo,
-             )
--        
-+
-         if canonical == "sethome":
-             return await self._handle_set_home_command(event)
- 
 @@ -7680,6 +8424,19 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          if canonical == "credits":
              return await self._handle_credits_command(event)
@@ -2033,15 +1778,6 @@ index 4b41cfc6a..a41eb658f 100644
          if canonical == "subgoal":
              return await self._handle_subgoal_command(event)
  
-@@ -7912,7 +8669,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                         )
-             except Exception as e:
-                 logger.debug("Skill command check failed (non-fatal): %s", e)
--        
-+
-         # Pending exec approvals are handled by /approve and /deny commands above.
-         # No bare text matching — "yes" in normal conversation must not trigger
-         # execution of a dangerous command.
 @@ -7963,10 +8720,18 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                      _final_text = str(_agent_result.get("final_response") or "")
                  elif isinstance(_agent_result, str):
@@ -2101,29 +1837,8 @@ index 4b41cfc6a..a41eb658f 100644
          if getattr(session_entry, "was_auto_reset", False):
              # Treat auto-reset as a full conversation boundary — drop every
              # session-scoped transient state so the fresh session does not
-@@ -8399,7 +9172,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             self._set_session_reasoning_override(session_key, None)
-             if hasattr(self, "_pending_model_notes"):
-                 self._pending_model_notes.pop(session_key, None)
--        
-+
-         # Emit session:start for new or auto-reset sessions
-         _is_new_session = (
-             session_entry.created_at == session_entry.updated_at
-@@ -8417,17 +9190,15 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 "session_id": session_entry.session_id,
-                 "session_key": session_key,
-             })
--        
-+
-         # Build session context
-         context = build_session_context(source, self.config, session_entry)
--        
-+
-         # Set session context variables for tools (task-local, concurrency-safe)
-         _session_env_tokens = self._set_session_env(context)
--        
-+
+@@ -8426,8 +9199,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+         
          # Read privacy.redact_pii from config (re-read per message)
          _redact_pii = False
 -        persist_user_message = None
@@ -2131,42 +1846,6 @@ index 4b41cfc6a..a41eb658f 100644
          try:
              _pcfg = _load_gateway_config()
              _redact_pii = bool((_pcfg.get("privacy") or {}).get("redact_pii", False))
-@@ -8436,7 +9207,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         # Build the context prompt to inject
-         context_prompt = build_session_context_prompt(context, redact_pii=_redact_pii)
--        
-+
-         # If the previous session expired and was auto-reset, prepend a notice
-         # so the agent knows this is a fresh conversation (not an intentional /reset).
-         if getattr(session_entry, 'was_auto_reset', False):
-@@ -8539,7 +9310,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-         # Load conversation history from transcript
-         history = self.session_store.load_transcript(session_entry.session_id)
--        
-+
-         # -----------------------------------------------------------------
-         # Session hygiene: auto-compress pathologically large transcripts
-         #
-@@ -8895,7 +9666,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     _pb_err,
-                 )
-                 context_prompt += _intro_note
--        
-+
-         # One-time prompt if no home channel is set for this platform
-         # Skip for webhooks - they deliver directly to configured targets (github_comment, etc.)
-         if not history and source.platform and source.platform != Platform.LOCAL and source.platform != Platform.WEBHOOK:
-@@ -8918,7 +9689,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     f"or ignore to skip."
-                 )
-                 await self._deliver_platform_notice(source, notice)
--        
-+
-         # -----------------------------------------------------------------
-         # Voice channel awareness — inject current voice channel state
-         # into context so the agent knows who is in the channel and who
 @@ -8952,42 +9723,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          if message_text is None:
              return
@@ -2249,15 +1928,6 @@ index 4b41cfc6a..a41eb658f 100644
              if _show_reasoning_effective and response and not _intentional_silence:
                  last_reasoning = agent_result.get("last_reasoning")
                  if last_reasoning:
-@@ -9186,7 +9912,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 **hook_ctx,
-                 "response": (response or "")[:500],
-             })
--            
-+
-             # Check for pending process watchers (check_interval on background processes)
-             try:
-                 from tools.process_registry import process_registry
 @@ -9203,17 +9929,18 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  logger.error("Process watcher setup error: %s", e)
  
@@ -2286,35 +1956,15 @@ index 4b41cfc6a..a41eb658f 100644
                  for evt in _watch_events:
                      synth_text = _format_gateway_process_notification(evt)
                      if synth_text:
-@@ -9230,7 +9957,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             # the time we reach here the approval has already been resolved.  The
-             # old post-loop pop_pending + approval_hint code was removed in favour
-             # of the blocking approach that mirrors CLI's synchronous input().
--            
-+
-             # Save the full conversation to the transcript, including tool calls.
-             # This preserves the complete agent loop (tool_calls, tool results,
-             # intermediate reasoning) so sessions can be resumed with full context
-@@ -9314,8 +10041,8 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -9314,7 +10041,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                      "Your next message will start a fresh session."
                  )
  
 -            ts = time.time()  # Unix epoch float — consistent with DB storage
--            
 +            ts = datetime.now().isoformat()
-+
+             
              # If this is a fresh session (no history), write the full tool
              # definitions as the first entry so the transcript is self-describing
-             # -- the same list of dicts sent as tools=[...] in the API request.
-@@ -9333,7 +10060,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                         "timestamp": ts,
-                     }
-                 )
--            
-+
-             # The agent already persisted these messages to SQLite via
-             # _flush_messages_to_session_db(), so skip the DB write here
-             # to prevent the duplicate-write bug (#860 / #42039).
 @@ -9350,19 +10077,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  # message so the next message can load a transcript that
                  # reflects what was said.  Skip the assistant error text since
@@ -2357,24 +2007,6 @@ index 4b41cfc6a..a41eb658f 100644
                      if event.message_id:
                          _user_entry["message_id"] = str(event.message_id)
                      self.session_store.append_to_transcript(
-@@ -9426,7 +10129,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                             session_entry.session_id, entry,
-                             skip_db=agent_persisted,
-                         )
--            
-+
-             # Token counts and model are now persisted by the agent directly.
-             # Keep only last_prompt_tokens here for context-window tracking and
-             # compression decisions.
-@@ -9488,7 +10191,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 return None
- 
-             return response
--            
-+
-         except Exception as e:
-             # Stop typing indicator on error too
-             try:
 @@ -9513,26 +10216,13 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                          _recent_transcript = []
                      for _msg in reversed(_recent_transcript[-10:]):
@@ -2470,10 +2102,23 @@ index 4b41cfc6a..a41eb658f 100644
      def _get_goal_manager_for_event(self, event: "MessageEvent"):
          """Return a GoalManager bound to the session for this gateway event.
  
-@@ -9973,29 +10714,493 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-         sid = getattr(session_entry, "session_id", None) or ""
-         if not sid:
-             return None, None
+@@ -9961,41 +10702,505 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+         goals module can't be loaded.
+         """
+         try:
+-            from hermes_cli.goals import GoalManager
++            from hermes_cli.goals import GoalManager
++        except Exception as exc:
++            logger.debug("goal manager unavailable: %s", exc)
++            return None, None
++        try:
++            session_entry = self.session_store.get_or_create_session(event.source)
++        except Exception as exc:
++            logger.debug("goal manager: session lookup failed: %s", exc)
++            return None, None
++        sid = getattr(session_entry, "session_id", None) or ""
++        if not sid:
++            return None, None
 +        # Walk the compression-continuation chain to the tip so /goal and
 +        # /supergoal commands always operate on the canonical child session
 +        # after context compression migration (cf _handle_message_with_agent
@@ -2500,9 +2145,9 @@ index 4b41cfc6a..a41eb658f 100644
 +                    switched = self.session_store.switch_session(session_key, canonical_sid)
 +                    if switched is not None:
 +                        session_entry = switched
-         max_turns = self._goal_max_turns_from_config()
-         return GoalManager(session_id=sid, default_max_turns=max_turns), session_entry
- 
++        max_turns = self._goal_max_turns_from_config()
++        return GoalManager(session_id=sid, default_max_turns=max_turns), session_entry
++
 +    def _goal_lock_for_session(self, session_id: str) -> asyncio.Lock:
 +        # Some tests instantiate GatewayRunner via __new__ to avoid heavy
 +        # startup wiring. Lazily create the lock map so those focused tests and
@@ -2765,19 +2410,18 @@ index 4b41cfc6a..a41eb658f 100644
 +                if prev:
 +                    return f"✓ Cleared {prev} subgoal{'s' if prev != 1 else ''}."
 +                return "No subgoals to clear."
- 
++
 +            try:
 +                text = mgr.add_subgoal(args)
 +            except (ValueError, RuntimeError) as exc:
 +                return f"/subgoal: {exc}"
 +            idx = len(mgr.state.subgoals) if mgr.state else 0
 +            return f"✓ Added subgoal {idx}: {text}"
- 
-     async def _send_goal_status_notice(self, source: Any, message: str) -> None:
-         """Send a /goal judge status line back to the originating chat/thread."""
-         adapter = self.adapters.get(source.platform)
-         if not adapter:
--            logger.debug("goal continuation: no adapter for %s", getattr(source, "platform", None))
++
++    async def _send_goal_status_notice(self, source: Any, message: str) -> None:
++        """Send a /goal judge status line back to the originating chat/thread."""
++        adapter = self.adapters.get(source.platform)
++        if not adapter:
 +            logger.debug("goal continuation: no adapter for %s", getattr(source, "platform", None))
 +            return
 +
@@ -2850,10 +2494,23 @@ index 4b41cfc6a..a41eb658f 100644
 +                controls=[],
 +                plain_text="Supergoal archived · controls disabled\nStart a new one with /supergoal <goal>.",
 +            )
-+        except Exception as exc:
+         except Exception as exc:
+-            logger.debug("goal manager unavailable: %s", exc)
+-            return None, None
 +            logger.debug("supergoal archive card build failed: %s", exc)
 +            return
-+        try:
+         try:
+-            session_entry = self.session_store.get_or_create_session(event.source)
+-        except Exception as exc:
+-            logger.debug("goal manager: session lookup failed: %s", exc)
+-            return None, None
+-        sid = getattr(session_entry, "session_id", None) or ""
+-        if not sid:
+-            return None, None
+-        max_turns = self._goal_max_turns_from_config()
+-        return GoalManager(session_id=sid, default_max_turns=max_turns), session_entry
+-
+-
 +            metadata = self._thread_metadata_for_source(source)
 +        except Exception:
 +            metadata = None
@@ -2871,7 +2528,9 @@ index 4b41cfc6a..a41eb658f 100644
 +            result = await send_card(source.chat_id, card.plain_text, metadata=metadata)
 +        if result is None or getattr(result, "success", True):
 +            mgr.clear_status_card_message_id(platform_key)
-+
+ 
+-    async def _send_goal_status_notice(self, source: Any, message: str) -> None:
+-        """Send a /goal judge status line back to the originating chat/thread."""
 +    async def _update_supergoal_status_card(
 +        self,
 +        source: Any,
@@ -2894,8 +2553,9 @@ index 4b41cfc6a..a41eb658f 100644
 +                terminal = str((decision or {}).get("status") or getattr(state, "status", ""))
 +                if terminal == "active":
 +                    return
-+        adapter = self.adapters.get(source.platform)
-+        if not adapter:
+         adapter = self.adapters.get(source.platform)
+         if not adapter:
+-            logger.debug("goal continuation: no adapter for %s", getattr(source, "platform", None))
              return
 -
          try:
@@ -3029,7 +2689,15 @@ index 4b41cfc6a..a41eb658f 100644
 +                getattr(state_before, "max_turns", "?"),
 +                len(final_response or ""),
 +            )
-+
+ 
+-        # Defer the status line until after the adapter has delivered the
+-        # agent's visible final response. The judge runs after the response is
+-        # produced but before BasePlatformAdapter sends it, so sending here
+-        # would show "✓ Goal achieved" before the answer itself. Registering
+-        # an awaited post-delivery callback preserves delivery reliability
+-        # without reversing the user-visible ordering.
+-        if msg and source is not None:
+-            await self._defer_goal_status_notice_after_delivery(source, msg)
 +            # GoalManager.evaluate_after_turn() can call synchronous auxiliary LLM
 +            # clients (goal judge / supergoal critic). Running it directly here
 +            # blocks the gateway asyncio loop and can starve platform heartbeats
@@ -3052,14 +2720,8 @@ index 4b41cfc6a..a41eb658f 100644
 +                finally:
 +                    clear_session_context()
  
--        # Defer the status line until after the adapter has delivered the
--        # agent's visible final response. The judge runs after the response is
--        # produced but before BasePlatformAdapter sends it, so sending here
--        # would show "✓ Goal achieved" before the answer itself. Registering
--        # an awaited post-delivery callback preserves delivery reliability
--        # without reversing the user-visible ordering.
--        if msg and source is not None:
--            await self._defer_goal_status_notice_after_delivery(source, msg)
+-        if not decision.get("should_continue"):
+-            return
 +            decision = await asyncio.to_thread(_evaluate_with_session_context)
 +            state_after = mgr.state
 +            logger.info(
@@ -3075,7 +2737,8 @@ index 4b41cfc6a..a41eb658f 100644
 +            )
 +            msg = decision.get("message") or ""
  
--        if not decision.get("should_continue"):
+-        prompt = decision.get("continuation_prompt") or ""
+-        if not prompt or source is None:
 -            return
 +            # Defer the status line until after the adapter has delivered the
 +            # agent's visible final response. The judge runs after the response is
@@ -3085,12 +2748,6 @@ index 4b41cfc6a..a41eb658f 100644
 +            # without reversing the user-visible ordering.
 +            if source is not None and self._should_send_goal_status_notice(decision, state_after):
 +                await self._defer_goal_status_notice_after_delivery(source, msg)
- 
--        prompt = decision.get("continuation_prompt") or ""
--        if not prompt or source is None:
--            return
-+            if source is not None and state_after is not None and getattr(state_after, "mode", "goal") == "supergoal":
-+                await self._update_supergoal_status_card(source, mgr, decision=decision)
  
 -        # Enqueue via the adapter's FIFO so a user message already in
 -        # flight preempts the continuation naturally.
@@ -3108,13 +2765,16 @@ index 4b41cfc6a..a41eb658f 100644
 -                self._enqueue_fifo(_quick_key, cont_event, adapter)
 -        except Exception as exc:
 -            logger.debug("goal continuation: enqueue failed: %s", exc)
++            if source is not None and state_after is not None and getattr(state_after, "mode", "goal") == "supergoal":
++                await self._update_supergoal_status_card(source, mgr, decision=decision)
+ 
 +            if not decision.get("should_continue"):
 +                return
 +
 +            prompt = decision.get("continuation_prompt") or ""
 +            if not prompt or source is None:
 +                return
- 
++
 +            # Enqueue via the adapter's FIFO so a user message already in
 +            # flight preempts the continuation naturally.
 +            try:
@@ -3432,7 +3092,7 @@ index 4b41cfc6a..a41eb658f 100644
  
          _thread_metadata: Optional[Dict[str, Any]] = self._thread_metadata_for_source(source, event_message_id)
  
-@@ -13727,18 +15138,16 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -13727,8 +15138,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          _interrupt_depth: int = 0,
          event_message_id: Optional[str] = None,
          channel_prompt: Optional[str] = None,
@@ -3441,27 +3101,6 @@ index 4b41cfc6a..a41eb658f 100644
      ) -> Dict[str, Any]:
          """
          Run the agent with the given message and context.
--        
-+
-         Returns the full result dict from run_conversation, including:
-           - "final_response": str (the text to send back)
-           - "messages": list (full conversation including tool calls)
-           - "api_calls": int
-           - "completed": bool
--        
-+
-         This is run in a thread pool to not block the event loop.
-         Supports interruption via new messages.
-         """
-@@ -13762,7 +15171,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             if run_generation is None or not session_key:
-                 return True
-             return self._is_session_run_current(session_key, run_generation)
--        
-+
-         user_config = _load_gateway_config()
-         platform_key = _platform_config_key(source.platform)
- 
 @@ -13811,8 +15220,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
              if _env_tp and not _tool_progress_configured
              else (_resolved_tp or _env_tp or "all")
@@ -3505,7 +3144,8 @@ index 4b41cfc6a..a41eb658f 100644
 -        )
 -        needs_progress_queue = tool_progress_enabled or _thinking_enabled
 -
- 
+-
++        
          # Queue for progress messages (thread-safe)
 -        progress_queue = queue.Queue() if needs_progress_queue else None
 +        _telegram_dynamic_progress = (
@@ -3542,45 +3182,6 @@ index 4b41cfc6a..a41eb658f 100644
  
              # Only act on tool.started events (ignore tool.completed, reasoning.available, etc.)
              if event_type not in {"tool.started",}:
-@@ -13996,7 +15376,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             if progress_mode == "new" and tool_name == last_tool[0]:
-                 return
-             last_tool[0] = tool_name
--            
-+
-             # Build progress message with primary argument preview
-             from agent.display import get_tool_emoji
-             emoji = get_tool_emoji(tool_name, default="⚙️")
-@@ -14071,7 +15451,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     msg = f"{emoji} {tool_name}..."
-                 progress_queue.put(msg)
-                 return
--            
-+
-             # "all" / "new" modes: short preview, respects tool_preview_length
-             # config (defaults to 40 chars when unset to keep gateway messages
-             # compact — unlike CLI spinners, these persist as permanent messages).
-@@ -14091,7 +15471,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             else:
-                 msg = f"{emoji} {tool_name}..."
-                 last_was_terminal_block[0] = False
--            
-+
-             # Dedup: collapse consecutive identical progress messages.
-             # Common with execute_code where models iterate with the same
-             # code (same boilerplate imports → identical previews).
-@@ -14103,9 +15483,9 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 return
-             last_progress_msg[0] = msg
-             repeat_count[0] = 0
--            
-+
-             progress_queue.put(msg)
--        
-+
-         # Background task to send progress messages
-         # Accumulates tool lines into a single message that gets edited.
-         #
 @@ -14116,9 +15496,10 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
          # - Feishu only honors reply_in_thread when sending a reply, so topic
          #   progress uses the triggering event message as the reply target
@@ -3669,22 +3270,6 @@ index 4b41cfc6a..a41eb658f 100644
              _last_edit_ts = 0.0      # Throttle edits to avoid Telegram flood control
              _PROGRESS_EDIT_INTERVAL = 1.5  # Minimum seconds between edits
  
-@@ -14460,13 +15899,13 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 except Exception as e:
-                     logger.error("Progress message error: %s", e)
-                     await asyncio.sleep(1)
--        
-+
-         # We need to share the agent instance for interrupt support
-         agent_holder = [None]  # Mutable container for the agent instance
-         result_holder = [None]  # Mutable container for the result
-         tools_holder = [None]   # Mutable container for the tool definitions
-         stream_consumer_holder = [None]  # Mutable container for stream consumer
--        
-+
-         # Bridge sync step_callback → async hooks.emit for agent:step events
-         _loop_for_step = asyncio.get_running_loop()
-         _hooks_ref = self.hooks
 @@ -14497,17 +15936,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  log_message="agent:step hook scheduling error",
              )
@@ -3703,20 +3288,6 @@ index 4b41cfc6a..a41eb658f 100644
          # Bridge sync status_callback → async adapter.send for context pressure
          _status_adapter = self.adapters.get(source.platform)
          _status_chat_id = source.chat_id
-@@ -14573,11 +16001,11 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
- 
-             # Read from env var or use default (same as CLI)
-             max_iterations = int(os.getenv("HERMES_MAX_ITERATIONS", "90"))
--            
-+
-             # Map platform enum to the platform hint key the agent understands.
-             # Platform.LOCAL ("local") maps to "cli"; others pass through as-is.
-             platform_key = "cli" if source.platform == Platform.LOCAL else source.platform.value
--            
-+
-             # Combine platform context, per-channel context, and the user-configured
-             # ephemeral system prompt.
-             combined_ephemeral = context_prompt or ""
 @@ -14637,9 +16065,19 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  if _plat_streaming is None
                  else bool(_plat_streaming)
@@ -3819,7 +3390,7 @@ index 4b41cfc6a..a41eb658f 100644
  
              # ------------------------------------------------------------------
              # Clarify callback: present a clarify prompt and block on a response.
-@@ -15013,15 +16454,11 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -15013,10 +16454,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
  
              agent.clarify_callback = _clarify_callback_sync
  
@@ -3830,32 +3401,14 @@ index 4b41cfc6a..a41eb658f 100644
              # Store agent reference for interrupt support
              agent_holder[0] = agent
              # Capture the full tool definitions for transcript logging
-             tools_holder[0] = agent.tools if hasattr(agent, 'tools') else None
--            
-+
-             # Convert history to agent format.
-             # Two cases:
-             #   1. Normal path (from transcript): simple {role, content, timestamp} dicts
-@@ -15039,9 +16476,8 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -15039,7 +16476,6 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
              agent_history, observed_group_context = _build_gateway_agent_history(
                  history,
                  channel_prompt=channel_prompt,
 -                inject_timestamps=_message_timestamps_enabled(_load_gateway_config()),
              )
--            
-+
+             
              # Collect MEDIA paths already in history so we can exclude them
-             # from the current turn's extraction. This is compression-safe:
-             # even if the message list shrinks, we know which paths are old.
-@@ -15061,7 +16497,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                             _p = _match.group(1).strip().rstrip('",}')
-                             if _p:
-                                 _history_media_paths.add(_p)
--            
-+
-             # Register per-session gateway approval callback so dangerous
-             # command approval blocks the agent thread (mirrors CLI input()).
-             # The callback bridges sync→async to send the approval request
 @@ -15153,44 +16589,14 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                  except Exception as _e:
                      logger.error("Failed to send approval request: %s", _e)
@@ -3923,7 +3476,7 @@ index 4b41cfc6a..a41eb658f 100644
 -                and agent_history[-1].get("role") == "tool"
 -                and _interruption_is_fresh
 -            )
- 
+-
 -            if _is_resume_pending:
 -                _reason = getattr(_resume_entry, "resume_reason", None) or "restart_timeout"
 -                _reason_phrase = (
@@ -3952,7 +3505,7 @@ index 4b41cfc6a..a41eb658f 100644
 -                    "below FIRST. Do NOT re-execute old tool calls from the history.]\n\n"
 -                    + message
 -                )
--
+ 
 -            # Consume one-shot /reload-skills note (if the user ran
 -            # /reload-skills since their last turn in this session). Same
 -            # queue pattern as CLI: prepend to the NEXT user message, then
@@ -4011,73 +3564,7 @@ index 4b41cfc6a..a41eb658f 100644
                  result = agent.run_conversation(_api_run_message, **_conversation_kwargs)
              finally:
                  unregister_gateway_notify(_approval_session_key)
-@@ -15316,7 +16691,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             # Signal the stream consumer that the agent is done
-             if _stream_consumer is not None:
-                 _stream_consumer.finish()
--            
-+
-             # Return final response, or a message if something went wrong
-             final_response = result.get("final_response")
- 
-@@ -15410,7 +16785,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     "model": _resolved_model,
-                     "context_length": _context_length,
-                 }
--            
-+
-             # Scan tool results for MEDIA:<path> tags that need to be delivered
-             # as native audio/file attachments.  The TTS tool embeds MEDIA: tags
-             # in its JSON response, but the model's final text reply usually
-@@ -15448,7 +16823,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     if has_voice_directive:
-                         unique_tags.insert(0, "[[audio_as_voice]]")
-                     final_response = final_response + "\n" + "\n".join(unique_tags)
--            
-+
-             # Auto-generate session title after first exchange (non-blocking)
-             if final_response and self._session_db:
-                 try:
-@@ -15512,7 +16887,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 "response_previewed": result.get("response_previewed", False),
-                 "response_transformed": result.get("response_transformed", False),
-             }
--        
-+
-         # Start progress message sender if enabled
-         progress_task = None
-         if tool_progress_enabled:
-@@ -15531,7 +16906,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 await asyncio.sleep(0.05)
- 
-         stream_task = asyncio.create_task(_start_stream_consumer())
--        
-+
-         # Track this agent as running for this session (for interrupt support)
-         # We do this in a callback after the agent is created
-         async def track_agent():
-@@ -15556,9 +16931,9 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-             self._running_agents[session_key] = agent_holder[0]
-             if self._draining:
-                 self._update_runtime_status("draining")
--        
-+
-         tracking_task = asyncio.create_task(track_agent())
--        
-+
-         # Monitor for interrupts from the adapter (new messages arriving).
-         # This is the PRIMARY interrupt path for regular text messages —
-         # Level 1 (base.py) catches them before _handle_message() is reached,
-@@ -15649,7 +17024,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                     raise
-                 except Exception as _mon_err:
-                     logger.debug("monitor_for_interrupt error (will retry): %s", _mon_err)
--        
-+
-         interrupt_monitor = asyncio.create_task(monitor_for_interrupt())
- 
-         # Periodic "still working" notifications for long-running tasks.
-@@ -15937,10 +17312,38 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
+@@ -15937,8 +17312,36 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
                      # agent so the next message retries the primary model.
                      self._evict_cached_agent(session_key)
  
@@ -4114,11 +3601,8 @@ index 4b41cfc6a..a41eb658f 100644
 +                            )
 +
              adapter = self.adapters.get(source.platform)
--            
-+
+             
              # Get pending message from adapter.
-             # Use session_key (not source.chat_id) to match adapter's storage keys.
-             pending_event = None
 @@ -16150,15 +17553,62 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
  
                  updated_history = result.get("messages", history)
@@ -4231,135 +3715,441 @@ index 4b41cfc6a..a41eb658f 100644
              if progress_task:
                  progress_task.cancel()
              interrupt_monitor.cancel()
-@@ -16231,7 +17702,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                             await stream_task
-                         except asyncio.CancelledError:
-                             pass
--            
-+
-             # Clean up tracking
-             tracking_task.cancel()
-             if session_key:
-@@ -16245,7 +17716,7 @@ class GatewayRunner(GatewayAuthorizationMixin, GatewayKanbanWatchersMixin, Gatew
-                 )
-             if self._draining:
-                 self._update_runtime_status("draining")
--            
-+
-             # Wait for cancelled tasks
-             for task in [progress_task, interrupt_monitor, tracking_task, _notify_task]:
-                 if task:
-@@ -16457,7 +17928,7 @@ def _run_planned_stop_watcher(
- def _start_cron_ticker(stop_event: threading.Event, adapters=None, loop=None, interval: int = 60):
-     """
-     Background thread that ticks the cron scheduler at a regular interval.
--    
-+
-     Runs inside the gateway process so cronjobs fire automatically without
-     needing a separate `hermes cron daemon` or system cron entry.
- 
-@@ -16552,11 +18023,11 @@ def _start_cron_ticker(stop_event: threading.Event, adapters=None, loop=None, in
- async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool = False, verbosity: Optional[int] = 0) -> bool:
-     """
-     Start the gateway and run until interrupted.
--    
-+
-     This is the main entry point for running the gateway.
-     Returns True if the gateway ran successfully, False if it failed to start.
-     A False return causes a non-zero exit code so systemd can auto-restart.
--    
-+
-     Args:
-         config: Optional gateway configuration override.
-         replace: If True, kill any existing gateway instance before starting.
-@@ -16730,7 +18201,7 @@ async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool =
-             logging.getLogger().setLevel(_stderr_level)
- 
-     runner = GatewayRunner(config)
--    
-+
-     # Track whether an unexpected signal initiated the shutdown. When an
-     # unexpected SIGTERM kills the gateway, we exit non-zero so service
-     # managers can revive the process. Planned stop paths write a marker
-@@ -16835,7 +18306,7 @@ async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool =
- 
-     def restart_signal_handler():
-         runner.request_restart(detached=False, via_service=True)
--    
-+
-     loop = asyncio.get_running_loop()
- 
-     # Install a loop-level exception handler that swallows transient
-@@ -16941,7 +18412,7 @@ async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool =
-         if runner.exit_reason:
-             logger.error("Gateway exiting cleanly: %s", runner.exit_reason)
-         return True
--    
-+
-     # Start background cron ticker so scheduled jobs fire automatically.
-     # Pass the event loop so cron delivery can use live adapters (E2EE support).
-     cron_stop = threading.Event()
-@@ -16953,7 +18424,7 @@ async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool =
-         name="cron-ticker",
-     )
-     cron_thread.start()
--    
-+
-     # Wait for shutdown
-     await runner.wait_for_shutdown()
- 
-@@ -16961,7 +18432,7 @@ async def start_gateway(config: Optional[GatewayConfig] = None, replace: bool =
-         if runner.exit_reason:
-             logger.error("Gateway exiting with failure: %s", runner.exit_reason)
-         return False
--    
-+
-     # Stop cron ticker cleanly
-     cron_stop.set()
-     cron_thread.join(timeout=5)
-@@ -17018,20 +18489,20 @@ def main():
-         pass
- 
-     import argparse
--    
-+
-     parser = argparse.ArgumentParser(description="Hermes Gateway - Multi-platform messaging")
-     parser.add_argument("--config", "-c", help="Path to gateway config file")
-     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
--    
-+
-     args = parser.parse_args()
--    
-+
-     config = None
-     if args.config:
-         import yaml
-         with open(args.config, encoding="utf-8") as f:
-             data = yaml.safe_load(f) or {}
-             config = GatewayConfig.from_dict(data)
--    
-+
-     # Run the gateway - exit with code 1 if no platforms connected,
-     # so systemd Restart=on-failure will retry on transient errors (e.g. DNS)
-     success = asyncio.run(start_gateway(config))
 diff --git a/hermes_cli/commands.py b/hermes_cli/commands.py
-index f81d50eac..27e8edb3f 100644
+index f81d50eac..3a0a9b7d6 100644
 --- a/hermes_cli/commands.py
 +++ b/hermes_cli/commands.py
-@@ -107,6 +107,8 @@ COMMAND_REGISTRY: list[CommandDef] = [
+@@ -107,9 +107,11 @@ COMMAND_REGISTRY: list[CommandDef] = [
                 args_hint="<prompt>"),
      CommandDef("goal", "Set a standing goal Hermes works on across turns until achieved", "Session",
                 args_hint="[text | pause | resume | clear | status]"),
 +    CommandDef("supergoal", "Set a high-budget standing goal for long autonomous work", "Session",
-+               aliases=("sgoal",), args_hint="[text | pause | resume | clear | status]"),
++               aliases=("sgoal",), args_hint="[start <text> | pause | resume | clear | status]"),
      CommandDef("subgoal", "Add or manage extra criteria on the active goal", "Session",
                 args_hint="[text | remove N | clear]"),
-     CommandDef("status", "Show session, model, token, and context info", "Session"),
+-    CommandDef("status", "Show session, model, token, and context info", "Session"),
++    CommandDef("status", "Show session info", "Session"),
+     CommandDef("whoami", "Show your slash command access (admin / user)", "Info"),
+     CommandDef("profile", "Show active profile name and home directory", "Info"),
+     CommandDef("sethome", "Set this chat as the home channel", "Session",
+@@ -131,6 +133,16 @@ COMMAND_REGISTRY: list[CommandDef] = [
+     CommandDef("gquota", "Show Google Gemini Code Assist quota usage", "Info",
+                cli_only=True),
+ 
++
++
++    CommandDef("cpaquota", "Show CLIProxyAPI Codex account quota/status", "Info",
++               gateway_only=True, aliases=("cquota", "cq", "cpaquato"),
++               args_hint="[full|compact|debug|config|trend]"),
++    CommandDef("pptoken", "Show PPToken balance, usage, and provider status", "Info",
++               gateway_only=True, aliases=("pp", "ppt"), args_hint="[compact|json|help]"),
++
++
++
+     CommandDef("personality", "Set a predefined personality", "Configuration",
+                args_hint="[name]"),
+     CommandDef("statusbar", "Toggle the context/model status bar", "Configuration",
+@@ -206,6 +218,9 @@ COMMAND_REGISTRY: list[CommandDef] = [
+                subcommands=("connect", "disconnect", "status")),
+     CommandDef("plugins", "List installed plugins and their status",
+                "Tools & Skills", cli_only=True),
++    CommandDef("proj", "Inspect a structured project map and query tracked projects",
++               "Tools & Skills", args_hint="[map|scan|show <name>|roots|git|active]",
++               subcommands=("map", "scan", "show", "roots", "git", "active")),
+ 
+     # Info
+     CommandDef("commands", "Browse all commands and skills (paginated)", "Info",
+@@ -214,7 +229,11 @@ COMMAND_REGISTRY: list[CommandDef] = [
+     CommandDef("restart", "Gracefully restart the gateway after draining active runs", "Session",
+                gateway_only=True),
+     CommandDef("usage", "Show token usage and rate limits for the current session", "Info"),
++
+     CommandDef("credits", "Show Nous credit balance and top up", "Info"),
++
++    CommandDef("quota", "Show OpenAI Codex pool quota and availability (Telegram picker)", "Info",
++               gateway_only=True, args_hint="[index|label|id]"),
+     CommandDef("insights", "Show usage insights and analytics", "Info",
+                args_hint="[days]"),
+     CommandDef("platforms", "Show gateway/messaging platform status", "Info",
+@@ -356,6 +375,7 @@ ACTIVE_SESSION_BYPASS_COMMANDS: frozenset[str] = frozenset(
+         "help",
+         "new",
+         "profile",
++        "proj",
+         "queue",
+         "restart",
+         "status",
+@@ -549,6 +569,9 @@ _TELEGRAM_MENU_PRIORITY = (
+     # Lower-priority but still useful operational built-ins.
+     "reasoning",
+     "usage",
++    "cpaquota",
++    "quota",
++    "pptoken",
+     "platforms",
+     "platform",
+     "profile",
+@@ -785,6 +808,49 @@ def _collect_gateway_skill_entries(
+ # Platform-specific wrappers
+ # ---------------------------------------------------------------------------
+ 
++_TELEGRAM_MENU_ZH_DESCRIPTIONS = {
++    "help": "查看帮助和常用命令",
++    "new": "开启新会话",
++    "stop": "停止当前运行任务",
++    "status": "查看当前会话状态",
++    "resume": "恢复历史会话",
++    "sessions": "浏览历史会话",
++    "model": "切换本会话模型",
++    "debug": "查看调试信息",
++    "restart": "重启 Hermes 网关",
++    "update": "更新 Hermes",
++    "commands": "查看完整命令列表",
++    "approve": "批准待确认操作",
++    "deny": "拒绝待确认操作",
++    "queue": "排队下一条指令",
++    "steer": "在工具调用后插入指令",
++    "background": "后台运行一个任务",
++    "reasoning": "设置推理强度/显示",
++    "usage": "查看本会话用量",
++    "cpaquota": "查看 CPA Codex 账号额度",
++    "quota": "查看 Codex 本地池额度",
++    "pptoken": "查看 PPToken 余额状态",
++    "platforms": "查看平台连接状态",
++    "platform": "查看平台连接状态",
++    "profile": "查看当前 Hermes 配置档",
++    "whoami": "查看你的命令权限",
++    "start": "启动/唤醒机器人",
++    "topic": "管理 Telegram 主题会话",
++    "retry": "重试上一条消息",
++    "undo": "撤销最近一轮对话",
++    "title": "设置当前会话标题",
++    "branch": "分叉当前会话",
++    "compress": "压缩当前上下文",
++    "rollback": "查看或恢复文件快照",
++    "agents": "查看运行中的任务",
++}
++
++
++def _localize_telegram_menu_description(name: str, description: str) -> str:
++    """Return a short Chinese description for Telegram's command menu."""
++    return _TELEGRAM_MENU_ZH_DESCRIPTIONS.get(name, description)
++
++
+ def telegram_menu_commands(max_commands: int = 100) -> tuple[list[tuple[str, str]], int]:
+     """Return Telegram menu commands capped to the Bot API limit.
+ 
+@@ -817,7 +883,11 @@ def telegram_menu_commands(max_commands: int = 100) -> tuple[list[tuple[str, str
+     )
+     # Drop the cmd_key — Telegram only needs (name, desc) pairs.
+     all_commands.extend((n, d) for n, d, _k in entries)
+-    return all_commands[:max_commands], hidden_count + hidden_core_count
++    localized_commands = [
++        (name, _localize_telegram_menu_description(name, description))
++        for name, description in all_commands
++    ]
++    return localized_commands[:max_commands], hidden_count + hidden_core_count
+ 
+ 
+ def discord_skill_commands(
+@@ -1053,8 +1123,7 @@ _SLACK_PRIORITY_ALIASES = ("btw", "bg")
+ # the telegram-parity test reads it so an entry here is a deliberate
+ # "Slack-via-/hermes" decision, not a silent clamp.
+ #   - credits: the billing/top-up surface; reached via /hermes credits on Slack.
+-#   - debug: the log/report upload surface; reached via /hermes debug on Slack.
+-_SLACK_VIA_HERMES_ONLY = frozenset({"credits", "debug"})
++_SLACK_VIA_HERMES_ONLY = frozenset({"credits"})
+ 
+ 
+ def _sanitize_slack_name(raw: str) -> str:
+@@ -1280,10 +1349,6 @@ class SlashCommandCompleter(Completer):
+         current word doesn't look like a path.  A word is path-like when
+         it starts with ``./``, ``../``, ``~/``, ``/``, or contains a
+         ``/`` separator (e.g. ``src/main.py``).
+-
+-        Tokens containing a ``://`` scheme separator (e.g. URLs like
+-        ``https://example.com/x``) are excluded even though they contain a
+-        ``/`` — they are never useful local-path completions.
+         """
+         if not text:
+             return None
+@@ -1295,12 +1360,6 @@ class SlashCommandCompleter(Completer):
+         word = text[i + 1:]
+         if not word:
+             return None
+-        # URLs contain "/" but are not local paths. Treating them as paths fires
+-        # os.listdir on every keystroke while typing/pasting a link (e.g. an
+-        # https:// URL becomes a listdir of "https:") — pure latency, never a
+-        # useful completion. Skip any token with a scheme separator.
+-        if "://" in word:
+-            return None
+         # Only trigger path completion for path-like tokens
+         if word.startswith(("./", "../", "~/", "/")) or "/" in word:
+             return word
 diff --git a/hermes_cli/config.py b/hermes_cli/config.py
-index 30d4b0738..a42d3b10e 100644
+index 30d4b0738..dfd16d86a 100644
 --- a/hermes_cli/config.py
 +++ b/hermes_cli/config.py
-@@ -1903,6 +1903,10 @@ DEFAULT_CONFIG = {
+@@ -350,124 +350,52 @@ def get_managed_update_command() -> Optional[str]:
+     return None
+ 
+ 
+-def _install_method_project_root(project_root: Optional[Path] = None) -> Path:
+-    """Resolve the directory that holds the *running code* (the install tree).
+-
+-    This is the parent of ``hermes_cli/`` — i.e. the git checkout for source
+-    installs, ``/opt/hermes`` inside the published image, the venv's
+-    site-packages root for pip installs. It is a property of the running
+-    interpreter, NOT of ``$HERMES_HOME``, which is why a code-scoped stamp
+-    here is immune to two installs sharing one data directory.
+-    """
+-    if project_root is not None:
+-        return project_root
+-    return Path(__file__).parent.parent.resolve()
+-
+-
+ def detect_install_method(project_root: Optional[Path] = None) -> str:
+     """Detect how Hermes was installed: 'docker', 'nixos', 'homebrew', 'git', or 'pip'.
+ 
+     Resolution order:
+-    1. Code-scoped stamp ``<install tree>/.install_method`` (next to the
+-       running code) — the authoritative marker.
+-    2. Legacy home-scoped stamp ``$HERMES_HOME/.install_method`` — read for
+-       backward compatibility, but a ``docker`` value is IGNORED when we are
+-       not actually running inside a container (see below).
+-    3. HERMES_MANAGED env / .managed marker (NixOS, Homebrew)
+-    4. .git directory presence -> 'git'
+-    5. Fallback -> 'pip'
+-
+-    Why the stamp is code-scoped, not home-scoped (issue: shared ``~/.hermes``)
+-    --------------------------------------------------------------------------
+-    The install method describes *the binary that is running*, but
+-    ``$HERMES_HOME`` is a shared DATA directory — the Docker docs deliberately
+-    bind-mount it (``~/.hermes:/opt/data``) so config/sessions/memory persist
+-    and can be shared with a host-side Desktop/CLI install. When a
+-    containerised gateway and a host install share one ``$HERMES_HOME``, a
+-    home-scoped stamp is a single slot describing two different installs:
+-    the container stamps ``docker`` on every boot, the host install then reads
+-    ``docker`` and ``hermes update`` refuses to run ("doesn't apply inside the
+-    Docker container") even though the host binary is a perfectly updatable
+-    git/pip install. Scoping the stamp to the install tree gives each install
+-    its own truthful marker.
+-
+-    Self-healing for already-poisoned homes: a legacy ``docker`` value in the
+-    home-scoped stamp is only honoured when we are genuinely in a container.
+-    On a host install that read a contaminating ``docker`` stamp, we fall
+-    through to managed/.git/pip detection instead — so existing shared-home
+-    setups recover without the user touching anything.
++    1. Stamped ``~/.hermes/.install_method`` file (written by installers)
++    2. HERMES_MANAGED env / .managed marker (NixOS, Homebrew)
++    3. .git directory presence -> 'git'
++    4. Fallback -> 'pip'
+ 
+     Note: running inside a container is NOT treated as "docker" on its own.
+-    The supported installs self-identify via the code-scoped stamp:
++    The two supported install paths both self-identify via the
++    ``.install_method`` stamp (caught by step 1), so neither relies on
++    container detection here:
+       - the curl installer (scripts/install.sh, the README/website install
+-        command) git-clones the repo and stamps ``git`` next to the code;
+-      - the published ``nousresearch/hermes-agent`` image bakes a ``docker``
+-        stamp into ``/opt/hermes`` at build time.
+-    An unsupported manual install dropped into a container (no stamp) falls
+-    through to the ``.git``/pip checks and behaves like any off-path install.
+-    See issue #34397.
++        command) git-clones the repo and stamps ``git``;
++      - the published ``nousresearch/hermes-agent`` image stamps ``docker``
++        at boot via ``docker/stage2-hook.sh``.
++    An unsupported manual install dropped into a container (no stamp) was
++    wrongly classified as the published image by bare container detection,
++    so ``hermes update`` bailed with "doesn't apply inside the Docker
++    container". Without that fallback such installs fall through to the
++    ``.git``/pip checks and behave like any off-path install. See issue #34397.
+     """
+-    root = _install_method_project_root(project_root)
+-
+-    # 1. Code-scoped stamp — authoritative, immune to shared $HERMES_HOME.
++    stamp = get_hermes_home() / ".install_method"
+     try:
+-        method = (root / ".install_method").read_text(encoding="utf-8").strip().lower()
++        method = stamp.read_text(encoding="utf-8").strip().lower()
+         if method:
+             return method
+     except OSError:
+         pass
+-
+-    # 2. Legacy home-scoped stamp — back-compat. Ignore a ``docker`` value
+-    #    when we are not actually containerised: that is the signature of a
+-    #    host install whose shared $HERMES_HOME was stamped by a co-located
+-    #    container, and honouring it wrongly blocks ``hermes update``.
+-    try:
+-        method = (
+-            (get_hermes_home() / ".install_method")
+-            .read_text(encoding="utf-8")
+-            .strip()
+-            .lower()
+-        )
+-        if method and not (method == "docker" and not _running_in_container()):
+-            return method
+-    except OSError:
+-        pass
+-
+     managed = get_managed_system()
+     if managed:
+         return managed.lower().replace(" ", "-")
+-    if (root / ".git").is_dir():
++    if project_root is None:
++        project_root = Path(__file__).parent.parent.resolve()
++    if (project_root / ".git").is_dir():
+         return "git"
+     return "pip"
+ 
+ 
+-def _running_in_container() -> bool:
+-    """Thin wrapper around ``hermes_constants.is_container`` (import-safe)."""
+-    try:
+-        from hermes_constants import is_container
+-
+-        return is_container()
+-    except Exception:
+-        return False
+-
+-
+-def stamp_install_method(method: str, project_root: Optional[Path] = None) -> None:
+-    """Write the install method next to the running code (code-scoped stamp).
+-
+-    The stamp lives in the install tree (``<install tree>/.install_method``),
+-    not in ``$HERMES_HOME``, so that two installs sharing one data directory
+-    do not overwrite each other's marker. See ``detect_install_method`` for
+-    the full rationale.
+-
+-    Best-effort: if the install tree is read-only (e.g. the immutable
+-    ``/opt/hermes`` in the published image, which instead bakes the stamp at
+-    build time) the write silently no-ops and detection falls back to its
+-    other signals.
+-    """
+-    root = _install_method_project_root(project_root)
++def stamp_install_method(method: str) -> None:
++    """Write the install method to ~/.hermes/.install_method."""
++    stamp = get_hermes_home() / ".install_method"
+     try:
+-        root.mkdir(parents=True, exist_ok=True)
+-        (root / ".install_method").write_text(method + "\n", encoding="utf-8")
++        stamp.parent.mkdir(parents=True, exist_ok=True)
++        stamp.write_text(method + "\n", encoding="utf-8")
+     except OSError:
+         pass
+ 
+@@ -1176,14 +1104,6 @@ DEFAULT_CONFIG = {
+         "min_interval_hours": 24,
+     },
+ 
+-    # Hard cap (chars) for a single automatic context file such as SOUL.md,
+-    # AGENTS.md, CLAUDE.md, .hermes.md, or .cursorrules before Hermes applies
+-    # head/tail truncation. ``null`` (the default) lets the cap scale with the
+-    # model's context window (floor 20K, ceiling 500K) so large-context models
+-    # rarely truncate a project doc. Set a positive integer to pin a fixed cap
+-    # and override the dynamic behavior. Separate from read_file tool limits.
+-    "context_file_max_chars": None,
+-
+     # Maximum characters returned by a single read_file call.  Reads that
+     # exceed this are rejected with guidance to use offset+limit.
+     # 100K chars ≈ 25–35K tokens across typical tokenisers.
+@@ -1289,6 +1209,59 @@ DEFAULT_CONFIG = {
+         "min_coding_score": 0.65,
+     },
+ 
++    # CLIProxyAPI Codex quota dashboard (/cpaquota). Secrets may be supplied
++    # via CPA_MANAGEMENT_KEY/CPA_BASE_URL env vars; behavioral settings live here.
++    "cpaquota": {
++        "base_url": "http://100.84.170.35:8317",
++        "management_key": "hermes-cpa-2026",
++        "wham_usage_url": "https://chatgpt.com/backend-api/wham/usage",
++        "keeper_db": "/opt/cpa-usage-keeper/data/app.db",
++        "cache_path": "~/.hermes/cache/cpa_quota.json",
++        "cache_ttl": 0,
++        "cache_max_age": 0,
++        "cache_refresh_cooldown": 0,
++        "query_jitter_min": 0.05,
++        "query_jitter_max": 0.25,
++        "query_order_jitter_max": 0.0,
++        "timeout_seconds": 90,
++        "live_query": True,
++        "plans": {
++            "plus": {
++                "five_hour": {"baseline_requests": 700.0, "display_mode": "direct_percent"},
++                "seven_day": {"baseline_requests": 1000.0, "display_mode": "convert_to_plus"},
++            },
++            "free": {
++                "five_hour": {"baseline_requests": 30.0, "display_mode": "convert_to_plus"},
++                "seven_day": {"baseline_requests": 38.0, "display_mode": "convert_to_plus"},
++            },
++        },
++        "forecast": {
++            "req_per_turn_window_hours": 6,
++            "history_days": 7,
++            "min_turns_per_window": 2,
++            "req_per_turn_prior_weight": 12.0,
++            "capacity_prior_weight_plus": 8.0,
++            "capacity_prior_weight_other": 6.0,
++            "capacity_max_deviation_plus": 0.20,
++            "capacity_max_deviation_other": 0.35,
++            "historical_headroom": 1.25,
++        },
++        "display": {
++            "rich_message": True,
++            "emoji_style": "auto",
++            "font_label_only": True,
++            "show_unhealthy_samples": True,
++            "max_unhealthy_samples": 8,
++            "show_capacity_diagnostics": False,
++            "top_assets_limit": 5,
++        },
++        "alerts": {
++            "plus_5h_pct_below": 50,
++            "estimated_turns_below": 50,
++            "usable_accounts_below": 2,
++        },
++    },
++
+     # AWS Bedrock provider configuration.
+     # Only used when model.provider is "bedrock".
+     "bedrock": {
+@@ -1508,12 +1481,6 @@ DEFAULT_CONFIG = {
+         "tui_agents_nudge": True,
+         "bell_on_complete": False,
+         "show_reasoning": False,
+-        # Background self-improvement review notifications surfaced in chat.
+-        #   "off"     — no chat notification (the review still runs and writes)
+-        #   "on"      — generic "💾 Memory updated" line (default)
+-        #   "verbose" — include a compact content preview of what changed
+-        # Per-platform overrides via display.platforms.<platform>.memory_notifications.
+-        "memory_notifications": "on",
+         "streaming": False,
+         "timestamps": False,      # Show [HH:MM] on user and assistant labels
+         "final_response_markdown": "strip",  # render | strip | raw
+@@ -1565,12 +1532,6 @@ DEFAULT_CONFIG = {
+         "tool_progress_command": False,  # Enable /verbose command in messaging gateway
+         "tool_progress_overrides": {},  # DEPRECATED — use display.platforms instead
+         "tool_preview_length": 0,  # Max chars for tool call previews (0 = no limit, show full paths/commands)
+-        # How gateway tool-progress is grouped on platforms that support message
+-        # editing: "accumulate" (default) edits one bubble in place; "separate"
+-        # sends one message per tool (the pre-v0.9 behavior, noisier). Only
+-        # applies where tool_progress is already enabled. Per-platform override
+-        # via display.platforms.<platform>.tool_progress_grouping.
+-        "tool_progress_grouping": "accumulate",
+         # Auto-delete system-notice replies (e.g. "✨ New session started!",
+         # "♻ Restarting gateway…", "⚡ Stopped…") after N seconds on platforms
+         # that support message deletion (currently Telegram; other platforms
+@@ -1867,7 +1828,6 @@ DEFAULT_CONFIG = {
+         "reasoning_effort": "",  # reasoning effort for subagents: "xhigh", "high", "medium",
+                                  # "low", "minimal", "none" (empty = inherit parent's level)
+         "max_concurrent_children": 3,  # max parallel children per batch; floor of 1 enforced, no ceiling
+-        "max_async_children": 3,  # max concurrent background (background=true) subagents; new dispatches rejected at capacity
+         # Orchestrator role controls (see tools/delegate_tool.py:_get_max_spawn_depth
+         # and _get_orchestrator_enabled).  Floored at 1, no upper ceiling —
+         # raise deliberately, each level multiplies API cost.
+@@ -1903,6 +1863,25 @@ DEFAULT_CONFIG = {
          # negatives (goal actually done but judge says continue) and
          # unbounded model spend on fuzzy / unachievable goals.
          "max_turns": 20,
@@ -4367,14 +4157,261 @@ index 30d4b0738..a42d3b10e 100644
 +        # separate from /goal so normal goals stay bounded while users with
 +        # large quota can opt into much longer continuous autonomous loops.
 +        "super_max_turns": 240,
++        # Every N supergoal turns, force a strategic replan even if the critic
++        # has not explicitly flagged drift/stuck behavior. 0 disables periodic
++        # replanning; the critic can still request replans.
++        "super_replan_interval": 5,
++        "supergoal_ui": {
++            "enabled": True,
++            "native_controls": True,
++            "verbosity": "normal",  # quiet | normal | verbose
++            "update_existing_card": True,
++            "checkpoint_interval_turns": 1,
++            "checkpoint_interval_minutes": 0,
++            "terminal_notices": True,
++            "auto_thread_discord": False,
++            "details_default_collapsed": True,
++        },
      },
  
      # Skills — external skill directories for sharing skills across tools/agents.
+@@ -1970,14 +1949,6 @@ DEFAULT_CONFIG = {
+         # Archive a skill (move to skills/.archive/) after this many days
+         # without use. Archived skills are recoverable — no auto-deletion.
+         "archive_after_days": 90,
+-        # Run the LLM consolidation (umbrella-building) pass. OFF by default.
+-        # When off, a curator run does ONLY the deterministic inactivity prune
+-        # (mark stale / archive long-unused skills) and skips the forked
+-        # aux-model review entirely — no umbrella-building, no aux-model cost.
+-        # Set to true to opt back into merging overlapping skills into
+-        # class-level umbrellas. `hermes curator run --consolidate` overrides
+-        # this for a single invocation.
+-        "consolidate": False,
+         # Also prune (archive) bundled built-in skills after the inactivity
+         # period, not just agent-created ones. ON by default. Built-ins are
+         # normally restored on every `hermes update`, so pruning them only
+@@ -2091,7 +2062,7 @@ DEFAULT_CONFIG = {
+         "channel_prompts": {},         # Per-chat/topic ephemeral system prompts (topics inherit from parent group)
+         "allowed_chats": "",           # If set, bot ONLY responds in these group/supergroup chat IDs (whitelist)
+         "extra": {
+-            "rich_messages": True,      # Bot API 10.1 rich messages (tables/task lists/details/math) render natively; set False to force legacy MarkdownV2
++            "rich_messages": False,     # Opt in to Bot API 10.1 rich messages; default uses legacy MarkdownV2
+         },
+     },
+ 
+@@ -2353,17 +2324,6 @@ DEFAULT_CONFIG = {
+     # Gateway settings — control how messaging platforms (Telegram, Discord,
+     # Slack, etc.) deliver agent-produced files as native attachments.
+     "gateway": {
+-        # Inject a human-readable timestamp prefix (e.g.
+-        # "[Tue 2026-04-28 13:40:53 CEST]") onto user messages IN THE MODEL'S
+-        # CONTEXT so the agent has temporal awareness of when each message was
+-        # sent. Off by default — when off, the model sees clean message text.
+-        # Persisted transcripts always stay clean (the timestamp is stored as
+-        # message metadata regardless of this toggle), so turning it on later
+-        # surfaces send-times for past messages too.
+-        "message_timestamps": {
+-            "enabled": False,
+-        },
+-
+         # When false (default), any file path the agent emits is delivered
+         # as a native attachment as long as it isn't under the credential /
+         # system-path denylist (/etc, /proc, ~/.ssh, ~/.aws, ~/.hermes/.env,
+@@ -2652,7 +2612,7 @@ DEFAULT_CONFIG = {
+ 
+ 
+     # Config schema version - bump this when adding new required fields
+-    "_config_version": 30,
++    "_config_version": 29,
+ }
+ 
+ # =============================================================================
+@@ -4941,29 +4901,6 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
+             if not quiet:
+                 print("  ✓ Renamed write_mode → write_approval (boolean gate)")
+ 
+-    # ── Version 29 → 30: seed curator.consolidate (default false) ──
+-    # Consolidation (the LLM umbrella-building fork) is now an opt-in toggle,
+-    # OFF by default. The deterministic inactivity prune still runs whenever
+-    # the curator is enabled; only the opinionated, aux-model-cost LLM pass is
+-    # gated. The runtime deep-merge already supplies the default, but we seed
+-    # the key so it's visible/editable in config.yaml. Existing installs that
+-    # WANT the old always-consolidate behavior must set it to true explicitly.
+-    # Only add the key when a curator section exists and lacks it — never
+-    # clobber a value the user already set.
+-    if current_ver < 30:
+-        config = read_raw_config()
+-        raw_curator = config.get("curator")
+-        if isinstance(raw_curator, dict) and "consolidate" not in raw_curator:
+-            raw_curator["consolidate"] = False
+-            config["curator"] = raw_curator
+-            save_config(config)
+-            results["config_added"].append("curator.consolidate=false")
+-            if not quiet:
+-                print(
+-                    "  ✓ Seeded curator.consolidate: false "
+-                    "(LLM consolidation is now opt-in; pruning stays on)"
+-                )
+-
+     # ── Post-migration: disable exfiltration-shaped MCP stdio entries ──
+     # Users can hand-edit mcp_servers, and older installs may already contain a
+     # malicious entry. Preserve the stanza for auditability but mark it
+diff --git a/hermes_cli/goal_events.py b/hermes_cli/goal_events.py
+new file mode 100644
+index 000000000..651daedef
+--- /dev/null
++++ b/hermes_cli/goal_events.py
+@@ -0,0 +1,145 @@
++"""Durable GoalEvent storage for /goal and /supergoal.
++
++This module owns the append-only event log.  Goal state itself still lives in
++``goals.py`` for now, but Supergoal projections can rebuild cached board fields
++from these events instead of relying solely on critic JSON.
++"""
++
++from __future__ import annotations
++
++import json
++import logging
++import time
++from dataclasses import asdict, dataclass, field
++from typing import Any, Dict, List, Optional
++
++logger = logging.getLogger(__name__)
++
++
++@dataclass
++class GoalEvent:
++    """Append-only audit / observation event for a goal or supergoal run."""
++
++    ts: float
++    type: str
++    turn: int = 0
++    summary: str = ""
++    data: Dict[str, Any] = field(default_factory=dict)
++
++    def to_dict(self) -> Dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_dict(cls, data: Any) -> Optional["GoalEvent"]:
++        if not isinstance(data, dict):
++            return None
++        event_type = str(data.get("type") or "").strip()
++        if not event_type:
++            return None
++        maybe_data = data.get("data")
++        raw_data: Dict[str, Any] = maybe_data if isinstance(maybe_data, dict) else {}
++        raw_ts = data.get("ts")
++        try:
++            ts = float(raw_ts) if raw_ts is not None else time.time()
++        except Exception:
++            ts = time.time()
++        return cls(
++            ts=ts,
++            type=event_type,
++            turn=int(data.get("turn", 0) or 0),
++            summary=str(data.get("summary") or "").strip(),
++            data=raw_data,
++        )
++
++
++def events_meta_key(session_id: str) -> str:
++    return f"goal_events:{session_id}"
++
++
++def _truncate(text: str, limit: int) -> str:
++    if not text:
++        return ""
++    return text if len(text) <= limit else text[:limit] + "… [truncated]"
++
++
++def _get_session_db() -> Optional[Any]:
++    try:
++        from hermes_constants import get_hermes_home
++        from hermes_state import SessionDB
++
++        # Keep one DB per HERMES_HOME without importing goals.py.
++        home = str(get_hermes_home())
++        cache = getattr(_get_session_db, "_cache", {})
++        if home in cache:
++            return cache[home]
++        db = SessionDB()
++        cache[home] = db
++        setattr(_get_session_db, "_cache", cache)
++        return db
++    except Exception as exc:  # pragma: no cover - defensive for nonstandard launchers
++        logger.debug("GoalEvent store bootstrap failed: %s", exc)
++        return None
++
++
++def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
++    """Load append-only goal events for a session from state_meta."""
++    if not session_id:
++        return []
++    db = _get_session_db()
++    if db is None:
++        return []
++    try:
++        raw = db.get_meta(events_meta_key(session_id))
++    except Exception as exc:
++        logger.debug("GoalEvent store get_meta failed: %s", exc)
++        return []
++    if not raw:
++        return []
++    try:
++        decoded = json.loads(raw)
++    except Exception as exc:
++        logger.debug("GoalEvent store parse failed for %s: %s", session_id, exc)
++        return []
++    if not isinstance(decoded, list):
++        return []
++    events: List[GoalEvent] = []
++    for item in decoded[-max(1, int(limit or 100)):]:
++        event = GoalEvent.from_dict(item)
++        if event is not None:
++            events.append(event)
++    return events
++
++
++def append_goal_event(
++    session_id: str,
++    event_type: str,
++    *,
++    turn: int = 0,
++    summary: str = "",
++    data: Optional[Dict[str, Any]] = None,
++    max_events: int = 200,
++) -> Optional[GoalEvent]:
++    """Append an event to the durable event log."""
++    if not session_id or not event_type:
++        return None
++    db = _get_session_db()
++    if db is None:
++        return None
++    event = GoalEvent(
++        ts=time.time(),
++        type=str(event_type).strip(),
++        turn=int(turn or 0),
++        summary=_truncate(" ".join(str(summary or "").split()), 500),
++        data=data or {},
++    )
++    events = load_goal_events(session_id, limit=max_events)
++    events.append(event)
++    events = events[-max_events:]
++    try:
++        db.set_meta(
++            events_meta_key(session_id),
++            json.dumps([e.to_dict() for e in events], ensure_ascii=False),
++        )
++    except Exception as exc:
++        logger.debug("GoalEvent store set_meta failed: %s", exc)
++    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..86b5fd6d2 100644
+index a6a28deaf..ff659b5a2 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
-@@ -37,6 +37,19 @@ from dataclasses import dataclass, field, asdict
+@@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
  from datetime import datetime, timezone
  from typing import Any, Dict, List, Optional, Tuple
  
@@ -4383,6 +4420,14 @@ index a6a28deaf..86b5fd6d2 100644
 +    append_goal_event as _append_goal_event_record,
 +    events_meta_key as _events_meta_key,
 +    load_goal_events as _load_goal_event_records,
++)
++from hermes_cli.supergoal.store import (
++    _DB_CACHE as _STORE_DB_CACHE,
++    GoalRunRepository,
++    SessionBindingStore,
++    get_session_db as _store_get_session_db,
++    legacy_goal_run_id as _legacy_goal_run_id,
++    new_goal_run_id as _new_goal_run_id,
 +)
 +from hermes_cli.supergoal_gates import build_default_supergoal_gates
 +from hermes_cli.supergoal_projection import (
@@ -4394,7 +4439,7 @@ index a6a28deaf..86b5fd6d2 100644
  logger = logging.getLogger(__name__)
  
  
-@@ -56,6 +69,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
+@@ -56,6 +77,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
  # we've live-tested; override via auxiliary.goal_judge.max_tokens for
  # specifically constrained setups.
  DEFAULT_JUDGE_MAX_TOKENS = 4096
@@ -4406,7 +4451,7 @@ index a6a28deaf..86b5fd6d2 100644
  # Cap how much of the last response + recent messages we send to the judge.
  _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
  # After this many consecutive judge *parse* failures (empty output / non-JSON),
-@@ -66,6 +84,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
+@@ -66,6 +92,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
  # exhausted with every reply shaped like `judge returned empty response` or
  # `judge reply was not JSON`.
  DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES = 3
@@ -4416,7 +4461,7 @@ index a6a28deaf..86b5fd6d2 100644
  
  
  CONTINUATION_PROMPT_TEMPLATE = (
-@@ -91,6 +112,89 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -91,6 +120,89 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "and stop."
  )
  
@@ -4506,7 +4551,7 @@ index a6a28deaf..86b5fd6d2 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +237,418 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +245,419 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -4922,12 +4967,13 @@ index a6a28deaf..86b5fd6d2 100644
  
      goal: str
 -    status: str = "active"          # active | paused | done | cleared
++    goal_run_id: str = ""           # stable logical mission id; session_id is only a physical context version
 +    mode: str = "goal"             # goal | supergoal
 +    status: str = "active"          # active | paused | done | cleared | migrated
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +657,49 @@ class GoalState:
+@@ -153,6 +666,49 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -4977,7 +5023,7 @@ index a6a28deaf..86b5fd6d2 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +708,12 @@ class GoalState:
+@@ -161,7 +717,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -4991,7 +5037,7 @@ index a6a28deaf..86b5fd6d2 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +722,37 @@ class GoalState:
+@@ -170,8 +731,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5025,11 +5071,12 @@ index a6a28deaf..86b5fd6d2 100644
 +                    gates.append(gate)
          return cls(
              goal=data.get("goal", ""),
++            goal_run_id=str(data.get("goal_run_id") or "").strip(),
 +            mode=data.get("mode", "goal") or "goal",
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +762,60 @@ class GoalState:
+@@ -181,6 +772,60 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5090,7 +5137,7 @@ index a6a28deaf..86b5fd6d2 100644
              subgoals=subgoals,
          )
  
-@@ -193,6 +828,87 @@ class GoalState:
+@@ -193,81 +838,181 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5178,61 +5225,182 @@ index a6a28deaf..86b5fd6d2 100644
  
  # ──────────────────────────────────────────────────────────────────────
  # Persistence (SessionDB state_meta)
-@@ -279,6 +995,88 @@ def clear_goal(session_id: str) -> None:
+ # ──────────────────────────────────────────────────────────────────────
+ 
+ 
+-def _meta_key(session_id: str) -> str:
+-    return f"goal:{session_id}"
+-
+-
+-_DB_CACHE: Dict[str, Any] = {}
++_BINDINGS = SessionBindingStore()
++_RUNS = GoalRunRepository()
++# Backwards-compatible test hook: existing tests clear goals._DB_CACHE.
++_DB_CACHE = _STORE_DB_CACHE
+ 
+ 
+ def _get_session_db() -> Optional[Any]:
+-    """Return a SessionDB instance for the current HERMES_HOME.
++    """Compatibility wrapper for tests/callers that reset goals._DB_CACHE."""
++    return _store_get_session_db()
+ 
+-    SessionDB has no built-in singleton, but opening a new connection per
+-    /goal call would thrash the file. We cache one instance per
+-    ``hermes_home`` path so profile switches still pick up the right DB.
+-    Defensive against import/instantiation failures so tests and
+-    non-standard launchers can still use the GoalManager.
+-    """
+-    try:
+-        from hermes_constants import get_hermes_home
+-        from hermes_state import SessionDB
+ 
+-        home = str(get_hermes_home())
+-    except Exception as exc:  # pragma: no cover
+-        logger.debug("GoalManager: SessionDB bootstrap failed (%s)", exc)
+-        return None
++def _get_bound_goal_run_id(session_id: str) -> str:
++    return _BINDINGS.get_goal_run_id(session_id)
+ 
+-    cached = _DB_CACHE.get(home)
+-    if cached is not None:
+-        return cached
+-    try:
+-        db = SessionDB()
+-    except Exception as exc:  # pragma: no cover
+-        logger.debug("GoalManager: SessionDB() raised (%s)", exc)
+-        return None
+-    _DB_CACHE[home] = db
+-    return db
+ 
++def _bind_session_to_goal_run(session_id: str, goal_run_id: str, *, reason: str = "") -> None:
++    _BINDINGS.bind(session_id, goal_run_id, reason=reason)
+ 
+-def load_goal(session_id: str) -> Optional[GoalState]:
+-    """Load the goal for a session, or None if none exists."""
+-    if not session_id:
+-        return None
+-    db = _get_session_db()
+-    if db is None:
++
++def _load_goal_run(goal_run_id: str) -> Optional[GoalState]:
++    raw = _RUNS.get_raw(goal_run_id)
++    if not raw:
+         return None
+     try:
+-        raw = db.get_meta(_meta_key(session_id))
++        state = GoalState.from_json(raw)
+     except Exception as exc:
+-        logger.debug("GoalManager: get_meta failed: %s", exc)
++        logger.warning("GoalManager: could not parse stored goal run %s: %s", goal_run_id, exc)
+         return None
++    if not state.goal_run_id:
++        state.goal_run_id = goal_run_id
++    return state
++
++
++def _load_legacy_session_goal(session_id: str) -> Optional[GoalState]:
++    raw = _RUNS.get_legacy_raw(session_id)
+     if not raw:
+         return None
+     try:
+-        return GoalState.from_json(raw)
++        state = GoalState.from_json(raw)
+     except Exception as exc:
+         logger.warning("GoalManager: could not parse stored goal for %s: %s", session_id, exc)
+         return None
++    if not state.goal_run_id:
++        state.goal_run_id = _legacy_goal_run_id(session_id)
++    return state
+ 
+ 
+-def save_goal(session_id: str, state: GoalState) -> None:
+-    """Persist a goal to SessionDB. No-op if DB unavailable."""
++def _event_log_id_for_session(session_id: str) -> str:
++    bound = _get_bound_goal_run_id(session_id)
++    if bound:
++        return bound
++    state = _load_legacy_session_goal(session_id)
++    if state and state.goal_run_id:
++        return state.goal_run_id
++    return session_id
++
++
++def load_goal(session_id: str) -> Optional[GoalState]:
++    """Load the logical goal run bound to a physical session id."""
+     if not session_id:
++        return None
++    goal_run_id = _get_bound_goal_run_id(session_id)
++    state = _load_goal_run(goal_run_id) if goal_run_id else None
++    if state is None:
++        state = _load_legacy_session_goal(session_id)
++        if state is not None:
++            # Lazy migration for pre-goal_run_id rows: bind the physical
++            # session to a stable logical run and materialize goal_run:<id>.
++            save_goal(session_id, state)
++    if state is not None and state.goal_run_id:
++        events = _load_goal_event_records(state.goal_run_id, limit=200)
++        if events:
++            state.event_count = len(events)
++            state.last_event_type = events[-1].type
++    return state
++
++
++def save_goal(session_id: str, state: GoalState) -> None:
++    """Persist a logical goal run and bind this physical session to it."""
++    if not session_id or state is None:
+         return
+-    db = _get_session_db()
+-    if db is None:
+-        return
+-    try:
+-        db.set_meta(_meta_key(session_id), state.to_json())
+-    except Exception as exc:
+-        logger.debug("GoalManager: set_meta failed: %s", exc)
++    if not state.goal_run_id:
++        state.goal_run_id = _new_goal_run_id()
++    _bind_session_to_goal_run(session_id, state.goal_run_id)
++    raw = state.to_json()
++    _RUNS.set_raw(state.goal_run_id, raw)
++    # Compatibility mirror for old callers/tools that inspect goal:<session_id>.
++    _RUNS.set_legacy_raw(session_id, raw)
+ 
+ 
+ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1024,69 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
 +def migrate_goal_state(old_session_id: str, new_session_id: str, *, reason: str = "compression") -> Optional[GoalState]:
-+    """Move active goal runtime state across a logical session-id rotation.
++    """Bind a new physical session id to the existing logical goal_run_id.
 +
-+    Compression creates a new SessionDB row for the same logical conversation.
-+    Goal state is keyed by session_id, so runtime state must move with that
-+    boundary just like memory/context engines do.  The old row is left as an
-+    audit tombstone instead of being deleted.
++    Compression rotates session_id/context, but it does not create a new
++    mission.  The durable mission state remains in ``goal_run:<goal_run_id>``;
++    both old and new session ids point at that same logical run.
 +    """
 +    if not old_session_id or not new_session_id or old_session_id == new_session_id:
 +        return load_goal(new_session_id) if new_session_id else None
-+    old_state = load_goal(old_session_id)
-+    if old_state is None:
++    state = load_goal(old_session_id)
++    if state is None:
 +        return load_goal(new_session_id)
-+    existing_new = load_goal(new_session_id)
-+    if existing_new is not None and existing_new.status in {"active", "paused", "done"}:
-+        return existing_new
-+    save_goal(new_session_id, old_state)
-+    old_state.status = "migrated"
-+    old_state.paused_reason = f"migrated to {new_session_id} ({reason})"
-+    save_goal(old_session_id, old_state)
-+
-+    events = load_goal_events(old_session_id, limit=200)
-+    db = _get_session_db()
-+    if db is not None and events:
-+        migrated_event = GoalEvent(
-+            ts=time.time(),
-+            type="migrated",
-+            turn=old_state.turns_used,
-+            summary=f"migrated to {new_session_id} ({reason})",
-+            data={"from": old_session_id, "to": new_session_id, "reason": reason},
-+        )
-+        try:
-+            db.set_meta(
-+                _events_meta_key(new_session_id),
-+                json.dumps([e.to_dict() for e in [*events, migrated_event]][-200:], ensure_ascii=False),
-+            )
-+        except Exception as exc:
-+            logger.debug("GoalManager: migrate events failed: %s", exc)
++    if not state.goal_run_id:
++        state.goal_run_id = _new_goal_run_id()
++        save_goal(old_session_id, state)
++    _bind_session_to_goal_run(new_session_id, state.goal_run_id, reason=reason)
++    # Keep a compatibility mirror for tools still looking at goal:<new_session_id>.
++    save_goal(new_session_id, state)
 +    append_goal_event(
-+        old_session_id,
-+        "migrated",
-+        turn=old_state.turns_used,
-+        summary=f"migrated to {new_session_id} ({reason})",
-+        data={"from": old_session_id, "to": new_session_id, "reason": reason},
++        new_session_id,
++        "session_rotated",
++        turn=state.turns_used,
++        summary=f"session rotated {old_session_id} -> {new_session_id} ({reason})",
++        data={"old_session_id": old_session_id, "new_session_id": new_session_id, "reason": reason},
 +    )
 +    return load_goal(new_session_id)
 +
 +
 +def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
-+    """Compatibility wrapper for callers/tests that import from goals.py."""
-+    return _load_goal_event_records(session_id, limit=limit)
++    """Load events for the logical goal run bound to ``session_id``."""
++    return _load_goal_event_records(_event_log_id_for_session(session_id), limit=limit)
 +
 +
 +def append_goal_event(
@@ -5244,9 +5412,10 @@ index a6a28deaf..86b5fd6d2 100644
 +    data: Optional[Dict[str, Any]] = None,
 +    max_events: int = 200,
 +) -> Optional[GoalEvent]:
-+    """Append an event and mirror event counters into the cached GoalState."""
++    """Append an event to the logical goal run and mirror counters into state."""
++    event_log_id = _event_log_id_for_session(session_id)
 +    event = _append_goal_event_record(
-+        session_id,
++        event_log_id,
 +        event_type,
 +        turn=turn,
 +        summary=summary,
@@ -5255,7 +5424,7 @@ index a6a28deaf..86b5fd6d2 100644
 +    )
 +    if event is None:
 +        return None
-+    events = load_goal_events(session_id, limit=max_events)
++    events = _load_goal_event_records(event_log_id, limit=max_events)
 +    state = load_goal(session_id)
 +    if state is not None:
 +        state.event_count = len(events)
@@ -5267,7 +5436,7 @@ index a6a28deaf..86b5fd6d2 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1090,733 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1100,733 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6001,7 +6170,7 @@ index a6a28deaf..86b5fd6d2 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +1824,31 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +1834,31 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6043,7 +6212,7 @@ index a6a28deaf..86b5fd6d2 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +1995,191 @@ def judge_goal(
+@@ -463,6 +2005,191 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6235,7 +6404,7 @@ index a6a28deaf..86b5fd6d2 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2206,41 @@ class GoalManager:
+@@ -489,6 +2216,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6277,7 +6446,7 @@ index a6a28deaf..86b5fd6d2 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2254,151 @@ class GoalManager:
+@@ -502,37 +2264,151 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -6435,7 +6604,7 @@ index a6a28deaf..86b5fd6d2 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2407,7 @@ class GoalManager:
+@@ -541,6 +2417,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -6443,7 +6612,7 @@ index a6a28deaf..86b5fd6d2 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2417,29 @@ class GoalManager:
+@@ -550,7 +2427,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -6473,7 +6642,7 @@ index a6a28deaf..86b5fd6d2 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2447,7 @@ class GoalManager:
+@@ -558,6 +2457,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -6481,12 +6650,12 @@ index a6a28deaf..86b5fd6d2 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2456,25 @@ class GoalManager:
+@@ -566,7 +2466,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -6501,13 +6670,13 @@ index a6a28deaf..86b5fd6d2 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2490,7 @@ class GoalManager:
+@@ -582,6 +2500,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -6515,7 +6684,7 @@ index a6a28deaf..86b5fd6d2 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2516,18 @@ class GoalManager:
+@@ -607,6 +2526,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -6534,7 +6703,7 @@ index a6a28deaf..86b5fd6d2 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -658,6 +2579,60 @@ class GoalManager:
+@@ -658,6 +2589,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -6595,7 +6764,7 @@ index a6a28deaf..86b5fd6d2 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +2641,89 @@ class GoalManager:
+@@ -666,9 +2651,89 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -6685,7 +6854,7 @@ index a6a28deaf..86b5fd6d2 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +2745,11 @@ class GoalManager:
+@@ -690,6 +2755,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -6697,7 +6866,7 @@ index a6a28deaf..86b5fd6d2 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +2768,83 @@ class GoalManager:
+@@ -708,10 +2778,83 @@ class GoalManager:
                  ),
              }
  
@@ -6781,7 +6950,7 @@ index a6a28deaf..86b5fd6d2 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +2857,20 @@ class GoalManager:
+@@ -724,7 +2867,20 @@ class GoalManager:
                  ),
              }
  
@@ -6802,7 +6971,7 @@ index a6a28deaf..86b5fd6d2 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +2878,52 @@ class GoalManager:
+@@ -732,13 +2888,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -6856,7 +7025,7 @@ index a6a28deaf..86b5fd6d2 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3084,8 @@ __all__ = [
+@@ -899,6 +3094,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -6865,6 +7034,350 @@ index a6a28deaf..86b5fd6d2 100644
      "JUDGE_USER_PROMPT_TEMPLATE",
      "JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE",
      "KANBAN_GOAL_CONTINUATION_TEMPLATE",
+diff --git a/hermes_cli/supergoal/__init__.py b/hermes_cli/supergoal/__init__.py
+new file mode 100644
+index 000000000..194fb2b68
+--- /dev/null
++++ b/hermes_cli/supergoal/__init__.py
+@@ -0,0 +1,6 @@
++"""Supergoal runtime package.
++
++This package owns the long-running /supergoal runtime internals.  The legacy
++``hermes_cli.goals`` module remains the public compatibility facade for /goal
++and /supergoal commands.
++"""
+diff --git a/hermes_cli/supergoal/store.py b/hermes_cli/supergoal/store.py
+new file mode 100644
+index 000000000..b88aed28b
+--- /dev/null
++++ b/hermes_cli/supergoal/store.py
+@@ -0,0 +1,126 @@
++"""Storage primitives for logical /supergoal runs.
++
++A physical Hermes ``session_id`` is a context version.  A long-running
++/supergoal mission needs a stable logical identity, represented by
++``goal_run_id``.  This module owns the small state_meta key scheme that maps
++between them without importing the large ``hermes_cli.goals`` facade.
++"""
++
++from __future__ import annotations
++
++import logging
++import re
++import uuid
++from typing import Any, Optional
++
++logger = logging.getLogger(__name__)
++
++_DB_CACHE: dict[str, Any] = {}
++
++
++def goal_session_key(session_id: str) -> str:
++    return f"goal_session:{session_id}"
++
++
++def goal_run_key(goal_run_id: str) -> str:
++    return f"goal_run:{goal_run_id}"
++
++
++def legacy_goal_key(session_id: str) -> str:
++    return f"goal:{session_id}"
++
++
++def new_goal_run_id() -> str:
++    return f"gr_{uuid.uuid4().hex[:16]}"
++
++
++def legacy_goal_run_id(session_id: str) -> str:
++    clean = re.sub(r"[^A-Za-z0-9_.-]", "_", session_id or "")
++    return f"legacy-{clean or uuid.uuid4().hex[:12]}"
++
++
++def get_session_db() -> Optional[Any]:
++    """Return a SessionDB instance for the current HERMES_HOME/profile."""
++    try:
++        from hermes_constants import get_hermes_home
++        from hermes_state import SessionDB
++
++        home = str(get_hermes_home())
++    except Exception as exc:  # pragma: no cover - defensive for nonstandard launchers
++        logger.debug("Supergoal store bootstrap failed: %s", exc)
++        return None
++
++    cached = _DB_CACHE.get(home)
++    if cached is not None:
++        return cached
++    try:
++        db = SessionDB()
++    except Exception as exc:  # pragma: no cover
++        logger.debug("Supergoal store SessionDB() raised: %s", exc)
++        return None
++    _DB_CACHE[home] = db
++    return db
++
++
++def get_meta(key: str) -> str:
++    db = get_session_db()
++    if db is None or not key:
++        return ""
++    try:
++        return str(db.get_meta(key) or "")
++    except Exception as exc:
++        logger.debug("Supergoal store get_meta(%s) failed: %s", key, exc)
++        return ""
++
++
++def set_meta(key: str, value: str) -> None:
++    db = get_session_db()
++    if db is None or not key:
++        return
++    try:
++        db.set_meta(key, value)
++    except Exception as exc:
++        logger.debug("Supergoal store set_meta(%s) failed: %s", key, exc)
++
++
++class SessionBindingStore:
++    """Maps physical session ids to logical goal_run ids."""
++
++    def get_goal_run_id(self, session_id: str) -> str:
++        if not session_id:
++            return ""
++        return get_meta(goal_session_key(session_id)).strip()
++
++    def bind(self, session_id: str, goal_run_id: str, *, reason: str = "") -> None:
++        if not session_id or not goal_run_id:
++            return
++        set_meta(goal_session_key(session_id), goal_run_id)
++
++
++class GoalRunRepository:
++    """Raw JSON repository for logical goal runs.
++
++    The concrete ``GoalState`` dataclass still lives in ``hermes_cli.goals``
++    during the facade migration.  Keeping this repository raw avoids circular
++    imports while moving persistence responsibility out of GoalManager.
++    """
++
++    def get_raw(self, goal_run_id: str) -> str:
++        if not goal_run_id:
++            return ""
++        return get_meta(goal_run_key(goal_run_id))
++
++    def set_raw(self, goal_run_id: str, raw_json: str) -> None:
++        if not goal_run_id:
++            return
++        set_meta(goal_run_key(goal_run_id), raw_json)
++
++    def get_legacy_raw(self, session_id: str) -> str:
++        if not session_id:
++            return ""
++        return get_meta(legacy_goal_key(session_id))
++
++    def set_legacy_raw(self, session_id: str, raw_json: str) -> None:
++        if not session_id:
++            return
++        set_meta(legacy_goal_key(session_id), raw_json)
+diff --git a/hermes_cli/supergoal_gates.py b/hermes_cli/supergoal_gates.py
+new file mode 100644
+index 000000000..ae553bda5
+--- /dev/null
++++ b/hermes_cli/supergoal_gates.py
+@@ -0,0 +1,66 @@
++"""Deterministic gate specifications for Hermes /supergoal.
++
++The concrete ``GoalGate`` dataclass lives in ``goals.py`` for backwards
++compatible serialization, but gate selection policy lives here so the core
++orchestration file does not own every mission-control concern.
++"""
++
++from __future__ import annotations
++
++from typing import Any, List, Tuple
++
++GateSpec = Tuple[str, str, str]
++
++
++def default_supergoal_gate_specs(goal: str = "") -> List[GateSpec]:
++    """Return deterministic gate specs for a supergoal text."""
++    text = (goal or "").lower()
++    gates: List[GateSpec] = [
++        (
++            "G1",
++            "Intent contract captured: root intent, success criteria, anti-goals/constraints",
++            "state.inferred_user_intent and state.success_definition",
++        ),
++        (
++            "G2",
++            "Research ledger has sufficient tool-backed external provenance",
++            "paper+github or 3 external tool-backed source types",
++        ),
++        (
++            "G3",
++            "At least one concrete execution artifact is verified",
++            "evidence/artifact/log/test recorded",
++        ),
++        (
++            "G4",
++            "Final report maps evidence to success criteria or blocked/no-edge outcome",
++            "done verdict or no_edge_report",
++        ),
++    ]
++    if any(k in text for k in ["策略", "strategy", "trading", "交易", "edge", "hypothesis", "假设"]):
++        gates.insert(2, (
++            "SG-1",
++            "Hypothesis portfolio contains at least 3 strategy hypotheses",
++            "len(hypothesis_portfolio) >= 3",
++        ))
++        gates.insert(3, (
++            "SG-2",
++            "Each active hypothesis has baseline, experiment, kill criteria, artifact, and verdict",
++            "portfolio completeness + verdicts",
++        ))
++        gates.insert(4, (
++            "SG-3",
++            "If no hypothesis passes, a no-edge attribution report exists",
++            "no_edge_report when all tested hypotheses fail/kill",
++        ))
++        gates.insert(5, (
++            "SG-4",
++            "Infrastructure work is allowed only when it proves dependency on a failed gate",
++            "infra dependency proof",
++        ))
++    return gates
++
++
++def build_default_supergoal_gates(goal: str, gate_cls: Any) -> list:
++    """Instantiate gate specs using the caller's GoalGate class."""
++    return [gate_cls(gid, description, verifier=verifier) for gid, description, verifier in default_supergoal_gate_specs(goal)]
+diff --git a/hermes_cli/supergoal_projection.py b/hermes_cli/supergoal_projection.py
+new file mode 100644
+index 000000000..013440964
+--- /dev/null
++++ b/hermes_cli/supergoal_projection.py
+@@ -0,0 +1,122 @@
++"""Projection helpers for Hermes /supergoal mission control.
++
++This module is deliberately independent from ``goals.py``'s GoalState dataclass.
++It extracts structured observation events from visible assistant output so the
++runtime can rebuild useful ledgers even when the strategic critic times out.
++"""
++
++from __future__ import annotations
++
++import re
++from datetime import datetime, timezone
++from typing import Any, Dict, List, Tuple
++
++_ARTIFACT_PATH_RE = re.compile(
++    r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))",
++    re.IGNORECASE,
++)
++
++
++def truncate(text: str, limit: int) -> str:
++    if not text:
++        return ""
++    return text if len(text) <= limit else text[:limit] + "… [truncated]"
++
++
++def classify_action_text(text: str) -> str:
++    """Classify a supergoal turn's dominant action class."""
++    t = (text or "").lower()
++    if any(k in t for k in ["no-edge", "no edge", "归因", "report", "总结", "报告"]):
++        return "reporting"
++    if any(k in t for k in ["hypothesis", "hypotheses", "假设", "portfolio", "策略候选"]):
++        return "hypothesis_generation"
++    if any(k in t for k in ["experiment", "backtest", "验证策略", "baseline", "ledger", "acceptance", "run test"]):
++        return "experiment_execution"
++    if any(k in t for k in ["verify", "test", "pytest", "lint", "validate", "验证", "artifact"]):
++        return "validation"
++    if any(k in t for k in ["search", "survey", "paper", "github", "docs", "web", "研究", "调研", "检索"]):
++        return "research"
++    if any(k in t for k in ["validator", "checker", "audit", "infra", "pipeline", "framework", "tool", "script", "模块", "平台", "基础设施"]):
++        return "infra_engineering"
++    if any(k in t for k in ["permission", "scope", "policy", "destructive", "安全"]):
++        return "safety"
++    return "unknown"
++
++
++def artifact_paths(text: str) -> List[str]:
++    """Return unique artifact-like paths mentioned in text."""
++    paths: List[str] = []
++    for match in _ARTIFACT_PATH_RE.finditer(text or ""):
++        path = match.group(0).strip()
++        if path and path not in paths:
++            paths.append(path)
++    return paths
++
++
++def extract_observation_events(last_response: str) -> List[Tuple[str, str, Dict[str, Any]]]:
++    """Extract structured observation events from an assistant response.
++
++    Returns ``(event_type, summary, data)`` tuples suitable for
++    ``append_goal_event``.  Extraction is conservative and evidence-gated: prose
++    like "I found one paper" does not become tool-backed research unless the
++    response also names an artifact or verification signal.
++    """
++    normalized = " ".join((last_response or "").split())
++    if not normalized:
++        return []
++    low = normalized.lower()
++    events: List[Tuple[str, str, Dict[str, Any]]] = []
++
++    action = classify_action_text(normalized)
++    if action != "unknown":
++        events.append(("action_class_observed", action, {"action_class": action}))
++
++    paths = artifact_paths(normalized)
++    for path in paths[:5]:
++        events.append(("artifact_observed", path, {"artifact_path": path, "locator": path}))
++
++    has_verification = any(k in low for k in ("verified", "tested", "pytest", "test passed", "tests passed", "验证", "测试"))
++    if has_verification:
++        events.append(("verification_observed", truncate(normalized, 180), {"evidence": truncate(normalized, 240)}))
++
++    has_research_language = any(k in low for k in ("research", "survey", "github", "docs", "paper", "benchmark", "external", "news", "rss", "调研", "外部", "新闻"))
++    has_observation_evidence = bool(paths) or has_verification
++    if has_observation_evidence and has_research_language:
++        source_type = "benchmark" if any(k in low for k in ("benchmark", "baseline", "backtest", "基准", "回测")) else "local"
++        if any(k in low for k in ("github", "repo")):
++            source_type = "github"
++        elif any(k in low for k in ("paper", "arxiv")):
++            source_type = "paper"
++        elif any(k in low for k in ("docs", "web", "rss", "news", "external", "新闻", "外部")):
++            source_type = "web"
++        events.append((
++            "research_observed",
++            truncate(normalized, 180),
++            {
++                "source_type": source_type,
++                "title": truncate(normalized, 120),
++                "locator": "assistant_turn",
++                "claim": truncate(normalized, 240),
++                "retrieved_at": datetime.now(timezone.utc).isoformat(),
++                "tool_call_id": "assistant_turn",
++                "evidence_quote_or_hash": truncate(normalized, 200),
++            },
++        ))
++
++    failure_category = ""
++    if any(k in low for k in ("buy-hold", "buy hold", "baseline", "跑不赢基线")):
++        failure_category = "baseline_underperformance"
++    elif any(k in low for k in ("drawdown", "dd", "回撤")):
++        failure_category = "drawdown_unacceptable"
++    elif any(k in low for k in ("rolling", "oos", "out-of-sample", "样本外")):
++        failure_category = "oos_instability"
++    elif any(k in low for k in ("cost", "fee", "成本")):
++        failure_category = "cost_drag"
++    elif any(k in low for k in ("beta", "market-neutral", "market neutral")):
++        failure_category = "beta_exposure"
++    elif any(k in low for k in ("failed", "fail", "失败", "打掉", "不通过")):
++        failure_category = "hypothesis_failed"
++    if failure_category:
++        events.append(("hypothesis_failed", truncate(normalized, 180), {"category": failure_category, "reason": truncate(normalized, 240)}))
++
++    return events
 diff --git a/tests/gateway/test_goal_status_notice.py b/tests/gateway/test_goal_status_notice.py
 index a45958cf9..4cd0d7118 100644
 --- a/tests/gateway/test_goal_status_notice.py
@@ -7372,11 +7885,80 @@ index 14f536aa4..efe242f56 100644
  @pytest.mark.asyncio
  async def test_goal_verdict_skipped_when_no_active_goal(hermes_home):
      """No goal set → the hook is a no-op. Nothing is sent, nothing enqueued."""
+diff --git a/tests/gateway/test_supergoal_max_turns_config.py b/tests/gateway/test_supergoal_max_turns_config.py
+new file mode 100644
+index 000000000..91e9aff9f
+--- /dev/null
++++ b/tests/gateway/test_supergoal_max_turns_config.py
+@@ -0,0 +1,63 @@
++import pytest
++
++from gateway.config import GatewayConfig, Platform, PlatformConfig
++from gateway.platforms.base import MessageEvent, MessageType
++from gateway.run import GatewayRunner
++from gateway.session import SessionSource
++from hermes_cli import goals
++
++
++class _FakeSessionEntry:
++    session_id = "sid-gateway-supergoal-config"
++
++
++class _FakeSessionStore:
++    def __init__(self):
++        self.entry = _FakeSessionEntry()
++
++    def get_or_create_session(self, source):
++        return self.entry
++
++    def _generate_session_key(self, source):
++        return "agent:main:discord:channel:supergoal-config"
++
++
++@pytest.mark.asyncio
++async def test_gateway_supergoal_uses_goals_super_max_turns_from_full_config(tmp_path, monkeypatch):
++    """Gateway /supergoal should honor top-level goals.super_max_turns from config.yaml."""
++    home = tmp_path / ".hermes"
++    home.mkdir()
++    (home / "config.yaml").write_text("goals:\n  max_turns: 7\n  super_max_turns: 123\n", encoding="utf-8")
++    monkeypatch.setenv("HERMES_HOME", str(home))
++    goals._DB_CACHE.clear()
++
++    runner = object.__new__(GatewayRunner)
++    runner.config = GatewayConfig(
++        platforms={Platform.DISCORD: PlatformConfig(enabled=True, token="token")}
++    )
++    runner.session_store = _FakeSessionStore()
++    runner.adapters = {}
++    runner._queued_events = {}
++
++    event = MessageEvent(
++        text="/supergoal start ship the benchmark",
++        message_type=MessageType.TEXT,
++        source=SessionSource(
++            platform=Platform.DISCORD,
++            chat_id="chat-supergoal-config",
++            chat_type="channel",
++            user_id="user-supergoal-config",
++        ),
++        message_id="msg-supergoal-config",
++    )
++
++    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
++
++    try:
++        assert "⊙ Goal set (123-turn budget): ship the benchmark" in response
++        state = goals.GoalManager("sid-gateway-supergoal-config").state
++        assert state is not None
++        assert state.max_turns == 123
++        assert state.mode == "supergoal"
++    finally:
++        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..6ae02124c 100644
+index 0dae684b6..95be65285 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,850 @@ class TestGoalManager:
+@@ -252,6 +252,874 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -7754,8 +8336,32 @@ index 0dae684b6..6ae02124c 100644
 +        assert "survey external implementations" in prompt
 +        old_state = GoalManager(session_id="super-old-sid").state
 +        assert old_state is not None
-+        assert old_state.status == "migrated"
-+        assert any(e.type == "migrated" for e in new_mgr.recent_events(limit=20))
++        assert old_state.status == "active"
++        assert old_state.goal_run_id == new_mgr.state.goal_run_id
++        assert migrated.goal_run_id == new_mgr.state.goal_run_id
++        assert any(e.type == "session_rotated" for e in new_mgr.recent_events(limit=20))
++
++
++    def test_goal_run_id_is_stable_across_session_rotation(self, hermes_home):
++        from hermes_cli.goals import GoalManager, append_goal_event, load_goal_events, migrate_goal_state
++
++        old = GoalManager(session_id="logical-old-sid")
++        old.set("finish the mission", max_turns=240, mode="supergoal")
++        assert old.state is not None
++        run_id = old.state.goal_run_id
++        assert run_id
++        append_goal_event("logical-old-sid", "verification_observed", summary="old evidence")
++
++        migrated = migrate_goal_state("logical-old-sid", "logical-new-sid", reason="compression")
++
++        new = GoalManager(session_id="logical-new-sid")
++        assert migrated is not None
++        assert new.state is not None
++        assert new.state.goal_run_id == run_id
++        assert GoalManager(session_id="logical-old-sid").state.goal_run_id == run_id
++        event_types = [e.type for e in load_goal_events("logical-new-sid", limit=20)]
++        assert "verification_observed" in event_types
++        assert "session_rotated" in event_types
 +
 +    def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
 +        from hermes_cli import goals
@@ -8227,7 +8833,7 @@ index 0dae684b6..6ae02124c 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1323,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1347,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -8236,7 +8842,7 @@ index 0dae684b6..6ae02124c 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1333,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1357,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -8298,3 +8904,21 @@ index 0dae684b6..6ae02124c 100644
      def test_consecutive_parse_failures_persists_across_goalmanager_reloads(
          self, hermes_home
      ):
+diff --git a/tests/hermes_cli/test_supergoal_command_registry.py b/tests/hermes_cli/test_supergoal_command_registry.py
+new file mode 100644
+index 000000000..b97ecdac2
+--- /dev/null
++++ b/tests/hermes_cli/test_supergoal_command_registry.py
+@@ -0,0 +1,12 @@
++from hermes_cli.commands import resolve_command
++from hermes_cli.config import DEFAULT_CONFIG
++
++
++def test_supergoal_registered_with_alias():
++    assert resolve_command("supergoal").name == "supergoal"
++    assert resolve_command("sgoal").name == "supergoal"
++
++
++def test_supergoal_has_separate_default_budget():
++    assert DEFAULT_CONFIG["goals"]["max_turns"] == 20
++    assert DEFAULT_CONFIG["goals"]["super_max_turns"] == 240

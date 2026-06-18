@@ -626,8 +626,117 @@ class TestGoalManager:
         assert "survey external implementations" in prompt
         old_state = GoalManager(session_id="super-old-sid").state
         assert old_state is not None
-        assert old_state.status == "migrated"
-        assert any(e.type == "migrated" for e in new_mgr.recent_events(limit=20))
+        assert old_state.status == "active"
+        assert old_state.goal_run_id == new_mgr.state.goal_run_id
+        assert migrated.goal_run_id == new_mgr.state.goal_run_id
+        assert any(e.type == "session_rotated" for e in new_mgr.recent_events(limit=20))
+
+
+
+
+    def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
+        import json
+        import time
+        from hermes_cli.goals import GoalManager, GoalState, save_goal, load_goal_events
+        from hermes_cli.goal_events import events_meta_key
+        from hermes_cli.supergoal.store import get_session_db, legacy_goal_key
+
+        legacy = GoalState(goal="legacy mission", mode="supergoal", status="active")
+        db = get_session_db()
+        assert db is not None
+        db.set_meta(legacy_goal_key("legacy-events-sid"), legacy.to_json())
+        db.set_meta(events_meta_key("legacy-events-sid"), json.dumps([
+            {"ts": time.time(), "type": "verification_observed", "turn": 3, "summary": "legacy evidence", "data": {}}
+        ], ensure_ascii=False))
+
+        mgr = GoalManager(session_id="legacy-events-sid")
+
+        assert mgr.state is not None
+        assert mgr.state.goal_run_id.startswith("legacy-")
+        events = load_goal_events("legacy-events-sid", limit=20)
+        assert [e.type for e in events] == ["verification_observed"]
+        assert mgr.state.event_count == 1
+
+    def test_migrate_goal_state_preserves_existing_destination_goal(self, hermes_home):
+        from hermes_cli.goals import GoalManager, migrate_goal_state
+
+        old = GoalManager(session_id="migration-existing-old")
+        old.set("old mission", max_turns=10, mode="supergoal")
+        new = GoalManager(session_id="migration-existing-new")
+        new.set("new mission", max_turns=10, mode="supergoal")
+        assert old.state is not None and new.state is not None
+        new_run_id = new.state.goal_run_id
+
+        result = migrate_goal_state("migration-existing-old", "migration-existing-new", reason="compression")
+
+        assert result is not None
+        assert result.goal == "new mission"
+        assert result.goal_run_id == new_run_id
+        assert GoalManager(session_id="migration-existing-new").state.goal_run_id == new_run_id
+
+    def test_supergoal_evaluate_uses_controller_facade(self, hermes_home, monkeypatch):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        mgr = GoalManager(session_id="super-controller-facade-sid")
+        mgr.set("ship via controller", max_turns=5, mode="supergoal")
+        calls = []
+
+        def fake_decide(self, ctx):
+            calls.append((ctx.session_id, ctx.last_response, ctx.state.mode))
+            return ControllerDecision(
+                status="active",
+                should_continue=False,
+                continuation_prompt=None,
+                verdict="continue",
+                reason="controller seam",
+                message="controller used",
+            )
+
+        monkeypatch.setattr("hermes_cli.supergoal.controller.SupergoalController.decide_after_turn", fake_decide)
+        decision = mgr.evaluate_after_turn("latest response")
+
+        assert calls == [("super-controller-facade-sid", "latest response", "supergoal")]
+        assert decision["message"] == "controller used"
+
+    def test_normal_goal_evaluate_skips_supergoal_controller(self, hermes_home, monkeypatch):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="normal-goal-controller-bypass-sid")
+        mgr.set("ordinary goal", max_turns=5, mode="goal")
+
+        def fail_if_called(*args, **kwargs):
+            raise AssertionError("normal /goal must not instantiate SupergoalController")
+
+        monkeypatch.setattr("hermes_cli.supergoal.controller.SupergoalController.decide_after_turn", fail_if_called)
+        with patch.object(goals, "judge_goal", return_value=("done", "ordinary done", False)):
+            decision = mgr.evaluate_after_turn("done")
+
+        assert decision["status"] == "done"
+        assert decision["verdict"] == "done"
+
+    def test_goal_run_id_is_stable_across_session_rotation(self, hermes_home):
+        from hermes_cli.goals import GoalManager, append_goal_event, load_goal_events, migrate_goal_state
+
+        old = GoalManager(session_id="logical-old-sid")
+        old.set("finish the mission", max_turns=240, mode="supergoal")
+        assert old.state is not None
+        run_id = old.state.goal_run_id
+        assert run_id
+        append_goal_event("logical-old-sid", "verification_observed", summary="old evidence")
+
+        migrated = migrate_goal_state("logical-old-sid", "logical-new-sid", reason="compression")
+
+        new = GoalManager(session_id="logical-new-sid")
+        assert migrated is not None
+        assert new.state is not None
+        assert new.state.goal_run_id == run_id
+        assert GoalManager(session_id="logical-old-sid").state.goal_run_id == run_id
+        event_types = [e.type for e in load_goal_events("logical-new-sid", limit=20)]
+        assert "verification_observed" in event_types
+        assert "session_rotated" in event_types
 
     def test_supergoal_periodic_replan_interval(self, hermes_home, monkeypatch):
         from hermes_cli import goals

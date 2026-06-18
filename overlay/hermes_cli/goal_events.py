@@ -64,18 +64,9 @@ def _truncate(text: str, limit: int) -> str:
 
 def _get_session_db() -> Optional[Any]:
     try:
-        from hermes_constants import get_hermes_home
-        from hermes_state import SessionDB
+        from hermes_cli.supergoal.store import get_session_db
 
-        # Keep one DB per HERMES_HOME without importing goals.py.
-        home = str(get_hermes_home())
-        cache = getattr(_get_session_db, "_cache", {})
-        if home in cache:
-            return cache[home]
-        db = SessionDB()
-        cache[home] = db
-        setattr(_get_session_db, "_cache", cache)
-        return db
+        return get_session_db()
     except Exception as exc:  # pragma: no cover - defensive for nonstandard launchers
         logger.debug("GoalEvent store bootstrap failed: %s", exc)
         return None

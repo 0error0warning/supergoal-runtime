@@ -43,6 +43,14 @@ from hermes_cli.goal_events import (
     events_meta_key as _events_meta_key,
     load_goal_events as _load_goal_event_records,
 )
+from hermes_cli.supergoal.store import (
+    _DB_CACHE as _STORE_DB_CACHE,
+    GoalRunRepository,
+    SessionBindingStore,
+    get_session_db as _store_get_session_db,
+    legacy_goal_run_id as _legacy_goal_run_id,
+    new_goal_run_id as _new_goal_run_id,
+)
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
 from hermes_cli.supergoal_projection import (
     artifact_paths as _artifact_paths,
@@ -647,6 +655,7 @@ class GoalState:
     """Serializable goal state stored per session."""
 
     goal: str
+    goal_run_id: str = ""           # stable logical mission id; session_id is only a physical context version
     mode: str = "goal"             # goal | supergoal
     status: str = "active"          # active | paused | done | cleared | migrated
     turns_used: int = 0
@@ -752,6 +761,7 @@ class GoalState:
                     gates.append(gate)
         return cls(
             goal=data.get("goal", ""),
+            goal_run_id=str(data.get("goal_run_id") or "").strip(),
             mode=data.get("mode", "goal") or "goal",
             status=data.get("status", "active"),
             turns_used=int(data.get("turns_used", 0) or 0),
@@ -915,75 +925,121 @@ class GoalState:
 # ──────────────────────────────────────────────────────────────────────
 
 
-def _meta_key(session_id: str) -> str:
-    return f"goal:{session_id}"
-
-
-_DB_CACHE: Dict[str, Any] = {}
+_BINDINGS = SessionBindingStore()
+_RUNS = GoalRunRepository()
+# Backwards-compatible test hook: existing tests clear goals._DB_CACHE.
+_DB_CACHE = _STORE_DB_CACHE
 
 
 def _get_session_db() -> Optional[Any]:
-    """Return a SessionDB instance for the current HERMES_HOME.
-
-    SessionDB has no built-in singleton, but opening a new connection per
-    /goal call would thrash the file. We cache one instance per
-    ``hermes_home`` path so profile switches still pick up the right DB.
-    Defensive against import/instantiation failures so tests and
-    non-standard launchers can still use the GoalManager.
-    """
-    try:
-        from hermes_constants import get_hermes_home
-        from hermes_state import SessionDB
-
-        home = str(get_hermes_home())
-    except Exception as exc:  # pragma: no cover
-        logger.debug("GoalManager: SessionDB bootstrap failed (%s)", exc)
-        return None
-
-    cached = _DB_CACHE.get(home)
-    if cached is not None:
-        return cached
-    try:
-        db = SessionDB()
-    except Exception as exc:  # pragma: no cover
-        logger.debug("GoalManager: SessionDB() raised (%s)", exc)
-        return None
-    _DB_CACHE[home] = db
-    return db
+    """Compatibility wrapper for tests/callers that reset goals._DB_CACHE."""
+    return _store_get_session_db()
 
 
-def load_goal(session_id: str) -> Optional[GoalState]:
-    """Load the goal for a session, or None if none exists."""
-    if not session_id:
-        return None
-    db = _get_session_db()
-    if db is None:
-        return None
-    try:
-        raw = db.get_meta(_meta_key(session_id))
-    except Exception as exc:
-        logger.debug("GoalManager: get_meta failed: %s", exc)
-        return None
+def _get_bound_goal_run_id(session_id: str) -> str:
+    return _BINDINGS.get_goal_run_id(session_id)
+
+
+def _bind_session_to_goal_run(session_id: str, goal_run_id: str, *, reason: str = "") -> None:
+    _BINDINGS.bind(session_id, goal_run_id, reason=reason)
+
+
+def _load_goal_run(goal_run_id: str) -> Optional[GoalState]:
+    raw = _RUNS.get_raw(goal_run_id)
     if not raw:
         return None
     try:
-        return GoalState.from_json(raw)
+        state = GoalState.from_json(raw)
+    except Exception as exc:
+        logger.warning("GoalManager: could not parse stored goal run %s: %s", goal_run_id, exc)
+        return None
+    if not state.goal_run_id:
+        state.goal_run_id = goal_run_id
+    return state
+
+
+def _load_legacy_session_goal(session_id: str) -> Optional[GoalState]:
+    raw = _RUNS.get_legacy_raw(session_id)
+    if not raw:
+        return None
+    try:
+        state = GoalState.from_json(raw)
     except Exception as exc:
         logger.warning("GoalManager: could not parse stored goal for %s: %s", session_id, exc)
         return None
+    if not state.goal_run_id:
+        state.goal_run_id = _legacy_goal_run_id(session_id)
+    return state
 
 
-def save_goal(session_id: str, state: GoalState) -> None:
-    """Persist a goal to SessionDB. No-op if DB unavailable."""
-    if not session_id:
+def _event_log_id_for_session(session_id: str) -> str:
+    bound = _get_bound_goal_run_id(session_id)
+    if bound:
+        return bound
+    state = _load_legacy_session_goal(session_id)
+    if state and state.goal_run_id:
+        return state.goal_run_id
+    return session_id
+
+
+def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
+    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
+    if not session_id or not goal_run_id or session_id == goal_run_id:
         return
+    legacy_events = _load_goal_event_records(session_id, limit=max_events)
+    if not legacy_events:
+        return
+    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
+    merged: List[GoalEvent] = []
+    seen = set()
+    for event in [*current_events, *legacy_events]:
+        key = json.dumps(event.to_dict(), sort_keys=True, ensure_ascii=False)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(event)
+    merged = sorted(merged, key=lambda e: e.ts)[-max_events:]
     db = _get_session_db()
     if db is None:
         return
     try:
-        db.set_meta(_meta_key(session_id), state.to_json())
+        db.set_meta(_events_meta_key(goal_run_id), json.dumps([e.to_dict() for e in merged], ensure_ascii=False))
     except Exception as exc:
-        logger.debug("GoalManager: set_meta failed: %s", exc)
+        logger.debug("GoalManager: legacy event migration failed: %s", exc)
+
+
+def load_goal(session_id: str) -> Optional[GoalState]:
+    """Load the logical goal run bound to a physical session id."""
+    if not session_id:
+        return None
+    goal_run_id = _get_bound_goal_run_id(session_id)
+    state = _load_goal_run(goal_run_id) if goal_run_id else None
+    if state is None:
+        state = _load_legacy_session_goal(session_id)
+        if state is not None:
+            # Lazy migration for pre-goal_run_id rows: bind the physical
+            # session to a stable logical run and materialize goal_run:<id>.
+            _merge_legacy_events_into_goal_run(session_id, state.goal_run_id)
+            save_goal(session_id, state)
+    if state is not None and state.goal_run_id:
+        events = _load_goal_event_records(state.goal_run_id, limit=200)
+        if events:
+            state.event_count = len(events)
+            state.last_event_type = events[-1].type
+    return state
+
+
+def save_goal(session_id: str, state: GoalState) -> None:
+    """Persist a logical goal run and bind this physical session to it."""
+    if not session_id or state is None:
+        return
+    if not state.goal_run_id:
+        state.goal_run_id = _new_goal_run_id()
+    _bind_session_to_goal_run(session_id, state.goal_run_id)
+    raw = state.to_json()
+    _RUNS.set_raw(state.goal_run_id, raw)
+    # Compatibility mirror for old callers/tools that inspect goal:<session_id>.
+    _RUNS.set_legacy_raw(session_id, raw)
 
 
 def clear_goal(session_id: str) -> None:
@@ -996,56 +1052,44 @@ def clear_goal(session_id: str) -> None:
 
 
 def migrate_goal_state(old_session_id: str, new_session_id: str, *, reason: str = "compression") -> Optional[GoalState]:
-    """Move active goal runtime state across a logical session-id rotation.
+    """Bind a new physical session id to the existing logical goal_run_id.
 
-    Compression creates a new SessionDB row for the same logical conversation.
-    Goal state is keyed by session_id, so runtime state must move with that
-    boundary just like memory/context engines do.  The old row is left as an
-    audit tombstone instead of being deleted.
+    Compression rotates session_id/context, but it does not create a new
+    mission.  The durable mission state remains in ``goal_run:<goal_run_id>``;
+    both old and new session ids point at that same logical run.
     """
     if not old_session_id or not new_session_id or old_session_id == new_session_id:
         return load_goal(new_session_id) if new_session_id else None
-    old_state = load_goal(old_session_id)
-    if old_state is None:
+    state = load_goal(old_session_id)
+    if state is None:
         return load_goal(new_session_id)
+    if not state.goal_run_id:
+        state.goal_run_id = _new_goal_run_id()
+        save_goal(old_session_id, state)
     existing_new = load_goal(new_session_id)
-    if existing_new is not None and existing_new.status in {"active", "paused", "done"}:
+    if (
+        existing_new is not None
+        and existing_new.status in {"active", "paused", "done"}
+        and existing_new.goal_run_id
+        and existing_new.goal_run_id != state.goal_run_id
+    ):
         return existing_new
-    save_goal(new_session_id, old_state)
-    old_state.status = "migrated"
-    old_state.paused_reason = f"migrated to {new_session_id} ({reason})"
-    save_goal(old_session_id, old_state)
-
-    events = load_goal_events(old_session_id, limit=200)
-    db = _get_session_db()
-    if db is not None and events:
-        migrated_event = GoalEvent(
-            ts=time.time(),
-            type="migrated",
-            turn=old_state.turns_used,
-            summary=f"migrated to {new_session_id} ({reason})",
-            data={"from": old_session_id, "to": new_session_id, "reason": reason},
-        )
-        try:
-            db.set_meta(
-                _events_meta_key(new_session_id),
-                json.dumps([e.to_dict() for e in [*events, migrated_event]][-200:], ensure_ascii=False),
-            )
-        except Exception as exc:
-            logger.debug("GoalManager: migrate events failed: %s", exc)
+    _bind_session_to_goal_run(new_session_id, state.goal_run_id, reason=reason)
+    # Keep a compatibility mirror for tools still looking at goal:<new_session_id>.
+    save_goal(new_session_id, state)
     append_goal_event(
-        old_session_id,
-        "migrated",
-        turn=old_state.turns_used,
-        summary=f"migrated to {new_session_id} ({reason})",
-        data={"from": old_session_id, "to": new_session_id, "reason": reason},
+        new_session_id,
+        "session_rotated",
+        turn=state.turns_used,
+        summary=f"session rotated {old_session_id} -> {new_session_id} ({reason})",
+        data={"old_session_id": old_session_id, "new_session_id": new_session_id, "reason": reason},
     )
     return load_goal(new_session_id)
 
 
 def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
-    """Compatibility wrapper for callers/tests that import from goals.py."""
-    return _load_goal_event_records(session_id, limit=limit)
+    """Load events for the logical goal run bound to ``session_id``."""
+    return _load_goal_event_records(_event_log_id_for_session(session_id), limit=limit)
 
 
 def append_goal_event(
@@ -1057,9 +1101,10 @@ def append_goal_event(
     data: Optional[Dict[str, Any]] = None,
     max_events: int = 200,
 ) -> Optional[GoalEvent]:
-    """Append an event and mirror event counters into the cached GoalState."""
+    """Append an event to the logical goal run and mirror counters into state."""
+    event_log_id = _event_log_id_for_session(session_id)
     event = _append_goal_event_record(
-        session_id,
+        event_log_id,
         event_type,
         turn=turn,
         summary=summary,
@@ -1068,7 +1113,7 @@ def append_goal_event(
     )
     if event is None:
         return None
-    events = load_goal_events(session_id, limit=max_events)
+    events = _load_goal_event_records(event_log_id, limit=max_events)
     state = load_goal(session_id)
     if state is not None:
         state.event_count = len(events)
@@ -2539,6 +2584,35 @@ class GoalManager:
     # --- the main entry point called after every turn -----------------
 
     def evaluate_after_turn(
+        self,
+        last_response: str,
+        *,
+        user_initiated: bool = True,
+    ) -> Dict[str, Any]:
+        """Public facade: delegate post-turn control to the runtime controller."""
+        if self._state is not None and getattr(self._state, "mode", "goal") == "supergoal":
+            from hermes_cli.supergoal.controller import SupergoalController
+            from hermes_cli.supergoal.domain import TurnContext
+            from hermes_cli.supergoal.evaluators import CompletionJudge, EvaluatorSuite, StrategicCritic
+
+            controller = SupergoalController(
+                evaluators=EvaluatorSuite(
+                    completion_judge=CompletionJudge(judge_goal),
+                    strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
+                ),
+                legacy_decider=self._evaluate_after_turn_legacy,
+            )
+            return controller.decide_after_turn(
+                TurnContext(
+                    session_id=self.session_id,
+                    state=self._state,
+                    last_response=last_response,
+                    user_initiated=user_initiated,
+                )
+            ).to_dict()
+        return self._evaluate_after_turn_legacy(last_response, user_initiated=user_initiated)
+
+    def _evaluate_after_turn_legacy(
         self,
         last_response: str,
         *,
