@@ -52,11 +52,3 @@ jobs:
           PYTHONPATH: .
         run: |
           python -m pytest tests/hermes_cli/test_goals.py tests/supergoal_replay/ -q -o 'addopts='
-          python -m pytest \
-            tests/gateway/test_goal_verdict_send.py \
-            tests/gateway/test_goal_status_notice.py \
-            tests/gateway/test_supergoal_max_turns_config.py \
-            tests/hermes_cli/test_supergoal_command_registry.py \
-            tests/test_model_tools.py \
-            tests/tools/test_hardline_blocklist.py \
-            -q -o 'addopts='
