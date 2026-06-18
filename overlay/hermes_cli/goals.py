@@ -63,6 +63,8 @@ from hermes_cli.supergoal.gates import (
     open_followups as _gate_open_followups,
     passed_gate_ids as _gate_passed_ids,
     set_gate_open as _gate_set_open,
+    sync_evidence_layers_from_findings as _gate_sync_evidence_layers_from_findings,
+    tool_backed_research_findings as _gate_tool_backed_research_findings,
     verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 )
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
@@ -1357,7 +1359,7 @@ def _merge_research_findings(existing: List[ResearchFinding], new_items: Any, *,
 
 
 def _tool_backed_research_findings(state: GoalState) -> List[ResearchFinding]:
-    return [f for f in getattr(state, "research_findings", []) or [] if getattr(f, "is_tool_backed", False)]
+    return _gate_tool_backed_research_findings(state)
 
 
 def _research_finding_types(state: GoalState) -> set:
@@ -1959,31 +1961,7 @@ def _hypothesis_complete(h: HypothesisRecord) -> bool:
 
 
 def _sync_evidence_layers_from_findings(state: GoalState) -> bool:
-    """Keep evidence_layers as a projection of provenanced findings.
-
-    The layer cache is derived state; this helper lets older critic-populated
-    boards and new event-populated boards use the same gate semantics.
-    """
-    if getattr(state, "mode", "goal") != "supergoal":
-        return False
-    changed = False
-    layers = dict(state.evidence_layers or {})
-    external = list(layers.get("external_prior", []))
-    local = list(layers.get("local_empirical", []))
-    for finding in _tool_backed_research_findings(state):
-        target = external if finding.source_type in {"paper", "github", "web", "docs"} else local
-        label = _truncate(f"{finding.source_type}:{finding.title}", 160)
-        merged = _merge_compact_list(target, [label], max_items=12)
-        if merged != target:
-            target[:] = merged
-            changed = True
-    if external:
-        layers["external_prior"] = external
-    if local:
-        layers["local_empirical"] = local
-    if changed:
-        state.evidence_layers = layers
-    return changed
+    return _gate_sync_evidence_layers_from_findings(state)
 
 
 def _set_gate_open(gate: GoalGate, *, missing: List[str], reason: str) -> None:

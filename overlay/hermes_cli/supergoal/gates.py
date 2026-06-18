@@ -17,6 +17,57 @@ _PASSING_STATUSES = {"passed", "not_applicable", "followup"}
 _BLOCKING_KINDS = {"run_acceptance", "domain_required", "safety_hard"}
 
 
+def _truncate(text: Any, limit: int) -> str:
+    value = str(text or "")
+    if not value:
+        return ""
+    if len(value) <= limit:
+        return value
+    return value[:limit] + "… [truncated]"
+
+
+def _clean_string_list(value: Any, *, limit: int = 12, item_limit: int = 220) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        value = [value]
+    if not isinstance(value, list):
+        return []
+    out: list[str] = []
+    seen = set()
+    for item in value:
+        text = str(item or "").strip()
+        if not text:
+            continue
+        text = " ".join(text.split())
+        if len(text) > item_limit:
+            text = text[:item_limit].rstrip() + "…"
+        key = text.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(text)
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _merge_compact_list(existing: list[str], new_items: Any, *, max_items: int = 20) -> list[str]:
+    merged = list(existing or [])
+    seen = {str(x).strip().lower() for x in merged if str(x).strip()}
+    for item in _clean_string_list(new_items, limit=20):
+        key = item.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(item)
+    return merged[-max_items:]
+
+
+def tool_backed_research_findings(state: Any) -> list[Any]:
+    return [finding for finding in (getattr(state, "research_findings", []) or []) if getattr(finding, "is_tool_backed", False)]
+
+
 def is_gate_open(gate: Any) -> bool:
     """Return whether a gate still requires controller action."""
     return getattr(gate, "status", "pending") not in _PASSING_STATUSES
@@ -103,6 +154,31 @@ def verified_hypothesis_artifact_count(state: Any) -> int:
         for hypothesis in (getattr(state, "hypothesis_portfolio", []) or [])
         if hypothesis_has_verified_artifact(hypothesis)
     )
+
+
+def sync_evidence_layers_from_findings(state: Any) -> bool:
+    """Keep evidence_layers as a projection of provenanced findings."""
+    if getattr(state, "mode", "goal") != "supergoal":
+        return False
+    changed = False
+    layers = dict(getattr(state, "evidence_layers", {}) or {})
+    external = list(layers.get("external_prior", []) or [])
+    local = list(layers.get("local_empirical", []) or [])
+    for finding in tool_backed_research_findings(state):
+        source_type = str(getattr(finding, "source_type", "") or "")
+        target = external if source_type in {"paper", "github", "web", "docs"} else local
+        label = _truncate(f"{source_type}:{getattr(finding, 'title', '')}", 160)
+        merged = _merge_compact_list(target, [label], max_items=12)
+        if merged != target:
+            target[:] = merged
+            changed = True
+    if external:
+        layers["external_prior"] = external
+    if local:
+        layers["local_empirical"] = local
+    if changed:
+        state.evidence_layers = layers
+    return changed
 
 
 def gate_eligible_evidence_count(state: Any) -> int:
