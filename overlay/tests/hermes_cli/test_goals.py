@@ -1202,7 +1202,12 @@ class TestGoalManager:
             decision = mgr.evaluate_after_turn(response)
 
         assert decision["should_continue"] is True
-        event_types = [event.type for event in mgr.recent_events(limit=20)]
+        pipeline = {entry["phase"]: entry for entry in decision["pipeline"]}
+        assert pipeline["observe"]["data"]["observation_events"] >= 4
+        assert pipeline["project"]["data"]["changed"] is True
+        events = mgr.recent_events(limit=20)
+        event_types = [event.type for event in events]
+        assert {event.turn for event in events if event.type in {"artifact_observed", "verification_observed", "research_observed"}} == {1}
         assert "artifact_observed" in event_types
         assert "verification_observed" in event_types
         assert "research_observed" in event_types

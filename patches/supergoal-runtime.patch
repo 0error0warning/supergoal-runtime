@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..9e64f4c6f 100644
+index a6a28deaf..564ea0012 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,46 @@ from dataclasses import dataclass, field, asdict
@@ -6697,7 +6697,7 @@ index a6a28deaf..9e64f4c6f 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2402,41 @@ class GoalManager:
+@@ -489,6 +2402,42 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6715,9 +6715,10 @@ index a6a28deaf..9e64f4c6f 100644
 +        *,
 +        summary: str = "",
 +        data: Optional[Dict[str, Any]] = None,
++        turn: Optional[int] = None,
 +    ) -> Optional[GoalEvent]:
 +        """Append a durable audit event and mirror counters into local state."""
-+        turn = self._state.turns_used if self._state else 0
++        turn = self._state.turns_used if turn is None and self._state else (turn or 0)
 +        event = append_goal_event(
 +            self.session_id,
 +            event_type,
@@ -6739,7 +6740,7 @@ index a6a28deaf..9e64f4c6f 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2450,154 @@ class GoalManager:
+@@ -502,37 +2451,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -6900,7 +6901,7 @@ index a6a28deaf..9e64f4c6f 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2606,7 @@ class GoalManager:
+@@ -541,6 +2607,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -6908,7 +6909,7 @@ index a6a28deaf..9e64f4c6f 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2616,29 @@ class GoalManager:
+@@ -550,7 +2617,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -6938,7 +6939,7 @@ index a6a28deaf..9e64f4c6f 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2646,7 @@ class GoalManager:
+@@ -558,6 +2647,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -6946,7 +6947,7 @@ index a6a28deaf..9e64f4c6f 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2655,25 @@ class GoalManager:
+@@ -566,7 +2656,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
@@ -6972,7 +6973,7 @@ index a6a28deaf..9e64f4c6f 100644
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2689,7 @@ class GoalManager:
+@@ -582,6 +2690,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -6980,7 +6981,7 @@ index a6a28deaf..9e64f4c6f 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2715,18 @@ class GoalManager:
+@@ -607,6 +2716,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -6999,7 +7000,7 @@ index a6a28deaf..9e64f4c6f 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2742,35 @@ class GoalManager:
+@@ -622,6 +2743,56 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7016,6 +7017,8 @@ index a6a28deaf..9e64f4c6f 100644
 +                    strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
 +                ),
 +                legacy_decider=self._evaluate_after_turn_legacy,
++                observe_events=self._observe_supergoal_events_for_controller,
++                project_state=self._project_supergoal_state_for_controller,
 +            )
 +            return controller.decide_after_turn(
 +                TurnContext(
@@ -7027,15 +7030,34 @@ index a6a28deaf..9e64f4c6f 100644
 +            ).to_dict()
 +        return self._evaluate_after_turn_legacy(last_response, user_initiated=user_initiated)
 +
++    def _observe_supergoal_events_for_controller(self, ctx: Any) -> int:
++        state = ctx.state
++        if state is None or getattr(state, "status", "") != "active":
++            return 0
++        count = 0
++        completed_turn = int(getattr(state, "turns_used", 0) or 0) + 1
++        for event_type, summary, data in _extract_supergoal_observation_events(ctx.last_response):
++            self._record_event(event_type, summary=summary, data=data, turn=completed_turn)
++            count += 1
++        return count
++
++    def _project_supergoal_state_for_controller(self, ctx: Any) -> bool:
++        state = ctx.state
++        if state is None or getattr(state, "status", "") != "active":
++            return False
++        return _goal_events_state_changed(state, self.recent_events(limit=200))
++
 +    def _evaluate_after_turn_legacy(
 +        self,
 +        last_response: str,
 +        *,
 +        user_initiated: bool = True,
++        supergoal_observed: bool = False,
++        supergoal_projected: bool = False,
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +2807,60 @@ class GoalManager:
+@@ -658,6 +2829,62 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7043,9 +7065,11 @@ index a6a28deaf..9e64f4c6f 100644
 +            gate_ids_before_critic = _passed_gate_ids(state)
 +            _infer_supergoal_contract_from_turn(state, last_response)
 +            _record_supergoal_turn_artifacts(state, last_response)
-+            for event_type, summary, data in _extract_supergoal_observation_events(last_response):
-+                self._record_event(event_type, summary=summary, data=data)
-+            _goal_events_state_changed(state, self.recent_events(limit=200))
++            if not supergoal_observed:
++                for event_type, summary, data in _extract_supergoal_observation_events(last_response):
++                    self._record_event(event_type, summary=summary, data=data)
++            if not supergoal_projected:
++                _goal_events_state_changed(state, self.recent_events(limit=200))
 +            try:
 +                critic_data = critic_supergoal(state, last_response)
 +                if critic_data:
@@ -7096,7 +7120,7 @@ index a6a28deaf..9e64f4c6f 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,11 +2869,102 @@ class GoalManager:
+@@ -666,11 +2893,102 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7199,7 +7223,7 @@ index a6a28deaf..9e64f4c6f 100644
                  "should_continue": False,
                  "continuation_prompt": None,
                  "verdict": "done",
-@@ -690,6 +2984,11 @@ class GoalManager:
+@@ -690,6 +3008,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7211,7 +7235,7 @@ index a6a28deaf..9e64f4c6f 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3007,83 @@ class GoalManager:
+@@ -708,10 +3031,83 @@ class GoalManager:
                  ),
              }
  
@@ -7295,7 +7319,7 @@ index a6a28deaf..9e64f4c6f 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3096,20 @@ class GoalManager:
+@@ -724,7 +3120,20 @@ class GoalManager:
                  ),
              }
  
@@ -7316,7 +7340,7 @@ index a6a28deaf..9e64f4c6f 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3117,52 @@ class GoalManager:
+@@ -732,13 +3141,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7370,7 +7394,7 @@ index a6a28deaf..9e64f4c6f 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3323,8 @@ __all__ = [
+@@ -899,6 +3347,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7393,10 +7417,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..b636ba0da
+index 000000000..a8679789c
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,197 @@
+@@ -0,0 +1,210 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7424,6 +7448,8 @@ index 000000000..b636ba0da
 +from hermes_cli.supergoal.evaluators import EvaluatorSuite
 +
 +LegacyDecisionFn = Callable[..., DecisionDict]
++ObserveEventsFn = Callable[[TurnContext], int]
++ProjectStateFn = Callable[[TurnContext], bool]
 +
 +
 +@dataclass(frozen=True)
@@ -7432,6 +7458,8 @@ index 000000000..b636ba0da
 +
 +    evaluators: EvaluatorSuite
 +    legacy_decider: LegacyDecisionFn
++    observe_events: ObserveEventsFn | None = None
++    project_state: ProjectStateFn | None = None
 +
 +    def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
 +        snapshots: list[PipelineSnapshot] = []
@@ -7444,15 +7472,17 @@ index 000000000..b636ba0da
 +    # 1. Observe ---------------------------------------------------------
 +    def _observe(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
 +        state = ctx.state
++        event_count = self.observe_events(ctx) if self.observe_events else 0
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="observe",
-+                summary="assistant turn completed",
++                summary="assistant turn completed; observation events recorded" if event_count else "assistant turn completed",
 +                data={
 +                    "session_id": ctx.session_id,
 +                    "goal_run_id": getattr(state, "goal_run_id", ""),
 +                    "response_chars": len(ctx.last_response or ""),
 +                    "turns_used_before": getattr(state, "turns_used", 0),
++                    "observation_events": event_count,
 +                },
 +            )
 +        )
@@ -7460,11 +7490,13 @@ index 000000000..b636ba0da
 +    # 2. Project ---------------------------------------------------------
 +    def _project(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
 +        state = ctx.state
++        changed = self.project_state(ctx) if self.project_state else False
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="project",
-+                summary="board projection available from persisted state/events",
++                summary="board projected from persisted events" if self.project_state else "board projection available from persisted state/events",
 +                data={
++                    "changed": changed,
 +                    "event_count": getattr(state, "event_count", 0),
 +                    "evidence_count": len(getattr(state, "evidence", []) or []),
 +                    "research_count": len(getattr(state, "research_findings", []) or []),
@@ -7492,7 +7524,12 @@ index 000000000..b636ba0da
 +    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> DecisionDict:
 +        # Legacy decider currently performs judge, critic, gate reconciliation,
 +        # stall/budget guards, persistence, and continuation prompt rendering.
-+        legacy = self.legacy_decider(ctx.last_response, user_initiated=ctx.user_initiated)
++        legacy = self.legacy_decider(
++            ctx.last_response,
++            user_initiated=ctx.user_initiated,
++            supergoal_observed=bool(self.observe_events),
++            supergoal_projected=bool(self.project_state),
++        )
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="reconcile",
@@ -9973,10 +10010,10 @@ index 14f536aa4..efe242f56 100644
  async def test_goal_verdict_skipped_when_no_active_goal(hermes_home):
      """No goal set → the hook is a no-op. Nothing is sent, nothing enqueued."""
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..b283972b1 100644
+index 0dae684b6..9da9c2136 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1158 @@ class TestGoalManager:
+@@ -252,6 +252,1163 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -10930,7 +10967,12 @@ index 0dae684b6..b283972b1 100644
 +            decision = mgr.evaluate_after_turn(response)
 +
 +        assert decision["should_continue"] is True
-+        event_types = [event.type for event in mgr.recent_events(limit=20)]
++        pipeline = {entry["phase"]: entry for entry in decision["pipeline"]}
++        assert pipeline["observe"]["data"]["observation_events"] >= 4
++        assert pipeline["project"]["data"]["changed"] is True
++        events = mgr.recent_events(limit=20)
++        event_types = [event.type for event in events]
++        assert {event.turn for event in events if event.type in {"artifact_observed", "verification_observed", "research_observed"}} == {1}
 +        assert "artifact_observed" in event_types
 +        assert "verification_observed" in event_types
 +        assert "research_observed" in event_types
@@ -11135,7 +11177,7 @@ index 0dae684b6..b283972b1 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1631,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1636,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -11144,7 +11186,7 @@ index 0dae684b6..b283972b1 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1641,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1646,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):

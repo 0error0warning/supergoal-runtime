@@ -2416,9 +2416,10 @@ class GoalManager:
         *,
         summary: str = "",
         data: Optional[Dict[str, Any]] = None,
+        turn: Optional[int] = None,
     ) -> Optional[GoalEvent]:
         """Append a durable audit event and mirror counters into local state."""
-        turn = self._state.turns_used if self._state else 0
+        turn = self._state.turns_used if turn is None and self._state else (turn or 0)
         event = append_goal_event(
             self.session_id,
             event_type,
@@ -2755,6 +2756,8 @@ class GoalManager:
                     strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
                 ),
                 legacy_decider=self._evaluate_after_turn_legacy,
+                observe_events=self._observe_supergoal_events_for_controller,
+                project_state=self._project_supergoal_state_for_controller,
             )
             return controller.decide_after_turn(
                 TurnContext(
@@ -2766,11 +2769,30 @@ class GoalManager:
             ).to_dict()
         return self._evaluate_after_turn_legacy(last_response, user_initiated=user_initiated)
 
+    def _observe_supergoal_events_for_controller(self, ctx: Any) -> int:
+        state = ctx.state
+        if state is None or getattr(state, "status", "") != "active":
+            return 0
+        count = 0
+        completed_turn = int(getattr(state, "turns_used", 0) or 0) + 1
+        for event_type, summary, data in _extract_supergoal_observation_events(ctx.last_response):
+            self._record_event(event_type, summary=summary, data=data, turn=completed_turn)
+            count += 1
+        return count
+
+    def _project_supergoal_state_for_controller(self, ctx: Any) -> bool:
+        state = ctx.state
+        if state is None or getattr(state, "status", "") != "active":
+            return False
+        return _goal_events_state_changed(state, self.recent_events(limit=200))
+
     def _evaluate_after_turn_legacy(
         self,
         last_response: str,
         *,
         user_initiated: bool = True,
+        supergoal_observed: bool = False,
+        supergoal_projected: bool = False,
     ) -> Dict[str, Any]:
         """Run the judge and update state. Return a decision dict.
 
@@ -2811,9 +2833,11 @@ class GoalManager:
             gate_ids_before_critic = _passed_gate_ids(state)
             _infer_supergoal_contract_from_turn(state, last_response)
             _record_supergoal_turn_artifacts(state, last_response)
-            for event_type, summary, data in _extract_supergoal_observation_events(last_response):
-                self._record_event(event_type, summary=summary, data=data)
-            _goal_events_state_changed(state, self.recent_events(limit=200))
+            if not supergoal_observed:
+                for event_type, summary, data in _extract_supergoal_observation_events(last_response):
+                    self._record_event(event_type, summary=summary, data=data)
+            if not supergoal_projected:
+                _goal_events_state_changed(state, self.recent_events(limit=200))
             try:
                 critic_data = critic_supergoal(state, last_response)
                 if critic_data:

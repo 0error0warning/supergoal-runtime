@@ -25,6 +25,8 @@ from hermes_cli.supergoal.domain import (
 from hermes_cli.supergoal.evaluators import EvaluatorSuite
 
 LegacyDecisionFn = Callable[..., DecisionDict]
+ObserveEventsFn = Callable[[TurnContext], int]
+ProjectStateFn = Callable[[TurnContext], bool]
 
 
 @dataclass(frozen=True)
@@ -33,6 +35,8 @@ class SupergoalController:
 
     evaluators: EvaluatorSuite
     legacy_decider: LegacyDecisionFn
+    observe_events: ObserveEventsFn | None = None
+    project_state: ProjectStateFn | None = None
 
     def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
         snapshots: list[PipelineSnapshot] = []
@@ -45,15 +49,17 @@ class SupergoalController:
     # 1. Observe ---------------------------------------------------------
     def _observe(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
         state = ctx.state
+        event_count = self.observe_events(ctx) if self.observe_events else 0
         snapshots.append(
             PipelineSnapshot(
                 phase="observe",
-                summary="assistant turn completed",
+                summary="assistant turn completed; observation events recorded" if event_count else "assistant turn completed",
                 data={
                     "session_id": ctx.session_id,
                     "goal_run_id": getattr(state, "goal_run_id", ""),
                     "response_chars": len(ctx.last_response or ""),
                     "turns_used_before": getattr(state, "turns_used", 0),
+                    "observation_events": event_count,
                 },
             )
         )
@@ -61,11 +67,13 @@ class SupergoalController:
     # 2. Project ---------------------------------------------------------
     def _project(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
         state = ctx.state
+        changed = self.project_state(ctx) if self.project_state else False
         snapshots.append(
             PipelineSnapshot(
                 phase="project",
-                summary="board projection available from persisted state/events",
+                summary="board projected from persisted events" if self.project_state else "board projection available from persisted state/events",
                 data={
+                    "changed": changed,
                     "event_count": getattr(state, "event_count", 0),
                     "evidence_count": len(getattr(state, "evidence", []) or []),
                     "research_count": len(getattr(state, "research_findings", []) or []),
@@ -93,7 +101,12 @@ class SupergoalController:
     def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> DecisionDict:
         # Legacy decider currently performs judge, critic, gate reconciliation,
         # stall/budget guards, persistence, and continuation prompt rendering.
-        legacy = self.legacy_decider(ctx.last_response, user_initiated=ctx.user_initiated)
+        legacy = self.legacy_decider(
+            ctx.last_response,
+            user_initiated=ctx.user_initiated,
+            supergoal_observed=bool(self.observe_events),
+            supergoal_projected=bool(self.project_state),
+        )
         snapshots.append(
             PipelineSnapshot(
                 phase="reconcile",
