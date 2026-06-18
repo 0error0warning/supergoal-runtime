@@ -54,10 +54,14 @@ from hermes_cli.supergoal.store import (
 from hermes_cli.supergoal.gates import (
     first_blocking_failure as _gate_first_blocking_failure,
     first_failed_gate as _gate_first_failed_gate,
+    gate_eligible_evidence_count as _gate_eligible_count,
+    has_verified_execution_evidence as _gate_has_verified_execution_evidence,
+    hypothesis_has_verified_artifact as _gate_hypothesis_has_verified_artifact,
     is_blocking_gate as _gate_is_blocking_gate,
     is_gate_open as _gate_is_open,
     open_followups as _gate_open_followups,
     passed_gate_ids as _gate_passed_ids,
+    verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 )
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
 from hermes_cli.supergoal_projection import (
@@ -1428,62 +1432,19 @@ def _evidence_ref_count(state: GoalState) -> int:
 
 
 def _hypothesis_has_verified_artifact(h: HypothesisRecord) -> bool:
-    if not (h.artifacts and h.status in {"passed", "failed", "killed"}):
-        return False
-    marker_text = " ".join([h.verdict_reason or "", " ".join(h.artifacts or [])]).lower()
-    return any(
-        marker in marker_text
-        for marker in (
-            "tool_evidence",
-            "verified",
-            "verification",
-            "pytest",
-            "test_run",
-            "observed",
-            "human_acceptance",
-            "sha256:",
-        )
-    )
+    return _gate_hypothesis_has_verified_artifact(h)
 
 
 def _verified_hypothesis_artifact_count(state: GoalState) -> int:
-    return sum(len(h.artifacts or []) for h in state.hypothesis_portfolio if _hypothesis_has_verified_artifact(h))
+    return _gate_verified_hypothesis_artifact_count(state)
 
 
 def _gate_eligible_evidence_count(state: GoalState) -> int:
-    """Evidence growth metric for gates/stall guards.
-
-    Assistant prose may update ``state.evidence`` for board continuity, but it
-    must not reset no-evidence inertia. Count only layers produced by
-    observed/verified tool evidence, explicit human acceptance, or
-    verifier-backed hypothesis artifacts.
-    """
-    layers = state.evidence_layers or {}
-    return (
-        len(layers.get("artifact", []) or [])
-        + len(layers.get("verification", []) or [])
-        + len(layers.get("human_acceptance", []) or [])
-        + len(layers.get("external_prior", []) or [])
-        + _verified_hypothesis_artifact_count(state)
-    )
+    return _gate_eligible_count(state)
 
 
 def _has_verified_execution_evidence(state: GoalState) -> bool:
-    """Return True only for gate-eligible execution evidence.
-
-    ``state.evidence`` may contain assistant-visible claims for board/prompt
-    continuity.  G3 must be stricter: only tool-observed artifact or
-    verification layers, verifier-backed hypothesis artifacts, or explicit human
-    acceptance can satisfy the run-acceptance gate.
-    """
-    layers = state.evidence_layers or {}
-    if layers.get("artifact") or layers.get("verification"):
-        return True
-    if any(_hypothesis_has_verified_artifact(h) for h in state.hypothesis_portfolio):
-        return True
-    if layers.get("human_acceptance"):
-        return True
-    return False
+    return _gate_has_verified_execution_evidence(state)
 
 
 def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
