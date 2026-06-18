@@ -63,6 +63,7 @@ from hermes_cli.supergoal.gates import (
     is_gate_open as _gate_is_open,
     open_followups as _gate_open_followups,
     passed_gate_ids as _gate_passed_ids,
+    reconcile_done_evidence_gates as _gate_reconcile_done_evidence_gates,
     set_gate_open as _gate_set_open,
     sync_evidence_layers_from_findings as _gate_sync_evidence_layers_from_findings,
     tool_backed_research_findings as _gate_tool_backed_research_findings,
@@ -1561,103 +1562,8 @@ def _passed_gate_ids(state: GoalState) -> set[str]:
     return _gate_passed_ids(state)
 
 
-_COMPLETION_MARKERS = (
-    "complete",
-    "completed",
-    "done",
-    "finished",
-    "resolved",
-    "shipped",
-    "final report",
-    "goal achieved",
-    "mission accomplished",
-)
-_EVIDENCE_MARKERS = (
-    "verified",
-    "verification",
-    "tested",
-    "tests pass",
-    "pytest",
-    "artifact",
-    "artifacts",
-    "evidence",
-    "changed:",
-    "verified:",
-    "evidence:",
-    "created",
-    "wrote",
-    "saved",
-    "report",
-    "log",
-    "logs",
-)
-_ARTIFACT_PATH_RE = re.compile(
-    r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))",
-    re.IGNORECASE,
-)
-
-
-def _has_explicit_final_evidence(last_response: str, judge_reason: str = "") -> bool:
-    """True only for final-looking responses with concrete verification/artifact language."""
-    text = " ".join([last_response or "", judge_reason or ""]).strip()
-    if not text:
-        return False
-    low = text.lower()
-    has_completion = any(marker in low for marker in _COMPLETION_MARKERS)
-    if not has_completion:
-        return False
-    has_evidence = any(marker in low for marker in _EVIDENCE_MARKERS) or bool(_ARTIFACT_PATH_RE.search(text))
-    if not has_evidence:
-        return False
-    # Avoid treating a bare "done, see above" as proof. A credible final report
-    # usually names at least two concrete dimensions: change, verification,
-    # evidence, artifact, or residual state.
-    marker_hits = sum(1 for marker in _EVIDENCE_MARKERS if marker in low)
-    if marker_hits >= 2:
-        return True
-    return bool(_ARTIFACT_PATH_RE.search(text)) and any(k in low for k in ("verified", "tested", "evidence", "report"))
-
-
 def _reconcile_done_evidence_gates(state: GoalState, last_response: str, judge_reason: str) -> List[str]:
-    """Pass stale generic gates when a done verdict is backed by final evidence.
-
-    This intentionally runs only after the completion judge says ``done``. It
-    does not infer completion from arbitrary assistant prose, and it does not
-    satisfy domain-specific strategy/research gates that still need structured
-    proof.
-    """
-    if getattr(state, "mode", "goal") != "supergoal":
-        return []
-    if not _has_explicit_final_evidence(last_response, judge_reason):
-        return []
-    passed: List[str] = []
-    for gate in state.gates:
-        if gate.status == "passed":
-            continue
-        if gate.id == "G1":
-            gate.status = "passed"
-            gate.evidence = "completion report states final outcome with verification evidence"
-            if not state.inferred_user_intent:
-                state.inferred_user_intent = _truncate(state.goal, 300)
-            if not state.success_definition:
-                state.success_definition = "final response explicitly reports completion with evidence/artifacts"
-            passed.append(gate.id)
-        elif gate.id == "G3":
-            if not _has_verified_execution_evidence(state):
-                _set_gate_open(
-                    gate,
-                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
-                    reason="final prose is not gate-eligible execution evidence",
-                )
-                continue
-            gate.status = "passed"
-            gate.evidence = "verified tool/human artifact or verification evidence recorded"
-            passed.append(gate.id)
-        elif gate.id == "G4":
-            gate.status = "passed"
-            gate.evidence = "completion judge plus explicit final report"
-            passed.append(gate.id)
-    return passed
+    return _gate_reconcile_done_evidence_gates(state, last_response, judge_reason)
 
 
 def _reset_gate_stall(state: GoalState) -> None:
