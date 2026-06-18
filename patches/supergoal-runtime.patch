@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..6288587b6 100644
+index a6a28deaf..e8f7fa103 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -35,7 +35,47 @@ import re
@@ -4683,7 +4683,7 @@ index a6a28deaf..6288587b6 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +264,526 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +264,537 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -5082,6 +5082,17 @@ index a6a28deaf..6288587b6 100644
 +
 +
 +@dataclass
++class DoneGateReconciliationResult:
++    verdict: str
++    reason: str
++    gate_vetoed: bool = False
++    done_followup_gate_ids: List[str] = field(default_factory=list)
++    paused: bool = False
++    paused_gate_id: str = ""
++    paused_message: str = ""
++
++
++@dataclass
 +class GoalGate:
 +    """Deterministic gate evaluated before a supergoal can converge.
 +
@@ -5212,7 +5223,7 @@ index a6a28deaf..6288587b6 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +792,54 @@ class GoalState:
+@@ -153,6 +803,54 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -5267,7 +5278,7 @@ index a6a28deaf..6288587b6 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +848,12 @@ class GoalState:
+@@ -161,7 +859,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -5281,7 +5292,7 @@ index a6a28deaf..6288587b6 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +862,38 @@ class GoalState:
+@@ -170,8 +873,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5320,7 +5331,7 @@ index a6a28deaf..6288587b6 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +903,65 @@ class GoalState:
+@@ -181,6 +914,65 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5386,7 +5397,7 @@ index a6a28deaf..6288587b6 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +974,228 @@ class GoalState:
+@@ -193,81 +985,228 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5598,10 +5609,10 @@ index a6a28deaf..6288587b6 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-+        return
+         return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-         return
++        return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -5658,7 +5669,7 @@ index a6a28deaf..6288587b6 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1207,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1218,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5736,7 +5747,7 @@ index a6a28deaf..6288587b6 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1291,711 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1302,785 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6019,6 +6030,80 @@ index a6a28deaf..6288587b6 100644
 +def _reset_gate_stall(state: GoalState) -> None:
 +    state.last_failed_gate_id = ""
 +    state.same_gate_stall_count = 0
++
++
++def _reconcile_done_with_supergoal_gates(
++    state: GoalState,
++    *,
++    verdict: str,
++    reason: str,
++    last_response: str,
++) -> DoneGateReconciliationResult:
++    if verdict != "done" or getattr(state, "mode", "goal") != "supergoal":
++        return DoneGateReconciliationResult(verdict=verdict, reason=reason)
++
++    _update_supergoal_gates(state)
++    gate_ids_before_reconcile = _passed_gate_ids(state)
++
++    # Cache the stall identity before reconcile so ancillary gate auto-pass
++    # (G1/G3/G4) does not silently reset the stall counter for the gate that is
++    # fundamentally still blocking.
++    stall_gate_id = state.last_failed_gate_id
++    stall_count = state.same_gate_stall_count
++    _reconcile_done_evidence_gates(state, last_response, reason)
++    if _passed_gate_ids(state) != gate_ids_before_reconcile:
++        _reset_gate_stall(state)
++    _update_supergoal_gates(state)
++    first_gate = _first_blocking_failed_gate(state)
++    followup_gates = _open_followup_gates(state)
++    if first_gate is None:
++        _reset_gate_stall(state)
++        done_followup_gate_ids = [g.id for g in followup_gates]
++        if followup_gates:
++            reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
++        return DoneGateReconciliationResult(
++            verdict="done",
++            reason=reason,
++            done_followup_gate_ids=done_followup_gate_ids,
++        )
++
++    if state.last_failed_gate_id == first_gate.id:
++        state.same_gate_stall_count += 1
++    elif stall_gate_id and first_gate.id == stall_gate_id:
++        # Ancillary gates passed during reconcile but the same blocking gate is
++        # still the first failure. Restore the saved stall identity and advance
++        # the counter so the stall guard accurately tracks consecutive same-gate
++        # vetoes.
++        state.last_failed_gate_id = stall_gate_id
++        state.same_gate_stall_count = stall_count + 1
++    else:
++        state.last_failed_gate_id = first_gate.id
++        state.same_gate_stall_count = 1
++
++    verdict = "continue"
++    reason = f"completion judge said done, but blocking supergoal gate {first_gate.id} remains open: {first_gate.description}"
++    state.last_verdict = verdict
++    state.last_reason = reason
++    state.should_replan = True
++    state.replan_count += 1
++    if not state.next_best_action:
++        state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
++    _update_supergoal_plan_from_progress(state, verdict="continue")
++    paused = state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS
++    if paused:
++        state.status = "paused"
++        state.paused_reason = (
++            f"supergoal gate {first_gate.id} is stalled after "
++            f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
++        )
++    return DoneGateReconciliationResult(
++        verdict=verdict,
++        reason=reason,
++        gate_vetoed=True,
++        paused=paused,
++        paused_gate_id=first_gate.id if paused else "",
++        paused_message=f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}" if paused else "",
++    )
 +
 +
 +def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "") -> bool:
@@ -6448,7 +6533,7 @@ index a6a28deaf..6288587b6 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2003,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2088,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6504,7 +6589,7 @@ index a6a28deaf..6288587b6 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2188,194 @@ def judge_goal(
+@@ -463,6 +2273,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6699,7 +6784,7 @@ index a6a28deaf..6288587b6 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2402,42 @@ class GoalManager:
+@@ -489,6 +2487,42 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6742,7 +6827,7 @@ index a6a28deaf..6288587b6 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2451,154 @@ class GoalManager:
+@@ -502,37 +2536,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -6903,7 +6988,7 @@ index a6a28deaf..6288587b6 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2607,7 @@ class GoalManager:
+@@ -541,6 +2692,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -6911,7 +6996,7 @@ index a6a28deaf..6288587b6 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2617,29 @@ class GoalManager:
+@@ -550,7 +2702,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -6941,7 +7026,7 @@ index a6a28deaf..6288587b6 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2647,7 @@ class GoalManager:
+@@ -558,6 +2732,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -6949,7 +7034,7 @@ index a6a28deaf..6288587b6 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2656,25 @@ class GoalManager:
+@@ -566,7 +2741,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
@@ -6975,7 +7060,7 @@ index a6a28deaf..6288587b6 100644
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2690,7 @@ class GoalManager:
+@@ -582,6 +2775,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -6983,7 +7068,7 @@ index a6a28deaf..6288587b6 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2716,18 @@ class GoalManager:
+@@ -607,6 +2801,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7002,7 +7087,7 @@ index a6a28deaf..6288587b6 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2743,71 @@ class GoalManager:
+@@ -622,6 +2828,71 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7074,7 +7159,7 @@ index a6a28deaf..6288587b6 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +2838,79 @@ class GoalManager:
+@@ -652,12 +2923,79 @@ class GoalManager:
          state.turns_used += 1
          state.last_turn_at = time.time()
  
@@ -7157,7 +7242,7 @@ index a6a28deaf..6288587b6 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,11 +2919,102 @@ class GoalManager:
+@@ -666,11 +3004,61 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7171,77 +7256,36 @@ index a6a28deaf..6288587b6 100644
 +        else:
 +            state.consecutive_judge_api_failures = 0
 +
-+        gate_vetoed = False
-+        done_followup_gate_ids: List[str] = []
-+        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
-+            _update_supergoal_gates(state)
-+            gate_ids_before_reconcile = _passed_gate_ids(state)
-+
-+            # Cache the stall identity before reconcile so ancillary gate
-+            # auto-pass (G1/G3/G4) does not silently reset the stall
-+            # counter for the gate that is fundamentally still blocking.
-+            _stall_gate_id = state.last_failed_gate_id
-+            _stall_count = state.same_gate_stall_count
-+            _reconcile_done_evidence_gates(state, last_response, reason)
-+            if _passed_gate_ids(state) != gate_ids_before_reconcile:
-+                _reset_gate_stall(state)
-+            _update_supergoal_gates(state)
-+            first_gate = _first_blocking_failed_gate(state)
-+            followup_gates = _open_followup_gates(state)
-+            if first_gate is not None:
-+                gate_vetoed = True
-+                if state.last_failed_gate_id == first_gate.id:
-+                    state.same_gate_stall_count += 1
-+
-+                elif _stall_gate_id and first_gate.id == _stall_gate_id:
-+                    # Ancillary gates passed during reconcile but the same
-+                    # blocking gate is still the first failure.  Restore the saved
-+                    # stall identity and advance the counter so the stall
-+                    # guard accurately tracks consecutive same-gate vetoes.
-+                    state.last_failed_gate_id = _stall_gate_id
-+                    state.same_gate_stall_count = _stall_count + 1
-+                else:
-+                    state.last_failed_gate_id = first_gate.id
-+                    state.same_gate_stall_count = 1
-+                verdict = "continue"
-+                reason = f"completion judge said done, but blocking supergoal gate {first_gate.id} remains open: {first_gate.description}"
-+                state.last_verdict = verdict
-+                state.last_reason = reason
-+                state.should_replan = True
-+                state.replan_count += 1
-+                if not state.next_best_action:
-+                    state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
-+                _update_supergoal_plan_from_progress(state, verdict="continue")
-+                if state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS:
-+                    state.status = "paused"
-+                    state.paused_reason = (
-+                        f"supergoal gate {first_gate.id} is stalled after "
-+                        f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
-+                    )
-+                    save_goal(self.session_id, state)
-+                    self._record_event(
-+                        "paused",
-+                        summary=state.paused_reason,
-+                        data={
-+                            "reason": state.paused_reason,
-+                            "trigger": "same_gate_stall",
-+                            "gate_id": first_gate.id,
-+                            "same_gate_stall_count": state.same_gate_stall_count,
-+                        },
-+                    )
-+                    return {
-+                        "status": "paused",
-+                        "should_continue": False,
-+                        "continuation_prompt": None,
-+                        "verdict": "continue",
-+                        "reason": reason,
-+                        "message": f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}",
-+                    }
-+            else:
-+                _reset_gate_stall(state)
-+                done_followup_gate_ids = [g.id for g in followup_gates]
-+                if followup_gates:
-+                    reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
++        gate_result = _reconcile_done_with_supergoal_gates(
++            state,
++            verdict=verdict,
++            reason=reason,
++            last_response=last_response,
++        )
++        verdict = gate_result.verdict
++        reason = gate_result.reason
++        gate_vetoed = gate_result.gate_vetoed
++        done_followup_gate_ids = gate_result.done_followup_gate_ids
++        if gate_result.paused:
++            save_goal(self.session_id, state)
++            self._record_event(
++                "paused",
++                summary=state.paused_reason or gate_result.paused_message,
++                data={
++                    "reason": state.paused_reason,
++                    "trigger": "same_gate_stall",
++                    "gate_id": gate_result.paused_gate_id,
++                    "same_gate_stall_count": state.same_gate_stall_count,
++                },
++            )
++            return {
++                "status": "paused",
++                "should_continue": False,
++                "continuation_prompt": None,
++                "verdict": "continue",
++                "reason": reason,
++                "message": gate_result.paused_message,
++            }
 +
          if verdict == "done":
              state.status = "done"
@@ -7260,7 +7304,7 @@ index a6a28deaf..6288587b6 100644
                  "should_continue": False,
                  "continuation_prompt": None,
                  "verdict": "done",
-@@ -690,6 +3034,11 @@ class GoalManager:
+@@ -690,6 +3078,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7272,7 +7316,7 @@ index a6a28deaf..6288587b6 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3057,83 @@ class GoalManager:
+@@ -708,10 +3101,83 @@ class GoalManager:
                  ),
              }
  
@@ -7356,7 +7400,7 @@ index a6a28deaf..6288587b6 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3146,20 @@ class GoalManager:
+@@ -724,7 +3190,20 @@ class GoalManager:
                  ),
              }
  
@@ -7377,7 +7421,7 @@ index a6a28deaf..6288587b6 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3167,52 @@ class GoalManager:
+@@ -732,13 +3211,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7431,7 +7475,7 @@ index a6a28deaf..6288587b6 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3373,8 @@ __all__ = [
+@@ -899,6 +3417,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",

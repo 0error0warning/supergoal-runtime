@@ -658,6 +658,17 @@ class HypothesisRecord:
 
 
 @dataclass
+class DoneGateReconciliationResult:
+    verdict: str
+    reason: str
+    gate_vetoed: bool = False
+    done_followup_gate_ids: List[str] = field(default_factory=list)
+    paused: bool = False
+    paused_gate_id: str = ""
+    paused_message: str = ""
+
+
+@dataclass
 class GoalGate:
     """Deterministic gate evaluated before a supergoal can converge.
 
@@ -1570,6 +1581,80 @@ def _reconcile_done_evidence_gates(state: GoalState, last_response: str, judge_r
 def _reset_gate_stall(state: GoalState) -> None:
     state.last_failed_gate_id = ""
     state.same_gate_stall_count = 0
+
+
+def _reconcile_done_with_supergoal_gates(
+    state: GoalState,
+    *,
+    verdict: str,
+    reason: str,
+    last_response: str,
+) -> DoneGateReconciliationResult:
+    if verdict != "done" or getattr(state, "mode", "goal") != "supergoal":
+        return DoneGateReconciliationResult(verdict=verdict, reason=reason)
+
+    _update_supergoal_gates(state)
+    gate_ids_before_reconcile = _passed_gate_ids(state)
+
+    # Cache the stall identity before reconcile so ancillary gate auto-pass
+    # (G1/G3/G4) does not silently reset the stall counter for the gate that is
+    # fundamentally still blocking.
+    stall_gate_id = state.last_failed_gate_id
+    stall_count = state.same_gate_stall_count
+    _reconcile_done_evidence_gates(state, last_response, reason)
+    if _passed_gate_ids(state) != gate_ids_before_reconcile:
+        _reset_gate_stall(state)
+    _update_supergoal_gates(state)
+    first_gate = _first_blocking_failed_gate(state)
+    followup_gates = _open_followup_gates(state)
+    if first_gate is None:
+        _reset_gate_stall(state)
+        done_followup_gate_ids = [g.id for g in followup_gates]
+        if followup_gates:
+            reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
+        return DoneGateReconciliationResult(
+            verdict="done",
+            reason=reason,
+            done_followup_gate_ids=done_followup_gate_ids,
+        )
+
+    if state.last_failed_gate_id == first_gate.id:
+        state.same_gate_stall_count += 1
+    elif stall_gate_id and first_gate.id == stall_gate_id:
+        # Ancillary gates passed during reconcile but the same blocking gate is
+        # still the first failure. Restore the saved stall identity and advance
+        # the counter so the stall guard accurately tracks consecutive same-gate
+        # vetoes.
+        state.last_failed_gate_id = stall_gate_id
+        state.same_gate_stall_count = stall_count + 1
+    else:
+        state.last_failed_gate_id = first_gate.id
+        state.same_gate_stall_count = 1
+
+    verdict = "continue"
+    reason = f"completion judge said done, but blocking supergoal gate {first_gate.id} remains open: {first_gate.description}"
+    state.last_verdict = verdict
+    state.last_reason = reason
+    state.should_replan = True
+    state.replan_count += 1
+    if not state.next_best_action:
+        state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
+    _update_supergoal_plan_from_progress(state, verdict="continue")
+    paused = state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS
+    if paused:
+        state.status = "paused"
+        state.paused_reason = (
+            f"supergoal gate {first_gate.id} is stalled after "
+            f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
+        )
+    return DoneGateReconciliationResult(
+        verdict=verdict,
+        reason=reason,
+        gate_vetoed=True,
+        paused=paused,
+        paused_gate_id=first_gate.id if paused else "",
+        paused_message=f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}" if paused else "",
+    )
 
 
 def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "") -> bool:
@@ -2929,77 +3014,36 @@ class GoalManager:
         else:
             state.consecutive_judge_api_failures = 0
 
-        gate_vetoed = False
-        done_followup_gate_ids: List[str] = []
-        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
-            _update_supergoal_gates(state)
-            gate_ids_before_reconcile = _passed_gate_ids(state)
-
-            # Cache the stall identity before reconcile so ancillary gate
-            # auto-pass (G1/G3/G4) does not silently reset the stall
-            # counter for the gate that is fundamentally still blocking.
-            _stall_gate_id = state.last_failed_gate_id
-            _stall_count = state.same_gate_stall_count
-            _reconcile_done_evidence_gates(state, last_response, reason)
-            if _passed_gate_ids(state) != gate_ids_before_reconcile:
-                _reset_gate_stall(state)
-            _update_supergoal_gates(state)
-            first_gate = _first_blocking_failed_gate(state)
-            followup_gates = _open_followup_gates(state)
-            if first_gate is not None:
-                gate_vetoed = True
-                if state.last_failed_gate_id == first_gate.id:
-                    state.same_gate_stall_count += 1
-
-                elif _stall_gate_id and first_gate.id == _stall_gate_id:
-                    # Ancillary gates passed during reconcile but the same
-                    # blocking gate is still the first failure.  Restore the saved
-                    # stall identity and advance the counter so the stall
-                    # guard accurately tracks consecutive same-gate vetoes.
-                    state.last_failed_gate_id = _stall_gate_id
-                    state.same_gate_stall_count = _stall_count + 1
-                else:
-                    state.last_failed_gate_id = first_gate.id
-                    state.same_gate_stall_count = 1
-                verdict = "continue"
-                reason = f"completion judge said done, but blocking supergoal gate {first_gate.id} remains open: {first_gate.description}"
-                state.last_verdict = verdict
-                state.last_reason = reason
-                state.should_replan = True
-                state.replan_count += 1
-                if not state.next_best_action:
-                    state.next_best_action = f"Satisfy gate {first_gate.id}: {first_gate.description}"
-                _update_supergoal_plan_from_progress(state, verdict="continue")
-                if state.same_gate_stall_count >= DEFAULT_MAX_SAME_GATE_STALLS:
-                    state.status = "paused"
-                    state.paused_reason = (
-                        f"supergoal gate {first_gate.id} is stalled after "
-                        f"{state.same_gate_stall_count} done-veto attempts: {first_gate.description}"
-                    )
-                    save_goal(self.session_id, state)
-                    self._record_event(
-                        "paused",
-                        summary=state.paused_reason,
-                        data={
-                            "reason": state.paused_reason,
-                            "trigger": "same_gate_stall",
-                            "gate_id": first_gate.id,
-                            "same_gate_stall_count": state.same_gate_stall_count,
-                        },
-                    )
-                    return {
-                        "status": "paused",
-                        "should_continue": False,
-                        "continuation_prompt": None,
-                        "verdict": "continue",
-                        "reason": reason,
-                        "message": f"⏸ Supergoal paused — gate {first_gate.id} is stalled. {first_gate.description}",
-                    }
-            else:
-                _reset_gate_stall(state)
-                done_followup_gate_ids = [g.id for g in followup_gates]
-                if followup_gates:
-                    reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
+        gate_result = _reconcile_done_with_supergoal_gates(
+            state,
+            verdict=verdict,
+            reason=reason,
+            last_response=last_response,
+        )
+        verdict = gate_result.verdict
+        reason = gate_result.reason
+        gate_vetoed = gate_result.gate_vetoed
+        done_followup_gate_ids = gate_result.done_followup_gate_ids
+        if gate_result.paused:
+            save_goal(self.session_id, state)
+            self._record_event(
+                "paused",
+                summary=state.paused_reason or gate_result.paused_message,
+                data={
+                    "reason": state.paused_reason,
+                    "trigger": "same_gate_stall",
+                    "gate_id": gate_result.paused_gate_id,
+                    "same_gate_stall_count": state.same_gate_stall_count,
+                },
+            )
+            return {
+                "status": "paused",
+                "should_continue": False,
+                "continuation_prompt": None,
+                "verdict": "continue",
+                "reason": reason,
+                "message": gate_result.paused_message,
+            }
 
         if verdict == "done":
             state.status = "done"
