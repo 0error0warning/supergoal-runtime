@@ -13,10 +13,11 @@ jobs:
         with:
           path: supergoal-runtime
 
-      - name: Checkout Hermes Agent upstream
+      - name: Checkout Hermes Agent patch base
         uses: actions/checkout@v4
         with:
           repository: NousResearch/hermes-agent
+          ref: 4440d77bf32d6267775be5eba2189e1ebde0b5b5
           path: hermes-agent
 
       - name: Set up Python

@@ -4,6 +4,8 @@ A focused patch package for evolving Hermes Agent `/supergoal` from a high-budge
 
 This repository is intentionally an **overlay / patchset**, not a full fork of Hermes Agent. It contains the smallest reviewable set of runtime changes, tests, docs, and real reference-run logs needed to study and apply the `/supergoal` upgrade.
 
+Current patch base: `NousResearch/hermes-agent@4440d77bf32d6267775be5eba2189e1ebde0b5b5`. CI applies the patch to this pinned base so reviewers get a reproducible signal instead of a red build whenever upstream `main` moves.
+
 ## Why build `/supergoal`?
 
 Normal `/goal` is useful: keep a task active, judge after each turn, continue until done or paused. But it is still fundamentally a *standing-goal loop*.
