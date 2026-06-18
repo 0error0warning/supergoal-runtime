@@ -619,13 +619,26 @@ class HypothesisRecord:
 
 @dataclass
 class GoalGate:
-    """Deterministic gate that must pass before a supergoal can converge."""
+    """Deterministic gate evaluated before a supergoal can converge.
+
+    ``blocking``/``kind`` separate acceptance gates from quality followups.  Old
+    persisted gates only had id/description/status/verifier/evidence; loading
+    still works and missing metadata is normalized from the gate id.
+    """
 
     id: str
     description: str
-    status: str = "pending"  # pending | passed | failed | blocked
+    status: str = "pending"  # pending | passed | failed | blocked | not_applicable | followup
     verifier: str = ""
     evidence: str = ""
+    phase: str = "verification"  # intent | research | execution | verification | finalization | safety
+    kind: str = "run_acceptance"  # run_acceptance | quality_followup | safety_hard | domain_required
+    blocking: bool = True
+    verifier_id: str = ""
+    required_evidence: List[str] = field(default_factory=list)
+    stale_after_turns: Optional[int] = None
+    missing: List[str] = field(default_factory=list)
+    reason: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -639,14 +652,38 @@ class GoalGate:
         if not gid or not desc:
             return None
         status = str(data.get("status") or "pending").strip().lower()
-        if status not in {"pending", "passed", "failed", "blocked"}:
+        if status not in {"pending", "passed", "failed", "blocked", "not_applicable", "followup"}:
             status = "pending"
+        phase = str(data.get("phase") or "").strip().lower()
+        kind = str(data.get("kind") or "").strip().lower()
+        blocking_raw = data.get("blocking")
+        if not phase or not kind or blocking_raw is None:
+            phase, kind, default_blocking = _default_gate_metadata(gid)
+            blocking = default_blocking if blocking_raw is None else bool(blocking_raw)
+        else:
+            blocking = bool(blocking_raw)
+        if phase not in {"intent", "research", "execution", "verification", "finalization", "safety"}:
+            phase = "verification"
+        if kind not in {"run_acceptance", "quality_followup", "safety_hard", "domain_required"}:
+            kind = "run_acceptance"
+        if kind in {"run_acceptance", "domain_required", "safety_hard"}:
+            blocking = True
+        elif kind == "quality_followup":
+            blocking = False
         return cls(
             id=_truncate(gid, 40),
             description=_truncate(" ".join(desc.split()), 240),
             status=status,
             verifier=_truncate(" ".join(str(data.get("verifier") or "").split()), 240),
             evidence=_truncate(" ".join(str(data.get("evidence") or "").split()), 300),
+            phase=phase,
+            kind=kind,
+            blocking=blocking,
+            verifier_id=_truncate(" ".join(str(data.get("verifier_id") or data.get("verifier") or "").split()), 120),
+            required_evidence=_clean_string_list(data.get("required_evidence") or [], limit=12, item_limit=80),
+            stale_after_turns=data.get("stale_after_turns") if isinstance(data.get("stale_after_turns"), int) else None,
+            missing=_clean_string_list(data.get("missing") or [], limit=12, item_limit=120),
+            reason=_truncate(" ".join(str(data.get("reason") or "").split()), 300),
         )
 
 
@@ -1257,8 +1294,44 @@ def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any
     return merged[-max_items:]
 
 
+def _default_gate_metadata(gate_id: str) -> tuple[str, str, bool]:
+    """Best-effort metadata for legacy persisted gates without typed fields."""
+    gid = (gate_id or "").upper()
+    if gid == "G1":
+        return "intent", "run_acceptance", True
+    if gid == "G2":
+        # Legacy sessions treated G2 as blocking.  Fresh generic goals get a
+        # non-blocking G2 from GateSpec; this conservative default preserves old
+        # domain/research runs until ensure_gates can merge newer specs.
+        return "research", "domain_required", True
+    if gid == "G3":
+        return "execution", "run_acceptance", True
+    if gid == "G4":
+        return "finalization", "run_acceptance", True
+    if gid.startswith("SG-"):
+        return "verification", "domain_required", True
+    if gid.startswith("SAFE") or gid.startswith("SAFETY"):
+        return "safety", "safety_hard", True
+    if gid.startswith("MON"):
+        return "verification", "quality_followup", False
+    return "verification", "run_acceptance", True
+
+
 def _default_supergoal_gates(goal: str = "") -> List[GoalGate]:
     return build_default_supergoal_gates(goal, GoalGate)
+
+
+def _merge_gate_metadata(existing: GoalGate, default: GoalGate) -> None:
+    """Upgrade persisted gates with newer typed metadata without clobbering status/evidence."""
+    existing.description = default.description or existing.description
+    existing.phase = default.phase
+    existing.kind = default.kind
+    existing.blocking = default.blocking
+    existing.verifier_id = default.verifier_id
+    existing.required_evidence = list(default.required_evidence or [])
+    existing.stale_after_turns = default.stale_after_turns
+    if default.verifier:
+        existing.verifier = default.verifier
 
 
 def _ensure_supergoal_gates_for_text(state: GoalState, text: str = "") -> None:
@@ -1272,18 +1345,40 @@ def _ensure_supergoal_gates_for_text(state: GoalState, text: str = "") -> None:
         return
     combined = " ".join([state.goal, text or "", " ".join(state.subgoals or [])])
     defaults = _default_supergoal_gates(combined)
-    existing = {g.id for g in state.gates or []}
+    by_id = {g.id: g for g in state.gates or []}
     for gate in defaults:
-        if gate.id not in existing:
+        existing = by_id.get(gate.id)
+        if existing is None:
             state.gates.append(gate)
-            existing.add(gate.id)
+            by_id[gate.id] = gate
+        else:
+            _merge_gate_metadata(existing, gate)
+
+
+def _is_gate_open(gate: GoalGate) -> bool:
+    return gate.status not in {"passed", "not_applicable", "followup"}
+
+
+def _is_blocking_gate(gate: GoalGate) -> bool:
+    return bool(getattr(gate, "blocking", True)) or getattr(gate, "kind", "") in {"run_acceptance", "domain_required", "safety_hard"}
 
 
 def _first_failed_gate(state: GoalState) -> Optional[GoalGate]:
     for gate in getattr(state, "gates", []) or []:
-        if gate.status != "passed":
+        if _is_gate_open(gate):
             return gate
     return None
+
+
+def _first_blocking_failed_gate(state: GoalState) -> Optional[GoalGate]:
+    for gate in getattr(state, "gates", []) or []:
+        if _is_gate_open(gate) and _is_blocking_gate(gate):
+            return gate
+    return None
+
+
+def _open_followup_gates(state: GoalState) -> List[GoalGate]:
+    return [g for g in getattr(state, "gates", []) or [] if _is_gate_open(g) and not _is_blocking_gate(g)]
 
 
 def _passed_gate_ids(state: GoalState) -> set[str]:
@@ -1673,6 +1768,14 @@ def _sync_evidence_layers_from_findings(state: GoalState) -> bool:
     return changed
 
 
+def _set_gate_open(gate: GoalGate, *, missing: List[str], reason: str) -> None:
+    if gate.status == "passed":
+        return
+    gate.missing = missing[:12]
+    gate.reason = _truncate(reason, 300)
+    gate.status = "pending" if _is_blocking_gate(gate) else "followup"
+
+
 def _update_supergoal_gates(state: GoalState) -> None:
     if getattr(state, "mode", "goal") != "supergoal":
         return
@@ -1681,26 +1784,64 @@ def _update_supergoal_gates(state: GoalState) -> None:
     _ensure_supergoal_gates_for_text(state)
     _sync_evidence_layers_from_findings(state)
     tool_backed = _tool_backed_research_findings(state)
+    external_prior_count = len(state.evidence_layers.get("external_prior", []))
     for gate in state.gates:
-        if gate.id == "G1" and state.inferred_user_intent and state.success_definition:
-            gate.status, gate.evidence = "passed", "intent + success_definition populated"
-        elif gate.id == "G2" and state.research_sufficiency == "sufficient" and state.evidence_layers.get("external_prior"):
-            gate.status, gate.evidence = "passed", f"{len(tool_backed)} tool-backed findings; external_prior={len(state.evidence_layers.get('external_prior', []))}"
-        elif gate.id == "SG-1" and len(state.hypothesis_portfolio) >= 3:
-            gate.status, gate.evidence = "passed", f"{len(state.hypothesis_portfolio)} hypotheses"
-        elif gate.id == "SG-2" and state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
-            gate.status, gate.evidence = "passed", "all hypotheses have experiment artifacts and verdicts"
+        if gate.id == "G1":
+            if state.inferred_user_intent and state.success_definition:
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "intent + success_definition populated", [], ""
+            else:
+                missing = []
+                if not state.inferred_user_intent:
+                    missing.append("inferred_user_intent")
+                if not state.success_definition:
+                    missing.append("success_definition")
+                _set_gate_open(gate, missing=missing, reason="intent contract is incomplete")
+        elif gate.id == "G2":
+            if state.research_sufficiency == "sufficient" and state.evidence_layers.get("external_prior"):
+                gate.status, gate.evidence, gate.missing, gate.reason = (
+                    "passed",
+                    f"{len(tool_backed)} tool-backed findings; external_prior={external_prior_count}",
+                    [],
+                    "",
+                )
+            else:
+                _set_gate_open(
+                    gate,
+                    missing=["tool_backed_external_prior", "research_sufficiency=sufficient"],
+                    reason="tool-backed external provenance is incomplete",
+                )
+        elif gate.id == "SG-1":
+            if len(state.hypothesis_portfolio) >= 3:
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", f"{len(state.hypothesis_portfolio)} hypotheses", [], ""
+            else:
+                _set_gate_open(gate, missing=["3 strategy hypotheses"], reason="hypothesis portfolio is too small")
+        elif gate.id == "SG-2":
+            if state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "all hypotheses have experiment artifacts and verdicts", [], ""
+            else:
+                _set_gate_open(gate, missing=["baseline", "experiment", "kill_criteria", "artifact", "verdict"], reason="hypothesis verification is incomplete")
         elif gate.id == "SG-3":
             tested = [h for h in state.hypothesis_portfolio if h.status in {"passed", "failed", "killed"}]
             has_pass = any(h.status == "passed" for h in state.hypothesis_portfolio)
             if has_pass or (state.no_edge_report and tested and len(tested) == len(state.hypothesis_portfolio)):
-                gate.status, gate.evidence = "passed", "passed hypothesis or no-edge attribution exists"
-        elif gate.id == "SG-4" and state.current_action_class != "infra_engineering":
-            gate.status, gate.evidence = "passed", "current action is not infrastructure"
-        elif gate.id == "G3" and (state.evidence or any(h.artifacts for h in state.hypothesis_portfolio)):
-            gate.status, gate.evidence = "passed", "evidence/artifacts recorded"
-        elif gate.id == "G4" and (state.no_edge_report or state.last_verdict == "done"):
-            gate.status, gate.evidence = "passed", "final/blocked/no-edge outcome recorded"
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "passed hypothesis or no-edge attribution exists", [], ""
+            else:
+                _set_gate_open(gate, missing=["passed hypothesis", "no_edge_report if all hypotheses fail"], reason="no edge/outcome attribution is incomplete")
+        elif gate.id == "SG-4":
+            if state.current_action_class != "infra_engineering":
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "current action is not infrastructure", [], ""
+            else:
+                _set_gate_open(gate, missing=["infra dependency proof"], reason="infrastructure work needs dependency proof")
+        elif gate.id == "G3":
+            if state.evidence or any(h.artifacts for h in state.hypothesis_portfolio):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "evidence/artifacts recorded", [], ""
+            else:
+                _set_gate_open(gate, missing=["artifact", "test/log/evidence"], reason="no verified artifact/evidence is recorded")
+        elif gate.id == "G4":
+            if state.no_edge_report or state.last_verdict == "done":
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
+            else:
+                _set_gate_open(gate, missing=["done verdict", "final evidence mapping"], reason="final evidence/outcome mapping is missing")
 
 
 def _apply_inertia_guard(state: GoalState) -> None:
@@ -2739,7 +2880,8 @@ class GoalManager:
             if _passed_gate_ids(state) != gate_ids_before_reconcile:
                 _reset_gate_stall(state)
             _update_supergoal_gates(state)
-            first_gate = _first_failed_gate(state)
+            first_gate = _first_blocking_failed_gate(state)
+            followup_gates = _open_followup_gates(state)
             if first_gate is not None:
                 gate_vetoed = True
                 if state.last_failed_gate_id == first_gate.id:
@@ -2747,7 +2889,7 @@ class GoalManager:
 
                 elif _stall_gate_id and first_gate.id == _stall_gate_id:
                     # Ancillary gates passed during reconcile but the same
-                    # gate is still the first failure.  Restore the saved
+                    # blocking gate is still the first failure.  Restore the saved
                     # stall identity and advance the counter so the stall
                     # guard accurately tracks consecutive same-gate vetoes.
                     state.last_failed_gate_id = _stall_gate_id
@@ -2756,7 +2898,7 @@ class GoalManager:
                     state.last_failed_gate_id = first_gate.id
                     state.same_gate_stall_count = 1
                 verdict = "continue"
-                reason = f"completion judge said done, but supergoal gate {first_gate.id} remains open: {first_gate.description}"
+                reason = f"completion judge said done, but blocking supergoal gate {first_gate.id} remains open: {first_gate.description}"
                 state.last_verdict = verdict
                 state.last_reason = reason
                 state.should_replan = True
@@ -2791,6 +2933,8 @@ class GoalManager:
                     }
             else:
                 _reset_gate_stall(state)
+                if followup_gates:
+                    reason = f"{reason}; follow-up gates open: {', '.join(g.id for g in followup_gates)}"
 
         if verdict == "done":
             state.status = "done"

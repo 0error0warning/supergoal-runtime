@@ -150,10 +150,15 @@ class SupergoalController:
         for gate in getattr(state, "gates", []) or []:
             out.append(
                 GateResult(
-                    id=str(getattr(gate, "id", "")),
-                    status=str(getattr(gate, "status", "")),
+                    gate_id=str(getattr(gate, "id", "")),
+                    status=str(getattr(gate, "status", "pending")),
+                    blocking=bool(getattr(gate, "blocking", True)),
+                    evidence_refs=[str(getattr(gate, "evidence", ""))] if getattr(gate, "evidence", "") else [],
+                    missing=[str(x) for x in (getattr(gate, "missing", []) or [])],
+                    reason=str(getattr(gate, "reason", "") or getattr(gate, "description", "")),
                     description=str(getattr(gate, "description", "")),
-                    evidence=str(getattr(gate, "evidence", "")),
+                    phase=str(getattr(gate, "phase", "verification")),
+                    kind=str(getattr(gate, "kind", "run_acceptance")),
                 )
             )
         return out

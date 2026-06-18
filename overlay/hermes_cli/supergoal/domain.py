@@ -41,17 +41,27 @@ class ActionProposal:
         return asdict(self)
 
 
+GateStatus = Literal["passed", "failed", "blocked", "not_applicable", "followup", "pending"]
+
+
 @dataclass(frozen=True)
 class GateResult:
     """Snapshot of a deterministic gate after reconciliation."""
 
-    id: str
-    status: str
+    gate_id: str
+    status: GateStatus
+    blocking: bool
+    evidence_refs: List[str]
+    missing: List[str]
+    reason: str
     description: str = ""
-    evidence: str = ""
+    phase: str = "verification"
+    kind: str = "run_acceptance"
 
     def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        data = asdict(self)
+        data["id"] = self.gate_id  # legacy alias for earlier typed surface
+        return data
 
 
 @dataclass(frozen=True)

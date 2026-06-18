@@ -826,7 +826,7 @@ class TestGoalManager:
         assert "gates=0/" in mgr.status_line()
         assert "first_gate=G1" in mgr.status_line()
 
-    def test_supergoal_done_judge_cannot_bypass_open_gates(self, hermes_home):
+    def test_supergoal_done_judge_cannot_bypass_open_blocking_gates(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
 
@@ -842,8 +842,22 @@ class TestGoalManager:
         assert decision["verdict"] == "continue"
         assert decision["should_continue"] is True
         assert mgr.state.status == "active"
-        assert "gate G2 remains open" in decision["reason"]
+        assert "blocking supergoal gate G2 remains open" in decision["reason"]
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
+        g2 = next(g for g in mgr.state.gates if g.id == "G2")
+        assert g2.kind == "domain_required"
+        assert g2.blocking is True
+
+    def test_supergoal_generic_research_gate_is_followup_not_acceptance(self, hermes_home):
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-generic-g2-followup-sid")
+        mgr.set("finish school hub", max_turns=20, mode="supergoal")
+
+        g2 = next(g for g in mgr.state.gates if g.id == "G2")
+        assert g2.kind == "quality_followup"
+        assert g2.blocking is False
+        assert g2.status == "followup"
 
     def test_supergoal_done_with_final_evidence_reconciles_stale_generic_gates(self, hermes_home):
         from hermes_cli import goals
@@ -1186,21 +1200,21 @@ class TestGoalManager:
         assert decision["should_continue"] is False
         assert decision["status"] == "paused"
         assert mgr.state.status == "paused"
-        assert mgr.state.last_failed_gate_id == "G2"
+        assert mgr.state.last_failed_gate_id == "G3"
         assert mgr.state.same_gate_stall_count == DEFAULT_MAX_SAME_GATE_STALLS
-        assert "gate G2 is stalled" in decision["message"]
+        assert "gate G3 is stalled" in decision["message"]
         assert "stalled" in mgr.state.paused_reason
 
 
-    def test_supergoal_reconcile_preserves_same_gate_stall_counter(self, hermes_home):
+    def test_supergoal_done_with_only_followup_gate_open_does_not_stall(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
 
-        mgr = GoalManager(session_id="super-reconcile-stall-counter-sid")
+        mgr = GoalManager(session_id="super-followup-gate-done-sid")
         mgr.set("finish school hub", max_turns=20, mode="supergoal")
-        # Simulate a prior done-veto where G2 was the first failed gate.
-        # The next turn has enough final evidence to auto-pass stale generic
-        # gates (G1/G3/G4), but G2 remains the first failed gate.
+        # Simulate a prior legacy done-veto on G2. For generic execution goals,
+        # G2 is now a non-blocking follow-up, so final artifact evidence must
+        # finish cleanly instead of pausing as stalled.
         mgr.state.last_failed_gate_id = "G2"
         mgr.state.same_gate_stall_count = 2
 
@@ -1215,10 +1229,13 @@ class TestGoalManager:
             decision = mgr.evaluate_after_turn(final_response)
 
         assert decision["should_continue"] is False
-        assert decision["status"] == "paused"
-        assert mgr.state.last_failed_gate_id == "G2"
-        assert mgr.state.same_gate_stall_count == 3
-        assert "gate G2 is stalled" in decision["message"]
+        assert decision["status"] == "done"
+        assert mgr.state.status == "done"
+        assert mgr.state.last_failed_gate_id == ""
+        assert mgr.state.same_gate_stall_count == 0
+        g2 = next(g for g in mgr.state.gates if g.id == "G2")
+        assert g2.blocking is False
+        assert g2.status in {"followup", "passed"}
 
     def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
         from hermes_cli import goals
