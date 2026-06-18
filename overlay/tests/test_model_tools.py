@@ -152,6 +152,141 @@ class TestHandleFunctionCall:
         assert mock_record_evidence.call_args.kwargs["session_id"] == "sid-1"
         assert mock_record_evidence.call_args.kwargs["tool_call_id"] == "tc-1"
 
+    def test_supergoal_policy_blocks_before_registry_dispatch(self, _isolate_hermes_home):
+        from hermes_cli.goals import GoalManager, save_goal
+
+        mgr = GoalManager(session_id="super-policy-block-sid")
+        state = mgr.set("maintain project", mode="supergoal")
+        state.permission_mode = "supervised"
+        state.permission_contract = {
+            "filesystem_allowlist": ["/tmp/allowed"],
+            "destructive_actions": "deny",
+            "trading_mode": "live_forbidden",
+        }
+        save_goal("super-policy-block-sid", state)
+
+        with patch("model_tools.registry.dispatch") as mock_dispatch:
+            result = handle_function_call(
+                "write_file",
+                {"path": "/etc/passwd", "content": "x"},
+                session_id="super-policy-block-sid",
+                tool_call_id="tc-policy",
+            )
+
+        parsed = json.loads(result)
+        assert "Supergoal policy" in parsed["error"]
+        mock_dispatch.assert_not_called()
+
+    def test_supergoal_default_ask_mode_preserves_existing_approval_path(self, _isolate_hermes_home):
+        from hermes_cli.goals import GoalManager, save_goal
+
+        mgr = GoalManager(session_id="super-policy-ask-sid")
+        state = mgr.set("maintain project", mode="supergoal")
+        state.permission_mode = "supervised"
+        state.permission_contract = {
+            "destructive_actions": "ask",
+            "requires_human_for": ["destructive_actions"],
+            "trading_mode": "live_forbidden",
+        }
+        save_goal("super-policy-ask-sid", state)
+
+        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
+            result = handle_function_call(
+                "write_file",
+                {"path": "/tmp/supergoal-ask.md", "content": "x"},
+                session_id="super-policy-ask-sid",
+                tool_call_id="tc-policy",
+            )
+
+        assert result == '{"ok":true}'
+        mock_dispatch.assert_called_once()
+
+    def test_supergoal_policy_resolves_terminal_relative_paths_against_workdir(self, _isolate_hermes_home):
+        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
+
+        contract = PermissionContract(
+            filesystem_allowlist=["/tmp/allowed"],
+            destructive_actions="allow",
+            trading_mode="live_forbidden",
+        )
+        result = PolicyGuard.pre_tool_call(
+            "gr-test",
+            None,
+            "terminal",
+            {"command": "cat data/input.csv", "workdir": "/tmp/allowed"},
+            contract,
+            mode="supervised",
+        )
+
+        assert result.allows_execution
+
+    def test_supergoal_policy_checks_v4a_patch_body_paths(self, _isolate_hermes_home):
+        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
+
+        contract = PermissionContract(
+            filesystem_allowlist=["/tmp/allowed"],
+            destructive_actions="allow",
+            trading_mode="live_forbidden",
+        )
+        result = PolicyGuard.pre_tool_call(
+            "gr-test",
+            None,
+            "patch",
+            {
+                "mode": "patch",
+                "patch": "*** Begin Patch\n*** Update File: /tmp/outside.txt\n@@\n-old\n+new\n*** End Patch",
+            },
+            contract,
+            mode="supervised",
+        )
+
+        assert not result.allows_execution
+        assert "/tmp/outside.txt" in result.reason
+
+    def test_supergoal_policy_resolves_file_relative_paths_against_terminal_cwd(self, _isolate_hermes_home, monkeypatch):
+        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
+
+        monkeypatch.setenv("TERMINAL_CWD", "/tmp/allowed")
+        contract = PermissionContract(
+            filesystem_allowlist=["/tmp/allowed"],
+            destructive_actions="allow",
+            trading_mode="live_forbidden",
+        )
+        result = PolicyGuard.pre_tool_call(
+            "gr-test",
+            None,
+            "write_file",
+            {"path": "relative/output.md", "content": "x"},
+            contract,
+            mode="supervised",
+        )
+
+        assert result.allows_execution
+
+    def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
+        from hermes_cli.goals import GoalManager, save_goal
+
+        mgr = GoalManager(session_id="super-policy-full-auto-sid")
+        state = mgr.set("maintain project", mode="supergoal")
+        state.permission_mode = "full_auto"
+        state.permission_contract = {
+            "filesystem_allowlist": ["/tmp/allowed"],
+            "destructive_actions": "deny",
+            "trading_mode": "live_forbidden",
+        }
+        save_goal("super-policy-full-auto-sid", state)
+
+        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
+            result = handle_function_call(
+                "write_file",
+                {"path": "/etc/passwd", "content": "x"},
+                session_id="super-policy-full-auto-sid",
+                tool_call_id="tc-policy",
+            )
+
+        assert result == '{"ok":true}'
+        mock_dispatch.assert_called_once()
+
     def test_tool_request_and_execution_middleware_wrap_registry_dispatch(self, monkeypatch):
         seen = {}
 

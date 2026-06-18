@@ -643,6 +643,51 @@ class TestGoalManager:
         assert mgr.state.current_action_class == "validation"
         assert mgr.state.action_proposal.action_class == "validation"
 
+    def test_supergoal_action_proposal_target_uses_refreshed_gate_state(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+        from hermes_cli.supergoal.evidence import record_tool_evidence
+
+        mgr = GoalManager(session_id="super-action-refreshed-gate-sid")
+        mgr.set("产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告", max_turns=20, mode="supergoal")
+        record_tool_evidence(
+            session_id="super-action-refreshed-gate-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://arxiv.org/abs/1"]},
+            result="paper quote",
+            tool_call_id="tc-paper",
+        )
+        record_tool_evidence(
+            session_id="super-action-refreshed-gate-sid",
+            tool_name="web_extract",
+            args={"urls": ["https://github.com/example/repo"]},
+            result="repo quote",
+            tool_call_id="tc-gh",
+        )
+        portfolio = [
+            {"id": "H1", "claim": "momentum", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["a.md"]},
+            {"id": "H2", "claim": "mean reversion", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["b.md"]},
+            {"id": "H3", "claim": "funding", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["c.md"]},
+        ]
+        with patch.object(goals, "judge_goal", return_value=("continue", "need experiments", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "real",
+                 "strategy_health": "good",
+                 "hypothesis_portfolio": portfolio,
+                 "action_proposal": {
+                     "action_class": "experiment_execution",
+                     "expected_evidence": ["baseline", "experiment artifact", "verdict"],
+                     "tools_needed": ["terminal"],
+                     "text": "execute the proposed hypotheses",
+                 },
+             }):
+            mgr.evaluate_after_turn("Created the 3-hypothesis portfolio; next run experiments.")
+
+        assert mgr.state is not None
+        assert next(g for g in mgr.state.gates if g.id == "SG-1").status == "passed"
+        assert mgr.state.action_proposal.target_gate_id == "SG-2"
+        assert "targets SG-1" not in (mgr.state.hard_gate_reason or "")
+
     def test_supergoal_hypothesis_portfolio_passes_strategy_gates(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager

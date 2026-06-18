@@ -805,6 +805,8 @@ class GoalState:
     replan_count: int = 0
     plan_steps: List[PlanStep] = field(default_factory=list)
     current_step_id: str = ""
+    permission_mode: str = "supervised"  # supervised | full_auto
+    permission_contract: Dict[str, Any] = field(default_factory=dict)
     event_count: int = 0
     last_event_type: Optional[str] = None
     status_card_message_ids: Dict[str, str] = field(default_factory=dict)
@@ -921,6 +923,8 @@ class GoalState:
             replan_count=int(data.get("replan_count", 0) or 0),
             plan_steps=plan_steps,
             current_step_id=str(data.get("current_step_id") or "").strip(),
+            permission_mode=str(data.get("permission_mode") or "supervised").strip().lower() if str(data.get("permission_mode") or "supervised").strip().lower() in {"supervised", "full_auto"} else "supervised",
+            permission_contract=data.get("permission_contract") if isinstance(data.get("permission_contract"), dict) else {},
             event_count=int(data.get("event_count", 0) or 0),
             last_event_type=data.get("last_event_type"),
             status_card_message_ids={
@@ -2272,6 +2276,20 @@ def _supergoal_replan_interval() -> int:
         return 5
 
 
+def _supergoal_permission_defaults() -> tuple[str, Dict[str, Any]]:
+    try:
+        from hermes_cli.config import load_config
+
+        goals_cfg = ((load_config() or {}).get("goals") or {})
+        mode = str(goals_cfg.get("supergoal_permission_mode") or "supervised").strip().lower()
+        if mode not in {"supervised", "full_auto"}:
+            mode = "supervised"
+        contract = goals_cfg.get("supergoal_permission_contract")
+        return mode, contract if isinstance(contract, dict) else {}
+    except Exception:
+        return "supervised", {}
+
+
 def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
     """Parse the judge's reply. Fail-open to ``(False, "<reason>", parse_failed)``.
 
@@ -2540,12 +2558,17 @@ def apply_supergoal_critic(state: GoalState, data: Optional[Dict[str, Any]]) -> 
     state.hypothesis_portfolio = _merge_hypothesis_portfolio(
         state.hypothesis_portfolio, data.get("hypothesis_portfolio") or data.get("new_hypotheses")
     )
-    proposal = _proposal_from_critic_data(state, data)
-    state.action_proposal = proposal
-    state.current_action_class = proposal.action_class or "unknown"
     no_edge = str(data.get("no_edge_report") or "").strip()
     if no_edge:
         state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
+    # Critic output can itself satisfy the currently open gate (e.g. add the
+    # SG-1 hypothesis portfolio). Refresh deterministic gates before defaulting
+    # action_proposal.target_gate_id so the proposal targets the next true
+    # blocking gate, not stale pre-merge gate state.
+    _update_supergoal_gates(state)
+    proposal = _proposal_from_critic_data(state, data)
+    state.action_proposal = proposal
+    state.current_action_class = proposal.action_class or "unknown"
 
     progress = str(data.get("progress") or "").strip().lower()
     if progress in {"real", "weak", "none", "regressed"}:
@@ -2793,6 +2816,7 @@ class GoalManager:
         if not goal:
             raise ValueError("goal text is empty")
         normalized_mode = "supergoal" if mode == "supergoal" else "goal"
+        permission_mode, permission_contract = _supergoal_permission_defaults() if normalized_mode == "supergoal" else ("supervised", {})
         state = GoalState(
             goal=goal,
             mode=normalized_mode,
@@ -2803,6 +2827,8 @@ class GoalManager:
             last_turn_at=0.0,
             plan_steps=_default_supergoal_plan() if normalized_mode == "supergoal" else [],
             current_step_id="S1" if normalized_mode == "supergoal" else "",
+            permission_mode=permission_mode,
+            permission_contract=permission_contract,
             gates=_default_supergoal_gates(goal) if normalized_mode == "supergoal" else [],
         )
         self._state = state

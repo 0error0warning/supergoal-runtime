@@ -15,6 +15,112 @@ index d5469a1b3..57878e742 100644
              # Reset flush cursor — new session starts with no messages written
              agent._last_flushed_db_idx = 0
          except Exception as e:
+diff --git a/agent/tool_executor.py b/agent/tool_executor.py
+index 144a29297..a40e86f46 100644
+--- a/agent/tool_executor.py
++++ b/agent/tool_executor.py
+@@ -181,6 +181,20 @@ def _tool_search_scoped_names(agent) -> frozenset:
+     return names
+ 
+ 
++def _supergoal_policy_block_message(agent, function_name: str, function_args: dict) -> str | None:
++    try:
++        from hermes_cli.supergoal.policy import pre_tool_policy_block_message
++
++        return pre_tool_policy_block_message(
++            getattr(agent, "session_id", "") or "",
++            function_name,
++            function_args if isinstance(function_args, dict) else {},
++            task_id=getattr(agent, "task_id", "") or "default",
++        )
++    except Exception:
++        return None
++
++
+ def _apply_tool_request_middleware_for_agent(
+     agent,
+     *,
+@@ -342,9 +356,11 @@ def execute_tool_calls_concurrent(agent, assistant_message, messages: list, effe
+                 middleware_trace=list(middleware_trace),
+             )
+         else:
++            block_message = _supergoal_policy_block_message(agent, function_name, function_args)
++            _block_error_type = "supergoal_policy_block" if block_message is not None else "plugin_block"
+             try:
+                 from hermes_cli.plugins import get_pre_tool_call_block_message
+-                block_message = get_pre_tool_call_block_message(
++                plugin_block_message = get_pre_tool_call_block_message(
+                     function_name,
+                     function_args,
+                     task_id=effective_task_id or "",
+@@ -354,11 +370,14 @@ def execute_tool_calls_concurrent(agent, assistant_message, messages: list, effe
+                     api_request_id=getattr(agent, "_current_api_request_id", "") or "",
+                     middleware_trace=list(middleware_trace),
+                 )
++                if block_message is None and plugin_block_message is not None:
++                    block_message = plugin_block_message
++                    _block_error_type = "plugin_block"
+             except Exception:
+-                block_message = None
++                pass
+ 
+             if block_message is not None:
+-                block_result = json.dumps({"error": block_message}, ensure_ascii=False)
++                block_result = block_message if str(block_message).lstrip().startswith("{") else json.dumps({"error": block_message}, ensure_ascii=False)
+                 _emit_terminal_post_tool_call(
+                     agent,
+                     function_name=function_name,
+@@ -367,7 +386,7 @@ def execute_tool_calls_concurrent(agent, assistant_message, messages: list, effe
+                     effective_task_id=effective_task_id,
+                     tool_call_id=getattr(tool_call, "id", "") or "",
+                     status="blocked",
+-                    error_type="plugin_block",
++                    error_type=_block_error_type,
+                     error_message=block_message,
+                     middleware_trace=list(middleware_trace),
+                 )
+@@ -826,16 +845,18 @@ def execute_tool_calls_sequential(agent, assistant_message, messages: list, effe
+             tool_call_id=getattr(tool_call, "id", "") or "",
+         )
+ 
+-        # Check plugin hooks for a block directive before executing.
++        # Check policy/plugin hooks for a block directive before executing.
+         _block_msg: Optional[str] = None
+         _block_error_type = "plugin_block"
+         if _ts_scope_block is not None:
+             _block_msg = _ts_scope_block
+             _block_error_type = "tool_scope_block"
+         else:
++            _block_msg = _supergoal_policy_block_message(agent, function_name, function_args)
++            _block_error_type = "supergoal_policy_block" if _block_msg is not None else "plugin_block"
+             try:
+                 from hermes_cli.plugins import get_pre_tool_call_block_message
+-                _block_msg = get_pre_tool_call_block_message(
++                _plugin_block_msg = get_pre_tool_call_block_message(
+                     function_name,
+                     function_args,
+                     task_id=effective_task_id or "",
+@@ -845,6 +866,9 @@ def execute_tool_calls_sequential(agent, assistant_message, messages: list, effe
+                     api_request_id=getattr(agent, "_current_api_request_id", "") or "",
+                     middleware_trace=list(middleware_trace),
+                 )
++                if _block_msg is None and _plugin_block_msg is not None:
++                    _block_msg = _plugin_block_msg
++                    _block_error_type = "plugin_block"
+             except Exception:
+                 pass
+ 
+@@ -929,8 +953,8 @@ def execute_tool_calls_sequential(agent, assistant_message, messages: list, effe
+         tool_start_time = time.time()
+ 
+         if _block_msg is not None:
+-            # Tool blocked by plugin policy — return error without executing.
+-            function_result = json.dumps({"error": _block_msg}, ensure_ascii=False)
++            # Tool blocked by supergoal policy, plugin policy, or tool scope — return error without executing.
++            function_result = _block_msg if str(_block_msg).lstrip().startswith("{") else json.dumps({"error": _block_msg}, ensure_ascii=False)
+             tool_duration = 0.0
+             _emit_terminal_post_tool_call(
+                 agent,
 diff --git a/gateway/run.py b/gateway/run.py
 index f469647be..a41eb658f 100644
 --- a/gateway/run.py
@@ -3764,261 +3870,70 @@ index 7812eba7d..27e8edb3f 100644
          if word.startswith(("./", "../", "~/", "/")) or "/" in word:
              return word
 diff --git a/hermes_cli/config.py b/hermes_cli/config.py
-index 7ee1f8690..8942eafe5 100644
+index 7ee1f8690..6d28461a5 100644
 --- a/hermes_cli/config.py
 +++ b/hermes_cli/config.py
-@@ -350,52 +350,124 @@ def get_managed_update_command() -> Optional[str]:
-     return None
- 
- 
-+def _install_method_project_root(project_root: Optional[Path] = None) -> Path:
-+    """Resolve the directory that holds the *running code* (the install tree).
-+
-+    This is the parent of ``hermes_cli/`` — i.e. the git checkout for source
-+    installs, ``/opt/hermes`` inside the published image, the venv's
-+    site-packages root for pip installs. It is a property of the running
-+    interpreter, NOT of ``$HERMES_HOME``, which is why a code-scoped stamp
-+    here is immune to two installs sharing one data directory.
-+    """
-+    if project_root is not None:
-+        return project_root
-+    return Path(__file__).parent.parent.resolve()
-+
-+
- def detect_install_method(project_root: Optional[Path] = None) -> str:
-     """Detect how Hermes was installed: 'docker', 'nixos', 'homebrew', 'git', or 'pip'.
- 
-     Resolution order:
--    1. Stamped ``~/.hermes/.install_method`` file (written by installers)
--    2. HERMES_MANAGED env / .managed marker (NixOS, Homebrew)
--    3. .git directory presence -> 'git'
--    4. Fallback -> 'pip'
-+    1. Code-scoped stamp ``<install tree>/.install_method`` (next to the
-+       running code) — the authoritative marker.
-+    2. Legacy home-scoped stamp ``$HERMES_HOME/.install_method`` — read for
-+       backward compatibility, but a ``docker`` value is IGNORED when we are
-+       not actually running inside a container (see below).
-+    3. HERMES_MANAGED env / .managed marker (NixOS, Homebrew)
-+    4. .git directory presence -> 'git'
-+    5. Fallback -> 'pip'
-+
-+    Why the stamp is code-scoped, not home-scoped (issue: shared ``~/.hermes``)
-+    --------------------------------------------------------------------------
-+    The install method describes *the binary that is running*, but
-+    ``$HERMES_HOME`` is a shared DATA directory — the Docker docs deliberately
-+    bind-mount it (``~/.hermes:/opt/data``) so config/sessions/memory persist
-+    and can be shared with a host-side Desktop/CLI install. When a
-+    containerised gateway and a host install share one ``$HERMES_HOME``, a
-+    home-scoped stamp is a single slot describing two different installs:
-+    the container stamps ``docker`` on every boot, the host install then reads
-+    ``docker`` and ``hermes update`` refuses to run ("doesn't apply inside the
-+    Docker container") even though the host binary is a perfectly updatable
-+    git/pip install. Scoping the stamp to the install tree gives each install
-+    its own truthful marker.
-+
-+    Self-healing for already-poisoned homes: a legacy ``docker`` value in the
-+    home-scoped stamp is only honoured when we are genuinely in a container.
-+    On a host install that read a contaminating ``docker`` stamp, we fall
-+    through to managed/.git/pip detection instead — so existing shared-home
-+    setups recover without the user touching anything.
- 
-     Note: running inside a container is NOT treated as "docker" on its own.
--    The two supported install paths both self-identify via the
--    ``.install_method`` stamp (caught by step 1), so neither relies on
--    container detection here:
-+    The supported installs self-identify via the code-scoped stamp:
-       - the curl installer (scripts/install.sh, the README/website install
--        command) git-clones the repo and stamps ``git``;
--      - the published ``nousresearch/hermes-agent`` image stamps ``docker``
--        at boot via ``docker/stage2-hook.sh``.
--    An unsupported manual install dropped into a container (no stamp) was
--    wrongly classified as the published image by bare container detection,
--    so ``hermes update`` bailed with "doesn't apply inside the Docker
--    container". Without that fallback such installs fall through to the
--    ``.git``/pip checks and behave like any off-path install. See issue #34397.
-+        command) git-clones the repo and stamps ``git`` next to the code;
-+      - the published ``nousresearch/hermes-agent`` image bakes a ``docker``
-+        stamp into ``/opt/hermes`` at build time.
-+    An unsupported manual install dropped into a container (no stamp) falls
-+    through to the ``.git``/pip checks and behaves like any off-path install.
-+    See issue #34397.
-     """
--    stamp = get_hermes_home() / ".install_method"
-+    root = _install_method_project_root(project_root)
-+
-+    # 1. Code-scoped stamp — authoritative, immune to shared $HERMES_HOME.
-     try:
--        method = stamp.read_text(encoding="utf-8").strip().lower()
-+        method = (root / ".install_method").read_text(encoding="utf-8").strip().lower()
-         if method:
-             return method
-     except OSError:
-         pass
-+
-+    # 2. Legacy home-scoped stamp — back-compat. Ignore a ``docker`` value
-+    #    when we are not actually containerised: that is the signature of a
-+    #    host install whose shared $HERMES_HOME was stamped by a co-located
-+    #    container, and honouring it wrongly blocks ``hermes update``.
-+    try:
-+        method = (
-+            (get_hermes_home() / ".install_method")
-+            .read_text(encoding="utf-8")
-+            .strip()
-+            .lower()
-+        )
-+        if method and not (method == "docker" and not _running_in_container()):
-+            return method
-+    except OSError:
-+        pass
-+
-     managed = get_managed_system()
-     if managed:
-         return managed.lower().replace(" ", "-")
--    if project_root is None:
--        project_root = Path(__file__).parent.parent.resolve()
--    if (project_root / ".git").is_dir():
-+    if (root / ".git").is_dir():
-         return "git"
-     return "pip"
- 
- 
--def stamp_install_method(method: str) -> None:
--    """Write the install method to ~/.hermes/.install_method."""
--    stamp = get_hermes_home() / ".install_method"
-+def _running_in_container() -> bool:
-+    """Thin wrapper around ``hermes_constants.is_container`` (import-safe)."""
-+    try:
-+        from hermes_constants import is_container
-+
-+        return is_container()
-+    except Exception:
-+        return False
-+
-+
-+def stamp_install_method(method: str, project_root: Optional[Path] = None) -> None:
-+    """Write the install method next to the running code (code-scoped stamp).
-+
-+    The stamp lives in the install tree (``<install tree>/.install_method``),
-+    not in ``$HERMES_HOME``, so that two installs sharing one data directory
-+    do not overwrite each other's marker. See ``detect_install_method`` for
-+    the full rationale.
-+
-+    Best-effort: if the install tree is read-only (e.g. the immutable
-+    ``/opt/hermes`` in the published image, which instead bakes the stamp at
-+    build time) the write silently no-ops and detection falls back to its
-+    other signals.
-+    """
-+    root = _install_method_project_root(project_root)
-     try:
--        stamp.parent.mkdir(parents=True, exist_ok=True)
--        stamp.write_text(method + "\n", encoding="utf-8")
-+        root.mkdir(parents=True, exist_ok=True)
-+        (root / ".install_method").write_text(method + "\n", encoding="utf-8")
-     except OSError:
-         pass
- 
-@@ -931,7 +1003,7 @@ DEFAULT_CONFIG = {
-         "image_input_mode": "auto",
-         "disabled_toolsets": [],
-     },
--    
-+
-     "terminal": {
-         "backend": "local",
-         "modal_mode": "auto",
-@@ -1104,6 +1176,14 @@ DEFAULT_CONFIG = {
-         "min_interval_hours": 24,
+@@ -1209,6 +1209,59 @@ DEFAULT_CONFIG = {
+         "min_coding_score": 0.65,
      },
  
-+    # Hard cap (chars) for a single automatic context file such as SOUL.md,
-+    # AGENTS.md, CLAUDE.md, .hermes.md, or .cursorrules before Hermes applies
-+    # head/tail truncation. ``null`` (the default) lets the cap scale with the
-+    # model's context window (floor 20K, ceiling 500K) so large-context models
-+    # rarely truncate a project doc. Set a positive integer to pin a fixed cap
-+    # and override the dynamic behavior. Separate from read_file tool limits.
-+    "context_file_max_chars": None,
++    # CLIProxyAPI Codex quota dashboard (/cpaquota). Secrets may be supplied
++    # via CPA_MANAGEMENT_KEY/CPA_BASE_URL env vars; behavioral settings live here.
++    "cpaquota": {
++        "base_url": "http://100.84.170.35:8317",
++        "management_key": "hermes-cpa-2026",
++        "wham_usage_url": "https://chatgpt.com/backend-api/wham/usage",
++        "keeper_db": "/opt/cpa-usage-keeper/data/app.db",
++        "cache_path": "~/.hermes/cache/cpa_quota.json",
++        "cache_ttl": 0,
++        "cache_max_age": 0,
++        "cache_refresh_cooldown": 0,
++        "query_jitter_min": 0.05,
++        "query_jitter_max": 0.25,
++        "query_order_jitter_max": 0.0,
++        "timeout_seconds": 90,
++        "live_query": True,
++        "plans": {
++            "plus": {
++                "five_hour": {"baseline_requests": 700.0, "display_mode": "direct_percent"},
++                "seven_day": {"baseline_requests": 1000.0, "display_mode": "convert_to_plus"},
++            },
++            "free": {
++                "five_hour": {"baseline_requests": 30.0, "display_mode": "convert_to_plus"},
++                "seven_day": {"baseline_requests": 38.0, "display_mode": "convert_to_plus"},
++            },
++        },
++        "forecast": {
++            "req_per_turn_window_hours": 6,
++            "history_days": 7,
++            "min_turns_per_window": 2,
++            "req_per_turn_prior_weight": 12.0,
++            "capacity_prior_weight_plus": 8.0,
++            "capacity_prior_weight_other": 6.0,
++            "capacity_max_deviation_plus": 0.20,
++            "capacity_max_deviation_other": 0.35,
++            "historical_headroom": 1.25,
++        },
++        "display": {
++            "rich_message": True,
++            "emoji_style": "auto",
++            "font_label_only": True,
++            "show_unhealthy_samples": True,
++            "max_unhealthy_samples": 8,
++            "show_capacity_diagnostics": False,
++            "top_assets_limit": 5,
++        },
++        "alerts": {
++            "plus_5h_pct_below": 50,
++            "estimated_turns_below": 50,
++            "usable_accounts_below": 2,
++        },
++    },
 +
-     # Maximum characters returned by a single read_file call.  Reads that
-     # exceed this are rejected with guidance to use offset+limit.
-     # 100K chars ≈ 25–35K tokens across typical tokenisers.
-@@ -1391,7 +1471,7 @@ DEFAULT_CONFIG = {
-             "extra_body": {},
-         },
-     },
--    
-+
-     "display": {
-         "compact": False,
-         "personality": "",
-@@ -1428,6 +1508,12 @@ DEFAULT_CONFIG = {
-         "tui_agents_nudge": True,
-         "bell_on_complete": False,
-         "show_reasoning": False,
-+        # Background self-improvement review notifications surfaced in chat.
-+        #   "off"     — no chat notification (the review still runs and writes)
-+        #   "on"      — generic "💾 Memory updated" line (default)
-+        #   "verbose" — include a compact content preview of what changed
-+        # Per-platform overrides via display.platforms.<platform>.memory_notifications.
-+        "memory_notifications": "on",
-         "streaming": False,
-         "timestamps": False,      # Show [HH:MM] on user and assistant labels
-         "final_response_markdown": "strip",  # render | strip | raw
-@@ -1479,6 +1565,12 @@ DEFAULT_CONFIG = {
-         "tool_progress_command": False,  # Enable /verbose command in messaging gateway
-         "tool_progress_overrides": {},  # DEPRECATED — use display.platforms instead
-         "tool_preview_length": 0,  # Max chars for tool call previews (0 = no limit, show full paths/commands)
-+        # How gateway tool-progress is grouped on platforms that support message
-+        # editing: "accumulate" (default) edits one bubble in place; "separate"
-+        # sends one message per tool (the pre-v0.9 behavior, noisier). Only
-+        # applies where tool_progress is already enabled. Per-platform override
-+        # via display.platforms.<platform>.tool_progress_grouping.
-+        "tool_progress_grouping": "accumulate",
-         # Auto-delete system-notice replies (e.g. "✨ New session started!",
-         # "♻ Restarting gateway…", "⚡ Stopped…") after N seconds on platforms
-         # that support message deletion (currently Telegram; other platforms
-@@ -1609,7 +1701,7 @@ DEFAULT_CONFIG = {
-     "privacy": {
-         "redact_pii": False,  # When True, hash user IDs and strip phone numbers from LLM context
-     },
--    
-+
-     # Text-to-speech configuration
-     # Each provider supports an optional `max_text_length:` override for the
-     # per-request input-character cap. Omit it to use the provider's documented
-@@ -1673,7 +1765,7 @@ DEFAULT_CONFIG = {
-             # "normalize_audio": True,
-         },
-     },
--    
-+
-     "stt": {
-         "enabled": True,
-         "provider": "local",  # "local" (free, faster-whisper) | "groq" | "openai" (Whisper API) | "mistral" (Voxtral Transcribe) | "elevenlabs" (Scribe)
-@@ -1703,13 +1795,13 @@ DEFAULT_CONFIG = {
-         "silence_threshold": 200,     # RMS below this = silence (0-32767)
-         "silence_duration": 3.0,      # Seconds of silence before auto-stop
-     },
--    
-+
-     "human_delay": {
-         "mode": "off",
-         "min_ms": 800,
-         "max_ms": 2500,
-     },
--    
-+
-     # Context engine -- controls how the context window is managed when
-     # approaching the model's token limit.
-     # "compressor" = built-in lossy summarization (default).
-@@ -1775,6 +1867,7 @@ DEFAULT_CONFIG = {
-         "reasoning_effort": "",  # reasoning effort for subagents: "xhigh", "high", "medium",
-                                  # "low", "minimal", "none" (empty = inherit parent's level)
-         "max_concurrent_children": 3,  # max parallel children per batch; floor of 1 enforced, no ceiling
-+        "max_async_children": 3,  # max concurrent background (background=true) subagents; new dispatches rejected at capacity
-         # Orchestrator role controls (see tools/delegate_tool.py:_get_max_spawn_depth
-         # and _get_orchestrator_enabled).  Floored at 1, no upper ceiling —
-         # raise deliberately, each level multiplies API cost.
-@@ -1810,6 +1903,10 @@ DEFAULT_CONFIG = {
+     # AWS Bedrock provider configuration.
+     # Only used when model.provider is "bedrock".
+     "bedrock": {
+@@ -1810,6 +1863,39 @@ DEFAULT_CONFIG = {
          # negatives (goal actually done but judge says continue) and
          # unbounded model spend on fuzzy / unachievable goals.
          "max_turns": 20,
@@ -4026,571 +3941,38 @@ index 7ee1f8690..8942eafe5 100644
 +        # separate from /goal so normal goals stay bounded while users with
 +        # large quota can opt into much longer continuous autonomous loops.
 +        "super_max_turns": 240,
++        # Every N supergoal turns, force a strategic replan even if the critic
++        # has not explicitly flagged drift/stuck behavior. 0 disables periodic
++        # replanning; the critic can still request replans.
++        "super_replan_interval": 5,
++        # Pre-tool permission policy for unattended /supergoal runs.
++        # supervised: enforce explicit contract restrictions while preserving existing tool approvals.
++        # full_auto: highest-autonomy mode; supergoal policy never asks/blocks (existing platform/tool hard safety still applies).
++        "supergoal_permission_mode": "supervised",  # supervised | full_auto
++        "supergoal_permission_contract": {
++            "filesystem_allowlist": [],
++            "network_allowlist": [],
++            "api_scopes": [],
++            "destructive_actions": "ask",  # deny | ask | allow
++            "trading_mode": "live_forbidden",  # dry_run | paper | live_forbidden | live_allowed
++            "max_cost_usd": None,
++            "max_runtime_minutes": None,
++            "requires_human_for": ["destructive_actions"],
++        },
++        "supergoal_ui": {
++            "enabled": True,
++            "native_controls": True,
++            "verbosity": "normal",  # quiet | normal | verbose
++            "update_existing_card": True,
++            "checkpoint_interval_turns": 1,
++            "checkpoint_interval_minutes": 0,
++            "terminal_notices": True,
++            "auto_thread_discord": False,
++            "details_default_collapsed": True,
++        },
      },
  
      # Skills — external skill directories for sharing skills across tools/agents.
-@@ -1877,6 +1974,14 @@ DEFAULT_CONFIG = {
-         # Archive a skill (move to skills/.archive/) after this many days
-         # without use. Archived skills are recoverable — no auto-deletion.
-         "archive_after_days": 90,
-+        # Run the LLM consolidation (umbrella-building) pass. OFF by default.
-+        # When off, a curator run does ONLY the deterministic inactivity prune
-+        # (mark stale / archive long-unused skills) and skips the forked
-+        # aux-model review entirely — no umbrella-building, no aux-model cost.
-+        # Set to true to opt back into merging overlapping skills into
-+        # class-level umbrellas. `hermes curator run --consolidate` overrides
-+        # this for a single invocation.
-+        "consolidate": False,
-         # Also prune (archive) bundled built-in skills after the inactivity
-         # period, not just agent-created ones. ON by default. Built-ins are
-         # normally restored on every `hermes update`, so pruning them only
-@@ -1990,7 +2095,7 @@ DEFAULT_CONFIG = {
-         "channel_prompts": {},         # Per-chat/topic ephemeral system prompts (topics inherit from parent group)
-         "allowed_chats": "",           # If set, bot ONLY responds in these group/supergroup chat IDs (whitelist)
-         "extra": {
--            "rich_messages": False,     # Opt in to Bot API 10.1 rich messages; default uses legacy MarkdownV2
-+            "rich_messages": True,      # Bot API 10.1 rich messages (tables/task lists/details/math) render natively; set False to force legacy MarkdownV2
-         },
-     },
- 
-@@ -2252,6 +2357,17 @@ DEFAULT_CONFIG = {
-     # Gateway settings — control how messaging platforms (Telegram, Discord,
-     # Slack, etc.) deliver agent-produced files as native attachments.
-     "gateway": {
-+        # Inject a human-readable timestamp prefix (e.g.
-+        # "[Tue 2026-04-28 13:40:53 CEST]") onto user messages IN THE MODEL'S
-+        # CONTEXT so the agent has temporal awareness of when each message was
-+        # sent. Off by default — when off, the model sees clean message text.
-+        # Persisted transcripts always stay clean (the timestamp is stored as
-+        # message metadata regardless of this toggle), so turning it on later
-+        # surfaces send-times for past messages too.
-+        "message_timestamps": {
-+            "enabled": False,
-+        },
-+
-         # When false (default), any file path the agent emits is delivered
-         # as a native attachment as long as it isn't under the credential /
-         # system-path denylist (/etc, /proc, ~/.ssh, ~/.aws, ~/.hermes/.env,
-@@ -2540,7 +2656,7 @@ DEFAULT_CONFIG = {
- 
- 
-     # Config schema version - bump this when adding new required fields
--    "_config_version": 29,
-+    "_config_version": 30,
- }
- 
- # =============================================================================
-@@ -3626,22 +3742,22 @@ OPTIONAL_ENV_VARS = {
- def get_missing_env_vars(required_only: bool = False) -> List[Dict[str, Any]]:
-     """
-     Check which environment variables are missing.
--    
-+
-     Returns list of dicts with var info for missing variables.
-     """
-     missing = []
--    
-+
-     # Check required vars
-     for var_name, info in REQUIRED_ENV_VARS.items():
-         if not get_env_value(var_name):
-             missing.append({"name": var_name, **info, "is_required": True})
--    
-+
-     # Check optional vars (if not required_only)
-     if not required_only:
-         for var_name, info in OPTIONAL_ENV_VARS.items():
-             if not get_env_value(var_name):
-                 missing.append({"name": var_name, **info, "is_required": False})
--    
-+
-     return missing
- 
- 
-@@ -3699,7 +3815,7 @@ def _set_nested(config, dotted_key: str, value):
- def get_missing_config_fields() -> List[Dict[str, Any]]:
-     """
-     Check which config fields are missing or outdated (recursive).
--    
-+
-     Walks the DEFAULT_CONFIG tree at arbitrary depth and reports any keys
-     present in defaults but absent from the user's loaded config.
-     """
-@@ -4360,11 +4476,11 @@ def warn_deprecated_cwd_env_vars(config: Optional[Dict[str, Any]] = None) -> Non
- def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, Any]:
-     """
-     Migrate config to latest version, prompting for new required fields.
--    
-+
-     Args:
-         interactive: If True, prompt user for missing values
-         quiet: If True, suppress output
--        
-+
-     Returns:
-         Dict with migration results: {"env_added": [...], "config_added": [...], "warnings": [...]}
-     """
-@@ -4380,7 +4496,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
- 
-     # Check config version
-     current_ver, latest_ver = check_config_version()
--    
-+
-     # ── Version 3 → 4: migrate tool progress from .env to config.yaml ──
-     if current_ver < 4:
-         config = load_config()
-@@ -4403,7 +4519,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
-             save_config(config)
-             if not quiet:
-                 print(f"  ✓ Migrated tool progress to config.yaml: {display['tool_progress']}")
--    
-+
-     # ── Version 4 → 5: add timezone field ──
-     if current_ver < 5:
-         config = load_config()
-@@ -4829,6 +4945,29 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
-             if not quiet:
-                 print("  ✓ Renamed write_mode → write_approval (boolean gate)")
- 
-+    # ── Version 29 → 30: seed curator.consolidate (default false) ──
-+    # Consolidation (the LLM umbrella-building fork) is now an opt-in toggle,
-+    # OFF by default. The deterministic inactivity prune still runs whenever
-+    # the curator is enabled; only the opinionated, aux-model-cost LLM pass is
-+    # gated. The runtime deep-merge already supplies the default, but we seed
-+    # the key so it's visible/editable in config.yaml. Existing installs that
-+    # WANT the old always-consolidate behavior must set it to true explicitly.
-+    # Only add the key when a curator section exists and lacks it — never
-+    # clobber a value the user already set.
-+    if current_ver < 30:
-+        config = read_raw_config()
-+        raw_curator = config.get("curator")
-+        if isinstance(raw_curator, dict) and "consolidate" not in raw_curator:
-+            raw_curator["consolidate"] = False
-+            config["curator"] = raw_curator
-+            save_config(config)
-+            results["config_added"].append("curator.consolidate=false")
-+            if not quiet:
-+                print(
-+                    "  ✓ Seeded curator.consolidate: false "
-+                    "(LLM consolidation is now opt-in; pruning stays on)"
-+                )
-+
-     # ── Post-migration: disable exfiltration-shaped MCP stdio entries ──
-     # Users can hand-edit mcp_servers, and older installs may already contain a
-     # malicious entry. Preserve the stanza for auditability but mark it
-@@ -4863,26 +5002,26 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
- 
-     if current_ver < latest_ver and not quiet:
-         print(f"Config version: {current_ver} → {latest_ver}")
--    
-+
-     # Check for missing required env vars
-     missing_env = get_missing_env_vars(required_only=True)
--    
-+
-     if missing_env and not quiet:
-         print("\n⚠️  Missing required environment variables:")
-         for var in missing_env:
-             print(f"   • {var['name']}: {var['description']}")
--    
-+
-     if interactive and missing_env:
-         print("\nLet's configure them now:\n")
-         for var in missing_env:
-             if var.get("url"):
-                 print(f"  Get your key at: {var['url']}")
--            
-+
-             if var.get("password"):
-                 value = masked_secret_prompt(f"  {var['prompt']}: ")
-             else:
-                 value = input(f"  {var['prompt']}: ").strip()
--            
-+
-             if value:
-                 save_env_value(var["name"], value)
-                 results["env_added"].append(var["name"])
-@@ -4890,7 +5029,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
-             else:
-                 results["warnings"].append(f"Skipped {var['name']} - some features may not work")
-             print()
--    
-+
-     # Check for missing optional env vars and offer to configure interactively
-     # Skip "advanced" vars (like OPENAI_BASE_URL) -- those are for power users
-     missing_optional = get_missing_env_vars(required_only=False)
-@@ -4899,7 +5038,7 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
-         v for v in missing_optional
-         if v["name"] not in required_names and not v.get("advanced")
-     ]
--    
-+
-     # Only offer to configure env vars that are NEW since the user's previous version
-     new_var_names = set()
-     for ver in range(current_ver + 1, latest_ver + 1):
-@@ -4942,22 +5081,22 @@ def migrate_config(interactive: bool = True, quiet: bool = False) -> Dict[str, A
-                     print()
-             else:
-                 print("  Set later with: hermes config set <key> <value>")
--    
-+
-     # Check for missing config fields
-     missing_config = get_missing_config_fields()
--    
-+
-     if missing_config:
-         config = load_config()
--        
-+
-         for field in missing_config:
-             key = field["key"]
-             default = field["default"]
--            
-+
-             _set_nested(config, key, default)
-             results["config_added"].append(key)
-             if not quiet:
-                 print(f"  ✓ Added {key} = {default}")
--        
-+
-         # Update version and save
-         config["_config_version"] = latest_ver
-         save_config(config)
-@@ -5831,7 +5970,7 @@ def save_env_value(key: str, value: str):
-         if lines and not lines[-1].endswith("\n"):
-             lines[-1] += "\n"
-         lines.append(f"{key}={value}\n")
--    
-+
-     fd, tmp_path = tempfile.mkstemp(dir=str(env_path.parent), suffix='.tmp', prefix='.env_')
-     # Preserve original permissions so Docker volume mounts aren't clobbered.
-     original_mode = None
-@@ -5985,7 +6124,7 @@ def get_env_value(key: str) -> Optional[str]:
-     # Check environment first
-     if key in os.environ:
-         return os.environ[key]
--    
-+
-     # Then check .env file
-     env_vars = load_env()
-     return env_vars.get(key)
-@@ -6008,23 +6147,23 @@ def redact_key(key: str) -> str:
- def show_config():
-     """Display current configuration."""
-     config = load_config()
--    
-+
-     print()
-     print(color("┌─────────────────────────────────────────────────────────┐", Colors.CYAN))
-     print(color("│              ⚕ Hermes Configuration                    │", Colors.CYAN))
-     print(color("└─────────────────────────────────────────────────────────┘", Colors.CYAN))
--    
-+
-     # Paths
-     print()
-     print(color("◆ Paths", Colors.CYAN, Colors.BOLD))
-     print(f"  Config:       {get_config_path()}")
-     print(f"  Secrets:      {get_env_path()}")
-     print(f"  Install:      {get_project_root()}")
--    
-+
-     # API Keys
-     print()
-     print(color("◆ API Keys", Colors.CYAN, Colors.BOLD))
--    
-+
-     keys = [
-         ("OPENROUTER_API_KEY", "OpenRouter"),
-         ("VOICE_TOOLS_OPENAI_KEY", "OpenAI (STT/TTS)"),
-@@ -6036,14 +6175,14 @@ def show_config():
-         ("BROWSER_USE_API_KEY", "Browser Use"),
-         ("FAL_KEY", "FAL"),
-     ]
--    
-+
-     for env_key, name in keys:
-         value = get_env_value(env_key)
-         print(f"  {name:<14} {redact_key(value)}")
-     from hermes_cli.auth import get_anthropic_key
-     anthropic_value = get_anthropic_key()
-     print(f"  {'Anthropic':<14} {redact_key(anthropic_value)}")
--    
-+
-     # Model settings
-     print()
-     print(color("◆ Model", Colors.CYAN, Colors.BOLD))
-@@ -6063,7 +6202,7 @@ def show_config():
-             ))
-     except Exception:
-         pass
--    
-+
-     # Display
-     print()
-     print(color("◆ Display", Colors.CYAN, Colors.BOLD))
-@@ -6083,7 +6222,7 @@ def show_config():
-     print(f"  Backend:      {terminal.get('backend', 'local')}")
-     print(f"  Working dir:  {terminal.get('cwd', '.')}")
-     print(f"  Timeout:      {terminal.get('timeout', 60)}s")
--    
-+
-     if terminal.get('backend') == 'docker':
-         print(f"  Docker image: {terminal.get('docker_image', 'nikolaik/python-nodejs:python3.11-nodejs20')}")
-     elif terminal.get('backend') == 'singularity':
-@@ -6101,7 +6240,7 @@ def show_config():
-         ssh_user = get_env_value('TERMINAL_SSH_USER')
-         print(f"  SSH host:     {ssh_host or '(not set)'}")
-         print(f"  SSH user:     {ssh_user or '(not set)'}")
--    
-+
-     # Timezone
-     print()
-     print(color("◆ Timezone", Colors.CYAN, Colors.BOLD))
-@@ -6128,7 +6267,7 @@ def show_config():
-         comp_provider = _aux_comp.get('provider', 'auto')
-         if comp_provider and comp_provider != 'auto':
-             print(f"  Provider:     {comp_provider}")
--    
-+
-     # Auxiliary models
-     auxiliary = config.get('auxiliary', {})
-     aux_tasks = {
-@@ -6150,17 +6289,17 @@ def show_config():
-                 if mdl:
-                     parts.append(f"model={mdl}")
-                 print(f"  {label:12s}  {', '.join(parts)}")
--    
-+
-     # Messaging
-     print()
-     print(color("◆ Messaging Platforms", Colors.CYAN, Colors.BOLD))
--    
-+
-     telegram_token = get_env_value('TELEGRAM_BOT_TOKEN')
-     discord_token = get_env_value('DISCORD_BOT_TOKEN')
--    
-+
-     print(f"  Telegram:     {'configured' if telegram_token else color('not configured', Colors.DIM)}")
-     print(f"  Discord:      {'configured' if discord_token else color('not configured', Colors.DIM)}")
--    
-+
-     # Skill config
-     try:
-         from agent.skill_utils import discover_all_skill_config_vars, resolve_skill_config_values
-@@ -6192,12 +6331,12 @@ def edit_config():
-         managed_error("edit configuration")
-         return
-     config_path = get_config_path()
--    
-+
-     # Ensure config exists
-     if not config_path.exists():
-         save_config(DEFAULT_CONFIG)
-         print(f"Created {config_path}")
--    
-+
-     # Find editor
-     editor = os.getenv('EDITOR') or os.getenv('VISUAL')
- 
-@@ -6216,12 +6355,12 @@ def edit_config():
-             if shutil.which(cmd):
-                 editor = cmd
-                 break
--    
-+
-     if not editor:
-         print("No editor found. Config file is at:")
-         print(f"  {config_path}")
-         return
--    
-+
-     print(f"Opening {config_path} in {editor}...")
-     subprocess.run([editor, str(config_path)])
- 
-@@ -6243,12 +6382,12 @@ def set_config_value(key: str, value: str):
-         'SUDO_PASSWORD', 'SLACK_BOT_TOKEN', 'SLACK_APP_TOKEN',
-         'GITHUB_TOKEN', 'HONCHO_API_KEY',
-     ]
--    
-+
-     if key.upper() in api_keys or key.upper().endswith(('_API_KEY', '_TOKEN')) or key.upper().startswith('TERMINAL_SSH'):
-         save_env_value(key.upper(), value)
-         print(f"✓ Set {key} in {get_env_path()}")
-         return
--    
-+
-     # Otherwise it goes to config.yaml
-     # Read the raw user config (not merged with defaults) to avoid
-     # dumping all default values back to the file
-@@ -6260,7 +6399,7 @@ def set_config_value(key: str, value: str):
-                 user_config = yaml.safe_load(f) or {}
-         except Exception:
-             user_config = {}
--    
-+
-     # Handle nested keys (e.g., "tts.provider") including numeric list
-     # indices (e.g., "custom_providers.0.api_key").  Delegates to
-     # _set_nested which preserves list-typed nodes; before #17876 the
-@@ -6277,12 +6416,12 @@ def set_config_value(key: str, value: str):
-         value = float(value)
- 
-     _set_nested(user_config, key, value)
--    
-+
-     # Write only user config back (not the full merged defaults)
-     ensure_hermes_home()
-     from utils import atomic_yaml_write
-     atomic_yaml_write(config_path, user_config, sort_keys=False)
--    
-+
-     # Keep .env in sync for keys that terminal_tool reads directly from env vars.
-     # config.yaml is authoritative, but terminal_tool only reads TERMINAL_ENV etc.
-     env_var = terminal_config_env_var_for_key(key)
-@@ -6299,13 +6438,13 @@ def set_config_value(key: str, value: str):
- def config_command(args):
-     """Handle config subcommands."""
-     subcmd = getattr(args, 'config_command', None)
--    
-+
-     if subcmd is None or subcmd == "show":
-         show_config()
--    
-+
-     elif subcmd == "edit":
-         edit_config()
--    
-+
-     elif subcmd == "set":
-         key = getattr(args, 'key', None)
-         value = getattr(args, 'value', None)
-@@ -6318,81 +6457,81 @@ def config_command(args):
-             print("  hermes config set OPENROUTER_API_KEY sk-or-...")
-             sys.exit(1)
-         set_config_value(key, value)
--    
-+
-     elif subcmd == "path":
-         print(get_config_path())
--    
-+
-     elif subcmd == "env-path":
-         print(get_env_path())
--    
-+
-     elif subcmd == "migrate":
-         print()
-         print(color("🔄 Checking configuration for updates...", Colors.CYAN, Colors.BOLD))
-         print()
--        
-+
-         # Check what's missing
-         missing_env = get_missing_env_vars(required_only=False)
-         missing_config = get_missing_config_fields()
-         current_ver, latest_ver = check_config_version()
--        
-+
-         if not missing_env and not missing_config and current_ver >= latest_ver:
-             print(color("✓ Configuration is up to date!", Colors.GREEN))
-             print()
-             return
--        
-+
-         # Show what needs to be updated
-         if current_ver < latest_ver:
-             print(f"  Config version: {current_ver} → {latest_ver}")
--        
-+
-         if missing_config:
-             print(f"\n  {len(missing_config)} new config option(s) will be added with defaults")
--        
-+
-         required_missing = [v for v in missing_env if v.get("is_required")]
-         optional_missing = [
-             v for v in missing_env
-             if not v.get("is_required") and not v.get("advanced")
-         ]
--        
-+
-         if required_missing:
-             print(f"\n  ⚠️  {len(required_missing)} required API key(s) missing:")
-             for var in required_missing:
-                 print(f"     • {var['name']}")
--        
-+
-         if optional_missing:
-             print(f"\n  ℹ️  {len(optional_missing)} optional API key(s) not configured:")
-             for var in optional_missing:
-                 tools = var.get("tools", [])
-                 tools_str = f" (enables: {', '.join(tools[:2])})" if tools else ""
-                 print(f"     • {var['name']}{tools_str}")
--        
-+
-         print()
--        
-+
-         # Run migration
-         results = migrate_config(interactive=True, quiet=False)
--        
-+
-         print()
-         if results["env_added"] or results["config_added"]:
-             print(color("✓ Configuration updated!", Colors.GREEN))
--        
-+
-         if results["warnings"]:
-             print()
-             for warning in results["warnings"]:
-                 print(color(f"  ⚠️  {warning}", Colors.YELLOW))
--        
-+
-         print()
--    
-+
-     elif subcmd == "check":
-         # Non-interactive check for what's missing
-         print()
-         print(color("📋 Configuration Status", Colors.CYAN, Colors.BOLD))
-         print()
--        
-+
-         current_ver, latest_ver = check_config_version()
-         if current_ver >= latest_ver:
-             print(f"  Config version: {current_ver} ✓")
-         else:
-             print(color(f"  Config version: {current_ver} → {latest_ver} (update available)", Colors.YELLOW))
--        
-+
-         print()
-         print(color("  Required:", Colors.BOLD))
-         for var_name in REQUIRED_ENV_VARS:
-@@ -6400,7 +6539,7 @@ def config_command(args):
-                 print(f"    ✓ {var_name}")
-             else:
-                 print(color(f"    ✗ {var_name} (missing)", Colors.RED))
--        
-+
-         print()
-         print(color("  Optional:", Colors.BOLD))
-         for var_name, info in OPTIONAL_ENV_VARS.items():
-@@ -6410,15 +6549,15 @@ def config_command(args):
-                 tools = info.get("tools", [])
-                 tools_str = f" → {', '.join(tools[:2])}" if tools else ""
-                 print(color(f"    ○ {var_name}{tools_str}", Colors.DIM))
--        
-+
-         missing_config = get_missing_config_fields()
-         if missing_config:
-             print()
-             print(color(f"  {len(missing_config)} new config option(s) available", Colors.YELLOW))
-             print("    Run 'hermes config migrate' to add them")
--        
-+
-         print()
--    
-+
-     else:
-         print(f"Unknown config command: {subcmd}")
-         print()
 diff --git a/hermes_cli/goal_events.py b/hermes_cli/goal_events.py
 new file mode 100644
 index 000000000..982ef4a69
@@ -4734,7 +4116,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..4ee25b81a 100644
+index a6a28deaf..1b9abe216 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -5395,7 +4777,7 @@ index a6a28deaf..4ee25b81a 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +762,52 @@ class GoalState:
+@@ -153,6 +762,54 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -5442,13 +4824,15 @@ index a6a28deaf..4ee25b81a 100644
 +    replan_count: int = 0
 +    plan_steps: List[PlanStep] = field(default_factory=list)
 +    current_step_id: str = ""
++    permission_mode: str = "supervised"  # supervised | full_auto
++    permission_contract: Dict[str, Any] = field(default_factory=dict)
 +    event_count: int = 0
 +    last_event_type: Optional[str] = None
 +    status_card_message_ids: Dict[str, str] = field(default_factory=dict)
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +816,12 @@ class GoalState:
+@@ -161,7 +818,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -5462,7 +4846,7 @@ index a6a28deaf..4ee25b81a 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +830,38 @@ class GoalState:
+@@ -170,8 +832,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5501,7 +4885,7 @@ index a6a28deaf..4ee25b81a 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +871,63 @@ class GoalState:
+@@ -181,6 +873,65 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5555,6 +4939,8 @@ index a6a28deaf..4ee25b81a 100644
 +            replan_count=int(data.get("replan_count", 0) or 0),
 +            plan_steps=plan_steps,
 +            current_step_id=str(data.get("current_step_id") or "").strip(),
++            permission_mode=str(data.get("permission_mode") or "supervised").strip().lower() if str(data.get("permission_mode") or "supervised").strip().lower() in {"supervised", "full_auto"} else "supervised",
++            permission_contract=data.get("permission_contract") if isinstance(data.get("permission_contract"), dict) else {},
 +            event_count=int(data.get("event_count", 0) or 0),
 +            last_event_type=data.get("last_event_type"),
 +            status_card_message_ids={
@@ -5565,7 +4951,7 @@ index a6a28deaf..4ee25b81a 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +940,228 @@ class GoalState:
+@@ -193,81 +944,228 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5777,10 +5163,10 @@ index a6a28deaf..4ee25b81a 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-         return
++        return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-+        return
+         return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -5837,7 +5223,7 @@ index a6a28deaf..4ee25b81a 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1173,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1177,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5915,7 +5301,7 @@ index a6a28deaf..4ee25b81a 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1257,987 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1261,987 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6903,7 +6289,7 @@ index a6a28deaf..4ee25b81a 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2245,31 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2249,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6942,10 +6328,24 @@ index a6a28deaf..4ee25b81a 100644
 -        pass
 -    return DEFAULT_JUDGE_MAX_TOKENS
 +        return 5
++
++
++def _supergoal_permission_defaults() -> tuple[str, Dict[str, Any]]:
++    try:
++        from hermes_cli.config import load_config
++
++        goals_cfg = ((load_config() or {}).get("goals") or {})
++        mode = str(goals_cfg.get("supergoal_permission_mode") or "supervised").strip().lower()
++        if mode not in {"supervised", "full_auto"}:
++            mode = "supervised"
++        contract = goals_cfg.get("supergoal_permission_contract")
++        return mode, contract if isinstance(contract, dict) else {}
++    except Exception:
++        return "supervised", {}
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2416,189 @@ def judge_goal(
+@@ -463,6 +2434,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -7073,12 +6473,17 @@ index a6a28deaf..4ee25b81a 100644
 +    state.hypothesis_portfolio = _merge_hypothesis_portfolio(
 +        state.hypothesis_portfolio, data.get("hypothesis_portfolio") or data.get("new_hypotheses")
 +    )
-+    proposal = _proposal_from_critic_data(state, data)
-+    state.action_proposal = proposal
-+    state.current_action_class = proposal.action_class or "unknown"
 +    no_edge = str(data.get("no_edge_report") or "").strip()
 +    if no_edge:
 +        state.no_edge_report = _truncate(" ".join(no_edge.split()), 500)
++    # Critic output can itself satisfy the currently open gate (e.g. add the
++    # SG-1 hypothesis portfolio). Refresh deterministic gates before defaulting
++    # action_proposal.target_gate_id so the proposal targets the next true
++    # blocking gate, not stale pre-merge gate state.
++    _update_supergoal_gates(state)
++    proposal = _proposal_from_critic_data(state, data)
++    state.action_proposal = proposal
++    state.current_action_class = proposal.action_class or "unknown"
 +
 +    progress = str(data.get("progress") or "").strip().lower()
 +    if progress in {"real", "weak", "none", "regressed"}:
@@ -7135,7 +6540,7 @@ index a6a28deaf..4ee25b81a 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2625,41 @@ class GoalManager:
+@@ -489,6 +2648,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -7177,7 +6582,7 @@ index a6a28deaf..4ee25b81a 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2673,151 @@ class GoalManager:
+@@ -502,37 +2696,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7307,6 +6712,7 @@ index a6a28deaf..4ee25b81a 100644
          if not goal:
              raise ValueError("goal text is empty")
 +        normalized_mode = "supergoal" if mode == "supergoal" else "goal"
++        permission_mode, permission_contract = _supergoal_permission_defaults() if normalized_mode == "supergoal" else ("supervised", {})
          state = GoalState(
              goal=goal,
 +            mode=normalized_mode,
@@ -7317,6 +6723,8 @@ index a6a28deaf..4ee25b81a 100644
              last_turn_at=0.0,
 +            plan_steps=_default_supergoal_plan() if normalized_mode == "supergoal" else [],
 +            current_step_id="S1" if normalized_mode == "supergoal" else "",
++            permission_mode=permission_mode,
++            permission_contract=permission_contract,
 +            gates=_default_supergoal_gates(goal) if normalized_mode == "supergoal" else [],
          )
          self._state = state
@@ -7335,7 +6743,7 @@ index a6a28deaf..4ee25b81a 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2826,7 @@ class GoalManager:
+@@ -541,6 +2852,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7343,7 +6751,7 @@ index a6a28deaf..4ee25b81a 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2836,29 @@ class GoalManager:
+@@ -550,7 +2862,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7373,7 +6781,7 @@ index a6a28deaf..4ee25b81a 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2866,7 @@ class GoalManager:
+@@ -558,6 +2892,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7381,12 +6789,12 @@ index a6a28deaf..4ee25b81a 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2875,25 @@ class GoalManager:
+@@ -566,7 +2901,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7401,13 +6809,13 @@ index a6a28deaf..4ee25b81a 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2909,7 @@ class GoalManager:
+@@ -582,6 +2935,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7415,7 +6823,7 @@ index a6a28deaf..4ee25b81a 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2935,18 @@ class GoalManager:
+@@ -607,6 +2961,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7434,7 +6842,7 @@ index a6a28deaf..4ee25b81a 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2962,35 @@ class GoalManager:
+@@ -622,6 +2988,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7470,7 +6878,7 @@ index a6a28deaf..4ee25b81a 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +3027,60 @@ class GoalManager:
+@@ -658,6 +3053,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7531,7 +6939,7 @@ index a6a28deaf..4ee25b81a 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +3089,92 @@ class GoalManager:
+@@ -666,9 +3115,92 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7624,7 +7032,7 @@ index a6a28deaf..4ee25b81a 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +3196,11 @@ class GoalManager:
+@@ -690,6 +3222,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7636,7 +7044,7 @@ index a6a28deaf..4ee25b81a 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3219,83 @@ class GoalManager:
+@@ -708,10 +3245,83 @@ class GoalManager:
                  ),
              }
  
@@ -7720,7 +7128,7 @@ index a6a28deaf..4ee25b81a 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3308,20 @@ class GoalManager:
+@@ -724,7 +3334,20 @@ class GoalManager:
                  ),
              }
  
@@ -7741,7 +7149,7 @@ index a6a28deaf..4ee25b81a 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3329,52 @@ class GoalManager:
+@@ -732,13 +3355,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7795,7 +7203,7 @@ index a6a28deaf..4ee25b81a 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3535,8 @@ __all__ = [
+@@ -899,6 +3561,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -8549,6 +7957,252 @@ index 000000000..ef8444e0a
 +        "evidence_source": ref.source.value,
 +        "trust_level": ref.trust_level,
 +    }
+diff --git a/hermes_cli/supergoal/policy.py b/hermes_cli/supergoal/policy.py
+new file mode 100644
+index 000000000..ee93183df
+--- /dev/null
++++ b/hermes_cli/supergoal/policy.py
+@@ -0,0 +1,240 @@
++"""Pre-tool permission policy for unattended /supergoal runs."""
++
++from __future__ import annotations
++
++import json
++import os
++import re
++from dataclasses import asdict, dataclass, field
++from pathlib import Path
++from typing import Any, Literal, Optional
++from urllib.parse import urlparse
++
++
++PolicyDecision = Literal["allow", "deny", "require_user_approval", "sandbox_only"]
++
++
++@dataclass
++class PermissionContract:
++    filesystem_allowlist: list[str] = field(default_factory=list)
++    network_allowlist: list[str] = field(default_factory=list)
++    api_scopes: list[str] = field(default_factory=list)
++    destructive_actions: Literal["deny", "ask", "allow"] = "ask"
++    trading_mode: Literal["dry_run", "paper", "live_forbidden", "live_allowed"] = "live_forbidden"
++    max_cost_usd: float | None = None
++    max_runtime_minutes: int | None = None
++    requires_human_for: list[str] = field(default_factory=list)
++
++    def to_dict(self) -> dict[str, Any]:
++        return asdict(self)
++
++    @classmethod
++    def from_mapping(cls, data: Any) -> "PermissionContract":
++        if not isinstance(data, dict):
++            return cls()
++        destructive = str(data.get("destructive_actions") or "ask").lower()
++        if destructive not in {"deny", "ask", "allow"}:
++            destructive = "ask"
++        trading = str(data.get("trading_mode") or "live_forbidden").lower()
++        if trading not in {"dry_run", "paper", "live_forbidden", "live_allowed"}:
++            trading = "live_forbidden"
++        return cls(
++            filesystem_allowlist=_list(data.get("filesystem_allowlist")),
++            network_allowlist=_list(data.get("network_allowlist")),
++            api_scopes=_list(data.get("api_scopes")),
++            destructive_actions=destructive,  # type: ignore[arg-type]
++            trading_mode=trading,  # type: ignore[arg-type]
++            max_cost_usd=_float_or_none(data.get("max_cost_usd")),
++            max_runtime_minutes=_int_or_none(data.get("max_runtime_minutes")),
++            requires_human_for=_list(data.get("requires_human_for")),
++        )
++
++
++@dataclass(frozen=True)
++class PolicyGuardResult:
++    decision: PolicyDecision = "allow"
++    reason: str = ""
++
++    @property
++    def allows_execution(self) -> bool:
++        return self.decision == "allow"
++
++    def block_message(self) -> str:
++        if self.allows_execution:
++            return ""
++        return json.dumps({"error": f"Supergoal policy {self.decision}: {self.reason}"}, ensure_ascii=False)
++
++
++def _list(value: Any) -> list[str]:
++    if isinstance(value, list):
++        return [str(x).strip() for x in value if str(x).strip()][:32]
++    if isinstance(value, str) and value.strip():
++        return [value.strip()]
++    return []
++
++
++def _float_or_none(value: Any) -> float | None:
++    try:
++        return float(value) if value is not None else None
++    except Exception:
++        return None
++
++
++def _int_or_none(value: Any) -> int | None:
++    try:
++        return int(value) if value is not None else None
++    except Exception:
++        return None
++
++
++def _path_allowed(path: str, allowlist: list[str], *, base_dir: str = "") -> bool:
++    if not allowlist or not path:
++        return True
++    try:
++        expanded = Path(os.path.expanduser(path))
++        if not expanded.is_absolute() and base_dir:
++            expanded = Path(os.path.expanduser(base_dir)) / expanded
++        p = expanded.resolve()
++    except Exception:
++        return False
++    for allowed in allowlist:
++        try:
++            a = Path(os.path.expanduser(allowed)).resolve()
++            if p == a or a in p.parents:
++                return True
++        except Exception:
++            continue
++    return False
++
++
++def _host_allowed(url_or_host: str, allowlist: list[str]) -> bool:
++    if not allowlist or not url_or_host:
++        return True
++    parsed = urlparse(url_or_host if "://" in url_or_host else f"https://{url_or_host}")
++    host = (parsed.hostname or url_or_host).lower()
++    for allowed in allowlist:
++        allowed_host = (urlparse(allowed if "://" in allowed else f"https://{allowed}").hostname or allowed).lower()
++        if host == allowed_host or host.endswith("." + allowed_host):
++            return True
++    return False
++
++
++def _task_base_dir(task_id: str = "") -> str:
++    try:
++        from tools.file_tools import _resolve_base_dir
++
++        return str(_resolve_base_dir(task_id or "default"))
++    except Exception:
++        raw = os.getenv("TERMINAL_CWD", "")
++        if raw and os.path.isabs(os.path.expanduser(raw)):
++            return os.path.expanduser(raw)
++        try:
++            return os.getcwd()
++        except Exception:
++            return ""
++
++
++_V4A_PATCH_PATH_RE = re.compile(r"^\*\*\*\s+(?:Add|Update|Delete)\s+File:\s+(.+?)\s*$", re.M)
++
++
++def _tool_paths(tool_name: str, args: dict[str, Any], *, task_id: str = "") -> list[str]:
++    paths: list[str] = []
++    base_dir = str(args.get("workdir") or args.get("cwd") or _task_base_dir(task_id) or "")
++    for key in ("path", "file_path", "local_path", "remote_path", "workdir", "cwd"):
++        value = args.get(key)
++        if value:
++            paths.append(str(value))
++    if tool_name == "terminal":
++        # Conservative extraction for common absolute/relative file targets.
++        # Relative matches are resolved against the terminal's own workdir/cwd,
++        # not the Hermes process cwd, so allowlists do not falsely block
++        # `terminal(command='cat data/x', workdir='/allowed')`.
++        cmd = str(args.get("command") or "")
++        for match in re.findall(r"(?:^|\s)(/[\w./-]+|~/?[\w./-]*|[\w.-]+/[\w./-]+)", cmd):
++            if match.startswith(("/", "~")) or not base_dir:
++                paths.append(match)
++            else:
++                paths.append(str(Path(os.path.expanduser(base_dir)) / match))
++    if tool_name == "patch" and str(args.get("mode") or "replace") == "patch":
++        patch_text = str(args.get("patch") or "")
++        paths.extend(p.strip() for p in _V4A_PATCH_PATH_RE.findall(patch_text) if p.strip())
++    return paths
++
++
++def _tool_urls(tool_name: str, args: dict[str, Any]) -> list[str]:
++    urls: list[str] = []
++    for key in ("url", "urls", "locator"):
++        value = args.get(key)
++        if isinstance(value, list):
++            urls.extend(str(x) for x in value if x)
++        elif value:
++            urls.append(str(value))
++    return urls
++
++
++def _is_destructive(tool_name: str, args: dict[str, Any]) -> bool:
++    if tool_name in {"write_file", "patch", "memory", "skill_manage", "cronjob", "send_message"}:
++        return True
++    if tool_name == "terminal":
++        cmd = str(args.get("command") or "").lower()
++        return bool(re.search(r"\b(rm\s+-rf|mkfs|dd\s+if=|shutdown|reboot|sudo\s+|chmod\s+-r|chown\s+-r)\b", cmd))
++    return False
++
++
++def _is_trading_live(tool_name: str, args: dict[str, Any]) -> bool:
++    blob = (tool_name + " " + json.dumps(args, ensure_ascii=False, default=str)).lower()
++    if not any(k in blob for k in ("trade", "trading", "order", "bitget", "binance", "buy", "sell", "futures")):
++        return False
++    if any(k in blob for k in ("dry_run", "dry-run", "paper", "simulate", "backtest")):
++        return False
++    return any(k in blob for k in ("place", "submit", "create_order", "live", "buy", "sell"))
++
++
++class PolicyGuard:
++    @staticmethod
++    def pre_tool_call(goal_run_id: str, action: Any, tool_name: str, args: dict[str, Any], contract: PermissionContract, *, mode: str = "supervised", task_id: str = "") -> PolicyGuardResult:
++        if mode == "full_auto":
++            return PolicyGuardResult()
++        if not isinstance(args, dict):
++            args = {}
++        if _is_trading_live(tool_name, args) and contract.trading_mode != "live_allowed":
++            return PolicyGuardResult("deny", f"live trading is not allowed by contract ({contract.trading_mode})")
++        if contract.destructive_actions == "deny" and _is_destructive(tool_name, args):
++            return PolicyGuardResult("deny", f"destructive tool {tool_name} is denied")
++        # Ask-mode destructive actions are intentionally *not* blocked here:
++        # they must fall through to Hermes' existing dangerous-command/edit
++        # approval paths. PolicyGuard only enforces hard denies/sandbox-only;
++        # it must not convert ask-mode into a synthetic tool error.
++        base_dir = str(args.get("workdir") or args.get("cwd") or _task_base_dir(task_id) or "")
++        for p in _tool_paths(tool_name, args, task_id=task_id):
++            if not _path_allowed(p, contract.filesystem_allowlist, base_dir=base_dir):
++                return PolicyGuardResult("deny", f"path {p} is outside filesystem allowlist")
++        for u in _tool_urls(tool_name, args):
++            if not _host_allowed(u, contract.network_allowlist):
++                return PolicyGuardResult("deny", f"network target {u} is outside network allowlist")
++        return PolicyGuardResult()
++
++
++def pre_tool_policy_block_message(session_id: str, tool_name: str, args: dict[str, Any], *, task_id: str = "") -> str | None:
++    if not session_id:
++        return None
++    try:
++        from hermes_cli.goals import load_goal
++
++        state = load_goal(session_id)
++        if state is None or getattr(state, "mode", "goal") != "supergoal":
++            return None
++        mode = str(getattr(state, "permission_mode", "supervised") or "supervised").strip().lower()
++        contract = PermissionContract.from_mapping(getattr(state, "permission_contract", {}) or {})
++        result = PolicyGuard.pre_tool_call(
++            getattr(state, "goal_run_id", "") or session_id,
++            getattr(state, "action_proposal", None),
++            tool_name,
++            args,
++            contract,
++            mode=mode,
++            task_id=task_id,
++        )
++        return None if result.allows_execution else result.block_message()
++    except Exception:
++        return None
 diff --git a/hermes_cli/supergoal/store.py b/hermes_cli/supergoal/store.py
 new file mode 100644
 index 000000000..b88aed28b
@@ -8977,10 +8631,26 @@ index 000000000..6405f62ce
 +
 +    return events
 diff --git a/model_tools.py b/model_tools.py
-index 0618138aa..18d2f2117 100644
+index 0618138aa..7b106ecf6 100644
 --- a/model_tools.py
 +++ b/model_tools.py
-@@ -848,11 +848,25 @@ def _emit_post_tool_call_hook(
+@@ -822,6 +822,15 @@ def _tool_result_observer_fields(result: Any) -> tuple[str, Optional[str], Optio
+     return "ok", None, None
+ 
+ 
++def _supergoal_policy_block_message(session_id: Optional[str], function_name: str, function_args: Dict[str, Any]) -> Optional[str]:
++    try:
++        from hermes_cli.supergoal.policy import pre_tool_policy_block_message
++
++        return pre_tool_policy_block_message(session_id or "", function_name, function_args if isinstance(function_args, dict) else {}, task_id="default")
++    except Exception:
++        return None
++
++
+ def _emit_post_tool_call_hook(
+     *,
+     function_name: str,
+@@ -848,11 +857,25 @@ def _emit_post_tool_call_hook(
      listener will actually consume it).
      """
      try:
@@ -9008,6 +8678,32 @@ index 0618138aa..18d2f2117 100644
          invoke_hook(
              "post_tool_call",
              tool_name=function_name,
+@@ -1018,6 +1041,25 @@ def handle_function_call(
+         if function_name in _AGENT_LOOP_TOOLS:
+             return json.dumps({"error": f"{function_name} must be handled by the agent loop"})
+ 
++        policy_block_message = _supergoal_policy_block_message(session_id, function_name, function_args)
++        if policy_block_message is not None:
++            result = policy_block_message if str(policy_block_message).lstrip().startswith("{") else json.dumps({"error": policy_block_message}, ensure_ascii=False)
++            _emit_post_tool_call_hook(
++                function_name=function_name,
++                function_args=function_args,
++                result=result,
++                task_id=task_id,
++                session_id=session_id,
++                tool_call_id=tool_call_id,
++                turn_id=turn_id,
++                api_request_id=api_request_id,
++                status="blocked",
++                error_type="supergoal_policy_block",
++                error_message=policy_block_message,
++                middleware_trace=list(_tool_middleware_trace),
++            )
++            return result
++
+         # Check plugin hooks for a block directive (unless caller already
+         # checked — e.g. run_agent._invoke_tool passes skip=True to
+         # avoid double-firing the hook).
 diff --git a/tests/gateway/test_goal_status_notice.py b/tests/gateway/test_goal_status_notice.py
 index a45958cf9..4cd0d7118 100644
 --- a/tests/gateway/test_goal_status_notice.py
@@ -9585,10 +9281,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..51c1130e5 100644
+index 0dae684b6..126e7a030 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1091 @@ class TestGoalManager:
+@@ -252,6 +252,1136 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -9982,6 +9678,51 @@ index 0dae684b6..51c1130e5 100644
 +        assert mgr.state is not None
 +        assert mgr.state.current_action_class == "validation"
 +        assert mgr.state.action_proposal.action_class == "validation"
++
++    def test_supergoal_action_proposal_target_uses_refreshed_gate_state(self, hermes_home):
++        from hermes_cli import goals
++        from hermes_cli.goals import GoalManager
++        from hermes_cli.supergoal.evidence import record_tool_evidence
++
++        mgr = GoalManager(session_id="super-action-refreshed-gate-sid")
++        mgr.set("产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告", max_turns=20, mode="supergoal")
++        record_tool_evidence(
++            session_id="super-action-refreshed-gate-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://arxiv.org/abs/1"]},
++            result="paper quote",
++            tool_call_id="tc-paper",
++        )
++        record_tool_evidence(
++            session_id="super-action-refreshed-gate-sid",
++            tool_name="web_extract",
++            args={"urls": ["https://github.com/example/repo"]},
++            result="repo quote",
++            tool_call_id="tc-gh",
++        )
++        portfolio = [
++            {"id": "H1", "claim": "momentum", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["a.md"]},
++            {"id": "H2", "claim": "mean reversion", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["b.md"]},
++            {"id": "H3", "claim": "funding", "baseline": "buy hold", "experiment": "backtest", "kill_criteria": "underperform", "status": "proposed", "artifacts": ["c.md"]},
++        ]
++        with patch.object(goals, "judge_goal", return_value=("continue", "need experiments", False)), \
++             patch.object(goals, "critic_supergoal", return_value={
++                 "progress": "real",
++                 "strategy_health": "good",
++                 "hypothesis_portfolio": portfolio,
++                 "action_proposal": {
++                     "action_class": "experiment_execution",
++                     "expected_evidence": ["baseline", "experiment artifact", "verdict"],
++                     "tools_needed": ["terminal"],
++                     "text": "execute the proposed hypotheses",
++                 },
++             }):
++            mgr.evaluate_after_turn("Created the 3-hypothesis portfolio; next run experiments.")
++
++        assert mgr.state is not None
++        assert next(g for g in mgr.state.gates if g.id == "SG-1").status == "passed"
++        assert mgr.state.action_proposal.target_gate_id == "SG-2"
++        assert "targets SG-1" not in (mgr.state.hard_gate_reason or "")
 +
 +    def test_supergoal_hypothesis_portfolio_passes_strategy_gates(self, hermes_home):
 +        from hermes_cli import goals
@@ -10680,7 +10421,7 @@ index 0dae684b6..51c1130e5 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1564,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1609,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -10689,7 +10430,7 @@ index 0dae684b6..51c1130e5 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1574,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1619,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -10770,10 +10511,10 @@ index 000000000..b97ecdac2
 +    assert DEFAULT_CONFIG["goals"]["max_turns"] == 20
 +    assert DEFAULT_CONFIG["goals"]["super_max_turns"] == 240
 diff --git a/tests/test_model_tools.py b/tests/test_model_tools.py
-index 91e7103aa..74bcbf42a 100644
+index 91e7103aa..58649727f 100644
 --- a/tests/test_model_tools.py
 +++ b/tests/test_model_tools.py
-@@ -127,25 +127,30 @@ class TestHandleFunctionCall:
+@@ -127,25 +127,165 @@ class TestHandleFunctionCall:
          # pre_tool_call does NOT get duration_ms (nothing has run yet).
          assert "duration_ms" not in kwargs_by_hook["pre_tool_call"]
  
@@ -10810,6 +10551,228 @@ index 91e7103aa..74bcbf42a 100644
 +        mock_record_evidence.assert_called_once()
 +        assert mock_record_evidence.call_args.kwargs["session_id"] == "sid-1"
 +        assert mock_record_evidence.call_args.kwargs["tool_call_id"] == "tc-1"
++
++    def test_supergoal_policy_blocks_before_registry_dispatch(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-block-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "supervised"
++        state.permission_contract = {
++            "filesystem_allowlist": ["/tmp/allowed"],
++            "destructive_actions": "deny",
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-block-sid", state)
++
++        with patch("model_tools.registry.dispatch") as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/etc/passwd", "content": "x"},
++                session_id="super-policy-block-sid",
++                tool_call_id="tc-policy",
++            )
++
++        parsed = json.loads(result)
++        assert "Supergoal policy" in parsed["error"]
++        mock_dispatch.assert_not_called()
++
++    def test_supergoal_default_ask_mode_preserves_existing_approval_path(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-ask-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "supervised"
++        state.permission_contract = {
++            "destructive_actions": "ask",
++            "requires_human_for": ["destructive_actions"],
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-ask-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/tmp/supergoal-ask.md", "content": "x"},
++                session_id="super-policy-ask-sid",
++                tool_call_id="tc-policy",
++            )
++
++        assert result == '{"ok":true}'
++        mock_dispatch.assert_called_once()
++
++    def test_supergoal_policy_resolves_terminal_relative_paths_against_workdir(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "terminal",
++            {"command": "cat data/input.csv", "workdir": "/tmp/allowed"},
++            contract,
++            mode="supervised",
++        )
++
++        assert result.allows_execution
++
++    def test_supergoal_policy_checks_v4a_patch_body_paths(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "patch",
++            {
++                "mode": "patch",
++                "patch": "*** Begin Patch\n*** Update File: /tmp/outside.txt\n@@\n-old\n+new\n*** End Patch",
++            },
++            contract,
++            mode="supervised",
++        )
++
++        assert not result.allows_execution
++        assert "/tmp/outside.txt" in result.reason
++
++    def test_supergoal_policy_resolves_file_relative_paths_against_terminal_cwd(self, _isolate_hermes_home, monkeypatch):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        monkeypatch.setenv("TERMINAL_CWD", "/tmp/allowed")
++        contract = PermissionContract(
++            filesystem_allowlist=["/tmp/allowed"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "write_file",
++            {"path": "relative/output.md", "content": "x"},
++            contract,
++            mode="supervised",
++        )
++
++        assert result.allows_execution
++
++    def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        mgr = GoalManager(session_id="super-policy-full-auto-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        state.permission_mode = "full_auto"
++        state.permission_contract = {
++            "filesystem_allowlist": ["/tmp/allowed"],
++            "destructive_actions": "deny",
++            "trading_mode": "live_forbidden",
++        }
++        save_goal("super-policy-full-auto-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}') as mock_dispatch:
++            result = handle_function_call(
++                "write_file",
++                {"path": "/etc/passwd", "content": "x"},
++                session_id="super-policy-full-auto-sid",
++                tool_call_id="tc-policy",
++            )
++
++        assert result == '{"ok":true}'
++        mock_dispatch.assert_called_once()
  
      def test_tool_request_and_execution_middleware_wrap_registry_dispatch(self, monkeypatch):
          seen = {}
+diff --git a/tests/tools/test_hardline_blocklist.py b/tests/tools/test_hardline_blocklist.py
+index 8d8062139..32c5a9557 100644
+--- a/tests/tools/test_hardline_blocklist.py
++++ b/tests/tools/test_hardline_blocklist.py
+@@ -256,6 +256,35 @@ def test_hardline_runs_before_dangerous_detection(clean_session):
+     assert result.get("hardline") is True
+ 
+ 
++def test_supergoal_full_auto_bypasses_recoverable_dangerous_approval(clean_session, monkeypatch, _isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, save_goal
++
++    sid = "super-full-auto-approval-sid"
++    mgr = GoalManager(session_id=sid)
++    state = mgr.set("autonomous maintenance", mode="supergoal")
++    state.permission_mode = "full_auto"
++    save_goal(sid, state)
++    monkeypatch.setenv("HERMES_SESSION_ID", sid)
++
++    result = check_dangerous_command("rm -rf /tmp/x", "local")
++    assert result["approved"] is True
++
++
++def test_supergoal_full_auto_cannot_bypass_hardline(clean_session, monkeypatch, _isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, save_goal
++
++    sid = "super-full-auto-hardline-sid"
++    mgr = GoalManager(session_id=sid)
++    state = mgr.set("autonomous maintenance", mode="supergoal")
++    state.permission_mode = "full_auto"
++    save_goal(sid, state)
++    monkeypatch.setenv("HERMES_SESSION_ID", sid)
++
++    result = check_dangerous_command("rm -rf /", "local")
++    assert result["approved"] is False
++    assert result.get("hardline") is True
++
++
+ def test_recoverable_dangerous_commands_still_pass_yolo(clean_session, monkeypatch):
+     """Yolo still bypasses the regular DANGEROUS_PATTERNS list.
+ 
+diff --git a/tools/approval.py b/tools/approval.py
+index 6ed1fb9cb..4a4f4dc51 100644
+--- a/tools/approval.py
++++ b/tools/approval.py
+@@ -1095,6 +1095,28 @@ Respond with exactly one word: APPROVE, DENY, or ESCALATE"""
+         return "escalate"
+ 
+ 
++def _supergoal_full_auto_approval_enabled() -> bool:
++    try:
++        from gateway.session_context import get_session_env
++
++        session_id = get_session_env("HERMES_SESSION_ID", "") or os.getenv("HERMES_SESSION_ID", "")
++    except Exception:
++        session_id = os.getenv("HERMES_SESSION_ID", "")
++    if not session_id:
++        return False
++    try:
++        from hermes_cli.goals import load_goal
++
++        state = load_goal(session_id)
++        return bool(
++            state is not None
++            and getattr(state, "mode", "goal") == "supergoal"
++            and getattr(state, "permission_mode", "supervised") == "full_auto"
++        )
++    except Exception:
++        return False
++
++
+ def check_dangerous_command(command: str, env_type: str,
+                             approval_callback=None) -> dict:
+     """Check if a command is dangerous and handle approval.
+@@ -1123,9 +1145,10 @@ def check_dangerous_command(command: str, env_type: str,
+         logger.warning("Hardline block: %s (command: %s)", hardline_desc, command[:200])
+         return _hardline_block_result(hardline_desc)
+ 
+-    # --yolo: bypass all approval prompts. Gateway /yolo is session-scoped;
+-    # CLI --yolo remains process-scoped via the env var for local use.
+-    if _YOLO_MODE_FROZEN or is_current_session_yolo_enabled():
++    # --yolo or /supergoal full_auto: bypass approval prompts while preserving
++    # the hardline floor above. full_auto is the highest unattended mode; it
++    # must not stop at every dangerous-command approval prompt.
++    if _YOLO_MODE_FROZEN or is_current_session_yolo_enabled() or _supergoal_full_auto_approval_enabled():
+         return {"approved": True, "message": None}
+ 
+     is_dangerous, pattern_key, description = detect_dangerous_command(command)
