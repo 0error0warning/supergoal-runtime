@@ -69,6 +69,11 @@ from hermes_cli.supergoal.gates import (
     tool_backed_research_findings as _gate_tool_backed_research_findings,
     verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 )
+from hermes_cli.supergoal.projection import (
+    add_evidence_layer as _project_add_evidence_layer,
+    apply_failure_taxonomy_policy as _project_apply_failure_taxonomy_policy,
+    increment_failure_taxonomy as _project_increment_failure_taxonomy,
+)
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
 from hermes_cli.supergoal_projection import (
     artifact_paths as _artifact_paths,
@@ -1613,25 +1618,23 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
 
     def add_layer(layer: str, value: str, *, max_items: int = 12) -> None:
         nonlocal changed
-        layer = str(layer or "").strip()
-        value = " ".join(str(value or "").split())
-        if not layer or not value:
-            return
-        layers = dict(state.evidence_layers or {})
-        before = list(layers.get(layer, []))
-        after = _merge_compact_list(before, [_truncate(value, 180)], max_items=max_items)
-        if after != before:
-            layers[layer] = after
-            state.evidence_layers = layers
-            changed = True
+        changed = _project_add_evidence_layer(
+            state,
+            layer,
+            value,
+            merge_compact_list=_merge_compact_list,
+            truncate=_truncate,
+            max_items=max_items,
+        ) or changed
 
     def inc_failure(category: str, *, event_key: Tuple[str, int, str]) -> None:
         nonlocal changed
-        category = str(category or "").strip().lower()
-        if not category or event_key in seen_event_keys:
-            return
-        seen_event_keys.add(event_key)
-        derived_failure_taxonomy[category] = int(derived_failure_taxonomy.get(category, 0) or 0) + 1
+        changed = _project_increment_failure_taxonomy(
+            derived_failure_taxonomy,
+            seen_event_keys,
+            category,
+            event_key=event_key,
+        ) or changed
 
     for event in events or []:
         data = event.data or {}
@@ -1710,22 +1713,10 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
         state.failure_taxonomy = derived_failure_taxonomy
         changed = True
 
-    failed_count = sum(1 for h in state.hypothesis_portfolio if h.status in {"failed", "killed"})
-    if failed_count >= 5 or len(state.failure_taxonomy or {}) >= 3:
-        if state.search_phase != "failure_taxonomy":
-            state.search_phase = "failure_taxonomy"
-            changed = True
-        criteria = [
-            "new hypothesis must name an independent information source, not only OHLCV/beta proxy",
-            "must define baseline, kill criteria, rolling/OOS gate, and artifact before execution",
-            "if next path is another failed family variant, produce no-edge attribution instead",
-        ]
-        before = list(state.admission_criteria or [])
-        state.admission_criteria = _merge_compact_list(state.admission_criteria, criteria, max_items=8)
-        changed = changed or state.admission_criteria != before
-        if not state.no_edge_report and failed_count >= 8:
-            state.no_edge_report = "multiple hypotheses failed; require failure taxonomy before more benchmark variants"
-            changed = True
+    changed = _project_apply_failure_taxonomy_policy(
+        state,
+        merge_compact_list=_merge_compact_list,
+    ) or changed
 
     _update_supergoal_gates(state)
     return changed

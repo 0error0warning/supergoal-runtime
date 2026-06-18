@@ -206,6 +206,7 @@ overlay/                                    # full modified files for review/ref
   hermes_cli/supergoal/store.py
   hermes_cli/supergoal/evidence.py
   hermes_cli/supergoal/policy.py
+  hermes_cli/supergoal/projection.py
   hermes_cli/supergoal_gates.py
   hermes_cli/supergoal_projection.py
   agent/conversation_compression.py
