@@ -1584,6 +1584,30 @@ def _reset_gate_stall(state: GoalState) -> None:
     state.same_gate_stall_count = 0
 
 
+def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
+    return {
+        "status": "paused",
+        "should_continue": False,
+        "continuation_prompt": None,
+        "verdict": "continue",
+        "reason": reason,
+        "message": result.paused_message,
+    }
+
+
+def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
+    return {
+        "status": "done",
+        "control_status": "done_with_followups" if followup_gate_ids else "done",
+        "followup_gate_ids": followup_gate_ids,
+        "should_continue": False,
+        "continuation_prompt": None,
+        "verdict": "done",
+        "reason": reason,
+        "message": f"✓ Goal achieved: {reason}",
+    }
+
+
 def _reconcile_done_with_supergoal_gates(
     state: GoalState,
     *,
@@ -3070,14 +3094,7 @@ class GoalManager:
                     "same_gate_stall_count": state.same_gate_stall_count,
                 },
             )
-            return {
-                "status": "paused",
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "continue",
-                "reason": reason,
-                "message": gate_result.paused_message,
-            }
+            return _gate_pause_decision(gate_result, reason=reason)
 
         if verdict == "done":
             state.status = "done"
@@ -3089,16 +3106,7 @@ class GoalManager:
             _update_supergoal_plan_from_progress(state, verdict="done")
             save_goal(self.session_id, state)
             self._record_event("done", summary=reason, data={"reason": reason})
-            return {
-                "status": "done",
-                "control_status": "done_with_followups" if done_followup_gate_ids else "done",
-                "followup_gate_ids": done_followup_gate_ids,
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "done",
-                "reason": reason,
-                "message": f"✓ Goal achieved: {reason}",
-            }
+            return _gate_done_decision(reason=reason, followup_gate_ids=done_followup_gate_ids)
 
         # Auto-pause when the judge model can't produce the expected JSON
         # verdict N turns in a row. Points the user at the goal_judge config
