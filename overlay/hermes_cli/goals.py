@@ -2183,8 +2183,12 @@ def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> N
                 step.status = "done"
         for gate in state.gates:
             if gate.status != "passed":
-                gate.status = "passed"
-                gate.evidence = gate.evidence or "completion judge marked goal done"
+                if _is_blocking_gate(gate):
+                    gate.status = "passed"
+                    gate.evidence = gate.evidence or "completion judge marked goal done"
+                else:
+                    gate.status = "followup"
+                    gate.evidence = ""
         state.current_step_id = ""
         return
     if state.strategy_health == "blocked":
@@ -3209,6 +3213,10 @@ class GoalManager:
 
         if verdict == "done":
             state.status = "done"
+            state.should_replan = False
+            state.next_best_action = ""
+            state.action_proposal = SupergoalActionProposal()
+            state.hard_gate_reason = ""
             _reset_gate_stall(state)
             _update_supergoal_plan_from_progress(state, verdict="done")
             save_goal(self.session_id, state)

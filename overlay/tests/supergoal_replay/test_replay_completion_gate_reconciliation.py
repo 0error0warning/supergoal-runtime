@@ -9,6 +9,8 @@ def test_replay_completion_done_with_acceptance_gates_does_not_enqueue(trace, re
     assert decision["control_status"] == "done"
     assert decision["should_continue"] is False
     assert decision["continuation_prompt"] is None
+    assert state.should_replan is False
+    assert not state.next_best_action
 
 
 def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
@@ -50,6 +52,9 @@ def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
     assert decision["control_status"] == "done_with_followups"
     assert decision["should_continue"] is False
     assert "follow-up gates open" in decision["reason"]
+    mon = next(g for g in mgr.state.gates if g.id == "MON-1")
+    assert mon.status == "followup"
+    assert not mon.evidence
 
 
 def test_replay_status_line_and_card_match_internal_status(trace, replay):
