@@ -8,7 +8,7 @@ controller-facing values are explicit and typed here.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Literal, Optional, cast
 
 
@@ -108,6 +108,19 @@ class GateDecision:
         data["followup_gate_ids"] = list(self.followup_gate_ids or [])
         return data
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any] | None) -> "GateDecision":
+        if not isinstance(data, dict):
+            return cls()
+        return cls(
+            gate_vetoed=bool(data.get("gate_vetoed", False)),
+            first_blocking_gate_id=str(data.get("first_blocking_gate_id") or ""),
+            first_blocking_gate_description=str(data.get("first_blocking_gate_description") or ""),
+            followup_gate_ids=[str(x) for x in (data.get("followup_gate_ids") or []) if str(x)],
+            done_with_followups=bool(data.get("done_with_followups", False)),
+            stalled=bool(data.get("stalled", False)),
+        )
+
 
 @dataclass(frozen=True)
 class TurnContext:
@@ -144,6 +157,7 @@ class ControllerDecision:
     gate_results: List[GateResult]
     evidence_refs: List[str]
     reason: str
+    gate_decision: GateDecision = field(default_factory=GateDecision)
     user_message: str = ""
     legacy_status: Optional[str] = None
     verdict: str = "continue"
@@ -162,6 +176,7 @@ class ControllerDecision:
             "control_status": self.status,
             "next_action": self.next_action.to_dict() if self.next_action else None,
             "gate_results": [g.to_dict() for g in self.gate_results],
+            "gate_decision": self.gate_decision.to_dict(),
             "evidence_refs": list(self.evidence_refs),
             "user_message": self.user_message,
             "followup_gate_ids": [
@@ -176,6 +191,7 @@ class ControllerDecision:
         data: DecisionDict,
         *,
         gate_results: Optional[List[GateResult]] = None,
+        gate_decision: Optional[GateDecision] = None,
         evidence_refs: Optional[List[str]] = None,
         next_action: Optional[ActionProposal] = None,
         snapshots: Optional[List[PipelineSnapshot]] = None,
@@ -200,6 +216,7 @@ class ControllerDecision:
             next_action=next_action,
             continuation_prompt=data.get("continuation_prompt"),
             gate_results=gate_results or [],
+            gate_decision=gate_decision or GateDecision.from_dict(data.get("gate_decision")),
             evidence_refs=evidence_refs or [],
             reason=reason,
             user_message=str(data.get("message") or data.get("user_message") or ""),

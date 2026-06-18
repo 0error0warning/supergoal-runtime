@@ -57,6 +57,7 @@ def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
     gate_decision = reconcile_phase["data"]["gate_decision"]
     assert gate_decision["done_with_followups"] is True
     assert set(gate_decision["followup_gate_ids"]) == {"G2", "MON-1"}
+    assert decision["gate_decision"] == gate_decision
     mon = next(g for g in mgr.state.gates if g.id == "MON-1")
     assert mon.status == "followup"
     assert not mon.evidence

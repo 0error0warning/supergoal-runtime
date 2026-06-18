@@ -161,6 +161,7 @@ class SupergoalController:
             gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
         )
         gate_decision = self._gate_decision(ctx.state, legacy)
+        legacy["gate_decision"] = gate_decision.to_dict()
         snapshots.append(
             PipelineSnapshot(
                 phase="reconcile",
@@ -207,6 +208,7 @@ class SupergoalController:
         return ControllerDecision.from_dict(
             legacy,
             gate_results=gate_results,
+            gate_decision=GateDecision.from_dict(legacy.get("gate_decision")),
             evidence_refs=evidence_refs,
             next_action=next_action,
             snapshots=snapshots,

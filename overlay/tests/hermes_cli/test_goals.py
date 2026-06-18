@@ -1001,6 +1001,7 @@ class TestGoalManager:
         gate_decision = reconcile_phase["data"]["gate_decision"]
         assert gate_decision["gate_vetoed"] is True
         assert gate_decision["first_blocking_gate_id"] == "G2"
+        assert decision["gate_decision"] == gate_decision
         g2 = next(g for g in mgr.state.gates if g.id == "G2")
         assert g2.kind == "domain_required"
         assert g2.blocking is True
