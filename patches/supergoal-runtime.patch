@@ -4519,10 +4519,10 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..c9207284f 100644
+index a6a28deaf..9e64f4c6f 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
-@@ -37,6 +37,50 @@ from dataclasses import dataclass, field, asdict
+@@ -37,6 +37,46 @@ from dataclasses import dataclass, field, asdict
  from datetime import datetime, timezone
  from typing import Any, Dict, List, Optional, Tuple
  
@@ -4558,11 +4558,7 @@ index a6a28deaf..c9207284f 100644
 +    tool_backed_research_findings as _gate_tool_backed_research_findings,
 +    verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 +)
-+from hermes_cli.supergoal.projection import (
-+    add_evidence_layer as _project_add_evidence_layer,
-+    apply_failure_taxonomy_policy as _project_apply_failure_taxonomy_policy,
-+    increment_failure_taxonomy as _project_increment_failure_taxonomy,
-+)
++from hermes_cli.supergoal.projection import project_events_to_board as _project_events_to_board
 +from hermes_cli.supergoal_gates import build_default_supergoal_gates
 +from hermes_cli.supergoal_projection import (
 +    artifact_paths as _artifact_paths,
@@ -4573,7 +4569,7 @@ index a6a28deaf..c9207284f 100644
  logger = logging.getLogger(__name__)
  
  
-@@ -56,6 +100,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
+@@ -56,6 +96,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
  # we've live-tested; override via auxiliary.goal_judge.max_tokens for
  # specifically constrained setups.
  DEFAULT_JUDGE_MAX_TOKENS = 4096
@@ -4585,7 +4581,7 @@ index a6a28deaf..c9207284f 100644
  # Cap how much of the last response + recent messages we send to the judge.
  _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
  # After this many consecutive judge *parse* failures (empty output / non-JSON),
-@@ -66,6 +115,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
+@@ -66,6 +111,9 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
  # exhausted with every reply shaped like `judge returned empty response` or
  # `judge reply was not JSON`.
  DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES = 3
@@ -4595,7 +4591,7 @@ index a6a28deaf..c9207284f 100644
  
  
  CONTINUATION_PROMPT_TEMPLATE = (
-@@ -91,6 +143,89 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -91,6 +139,89 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "and stop."
  )
  
@@ -4685,7 +4681,7 @@ index a6a28deaf..c9207284f 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +268,526 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +264,526 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -5214,7 +5210,7 @@ index a6a28deaf..c9207284f 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +796,54 @@ class GoalState:
+@@ -153,6 +792,54 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -5269,7 +5265,7 @@ index a6a28deaf..c9207284f 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +852,12 @@ class GoalState:
+@@ -161,7 +848,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -5283,7 +5279,7 @@ index a6a28deaf..c9207284f 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +866,38 @@ class GoalState:
+@@ -170,8 +862,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -5322,7 +5318,7 @@ index a6a28deaf..c9207284f 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +907,65 @@ class GoalState:
+@@ -181,6 +903,65 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -5388,7 +5384,7 @@ index a6a28deaf..c9207284f 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +978,228 @@ class GoalState:
+@@ -193,81 +974,228 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5600,10 +5596,10 @@ index a6a28deaf..c9207284f 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-         return
++        return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-+        return
+         return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -5660,7 +5656,7 @@ index a6a28deaf..c9207284f 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1211,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1207,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5738,7 +5734,7 @@ index a6a28deaf..c9207284f 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1295,820 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1291,711 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6050,124 +6046,15 @@ index a6a28deaf..c9207284f 100644
 +
 +
 +def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> bool:
-+    """Derive lightweight ledgers from structured GoalEvent payloads.
-+
-+    GoalEvent is the durable source of truth for what happened. The mutable
-+    board stays as a cached projection so status and continuation prompts are
-+    cheap to render, but it should be rebuildable from event data when critic
-+    output is missing or stale.
-+    """
-+    if state is None or getattr(state, "mode", "goal") != "supergoal":
-+        return False
-+    changed = False
-+    seen_event_keys: set[Tuple[str, int, str]] = set()
-+    derived_failure_taxonomy: Dict[str, int] = {}
-+
-+    def add_layer(layer: str, value: str, *, max_items: int = 12) -> None:
-+        nonlocal changed
-+        changed = _project_add_evidence_layer(
-+            state,
-+            layer,
-+            value,
-+            merge_compact_list=_merge_compact_list,
-+            truncate=_truncate,
-+            max_items=max_items,
-+        ) or changed
-+
-+    def inc_failure(category: str, *, event_key: Tuple[str, int, str]) -> None:
-+        nonlocal changed
-+        changed = _project_increment_failure_taxonomy(
-+            derived_failure_taxonomy,
-+            seen_event_keys,
-+            category,
-+            event_key=event_key,
-+        ) or changed
-+
-+    for event in events or []:
-+        data = event.data or {}
-+        etype = event.type
-+        if etype == "artifact_observed":
-+            locator = data.get("artifact_path") or data.get("locator") or event.summary
-+            before = list(state.evidence or [])
-+            state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-+            changed = changed or state.evidence != before
-+            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
-+                add_layer("artifact", locator)
-+        elif etype == "verification_observed":
-+            evidence = data.get("evidence") or event.summary
-+            before = list(state.evidence or [])
-+            state.evidence = _merge_compact_list(state.evidence, [evidence], max_items=20)
-+            changed = changed or state.evidence != before
-+            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
-+                add_layer("verification", evidence)
-+        elif etype == "research_observed":
-+            before = list(state.research_findings or [])
-+            state.research_findings = _merge_research_findings(state.research_findings, data)
-+            state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
-+            changed = changed or state.research_findings != before
-+            source = str(data.get("evidence_source") or "").strip()
-+            trust = str(data.get("trust_level") or "").strip().lower()
-+            tool_call_id = str(data.get("tool_call_id") or "").strip()
-+            is_tool_backed = bool(tool_call_id and tool_call_id != "assistant_turn" and source != "assistant_claim" and trust in {"observed", "verified"})
-+            if is_tool_backed:
-+                add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
-+        elif etype == "tool_evidence_observed":
-+            try:
-+                from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
-+
-+                ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
-+            except Exception:
-+                ref = None
-+                research_finding_from_evidence = None  # type: ignore[assignment]
-+            if ref is not None:
-+                locator = ref.artifact_path or ref.locator or ref.id
-+                if ref.trust_level in {"observed", "verified"}:
-+                    layer = "verification" if ref.trust_level == "verified" else "tool_observation"
-+                    if ref.source.value in {"web_source", "github_source"}:
-+                        layer = "external_prior"
-+                    elif ref.source.value == "file_artifact":
-+                        layer = "artifact"
-+                    elif ref.source.value == "test_run":
-+                        layer = "verification"
-+                    add_layer(layer, locator)
-+                    before_evidence = list(state.evidence or [])
-+                    state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-+                    changed = changed or state.evidence != before_evidence
-+                try:
-+                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
-+                except Exception:
-+                    finding_data = None
-+                if finding_data:
-+                    before = list(state.research_findings or [])
-+                    state.research_findings = _merge_research_findings(state.research_findings, finding_data)
-+                    state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
-+                    changed = changed or state.research_findings != before
-+        elif etype == "hypothesis_failed":
-+            add_layer("failed_hypothesis", event.summary)
-+            inc_failure(
-+                data.get("category") or data.get("reason") or event.summary,
-+                event_key=(event.type, int(event.turn or 0), event.summary),
-+            )
-+        elif etype == "action_class_observed":
-+            action = str(data.get("action_class") or event.summary or "").strip().lower()
-+            if action:
-+                before = list(state.action_history or [])
-+                state.action_history = (before + [action])[-12:]
-+                state.current_action_class = action
-+                changed = changed or state.action_history != before
-+
-+    if derived_failure_taxonomy != (state.failure_taxonomy or {}):
-+        state.failure_taxonomy = derived_failure_taxonomy
-+        changed = True
-+
-+    changed = _project_apply_failure_taxonomy_policy(
++    return _project_events_to_board(
 +        state,
++        events,
 +        merge_compact_list=_merge_compact_list,
-+    ) or changed
-+
-+    _update_supergoal_gates(state)
-+    return changed
-+
++        truncate=_truncate,
++        merge_research_findings=_merge_research_findings,
++        research_sufficiency_from_findings=_research_sufficiency_from_findings,
++        update_gates=_update_supergoal_gates,
++    )
 +
 +def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
 +    """Bring old persisted supergoal states under the current deterministic guards."""
@@ -6559,7 +6446,7 @@ index a6a28deaf..c9207284f 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2116,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2003,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6615,7 +6502,7 @@ index a6a28deaf..c9207284f 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2301,194 @@ def judge_goal(
+@@ -463,6 +2188,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6810,7 +6697,7 @@ index a6a28deaf..c9207284f 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2515,41 @@ class GoalManager:
+@@ -489,6 +2402,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6852,7 +6739,7 @@ index a6a28deaf..c9207284f 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2563,154 @@ class GoalManager:
+@@ -502,37 +2450,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7013,7 +6900,7 @@ index a6a28deaf..c9207284f 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2719,7 @@ class GoalManager:
+@@ -541,6 +2606,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7021,7 +6908,7 @@ index a6a28deaf..c9207284f 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2729,29 @@ class GoalManager:
+@@ -550,7 +2616,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7051,7 +6938,7 @@ index a6a28deaf..c9207284f 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2759,7 @@ class GoalManager:
+@@ -558,6 +2646,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7059,7 +6946,7 @@ index a6a28deaf..c9207284f 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2768,25 @@ class GoalManager:
+@@ -566,7 +2655,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
@@ -7085,7 +6972,7 @@ index a6a28deaf..c9207284f 100644
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2802,7 @@ class GoalManager:
+@@ -582,6 +2689,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7093,7 +6980,7 @@ index a6a28deaf..c9207284f 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2828,18 @@ class GoalManager:
+@@ -607,6 +2715,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7112,7 +6999,7 @@ index a6a28deaf..c9207284f 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2855,35 @@ class GoalManager:
+@@ -622,6 +2742,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7148,7 +7035,7 @@ index a6a28deaf..c9207284f 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +2920,60 @@ class GoalManager:
+@@ -658,6 +2807,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7209,7 +7096,7 @@ index a6a28deaf..c9207284f 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,11 +2982,102 @@ class GoalManager:
+@@ -666,11 +2869,102 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7312,7 +7199,7 @@ index a6a28deaf..c9207284f 100644
                  "should_continue": False,
                  "continuation_prompt": None,
                  "verdict": "done",
-@@ -690,6 +3097,11 @@ class GoalManager:
+@@ -690,6 +2984,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7324,7 +7211,7 @@ index a6a28deaf..c9207284f 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3120,83 @@ class GoalManager:
+@@ -708,10 +3007,83 @@ class GoalManager:
                  ),
              }
  
@@ -7408,7 +7295,7 @@ index a6a28deaf..c9207284f 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3209,20 @@ class GoalManager:
+@@ -724,7 +3096,20 @@ class GoalManager:
                  ),
              }
  
@@ -7429,7 +7316,7 @@ index a6a28deaf..c9207284f 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3230,52 @@ class GoalManager:
+@@ -732,13 +3117,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7483,7 +7370,7 @@ index a6a28deaf..c9207284f 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3436,8 @@ __all__ = [
+@@ -899,6 +3323,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -8919,10 +8806,10 @@ index 000000000..9d767d6eb
 +        return None
 diff --git a/hermes_cli/supergoal/projection.py b/hermes_cli/supergoal/projection.py
 new file mode 100644
-index 000000000..cbd95a201
+index 000000000..ec4cf57e5
 --- /dev/null
 +++ b/hermes_cli/supergoal/projection.py
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,210 @@
 +"""Projection helpers for /supergoal event-derived board state.
 +
 +The controller will eventually own Observe → Project.  During staged migration,
@@ -9008,6 +8895,130 @@ index 000000000..cbd95a201
 +        if not getattr(state, "no_edge_report", "") and failed_count >= 8:
 +            state.no_edge_report = "multiple hypotheses failed; require failure taxonomy before more benchmark variants"
 +            changed = True
++    return changed
++
++
++def project_events_to_board(
++    state: Any,
++    events: list[Any],
++    *,
++    merge_compact_list: Callable[..., list[str]],
++    truncate: Truncate,
++    merge_research_findings: Callable[..., list[Any]],
++    research_sufficiency_from_findings: Callable[[Any, str], str],
++    update_gates: Callable[[Any], None],
++) -> bool:
++    """Derive lightweight board ledgers from structured GoalEvent payloads."""
++    if state is None or getattr(state, "mode", "goal") != "supergoal":
++        return False
++    changed = False
++    seen_event_keys: set[tuple[str, int, str]] = set()
++    derived_failure_taxonomy: dict[str, int] = {}
++
++    def add_layer(layer: str, value: str, *, max_items: int = 12) -> None:
++        nonlocal changed
++        changed = add_evidence_layer(
++            state,
++            layer,
++            value,
++            merge_compact_list=merge_compact_list,
++            truncate=truncate,
++            max_items=max_items,
++        ) or changed
++
++    def inc_failure(category: str, *, event_key: tuple[str, int, str]) -> None:
++        nonlocal changed
++        changed = increment_failure_taxonomy(
++            derived_failure_taxonomy,
++            seen_event_keys,
++            category,
++            event_key=event_key,
++        ) or changed
++
++    for event in events or []:
++        data = getattr(event, "data", None) or {}
++        etype = getattr(event, "type", "")
++        summary = getattr(event, "summary", "")
++        if etype == "artifact_observed":
++            locator = data.get("artifact_path") or data.get("locator") or summary
++            before = list(getattr(state, "evidence", []) or [])
++            state.evidence = merge_compact_list(getattr(state, "evidence", []) or [], [locator], max_items=20)
++            changed = changed or state.evidence != before
++            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
++                add_layer("artifact", locator)
++        elif etype == "verification_observed":
++            evidence = data.get("evidence") or summary
++            before = list(getattr(state, "evidence", []) or [])
++            state.evidence = merge_compact_list(getattr(state, "evidence", []) or [], [evidence], max_items=20)
++            changed = changed or state.evidence != before
++            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
++                add_layer("verification", evidence)
++        elif etype == "research_observed":
++            before = list(getattr(state, "research_findings", []) or [])
++            state.research_findings = merge_research_findings(getattr(state, "research_findings", []) or [], data)
++            state.research_sufficiency = research_sufficiency_from_findings(state, getattr(state, "research_sufficiency", ""))
++            changed = changed or state.research_findings != before
++            source = str(data.get("evidence_source") or "").strip()
++            trust = str(data.get("trust_level") or "").strip().lower()
++            tool_call_id = str(data.get("tool_call_id") or "").strip()
++            is_tool_backed = bool(tool_call_id and tool_call_id != "assistant_turn" and source != "assistant_claim" and trust in {"observed", "verified"})
++            if is_tool_backed:
++                add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", summary)
++        elif etype == "tool_evidence_observed":
++            try:
++                from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
++
++                ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
++            except Exception:
++                ref = None
++                research_finding_from_evidence = None  # type: ignore[assignment]
++            if ref is not None:
++                locator = ref.artifact_path or ref.locator or ref.id
++                if ref.trust_level in {"observed", "verified"}:
++                    layer = "verification" if ref.trust_level == "verified" else "tool_observation"
++                    if ref.source.value in {"web_source", "github_source"}:
++                        layer = "external_prior"
++                    elif ref.source.value == "file_artifact":
++                        layer = "artifact"
++                    elif ref.source.value == "test_run":
++                        layer = "verification"
++                    add_layer(layer, locator)
++                    before_evidence = list(getattr(state, "evidence", []) or [])
++                    state.evidence = merge_compact_list(getattr(state, "evidence", []) or [], [locator], max_items=20)
++                    changed = changed or state.evidence != before_evidence
++                try:
++                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
++                except Exception:
++                    finding_data = None
++                if finding_data:
++                    before = list(getattr(state, "research_findings", []) or [])
++                    state.research_findings = merge_research_findings(getattr(state, "research_findings", []) or [], finding_data)
++                    state.research_sufficiency = research_sufficiency_from_findings(state, getattr(state, "research_sufficiency", ""))
++                    changed = changed or state.research_findings != before
++        elif etype == "hypothesis_failed":
++            add_layer("failed_hypothesis", summary)
++            inc_failure(
++                data.get("category") or data.get("reason") or summary,
++                event_key=(etype, int(getattr(event, "turn", 0) or 0), summary),
++            )
++        elif etype == "action_class_observed":
++            action = str(data.get("action_class") or summary or "").strip().lower()
++            if action:
++                before = list(getattr(state, "action_history", []) or [])
++                state.action_history = (before + [action])[-12:]
++                state.current_action_class = action
++                changed = changed or state.action_history != before
++
++    if derived_failure_taxonomy != (getattr(state, "failure_taxonomy", {}) or {}):
++        state.failure_taxonomy = derived_failure_taxonomy
++        changed = True
++
++    changed = apply_failure_taxonomy_policy(
++        state,
++        merge_compact_list=merge_compact_list,
++    ) or changed
++
++    update_gates(state)
 +    return changed
 diff --git a/hermes_cli/supergoal/store.py b/hermes_cli/supergoal/store.py
 new file mode 100644

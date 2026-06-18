@@ -69,11 +69,7 @@ from hermes_cli.supergoal.gates import (
     tool_backed_research_findings as _gate_tool_backed_research_findings,
     verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 )
-from hermes_cli.supergoal.projection import (
-    add_evidence_layer as _project_add_evidence_layer,
-    apply_failure_taxonomy_policy as _project_apply_failure_taxonomy_policy,
-    increment_failure_taxonomy as _project_increment_failure_taxonomy,
-)
+from hermes_cli.supergoal.projection import project_events_to_board as _project_events_to_board
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
 from hermes_cli.supergoal_projection import (
     artifact_paths as _artifact_paths,
@@ -1603,124 +1599,15 @@ def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "
 
 
 def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> bool:
-    """Derive lightweight ledgers from structured GoalEvent payloads.
-
-    GoalEvent is the durable source of truth for what happened. The mutable
-    board stays as a cached projection so status and continuation prompts are
-    cheap to render, but it should be rebuildable from event data when critic
-    output is missing or stale.
-    """
-    if state is None or getattr(state, "mode", "goal") != "supergoal":
-        return False
-    changed = False
-    seen_event_keys: set[Tuple[str, int, str]] = set()
-    derived_failure_taxonomy: Dict[str, int] = {}
-
-    def add_layer(layer: str, value: str, *, max_items: int = 12) -> None:
-        nonlocal changed
-        changed = _project_add_evidence_layer(
-            state,
-            layer,
-            value,
-            merge_compact_list=_merge_compact_list,
-            truncate=_truncate,
-            max_items=max_items,
-        ) or changed
-
-    def inc_failure(category: str, *, event_key: Tuple[str, int, str]) -> None:
-        nonlocal changed
-        changed = _project_increment_failure_taxonomy(
-            derived_failure_taxonomy,
-            seen_event_keys,
-            category,
-            event_key=event_key,
-        ) or changed
-
-    for event in events or []:
-        data = event.data or {}
-        etype = event.type
-        if etype == "artifact_observed":
-            locator = data.get("artifact_path") or data.get("locator") or event.summary
-            before = list(state.evidence or [])
-            state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-            changed = changed or state.evidence != before
-            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
-                add_layer("artifact", locator)
-        elif etype == "verification_observed":
-            evidence = data.get("evidence") or event.summary
-            before = list(state.evidence or [])
-            state.evidence = _merge_compact_list(state.evidence, [evidence], max_items=20)
-            changed = changed or state.evidence != before
-            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
-                add_layer("verification", evidence)
-        elif etype == "research_observed":
-            before = list(state.research_findings or [])
-            state.research_findings = _merge_research_findings(state.research_findings, data)
-            state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
-            changed = changed or state.research_findings != before
-            source = str(data.get("evidence_source") or "").strip()
-            trust = str(data.get("trust_level") or "").strip().lower()
-            tool_call_id = str(data.get("tool_call_id") or "").strip()
-            is_tool_backed = bool(tool_call_id and tool_call_id != "assistant_turn" and source != "assistant_claim" and trust in {"observed", "verified"})
-            if is_tool_backed:
-                add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
-        elif etype == "tool_evidence_observed":
-            try:
-                from hermes_cli.supergoal.evidence import EvidenceRef, research_finding_from_evidence
-
-                ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
-            except Exception:
-                ref = None
-                research_finding_from_evidence = None  # type: ignore[assignment]
-            if ref is not None:
-                locator = ref.artifact_path or ref.locator or ref.id
-                if ref.trust_level in {"observed", "verified"}:
-                    layer = "verification" if ref.trust_level == "verified" else "tool_observation"
-                    if ref.source.value in {"web_source", "github_source"}:
-                        layer = "external_prior"
-                    elif ref.source.value == "file_artifact":
-                        layer = "artifact"
-                    elif ref.source.value == "test_run":
-                        layer = "verification"
-                    add_layer(layer, locator)
-                    before_evidence = list(state.evidence or [])
-                    state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-                    changed = changed or state.evidence != before_evidence
-                try:
-                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
-                except Exception:
-                    finding_data = None
-                if finding_data:
-                    before = list(state.research_findings or [])
-                    state.research_findings = _merge_research_findings(state.research_findings, finding_data)
-                    state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
-                    changed = changed or state.research_findings != before
-        elif etype == "hypothesis_failed":
-            add_layer("failed_hypothesis", event.summary)
-            inc_failure(
-                data.get("category") or data.get("reason") or event.summary,
-                event_key=(event.type, int(event.turn or 0), event.summary),
-            )
-        elif etype == "action_class_observed":
-            action = str(data.get("action_class") or event.summary or "").strip().lower()
-            if action:
-                before = list(state.action_history or [])
-                state.action_history = (before + [action])[-12:]
-                state.current_action_class = action
-                changed = changed or state.action_history != before
-
-    if derived_failure_taxonomy != (state.failure_taxonomy or {}):
-        state.failure_taxonomy = derived_failure_taxonomy
-        changed = True
-
-    changed = _project_apply_failure_taxonomy_policy(
+    return _project_events_to_board(
         state,
+        events,
         merge_compact_list=_merge_compact_list,
-    ) or changed
-
-    _update_supergoal_gates(state)
-    return changed
-
+        truncate=_truncate,
+        merge_research_findings=_merge_research_findings,
+        research_sufficiency_from_findings=_research_sufficiency_from_findings,
+        update_gates=_update_supergoal_gates,
+    )
 
 def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
     """Bring old persisted supergoal states under the current deterministic guards."""
