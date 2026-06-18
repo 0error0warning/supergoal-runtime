@@ -195,6 +195,8 @@ overlay/                                    # full modified files for review/ref
   hermes_cli/config.py
   hermes_cli/goals.py
   hermes_cli/goal_events.py
+  hermes_cli/supergoal/__init__.py
+  hermes_cli/supergoal/store.py
   hermes_cli/supergoal_gates.py
   hermes_cli/supergoal_projection.py
   agent/conversation_compression.py
