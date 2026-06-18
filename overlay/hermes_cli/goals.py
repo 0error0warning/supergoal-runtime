@@ -2793,6 +2793,7 @@ class GoalManager:
         user_initiated: bool = True,
         supergoal_observed: bool = False,
         supergoal_projected: bool = False,
+        judge_result: Optional[Tuple[str, str, bool]] = None,
     ) -> Dict[str, Any]:
         """Run the judge and update state. Return a decision dict.
 
@@ -2823,9 +2824,12 @@ class GoalManager:
         state.turns_used += 1
         state.last_turn_at = time.time()
 
-        verdict, reason, parse_failed = judge_goal(
-            state.goal, last_response, subgoals=state.subgoals or None
-        )
+        if judge_result is None:
+            verdict, reason, parse_failed = judge_goal(
+                state.goal, last_response, subgoals=state.subgoals or None
+            )
+        else:
+            verdict, reason, parse_failed = judge_result
         state.last_verdict = verdict
         state.last_reason = reason
 

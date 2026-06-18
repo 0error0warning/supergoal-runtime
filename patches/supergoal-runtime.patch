@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..564ea0012 100644
+index a6a28deaf..49497acdb 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,46 @@ from dataclasses import dataclass, field, asdict
@@ -7000,7 +7000,7 @@ index a6a28deaf..564ea0012 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2743,56 @@ class GoalManager:
+@@ -622,6 +2743,57 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7054,10 +7054,23 @@ index a6a28deaf..564ea0012 100644
 +        user_initiated: bool = True,
 +        supergoal_observed: bool = False,
 +        supergoal_projected: bool = False,
++        judge_result: Optional[Tuple[str, str, bool]] = None,
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +2829,62 @@ class GoalManager:
+@@ -652,12 +2824,71 @@ class GoalManager:
+         state.turns_used += 1
+         state.last_turn_at = time.time()
+ 
+-        verdict, reason, parse_failed = judge_goal(
+-            state.goal, last_response, subgoals=state.subgoals or None
+-        )
++        if judge_result is None:
++            verdict, reason, parse_failed = judge_goal(
++                state.goal, last_response, subgoals=state.subgoals or None
++            )
++        else:
++            verdict, reason, parse_failed = judge_result
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7120,7 +7133,7 @@ index a6a28deaf..564ea0012 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,11 +2893,102 @@ class GoalManager:
+@@ -666,11 +2897,102 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7223,7 +7236,7 @@ index a6a28deaf..564ea0012 100644
                  "should_continue": False,
                  "continuation_prompt": None,
                  "verdict": "done",
-@@ -690,6 +3008,11 @@ class GoalManager:
+@@ -690,6 +3012,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7235,7 +7248,7 @@ index a6a28deaf..564ea0012 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3031,83 @@ class GoalManager:
+@@ -708,10 +3035,83 @@ class GoalManager:
                  ),
              }
  
@@ -7319,7 +7332,7 @@ index a6a28deaf..564ea0012 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3120,20 @@ class GoalManager:
+@@ -724,7 +3124,20 @@ class GoalManager:
                  ),
              }
  
@@ -7340,7 +7353,7 @@ index a6a28deaf..564ea0012 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3141,52 @@ class GoalManager:
+@@ -732,13 +3145,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7394,7 +7407,7 @@ index a6a28deaf..564ea0012 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3347,8 @@ __all__ = [
+@@ -899,6 +3351,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7417,10 +7430,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..a8679789c
+index 000000000..efe0fdc8c
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,210 @@
+@@ -0,0 +1,223 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7465,8 +7478,8 @@ index 000000000..a8679789c
 +        snapshots: list[PipelineSnapshot] = []
 +        self._observe(ctx, snapshots)
 +        self._project(ctx, snapshots)
-+        self._evaluate(ctx, snapshots)
-+        legacy = self._reconcile_and_decide(ctx, snapshots)
++        evaluation = self._evaluate(ctx, snapshots)
++        legacy = self._reconcile_and_decide(ctx, snapshots, evaluation)
 +        return self._render(ctx, legacy, snapshots)
 +
 +    # 1. Observe ---------------------------------------------------------
@@ -7506,22 +7519,34 @@ index 000000000..a8679789c
 +        )
 +
 +    # 3. Evaluate --------------------------------------------------------
-+    def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
++    def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> dict[str, Any]:
 +        state = ctx.state
++        if getattr(state, "status", "") == "active":
++            verdict, reason, parse_failed = self.evaluators.completion_judge.evaluate(
++                getattr(state, "goal", ""),
++                ctx.last_response,
++                subgoals=getattr(state, "subgoals", []) or None,
++            )
++        else:
++            verdict, reason, parse_failed = "inactive", "no active goal", False
++        evaluation = {"verdict": verdict, "reason": reason, "parse_failed": parse_failed}
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="evaluate",
-+                summary="deterministic/LLM evaluators configured",
++                summary=f"completion judge verdict={verdict}",
 +                data={
 +                    "completion_judge": type(self.evaluators.completion_judge).__name__,
 +                    "strategic_critic": type(self.evaluators.strategic_critic).__name__,
 +                    "gate_count": len(getattr(state, "gates", []) or []),
++                    "verdict": verdict,
++                    "parse_failed": parse_failed,
 +                },
 +            )
 +        )
++        return evaluation
 +
 +    # 4/5. Reconcile + Decide -------------------------------------------
-+    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> DecisionDict:
++    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
 +        # Legacy decider currently performs judge, critic, gate reconciliation,
 +        # stall/budget guards, persistence, and continuation prompt rendering.
 +        legacy = self.legacy_decider(
@@ -7529,6 +7554,7 @@ index 000000000..a8679789c
 +            user_initiated=ctx.user_initiated,
 +            supergoal_observed=bool(self.observe_events),
 +            supergoal_projected=bool(self.project_state),
++            judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
 +        )
 +        snapshots.append(
 +            PipelineSnapshot(
@@ -10010,10 +10036,10 @@ index 14f536aa4..efe242f56 100644
  async def test_goal_verdict_skipped_when_no_active_goal(hermes_home):
      """No goal set → the hook is a no-op. Nothing is sent, nothing enqueued."""
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..9da9c2136 100644
+index 0dae684b6..a020263d7 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1163 @@ class TestGoalManager:
+@@ -252,6 +252,1167 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -10542,7 +10568,8 @@ index 0dae684b6..9da9c2136 100644
 +
 +        mgr = GoalManager(session_id="super-controller-pipeline-sid")
 +        mgr.set("ship via explicit pipeline", max_turns=5, mode="supergoal")
-+        with patch.object(goals, "judge_goal", return_value=("continue", "needs evidence", False)),              patch.object(goals, "critic_supergoal", return_value={
++        with patch.object(goals, "judge_goal", return_value=("continue", "needs evidence", False)) as judge_mock, \
++             patch.object(goals, "critic_supergoal", return_value={
 +                 "progress": "weak",
 +                 "strategy_health": "good",
 +                 "next_best_action": "collect verifier output",
@@ -10557,6 +10584,9 @@ index 0dae684b6..9da9c2136 100644
 +        assert [p["phase"] for p in decision["pipeline"]] == [
 +            "observe", "project", "evaluate", "reconcile", "decide", "render"
 +        ]
++        evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
++        assert evaluate_phase["data"]["verdict"] == "continue"
++        judge_mock.assert_called_once()
 +
 +    def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
 +        import json
@@ -11177,7 +11207,7 @@ index 0dae684b6..9da9c2136 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1636,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1640,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -11186,7 +11216,7 @@ index 0dae684b6..9da9c2136 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1646,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1650,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):

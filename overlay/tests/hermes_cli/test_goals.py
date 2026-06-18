@@ -777,7 +777,8 @@ class TestGoalManager:
 
         mgr = GoalManager(session_id="super-controller-pipeline-sid")
         mgr.set("ship via explicit pipeline", max_turns=5, mode="supergoal")
-        with patch.object(goals, "judge_goal", return_value=("continue", "needs evidence", False)),              patch.object(goals, "critic_supergoal", return_value={
+        with patch.object(goals, "judge_goal", return_value=("continue", "needs evidence", False)) as judge_mock, \
+             patch.object(goals, "critic_supergoal", return_value={
                  "progress": "weak",
                  "strategy_health": "good",
                  "next_best_action": "collect verifier output",
@@ -792,6 +793,9 @@ class TestGoalManager:
         assert [p["phase"] for p in decision["pipeline"]] == [
             "observe", "project", "evaluate", "reconcile", "decide", "render"
         ]
+        evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
+        assert evaluate_phase["data"]["verdict"] == "continue"
+        judge_mock.assert_called_once()
 
     def test_legacy_goal_events_migrate_to_goal_run_id(self, hermes_home):
         import json

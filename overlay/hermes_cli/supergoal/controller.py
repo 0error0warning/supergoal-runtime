@@ -42,8 +42,8 @@ class SupergoalController:
         snapshots: list[PipelineSnapshot] = []
         self._observe(ctx, snapshots)
         self._project(ctx, snapshots)
-        self._evaluate(ctx, snapshots)
-        legacy = self._reconcile_and_decide(ctx, snapshots)
+        evaluation = self._evaluate(ctx, snapshots)
+        legacy = self._reconcile_and_decide(ctx, snapshots, evaluation)
         return self._render(ctx, legacy, snapshots)
 
     # 1. Observe ---------------------------------------------------------
@@ -83,22 +83,34 @@ class SupergoalController:
         )
 
     # 3. Evaluate --------------------------------------------------------
-    def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
+    def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> dict[str, Any]:
         state = ctx.state
+        if getattr(state, "status", "") == "active":
+            verdict, reason, parse_failed = self.evaluators.completion_judge.evaluate(
+                getattr(state, "goal", ""),
+                ctx.last_response,
+                subgoals=getattr(state, "subgoals", []) or None,
+            )
+        else:
+            verdict, reason, parse_failed = "inactive", "no active goal", False
+        evaluation = {"verdict": verdict, "reason": reason, "parse_failed": parse_failed}
         snapshots.append(
             PipelineSnapshot(
                 phase="evaluate",
-                summary="deterministic/LLM evaluators configured",
+                summary=f"completion judge verdict={verdict}",
                 data={
                     "completion_judge": type(self.evaluators.completion_judge).__name__,
                     "strategic_critic": type(self.evaluators.strategic_critic).__name__,
                     "gate_count": len(getattr(state, "gates", []) or []),
+                    "verdict": verdict,
+                    "parse_failed": parse_failed,
                 },
             )
         )
+        return evaluation
 
     # 4/5. Reconcile + Decide -------------------------------------------
-    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> DecisionDict:
+    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
         # Legacy decider currently performs judge, critic, gate reconciliation,
         # stall/budget guards, persistence, and continuation prompt rendering.
         legacy = self.legacy_decider(
@@ -106,6 +118,7 @@ class SupergoalController:
             user_initiated=ctx.user_initiated,
             supergoal_observed=bool(self.observe_events),
             supergoal_projected=bool(self.project_state),
+            judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
         )
         snapshots.append(
             PipelineSnapshot(
