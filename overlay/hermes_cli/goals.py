@@ -51,6 +51,14 @@ from hermes_cli.supergoal.store import (
     legacy_goal_run_id as _legacy_goal_run_id,
     new_goal_run_id as _new_goal_run_id,
 )
+from hermes_cli.supergoal.gates import (
+    first_blocking_failure as _gate_first_blocking_failure,
+    first_failed_gate as _gate_first_failed_gate,
+    is_blocking_gate as _gate_is_blocking_gate,
+    is_gate_open as _gate_is_open,
+    open_followups as _gate_open_followups,
+    passed_gate_ids as _gate_passed_ids,
+)
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
 from hermes_cli.supergoal_projection import (
     artifact_paths as _artifact_paths,
@@ -1564,33 +1572,27 @@ def _ensure_supergoal_gates_for_text(state: GoalState, text: str = "") -> None:
 
 
 def _is_gate_open(gate: GoalGate) -> bool:
-    return gate.status not in {"passed", "not_applicable", "followup"}
+    return _gate_is_open(gate)
 
 
 def _is_blocking_gate(gate: GoalGate) -> bool:
-    return bool(getattr(gate, "blocking", True)) or getattr(gate, "kind", "") in {"run_acceptance", "domain_required", "safety_hard"}
+    return _gate_is_blocking_gate(gate)
 
 
 def _first_failed_gate(state: GoalState) -> Optional[GoalGate]:
-    for gate in getattr(state, "gates", []) or []:
-        if _is_gate_open(gate):
-            return gate
-    return None
+    return _gate_first_failed_gate(state)  # type: ignore[return-value]
 
 
 def _first_blocking_failed_gate(state: GoalState) -> Optional[GoalGate]:
-    for gate in getattr(state, "gates", []) or []:
-        if _is_gate_open(gate) and _is_blocking_gate(gate):
-            return gate
-    return None
+    return _gate_first_blocking_failure(state)  # type: ignore[return-value]
 
 
 def _open_followup_gates(state: GoalState) -> List[GoalGate]:
-    return [g for g in getattr(state, "gates", []) or [] if _is_gate_open(g) and not _is_blocking_gate(g)]
+    return list(_gate_open_followups(state))  # type: ignore[list-item]
 
 
 def _passed_gate_ids(state: GoalState) -> set[str]:
-    return {g.id for g in getattr(state, "gates", []) or [] if g.status == "passed"}
+    return _gate_passed_ids(state)
 
 
 _COMPLETION_MARKERS = (
