@@ -169,6 +169,15 @@ def _tool_urls(tool_name: str, args: dict[str, Any]) -> list[str]:
             urls.extend(str(x) for x in value if x)
         elif value:
             urls.append(str(value))
+    if tool_name == "terminal":
+        cmd = str(args.get("command") or "")
+        urls.extend(re.findall(r"https?://[^\s)\]}>\"']+", cmd, flags=re.I))
+        # Catch common network CLI forms without schemes: curl example.com,
+        # wget api.example/v1. Avoid treating shell flags or local paths as hosts.
+        for match in re.findall(r"\b(?:curl|wget|httpie|http)\s+(?:-[^\s]+\s+)*([^\s;&|]+)", cmd, flags=re.I):
+            target = match.strip().strip("'\"")
+            if target and not target.startswith(("-", "/", "./", "../")):
+                urls.append(target)
     return urls
 
 

@@ -181,7 +181,7 @@ def _tool_search_scoped_names(agent) -> frozenset:
     return names
 
 
-def _supergoal_policy_block_message(agent, function_name: str, function_args: dict) -> str | None:
+def _supergoal_policy_block_message(agent, function_name: str, function_args: dict, *, task_id: str = "") -> str | None:
     try:
         from hermes_cli.supergoal.policy import pre_tool_policy_block_message
 
@@ -189,7 +189,7 @@ def _supergoal_policy_block_message(agent, function_name: str, function_args: di
             getattr(agent, "session_id", "") or "",
             function_name,
             function_args if isinstance(function_args, dict) else {},
-            task_id=getattr(agent, "task_id", "") or "default",
+            task_id=task_id or getattr(agent, "task_id", "") or "default",
         )
     except Exception:
         return None
@@ -356,7 +356,7 @@ def execute_tool_calls_concurrent(agent, assistant_message, messages: list, effe
                 middleware_trace=list(middleware_trace),
             )
         else:
-            block_message = _supergoal_policy_block_message(agent, function_name, function_args)
+            block_message = _supergoal_policy_block_message(agent, function_name, function_args, task_id=effective_task_id)
             _block_error_type = "supergoal_policy_block" if block_message is not None else "plugin_block"
             try:
                 from hermes_cli.plugins import get_pre_tool_call_block_message
@@ -852,7 +852,7 @@ def execute_tool_calls_sequential(agent, assistant_message, messages: list, effe
             _block_msg = _ts_scope_block
             _block_error_type = "tool_scope_block"
         else:
-            _block_msg = _supergoal_policy_block_message(agent, function_name, function_args)
+            _block_msg = _supergoal_policy_block_message(agent, function_name, function_args, task_id=effective_task_id)
             _block_error_type = "supergoal_policy_block" if _block_msg is not None else "plugin_block"
             try:
                 from hermes_cli.plugins import get_pre_tool_call_block_message

@@ -263,6 +263,26 @@ class TestHandleFunctionCall:
 
         assert result.allows_execution
 
+    def test_supergoal_policy_enforces_terminal_network_allowlist(self, _isolate_hermes_home):
+        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
+
+        contract = PermissionContract(
+            network_allowlist=["allowed.example"],
+            destructive_actions="allow",
+            trading_mode="live_forbidden",
+        )
+        result = PolicyGuard.pre_tool_call(
+            "gr-test",
+            None,
+            "terminal",
+            {"command": "curl https://unapproved.example/data.json"},
+            contract,
+            mode="supervised",
+        )
+
+        assert not result.allows_execution
+        assert "unapproved.example" in result.reason
+
     def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
         from hermes_cli.goals import GoalManager, save_goal
 

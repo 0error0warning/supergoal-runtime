@@ -183,6 +183,8 @@ def _infer_control_status(
 ) -> ControlStatus:
     text = " ".join([legacy_status, verdict, reason, message]).lower()
     if legacy_status == "done" or verdict == "done":
+        if "follow-up gates open" in text or "followup gates open" in text:
+            return "done_with_followups"
         return "done"
     if should_continue:
         return "continue"

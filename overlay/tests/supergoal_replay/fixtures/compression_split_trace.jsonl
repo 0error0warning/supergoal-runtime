@@ -1,0 +1,4 @@
+{"op":"set","session_id":"replay-compress-old","goal":"long running coding mission survives compression","max_turns":20}
+{"op":"assistant_turn","response":"Initial work recorded.","judge":["continue","needs more",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"research","target_gate_id":"G1","expected_evidence":["intent"],"text":"capture intent"}}}
+{"op":"rotate","old_session_id":"replay-compress-old","new_session_id":"replay-compress-new","reason":"context_compression"}
+{"op":"assistant_turn","session_id":"replay-compress-new","response":"Continuing after compression with same mission identity.","judge":["continue","needs final verification",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"validation","target_gate_id":"G3","expected_evidence":["verification"],"text":"verify artifact"}}}

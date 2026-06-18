@@ -16,14 +16,14 @@ index d5469a1b3..57878e742 100644
              agent._last_flushed_db_idx = 0
          except Exception as e:
 diff --git a/agent/tool_executor.py b/agent/tool_executor.py
-index 144a29297..a40e86f46 100644
+index 144a29297..4c852864b 100644
 --- a/agent/tool_executor.py
 +++ b/agent/tool_executor.py
 @@ -181,6 +181,20 @@ def _tool_search_scoped_names(agent) -> frozenset:
      return names
  
  
-+def _supergoal_policy_block_message(agent, function_name: str, function_args: dict) -> str | None:
++def _supergoal_policy_block_message(agent, function_name: str, function_args: dict, *, task_id: str = "") -> str | None:
 +    try:
 +        from hermes_cli.supergoal.policy import pre_tool_policy_block_message
 +
@@ -31,7 +31,7 @@ index 144a29297..a40e86f46 100644
 +            getattr(agent, "session_id", "") or "",
 +            function_name,
 +            function_args if isinstance(function_args, dict) else {},
-+            task_id=getattr(agent, "task_id", "") or "default",
++            task_id=task_id or getattr(agent, "task_id", "") or "default",
 +        )
 +    except Exception:
 +        return None
@@ -44,7 +44,7 @@ index 144a29297..a40e86f46 100644
                  middleware_trace=list(middleware_trace),
              )
          else:
-+            block_message = _supergoal_policy_block_message(agent, function_name, function_args)
++            block_message = _supergoal_policy_block_message(agent, function_name, function_args, task_id=effective_task_id)
 +            _block_error_type = "supergoal_policy_block" if block_message is not None else "plugin_block"
              try:
                  from hermes_cli.plugins import get_pre_tool_call_block_message
@@ -91,7 +91,7 @@ index 144a29297..a40e86f46 100644
              _block_msg = _ts_scope_block
              _block_error_type = "tool_scope_block"
          else:
-+            _block_msg = _supergoal_policy_block_message(agent, function_name, function_args)
++            _block_msg = _supergoal_policy_block_message(agent, function_name, function_args, task_id=effective_task_id)
 +            _block_error_type = "supergoal_policy_block" if _block_msg is not None else "plugin_block"
              try:
                  from hermes_cli.plugins import get_pre_tool_call_block_message
@@ -7429,10 +7429,10 @@ index 000000000..b636ba0da
 +        )
 diff --git a/hermes_cli/supergoal/domain.py b/hermes_cli/supergoal/domain.py
 new file mode 100644
-index 000000000..6cad603c4
+index 000000000..d506a3f51
 --- /dev/null
 +++ b/hermes_cli/supergoal/domain.py
-@@ -0,0 +1,201 @@
+@@ -0,0 +1,203 @@
 +"""Domain DTOs for the /supergoal runtime.
 +
 +This module defines platform-agnostic data exchanged between the public
@@ -7618,6 +7618,8 @@ index 000000000..6cad603c4
 +) -> ControlStatus:
 +    text = " ".join([legacy_status, verdict, reason, message]).lower()
 +    if legacy_status == "done" or verdict == "done":
++        if "follow-up gates open" in text or "followup gates open" in text:
++            return "done_with_followups"
 +        return "done"
 +    if should_continue:
 +        return "continue"
@@ -7959,10 +7961,10 @@ index 000000000..ef8444e0a
 +    }
 diff --git a/hermes_cli/supergoal/policy.py b/hermes_cli/supergoal/policy.py
 new file mode 100644
-index 000000000..ee93183df
+index 000000000..9d767d6eb
 --- /dev/null
 +++ b/hermes_cli/supergoal/policy.py
-@@ -0,0 +1,240 @@
+@@ -0,0 +1,249 @@
 +"""Pre-tool permission policy for unattended /supergoal runs."""
 +
 +from __future__ import annotations
@@ -8134,6 +8136,15 @@ index 000000000..ee93183df
 +            urls.extend(str(x) for x in value if x)
 +        elif value:
 +            urls.append(str(value))
++    if tool_name == "terminal":
++        cmd = str(args.get("command") or "")
++        urls.extend(re.findall(r"https?://[^\s)\]}>\"']+", cmd, flags=re.I))
++        # Catch common network CLI forms without schemes: curl example.com,
++        # wget api.example/v1. Avoid treating shell flags or local paths as hosts.
++        for match in re.findall(r"\b(?:curl|wget|httpie|http)\s+(?:-[^\s]+\s+)*([^\s;&|]+)", cmd, flags=re.I):
++            target = match.strip().strip("'\"")
++            if target and not target.startswith(("-", "/", "./", "../")):
++                urls.append(target)
 +    return urls
 +
 +
@@ -10510,11 +10521,396 @@ index 000000000..b97ecdac2
 +def test_supergoal_has_separate_default_budget():
 +    assert DEFAULT_CONFIG["goals"]["max_turns"] == 20
 +    assert DEFAULT_CONFIG["goals"]["super_max_turns"] == 240
+diff --git a/tests/supergoal_replay/conftest.py b/tests/supergoal_replay/conftest.py
+new file mode 100644
+index 000000000..fece23a61
+--- /dev/null
++++ b/tests/supergoal_replay/conftest.py
+@@ -0,0 +1,109 @@
++from __future__ import annotations
++
++import json
++from pathlib import Path
++from typing import Any
++from unittest.mock import patch
++
++import pytest
++
++
++FIXTURE_DIR = Path(__file__).parent / "fixtures"
++
++
++def load_trace(name: str) -> list[dict[str, Any]]:
++    path = FIXTURE_DIR / name
++    events: list[dict[str, Any]] = []
++    for line in path.read_text(encoding="utf-8").splitlines():
++        line = line.strip()
++        if line:
++            events.append(json.loads(line))
++    return events
++
++
++class ReplayResult:
++    def __init__(self) -> None:
++        self.managers: dict[str, Any] = {}
++        self.decisions: list[dict[str, Any]] = []
++        self.policy_decisions: list[dict[str, Any]] = []
++        self.goal_run_ids: list[str] = []
++
++    @property
++    def current(self):
++        if not self.managers:
++            return None
++        return list(self.managers.values())[-1]
++
++
++def run_trace(events: list[dict[str, Any]]) -> ReplayResult:
++    from hermes_cli.goals import GoalManager, migrate_goal_state
++    from hermes_cli.supergoal.evidence import record_tool_evidence
++    from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++    result = ReplayResult()
++    current_session = ""
++
++    for event in events:
++        op = event["op"]
++        session_id = event.get("session_id") or current_session
++        if op == "set":
++            current_session = event["session_id"]
++            mgr = GoalManager(session_id=current_session)
++            state = mgr.set(event["goal"], max_turns=event.get("max_turns", 20), mode="supergoal")
++            result.managers[current_session] = mgr
++            result.goal_run_ids.append(state.goal_run_id)
++        elif op == "tool_evidence":
++            record_tool_evidence(
++                session_id=session_id,
++                tool_name=event["tool_name"],
++                args=event.get("args") or {},
++                result=event.get("result") or "",
++                tool_call_id=event.get("tool_call_id") or "tc-replay",
++                turn_id=event.get("turn_id") or "turn-replay",
++                status=event.get("status") or "ok",
++            )
++        elif op == "assistant_turn":
++            mgr = result.managers.get(session_id) or GoalManager(session_id=session_id)
++            result.managers[session_id] = mgr
++            current_session = session_id
++            with patch("hermes_cli.goals.judge_goal", return_value=tuple(event["judge"])), patch(
++                "hermes_cli.goals.critic_supergoal", return_value=event.get("critic") or {}
++            ):
++                decision = mgr.evaluate_after_turn(event.get("response") or "")
++            result.decisions.append(decision)
++        elif op == "rotate":
++            old = event["old_session_id"]
++            new = event["new_session_id"]
++            state = migrate_goal_state(old, new, reason=event.get("reason") or "replay")
++            current_session = new
++            result.managers[new] = GoalManager(session_id=new)
++            if state is not None:
++                result.goal_run_ids.append(state.goal_run_id)
++        elif op == "policy_call":
++            mgr = result.managers.get(session_id) or GoalManager(session_id=session_id)
++            state = mgr.state
++            assert state is not None
++            contract = PermissionContract.from_mapping(state.permission_contract)
++            policy = PolicyGuard.pre_tool_call(
++                state.goal_run_id,
++                state.action_proposal,
++                event["tool_name"],
++                event.get("args") or {},
++                contract,
++                mode=state.permission_mode,
++                task_id=event.get("task_id") or "default",
++            )
++            result.policy_decisions.append(policy.__dict__)
++        else:
++            raise AssertionError(f"unknown replay op: {op}")
++    return result
++
++
++@pytest.fixture
++def replay():
++    return run_trace
++
++
++@pytest.fixture
++def trace():
++    return load_trace
+diff --git a/tests/supergoal_replay/fixtures/ai6_completion_gate_conflict.jsonl b/tests/supergoal_replay/fixtures/ai6_completion_gate_conflict.jsonl
+new file mode 100644
+index 000000000..b8ce680b7
+--- /dev/null
++++ b/tests/supergoal_replay/fixtures/ai6_completion_gate_conflict.jsonl
+@@ -0,0 +1,4 @@
++{"op":"set","session_id":"replay-ai6","goal":"produce an AI6 daily digest with verified artifacts","max_turns":20}
++{"op":"tool_evidence","tool_name":"web_extract","args":{"urls":["https://docs.example/ai6"]},"result":"official docs quote","tool_call_id":"tc-ai6-docs"}
++{"op":"tool_evidence","tool_name":"terminal","args":{"command":"python digest.py","workdir":"/tmp/ai6"},"result":"wrote /tmp/ai6/digest.md\npytest passed","tool_call_id":"tc-ai6-run"}
++{"op":"assistant_turn","response":"Digest is complete with docs quote and /tmp/ai6/digest.md artifact. Criteria mapped to evidence.","judge":["done","all acceptance criteria satisfied with verified artifact",false],"critic":{"progress":"real","strategy_health":"good","success_definition":"AI6 digest artifact exists and is backed by cited source","inferred_user_intent":"deliver verified AI6 digest","first_principles_model":["daily digest needs source provenance","artifact must be produced"],"existing_solution_scan":["checked source docs"],"action_proposal":{"action_class":"reporting","target_gate_id":"G4","expected_evidence":["final digest"],"tools_needed":[],"text":"finalize report"}}}
+diff --git a/tests/supergoal_replay/fixtures/bitget_20260608_trace.jsonl b/tests/supergoal_replay/fixtures/bitget_20260608_trace.jsonl
+new file mode 100644
+index 000000000..44ad0476e
+--- /dev/null
++++ b/tests/supergoal_replay/fixtures/bitget_20260608_trace.jsonl
+@@ -0,0 +1,6 @@
++{"op":"set","session_id":"replay-bitget","goal":"产出 2-3 个交易策略假设并验证，没有 edge 就写 no-edge 报告","max_turns":20}
++{"op":"tool_evidence","tool_name":"web_extract","args":{"urls":["https://arxiv.org/abs/1"]},"result":"paper quote","tool_call_id":"tc-paper"}
++{"op":"tool_evidence","tool_name":"web_extract","args":{"urls":["https://github.com/example/strategy"]},"result":"repo quote","tool_call_id":"tc-gh"}
++{"op":"assistant_turn","response":"I will add another validator module before hypotheses.","judge":["continue","strategy gates unmet",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"infra_engineering","target_gate_id":"SG-1","expected_evidence":["validator script"],"tools_needed":["write_file"],"text":"add another validator checker module"}}}
++{"op":"assistant_turn","response":"I still want to build validator tooling.","judge":["continue","strategy gates unmet",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"infra_engineering","target_gate_id":"SG-1","expected_evidence":["validator script"],"tools_needed":["write_file"],"text":"add another validator checker module"}}}
++{"op":"assistant_turn","response":"No evidence grew; continuing same path.","judge":["continue","strategy gates unmet",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"infra_engineering","target_gate_id":"SG-1","expected_evidence":["validator script"],"tools_needed":["write_file"],"text":"add another validator checker module"}}}
+diff --git a/tests/supergoal_replay/fixtures/compression_split_trace.jsonl b/tests/supergoal_replay/fixtures/compression_split_trace.jsonl
+new file mode 100644
+index 000000000..5b0147d13
+--- /dev/null
++++ b/tests/supergoal_replay/fixtures/compression_split_trace.jsonl
+@@ -0,0 +1,4 @@
++{"op":"set","session_id":"replay-compress-old","goal":"long running coding mission survives compression","max_turns":20}
++{"op":"assistant_turn","response":"Initial work recorded.","judge":["continue","needs more",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"research","target_gate_id":"G1","expected_evidence":["intent"],"text":"capture intent"}}}
++{"op":"rotate","old_session_id":"replay-compress-old","new_session_id":"replay-compress-new","reason":"context_compression"}
++{"op":"assistant_turn","session_id":"replay-compress-new","response":"Continuing after compression with same mission identity.","judge":["continue","needs final verification",false],"critic":{"progress":"real","strategy_health":"good","action_proposal":{"action_class":"validation","target_gate_id":"G3","expected_evidence":["verification"],"text":"verify artifact"}}}
+diff --git a/tests/supergoal_replay/test_replay_bitget_no_infra_inertia.py b/tests/supergoal_replay/test_replay_bitget_no_infra_inertia.py
+new file mode 100644
+index 000000000..63d363076
+--- /dev/null
++++ b/tests/supergoal_replay/test_replay_bitget_no_infra_inertia.py
+@@ -0,0 +1,20 @@
++def test_replay_bitget_infra_cannot_bypass_open_strategy_gate(trace, replay):
++    result = replay(trace("bitget_20260608_trace.jsonl"))
++    mgr = result.managers["replay-bitget"]
++    state = mgr.state
++
++    assert state is not None
++    assert state.hard_gate_reason
++    assert "infra_engineering" in state.hard_gate_reason
++    assert state.action_proposal.action_class == "hypothesis_generation"
++    assert state.action_proposal.target_gate_id == "SG-1"
++    assert any(d["continuation_prompt"] and "HARD GATE / INERTIA GUARD" in d["continuation_prompt"] for d in result.decisions)
++
++
++def test_replay_same_blocking_gate_no_evidence_blocks_or_no_edge(trace, replay):
++    result = replay(trace("bitget_20260608_trace.jsonl"))
++    state = result.managers["replay-bitget"].state
++
++    assert state is not None
++    assert state.same_action_no_evidence_count >= 1 or state.hard_gate_reason
++    assert state.hard_gate_reason or state.no_edge_report
+diff --git a/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
+new file mode 100644
+index 000000000..8c2cf0894
+--- /dev/null
++++ b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
+@@ -0,0 +1,74 @@
++def test_replay_completion_done_with_acceptance_gates_does_not_enqueue(trace, replay):
++    result = replay(trace("ai6_completion_gate_conflict.jsonl"))
++    decision = result.decisions[-1]
++    state = result.managers["replay-ai6"].state
++
++    assert state is not None
++    assert state.status == "done"
++    assert decision["status"] == "done"
++    assert decision["control_status"] == "done"
++    assert decision["should_continue"] is False
++    assert decision["continuation_prompt"] is None
++
++
++def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
++    from unittest.mock import patch
++    from hermes_cli import goals
++    from hermes_cli.goals import GoalGate, GoalManager, save_goal
++
++    mgr = GoalManager(session_id="replay-followups")
++    state = mgr.set("write a small verified artifact", max_turns=10, mode="supergoal")
++    state.gates.append(
++        GoalGate(
++            id="MON-1",
++            description="Optional post-run monitoring followup",
++            status="pending",
++            phase="verification",
++            kind="quality_followup",
++            blocking=False,
++            missing=["monitoring followup"],
++        )
++    )
++    save_goal("replay-followups", state)
++    with patch.object(goals, "judge_goal", return_value=("done", "artifact satisfies request", False)), patch.object(
++        goals,
++        "critic_supergoal",
++        return_value={
++            "progress": "real",
++            "strategy_health": "good",
++            "success_definition": "artifact exists and is summarized",
++            "inferred_user_intent": "get the artifact",
++            "first_principles_model": ["small artifact can be accepted without broad research"],
++            "existing_solution_scan": ["not required for this tiny artifact"],
++            "new_evidence": ["artifact: /tmp/replay-small.md"],
++            "action_proposal": {"action_class": "reporting", "target_gate_id": "G4", "text": "finalize"},
++        },
++    ):
++        decision = mgr.evaluate_after_turn("Created /tmp/replay-small.md and mapped it to the request.")
++
++    assert decision["status"] == "done"
++    assert decision["control_status"] == "done_with_followups"
++    assert decision["should_continue"] is False
++    assert "follow-up gates open" in decision["reason"]
++
++
++def test_replay_status_line_and_card_match_internal_status(trace, replay):
++    result = replay(trace("ai6_completion_gate_conflict.jsonl"))
++    mgr = result.managers["replay-ai6"]
++    state = mgr.state
++    assert state is not None
++
++    line = mgr.status_line()
++    card = mgr.status_card()
++    assert state.status in line
++    assert card.status == state.status
++
++
++def test_replay_gate_passes_have_evidence_refs(trace, replay):
++    result = replay(trace("ai6_completion_gate_conflict.jsonl"))
++    decision = result.decisions[-1]
++    passed = [g for g in decision["gate_results"] if g["status"] == "passed"]
++
++    assert passed
++    assert decision["evidence_refs"]
++    assert all(g["evidence_refs"] or g["evidence"] for g in passed)
+diff --git a/tests/supergoal_replay/test_replay_compression_goal_run_id.py b/tests/supergoal_replay/test_replay_compression_goal_run_id.py
+new file mode 100644
+index 000000000..baea8257b
+--- /dev/null
++++ b/tests/supergoal_replay/test_replay_compression_goal_run_id.py
+@@ -0,0 +1,20 @@
++def test_replay_compression_preserves_goal_run_id(trace, replay):
++    result = replay(trace("compression_split_trace.jsonl"))
++    old = result.managers["replay-compress-old"].state
++    new = result.managers["replay-compress-new"].state
++
++    assert old is not None
++    assert new is not None
++    assert old.goal_run_id == new.goal_run_id
++    assert len(set(gid for gid in result.goal_run_ids if gid)) == 1
++
++
++def test_replay_compression_continues_same_logical_mission(trace, replay):
++    result = replay(trace("compression_split_trace.jsonl"))
++    new = result.managers["replay-compress-new"].state
++    decision = result.decisions[-1]
++
++    assert new is not None
++    assert new.status == "active"
++    assert decision["should_continue"] is True
++    assert decision["continuation_prompt"]
+diff --git a/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
+new file mode 100644
+index 000000000..621946ac7
+--- /dev/null
++++ b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
+@@ -0,0 +1,75 @@
++from unittest.mock import patch
++
++
++def test_replay_assistant_claims_do_not_pass_tool_backed_research_gate(_isolate_hermes_home):
++    from hermes_cli import goals
++    from hermes_cli.goals import GoalManager
++
++    mgr = GoalManager(session_id="replay-claim-only")
++    mgr.set("research existing AI digest systems", max_turns=10, mode="supergoal")
++    with patch.object(goals, "judge_goal", return_value=("continue", "needs tool-backed sources", False)), patch.object(
++        goals,
++        "critic_supergoal",
++        return_value={
++            "progress": "real",
++            "strategy_health": "good",
++            "research_findings": [
++                {
++                    "source_type": "docs",
++                    "title": "claimed docs",
++                    "locator": "https://docs.example/claimed",
++                    "claim": "assistant says it checked docs",
++                    "tool_call_id": "assistant_turn",
++                    "evidence_source": "assistant_claim",
++                    "trust_level": "claim",
++                }
++            ],
++            "action_proposal": {
++                "action_class": "research",
++                "target_gate_id": "G2",
++                "expected_evidence": ["tool-backed source"],
++                "tools_needed": ["web_extract"],
++                "text": "collect real source evidence",
++            },
++        },
++    ):
++        decision = mgr.evaluate_after_turn("I checked docs and web sources in prose only.")
++
++    assert mgr.state is not None
++    g2 = next(g for g in mgr.state.gates if g.id == "G2")
++    assert g2.status != "passed"
++    assert "tool-backed" in (g2.reason or "") or "missing" in (g2.reason or "")
++    assert decision["should_continue"] is True
++
++
++def test_replay_every_policy_checked_tool_call_has_decision(_isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, save_goal
++    from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++    mgr = GoalManager(session_id="replay-policy")
++    state = mgr.set("safe unattended run", mode="supergoal")
++    state.permission_mode = "supervised"
++    state.permission_contract = {
++        "filesystem_allowlist": ["/tmp/allowed"],
++        "network_allowlist": ["allowed.example"],
++        "destructive_actions": "allow",
++        "trading_mode": "live_forbidden",
++    }
++    save_goal("replay-policy", state)
++    contract = PermissionContract.from_mapping(state.permission_contract)
++
++    calls = [
++        ("terminal", {"command": "curl https://unapproved.example/data"}),
++        ("write_file", {"path": "/tmp/allowed/out.txt", "content": "ok"}),
++        ("patch", {"mode": "patch", "patch": "*** Begin Patch\n*** Update File: /tmp/allowed/out.txt\n@@\n-old\n+new\n*** End Patch"}),
++    ]
++    decisions = [
++        PolicyGuard.pre_tool_call(state.goal_run_id, state.action_proposal, tool, args, contract, mode=state.permission_mode)
++        for tool, args in calls
++    ]
++
++    assert len(decisions) == len(calls)
++    assert all(d.decision in {"allow", "deny", "require_user_approval", "sandbox_only"} for d in decisions)
++    assert decisions[0].decision == "deny"
++    assert decisions[1].decision == "allow"
++    assert decisions[2].decision == "allow"
+diff --git a/tests/supergoal_replay/test_replay_replan_changes_action_or_blocks.py b/tests/supergoal_replay/test_replay_replan_changes_action_or_blocks.py
+new file mode 100644
+index 000000000..fcdea9dc7
+--- /dev/null
++++ b/tests/supergoal_replay/test_replay_replan_changes_action_or_blocks.py
+@@ -0,0 +1,19 @@
++def test_replay_replan_changes_action_class_or_blocks(trace, replay):
++    result = replay(trace("bitget_20260608_trace.jsonl"))
++    state = result.managers["replay-bitget"].state
++
++    assert state is not None
++    assert state.replan_count > 0 or state.should_replan
++    # The replay proposes infra repeatedly while SG-1 is open. Controller must
++    # either rewrite the next action to the gate-aligned action or block it.
++    assert state.action_proposal.action_class != "infra_engineering" or state.hard_gate_reason
++
++
++def test_replay_action_targets_first_failed_blocking_gate_after_replan(trace, replay):
++    result = replay(trace("bitget_20260608_trace.jsonl"))
++    state = result.managers["replay-bitget"].state
++
++    assert state is not None
++    first_open = next((g for g in state.gates if g.status != "passed" and g.blocking), None)
++    assert first_open is not None
++    assert state.action_proposal.target_gate_id == first_open.id or state.hard_gate_reason
 diff --git a/tests/test_model_tools.py b/tests/test_model_tools.py
-index 91e7103aa..58649727f 100644
+index 91e7103aa..46b4405ad 100644
 --- a/tests/test_model_tools.py
 +++ b/tests/test_model_tools.py
-@@ -127,25 +127,165 @@ class TestHandleFunctionCall:
+@@ -127,25 +127,185 @@ class TestHandleFunctionCall:
          # pre_tool_call does NOT get duration_ms (nothing has run yet).
          assert "duration_ms" not in kwargs_by_hook["pre_tool_call"]
  
@@ -10662,6 +11058,26 @@ index 91e7103aa..58649727f 100644
 +        )
 +
 +        assert result.allows_execution
++
++    def test_supergoal_policy_enforces_terminal_network_allowlist(self, _isolate_hermes_home):
++        from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard
++
++        contract = PermissionContract(
++            network_allowlist=["allowed.example"],
++            destructive_actions="allow",
++            trading_mode="live_forbidden",
++        )
++        result = PolicyGuard.pre_tool_call(
++            "gr-test",
++            None,
++            "terminal",
++            {"command": "curl https://unapproved.example/data.json"},
++            contract,
++            mode="supervised",
++        )
++
++        assert not result.allows_execution
++        assert "unapproved.example" in result.reason
 +
 +    def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
 +        from hermes_cli.goals import GoalManager, save_goal
