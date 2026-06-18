@@ -86,6 +86,17 @@ def hypothesis_has_verified_artifact(hypothesis: Any) -> bool:
     )
 
 
+def hypothesis_complete(hypothesis: Any) -> bool:
+    """Return whether a strategy hypothesis has all required experiment fields."""
+    return bool(
+        getattr(hypothesis, "baseline", None)
+        and getattr(hypothesis, "experiment", None)
+        and getattr(hypothesis, "kill_criteria", None)
+        and getattr(hypothesis, "artifacts", None)
+        and getattr(hypothesis, "status", "") in {"passed", "failed", "killed"}
+    )
+
+
 def verified_hypothesis_artifact_count(state: Any) -> int:
     return sum(
         len(getattr(hypothesis, "artifacts", []) or [])

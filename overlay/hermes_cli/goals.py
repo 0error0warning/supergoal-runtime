@@ -56,6 +56,7 @@ from hermes_cli.supergoal.gates import (
     first_failed_gate as _gate_first_failed_gate,
     gate_eligible_evidence_count as _gate_eligible_count,
     has_verified_execution_evidence as _gate_has_verified_execution_evidence,
+    hypothesis_complete as _gate_hypothesis_complete,
     hypothesis_has_verified_artifact as _gate_hypothesis_has_verified_artifact,
     is_blocking_gate as _gate_is_blocking_gate,
     is_gate_open as _gate_is_open,
@@ -1953,7 +1954,7 @@ def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bo
 
 
 def _hypothesis_complete(h: HypothesisRecord) -> bool:
-    return bool(h.baseline and h.experiment and h.kill_criteria and h.artifacts and h.status in {"passed", "failed", "killed"})
+    return _gate_hypothesis_complete(h)
 
 
 
