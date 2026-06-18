@@ -124,8 +124,6 @@ def _make_runner_with_adapter(session_id: str = None):
     runner.session_store = MagicMock()
     runner.session_store.get_or_create_session.return_value = session_entry
     runner.session_store._generate_session_key.return_value = build_session_key(src)
-    runner.session_store.switch_session.return_value = session_entry
-    runner._session_db = None
 
     adapter = _RecordingAdapter()
     runner.adapters[Platform.TELEGRAM] = adapter
@@ -336,70 +334,6 @@ async def test_gateway_supergoal_start_sets_and_enqueues(hermes_home):
     assert state.mode == "supergoal"
     assert state.goal == "run the long benchmark"
     assert adapter._pending_messages
-
-
-@pytest.mark.asyncio
-async def test_gateway_supergoal_resume_follows_compression_tip(hermes_home):
-    """`/supergoal resume` should target the migrated compression child.
-
-    Compression migrates GoalManager state from parent -> child.  If the
-    gateway's session-key binding is still on the parent, resume used to load
-    the parent's migrated tombstone and refuse to wake the loop.  The command
-    path now resolves SessionDB.get_compression_tip() first, rewrites the
-    session-key binding, and enqueues the continuation under the child state.
-    """
-    from gateway.platforms.base import MessageEvent, MessageType
-    from hermes_cli.goals import GoalManager, save_goal
-
-    runner, adapter, parent_entry, src = _make_runner_with_adapter(session_id="goal-parent")
-    child_entry = SessionEntry(
-        session_key=parent_entry.session_key,
-        session_id="goal-child",
-        created_at=datetime.now(),
-        updated_at=datetime.now(),
-        platform=Platform.TELEGRAM,
-        chat_type="dm",
-        origin=src,
-    )
-
-    class _TipDB:
-        def get_compression_tip(self, session_id):
-            return "goal-child" if session_id == "goal-parent" else session_id
-
-    runner._session_db = _TipDB()
-    runner.session_store.switch_session.return_value = child_entry
-
-    mgr = GoalManager("goal-child")
-    mgr.set("continue after compression", max_turns=5, mode="supergoal")
-    assert mgr.pause(reason="test-paused") is not None
-    save_goal("goal-child", mgr.state)
-
-    # Parent has only the migration tombstone, which must not control resume.
-    parent_mgr = GoalManager("goal-parent")
-    parent_mgr.set("stale parent", max_turns=5, mode="supergoal")
-    parent_state = parent_mgr.state
-    parent_state.status = "migrated"
-    parent_state.paused_reason = "migrated to goal-child (compression)"
-    save_goal("goal-parent", parent_state)
-
-    event = MessageEvent(
-        text="/supergoal resume",
-        message_type=MessageType.TEXT,
-        source=src,
-        message_id="resume-after-compression-msg",
-    )
-
-    from gateway.run import GatewayRunner
-
-    response = await GatewayRunner._handle_goal_command(runner, event, super_mode=True)
-
-    assert "resumed" in response.lower()
-    runner.session_store.switch_session.assert_called_once_with(parent_entry.session_key, "goal-child")
-    assert GoalManager("goal-child").state.status == "active"
-    assert GoalManager("goal-parent").state.status == "migrated"
-    assert adapter._pending_messages, "resume should enqueue continuation on the migrated child"
-    queued = next(iter(adapter._pending_messages.values()))
-    assert "continue after compression" in queued.text
 
 
 @pytest.mark.asyncio

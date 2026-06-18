@@ -191,7 +191,12 @@ Long-running agents with shell, file, network, API, database, or trading permiss
 ```text
 patches/supergoal-runtime.patch             # apply this to Hermes Agent
 overlay/                                    # full modified files for review/reference
+  hermes_cli/commands.py
+  hermes_cli/config.py
   hermes_cli/goals.py
+  hermes_cli/goal_events.py
+  hermes_cli/supergoal_gates.py
+  hermes_cli/supergoal_projection.py
   agent/conversation_compression.py
   gateway/run.py
   tests/hermes_cli/test_goals.py
@@ -202,6 +207,7 @@ overlay/                                    # full modified files for review/ref
 docs/run-analysis.md                        # observed failure analysis from the live run
 docs/architecture.md                        # architectural rationale
 docs/principles.md                          # why Supergoal exists and what principles guide it
+docs/completion-gate-conflict.md            # real completion/gate conflict diagnosis
 scripts/apply.sh                            # helper to apply the patch to a Hermes checkout
 reference-runs/                             # redacted real run logs and state snapshots
 ```

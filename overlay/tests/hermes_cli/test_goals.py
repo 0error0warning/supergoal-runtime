@@ -314,11 +314,11 @@ class TestGoalManager:
 
         line = mgr.status_line(compact=True)
 
-        assert "Supergoal active · 3/240" in line
-        assert "last: continue — needs more verified work" in line
-        assert "flag: critic×2" in line
-        assert "next: satisfy the first open gate" in line
-        assert "Controls:" not in line
+        assert "Supergoal active · turns 3/240" in line
+        assert "last continue: needs more verified work" in line
+        assert "critic_failures 2" in line
+        assert "next satisfy the first open gate" in line
+        assert "Controls: /supergoal pause · /supergoal status · /supergoal clear" in line
 
     def test_supergoal_initializes_plan_and_event_log(self, hermes_home):
         """Product invariant: /supergoal starts with durable plan + audit events."""
@@ -741,24 +741,32 @@ class TestGoalManager:
         assert mgr.state.consecutive_critic_failures == 1
         assert mgr.state.same_gate_stall_count == 0
 
-    def test_supergoal_critic_failures_degrade_but_continue_and_reset(self, hermes_home):
+
+    def test_supergoal_critic_failures_do_not_pause_when_board_progress_is_deterministic(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
 
         mgr = GoalManager(session_id="super-critic-failure-counter-sid")
         mgr.set("debug the mission", max_turns=20, mode="supergoal")
 
+        visible_progress = (
+            "Research update: external web docs and benchmark evidence reviewed. "
+            "Verified with pytest and saved artifact logs/release-check.log."
+        )
         with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
              patch.object(goals, "critic_supergoal", return_value=None):
-            decisions = [mgr.evaluate_after_turn("partial") for _ in range(DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES)]
+            decisions = [mgr.evaluate_after_turn(visible_progress) for _ in range(DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES)]
 
         assert decisions[-1]["should_continue"] is True
         assert decisions[-1]["status"] == "active"
         assert mgr.state is not None
         assert mgr.state.status == "active"
         assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
-        assert "REPLAN REQUIRED THIS TURN" in decisions[-1]["continuation_prompt"]
+        assert mgr.state.evidence
+        assert mgr.state.research_findings
+        assert mgr.state.research_sufficiency in {"thin", "sufficient"}
 
+        mgr.resume(reset_budget=False)
         with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
              patch.object(goals, "critic_supergoal", return_value={
                  "progress": "weak",
@@ -769,6 +777,199 @@ class TestGoalManager:
         assert d_ok["should_continue"] is True
         assert mgr.state.consecutive_critic_failures == 0
         assert "critic_failures=" not in mgr.status_line()
+
+    def test_supergoal_event_ledger_rehydrates_evidence_and_failure_taxonomy(self, hermes_home):
+        from hermes_cli.goals import GoalManager
+
+        sid = "super-event-ledger-rehydrate-sid"
+        mgr = GoalManager(session_id=sid)
+        state = mgr.set("find a profitable trading strategy", max_turns=20, mode="supergoal")
+        state.evidence = []
+        state.research_findings = []
+        state.evidence_layers = {}
+        state.failure_taxonomy = {}
+        state.search_phase = "explore"
+        state.admission_criteria = []
+
+        mgr._record_event(
+            "research_observed",
+            summary="external paper and benchmark source checked",
+            data={
+                "source_type": "web",
+                "title": "External strategy benchmark",
+                "locator": "https://example.test/strategy",
+                "claim": "candidate has public prior evidence",
+                "retrieved_at": "2026-06-17T00:00:00+00:00",
+                "tool_call_id": "tool-1",
+                "evidence_quote_or_hash": "quote",
+            },
+        )
+        mgr._record_event(
+            "artifact_observed",
+            summary="/tmp/strategy_report.md",
+            data={"artifact_path": "/tmp/strategy_report.md"},
+        )
+        for category in ["beta_exposure", "oos_instability", "drawdown_unacceptable"]:
+            mgr._record_event(
+                "hypothesis_failed",
+                summary=f"failed due to {category}",
+                data={"category": category},
+            )
+
+        reloaded = GoalManager(session_id=sid)
+        assert reloaded.state is not None
+        assert reloaded.state.evidence
+        assert reloaded.state.research_findings
+        assert reloaded.state.evidence_layers["external_prior"]
+        assert reloaded.state.evidence_layers["artifact"]
+        assert reloaded.state.failure_taxonomy == {
+            "beta_exposure": 1,
+            "oos_instability": 1,
+            "drawdown_unacceptable": 1,
+        }
+        assert reloaded.state.search_phase == "failure_taxonomy"
+        assert any("independent information source" in c for c in reloaded.state.admission_criteria)
+        prompt = reloaded.next_continuation_prompt()
+        assert prompt is not None
+        assert "FAILURE TAXONOMY PHASE" in prompt
+        assert "DO NOT RUN ANOTHER ORDINARY BENCHMARK" in prompt
+        assert "independent information source" in prompt
+
+    def test_supergoal_g2_requires_event_derived_external_prior_layer(self, hermes_home):
+        from hermes_cli.goals import GoalManager
+
+        sid = "super-g2-event-layer-sid"
+        mgr = GoalManager(session_id=sid)
+        state = mgr.set("find a profitable trading strategy", max_turns=20, mode="supergoal")
+        state.research_sufficiency = "sufficient"
+        state.research_findings = []
+        state.evidence_layers = {}
+        for gate in state.gates:
+            if gate.id == "G2":
+                gate.status = "pending"
+        mgr._record_event(
+            "research_observed",
+            summary="local benchmark only",
+            data={
+                "source_type": "benchmark",
+                "title": "Local benchmark",
+                "locator": "/tmp/local.md",
+                "claim": "local result",
+                "retrieved_at": "2026-06-17T00:00:00+00:00",
+                "tool_call_id": "tool-local",
+                "evidence_quote_or_hash": "quote",
+            },
+        )
+
+        local_only = GoalManager(session_id=sid)
+        assert next(g for g in local_only.state.gates if g.id == "G2").status == "pending"
+
+        for source_type, title, locator, tool_id in [
+            ("paper", "External paper prior", "arxiv:1", "tool-paper"),
+            ("github", "External implementation prior", "https://github.com/x/y", "tool-github"),
+        ]:
+            local_only._record_event(
+                "research_observed",
+                summary=title,
+                data={
+                    "source_type": source_type,
+                    "title": title,
+                    "locator": locator,
+                    "claim": "external prior",
+                    "retrieved_at": "2026-06-17T00:00:00+00:00",
+                    "tool_call_id": tool_id,
+                    "evidence_quote_or_hash": "quote",
+                },
+            )
+        with_external = GoalManager(session_id=sid)
+        assert next(g for g in with_external.state.gates if g.id == "G2").status == "passed"
+
+    def test_supergoal_records_observation_events_after_turn(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-observation-events-sid")
+        mgr.set("find a profitable trading strategy", max_turns=20, mode="supergoal")
+        response = (
+            "Changed: ran benchmark and external news source scan. "
+            "Verified with pytest. Artifact /tmp/alpha_report.md saved. "
+            "Result failed rolling OOS and buy-hold baseline gate."
+        )
+        with patch.object(goals, "judge_goal", return_value=("continue", "not solved", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn(response)
+
+        assert decision["should_continue"] is True
+        event_types = [event.type for event in mgr.recent_events(limit=20)]
+        assert "artifact_observed" in event_types
+        assert "verification_observed" in event_types
+        assert "research_observed" in event_types
+        assert "hypothesis_failed" in event_types
+        assert mgr.state is not None
+        assert mgr.state.failure_taxonomy.get("baseline_underperformance") == 1
+        assert mgr.state.evidence_layers["artifact"]
+
+    def test_supergoal_critic_uses_dedicated_route_and_budget(self, hermes_home, monkeypatch):
+        from pathlib import Path
+        from hermes_cli import goals
+
+        Path(hermes_home / "config.yaml").write_text(
+            "model:\n"
+            "  provider: custom:CPA\n"
+            "  default: gpt-5.5\n"
+            "auxiliary:\n"
+            "  supergoal_critic:\n"
+            "    provider: custom:CPA\n"
+            "    model: gpt-5.4-mini\n"
+            "    max_tokens: 512\n"
+            "    timeout: 7\n",
+            encoding="utf-8",
+        )
+        state = goals.GoalState(goal="debug mission", mode="supergoal")
+
+        captured = {}
+
+        class FakeMessage:
+            content = '{"progress":"weak","strategy_health":"good"}'
+
+        class FakeCompletions:
+            def create(self, **kwargs):
+                captured.update(kwargs)
+                return type("Resp", (), {"choices": [type("Choice", (), {"message": FakeMessage()})()]})()
+
+        class FakeClient:
+            chat = type("Chat", (), {"completions": FakeCompletions()})()
+
+        def fake_get_text_auxiliary_client(task):
+            captured["task"] = task
+            return FakeClient(), "gpt-5.4-mini"
+
+        monkeypatch.setattr("agent.auxiliary_client.get_text_auxiliary_client", fake_get_text_auxiliary_client)
+        data = goals.critic_supergoal(state, "Verified: artifact report.md saved", timeout=30)
+
+        assert data["progress"] == "weak"
+        assert captured["task"] == "supergoal_critic"
+        assert captured["model"] == "gpt-5.4-mini"
+        assert captured["max_tokens"] == 512
+        assert captured["timeout"] == 7
+
+    def test_supergoal_critic_failures_pause_when_no_board_progress(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+
+        mgr = GoalManager(session_id="super-critic-no-progress-sid")
+        mgr.set("debug the mission", max_turns=20, mode="supergoal")
+
+        with patch.object(goals, "judge_goal", return_value=("continue", "still working", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decisions = [mgr.evaluate_after_turn("partial") for _ in range(DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES)]
+
+        assert decisions[-1]["should_continue"] is False
+        assert decisions[-1]["status"] == "paused"
+        assert mgr.state is not None
+        assert mgr.state.status == "paused"
+        assert mgr.state.consecutive_critic_failures == DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+        assert "critic/board update failed" in decisions[-1]["message"]
 
     def test_supergoal_deterministically_populates_g1_when_critic_fails(self, hermes_home):
         from hermes_cli import goals
@@ -853,6 +1054,35 @@ class TestGoalManager:
         assert mgr.state.same_gate_stall_count == DEFAULT_MAX_SAME_GATE_STALLS
         assert "gate G2 is stalled" in decision["message"]
         assert "stalled" in mgr.state.paused_reason
+
+
+    def test_supergoal_reconcile_preserves_same_gate_stall_counter(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-reconcile-stall-counter-sid")
+        mgr.set("finish school hub", max_turns=20, mode="supergoal")
+        # Simulate a prior done-veto where G2 was the first failed gate.
+        # The next turn has enough final evidence to auto-pass stale generic
+        # gates (G1/G3/G4), but G2 remains the first failed gate.
+        mgr.state.last_failed_gate_id = "G2"
+        mgr.state.same_gate_stall_count = 2
+
+        final_response = (
+            "Completed the mission.\n"
+            "Changed: saved docs/school-hub-final.md.\n"
+            "Verified: pytest passed and the generated report was reviewed.\n"
+            "Evidence: artifact docs/school-hub-final.md maps the result to the criteria."
+        )
+        with patch.object(goals, "judge_goal", return_value=("done", "complete with verified artifacts", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn(final_response)
+
+        assert decision["should_continue"] is False
+        assert decision["status"] == "paused"
+        assert mgr.state.last_failed_gate_id == "G2"
+        assert mgr.state.same_gate_stall_count == 3
+        assert "gate G2 is stalled" in decision["message"]
 
     def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
         from hermes_cli import goals

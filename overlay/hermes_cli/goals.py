@@ -37,6 +37,19 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
+from hermes_cli.goal_events import (
+    GoalEvent,
+    append_goal_event as _append_goal_event_record,
+    events_meta_key as _events_meta_key,
+    load_goal_events as _load_goal_event_records,
+)
+from hermes_cli.supergoal_gates import build_default_supergoal_gates
+from hermes_cli.supergoal_projection import (
+    artifact_paths as _artifact_paths,
+    classify_action_text as _classify_action_text,
+    extract_observation_events as _extract_supergoal_observation_events,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -56,6 +69,11 @@ DEFAULT_JUDGE_TIMEOUT = 30.0
 # we've live-tested; override via auxiliary.goal_judge.max_tokens for
 # specifically constrained setups.
 DEFAULT_JUDGE_MAX_TOKENS = 4096
+# Supergoal critic is a board updater, not the completion judge. Keep its
+# default output budget lower so CPA/custom endpoints do not spend a long time
+# reasoning before emitting the small JSON board delta. Users can override via
+# auxiliary.supergoal_critic.max_tokens.
+DEFAULT_SUPERGOAL_CRITIC_MAX_TOKENS = 1536
 # Cap how much of the last response + recent messages we send to the judge.
 _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
 # After this many consecutive judge *parse* failures (empty output / non-JSON),
@@ -67,7 +85,7 @@ _JUDGE_RESPONSE_SNIPPET_CHARS = 4000
 # `judge reply was not JSON`.
 DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES = 3
 DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES = 5  # auto-pause after this many consecutive API errors
-DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES = 3  # after this many board/critic failures, degrade to deterministic board updates
+DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES = 3  # supergoal board/critic failures must fail-closed, not burn budget
 DEFAULT_MAX_SAME_GATE_STALLS = 3  # pause instead of looping forever on the same deterministic gate veto
 
 
@@ -148,6 +166,18 @@ SUPERGOAL_HARD_GATE_BLOCK_TEMPLATE = (
     "{reason}\n"
     "You are not allowed to continue the blocked action class by inertia. Work on the first failed gate instead. "
     "If the gate cannot be satisfied with available tools, produce a concise blocked or no-edge report with evidence."
+)
+
+SUPERGOAL_FAILURE_TAXONOMY_BLOCK_TEMPLATE = (
+    "\n\nFAILURE TAXONOMY PHASE — DO NOT RUN ANOTHER ORDINARY BENCHMARK BY INERTIA:\n"
+    "Repeated hypotheses have failed. This turn must first explain the failure pattern before proposing more experiments.\n"
+    "Failure taxonomy so far: {taxonomy}\n"
+    "Admission criteria for any new hypothesis: {criteria}\n"
+    "Required order this turn:\n"
+    "1. Cluster failed paths by root failure cause (beta/proxy overlap, OOS instability, drawdown, costs, sample size, data latency, or missing independent information).\n"
+    "2. State which search families are now low-ROI and should be stopped.\n"
+    "3. Either produce/update a no-edge attribution report, or propose ONE new hypothesis family that satisfies every admission criterion.\n"
+    "4. If proposing a new hypothesis, explain the independent information source before writing code or running a benchmark.\n"
 )
 
 SUPERGOAL_CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
@@ -295,42 +325,6 @@ class PlanStep:
             status=status,
             verification=str(data.get("verification") or "").strip(),
             summary=str(data.get("summary") or "").strip(),
-        )
-
-
-@dataclass
-class GoalEvent:
-    """Append-only audit event for a goal/supergoal run."""
-
-    ts: float
-    type: str
-    turn: int = 0
-    summary: str = ""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-    def to_dict(self) -> Dict[str, Any]:
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, data: Any) -> Optional["GoalEvent"]:
-        if not isinstance(data, dict):
-            return None
-        event_type = str(data.get("type") or "").strip()
-        if not event_type:
-            return None
-        maybe_data = data.get("data")
-        raw_data: Dict[str, Any] = maybe_data if isinstance(maybe_data, dict) else {}
-        raw_ts = data.get("ts")
-        try:
-            ts = float(raw_ts) if raw_ts is not None else time.time()
-        except Exception:
-            ts = time.time()
-        return cls(
-            ts=ts,
-            type=event_type,
-            turn=int(data.get("turn", 0) or 0),
-            summary=str(data.get("summary") or "").strip(),
-            data=raw_data,
         )
 
 
@@ -689,6 +683,10 @@ class GoalState:
     hard_gate_reason: str = ""
     no_edge_report: str = ""
     build_vs_reuse_decision: str = ""
+    evidence_layers: Dict[str, List[str]] = field(default_factory=dict)
+    failure_taxonomy: Dict[str, int] = field(default_factory=dict)
+    search_phase: str = "explore"
+    admission_criteria: List[str] = field(default_factory=list)
     literalism_risk: str = "unknown"
     research_sufficiency: str = "unknown"
     next_best_action: str = ""
@@ -789,6 +787,18 @@ class GoalState:
             hard_gate_reason=str(data.get("hard_gate_reason") or "").strip(),
             no_edge_report=str(data.get("no_edge_report") or "").strip(),
             build_vs_reuse_decision=str(data.get("build_vs_reuse_decision") or "").strip(),
+            evidence_layers={
+                str(k): _clean_string_list(v, limit=12, item_limit=160)
+                for k, v in (data.get("evidence_layers") or {}).items()
+                if str(k).strip()
+            } if isinstance(data.get("evidence_layers"), dict) else {},
+            failure_taxonomy={
+                str(k): int(v or 0)
+                for k, v in (data.get("failure_taxonomy") or {}).items()
+                if str(k).strip()
+            } if isinstance(data.get("failure_taxonomy"), dict) else {},
+            search_phase=str(data.get("search_phase") or "explore").strip() or "explore",
+            admission_criteria=_clean_string_list(data.get("admission_criteria") or [], limit=8, item_limit=180),
             literalism_risk=str(data.get("literalism_risk") or "unknown").strip() or "unknown",
             research_sufficiency=str(data.get("research_sufficiency") or "unknown").strip() or "unknown",
             next_best_action=str(data.get("next_best_action") or "").strip(),
@@ -860,6 +870,15 @@ class GoalState:
             parts.append("no_edge_report: " + self.no_edge_report)
         if self.build_vs_reuse_decision:
             parts.append("build_vs_reuse_decision: " + self.build_vs_reuse_decision)
+        if self.search_phase and self.search_phase != "explore":
+            parts.append("search_phase: " + self.search_phase)
+        if self.failure_taxonomy:
+            ranked = sorted(self.failure_taxonomy.items(), key=lambda kv: (-kv[1], kv[0]))[:8]
+            parts.append("failure_taxonomy: " + "; ".join(f"{k}={v}" for k, v in ranked))
+        if self.evidence_layers:
+            parts.append("evidence_layers: " + "; ".join(f"{k}={len(v)}" for k, v in sorted(self.evidence_layers.items())))
+        if self.admission_criteria:
+            parts.append("admission_criteria: " + "; ".join(self.admission_criteria[-6:]))
         if self.acceptance_criteria:
             parts.append("acceptance_criteria: " + "; ".join(self.acceptance_criteria[:6]))
         if self.milestones:
@@ -900,10 +919,6 @@ def _meta_key(session_id: str) -> str:
     return f"goal:{session_id}"
 
 
-def _events_meta_key(session_id: str) -> str:
-    return f"goal_events:{session_id}"
-
-
 _DB_CACHE: Dict[str, Any] = {}
 
 
@@ -929,11 +944,7 @@ def _get_session_db() -> Optional[Any]:
     if cached is not None:
         return cached
     try:
-        # Pass the path explicitly instead of relying on hermes_state.DEFAULT_DB_PATH.
-        # DEFAULT_DB_PATH is computed at hermes_state import time; gateway tests and
-        # long-lived processes can import it before HERMES_HOME/profile overrides are
-        # applied, which makes goal state bleed into the wrong profile/session DB.
-        db = SessionDB(db_path=get_hermes_home() / "state.db")
+        db = SessionDB()
     except Exception as exc:  # pragma: no cover
         logger.debug("GoalManager: SessionDB() raised (%s)", exc)
         return None
@@ -1033,32 +1044,8 @@ def migrate_goal_state(old_session_id: str, new_session_id: str, *, reason: str 
 
 
 def load_goal_events(session_id: str, *, limit: int = 100) -> List[GoalEvent]:
-    """Load append-only goal events for a session from state_meta."""
-    if not session_id:
-        return []
-    db = _get_session_db()
-    if db is None:
-        return []
-    try:
-        raw = db.get_meta(_events_meta_key(session_id))
-    except Exception as exc:
-        logger.debug("GoalManager: get events meta failed: %s", exc)
-        return []
-    if not raw:
-        return []
-    try:
-        decoded = json.loads(raw)
-    except Exception as exc:
-        logger.debug("GoalManager: could not parse events for %s: %s", session_id, exc)
-        return []
-    if not isinstance(decoded, list):
-        return []
-    events: List[GoalEvent] = []
-    for item in decoded[-max(1, int(limit or 100)):]:
-        event = GoalEvent.from_dict(item)
-        if event is not None:
-            events.append(event)
-    return events
+    """Compatibility wrapper for callers/tests that import from goals.py."""
+    return _load_goal_event_records(session_id, limit=limit)
 
 
 def append_goal_event(
@@ -1070,31 +1057,18 @@ def append_goal_event(
     data: Optional[Dict[str, Any]] = None,
     max_events: int = 200,
 ) -> Optional[GoalEvent]:
-    """Append an audit event and update lightweight counters on GoalState."""
-    if not session_id or not event_type:
-        return None
-    db = _get_session_db()
-    if db is None:
-        return None
-    event = GoalEvent(
-        ts=time.time(),
-        type=str(event_type).strip(),
-        turn=int(turn or 0),
-        summary=_truncate(" ".join(str(summary or "").split()), 500),
-        data=data or {},
+    """Append an event and mirror event counters into the cached GoalState."""
+    event = _append_goal_event_record(
+        session_id,
+        event_type,
+        turn=turn,
+        summary=summary,
+        data=data,
+        max_events=max_events,
     )
+    if event is None:
+        return None
     events = load_goal_events(session_id, limit=max_events)
-    events.append(event)
-    events = events[-max_events:]
-    try:
-        db.set_meta(
-            _events_meta_key(session_id),
-            json.dumps([e.to_dict() for e in events], ensure_ascii=False),
-        )
-    except Exception as exc:
-        logger.debug("GoalManager: set events meta failed: %s", exc)
-        return event
-
     state = load_goal(session_id)
     if state is not None:
         state.event_count = len(events)
@@ -1204,6 +1178,11 @@ def _research_sufficiency_from_findings(state: GoalState, critic_value: str = ""
         return "sufficient"
     if external_types:
         return "thin"
+    if any(f.source_type in {"benchmark", "local"} for f in _tool_backed_research_findings(state)):
+        # Local tool-backed experiments/benchmarks are real progress for
+        # maintenance/debugging/trading supergoals, but they are not enough to
+        # satisfy the external-provenance research gate by themselves.
+        return "thin"
     if critic_value in {"thin", "missing"}:
         return critic_value
     return "missing"
@@ -1234,19 +1213,7 @@ def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any
 
 
 def _default_supergoal_gates(goal: str = "") -> List[GoalGate]:
-    text = (goal or "").lower()
-    gates = [
-        GoalGate("G1", "Intent contract captured: root intent, success criteria, anti-goals/constraints", verifier="state.inferred_user_intent and state.success_definition"),
-        GoalGate("G2", "Research ledger has sufficient tool-backed external provenance", verifier="paper+github or 3 external tool-backed source types"),
-        GoalGate("G3", "At least one concrete execution artifact is verified", verifier="evidence/artifact/log/test recorded"),
-        GoalGate("G4", "Final report maps evidence to success criteria or blocked/no-edge outcome", verifier="done verdict or no_edge_report"),
-    ]
-    if any(k in text for k in ["策略", "strategy", "trading", "交易", "edge", "hypothesis", "假设"]):
-        gates.insert(2, GoalGate("SG-1", "Hypothesis portfolio contains at least 3 strategy hypotheses", verifier="len(hypothesis_portfolio) >= 3"))
-        gates.insert(3, GoalGate("SG-2", "Each active hypothesis has baseline, experiment, kill criteria, artifact, and verdict", verifier="portfolio completeness + verdicts"))
-        gates.insert(4, GoalGate("SG-3", "If no hypothesis passes, a no-edge attribution report exists", verifier="no_edge_report when all tested hypotheses fail/kill"))
-        gates.insert(5, GoalGate("SG-4", "Infrastructure work is allowed only when it proves dependency on a failed gate", verifier="infra dependency proof"))
-    return gates
+    return build_default_supergoal_gates(goal, GoalGate)
 
 
 def _ensure_supergoal_gates_for_text(state: GoalState, text: str = "") -> None:
@@ -1406,6 +1373,102 @@ def _infer_supergoal_contract_from_turn(state: GoalState, last_response: str = "
     return changed
 
 
+def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> bool:
+    """Derive lightweight ledgers from structured GoalEvent payloads.
+
+    GoalEvent is the durable source of truth for what happened. The mutable
+    board stays as a cached projection so status and continuation prompts are
+    cheap to render, but it should be rebuildable from event data when critic
+    output is missing or stale.
+    """
+    if state is None or getattr(state, "mode", "goal") != "supergoal":
+        return False
+    changed = False
+    seen_event_keys: set[Tuple[str, int, str]] = set()
+    derived_failure_taxonomy: Dict[str, int] = {}
+
+    def add_layer(layer: str, value: str, *, max_items: int = 12) -> None:
+        nonlocal changed
+        layer = str(layer or "").strip()
+        value = " ".join(str(value or "").split())
+        if not layer or not value:
+            return
+        layers = dict(state.evidence_layers or {})
+        before = list(layers.get(layer, []))
+        after = _merge_compact_list(before, [_truncate(value, 180)], max_items=max_items)
+        if after != before:
+            layers[layer] = after
+            state.evidence_layers = layers
+            changed = True
+
+    def inc_failure(category: str, *, event_key: Tuple[str, int, str]) -> None:
+        nonlocal changed
+        category = str(category or "").strip().lower()
+        if not category or event_key in seen_event_keys:
+            return
+        seen_event_keys.add(event_key)
+        derived_failure_taxonomy[category] = int(derived_failure_taxonomy.get(category, 0) or 0) + 1
+
+    for event in events or []:
+        data = event.data or {}
+        etype = event.type
+        if etype == "artifact_observed":
+            locator = data.get("artifact_path") or data.get("locator") or event.summary
+            add_layer("artifact", locator)
+            before = list(state.evidence or [])
+            state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
+            changed = changed or state.evidence != before
+        elif etype == "verification_observed":
+            evidence = data.get("evidence") or event.summary
+            add_layer("verification", evidence)
+            before = list(state.evidence or [])
+            state.evidence = _merge_compact_list(state.evidence, [evidence], max_items=20)
+            changed = changed or state.evidence != before
+        elif etype == "research_observed":
+            add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
+            before = list(state.research_findings or [])
+            state.research_findings = _merge_research_findings(state.research_findings, data)
+            state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
+            changed = changed or state.research_findings != before
+        elif etype == "hypothesis_failed":
+            add_layer("failed_hypothesis", event.summary)
+            inc_failure(
+                data.get("category") or data.get("reason") or event.summary,
+                event_key=(event.type, int(event.turn or 0), event.summary),
+            )
+        elif etype == "action_class_observed":
+            action = str(data.get("action_class") or event.summary or "").strip().lower()
+            if action:
+                before = list(state.action_history or [])
+                state.action_history = (before + [action])[-12:]
+                state.current_action_class = action
+                changed = changed or state.action_history != before
+
+    if derived_failure_taxonomy != (state.failure_taxonomy or {}):
+        state.failure_taxonomy = derived_failure_taxonomy
+        changed = True
+
+    failed_count = sum(1 for h in state.hypothesis_portfolio if h.status in {"failed", "killed"})
+    if failed_count >= 5 or len(state.failure_taxonomy or {}) >= 3:
+        if state.search_phase != "failure_taxonomy":
+            state.search_phase = "failure_taxonomy"
+            changed = True
+        criteria = [
+            "new hypothesis must name an independent information source, not only OHLCV/beta proxy",
+            "must define baseline, kill criteria, rolling/OOS gate, and artifact before execution",
+            "if next path is another failed family variant, produce no-edge attribution instead",
+        ]
+        before = list(state.admission_criteria or [])
+        state.admission_criteria = _merge_compact_list(state.admission_criteria, criteria, max_items=8)
+        changed = changed or state.admission_criteria != before
+        if not state.no_edge_report and failed_count >= 8:
+            state.no_edge_report = "multiple hypotheses failed; require failure taxonomy before more benchmark variants"
+            changed = True
+
+    _update_supergoal_gates(state)
+    return changed
+
+
 def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
     """Bring old persisted supergoal states under the current deterministic guards."""
     if state is None or getattr(state, "mode", "goal") != "supergoal":
@@ -1448,16 +1511,25 @@ def _normalize_loaded_supergoal_state(state: Optional[GoalState]) -> bool:
                 else:
                     state.next_best_action = "Review normalized supergoal state and decide whether to resume or finalize."
                 changed = True
-    if state.status == "active" and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES:
-        # Critic failures should degrade strategy quality, not make the loop look
-        # stuck.  Deterministic gates/artifact extraction still provide a safe
-        # control loop, so keep the supergoal runnable and force a replan instead
-        # of pausing before the agent can act.
+    deterministic_board_progress = bool(
+        state.evidence
+        or state.research_findings
+        or state.action_history
+    )
+    if (
+        state.status == "active"
+        and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+        and not deterministic_board_progress
+    ):
+        state.status = "paused"
+        state.paused_reason = (
+            f"supergoal critic/board update failed {state.consecutive_critic_failures} turns in a row"
+        )
         state.should_replan = True
-        state.strategy_health = "blocked" if state.strategy_health == "unknown" else state.strategy_health
-        state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
+        state.next_best_action = state.next_best_action or "Repair auxiliary critic/board update path, then resume with a strategic replan."
         changed = True
     return changed
+
 
 
 def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bool:
@@ -1485,7 +1557,7 @@ def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bo
         "evidence", "report", "log", "wrote", "saved", "created", "backtest", "baseline",
         "验证", "测试", "证据", "日志", "报告", "回测",
     )
-    if any(marker in low for marker in evidence_markers) or _ARTIFACT_PATH_RE.search(normalized):
+    if any(marker in low for marker in evidence_markers) or _artifact_paths(normalized):
         before = list(state.evidence or [])
         state.evidence = _merge_compact_list(
             state.evidence,
@@ -1493,6 +1565,32 @@ def _record_supergoal_turn_artifacts(state: GoalState, last_response: str) -> bo
             max_items=20,
         )
         changed = state.evidence != before or changed
+
+    research_markers = (
+        "research", "survey", "github", "docs", "paper", "benchmark", "scan",
+        "news", "rss", "source", "external", "market", "taxonomy", "调研",
+        "检索", "外部", "新闻", "来源", "基准", "对比",
+    )
+    has_evidence_marker = any(marker in low for marker in evidence_markers) or bool(_artifact_paths(normalized))
+    if has_evidence_marker and any(marker in low for marker in research_markers):
+        source_type = "benchmark" if any(k in low for k in ("benchmark", "baseline", "backtest", "基准", "回测")) else "local"
+        if any(k in low for k in ("github", "repo")):
+            source_type = "github"
+        elif any(k in low for k in ("docs", "paper", "web", "rss", "news", "external", "新闻", "外部")):
+            source_type = "web"
+        finding = ResearchFinding(
+            source_type=source_type,
+            title=_truncate(normalized, 120),
+            locator="assistant_turn",
+            claim=_truncate(normalized, 240),
+            retrieved_at=datetime.now(timezone.utc).isoformat(),
+            tool_call_id="assistant_turn",
+            evidence_quote_or_hash=_truncate(normalized, 200),
+        )
+        before_findings = list(state.research_findings or [])
+        state.research_findings = _merge_research_findings(state.research_findings, finding.to_dict())
+        state.research_sufficiency = _research_sufficiency_from_findings(state, state.research_sufficiency)
+        changed = state.research_findings != before_findings or changed
     _update_supergoal_gates(state)
     return changed
 
@@ -1501,23 +1599,33 @@ def _hypothesis_complete(h: HypothesisRecord) -> bool:
     return bool(h.baseline and h.experiment and h.kill_criteria and h.artifacts and h.status in {"passed", "failed", "killed"})
 
 
-def _classify_action_text(text: str) -> str:
-    t = (text or "").lower()
-    if any(k in t for k in ["no-edge", "no edge", "归因", "report", "总结", "报告"]):
-        return "reporting"
-    if any(k in t for k in ["hypothesis", "hypotheses", "假设", "portfolio", "策略候选"]):
-        return "hypothesis_generation"
-    if any(k in t for k in ["experiment", "backtest", "验证策略", "baseline", "ledger", "acceptance", "run test"]):
-        return "experiment_execution"
-    if any(k in t for k in ["verify", "test", "pytest", "lint", "validate", "验证", "artifact"]):
-        return "validation"
-    if any(k in t for k in ["search", "survey", "paper", "github", "docs", "web", "研究", "调研", "检索"]):
-        return "research"
-    if any(k in t for k in ["validator", "checker", "audit", "infra", "pipeline", "framework", "tool", "script", "模块", "平台", "基础设施"]):
-        return "infra_engineering"
-    if any(k in t for k in ["permission", "scope", "policy", "destructive", "安全"]):
-        return "safety"
-    return "unknown"
+
+def _sync_evidence_layers_from_findings(state: GoalState) -> bool:
+    """Keep evidence_layers as a projection of provenanced findings.
+
+    The layer cache is derived state; this helper lets older critic-populated
+    boards and new event-populated boards use the same gate semantics.
+    """
+    if getattr(state, "mode", "goal") != "supergoal":
+        return False
+    changed = False
+    layers = dict(state.evidence_layers or {})
+    external = list(layers.get("external_prior", []))
+    local = list(layers.get("local_empirical", []))
+    for finding in _tool_backed_research_findings(state):
+        target = external if finding.source_type in {"paper", "github", "web", "docs"} else local
+        label = _truncate(f"{finding.source_type}:{finding.title}", 160)
+        merged = _merge_compact_list(target, [label], max_items=12)
+        if merged != target:
+            target[:] = merged
+            changed = True
+    if external:
+        layers["external_prior"] = external
+    if local:
+        layers["local_empirical"] = local
+    if changed:
+        state.evidence_layers = layers
+    return changed
 
 
 def _update_supergoal_gates(state: GoalState) -> None:
@@ -1526,15 +1634,13 @@ def _update_supergoal_gates(state: GoalState) -> None:
     if not state.gates:
         state.gates = _default_supergoal_gates(state.goal)
     _ensure_supergoal_gates_for_text(state)
+    _sync_evidence_layers_from_findings(state)
     tool_backed = _tool_backed_research_findings(state)
     for gate in state.gates:
         if gate.id == "G1" and state.inferred_user_intent and state.success_definition:
             gate.status, gate.evidence = "passed", "intent + success_definition populated"
-        elif gate.id == "G2" and state.research_sufficiency in {"sufficient", "thin"}:
-            # Thin but real tool-backed provenance is enough for generic
-            # debugging/maintenance supergoals to keep moving.  Strategy/trading
-            # supergoals still get stricter domain gates below.
-            gate.status, gate.evidence = "passed", f"research_sufficiency={state.research_sufficiency}; {len(tool_backed)} tool-backed findings"
+        elif gate.id == "G2" and state.research_sufficiency == "sufficient" and state.evidence_layers.get("external_prior"):
+            gate.status, gate.evidence = "passed", f"{len(tool_backed)} tool-backed findings; external_prior={len(state.evidence_layers.get('external_prior', []))}"
         elif gate.id == "SG-1" and len(state.hypothesis_portfolio) >= 3:
             gate.status, gate.evidence = "passed", f"{len(state.hypothesis_portfolio)} hypotheses"
         elif gate.id == "SG-2" and state.hypothesis_portfolio and all(_hypothesis_complete(h) for h in state.hypothesis_portfolio):
@@ -1669,6 +1775,48 @@ def _update_supergoal_plan_from_progress(state: GoalState, *, verdict: str) -> N
 _JSON_OBJECT_RE = re.compile(r"\{.*?\}", re.DOTALL)
 
 
+def _auxiliary_task_config(task: str) -> Dict[str, Any]:
+    """Return raw ``auxiliary.<task>`` config from config.yaml.
+
+    Kept local to goals.py so /supergoal can distinguish an explicitly
+    configured critic route from the completion judge route without expanding
+    the public auxiliary-client API.
+    """
+    if not task:
+        return {}
+    try:
+        from hermes_cli.config import load_config
+
+        cfg = load_config() or {}
+        aux = cfg.get("auxiliary") or {}
+        raw = aux.get(task) if isinstance(aux, dict) else None
+        return raw if isinstance(raw, dict) else {}
+    except Exception:
+        return {}
+
+
+def _auxiliary_int_config(task: str, key: str, default: int) -> int:
+    """Resolve a positive integer from auxiliary.<task>.<key>."""
+    try:
+        value = int(_auxiliary_task_config(task).get(key, default))
+        if value > 0:
+            return value
+    except Exception:
+        pass
+    return default
+
+
+def _auxiliary_float_config(task: str, key: str, default: float) -> float:
+    """Resolve a positive float from auxiliary.<task>.<key>."""
+    try:
+        value = float(_auxiliary_task_config(task).get(key, default))
+        if value > 0:
+            return value
+    except Exception:
+        pass
+    return default
+
+
 def _goal_judge_max_tokens() -> int:
     """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
 
@@ -1676,21 +1824,19 @@ def _goal_judge_max_tokens() -> int:
     this once per judge turn is cheap. A non-positive or non-int value falls
     back to the default rather than crashing the goal loop.
     """
-    try:
-        from hermes_cli.config import load_config
+    return _auxiliary_int_config("goal_judge", "max_tokens", DEFAULT_JUDGE_MAX_TOKENS)
 
-        cfg = load_config()
-        value = (
-            (cfg.get("auxiliary") or {})
-            .get("goal_judge", {})
-            .get("max_tokens", DEFAULT_JUDGE_MAX_TOKENS)
-        )
-        value = int(value)
-        if value > 0:
-            return value
-    except Exception:
-        pass
-    return DEFAULT_JUDGE_MAX_TOKENS
+
+def _supergoal_critic_max_tokens() -> int:
+    """Resolve auxiliary.supergoal_critic.max_tokens for board-update JSON."""
+    return _auxiliary_int_config(
+        "supergoal_critic", "max_tokens", DEFAULT_SUPERGOAL_CRITIC_MAX_TOKENS
+    )
+
+
+def _supergoal_critic_timeout(default: float = DEFAULT_JUDGE_TIMEOUT) -> float:
+    """Resolve auxiliary.supergoal_critic.timeout for the critic call."""
+    return _auxiliary_float_config("supergoal_critic", "timeout", default)
 
 
 def _supergoal_replan_interval() -> int:
@@ -1887,23 +2033,34 @@ def critic_supergoal(state: GoalState, last_response: str, *, timeout: float = D
         logger.debug("supergoal critic: auxiliary client import failed: %s", exc)
         return None
 
-    # Use the same auxiliary route as the strict completion judge by default.
-    # This avoids requiring users to configure a brand-new auxiliary task just
-    # to get strategic feedback; a future dedicated supergoal_critic override
-    # can be added once auxiliary task registration exposes it consistently.
+    # Prefer a dedicated supergoal_critic route when configured, otherwise
+    # fall back to goal_judge for backwards compatibility. This lets deployments
+    # keep the main model strong while routing board-update JSON to a faster CPA
+    # model such as gpt-5.4-mini without changing the completion judge.
+    critic_config = _auxiliary_task_config("supergoal_critic")
+    has_dedicated_route = any(
+        str(critic_config.get(key) or "").strip()
+        for key in ("provider", "model", "base_url", "api_key", "api_mode")
+    )
+    task_name = "supergoal_critic" if has_dedicated_route else "goal_judge"
     try:
-        client, model = get_text_auxiliary_client("goal_judge")
+        client, model = get_text_auxiliary_client(task_name)
     except Exception as exc:
-        logger.debug("supergoal critic: goal_judge client unavailable: %s", exc)
+        logger.debug("supergoal critic: %s client unavailable: %s", task_name, exc)
         return None
 
     if client is None or not model:
         return None
 
+    # Dedicated critic config can shrink prompt slices for latency-sensitive
+    # CPA/custom routes without weakening the main supergoal continuation.
+    board_chars = _auxiliary_int_config("supergoal_critic", "board_chars", 2400)
+    response_chars = _auxiliary_int_config("supergoal_critic", "response_chars", 2400)
+    goal_chars = _auxiliary_int_config("supergoal_critic", "goal_chars", 1200)
     prompt = SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE.format(
-        goal=_truncate(state.goal, 2000),
-        board=_truncate(state.render_supergoal_board(), 4000),
-        response=_truncate(last_response, _JUDGE_RESPONSE_SNIPPET_CHARS),
+        goal=_truncate(state.goal, goal_chars),
+        board=_truncate(state.render_supergoal_board(), board_chars),
+        response=_truncate(last_response, response_chars),
     )
     try:
         resp = client.chat.completions.create(
@@ -1913,8 +2070,8 @@ def critic_supergoal(state: GoalState, last_response: str, *, timeout: float = D
                 {"role": "user", "content": prompt},
             ],
             temperature=0,
-            max_tokens=_goal_judge_max_tokens(),
-            timeout=timeout,
+            max_tokens=_supergoal_critic_max_tokens(),
+            timeout=_supergoal_critic_timeout(timeout),
             extra_body=get_auxiliary_extra_body() or None,
         )
         raw = resp.choices[0].message.content or ""
@@ -2049,8 +2206,13 @@ class GoalManager:
         self.session_id = session_id
         self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
         self._state: Optional[GoalState] = load_goal(session_id)
-        if self._state is not None and _normalize_loaded_supergoal_state(self._state):
-            save_goal(self.session_id, self._state)
+        if self._state is not None:
+            changed = _goal_events_state_changed(
+                self._state, load_goal_events(self.session_id, limit=200)
+            )
+            changed = _normalize_loaded_supergoal_state(self._state) or changed
+            if changed:
+                save_goal(self.session_id, self._state)
 
     def _record_event(
         self,
@@ -2099,29 +2261,24 @@ class GoalManager:
         turns = f"{s.turns_used}/{s.max_turns} turns"
         label = "Supergoal" if getattr(s, "mode", "goal") == "supergoal" else "Goal"
         if compact:
-            # Mobile/chat friendly: keep the live status to a few short,
-            # scannable lines. Native status cards already expose controls, and
-            # repeating a full controls row on every forced status/update makes
-            # supergoal output feel noisy.
-            lines = [f"{label} {s.status} · {s.turns_used}/{s.max_turns}"]
+            command = "/supergoal" if label == "Supergoal" else "/goal"
+            lines = [f"{label} {s.status} · turns {s.turns_used}/{s.max_turns}"]
             if s.last_verdict or s.last_reason:
                 verdict = s.last_verdict or "last"
-                reason = f" — {_truncate(s.last_reason, 88)}" if s.last_reason else ""
-                lines.append(f"last: {verdict}{reason}")
+                reason = f": {_truncate(s.last_reason, 96)}" if s.last_reason else ""
+                lines.append(f"last {verdict}{reason}")
             if getattr(s, "mode", "goal") == "supergoal":
-                flag = ""
                 if getattr(s, "same_gate_stall_count", 0) and getattr(s, "last_failed_gate_id", ""):
-                    flag = f"gate {s.last_failed_gate_id}×{s.same_gate_stall_count}"
+                    lines.append(f"gate_stall {s.last_failed_gate_id}:{s.same_gate_stall_count}")
                 elif getattr(s, "consecutive_critic_failures", 0):
-                    flag = f"critic×{s.consecutive_critic_failures}"
+                    lines.append(f"critic_failures {s.consecutive_critic_failures}")
                 else:
                     first_gate = _first_failed_gate(s)
                     if first_gate is not None:
-                        flag = f"gate {first_gate.id}"
-                if flag:
-                    lines.append(f"flag: {flag}")
+                        lines.append(f"first_gate {first_gate.id}: {_truncate(first_gate.description, 96)}")
                 if getattr(s, "next_best_action", ""):
-                    lines.append(f"next: {_truncate(s.next_best_action, 92)}")
+                    lines.append(f"next {_truncate(s.next_best_action, 96)}")
+            lines.append(f"Controls: {command} pause · {command} status · {command} clear")
             return "\n".join(lines)
         sub = f", {len(s.subgoals)} subgoal{'s' if len(s.subgoals) != 1 else ''}" if s.subgoals else ""
         diagnostics = []
@@ -2426,6 +2583,9 @@ class GoalManager:
             gate_ids_before_critic = _passed_gate_ids(state)
             _infer_supergoal_contract_from_turn(state, last_response)
             _record_supergoal_turn_artifacts(state, last_response)
+            for event_type, summary, data in _extract_supergoal_observation_events(last_response):
+                self._record_event(event_type, summary=summary, data=data)
+            _goal_events_state_changed(state, self.recent_events(limit=200))
             try:
                 critic_data = critic_supergoal(state, last_response)
                 if critic_data:
@@ -2481,6 +2641,9 @@ class GoalManager:
         else:
             state.consecutive_parse_failures = 0
 
+
+
+
         # Track consecutive judge API/transport errors separately.
         # "judge error: ..." in the reason signals an API call failure.
         if reason and reason.startswith("judge error:"):
@@ -2492,6 +2655,7 @@ class GoalManager:
         if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
             _update_supergoal_gates(state)
             gate_ids_before_reconcile = _passed_gate_ids(state)
+
             # Cache the stall identity before reconcile so ancillary gate
             # auto-pass (G1/G3/G4) does not silently reset the stall
             # counter for the gate that is fundamentally still blocking.
@@ -2506,6 +2670,7 @@ class GoalManager:
                 gate_vetoed = True
                 if state.last_failed_gate_id == first_gate.id:
                     state.same_gate_stall_count += 1
+
                 elif _stall_gate_id and first_gate.id == _stall_gate_id:
                     # Ancillary gates passed during reconcile but the same
                     # gate is still the first failure.  Restore the saved
@@ -2632,18 +2797,44 @@ class GoalManager:
                 ),
             }
 
-        # Supergoal critic is an auxiliary quality layer.  If it fails, keep
-        # the loop alive on deterministic board/gate updates instead of pausing
-        # the user's long-running task.  Judge API/parse failures above still
-        # fail closed because they break the core continuation contract.
+        # Supergoal board/critic is part of the control system, not a cosmetic
+        # side-task. If it cannot update for several turns, fail closed only
+        # when deterministic board reconciliation also has no useful evidence.
+        # This keeps CPA-only deployments alive when the LLM critic times out
+        # but the turn itself produced visible tool-backed progress.
+        deterministic_board_progress = bool(
+            state.evidence
+            or state.research_findings
+            or state.action_history
+        )
         if (
             getattr(state, "mode", "goal") == "supergoal"
             and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
+            and not deterministic_board_progress
         ):
+            state.status = "paused"
+            state.paused_reason = (
+                f"supergoal critic/board update failed {state.consecutive_critic_failures} turns in a row"
+            )
             state.should_replan = True
-            if state.strategy_health == "unknown":
-                state.strategy_health = "blocked"
-            state.next_best_action = state.next_best_action or "Continue with deterministic board updates while auxiliary critic is unavailable."
+            state.next_best_action = state.next_best_action or "Repair auxiliary critic/board update path, then resume with a strategic replan."
+            save_goal(self.session_id, state)
+            self._record_event(
+                "paused",
+                summary=state.paused_reason,
+                data={"reason": state.paused_reason, "trigger": "critic_failures"},
+            )
+            return {
+                "status": "paused",
+                "should_continue": False,
+                "continuation_prompt": None,
+                "verdict": "continue",
+                "reason": reason,
+                "message": (
+                    f"⏸ Supergoal paused — critic/board update failed "
+                    f"{state.consecutive_critic_failures} turns in a row. Check auxiliary goal_judge/critic health, then /supergoal resume."
+                ),
+            }
 
         if state.turns_used >= state.max_turns:
             state.status = "paused"
@@ -2707,6 +2898,19 @@ class GoalManager:
             )
             if self._state.hard_gate_reason:
                 prompt += SUPERGOAL_HARD_GATE_BLOCK_TEMPLATE.format(reason=self._state.hard_gate_reason)
+            if self._state.search_phase == "failure_taxonomy":
+                taxonomy = "; ".join(
+                    f"{k}={v}"
+                    for k, v in sorted(
+                        (self._state.failure_taxonomy or {}).items(),
+                        key=lambda kv: (-kv[1], kv[0]),
+                    )[:8]
+                ) or "not yet classified"
+                criteria = "; ".join(self._state.admission_criteria or []) or "independent source + baseline + kill criteria + OOS/rolling verifier required"
+                prompt += SUPERGOAL_FAILURE_TAXONOMY_BLOCK_TEMPLATE.format(
+                    taxonomy=taxonomy,
+                    criteria=criteria,
+                )
             if self._state.should_replan:
                 prompt += SUPERGOAL_REPLAN_BLOCK
                 self._record_event(
