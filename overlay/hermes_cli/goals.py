@@ -61,6 +61,7 @@ from hermes_cli.supergoal.gates import (
     is_gate_open as _gate_is_open,
     open_followups as _gate_open_followups,
     passed_gate_ids as _gate_passed_ids,
+    set_gate_open as _gate_set_open,
     verified_hypothesis_artifact_count as _gate_verified_hypothesis_artifact_count,
 )
 from hermes_cli.supergoal_gates import build_default_supergoal_gates
@@ -1985,11 +1986,7 @@ def _sync_evidence_layers_from_findings(state: GoalState) -> bool:
 
 
 def _set_gate_open(gate: GoalGate, *, missing: List[str], reason: str) -> None:
-    if gate.status == "passed":
-        return
-    gate.missing = missing[:12]
-    gate.reason = _truncate(reason, 300)
-    gate.status = "pending" if _is_blocking_gate(gate) else "followup"
+    _gate_set_open(gate, missing=missing, reason=reason)
 
 
 def _update_supergoal_gates(state: GoalState) -> None:

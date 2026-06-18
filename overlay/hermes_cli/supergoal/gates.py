@@ -120,3 +120,13 @@ def has_verified_execution_evidence(state: Any) -> bool:
     if layers.get("human_acceptance"):
         return True
     return False
+
+
+def set_gate_open(gate: Any, *, missing: list[str], reason: str, truncate_limit: int = 300) -> None:
+    """Mark a gate as open without clobbering already passed gates."""
+    if getattr(gate, "status", "") == "passed":
+        return
+    gate.missing = list(missing or [])[:12]
+    reason_text = " ".join(str(reason or "").split())
+    gate.reason = reason_text if len(reason_text) <= truncate_limit else reason_text[:truncate_limit]
+    gate.status = "pending" if is_blocking_gate(gate) else "followup"
