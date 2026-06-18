@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..7a44c80ee 100644
+index a6a28deaf..189a2d53e 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -5715,7 +5715,7 @@ index a6a28deaf..7a44c80ee 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1272,992 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1272,1018 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -5858,6 +5858,24 @@ index a6a28deaf..7a44c80ee 100644
 +
 +def _evidence_ref_count(state: GoalState) -> int:
 +    return sum(len(v or []) for v in (state.evidence_layers or {}).values()) + len(state.evidence or []) + len(state.research_findings or [])
++
++
++def _has_verified_execution_evidence(state: GoalState) -> bool:
++    """Return True only for gate-eligible execution evidence.
++
++    ``state.evidence`` may contain assistant-visible claims for board/prompt
++    continuity.  G3 must be stricter: only tool-observed artifact or
++    verification layers, verifier-backed hypothesis artifacts, or explicit human
++    acceptance can satisfy the run-acceptance gate.
++    """
++    layers = state.evidence_layers or {}
++    if layers.get("artifact") or layers.get("verification"):
++        return True
++    if any(h.artifacts and h.status in {"passed", "failed", "killed"} for h in state.hypothesis_portfolio):
++        return True
++    if layers.get("human_acceptance"):
++        return True
++    return False
 +
 +
 +def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
@@ -6057,13 +6075,15 @@ index a6a28deaf..7a44c80ee 100644
 +                state.success_definition = "final response explicitly reports completion with evidence/artifacts"
 +            passed.append(gate.id)
 +        elif gate.id == "G3":
++            if not _has_verified_execution_evidence(state):
++                _set_gate_open(
++                    gate,
++                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
++                    reason="final prose is not gate-eligible execution evidence",
++                )
++                continue
 +            gate.status = "passed"
-+            gate.evidence = "final response includes concrete verification/artifact evidence"
-+            state.evidence = _merge_compact_list(
-+                state.evidence,
-+                [_truncate(" ".join((last_response or "").split()), 300)],
-+                max_items=20,
-+            )
++            gate.evidence = "verified tool/human artifact or verification evidence recorded"
 +            passed.append(gate.id)
 +        elif gate.id == "G4":
 +            gate.status = "passed"
@@ -6144,16 +6164,18 @@ index a6a28deaf..7a44c80ee 100644
 +        etype = event.type
 +        if etype == "artifact_observed":
 +            locator = data.get("artifact_path") or data.get("locator") or event.summary
-+            add_layer("artifact", locator)
 +            before = list(state.evidence or [])
 +            state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
 +            changed = changed or state.evidence != before
++            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
++                add_layer("artifact", locator)
 +        elif etype == "verification_observed":
 +            evidence = data.get("evidence") or event.summary
-+            add_layer("verification", evidence)
 +            before = list(state.evidence or [])
 +            state.evidence = _merge_compact_list(state.evidence, [evidence], max_items=20)
 +            changed = changed or state.evidence != before
++            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
++                add_layer("verification", evidence)
 +        elif etype == "research_observed":
 +            add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
 +            before = list(state.research_findings or [])
@@ -6459,10 +6481,14 @@ index a6a28deaf..7a44c80ee 100644
 +            else:
 +                _set_gate_open(gate, missing=["infra dependency proof"], reason="infrastructure work needs dependency proof")
 +        elif gate.id == "G3":
-+            if state.evidence or any(h.artifacts for h in state.hypothesis_portfolio):
-+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "evidence/artifacts recorded", [], ""
++            if _has_verified_execution_evidence(state):
++                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "verified tool/human artifact or verification evidence recorded", [], ""
 +            else:
-+                _set_gate_open(gate, missing=["artifact", "test/log/evidence"], reason="no verified artifact/evidence is recorded")
++                _set_gate_open(
++                    gate,
++                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
++                    reason="no gate-eligible tool/human artifact or verification evidence is recorded",
++                )
 +        elif gate.id == "G4":
 +            if state.no_edge_report or state.last_verdict == "done":
 +                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
@@ -6708,7 +6734,7 @@ index a6a28deaf..7a44c80ee 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2265,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2291,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6764,7 +6790,7 @@ index a6a28deaf..7a44c80ee 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2450,194 @@ def judge_goal(
+@@ -463,6 +2476,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6959,7 +6985,7 @@ index a6a28deaf..7a44c80ee 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2664,41 @@ class GoalManager:
+@@ -489,6 +2690,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -7001,7 +7027,7 @@ index a6a28deaf..7a44c80ee 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2712,154 @@ class GoalManager:
+@@ -502,37 +2738,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7162,7 +7188,7 @@ index a6a28deaf..7a44c80ee 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2868,7 @@ class GoalManager:
+@@ -541,6 +2894,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7170,7 +7196,7 @@ index a6a28deaf..7a44c80ee 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2878,29 @@ class GoalManager:
+@@ -550,7 +2904,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7200,7 +7226,7 @@ index a6a28deaf..7a44c80ee 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2908,7 @@ class GoalManager:
+@@ -558,6 +2934,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7208,7 +7234,7 @@ index a6a28deaf..7a44c80ee 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2917,25 @@ class GoalManager:
+@@ -566,7 +2943,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
@@ -7234,7 +7260,7 @@ index a6a28deaf..7a44c80ee 100644
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2951,7 @@ class GoalManager:
+@@ -582,6 +2977,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7242,7 +7268,7 @@ index a6a28deaf..7a44c80ee 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2977,18 @@ class GoalManager:
+@@ -607,6 +3003,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7261,7 +7287,7 @@ index a6a28deaf..7a44c80ee 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +3004,35 @@ class GoalManager:
+@@ -622,6 +3030,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7297,7 +7323,7 @@ index a6a28deaf..7a44c80ee 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +3069,60 @@ class GoalManager:
+@@ -658,6 +3095,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -7358,7 +7384,7 @@ index a6a28deaf..7a44c80ee 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +3131,96 @@ class GoalManager:
+@@ -666,11 +3157,102 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7373,6 +7399,7 @@ index a6a28deaf..7a44c80ee 100644
 +            state.consecutive_judge_api_failures = 0
 +
 +        gate_vetoed = False
++        done_followup_gate_ids: List[str] = []
 +        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
 +            _update_supergoal_gates(state)
 +            gate_ids_before_reconcile = _passed_gate_ids(state)
@@ -7439,8 +7466,9 @@ index a6a28deaf..7a44c80ee 100644
 +                    }
 +            else:
 +                _reset_gate_stall(state)
++                done_followup_gate_ids = [g.id for g in followup_gates]
 +                if followup_gates:
-+                    reason = f"{reason}; follow-up gates open: {', '.join(g.id for g in followup_gates)}"
++                    reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
 +
          if verdict == "done":
              state.status = "done"
@@ -7454,8 +7482,12 @@ index a6a28deaf..7a44c80ee 100644
 +            self._record_event("done", summary=reason, data={"reason": reason})
              return {
                  "status": "done",
++                "control_status": "done_with_followups" if done_followup_gate_ids else "done",
++                "followup_gate_ids": done_followup_gate_ids,
                  "should_continue": False,
-@@ -690,6 +3242,11 @@ class GoalManager:
+                 "continuation_prompt": None,
+                 "verdict": "done",
+@@ -690,6 +3272,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7467,7 +7499,7 @@ index a6a28deaf..7a44c80ee 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3265,83 @@ class GoalManager:
+@@ -708,10 +3295,83 @@ class GoalManager:
                  ),
              }
  
@@ -7551,7 +7583,7 @@ index a6a28deaf..7a44c80ee 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3354,20 @@ class GoalManager:
+@@ -724,7 +3384,20 @@ class GoalManager:
                  ),
              }
  
@@ -7572,7 +7604,7 @@ index a6a28deaf..7a44c80ee 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3375,52 @@ class GoalManager:
+@@ -732,13 +3405,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7626,7 +7658,7 @@ index a6a28deaf..7a44c80ee 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3581,8 @@ __all__ = [
+@@ -899,6 +3611,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7852,10 +7884,10 @@ index 000000000..b636ba0da
 +        )
 diff --git a/hermes_cli/supergoal/domain.py b/hermes_cli/supergoal/domain.py
 new file mode 100644
-index 000000000..d506a3f51
+index 000000000..479fd2b07
 --- /dev/null
 +++ b/hermes_cli/supergoal/domain.py
-@@ -0,0 +1,203 @@
+@@ -0,0 +1,222 @@
 +"""Domain DTOs for the /supergoal runtime.
 +
 +This module defines platform-agnostic data exchanged between the public
@@ -7867,7 +7899,7 @@ index 000000000..d506a3f51
 +from __future__ import annotations
 +
 +from dataclasses import asdict, dataclass
-+from typing import Any, Callable, Dict, List, Literal, Optional
++from typing import Any, Callable, Dict, List, Literal, Optional, cast
 +
 +
 +ControlStatus = Literal[
@@ -7881,6 +7913,18 @@ index 000000000..d506a3f51
 +    "paused_critic_unhealthy",
 +    "needs_user",
 +]
++
++_CONTROL_STATUS_VALUES = {
++    "continue",
++    "done",
++    "done_with_followups",
++    "blocked",
++    "paused_budget",
++    "paused_stalled",
++    "paused_judge_unhealthy",
++    "paused_critic_unhealthy",
++    "needs_user",
++}
 +
 +DecisionDict = Dict[str, Any]
 +PromptBuilder = Callable[[], Optional[str]]
@@ -7993,6 +8037,9 @@ index 000000000..d506a3f51
 +            "gate_results": [g.to_dict() for g in self.gate_results],
 +            "evidence_refs": list(self.evidence_refs),
 +            "user_message": self.user_message,
++            "followup_gate_ids": [
++                g.gate_id for g in self.gate_results if g.status == "followup" and not g.blocking
++            ] if self.status == "done_with_followups" else [],
 +            "pipeline": [asdict(s) for s in (self.snapshots or [])],
 +        }
 +
@@ -8009,13 +8056,17 @@ index 000000000..d506a3f51
 +        legacy_status = data.get("status")
 +        verdict = str(data.get("verdict") or "")
 +        reason = str(data.get("reason") or "")
-+        control_status = _infer_control_status(
-+            legacy_status=str(legacy_status or ""),
-+            verdict=verdict,
-+            reason=reason,
-+            should_continue=bool(data.get("should_continue", False)),
-+            message=str(data.get("message") or ""),
-+        )
++        explicit_control_status = str(data.get("control_status") or "")
++        if explicit_control_status in _CONTROL_STATUS_VALUES:
++            control_status = cast(ControlStatus, explicit_control_status)
++        else:
++            control_status = _infer_control_status(
++                legacy_status=str(legacy_status or ""),
++                verdict=verdict,
++                reason=reason,
++                should_continue=bool(data.get("should_continue", False)),
++                message=str(data.get("message") or ""),
++            )
 +        return cls(
 +            status=control_status,
 +            should_continue=bool(data.get("should_continue", False)),
@@ -8936,10 +8987,10 @@ index 000000000..6521fe2e3
 +    ]
 diff --git a/hermes_cli/supergoal_projection.py b/hermes_cli/supergoal_projection.py
 new file mode 100644
-index 000000000..6405f62ce
+index 000000000..47e4d6267
 --- /dev/null
 +++ b/hermes_cli/supergoal_projection.py
-@@ -0,0 +1,124 @@
+@@ -0,0 +1,132 @@
 +"""Projection helpers for Hermes /supergoal mission control.
 +
 +This module is deliberately independent from ``goals.py``'s GoalState dataclass.
@@ -9015,11 +9066,19 @@ index 000000000..6405f62ce
 +
 +    paths = artifact_paths(normalized)
 +    for path in paths[:5]:
-+        events.append(("artifact_observed", path, {"artifact_path": path, "locator": path}))
++        events.append((
++            "artifact_observed",
++            path,
++            {"artifact_path": path, "locator": path, "evidence_source": "assistant_claim", "trust_level": "claim"},
++        ))
 +
 +    has_verification = any(k in low for k in ("verified", "tested", "pytest", "test passed", "tests passed", "验证", "测试"))
 +    if has_verification:
-+        events.append(("verification_observed", truncate(normalized, 180), {"evidence": truncate(normalized, 240)}))
++        events.append((
++            "verification_observed",
++            truncate(normalized, 180),
++            {"evidence": truncate(normalized, 240), "evidence_source": "assistant_claim", "trust_level": "claim"},
++        ))
 +
 +    has_research_language = any(k in low for k in ("research", "survey", "github", "docs", "paper", "benchmark", "external", "news", "rss", "调研", "外部", "新闻"))
 +    has_observation_evidence = bool(paths) or has_verification
@@ -9715,10 +9774,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..8d4090020 100644
+index 0dae684b6..752ee6870 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1152 @@ class TestGoalManager:
+@@ -252,6 +252,1156 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -10489,6 +10548,7 @@ index 0dae684b6..8d4090020 100644
 +            if gate.id == "G2":
 +                gate.status = "passed"
 +                gate.evidence = "pre-existing tool-backed research"
++        mgr.state.evidence_layers = {"artifact": ["docs/school-hub-final.md"]}
 +
 +        final_response = (
 +            "Completed the school hub mission.\n"
@@ -10588,7 +10648,7 @@ index 0dae684b6..8d4090020 100644
 +        assert reloaded.state.evidence
 +        assert reloaded.state.research_findings
 +        assert reloaded.state.evidence_layers["external_prior"]
-+        assert reloaded.state.evidence_layers["artifact"]
++        assert "artifact" not in reloaded.state.evidence_layers
 +        assert reloaded.state.failure_taxonomy == {
 +            "beta_exposure": 1,
 +            "oos_instability": 1,
@@ -10676,7 +10736,7 @@ index 0dae684b6..8d4090020 100644
 +        assert "hypothesis_failed" in event_types
 +        assert mgr.state is not None
 +        assert mgr.state.failure_taxonomy.get("baseline_underperformance") == 1
-+        assert mgr.state.evidence_layers["artifact"]
++        assert "artifact" not in mgr.state.evidence_layers
 +
 +    def test_supergoal_critic_uses_dedicated_route_and_budget(self, hermes_home, monkeypatch):
 +        from pathlib import Path
@@ -10757,7 +10817,7 @@ index 0dae684b6..8d4090020 100644
 +        assert mgr.state.success_definition
 +        assert next(g for g in mgr.state.gates if g.id == "G1").status == "passed"
 +
-+    def test_supergoal_records_action_and_evidence_without_critic_json(self, hermes_home):
++    def test_supergoal_records_assistant_claim_without_passing_g3(self, hermes_home):
 +        from hermes_cli import goals
 +        from hermes_cli.goals import GoalManager
 +
@@ -10773,7 +10833,9 @@ index 0dae684b6..8d4090020 100644
 +        assert mgr.state is not None
 +        assert mgr.state.action_history
 +        assert mgr.state.evidence
-+        assert next(g for g in mgr.state.gates if g.id == "G3").status == "passed"
++        g3 = next(g for g in mgr.state.gates if g.id == "G3")
++        assert g3.status != "passed"
++        assert "tool" in g3.reason
 +
 +    def test_supergoal_loaded_old_state_normalizes_g1_and_stale_stall(self, hermes_home):
 +        from hermes_cli.goals import GoalManager, save_goal
@@ -10836,6 +10898,7 @@ index 0dae684b6..8d4090020 100644
 +        # finish cleanly instead of pausing as stalled.
 +        mgr.state.last_failed_gate_id = "G2"
 +        mgr.state.same_gate_stall_count = 2
++        mgr.state.evidence_layers = {"artifact": ["docs/school-hub-final.md"]}
 +
 +        final_response = (
 +            "Completed the mission.\n"
@@ -10871,7 +10934,7 @@ index 0dae684b6..8d4090020 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1625,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1629,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -10880,7 +10943,7 @@ index 0dae684b6..8d4090020 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1635,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1639,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -11135,10 +11198,10 @@ index 000000000..63d363076
 +    assert state.hard_gate_reason or state.no_edge_report
 diff --git a/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
 new file mode 100644
-index 000000000..3267a7210
+index 000000000..46eed3879
 --- /dev/null
 +++ b/tests/supergoal_replay/test_replay_completion_gate_reconciliation.py
-@@ -0,0 +1,79 @@
+@@ -0,0 +1,80 @@
 +def test_replay_completion_done_with_acceptance_gates_does_not_enqueue(trace, replay):
 +    result = replay(trace("ai6_completion_gate_conflict.jsonl"))
 +    decision = result.decisions[-1]
@@ -11161,6 +11224,7 @@ index 000000000..3267a7210
 +
 +    mgr = GoalManager(session_id="replay-followups")
 +    state = mgr.set("write a small verified artifact", max_turns=10, mode="supergoal")
++    state.evidence_layers = {"artifact": ["/tmp/replay-small.md"]}
 +    state.gates.append(
 +        GoalGate(
 +            id="MON-1",
@@ -11191,8 +11255,8 @@ index 000000000..3267a7210
 +
 +    assert decision["status"] == "done"
 +    assert decision["control_status"] == "done_with_followups"
++    assert set(decision["followup_gate_ids"]) == {"G2", "MON-1"}
 +    assert decision["should_continue"] is False
-+    assert "follow-up gates open" in decision["reason"]
 +    mon = next(g for g in mgr.state.gates if g.id == "MON-1")
 +    assert mon.status == "followup"
 +    assert not mon.evidence
@@ -11246,10 +11310,10 @@ index 000000000..baea8257b
 +    assert decision["continuation_prompt"]
 diff --git a/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
 new file mode 100644
-index 000000000..5c656d8d3
+index 000000000..8124851ca
 --- /dev/null
 +++ b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,164 @@
 +from unittest.mock import patch
 +
 +
@@ -11326,6 +11390,61 @@ index 000000000..5c656d8d3
 +    assert changed is False
 +    assert not state.evidence
 +    assert not any(g.id == "G3" and g.status == "passed" for g in state.gates)
++
++
++def test_replay_assistant_prose_does_not_satisfy_g3_or_done_reconcile(_isolate_hermes_home):
++    from hermes_cli import goals
++    from hermes_cli.goals import GoalManager
++
++    mgr = GoalManager(session_id="replay-prose-g3")
++    mgr.set("produce a verified artifact", mode="supergoal")
++    response = "Done. Created /tmp/a.md, pytest passed, verified artifact saved with evidence log."
++    with patch.object(goals, "judge_goal", return_value=("done", "final artifact and tests reported", True)), patch.object(
++        goals,
++        "critic_supergoal",
++        return_value=None,
++    ):
++        decision = mgr.evaluate_after_turn(response)
++
++    assert mgr.state is not None
++    g3 = next(g for g in mgr.state.gates if g.id == "G3")
++    assert g3.status != "passed"
++    assert "prose" in g3.reason or "tool" in g3.reason
++    assert decision["should_continue"] is True
++
++
++def test_replay_observed_tool_evidence_satisfies_g3(_isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, GoalEvent, _goal_events_state_changed
++    from hermes_cli.supergoal.evidence import evidence_ref_from_tool_call
++
++    mgr = GoalManager(session_id="replay-observed-evidence")
++    state = mgr.set("produce a verified artifact", mode="supergoal")
++    ref = evidence_ref_from_tool_call(
++        goal_run_id=state.goal_run_id,
++        turn_id="turn-ok",
++        tool_name="write_file",
++        args={"path": "/tmp/ok.md", "content": "x"},
++        result={"path": "/tmp/ok.md", "success": True},
++        tool_call_id="tc-ok",
++        status="ok",
++    )
++    assert ref is not None
++    changed = _goal_events_state_changed(
++        state,
++        [
++            GoalEvent(
++                ts=0.0,
++                type="tool_evidence_observed",
++                turn=0,
++                summary=ref.claim,
++                data={"evidence_ref": ref.to_dict()},
++            )
++        ],
++    )
++
++    assert changed is True
++    assert state.evidence_layers.get("artifact")
++    assert next(g for g in state.gates if g.id == "G3").status == "passed"
 +
 +
 +def test_replay_every_policy_checked_tool_call_has_decision(_isolate_hermes_home):

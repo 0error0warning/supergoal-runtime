@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  patch-apply-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout supergoal-runtime
+        uses: actions/checkout@v4
+        with:
+          path: supergoal-runtime
+
+      - name: Checkout Hermes Agent upstream
+        uses: actions/checkout@v4
+        with:
+          repository: NousResearch/hermes-agent
+          path: hermes-agent
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Apply patch
+        working-directory: hermes-agent
+        run: |
+          git apply --check ../supergoal-runtime/patches/supergoal-runtime.patch
+          git apply ../supergoal-runtime/patches/supergoal-runtime.patch
+
+      - name: Install test dependencies
+        working-directory: hermes-agent
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f pyproject.toml ]; then python -m pip install -e '.[dev]'; fi
+
+      - name: Compile patched runtime
+        working-directory: hermes-agent
+        run: |
+          python -m py_compile \
+            hermes_cli/goals.py hermes_cli/goal_events.py hermes_cli/supergoal/*.py \
+            hermes_cli/supergoal_gates.py hermes_cli/supergoal_projection.py \
+            agent/conversation_compression.py agent/tool_executor.py model_tools.py \
+            gateway/run.py hermes_cli/commands.py hermes_cli/config.py tools/approval.py
+
+      - name: Run focused supergoal tests
+        working-directory: hermes-agent
+        env:
+          PYTHONPATH: .
+        run: |
+          python -m pytest tests/hermes_cli/test_goals.py tests/supergoal_replay/ -q -o 'addopts='
+          python -m pytest \
+            tests/gateway/test_goal_verdict_send.py \
+            tests/gateway/test_goal_status_notice.py \
+            tests/gateway/test_supergoal_max_turns_config.py \
+            tests/hermes_cli/test_supergoal_command_registry.py \
+            tests/test_model_tools.py \
+            tests/tools/test_hardline_blocklist.py \
+            -q -o 'addopts='

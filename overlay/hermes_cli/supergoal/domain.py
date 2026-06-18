@@ -9,7 +9,7 @@ controller-facing values are explicit and typed here.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from typing import Any, Callable, Dict, List, Literal, Optional
+from typing import Any, Callable, Dict, List, Literal, Optional, cast
 
 
 ControlStatus = Literal[
@@ -23,6 +23,18 @@ ControlStatus = Literal[
     "paused_critic_unhealthy",
     "needs_user",
 ]
+
+_CONTROL_STATUS_VALUES = {
+    "continue",
+    "done",
+    "done_with_followups",
+    "blocked",
+    "paused_budget",
+    "paused_stalled",
+    "paused_judge_unhealthy",
+    "paused_critic_unhealthy",
+    "needs_user",
+}
 
 DecisionDict = Dict[str, Any]
 PromptBuilder = Callable[[], Optional[str]]
@@ -135,6 +147,9 @@ class ControllerDecision:
             "gate_results": [g.to_dict() for g in self.gate_results],
             "evidence_refs": list(self.evidence_refs),
             "user_message": self.user_message,
+            "followup_gate_ids": [
+                g.gate_id for g in self.gate_results if g.status == "followup" and not g.blocking
+            ] if self.status == "done_with_followups" else [],
             "pipeline": [asdict(s) for s in (self.snapshots or [])],
         }
 
@@ -151,13 +166,17 @@ class ControllerDecision:
         legacy_status = data.get("status")
         verdict = str(data.get("verdict") or "")
         reason = str(data.get("reason") or "")
-        control_status = _infer_control_status(
-            legacy_status=str(legacy_status or ""),
-            verdict=verdict,
-            reason=reason,
-            should_continue=bool(data.get("should_continue", False)),
-            message=str(data.get("message") or ""),
-        )
+        explicit_control_status = str(data.get("control_status") or "")
+        if explicit_control_status in _CONTROL_STATUS_VALUES:
+            control_status = cast(ControlStatus, explicit_control_status)
+        else:
+            control_status = _infer_control_status(
+                legacy_status=str(legacy_status or ""),
+                verdict=verdict,
+                reason=reason,
+                should_continue=bool(data.get("should_continue", False)),
+                message=str(data.get("message") or ""),
+            )
         return cls(
             status=control_status,
             should_continue=bool(data.get("should_continue", False)),

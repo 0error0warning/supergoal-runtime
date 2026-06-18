@@ -1019,6 +1019,7 @@ class TestGoalManager:
             if gate.id == "G2":
                 gate.status = "passed"
                 gate.evidence = "pre-existing tool-backed research"
+        mgr.state.evidence_layers = {"artifact": ["docs/school-hub-final.md"]}
 
         final_response = (
             "Completed the school hub mission.\n"
@@ -1118,7 +1119,7 @@ class TestGoalManager:
         assert reloaded.state.evidence
         assert reloaded.state.research_findings
         assert reloaded.state.evidence_layers["external_prior"]
-        assert reloaded.state.evidence_layers["artifact"]
+        assert "artifact" not in reloaded.state.evidence_layers
         assert reloaded.state.failure_taxonomy == {
             "beta_exposure": 1,
             "oos_instability": 1,
@@ -1206,7 +1207,7 @@ class TestGoalManager:
         assert "hypothesis_failed" in event_types
         assert mgr.state is not None
         assert mgr.state.failure_taxonomy.get("baseline_underperformance") == 1
-        assert mgr.state.evidence_layers["artifact"]
+        assert "artifact" not in mgr.state.evidence_layers
 
     def test_supergoal_critic_uses_dedicated_route_and_budget(self, hermes_home, monkeypatch):
         from pathlib import Path
@@ -1287,7 +1288,7 @@ class TestGoalManager:
         assert mgr.state.success_definition
         assert next(g for g in mgr.state.gates if g.id == "G1").status == "passed"
 
-    def test_supergoal_records_action_and_evidence_without_critic_json(self, hermes_home):
+    def test_supergoal_records_assistant_claim_without_passing_g3(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
 
@@ -1303,7 +1304,9 @@ class TestGoalManager:
         assert mgr.state is not None
         assert mgr.state.action_history
         assert mgr.state.evidence
-        assert next(g for g in mgr.state.gates if g.id == "G3").status == "passed"
+        g3 = next(g for g in mgr.state.gates if g.id == "G3")
+        assert g3.status != "passed"
+        assert "tool" in g3.reason
 
     def test_supergoal_loaded_old_state_normalizes_g1_and_stale_stall(self, hermes_home):
         from hermes_cli.goals import GoalManager, save_goal
@@ -1366,6 +1369,7 @@ class TestGoalManager:
         # finish cleanly instead of pausing as stalled.
         mgr.state.last_failed_gate_id = "G2"
         mgr.state.same_gate_stall_count = 2
+        mgr.state.evidence_layers = {"artifact": ["docs/school-hub-final.md"]}
 
         final_response = (
             "Completed the mission.\n"

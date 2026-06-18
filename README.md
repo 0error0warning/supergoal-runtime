@@ -139,17 +139,17 @@ A good long-running agent must know when to stop, branch, ask, or write a no-edg
 
 `/supergoal` should not pollute ordinary `/goal`. The lightweight path should remain fast, predictable, and easy to reason about. Supergoal-only machinery is guarded by `mode == "supergoal"`, with regression tests proving normal goal behavior still works.
 
-### 12. Safety must become a first-class runtime layer
+### 12. Safety is a first-class runtime layer
 
-Long-running agents with shell, file, network, API, database, or trading permissions need pre-execution policy, not only post-hoc judging. This patch adds gates/inertia guards, but a full permission/scope/destructive-action policy is still future work.
+Long-running agents with shell, file, network, API, database, or trading permissions need pre-execution policy, not only post-hoc judging. This patch now includes `hermes_cli/supergoal/policy.py` plus pre-tool integration in `agent/tool_executor.py` / `model_tools.py`: permission contracts, filesystem/network/destructive-action checks, and replay tests for policy decisions. The remaining work is richer user-facing policy configuration and more domain-specific verifiers, not the first policy boundary itself.
 
 ## What this patch currently changes
 
-1. **Compression-safe goal runtime migration**
-   - Adds `migrate_goal_state(old_session_id, new_session_id, reason="compression")`.
-   - Moves active `/goal` or `/supergoal` state across context-compression session splits.
-   - Leaves the old session as a `migrated` audit tombstone.
-   - Copies goal event history to the new session and appends a `migrated` event.
+1. **Compression-safe logical goal identity**
+   - Introduces stable `goal_run_id` as the mission identity; `session_id` is only the physical context version.
+   - Stores authoritative state under `goal_run:{goal_run_id}` and binds sessions through `goal_session:{session_id} -> goal_run_id`.
+   - Context compression binds the new session to the existing run and appends a `session_rotated` event; it does not copy state or leave tombstone forks.
+   - Legacy `goal:{session_id}` rows are migrated lazily without overwriting a destination session that already points at a different active run.
 
 2. **Supergoal Mission Control state**
    - Adds durable dataclasses for:
@@ -160,9 +160,11 @@ Long-running agents with shell, file, network, API, database, or trading permiss
      - `GoalGate`
    - Extends `GoalState` with research ledger, hypothesis portfolio, gates, action history, current action class, hard gate reason, and no-edge report.
 
-3. **Tool-backed research gate**
-   - `research_sufficiency` is derived from tool-backed findings.
-   - Critic-only source claims stay visible but do not pass the gate.
+3. **Tool-backed evidence ledger**
+   - Adds `EvidenceRef` and `tool_evidence_observed` events from real tool dispatch.
+   - `research_sufficiency` and G2 are derived from observed/verified web/GitHub/source evidence.
+   - G3 requires gate-eligible artifact/verification evidence from observed/verified tool evidence, verifier-backed hypotheses, or explicit human acceptance; assistant prose remains board context only.
+   - Critic-only and assistant-output source claims stay visible but cannot pass tool-backed gates.
 
 4. **Hard gates and strategy gates**
    - Default gates track intent, research, verified artifact, and final evidence/no-edge outcome.
@@ -200,15 +202,24 @@ overlay/                                    # full modified files for review/ref
   hermes_cli/supergoal/evaluators.py
   hermes_cli/supergoal/controller.py
   hermes_cli/supergoal/store.py
+  hermes_cli/supergoal/evidence.py
+  hermes_cli/supergoal/policy.py
   hermes_cli/supergoal_gates.py
   hermes_cli/supergoal_projection.py
   agent/conversation_compression.py
+  agent/tool_executor.py
+  model_tools.py
+  tools/approval.py
   gateway/run.py
   tests/hermes_cli/test_goals.py
   tests/hermes_cli/test_supergoal_command_registry.py
+  tests/supergoal_replay/*.py
+  tests/supergoal_replay/fixtures/*.jsonl
   tests/gateway/test_goal_verdict_send.py
   tests/gateway/test_goal_status_notice.py
   tests/gateway/test_supergoal_max_turns_config.py
+  tests/test_model_tools.py
+  tests/tools/test_hardline_blocklist.py
 docs/run-analysis.md                        # observed failure analysis from the live run
 docs/architecture.md                        # architectural rationale
 docs/principles.md                          # why Supergoal exists and what principles guide it
@@ -237,27 +248,28 @@ git apply /path/to/supergoal-runtime/patches/supergoal-runtime.patch
 From the Hermes Agent checkout after applying:
 
 ```bash
-PYTHONPATH=. pytest tests/hermes_cli/test_goals.py -q
+PYTHONPATH=. pytest tests/hermes_cli/test_goals.py tests/supergoal_replay/ -q
 PYTHONPATH=. pytest \
   tests/gateway/test_goal_verdict_send.py \
   tests/gateway/test_goal_status_notice.py \
   tests/gateway/test_supergoal_max_turns_config.py \
   tests/hermes_cli/test_supergoal_command_registry.py \
-  tests/gateway/test_goal_max_turns_config.py \
-  tests/tui_gateway/test_goal_command.py \
-  tests/cli/test_cli_goal_interrupt.py -q
-PYTHONPATH=. pytest tests/hermes_cli/test_kanban_goal_mode.py -q
-python -m py_compile hermes_cli/goals.py agent/conversation_compression.py gateway/run.py cli.py
+  tests/test_model_tools.py \
+  tests/tools/test_hardline_blocklist.py -q
+python -m py_compile \
+  hermes_cli/goals.py hermes_cli/goal_events.py hermes_cli/supergoal/*.py \
+  hermes_cli/supergoal_gates.py hermes_cli/supergoal_projection.py \
+  agent/conversation_compression.py agent/tool_executor.py model_tools.py \
+  gateway/run.py hermes_cli/commands.py hermes_cli/config.py tools/approval.py
 git diff --check
 ```
 
 Verified locally before packaging:
 
 ```text
-tests/hermes_cli/test_goals.py: 68 passed, 1 warning
-goal/gateway/TUI/CLI regression subset: 100 passed
-kanban goal-mode regression: 12 passed
-py_compile + git diff --check: passed
+supergoal core/replay suite: 109 passed, 1 warning
+focused G3/prose-trust + followup-status regressions: 10 passed
+clean-base patch apply + py_compile: passed during packaging
 ```
 
 ## Compatibility notes
@@ -273,12 +285,11 @@ This patch is not the final “superintelligent long-running agent.” It is the
 
 Important next steps:
 
-1. **Logical `goal_run_id`** — make goal identity stable across physical session IDs, child sessions, compression, and resumes.
-2. **Pre-execution permission policy** — scope, destructive-action controls, trading/API/database risk policy before tools run.
-3. **Dedicated model roles** — split completion judge, strategic critic, planner, policy guard, and artifact verifier.
-4. **Tool wrappers that write ledgers directly** — web/search/GitHub/paper/local wrappers should emit research/artifact ledger entries without relying on critic extraction.
-5. **Full board commands** — `/supergoal board`, `/supergoal gates`, `/supergoal portfolio`, and `/supergoal next` for user-visible mission control.
-6. **Trace → feedback → evals loop** — mine real failed runs into reusable regression tests and ranked harness changes.
+1. **Move meat out of legacy `goals.py`** — `SupergoalController` exposes Observe → Project → Evaluate → Reconcile → Decide → Render, but some heavy logic still lives in the legacy facade during staged migration.
+2. **Dedicated verifier roles** — split completion judge, strategic critic, planner, policy guard, and artifact verifier with explicit typed results.
+3. **Richer tool wrappers and verifiers** — more tools should emit typed `EvidenceRef` entries directly, and artifact/test verifiers should promote observed evidence to verified evidence.
+4. **Full board commands** — `/supergoal board`, `/supergoal gates`, `/supergoal portfolio`, and `/supergoal next` for user-visible mission control.
+5. **Trace → feedback → evals loop** — mine real failed runs into reusable regression tests and ranked harness changes.
 
 ## License
 

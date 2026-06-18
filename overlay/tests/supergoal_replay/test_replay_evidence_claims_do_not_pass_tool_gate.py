@@ -76,6 +76,61 @@ def test_replay_blocked_tool_evidence_does_not_satisfy_artifact_gate(_isolate_he
     assert not any(g.id == "G3" and g.status == "passed" for g in state.gates)
 
 
+def test_replay_assistant_prose_does_not_satisfy_g3_or_done_reconcile(_isolate_hermes_home):
+    from hermes_cli import goals
+    from hermes_cli.goals import GoalManager
+
+    mgr = GoalManager(session_id="replay-prose-g3")
+    mgr.set("produce a verified artifact", mode="supergoal")
+    response = "Done. Created /tmp/a.md, pytest passed, verified artifact saved with evidence log."
+    with patch.object(goals, "judge_goal", return_value=("done", "final artifact and tests reported", True)), patch.object(
+        goals,
+        "critic_supergoal",
+        return_value=None,
+    ):
+        decision = mgr.evaluate_after_turn(response)
+
+    assert mgr.state is not None
+    g3 = next(g for g in mgr.state.gates if g.id == "G3")
+    assert g3.status != "passed"
+    assert "prose" in g3.reason or "tool" in g3.reason
+    assert decision["should_continue"] is True
+
+
+def test_replay_observed_tool_evidence_satisfies_g3(_isolate_hermes_home):
+    from hermes_cli.goals import GoalManager, GoalEvent, _goal_events_state_changed
+    from hermes_cli.supergoal.evidence import evidence_ref_from_tool_call
+
+    mgr = GoalManager(session_id="replay-observed-evidence")
+    state = mgr.set("produce a verified artifact", mode="supergoal")
+    ref = evidence_ref_from_tool_call(
+        goal_run_id=state.goal_run_id,
+        turn_id="turn-ok",
+        tool_name="write_file",
+        args={"path": "/tmp/ok.md", "content": "x"},
+        result={"path": "/tmp/ok.md", "success": True},
+        tool_call_id="tc-ok",
+        status="ok",
+    )
+    assert ref is not None
+    changed = _goal_events_state_changed(
+        state,
+        [
+            GoalEvent(
+                ts=0.0,
+                type="tool_evidence_observed",
+                turn=0,
+                summary=ref.claim,
+                data={"evidence_ref": ref.to_dict()},
+            )
+        ],
+    )
+
+    assert changed is True
+    assert state.evidence_layers.get("artifact")
+    assert next(g for g in state.gates if g.id == "G3").status == "passed"
+
+
 def test_replay_every_policy_checked_tool_call_has_decision(_isolate_hermes_home):
     from hermes_cli.goals import GoalManager, save_goal
     from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard

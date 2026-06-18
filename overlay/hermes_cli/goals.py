@@ -1413,6 +1413,24 @@ def _evidence_ref_count(state: GoalState) -> int:
     return sum(len(v or []) for v in (state.evidence_layers or {}).values()) + len(state.evidence or []) + len(state.research_findings or [])
 
 
+def _has_verified_execution_evidence(state: GoalState) -> bool:
+    """Return True only for gate-eligible execution evidence.
+
+    ``state.evidence`` may contain assistant-visible claims for board/prompt
+    continuity.  G3 must be stricter: only tool-observed artifact or
+    verification layers, verifier-backed hypothesis artifacts, or explicit human
+    acceptance can satisfy the run-acceptance gate.
+    """
+    layers = state.evidence_layers or {}
+    if layers.get("artifact") or layers.get("verification"):
+        return True
+    if any(h.artifacts and h.status in {"passed", "failed", "killed"} for h in state.hypothesis_portfolio):
+        return True
+    if layers.get("human_acceptance"):
+        return True
+    return False
+
+
 def _merge_hypothesis_portfolio(existing: List[HypothesisRecord], new_items: Any, *, max_items: int = 16) -> List[HypothesisRecord]:
     merged = list(existing or [])
     seen = {(h.id.lower(), h.claim.lower()) for h in merged}
@@ -1610,13 +1628,15 @@ def _reconcile_done_evidence_gates(state: GoalState, last_response: str, judge_r
                 state.success_definition = "final response explicitly reports completion with evidence/artifacts"
             passed.append(gate.id)
         elif gate.id == "G3":
+            if not _has_verified_execution_evidence(state):
+                _set_gate_open(
+                    gate,
+                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
+                    reason="final prose is not gate-eligible execution evidence",
+                )
+                continue
             gate.status = "passed"
-            gate.evidence = "final response includes concrete verification/artifact evidence"
-            state.evidence = _merge_compact_list(
-                state.evidence,
-                [_truncate(" ".join((last_response or "").split()), 300)],
-                max_items=20,
-            )
+            gate.evidence = "verified tool/human artifact or verification evidence recorded"
             passed.append(gate.id)
         elif gate.id == "G4":
             gate.status = "passed"
@@ -1697,16 +1717,18 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
         etype = event.type
         if etype == "artifact_observed":
             locator = data.get("artifact_path") or data.get("locator") or event.summary
-            add_layer("artifact", locator)
             before = list(state.evidence or [])
             state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
             changed = changed or state.evidence != before
+            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
+                add_layer("artifact", locator)
         elif etype == "verification_observed":
             evidence = data.get("evidence") or event.summary
-            add_layer("verification", evidence)
             before = list(state.evidence or [])
             state.evidence = _merge_compact_list(state.evidence, [evidence], max_items=20)
             changed = changed or state.evidence != before
+            if data.get("trust_level") in {"observed", "verified"} and data.get("evidence_source") != "assistant_claim":
+                add_layer("verification", evidence)
         elif etype == "research_observed":
             add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", event.summary)
             before = list(state.research_findings or [])
@@ -2012,10 +2034,14 @@ def _update_supergoal_gates(state: GoalState) -> None:
             else:
                 _set_gate_open(gate, missing=["infra dependency proof"], reason="infrastructure work needs dependency proof")
         elif gate.id == "G3":
-            if state.evidence or any(h.artifacts for h in state.hypothesis_portfolio):
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "evidence/artifacts recorded", [], ""
+            if _has_verified_execution_evidence(state):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "verified tool/human artifact or verification evidence recorded", [], ""
             else:
-                _set_gate_open(gate, missing=["artifact", "test/log/evidence"], reason="no verified artifact/evidence is recorded")
+                _set_gate_open(
+                    gate,
+                    missing=["tool_observed_artifact", "tool_verified_test_or_log", "human_acceptance"],
+                    reason="no gate-eligible tool/human artifact or verification evidence is recorded",
+                )
         elif gate.id == "G4":
             if state.no_edge_report or state.last_verdict == "done":
                 gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
@@ -3142,6 +3168,7 @@ class GoalManager:
             state.consecutive_judge_api_failures = 0
 
         gate_vetoed = False
+        done_followup_gate_ids: List[str] = []
         if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
             _update_supergoal_gates(state)
             gate_ids_before_reconcile = _passed_gate_ids(state)
@@ -3208,8 +3235,9 @@ class GoalManager:
                     }
             else:
                 _reset_gate_stall(state)
+                done_followup_gate_ids = [g.id for g in followup_gates]
                 if followup_gates:
-                    reason = f"{reason}; follow-up gates open: {', '.join(g.id for g in followup_gates)}"
+                    reason = f"{reason}; follow-up gates open: {', '.join(done_followup_gate_ids)}"
 
         if verdict == "done":
             state.status = "done"
@@ -3223,6 +3251,8 @@ class GoalManager:
             self._record_event("done", summary=reason, data={"reason": reason})
             return {
                 "status": "done",
+                "control_status": "done_with_followups" if done_followup_gate_ids else "done",
+                "followup_gate_ids": done_followup_gate_ids,
                 "should_continue": False,
                 "continuation_prompt": None,
                 "verdict": "done",

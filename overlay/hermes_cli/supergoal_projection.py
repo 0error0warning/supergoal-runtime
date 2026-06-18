@@ -73,11 +73,19 @@ def extract_observation_events(last_response: str) -> List[Tuple[str, str, Dict[
 
     paths = artifact_paths(normalized)
     for path in paths[:5]:
-        events.append(("artifact_observed", path, {"artifact_path": path, "locator": path}))
+        events.append((
+            "artifact_observed",
+            path,
+            {"artifact_path": path, "locator": path, "evidence_source": "assistant_claim", "trust_level": "claim"},
+        ))
 
     has_verification = any(k in low for k in ("verified", "tested", "pytest", "test passed", "tests passed", "验证", "测试"))
     if has_verification:
-        events.append(("verification_observed", truncate(normalized, 180), {"evidence": truncate(normalized, 240)}))
+        events.append((
+            "verification_observed",
+            truncate(normalized, 180),
+            {"evidence": truncate(normalized, 240), "evidence_source": "assistant_claim", "trust_level": "claim"},
+        ))
 
     has_research_language = any(k in low for k in ("research", "survey", "github", "docs", "paper", "benchmark", "external", "news", "rss", "调研", "外部", "新闻"))
     has_observation_evidence = bool(paths) or has_verification

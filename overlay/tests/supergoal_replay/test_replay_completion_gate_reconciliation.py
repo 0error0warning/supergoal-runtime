@@ -20,6 +20,7 @@ def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
 
     mgr = GoalManager(session_id="replay-followups")
     state = mgr.set("write a small verified artifact", max_turns=10, mode="supergoal")
+    state.evidence_layers = {"artifact": ["/tmp/replay-small.md"]}
     state.gates.append(
         GoalGate(
             id="MON-1",
@@ -50,8 +51,8 @@ def test_replay_only_monitoring_gates_done_with_followups(_isolate_hermes_home):
 
     assert decision["status"] == "done"
     assert decision["control_status"] == "done_with_followups"
+    assert set(decision["followup_gate_ids"]) == {"G2", "MON-1"}
     assert decision["should_continue"] is False
-    assert "follow-up gates open" in decision["reason"]
     mon = next(g for g in mgr.state.gates if g.id == "MON-1")
     assert mon.status == "followup"
     assert not mon.evidence
