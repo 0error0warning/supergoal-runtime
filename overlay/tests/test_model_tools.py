@@ -283,6 +283,32 @@ class TestHandleFunctionCall:
         assert not result.allows_execution
         assert "unapproved.example" in result.reason
 
+    def test_supergoal_policy_check_receives_handle_function_task_id(self, _isolate_hermes_home, monkeypatch):
+        from hermes_cli.goals import GoalManager, save_goal
+
+        seen = {}
+        def fake_policy(session_id, tool_name, args, *, task_id=""):
+            seen["task_id"] = task_id
+            return None
+
+        import hermes_cli.supergoal.policy as policy_mod
+        monkeypatch.setattr(policy_mod, "pre_tool_policy_block_message", fake_policy)
+
+        mgr = GoalManager(session_id="super-policy-task-id-sid")
+        state = mgr.set("maintain project", mode="supergoal")
+        save_goal("super-policy-task-id-sid", state)
+
+        with patch("model_tools.registry.dispatch", return_value='{"ok":true}'):
+            handle_function_call(
+                "write_file",
+                {"path": "relative/out.txt", "content": "x"},
+                session_id="super-policy-task-id-sid",
+                tool_call_id="tc-policy",
+                task_id="workspace-task",
+            )
+
+        assert seen["task_id"] == "workspace-task"
+
     def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
         from hermes_cli.goals import GoalManager, save_goal
 

@@ -42,6 +42,40 @@ def test_replay_assistant_claims_do_not_pass_tool_backed_research_gate(_isolate_
     assert decision["should_continue"] is True
 
 
+def test_replay_blocked_tool_evidence_does_not_satisfy_artifact_gate(_isolate_hermes_home):
+    from hermes_cli.goals import GoalManager, GoalEvent, _goal_events_state_changed
+    from hermes_cli.supergoal.evidence import evidence_ref_from_tool_call
+
+    mgr = GoalManager(session_id="replay-blocked-evidence")
+    state = mgr.set("produce a verified artifact", mode="supergoal")
+    ref = evidence_ref_from_tool_call(
+        goal_run_id=state.goal_run_id,
+        turn_id="turn-blocked",
+        tool_name="write_file",
+        args={"path": "/tmp/blocked.md", "content": "x"},
+        result={"error": "Supergoal policy deny: path outside allowlist"},
+        tool_call_id="tc-blocked",
+        status="blocked",
+    )
+    assert ref is not None
+    changed = _goal_events_state_changed(
+        state,
+        [
+            GoalEvent(
+                ts=0.0,
+                type="tool_evidence_observed",
+                turn=0,
+                summary=ref.claim,
+                data={"evidence_ref": ref.to_dict()},
+            )
+        ],
+    )
+
+    assert changed is False
+    assert not state.evidence
+    assert not any(g.id == "G3" and g.status == "passed" for g in state.gates)
+
+
 def test_replay_every_policy_checked_tool_call_has_decision(_isolate_hermes_home):
     from hermes_cli.goals import GoalManager, save_goal
     from hermes_cli.supergoal.policy import PermissionContract, PolicyGuard

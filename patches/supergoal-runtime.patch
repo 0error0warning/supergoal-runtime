@@ -4116,7 +4116,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..1b9abe216 100644
+index a6a28deaf..79e15f64f 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -37,6 +37,27 @@ from dataclasses import dataclass, field, asdict
@@ -4259,7 +4259,7 @@ index a6a28deaf..1b9abe216 100644
  
  JUDGE_SYSTEM_PROMPT = (
      "You are a strict judge evaluating whether an autonomous agent has "
-@@ -133,18 +245,515 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
+@@ -133,18 +245,526 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
      "Is the goal AND every additional criterion satisfied?"
  )
  
@@ -4568,7 +4568,7 @@ index a6a28deaf..1b9abe216 100644
 +        return bool(self.tool_call_id and self.trust_level in {"observed", "verified"})
 +
 +    @classmethod
-+    def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
++    def from_dict(cls, data: Any, *, infer_legacy_tool_backed: bool = False) -> Optional["ResearchFinding"]:
 +        if not isinstance(data, dict):
 +            return None
 +        source_type = str(data.get("source_type") or data.get("type") or "").strip().lower()
@@ -4578,17 +4578,28 @@ index a6a28deaf..1b9abe216 100644
 +        allowed = {"paper", "github", "web", "docs", "repo", "benchmark", "local", "other"}
 +        if source_type not in allowed:
 +            source_type = "other"
++        tool_call_id = _truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120)
++        evidence_quote_or_hash = _truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400)
++        raw_source = str(data.get("evidence_source") or data.get("source") or "").strip()
++        raw_trust = str(data.get("trust_level") or "").strip()
++        # Back-compat: older supergoal research records predate evidence_source
++        # and trust_level, but may still carry a real tool_call_id plus quote/hash.
++        # Do not silently downgrade those to assistant_claim; otherwise upgrades
++        # erase valid G2 provenance and can strand active missions.
++        legacy_tool_backed = bool(infer_legacy_tool_backed and tool_call_id and tool_call_id != "assistant_turn" and evidence_quote_or_hash)
++        evidence_source = raw_source or ("tool_call" if legacy_tool_backed else "assistant_claim")
++        trust_level = raw_trust or ("observed" if legacy_tool_backed else "claim")
 +        return cls(
 +            source_type=source_type,
 +            title=_truncate(" ".join(title.split()), 160),
 +            locator=_truncate(" ".join(str(data.get("locator") or data.get("url_or_path") or "").split()), 240),
 +            claim=_truncate(" ".join(str(data.get("claim") or "").split()), 240),
 +            retrieved_at=_truncate(" ".join(str(data.get("retrieved_at") or "").split()), 80),
-+            tool_call_id=_truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120),
++            tool_call_id=tool_call_id,
 +            query=_truncate(" ".join(str(data.get("query") or "").split()), 240),
-+            evidence_quote_or_hash=_truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400),
-+            evidence_source=_truncate(" ".join(str(data.get("evidence_source") or data.get("source") or "assistant_claim").split()), 80),
-+            trust_level=_truncate(" ".join(str(data.get("trust_level") or "claim").split()), 20),
++            evidence_quote_or_hash=evidence_quote_or_hash,
++            evidence_source=_truncate(" ".join(evidence_source.split()), 80),
++            trust_level=_truncate(" ".join(trust_level.split()), 20),
 +            relevance_score=_coerce_float(data.get("relevance_score"), 0.0),
 +            contradiction=bool(data.get("contradiction", False)),
 +        )
@@ -4777,7 +4788,7 @@ index a6a28deaf..1b9abe216 100644
      turns_used: int = 0
      max_turns: int = DEFAULT_MAX_TURNS
      created_at: float = 0.0
-@@ -153,6 +762,54 @@ class GoalState:
+@@ -153,6 +773,54 @@ class GoalState:
      last_reason: Optional[str] = None
      paused_reason: Optional[str] = None       # why we auto-paused (budget, etc.)
      consecutive_parse_failures: int = 0       # judge-output parse failures in a row
@@ -4832,7 +4843,7 @@ index a6a28deaf..1b9abe216 100644
      # User-added criteria appended mid-loop via the /subgoal command.
      # When non-empty the judge prompt and continuation prompt both
      # include them so the agent works toward them and the judge factors
-@@ -161,7 +818,12 @@ class GoalState:
+@@ -161,7 +829,12 @@ class GoalState:
      subgoals: List[str] = field(default_factory=list)
  
      def to_json(self) -> str:
@@ -4846,7 +4857,7 @@ index a6a28deaf..1b9abe216 100644
  
      @classmethod
      def from_json(cls, raw: str) -> "GoalState":
-@@ -170,8 +832,38 @@ class GoalState:
+@@ -170,8 +843,38 @@ class GoalState:
          subgoals: List[str] = []
          if isinstance(raw_subgoals, list):
              subgoals = [str(s).strip() for s in raw_subgoals if str(s).strip()]
@@ -4861,7 +4872,7 @@ index a6a28deaf..1b9abe216 100644
 +        research_findings: List[ResearchFinding] = []
 +        if isinstance(raw_findings, list):
 +            for raw_finding in raw_findings:
-+                finding = ResearchFinding.from_dict(raw_finding)
++                finding = ResearchFinding.from_dict(raw_finding, infer_legacy_tool_backed=True)
 +                if finding is not None:
 +                    research_findings.append(finding)
 +        raw_portfolio = data.get("hypothesis_portfolio") or data.get("hypotheses_detail") or []
@@ -4885,7 +4896,7 @@ index a6a28deaf..1b9abe216 100644
              status=data.get("status", "active"),
              turns_used=int(data.get("turns_used", 0) or 0),
              max_turns=int(data.get("max_turns", DEFAULT_MAX_TURNS) or DEFAULT_MAX_TURNS),
-@@ -181,6 +873,65 @@ class GoalState:
+@@ -181,6 +884,65 @@ class GoalState:
              last_reason=data.get("last_reason"),
              paused_reason=data.get("paused_reason"),
              consecutive_parse_failures=int(data.get("consecutive_parse_failures", 0) or 0),
@@ -4951,7 +4962,7 @@ index a6a28deaf..1b9abe216 100644
              subgoals=subgoals,
          )
  
-@@ -193,81 +944,228 @@ class GoalState:
+@@ -193,81 +955,228 @@ class GoalState:
              return ""
          return "\n".join(f"- {i}. {text}" for i, text in enumerate(self.subgoals, start=1))
  
@@ -5223,7 +5234,7 @@ index a6a28deaf..1b9abe216 100644
  
  
  def clear_goal(session_id: str) -> None:
-@@ -279,6 +1177,77 @@ def clear_goal(session_id: str) -> None:
+@@ -279,6 +1188,77 @@ def clear_goal(session_id: str) -> None:
      save_goal(session_id, state)
  
  
@@ -5301,7 +5312,7 @@ index a6a28deaf..1b9abe216 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1261,987 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1272,988 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -5756,17 +5767,18 @@ index a6a28deaf..1b9abe216 100644
 +                research_finding_from_evidence = None  # type: ignore[assignment]
 +            if ref is not None:
 +                locator = ref.artifact_path or ref.locator or ref.id
-+                layer = "verification" if ref.trust_level == "verified" else "tool_observation"
-+                if ref.source.value in {"web_source", "github_source"}:
-+                    layer = "external_prior"
-+                elif ref.source.value == "file_artifact":
-+                    layer = "artifact"
-+                elif ref.source.value == "test_run":
-+                    layer = "verification"
-+                add_layer(layer, locator)
-+                before_evidence = list(state.evidence or [])
-+                state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-+                changed = changed or state.evidence != before_evidence
++                if ref.trust_level in {"observed", "verified"}:
++                    layer = "verification" if ref.trust_level == "verified" else "tool_observation"
++                    if ref.source.value in {"web_source", "github_source"}:
++                        layer = "external_prior"
++                    elif ref.source.value == "file_artifact":
++                        layer = "artifact"
++                    elif ref.source.value == "test_run":
++                        layer = "verification"
++                    add_layer(layer, locator)
++                    before_evidence = list(state.evidence or [])
++                    state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
++                    changed = changed or state.evidence != before_evidence
 +                try:
 +                    finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
 +                except Exception:
@@ -6289,7 +6301,7 @@ index a6a28deaf..1b9abe216 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2249,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2261,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6345,7 +6357,7 @@ index a6a28deaf..1b9abe216 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2434,194 @@ def judge_goal(
+@@ -463,6 +2446,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6540,7 +6552,7 @@ index a6a28deaf..1b9abe216 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2648,41 @@ class GoalManager:
+@@ -489,6 +2660,41 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6582,7 +6594,7 @@ index a6a28deaf..1b9abe216 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2696,154 @@ class GoalManager:
+@@ -502,37 +2708,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -6743,7 +6755,7 @@ index a6a28deaf..1b9abe216 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2852,7 @@ class GoalManager:
+@@ -541,6 +2864,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -6751,7 +6763,7 @@ index a6a28deaf..1b9abe216 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2862,29 @@ class GoalManager:
+@@ -550,7 +2874,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -6781,7 +6793,7 @@ index a6a28deaf..1b9abe216 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2892,7 @@ class GoalManager:
+@@ -558,6 +2904,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -6789,7 +6801,7 @@ index a6a28deaf..1b9abe216 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2901,25 @@ class GoalManager:
+@@ -566,7 +2913,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
@@ -6815,7 +6827,7 @@ index a6a28deaf..1b9abe216 100644
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2935,7 @@ class GoalManager:
+@@ -582,6 +2947,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -6823,7 +6835,7 @@ index a6a28deaf..1b9abe216 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2961,18 @@ class GoalManager:
+@@ -607,6 +2973,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -6842,7 +6854,7 @@ index a6a28deaf..1b9abe216 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2988,35 @@ class GoalManager:
+@@ -622,6 +3000,35 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -6878,7 +6890,7 @@ index a6a28deaf..1b9abe216 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -658,6 +3053,60 @@ class GoalManager:
+@@ -658,6 +3065,60 @@ class GoalManager:
          state.last_verdict = verdict
          state.last_reason = reason
  
@@ -6939,7 +6951,7 @@ index a6a28deaf..1b9abe216 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,9 +3115,92 @@ class GoalManager:
+@@ -666,9 +3127,92 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7032,7 +7044,7 @@ index a6a28deaf..1b9abe216 100644
              return {
                  "status": "done",
                  "should_continue": False,
-@@ -690,6 +3222,11 @@ class GoalManager:
+@@ -690,6 +3234,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7044,7 +7056,7 @@ index a6a28deaf..1b9abe216 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3245,83 @@ class GoalManager:
+@@ -708,10 +3257,83 @@ class GoalManager:
                  ),
              }
  
@@ -7128,7 +7140,7 @@ index a6a28deaf..1b9abe216 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3334,20 @@ class GoalManager:
+@@ -724,7 +3346,20 @@ class GoalManager:
                  ),
              }
  
@@ -7149,7 +7161,7 @@ index a6a28deaf..1b9abe216 100644
          return {
              "status": "active",
              "should_continue": True,
-@@ -732,13 +3355,52 @@ class GoalManager:
+@@ -732,13 +3367,52 @@ class GoalManager:
              "verdict": "continue",
              "reason": reason,
              "message": (
@@ -7203,7 +7215,7 @@ index a6a28deaf..1b9abe216 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3561,8 @@ __all__ = [
+@@ -899,6 +3573,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -8642,18 +8654,18 @@ index 000000000..6405f62ce
 +
 +    return events
 diff --git a/model_tools.py b/model_tools.py
-index 0618138aa..7b106ecf6 100644
+index 0618138aa..fae2d6d56 100644
 --- a/model_tools.py
 +++ b/model_tools.py
 @@ -822,6 +822,15 @@ def _tool_result_observer_fields(result: Any) -> tuple[str, Optional[str], Optio
      return "ok", None, None
  
  
-+def _supergoal_policy_block_message(session_id: Optional[str], function_name: str, function_args: Dict[str, Any]) -> Optional[str]:
++def _supergoal_policy_block_message(session_id: Optional[str], function_name: str, function_args: Dict[str, Any], *, task_id: Optional[str] = None) -> Optional[str]:
 +    try:
 +        from hermes_cli.supergoal.policy import pre_tool_policy_block_message
 +
-+        return pre_tool_policy_block_message(session_id or "", function_name, function_args if isinstance(function_args, dict) else {}, task_id="default")
++        return pre_tool_policy_block_message(session_id or "", function_name, function_args if isinstance(function_args, dict) else {}, task_id=task_id or "default")
 +    except Exception:
 +        return None
 +
@@ -8693,7 +8705,7 @@ index 0618138aa..7b106ecf6 100644
          if function_name in _AGENT_LOOP_TOOLS:
              return json.dumps({"error": f"{function_name} must be handled by the agent loop"})
  
-+        policy_block_message = _supergoal_policy_block_message(session_id, function_name, function_args)
++        policy_block_message = _supergoal_policy_block_message(session_id, function_name, function_args, task_id=task_id)
 +        if policy_block_message is not None:
 +            result = policy_block_message if str(policy_block_message).lstrip().startswith("{") else json.dumps({"error": policy_block_message}, ensure_ascii=False)
 +            _emit_post_tool_call_hook(
@@ -9292,10 +9304,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..126e7a030 100644
+index 0dae684b6..8d4090020 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1136 @@ class TestGoalManager:
+@@ -252,6 +252,1152 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -9562,6 +9574,22 @@ index 0dae684b6..126e7a030 100644
 +        assert mgr.state.research_sufficiency == "missing"
 +        assert "paper/critic" in decision["continuation_prompt"]
 +        assert "REPLAN REQUIRED" in decision["continuation_prompt"]
++
++    def test_supergoal_legacy_tool_backed_research_keeps_provenance(self, hermes_home):
++        from hermes_cli.goals import ResearchFinding
++
++        finding = ResearchFinding.from_dict({
++            "source_type": "docs",
++            "title": "Legacy tool-backed source",
++            "locator": "https://docs.example/legacy",
++            "tool_call_id": "tc-legacy",
++            "evidence_quote_or_hash": "sha256:abc",
++        }, infer_legacy_tool_backed=True)
++
++        assert finding is not None
++        assert finding.evidence_source == "tool_call"
++        assert finding.trust_level == "observed"
++        assert finding.is_tool_backed is True
 +
 +    def test_supergoal_tool_evidence_research_can_pass_gate(self, hermes_home):
 +        from hermes_cli import goals
@@ -10432,7 +10460,7 @@ index 0dae684b6..126e7a030 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1609,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1625,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -10441,7 +10469,7 @@ index 0dae684b6..126e7a030 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1619,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1635,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):
@@ -10802,10 +10830,10 @@ index 000000000..baea8257b
 +    assert decision["continuation_prompt"]
 diff --git a/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
 new file mode 100644
-index 000000000..621946ac7
+index 000000000..5c656d8d3
 --- /dev/null
 +++ b/tests/supergoal_replay/test_replay_evidence_claims_do_not_pass_tool_gate.py
-@@ -0,0 +1,75 @@
+@@ -0,0 +1,109 @@
 +from unittest.mock import patch
 +
 +
@@ -10848,6 +10876,40 @@ index 000000000..621946ac7
 +    assert g2.status != "passed"
 +    assert "tool-backed" in (g2.reason or "") or "missing" in (g2.reason or "")
 +    assert decision["should_continue"] is True
++
++
++def test_replay_blocked_tool_evidence_does_not_satisfy_artifact_gate(_isolate_hermes_home):
++    from hermes_cli.goals import GoalManager, GoalEvent, _goal_events_state_changed
++    from hermes_cli.supergoal.evidence import evidence_ref_from_tool_call
++
++    mgr = GoalManager(session_id="replay-blocked-evidence")
++    state = mgr.set("produce a verified artifact", mode="supergoal")
++    ref = evidence_ref_from_tool_call(
++        goal_run_id=state.goal_run_id,
++        turn_id="turn-blocked",
++        tool_name="write_file",
++        args={"path": "/tmp/blocked.md", "content": "x"},
++        result={"error": "Supergoal policy deny: path outside allowlist"},
++        tool_call_id="tc-blocked",
++        status="blocked",
++    )
++    assert ref is not None
++    changed = _goal_events_state_changed(
++        state,
++        [
++            GoalEvent(
++                ts=0.0,
++                type="tool_evidence_observed",
++                turn=0,
++                summary=ref.claim,
++                data={"evidence_ref": ref.to_dict()},
++            )
++        ],
++    )
++
++    assert changed is False
++    assert not state.evidence
++    assert not any(g.id == "G3" and g.status == "passed" for g in state.gates)
 +
 +
 +def test_replay_every_policy_checked_tool_call_has_decision(_isolate_hermes_home):
@@ -10907,10 +10969,10 @@ index 000000000..fcdea9dc7
 +    assert first_open is not None
 +    assert state.action_proposal.target_gate_id == first_open.id or state.hard_gate_reason
 diff --git a/tests/test_model_tools.py b/tests/test_model_tools.py
-index 91e7103aa..46b4405ad 100644
+index 91e7103aa..39c3fde26 100644
 --- a/tests/test_model_tools.py
 +++ b/tests/test_model_tools.py
-@@ -127,25 +127,185 @@ class TestHandleFunctionCall:
+@@ -127,25 +127,211 @@ class TestHandleFunctionCall:
          # pre_tool_call does NOT get duration_ms (nothing has run yet).
          assert "duration_ms" not in kwargs_by_hook["pre_tool_call"]
  
@@ -11078,6 +11140,32 @@ index 91e7103aa..46b4405ad 100644
 +
 +        assert not result.allows_execution
 +        assert "unapproved.example" in result.reason
++
++    def test_supergoal_policy_check_receives_handle_function_task_id(self, _isolate_hermes_home, monkeypatch):
++        from hermes_cli.goals import GoalManager, save_goal
++
++        seen = {}
++        def fake_policy(session_id, tool_name, args, *, task_id=""):
++            seen["task_id"] = task_id
++            return None
++
++        import hermes_cli.supergoal.policy as policy_mod
++        monkeypatch.setattr(policy_mod, "pre_tool_policy_block_message", fake_policy)
++
++        mgr = GoalManager(session_id="super-policy-task-id-sid")
++        state = mgr.set("maintain project", mode="supergoal")
++        save_goal("super-policy-task-id-sid", state)
++
++        with patch("model_tools.registry.dispatch", return_value='{"ok":true}'):
++            handle_function_call(
++                "write_file",
++                {"path": "relative/out.txt", "content": "x"},
++                session_id="super-policy-task-id-sid",
++                tool_call_id="tc-policy",
++                task_id="workspace-task",
++            )
++
++        assert seen["task_id"] == "workspace-task"
 +
 +    def test_supergoal_full_auto_bypasses_policy_guard(self, _isolate_hermes_home):
 +        from hermes_cli.goals import GoalManager, save_goal

@@ -549,7 +549,7 @@ class ResearchFinding:
         return bool(self.tool_call_id and self.trust_level in {"observed", "verified"})
 
     @classmethod
-    def from_dict(cls, data: Any) -> Optional["ResearchFinding"]:
+    def from_dict(cls, data: Any, *, infer_legacy_tool_backed: bool = False) -> Optional["ResearchFinding"]:
         if not isinstance(data, dict):
             return None
         source_type = str(data.get("source_type") or data.get("type") or "").strip().lower()
@@ -559,17 +559,28 @@ class ResearchFinding:
         allowed = {"paper", "github", "web", "docs", "repo", "benchmark", "local", "other"}
         if source_type not in allowed:
             source_type = "other"
+        tool_call_id = _truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120)
+        evidence_quote_or_hash = _truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400)
+        raw_source = str(data.get("evidence_source") or data.get("source") or "").strip()
+        raw_trust = str(data.get("trust_level") or "").strip()
+        # Back-compat: older supergoal research records predate evidence_source
+        # and trust_level, but may still carry a real tool_call_id plus quote/hash.
+        # Do not silently downgrade those to assistant_claim; otherwise upgrades
+        # erase valid G2 provenance and can strand active missions.
+        legacy_tool_backed = bool(infer_legacy_tool_backed and tool_call_id and tool_call_id != "assistant_turn" and evidence_quote_or_hash)
+        evidence_source = raw_source or ("tool_call" if legacy_tool_backed else "assistant_claim")
+        trust_level = raw_trust or ("observed" if legacy_tool_backed else "claim")
         return cls(
             source_type=source_type,
             title=_truncate(" ".join(title.split()), 160),
             locator=_truncate(" ".join(str(data.get("locator") or data.get("url_or_path") or "").split()), 240),
             claim=_truncate(" ".join(str(data.get("claim") or "").split()), 240),
             retrieved_at=_truncate(" ".join(str(data.get("retrieved_at") or "").split()), 80),
-            tool_call_id=_truncate(" ".join(str(data.get("tool_call_id") or "").split()), 120),
+            tool_call_id=tool_call_id,
             query=_truncate(" ".join(str(data.get("query") or "").split()), 240),
-            evidence_quote_or_hash=_truncate(" ".join(str(data.get("evidence_quote_or_hash") or data.get("quote") or data.get("hash") or "").split()), 400),
-            evidence_source=_truncate(" ".join(str(data.get("evidence_source") or data.get("source") or "assistant_claim").split()), 80),
-            trust_level=_truncate(" ".join(str(data.get("trust_level") or "claim").split()), 20),
+            evidence_quote_or_hash=evidence_quote_or_hash,
+            evidence_source=_truncate(" ".join(evidence_source.split()), 80),
+            trust_level=_truncate(" ".join(trust_level.split()), 20),
             relevance_score=_coerce_float(data.get("relevance_score"), 0.0),
             contradiction=bool(data.get("contradiction", False)),
         )
@@ -843,7 +854,7 @@ class GoalState:
         research_findings: List[ResearchFinding] = []
         if isinstance(raw_findings, list):
             for raw_finding in raw_findings:
-                finding = ResearchFinding.from_dict(raw_finding)
+                finding = ResearchFinding.from_dict(raw_finding, infer_legacy_tool_backed=True)
                 if finding is not None:
                     research_findings.append(finding)
         raw_portfolio = data.get("hypothesis_portfolio") or data.get("hypotheses_detail") or []
@@ -1712,17 +1723,18 @@ def _goal_events_state_changed(state: GoalState, events: List[GoalEvent]) -> boo
                 research_finding_from_evidence = None  # type: ignore[assignment]
             if ref is not None:
                 locator = ref.artifact_path or ref.locator or ref.id
-                layer = "verification" if ref.trust_level == "verified" else "tool_observation"
-                if ref.source.value in {"web_source", "github_source"}:
-                    layer = "external_prior"
-                elif ref.source.value == "file_artifact":
-                    layer = "artifact"
-                elif ref.source.value == "test_run":
-                    layer = "verification"
-                add_layer(layer, locator)
-                before_evidence = list(state.evidence or [])
-                state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
-                changed = changed or state.evidence != before_evidence
+                if ref.trust_level in {"observed", "verified"}:
+                    layer = "verification" if ref.trust_level == "verified" else "tool_observation"
+                    if ref.source.value in {"web_source", "github_source"}:
+                        layer = "external_prior"
+                    elif ref.source.value == "file_artifact":
+                        layer = "artifact"
+                    elif ref.source.value == "test_run":
+                        layer = "verification"
+                    add_layer(layer, locator)
+                    before_evidence = list(state.evidence or [])
+                    state.evidence = _merge_compact_list(state.evidence, [locator], max_items=20)
+                    changed = changed or state.evidence != before_evidence
                 try:
                     finding_data = research_finding_from_evidence(ref) if research_finding_from_evidence else None  # type: ignore[misc]
                 except Exception:

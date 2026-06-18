@@ -822,11 +822,11 @@ def _tool_result_observer_fields(result: Any) -> tuple[str, Optional[str], Optio
     return "ok", None, None
 
 
-def _supergoal_policy_block_message(session_id: Optional[str], function_name: str, function_args: Dict[str, Any]) -> Optional[str]:
+def _supergoal_policy_block_message(session_id: Optional[str], function_name: str, function_args: Dict[str, Any], *, task_id: Optional[str] = None) -> Optional[str]:
     try:
         from hermes_cli.supergoal.policy import pre_tool_policy_block_message
 
-        return pre_tool_policy_block_message(session_id or "", function_name, function_args if isinstance(function_args, dict) else {}, task_id="default")
+        return pre_tool_policy_block_message(session_id or "", function_name, function_args if isinstance(function_args, dict) else {}, task_id=task_id or "default")
     except Exception:
         return None
 
@@ -1041,7 +1041,7 @@ def handle_function_call(
         if function_name in _AGENT_LOOP_TOOLS:
             return json.dumps({"error": f"{function_name} must be handled by the agent loop"})
 
-        policy_block_message = _supergoal_policy_block_message(session_id, function_name, function_args)
+        policy_block_message = _supergoal_policy_block_message(session_id, function_name, function_args, task_id=task_id)
         if policy_block_message is not None:
             result = policy_block_message if str(policy_block_message).lstrip().startswith("{") else json.dumps({"error": policy_block_message}, ensure_ascii=False)
             _emit_post_tool_call_hook(

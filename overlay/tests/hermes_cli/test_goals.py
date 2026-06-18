@@ -516,6 +516,22 @@ class TestGoalManager:
         assert "paper/critic" in decision["continuation_prompt"]
         assert "REPLAN REQUIRED" in decision["continuation_prompt"]
 
+    def test_supergoal_legacy_tool_backed_research_keeps_provenance(self, hermes_home):
+        from hermes_cli.goals import ResearchFinding
+
+        finding = ResearchFinding.from_dict({
+            "source_type": "docs",
+            "title": "Legacy tool-backed source",
+            "locator": "https://docs.example/legacy",
+            "tool_call_id": "tc-legacy",
+            "evidence_quote_or_hash": "sha256:abc",
+        }, infer_legacy_tool_backed=True)
+
+        assert finding is not None
+        assert finding.evidence_source == "tool_call"
+        assert finding.trust_level == "observed"
+        assert finding.is_tool_backed is True
+
     def test_supergoal_tool_evidence_research_can_pass_gate(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager
