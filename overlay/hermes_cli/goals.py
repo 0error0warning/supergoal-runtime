@@ -1584,6 +1584,25 @@ def _reset_gate_stall(state: GoalState) -> None:
     state.same_gate_stall_count = 0
 
 
+def _render_continue_decision(
+    state: GoalState,
+    *,
+    reason: str,
+    continuation_prompt: Optional[str],
+) -> Dict[str, Any]:
+    return {
+        "status": "active",
+        "should_continue": True,
+        "continuation_prompt": continuation_prompt,
+        "verdict": "continue",
+        "reason": reason,
+        "message": (
+            f"↻ Continuing toward {'supergoal' if getattr(state, 'mode', 'goal') == 'supergoal' else 'goal'} "
+            f"({state.turns_used}/{state.max_turns}): {reason}"
+        ),
+    }
+
+
 def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
     return {
         "status": "paused",
@@ -3246,16 +3265,11 @@ class GoalManager:
                 "current_step_id": state.current_step_id,
             },
         )
-        return {
-            "status": "active",
-            "should_continue": True,
-            "continuation_prompt": self.next_continuation_prompt(),
-            "verdict": "continue",
-            "reason": reason,
-            "message": (
-                f"↻ Continuing toward {'supergoal' if getattr(state, 'mode', 'goal') == 'supergoal' else 'goal'} ({state.turns_used}/{state.max_turns}): {reason}"
-            ),
-        }
+        return _render_continue_decision(
+            state,
+            reason=reason,
+            continuation_prompt=self.next_continuation_prompt(),
+        )
 
     def next_continuation_prompt(self) -> Optional[str]:
         if not self._state or self._state.status != "active":

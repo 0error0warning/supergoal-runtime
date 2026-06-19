@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..297dc0620 100644
+index a6a28deaf..09c14861a 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -35,7 +35,47 @@ import re
@@ -5748,7 +5748,7 @@ index a6a28deaf..297dc0620 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1303,814 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1303,833 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6031,6 +6031,25 @@ index a6a28deaf..297dc0620 100644
 +def _reset_gate_stall(state: GoalState) -> None:
 +    state.last_failed_gate_id = ""
 +    state.same_gate_stall_count = 0
++
++
++def _render_continue_decision(
++    state: GoalState,
++    *,
++    reason: str,
++    continuation_prompt: Optional[str],
++) -> Dict[str, Any]:
++    return {
++        "status": "active",
++        "should_continue": True,
++        "continuation_prompt": continuation_prompt,
++        "verdict": "continue",
++        "reason": reason,
++        "message": (
++            f"↻ Continuing toward {'supergoal' if getattr(state, 'mode', 'goal') == 'supergoal' else 'goal'} "
++            f"({state.turns_used}/{state.max_turns}): {reason}"
++        ),
++    }
 +
 +
 +def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
@@ -6563,7 +6582,7 @@ index a6a28deaf..297dc0620 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2118,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2137,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6619,7 +6638,7 @@ index a6a28deaf..297dc0620 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2303,194 @@ def judge_goal(
+@@ -463,6 +2322,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6814,7 +6833,7 @@ index a6a28deaf..297dc0620 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2517,42 @@ class GoalManager:
+@@ -489,6 +2536,42 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6857,7 +6876,7 @@ index a6a28deaf..297dc0620 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2566,154 @@ class GoalManager:
+@@ -502,37 +2585,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7018,7 +7037,7 @@ index a6a28deaf..297dc0620 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2722,7 @@ class GoalManager:
+@@ -541,6 +2741,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7026,7 +7045,7 @@ index a6a28deaf..297dc0620 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2732,29 @@ class GoalManager:
+@@ -550,7 +2751,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7056,7 +7075,7 @@ index a6a28deaf..297dc0620 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2762,7 @@ class GoalManager:
+@@ -558,6 +2781,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7064,12 +7083,12 @@ index a6a28deaf..297dc0620 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2771,25 @@ class GoalManager:
+@@ -566,7 +2790,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7084,13 +7103,13 @@ index a6a28deaf..297dc0620 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2805,7 @@ class GoalManager:
+@@ -582,6 +2824,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7098,7 +7117,7 @@ index a6a28deaf..297dc0620 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2831,18 @@ class GoalManager:
+@@ -607,6 +2850,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7117,7 +7136,7 @@ index a6a28deaf..297dc0620 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2858,94 @@ class GoalManager:
+@@ -622,6 +2877,94 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7212,7 +7231,7 @@ index a6a28deaf..297dc0620 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +2976,79 @@ class GoalManager:
+@@ -652,12 +2995,79 @@ class GoalManager:
          state.turns_used += 1
          state.last_turn_at = time.time()
  
@@ -7295,7 +7314,7 @@ index a6a28deaf..297dc0620 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,17 +3057,56 @@ class GoalManager:
+@@ -666,17 +3076,56 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7360,7 +7379,7 @@ index a6a28deaf..297dc0620 100644
  
          # Auto-pause when the judge model can't produce the expected JSON
          # verdict N turns in a row. Points the user at the goal_judge config
-@@ -690,6 +3120,11 @@ class GoalManager:
+@@ -690,6 +3139,11 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7372,7 +7391,7 @@ index a6a28deaf..297dc0620 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -708,10 +3143,83 @@ class GoalManager:
+@@ -708,10 +3162,83 @@ class GoalManager:
                  ),
              }
  
@@ -7456,7 +7475,7 @@ index a6a28deaf..297dc0620 100644
              return {
                  "status": "paused",
                  "should_continue": False,
-@@ -724,7 +3232,20 @@ class GoalManager:
+@@ -724,21 +3251,68 @@ class GoalManager:
                  ),
              }
  
@@ -7464,6 +7483,16 @@ index a6a28deaf..297dc0620 100644
 +            _reset_gate_stall(state)
 +
          save_goal(self.session_id, state)
+-        return {
+-            "status": "active",
+-            "should_continue": True,
+-            "continuation_prompt": self.next_continuation_prompt(),
+-            "verdict": "continue",
+-            "reason": reason,
+-            "message": (
+-                f"↻ Continuing toward goal ({state.turns_used}/{state.max_turns}): {reason}"
+-            ),
+-        }
 +        self._record_event(
 +            "turn_evaluated",
 +            summary=reason,
@@ -7474,17 +7503,11 @@ index a6a28deaf..297dc0620 100644
 +                "current_step_id": state.current_step_id,
 +            },
 +        )
-         return {
-             "status": "active",
-             "should_continue": True,
-@@ -732,13 +3253,52 @@ class GoalManager:
-             "verdict": "continue",
-             "reason": reason,
-             "message": (
--                f"↻ Continuing toward goal ({state.turns_used}/{state.max_turns}): {reason}"
-+                f"↻ Continuing toward {'supergoal' if getattr(state, 'mode', 'goal') == 'supergoal' else 'goal'} ({state.turns_used}/{state.max_turns}): {reason}"
-             ),
-         }
++        return _render_continue_decision(
++            state,
++            reason=reason,
++            continuation_prompt=self.next_continuation_prompt(),
++        )
  
      def next_continuation_prompt(self) -> Optional[str]:
          if not self._state or self._state.status != "active":
@@ -7531,7 +7554,7 @@ index a6a28deaf..297dc0620 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3459,8 @@ __all__ = [
+@@ -899,6 +3473,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
