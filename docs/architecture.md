@@ -74,11 +74,42 @@ Three reasoning principles sit above the mechanics:
 
 ## Main implementation points
 
-### Compression migration
+### Compression-safe logical goal identity
 
-`migrate_goal_state(old_session_id, new_session_id, reason="compression")` copies runtime state across session splits and leaves the old state as a `migrated` audit tombstone.
+The runtime now treats `goal_run_id` as the stable mission identity and `session_id` as a physical context version.
 
-This is a transitional fix. The long-term model should use a stable `goal_run_id`, with `session_id` treated as only one physical context version.
+Storage model:
+
+```text
+goal_run:{goal_run_id}          # authoritative mission state
+goal_session:{session_id}       # physical session → logical run binding
+goal_events:{goal_run_id}       # append-only mission event log
+goal:{session_id}               # compatibility mirror for old callers/tools
+```
+
+`migrate_goal_state(old_session_id, new_session_id, reason="compression")` binds the new physical session to the existing logical run and appends a `session_rotated` event. It does not fork or copy the mission as a new logical run, and it preserves an already-active destination run instead of overwriting it.
+
+### Explicit controller pipeline
+
+`hermes_cli/supergoal/controller.py` is now the post-turn control boundary for `/supergoal`:
+
+```text
+Observe → Project → Evaluate → Reconcile → Decide → Render
+```
+
+The controller owns the high-risk runtime side effects that previously lived inside the large GoalManager body:
+
+- completed-turn accounting and `last_turn_at`;
+- raw `last_verdict` / `last_reason` mirror;
+- judge parse/API health counters;
+- critic failure counter and periodic replan;
+- active-continue persistence, `turn_evaluated` event, and continuation prompt generation;
+- DONE state mutation, persistence, and `done` event;
+- PAUSED guard state mutation, persistence, and `paused` event.
+
+The old `legacy_decider` injection has been replaced by an explicit `apply_runtime_outcome` adapter. The remaining adapter exists only as a staged compatibility seam for gate/plan reconciliation and decision rendering while those helpers are slimmed further.
+
+Important invariant: DONE side effects are keyed on `runtime["verdict"] == "done"`, not `runtime["status"] == "done"`, so re-evaluating an already-completed supergoal (`status=done`, `verdict=inactive`) cannot duplicate the `done` event.
 
 ### Mission Control state
 
@@ -167,20 +198,28 @@ The current patch adds or updates tests for:
 - normal `/goal` regression;
 - gateway continuation label and enqueue behavior.
 
-Verified locally:
+Verified for the current patch package:
 
 ```text
-tests/hermes_cli/test_goals.py: 68 passed, 1 warning
-goal/gateway/TUI/CLI regression subset: 100 passed
-kanban goal-mode regression: 12 passed
-py_compile + git diff --check: passed
+Hermes core checkout:
+  py_compile goals/controller/domain: passed
+  tests/hermes_cli/test_goals.py + tests/supergoal_replay/ + tests/gateway/test_goal_verdict_send.py: 132 passed
+
+Clean-base patch verification from the pinned base:
+  git apply --check: passed
+  git apply: passed
+  py_compile goals/controller/domain: passed
+  same focused test set: 132 passed
+
+supergoal-runtime GitHub Actions:
+  fa1c43b7182110bc8c1ea177a8361158273b5822: success
 ```
 
 ## Remaining architectural work
 
-1. Stable logical `goal_run_id`.
+1. Slim the remaining GoalManager adapter callbacks for gate/plan reconciliation.
 2. Tool wrappers that write ledgers directly.
 3. Dedicated model roles for judge/critic/planner/policy/verifier.
-4. Pre-execution permission and scope policy.
+4. Richer pre-execution permission and scope policy configuration.
 5. Full user-facing Mission Control commands.
 6. Trace → feedback → evals → ranked changes → implementation handoff loop.

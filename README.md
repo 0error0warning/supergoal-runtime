@@ -186,7 +186,13 @@ Long-running agents with shell, file, network, API, database, or trading permiss
 7. **Codex-like checkpoint pressure**
    - Replan prompts require compact evidence sections: Changed, Verified, Evidence, Remaining gates, Next action class, and why not the tempting alternative.
 
-8. **Status/UX upgrades**
+8. **Explicit controller pipeline + runtime side effects**
+   - `hermes_cli/supergoal/controller.py` now exposes the post-turn pipeline as Observe → Project → Evaluate → Reconcile → Decide → Render.
+   - The vague `legacy_decider` injection has been replaced by an explicit `apply_runtime_outcome` adapter while staged migration continues.
+   - Controller-owned runtime side effects now include turn accounting, raw verdict mirroring, judge parse/API counters, critic failure counters, periodic replan, active-continue save/event/prompt, DONE save/event, and PAUSED guard save/event.
+   - DONE side effects are guarded by `verdict == "done"`, preventing duplicate completion events when an already-completed supergoal is evaluated again.
+
+9. **Status/UX upgrades**
    - `/supergoal status` surfaces gate counts, first failed gate, hard gate reasons, diagnostics, events, and next action.
    - Gateway continuation messages distinguish `supergoal` from normal `goal`.
 
@@ -267,12 +273,21 @@ python -m py_compile \
 git diff --check
 ```
 
-Verified locally before packaging:
+Verified for the current packaged patch:
 
 ```text
-supergoal core/replay suite: 109 passed, 1 warning
-focused G3/prose-trust + followup-status regressions: 10 passed
-clean-base patch apply + py_compile: passed during packaging
+Hermes core checkout:
+  py_compile goals/controller/domain: passed
+  tests/hermes_cli/test_goals.py + tests/supergoal_replay/ + tests/gateway/test_goal_verdict_send.py: 132 passed
+
+Clean-base patch verification from NousResearch/hermes-agent@4440d77bf32d6267775be5eba2189e1ebde0b5b5:
+  git apply --check: passed
+  git apply: passed
+  py_compile goals/controller/domain: passed
+  same focused test set: 132 passed
+
+supergoal-runtime GitHub Actions:
+  fa1c43b7182110bc8c1ea177a8361158273b5822: success
 ```
 
 ## Compatibility notes
@@ -288,7 +303,7 @@ This patch is not the final “superintelligent long-running agent.” It is the
 
 Important next steps:
 
-1. **Move meat out of legacy `goals.py`** — `SupergoalController` exposes Observe → Project → Evaluate → Reconcile → Decide → Render, but some heavy logic still lives in the legacy facade during staged migration.
+1. **Slim the remaining GoalManager adapter** — the supergoal controller owns the major post-turn side effects, but some gate/plan reconciliation helpers still live in `goals.py` behind adapter callbacks.
 2. **Dedicated verifier roles** — split completion judge, strategic critic, planner, policy guard, and artifact verifier with explicit typed results.
 3. **Richer tool wrappers and verifiers** — more tools should emit typed `EvidenceRef` entries directly, and artifact/test verifiers should promote observed evidence to verified evidence.
 4. **Full board commands** — `/supergoal board`, `/supergoal gates`, `/supergoal portfolio`, and `/supergoal next` for user-visible mission control.
