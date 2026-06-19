@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..09c14861a 100644
+index a6a28deaf..3ed2885cc 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -35,7 +35,47 @@ import re
@@ -5610,10 +5610,10 @@ index a6a28deaf..09c14861a 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-         return
++        return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-+        return
+         return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -5748,7 +5748,7 @@ index a6a28deaf..09c14861a 100644
  # ──────────────────────────────────────────────────────────────────────
  # Judge
  # ──────────────────────────────────────────────────────────────────────
-@@ -292,9 +1303,833 @@ def _truncate(text: str, limit: int) -> str:
+@@ -292,9 +1303,837 @@ def _truncate(text: str, limit: int) -> str:
      return text[:limit] + "… [truncated]"
  
  
@@ -6052,15 +6052,19 @@ index a6a28deaf..09c14861a 100644
 +    }
 +
 +
-+def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
++def _render_paused_decision(*, reason: str, message: str) -> Dict[str, Any]:
 +    return {
 +        "status": "paused",
 +        "should_continue": False,
 +        "continuation_prompt": None,
 +        "verdict": "continue",
 +        "reason": reason,
-+        "message": result.paused_message,
++        "message": message,
 +    }
++
++
++def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
++    return _render_paused_decision(reason=reason, message=result.paused_message)
 +
 +
 +def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
@@ -6582,7 +6586,7 @@ index a6a28deaf..09c14861a 100644
  def _goal_judge_max_tokens() -> int:
      """Resolve auxiliary.goal_judge.max_tokens, falling back to the default.
  
-@@ -302,21 +2137,45 @@ def _goal_judge_max_tokens() -> int:
+@@ -302,21 +2141,45 @@ def _goal_judge_max_tokens() -> int:
      this once per judge turn is cheap. A non-positive or non-int value falls
      back to the default rather than crashing the goal loop.
      """
@@ -6638,7 +6642,7 @@ index a6a28deaf..09c14861a 100644
  
  
  def _parse_judge_response(raw: str) -> Tuple[bool, str, bool]:
-@@ -463,6 +2322,194 @@ def judge_goal(
+@@ -463,6 +2326,194 @@ def judge_goal(
      return verdict, reason, parse_failed
  
  
@@ -6833,7 +6837,7 @@ index a6a28deaf..09c14861a 100644
  # ──────────────────────────────────────────────────────────────────────
  # GoalManager — the orchestration surface CLI + gateway talk to
  # ──────────────────────────────────────────────────────────────────────
-@@ -489,6 +2536,42 @@ class GoalManager:
+@@ -489,6 +2540,42 @@ class GoalManager:
          self.session_id = session_id
          self.default_max_turns = int(default_max_turns or DEFAULT_MAX_TURNS)
          self._state: Optional[GoalState] = load_goal(session_id)
@@ -6876,7 +6880,7 @@ index a6a28deaf..09c14861a 100644
  
      # --- introspection ------------------------------------------------
  
-@@ -502,37 +2585,154 @@ class GoalManager:
+@@ -502,37 +2589,154 @@ class GoalManager:
      def has_goal(self) -> bool:
          return self._state is not None and self._state.status in {"active", "paused"}
  
@@ -7037,7 +7041,7 @@ index a6a28deaf..09c14861a 100644
          return state
  
      def pause(self, reason: str = "user-paused") -> Optional[GoalState]:
-@@ -541,6 +2741,7 @@ class GoalManager:
+@@ -541,6 +2745,7 @@ class GoalManager:
          self._state.status = "paused"
          self._state.paused_reason = reason
          save_goal(self.session_id, self._state)
@@ -7045,7 +7049,7 @@ index a6a28deaf..09c14861a 100644
          return self._state
  
      def resume(self, *, reset_budget: bool = True) -> Optional[GoalState]:
-@@ -550,7 +2751,29 @@ class GoalManager:
+@@ -550,7 +2755,29 @@ class GoalManager:
          self._state.paused_reason = None
          if reset_budget:
              self._state.turns_used = 0
@@ -7075,7 +7079,7 @@ index a6a28deaf..09c14861a 100644
          return self._state
  
      def clear(self) -> None:
-@@ -558,6 +2781,7 @@ class GoalManager:
+@@ -558,6 +2785,7 @@ class GoalManager:
              return
          self._state.status = "cleared"
          save_goal(self.session_id, self._state)
@@ -7083,12 +7087,12 @@ index a6a28deaf..09c14861a 100644
          self._state = None
  
      def mark_done(self, reason: str) -> None:
-@@ -566,7 +2790,25 @@ class GoalManager:
+@@ -566,7 +2794,25 @@ class GoalManager:
          self._state.status = "done"
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7103,13 +7107,13 @@ index a6a28deaf..09c14861a 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
      # --- /subgoal user controls ---------------------------------------
  
-@@ -582,6 +2824,7 @@ class GoalManager:
+@@ -582,6 +2828,7 @@ class GoalManager:
          if not text:
              raise ValueError("subgoal text is empty")
          self._state.subgoals.append(text)
@@ -7117,7 +7121,7 @@ index a6a28deaf..09c14861a 100644
          save_goal(self.session_id, self._state)
          return text
  
-@@ -607,6 +2850,18 @@ class GoalManager:
+@@ -607,6 +2854,18 @@ class GoalManager:
          save_goal(self.session_id, self._state)
          return prev
  
@@ -7136,7 +7140,7 @@ index a6a28deaf..09c14861a 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2877,94 @@ class GoalManager:
+@@ -622,6 +2881,94 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7231,7 +7235,7 @@ index a6a28deaf..09c14861a 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +2995,79 @@ class GoalManager:
+@@ -652,12 +2999,79 @@ class GoalManager:
          state.turns_used += 1
          state.last_turn_at = time.time()
  
@@ -7314,7 +7318,7 @@ index a6a28deaf..09c14861a 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,17 +3076,56 @@ class GoalManager:
+@@ -666,17 +3080,56 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7379,22 +7383,35 @@ index a6a28deaf..09c14861a 100644
  
          # Auto-pause when the judge model can't produce the expected JSON
          # verdict N turns in a row. Points the user at the goal_judge config
-@@ -690,6 +3139,11 @@ class GoalManager:
+@@ -690,13 +3143,14 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
+-            return {
+-                "status": "paused",
+-                "should_continue": False,
+-                "continuation_prompt": None,
+-                "verdict": "continue",
+-                "reason": reason,
+-                "message": (
 +            self._record_event(
 +                "paused",
 +                summary=state.paused_reason,
 +                data={"reason": state.paused_reason, "trigger": "parse_failures"},
 +            )
-             return {
-                 "status": "paused",
-                 "should_continue": False,
-@@ -708,10 +3162,83 @@ class GoalManager:
++            return _render_paused_decision(
++                reason=reason,
++                message=(
+                     f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
+                     "isn't returning the required JSON verdict. Route the judge to a stricter "
+                     "model in ~/.hermes/config.yaml:\n"
+@@ -706,39 +3160,147 @@ class GoalManager:
+                     "      model: google/gemini-3-flash-preview\n"
+                     "Then /goal resume to continue."
                  ),
-             }
- 
+-            }
++            )
++
 +        # Auto-pause when the judge API keeps failing (e.g. CPA exhausted,
 +        # endpoint down, auth errors).  Without this guard, a dead judge
 +        # endpoint causes the supergoal to loop forever with
@@ -7411,18 +7428,14 @@ index a6a28deaf..09c14861a 100644
 +                summary=state.paused_reason,
 +                data={"reason": state.paused_reason, "trigger": "judge_api_failures"},
 +            )
-+            return {
-+                "status": "paused",
-+                "should_continue": False,
-+                "continuation_prompt": None,
-+                "verdict": "continue",
-+                "reason": reason,
-+                "message": (
++            return _render_paused_decision(
++                reason=reason,
++                message=(
 +                    f"⏸ Goal paused — the judge API failed "
 +                    f"{state.consecutive_judge_api_failures} turns in a row. "
 +                    "Check CPA quota / endpoint health, then /goal resume."
 +                ),
-+            }
++            )
 +
 +        # Supergoal board/critic is part of the control system, not a cosmetic
 +        # side-task. If it cannot update for several turns, fail closed only
@@ -7451,37 +7464,42 @@ index a6a28deaf..09c14861a 100644
 +                summary=state.paused_reason,
 +                data={"reason": state.paused_reason, "trigger": "critic_failures"},
 +            )
-+            return {
-+                "status": "paused",
-+                "should_continue": False,
-+                "continuation_prompt": None,
-+                "verdict": "continue",
-+                "reason": reason,
-+                "message": (
++            return _render_paused_decision(
++                reason=reason,
++                message=(
 +                    f"⏸ Supergoal paused — critic/board update failed "
 +                    f"{state.consecutive_critic_failures} turns in a row. Check auxiliary goal_judge/critic health, then /supergoal resume."
 +                ),
-+            }
-+
++            )
+ 
          if state.turns_used >= state.max_turns:
              state.status = "paused"
              state.paused_reason = f"turn budget exhausted ({state.turns_used}/{state.max_turns})"
              save_goal(self.session_id, state)
+-            return {
+-                "status": "paused",
+-                "should_continue": False,
+-                "continuation_prompt": None,
+-                "verdict": "continue",
+-                "reason": reason,
+-                "message": (
 +            self._record_event(
 +                "paused",
 +                summary=state.paused_reason,
 +                data={"reason": state.paused_reason, "trigger": "budget"},
 +            )
-             return {
-                 "status": "paused",
-                 "should_continue": False,
-@@ -724,21 +3251,68 @@ class GoalManager:
++            return _render_paused_decision(
++                reason=reason,
++                message=(
+                     f"⏸ Goal paused — {state.turns_used}/{state.max_turns} turns used. "
+                     "Use /goal resume to keep going, or /goal clear to stop."
                  ),
-             }
- 
+-            }
++            )
++
 +        if not gate_vetoed:
 +            _reset_gate_stall(state)
-+
+ 
          save_goal(self.session_id, state)
 -        return {
 -            "status": "active",
@@ -7554,7 +7572,7 @@ index a6a28deaf..09c14861a 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3473,8 @@ __all__ = [
+@@ -899,6 +3461,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",

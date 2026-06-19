@@ -1603,15 +1603,19 @@ def _render_continue_decision(
     }
 
 
-def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
+def _render_paused_decision(*, reason: str, message: str) -> Dict[str, Any]:
     return {
         "status": "paused",
         "should_continue": False,
         "continuation_prompt": None,
         "verdict": "continue",
         "reason": reason,
-        "message": result.paused_message,
+        "message": message,
     }
+
+
+def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
+    return _render_paused_decision(reason=reason, message=result.paused_message)
 
 
 def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
@@ -3144,13 +3148,9 @@ class GoalManager:
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "parse_failures"},
             )
-            return {
-                "status": "paused",
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "continue",
-                "reason": reason,
-                "message": (
+            return _render_paused_decision(
+                reason=reason,
+                message=(
                     f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
                     "isn't returning the required JSON verdict. Route the judge to a stricter "
                     "model in ~/.hermes/config.yaml:\n"
@@ -3160,7 +3160,7 @@ class GoalManager:
                     "      model: google/gemini-3-flash-preview\n"
                     "Then /goal resume to continue."
                 ),
-            }
+            )
 
         # Auto-pause when the judge API keeps failing (e.g. CPA exhausted,
         # endpoint down, auth errors).  Without this guard, a dead judge
@@ -3178,18 +3178,14 @@ class GoalManager:
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "judge_api_failures"},
             )
-            return {
-                "status": "paused",
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "continue",
-                "reason": reason,
-                "message": (
+            return _render_paused_decision(
+                reason=reason,
+                message=(
                     f"⏸ Goal paused — the judge API failed "
                     f"{state.consecutive_judge_api_failures} turns in a row. "
                     "Check CPA quota / endpoint health, then /goal resume."
                 ),
-            }
+            )
 
         # Supergoal board/critic is part of the control system, not a cosmetic
         # side-task. If it cannot update for several turns, fail closed only
@@ -3218,17 +3214,13 @@ class GoalManager:
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "critic_failures"},
             )
-            return {
-                "status": "paused",
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "continue",
-                "reason": reason,
-                "message": (
+            return _render_paused_decision(
+                reason=reason,
+                message=(
                     f"⏸ Supergoal paused — critic/board update failed "
                     f"{state.consecutive_critic_failures} turns in a row. Check auxiliary goal_judge/critic health, then /supergoal resume."
                 ),
-            }
+            )
 
         if state.turns_used >= state.max_turns:
             state.status = "paused"
@@ -3239,17 +3231,13 @@ class GoalManager:
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "budget"},
             )
-            return {
-                "status": "paused",
-                "should_continue": False,
-                "continuation_prompt": None,
-                "verdict": "continue",
-                "reason": reason,
-                "message": (
+            return _render_paused_decision(
+                reason=reason,
+                message=(
                     f"⏸ Goal paused — {state.turns_used}/{state.max_turns} turns used. "
                     "Use /goal resume to keep going, or /goal clear to stop."
                 ),
-            }
+            )
 
         if not gate_vetoed:
             _reset_gate_stall(state)
