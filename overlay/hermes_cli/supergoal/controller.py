@@ -3,10 +3,10 @@
 The controller now exposes the intended state-machine phases explicitly:
 observe → project → evaluate → reconcile → decide → render.
 
-For this migration step, the heavyweight historical state-machine body is still
-injected as ``legacy_decider`` and executed in the reconcile/decide boundary.
-That preserves behavior while giving later refactors a stable place to move
-logic phase-by-phase without touching CLI/Gateway callers.
+For this migration step, side effects that still live at the GoalManager
+boundary are injected as a named runtime-outcome adapter and executed in the
+reconcile/decide boundary.  That preserves behavior while giving later refactors
+a stable place to move logic phase-by-phase without touching CLI/Gateway callers.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from hermes_cli.supergoal.domain import (
 )
 from hermes_cli.supergoal.evaluators import EvaluatorSuite
 
-LegacyDecisionFn = Callable[..., DecisionDict]
+RuntimeOutcomeFn = Callable[..., DecisionDict]
 ObserveEventsFn = Callable[[TurnContext], int]
 ProjectStateFn = Callable[[TurnContext], bool]
 PrepareEvaluationFn = Callable[[TurnContext], bool]
@@ -37,7 +37,7 @@ class SupergoalController:
     """Platform-neutral /supergoal controller boundary."""
 
     evaluators: EvaluatorSuite
-    legacy_decider: LegacyDecisionFn
+    apply_runtime_outcome: RuntimeOutcomeFn
     observe_events: ObserveEventsFn | None = None
     project_state: ProjectStateFn | None = None
     prepare_evaluation: PrepareEvaluationFn | None = None
@@ -48,8 +48,8 @@ class SupergoalController:
         self._observe(ctx, snapshots)
         self._project(ctx, snapshots)
         evaluation = self._evaluate(ctx, snapshots)
-        legacy = self._reconcile_and_decide(ctx, snapshots, evaluation)
-        return self._render(ctx, legacy, snapshots)
+        runtime = self._reconcile_and_decide(ctx, snapshots, evaluation)
+        return self._render(ctx, runtime, snapshots)
 
     # 1. Observe ---------------------------------------------------------
     def _observe(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
@@ -148,10 +148,11 @@ class SupergoalController:
 
     # 4/5. Reconcile + Decide -------------------------------------------
     def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
-        # Legacy decider currently performs stall/budget guards, persistence,
-        # and continuation prompt rendering. Gate reconciliation is staged:
-        # controller can precompute the done+gates result and legacy will apply
-        # persistence/return-shaping without recomputing it.
+        # The GoalManager runtime adapter currently performs the remaining
+        # side effects: turn accounting, failure counters, persistence, events,
+        # budget guards, and continuation prompt rendering. Gate reconciliation
+        # is staged: controller can precompute the done+gates result and the
+        # adapter will apply persistence/return-shaping without recomputing it.
         done_gate_result = None
         if self.reconcile_done_gates and evaluation.get("verdict") == "done":
             # Legacy gate reconciliation used to run after last_verdict/last_reason
@@ -166,7 +167,7 @@ class SupergoalController:
                 evaluation.get("gate_ids_before_critic"),
                 bool(evaluation.get("critic_applied")),
             )
-        legacy = self.legacy_decider(
+        runtime = self.apply_runtime_outcome(
             ctx.last_response,
             user_initiated=ctx.user_initiated,
             supergoal_observed=bool(self.observe_events),
@@ -179,16 +180,17 @@ class SupergoalController:
             gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
             done_gate_result=done_gate_result,
         )
-        gate_decision = self._gate_decision(ctx.state, legacy)
-        legacy["gate_decision"] = gate_decision.to_dict()
+        gate_decision = self._gate_decision(ctx.state, runtime)
+        runtime["gate_decision"] = gate_decision.to_dict()
         snapshots.append(
             PipelineSnapshot(
                 phase="reconcile",
-                summary=str(legacy.get("reason") or ""),
+                summary=str(runtime.get("reason") or ""),
                 data={
-                    "legacy_status": legacy.get("status"),
-                    "verdict": legacy.get("verdict"),
-                    "should_continue": bool(legacy.get("should_continue", False)),
+                    "legacy_status": runtime.get("status"),
+                    "runtime_status": runtime.get("status"),
+                    "verdict": runtime.get("verdict"),
+                    "should_continue": bool(runtime.get("should_continue", False)),
                     "done_gate_precomputed": done_gate_result is not None,
                     "gate_decision": gate_decision.to_dict(),
                 },
@@ -197,17 +199,17 @@ class SupergoalController:
         snapshots.append(
             PipelineSnapshot(
                 phase="decide",
-                summary=str(legacy.get("message") or legacy.get("reason") or ""),
-                data={"continuation": bool(legacy.get("continuation_prompt"))},
+                summary=str(runtime.get("message") or runtime.get("reason") or ""),
+                data={"continuation": bool(runtime.get("continuation_prompt"))},
             )
         )
-        return legacy
+        return runtime
 
     # 6. Render ----------------------------------------------------------
     def _render(
         self,
         ctx: TurnContext,
-        legacy: DecisionDict,
+        runtime: DecisionDict,
         snapshots: list[PipelineSnapshot],
     ) -> ControllerDecision:
         state = ctx.state
@@ -226,9 +228,9 @@ class SupergoalController:
             )
         )
         return ControllerDecision.from_dict(
-            legacy,
+            runtime,
             gate_results=gate_results,
-            gate_decision=GateDecision.from_dict(legacy.get("gate_decision")),
+            gate_decision=GateDecision.from_dict(runtime.get("gate_decision")),
             evidence_refs=evidence_refs,
             next_action=next_action,
             snapshots=snapshots,

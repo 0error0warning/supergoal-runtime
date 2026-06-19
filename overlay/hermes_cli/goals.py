@@ -2897,7 +2897,7 @@ class GoalManager:
                     completion_judge=CompletionJudge(judge_goal),
                     strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
                 ),
-                legacy_decider=self._evaluate_after_turn_legacy,
+                apply_runtime_outcome=self._apply_supergoal_runtime_outcome,
                 observe_events=self._observe_supergoal_events_for_controller,
                 project_state=self._project_supergoal_state_for_controller,
                 prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
@@ -2958,6 +2958,16 @@ class GoalManager:
             last_response=last_response,
             apply_paused_status=False,
         )
+
+    def _apply_supergoal_runtime_outcome(self, last_response: str, **kwargs: Any) -> Dict[str, Any]:
+        """Apply remaining /supergoal runtime side effects and render a decision.
+
+        This is the explicit GoalManager boundary used by SupergoalController.
+        It owns legacy side effects until they are migrated one-by-one: turn
+        accounting, failure counters, persistence, event emission, budget guards,
+        and continuation prompt side effects.
+        """
+        return self._evaluate_after_turn_legacy(last_response, **kwargs)
 
     def _evaluate_after_turn_legacy(
         self,

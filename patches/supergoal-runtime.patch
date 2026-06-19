@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..6567e0ee3 100644
+index a6a28deaf..3a9db35a7 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -35,7 +35,47 @@ import re
@@ -5610,10 +5610,10 @@ index a6a28deaf..6567e0ee3 100644
 +def _merge_legacy_events_into_goal_run(session_id: str, goal_run_id: str, *, max_events: int = 200) -> None:
 +    """Move pre-goal_run_id events from goal_events:<session_id> to goal_events:<goal_run_id>."""
 +    if not session_id or not goal_run_id or session_id == goal_run_id:
-+        return
+         return
 +    legacy_events = _load_goal_event_records(session_id, limit=max_events)
 +    if not legacy_events:
-         return
++        return
 +    current_events = _load_goal_event_records(goal_run_id, limit=max_events)
 +    merged: List[GoalEvent] = []
 +    seen = set()
@@ -7096,7 +7096,7 @@ index a6a28deaf..6567e0ee3 100644
          self._state.last_verdict = "done"
          self._state.last_reason = reason
 +        _update_supergoal_plan_from_progress(self._state, verdict="done")
-+        save_goal(self.session_id, self._state)
+         save_goal(self.session_id, self._state)
 +        self._record_event("done", summary=reason, data={"reason": reason})
 +
 +    def record_continuation_enqueued(self, *, kind: str = "fifo") -> Optional[GoalState]:
@@ -7111,7 +7111,7 @@ index a6a28deaf..6567e0ee3 100644
 +            return None
 +        self._state.last_continuation_enqueued_at = time.time()
 +        self._state.last_continuation_kind = kind
-         save_goal(self.session_id, self._state)
++        save_goal(self.session_id, self._state)
 +        self._record_event("continuation_enqueued", summary=kind, data={"kind": kind})
 +        return self._state
  
@@ -7144,7 +7144,7 @@ index a6a28deaf..6567e0ee3 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2885,94 @@ class GoalManager:
+@@ -622,6 +2885,104 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7160,7 +7160,7 @@ index a6a28deaf..6567e0ee3 100644
 +                    completion_judge=CompletionJudge(judge_goal),
 +                    strategic_critic=StrategicCritic(critic_supergoal, apply_supergoal_critic),
 +                ),
-+                legacy_decider=self._evaluate_after_turn_legacy,
++                apply_runtime_outcome=self._apply_supergoal_runtime_outcome,
 +                observe_events=self._observe_supergoal_events_for_controller,
 +                project_state=self._project_supergoal_state_for_controller,
 +                prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
@@ -7222,6 +7222,16 @@ index a6a28deaf..6567e0ee3 100644
 +            apply_paused_status=False,
 +        )
 +
++    def _apply_supergoal_runtime_outcome(self, last_response: str, **kwargs: Any) -> Dict[str, Any]:
++        """Apply remaining /supergoal runtime side effects and render a decision.
++
++        This is the explicit GoalManager boundary used by SupergoalController.
++        It owns legacy side effects until they are migrated one-by-one: turn
++        accounting, failure counters, persistence, event emission, budget guards,
++        and continuation prompt side effects.
++        """
++        return self._evaluate_after_turn_legacy(last_response, **kwargs)
++
 +    def _evaluate_after_turn_legacy(
 +        self,
 +        last_response: str,
@@ -7239,7 +7249,7 @@ index a6a28deaf..6567e0ee3 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +3003,79 @@ class GoalManager:
+@@ -652,12 +3013,79 @@ class GoalManager:
          state.turns_used += 1
          state.last_turn_at = time.time()
  
@@ -7322,7 +7332,7 @@ index a6a28deaf..6567e0ee3 100644
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
          # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,17 +3084,56 @@ class GoalManager:
+@@ -666,17 +3094,56 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7387,7 +7397,7 @@ index a6a28deaf..6567e0ee3 100644
  
          # Auto-pause when the judge model can't produce the expected JSON
          # verdict N turns in a row. Points the user at the goal_judge config
-@@ -690,13 +3147,14 @@ class GoalManager:
+@@ -690,13 +3157,14 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7409,7 +7419,7 @@ index a6a28deaf..6567e0ee3 100644
                      f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
                      "isn't returning the required JSON verdict. Route the judge to a stricter "
                      "model in ~/.hermes/config.yaml:\n"
-@@ -706,39 +3164,147 @@ class GoalManager:
+@@ -706,39 +3174,147 @@ class GoalManager:
                      "      model: google/gemini-3-flash-preview\n"
                      "Then /goal resume to continue."
                  ),
@@ -7576,7 +7586,7 @@ index a6a28deaf..6567e0ee3 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3465,8 @@ __all__ = [
+@@ -899,6 +3475,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7599,19 +7609,19 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..7e9db4599
+index 000000000..c873318c3
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,326 @@
+@@ -0,0 +1,328 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
 +observe → project → evaluate → reconcile → decide → render.
 +
-+For this migration step, the heavyweight historical state-machine body is still
-+injected as ``legacy_decider`` and executed in the reconcile/decide boundary.
-+That preserves behavior while giving later refactors a stable place to move
-+logic phase-by-phase without touching CLI/Gateway callers.
++For this migration step, side effects that still live at the GoalManager
++boundary are injected as a named runtime-outcome adapter and executed in the
++reconcile/decide boundary.  That preserves behavior while giving later refactors
++a stable place to move logic phase-by-phase without touching CLI/Gateway callers.
 +"""
 +
 +from __future__ import annotations
@@ -7630,7 +7640,7 @@ index 000000000..7e9db4599
 +)
 +from hermes_cli.supergoal.evaluators import EvaluatorSuite
 +
-+LegacyDecisionFn = Callable[..., DecisionDict]
++RuntimeOutcomeFn = Callable[..., DecisionDict]
 +ObserveEventsFn = Callable[[TurnContext], int]
 +ProjectStateFn = Callable[[TurnContext], bool]
 +PrepareEvaluationFn = Callable[[TurnContext], bool]
@@ -7642,7 +7652,7 @@ index 000000000..7e9db4599
 +    """Platform-neutral /supergoal controller boundary."""
 +
 +    evaluators: EvaluatorSuite
-+    legacy_decider: LegacyDecisionFn
++    apply_runtime_outcome: RuntimeOutcomeFn
 +    observe_events: ObserveEventsFn | None = None
 +    project_state: ProjectStateFn | None = None
 +    prepare_evaluation: PrepareEvaluationFn | None = None
@@ -7653,8 +7663,8 @@ index 000000000..7e9db4599
 +        self._observe(ctx, snapshots)
 +        self._project(ctx, snapshots)
 +        evaluation = self._evaluate(ctx, snapshots)
-+        legacy = self._reconcile_and_decide(ctx, snapshots, evaluation)
-+        return self._render(ctx, legacy, snapshots)
++        runtime = self._reconcile_and_decide(ctx, snapshots, evaluation)
++        return self._render(ctx, runtime, snapshots)
 +
 +    # 1. Observe ---------------------------------------------------------
 +    def _observe(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
@@ -7753,10 +7763,11 @@ index 000000000..7e9db4599
 +
 +    # 4/5. Reconcile + Decide -------------------------------------------
 +    def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
-+        # Legacy decider currently performs stall/budget guards, persistence,
-+        # and continuation prompt rendering. Gate reconciliation is staged:
-+        # controller can precompute the done+gates result and legacy will apply
-+        # persistence/return-shaping without recomputing it.
++        # The GoalManager runtime adapter currently performs the remaining
++        # side effects: turn accounting, failure counters, persistence, events,
++        # budget guards, and continuation prompt rendering. Gate reconciliation
++        # is staged: controller can precompute the done+gates result and the
++        # adapter will apply persistence/return-shaping without recomputing it.
 +        done_gate_result = None
 +        if self.reconcile_done_gates and evaluation.get("verdict") == "done":
 +            # Legacy gate reconciliation used to run after last_verdict/last_reason
@@ -7771,7 +7782,7 @@ index 000000000..7e9db4599
 +                evaluation.get("gate_ids_before_critic"),
 +                bool(evaluation.get("critic_applied")),
 +            )
-+        legacy = self.legacy_decider(
++        runtime = self.apply_runtime_outcome(
 +            ctx.last_response,
 +            user_initiated=ctx.user_initiated,
 +            supergoal_observed=bool(self.observe_events),
@@ -7784,16 +7795,17 @@ index 000000000..7e9db4599
 +            gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
 +            done_gate_result=done_gate_result,
 +        )
-+        gate_decision = self._gate_decision(ctx.state, legacy)
-+        legacy["gate_decision"] = gate_decision.to_dict()
++        gate_decision = self._gate_decision(ctx.state, runtime)
++        runtime["gate_decision"] = gate_decision.to_dict()
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="reconcile",
-+                summary=str(legacy.get("reason") or ""),
++                summary=str(runtime.get("reason") or ""),
 +                data={
-+                    "legacy_status": legacy.get("status"),
-+                    "verdict": legacy.get("verdict"),
-+                    "should_continue": bool(legacy.get("should_continue", False)),
++                    "legacy_status": runtime.get("status"),
++                    "runtime_status": runtime.get("status"),
++                    "verdict": runtime.get("verdict"),
++                    "should_continue": bool(runtime.get("should_continue", False)),
 +                    "done_gate_precomputed": done_gate_result is not None,
 +                    "gate_decision": gate_decision.to_dict(),
 +                },
@@ -7802,17 +7814,17 @@ index 000000000..7e9db4599
 +        snapshots.append(
 +            PipelineSnapshot(
 +                phase="decide",
-+                summary=str(legacy.get("message") or legacy.get("reason") or ""),
-+                data={"continuation": bool(legacy.get("continuation_prompt"))},
++                summary=str(runtime.get("message") or runtime.get("reason") or ""),
++                data={"continuation": bool(runtime.get("continuation_prompt"))},
 +            )
 +        )
-+        return legacy
++        return runtime
 +
 +    # 6. Render ----------------------------------------------------------
 +    def _render(
 +        self,
 +        ctx: TurnContext,
-+        legacy: DecisionDict,
++        runtime: DecisionDict,
 +        snapshots: list[PipelineSnapshot],
 +    ) -> ControllerDecision:
 +        state = ctx.state
@@ -7831,9 +7843,9 @@ index 000000000..7e9db4599
 +            )
 +        )
 +        return ControllerDecision.from_dict(
-+            legacy,
++            runtime,
 +            gate_results=gate_results,
-+            gate_decision=GateDecision.from_dict(legacy.get("gate_decision")),
++            gate_decision=GateDecision.from_dict(runtime.get("gate_decision")),
 +            evidence_refs=evidence_refs,
 +            next_action=next_action,
 +            snapshots=snapshots,
