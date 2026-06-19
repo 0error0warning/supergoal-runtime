@@ -11,6 +11,7 @@ a stable place to move logic phase-by-phase without touching CLI/Gateway callers
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -47,6 +48,7 @@ class SupergoalController:
         snapshots: list[PipelineSnapshot] = []
         self._observe(ctx, snapshots)
         self._project(ctx, snapshots)
+        self._account_turn(ctx, snapshots)
         evaluation = self._evaluate(ctx, snapshots)
         runtime = self._reconcile_and_decide(ctx, snapshots, evaluation)
         return self._render(ctx, runtime, snapshots)
@@ -87,6 +89,28 @@ class SupergoalController:
             )
         )
 
+    def _account_turn(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
+        """Count the completed turn before evaluation.
+
+        Observation happens first and records events for ``turns_used + 1``;
+        this method then advances the authoritative budget counter before judge,
+        critic, periodic replan, and budget guards inspect it.
+        """
+        state = ctx.state
+        if getattr(state, "status", "") != "active":
+            return
+        before = int(getattr(state, "turns_used", 0) or 0)
+        state.turns_used = before + 1
+        state.last_turn_at = time.time()
+        if snapshots:
+            data = dict(snapshots[-1].data or {})
+            data["turns_used_after"] = state.turns_used
+            snapshots[-1] = PipelineSnapshot(
+                phase=snapshots[-1].phase,
+                summary=snapshots[-1].summary,
+                data=data,
+            )
+
     # 3. Evaluate --------------------------------------------------------
     def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> dict[str, Any]:
         state = ctx.state
@@ -98,6 +122,10 @@ class SupergoalController:
             )
         else:
             verdict, reason, parse_failed = "inactive", "no active goal", False
+
+        if getattr(state, "status", "") == "active":
+            setattr(state, "last_verdict", verdict)
+            setattr(state, "last_reason", reason)
 
         prepared = False
         critic_data: dict[str, Any] | None = None
@@ -173,6 +201,8 @@ class SupergoalController:
             supergoal_observed=bool(self.observe_events),
             supergoal_projected=bool(self.project_state),
             supergoal_evaluated=bool(self.prepare_evaluation),
+            turn_accounted=True,
+            verdict_mirrored=True,
             judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
             critic_data=evaluation.get("critic_data"),
             critic_applied=bool(evaluation.get("critic_applied")),

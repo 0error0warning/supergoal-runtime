@@ -2977,6 +2977,8 @@ class GoalManager:
         supergoal_observed: bool = False,
         supergoal_projected: bool = False,
         supergoal_evaluated: bool = False,
+        turn_accounted: bool = False,
+        verdict_mirrored: bool = False,
         judge_result: Optional[Tuple[str, str, bool]] = None,
         critic_data: Optional[Dict[str, Any]] = None,
         critic_applied: bool = False,
@@ -3009,9 +3011,12 @@ class GoalManager:
                 "message": "",
             }
 
-        # Count the turn that just finished.
-        state.turns_used += 1
-        state.last_turn_at = time.time()
+        # Count the turn that just finished. /supergoal controller now owns
+        # this before evaluation; legacy /goal and direct fallback paths still
+        # account here.
+        if not turn_accounted:
+            state.turns_used += 1
+            state.last_turn_at = time.time()
 
         if judge_result is None:
             verdict, reason, parse_failed = judge_goal(
@@ -3019,8 +3024,9 @@ class GoalManager:
             )
         else:
             verdict, reason, parse_failed = judge_result
-        state.last_verdict = verdict
-        state.last_reason = reason
+        if not verdict_mirrored:
+            state.last_verdict = verdict
+            state.last_reason = reason
 
         if getattr(state, "mode", "goal") == "supergoal":
             if not supergoal_evaluated:

@@ -4519,7 +4519,7 @@ index 000000000..982ef4a69
 +        logger.debug("GoalEvent store set_meta failed: %s", exc)
 +    return event
 diff --git a/hermes_cli/goals.py b/hermes_cli/goals.py
-index a6a28deaf..3a9db35a7 100644
+index a6a28deaf..4cb6878a4 100644
 --- a/hermes_cli/goals.py
 +++ b/hermes_cli/goals.py
 @@ -35,7 +35,47 @@ import re
@@ -7144,7 +7144,7 @@ index a6a28deaf..3a9db35a7 100644
      def render_subgoals(self) -> str:
          """Public helper for the /subgoal slash command."""
          if self._state is None:
-@@ -622,6 +2885,104 @@ class GoalManager:
+@@ -622,6 +2885,106 @@ class GoalManager:
          last_response: str,
          *,
          user_initiated: bool = True,
@@ -7240,6 +7240,8 @@ index a6a28deaf..3a9db35a7 100644
 +        supergoal_observed: bool = False,
 +        supergoal_projected: bool = False,
 +        supergoal_evaluated: bool = False,
++        turn_accounted: bool = False,
++        verdict_mirrored: bool = False,
 +        judge_result: Optional[Tuple[str, str, bool]] = None,
 +        critic_data: Optional[Dict[str, Any]] = None,
 +        critic_applied: bool = False,
@@ -7249,22 +7251,35 @@ index a6a28deaf..3a9db35a7 100644
      ) -> Dict[str, Any]:
          """Run the judge and update state. Return a decision dict.
  
-@@ -652,12 +3013,79 @@ class GoalManager:
-         state.turns_used += 1
-         state.last_turn_at = time.time()
+@@ -648,15 +3011,86 @@ class GoalManager:
+                 "message": "",
+             }
+ 
+-        # Count the turn that just finished.
+-        state.turns_used += 1
+-        state.last_turn_at = time.time()
++        # Count the turn that just finished. /supergoal controller now owns
++        # this before evaluation; legacy /goal and direct fallback paths still
++        # account here.
++        if not turn_accounted:
++            state.turns_used += 1
++            state.last_turn_at = time.time()
  
 -        verdict, reason, parse_failed = judge_goal(
 -            state.goal, last_response, subgoals=state.subgoals or None
 -        )
+-        state.last_verdict = verdict
+-        state.last_reason = reason
 +        if judge_result is None:
 +            verdict, reason, parse_failed = judge_goal(
 +                state.goal, last_response, subgoals=state.subgoals or None
 +            )
 +        else:
 +            verdict, reason, parse_failed = judge_result
-         state.last_verdict = verdict
-         state.last_reason = reason
- 
++        if not verdict_mirrored:
++            state.last_verdict = verdict
++            state.last_reason = reason
++
 +        if getattr(state, "mode", "goal") == "supergoal":
 +            if not supergoal_evaluated:
 +                gate_ids_before_critic = _passed_gate_ids(state)
@@ -7328,11 +7343,10 @@ index a6a28deaf..3a9db35a7 100644
 +            except Exception as exc:
 +                logger.debug("supergoal critic merge failed: %s", exc)
 +                state.consecutive_critic_failures += 1
-+
+ 
          # Track consecutive judge parse failures. Reset on any usable reply,
          # including API / transport errors (parse_failed=False) so a flaky
-         # network doesn't trip the auto-pause meant for bad judge models.
-@@ -666,17 +3094,56 @@ class GoalManager:
+@@ -666,17 +3100,56 @@ class GoalManager:
          else:
              state.consecutive_parse_failures = 0
  
@@ -7397,7 +7411,7 @@ index a6a28deaf..3a9db35a7 100644
  
          # Auto-pause when the judge model can't produce the expected JSON
          # verdict N turns in a row. Points the user at the goal_judge config
-@@ -690,13 +3157,14 @@ class GoalManager:
+@@ -690,13 +3163,14 @@ class GoalManager:
                  f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
              )
              save_goal(self.session_id, state)
@@ -7419,7 +7433,7 @@ index a6a28deaf..3a9db35a7 100644
                      f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
                      "isn't returning the required JSON verdict. Route the judge to a stricter "
                      "model in ~/.hermes/config.yaml:\n"
-@@ -706,39 +3174,147 @@ class GoalManager:
+@@ -706,39 +3180,147 @@ class GoalManager:
                      "      model: google/gemini-3-flash-preview\n"
                      "Then /goal resume to continue."
                  ),
@@ -7586,7 +7600,7 @@ index a6a28deaf..3a9db35a7 100644
          if self._state.subgoals:
              return CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
                  goal=self._state.goal,
-@@ -899,6 +3475,8 @@ __all__ = [
+@@ -899,6 +3481,8 @@ __all__ = [
      "GoalManager",
      "CONTINUATION_PROMPT_TEMPLATE",
      "CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE",
@@ -7609,10 +7623,10 @@ index 000000000..194fb2b68
 +"""
 diff --git a/hermes_cli/supergoal/controller.py b/hermes_cli/supergoal/controller.py
 new file mode 100644
-index 000000000..c873318c3
+index 000000000..68e6746d8
 --- /dev/null
 +++ b/hermes_cli/supergoal/controller.py
-@@ -0,0 +1,328 @@
+@@ -0,0 +1,358 @@
 +"""Explicit controller pipeline for /supergoal post-turn decisions.
 +
 +The controller now exposes the intended state-machine phases explicitly:
@@ -7626,6 +7640,7 @@ index 000000000..c873318c3
 +
 +from __future__ import annotations
 +
++import time
 +from dataclasses import dataclass
 +from typing import Any, Callable
 +
@@ -7662,6 +7677,7 @@ index 000000000..c873318c3
 +        snapshots: list[PipelineSnapshot] = []
 +        self._observe(ctx, snapshots)
 +        self._project(ctx, snapshots)
++        self._account_turn(ctx, snapshots)
 +        evaluation = self._evaluate(ctx, snapshots)
 +        runtime = self._reconcile_and_decide(ctx, snapshots, evaluation)
 +        return self._render(ctx, runtime, snapshots)
@@ -7702,6 +7718,28 @@ index 000000000..c873318c3
 +            )
 +        )
 +
++    def _account_turn(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> None:
++        """Count the completed turn before evaluation.
++
++        Observation happens first and records events for ``turns_used + 1``;
++        this method then advances the authoritative budget counter before judge,
++        critic, periodic replan, and budget guards inspect it.
++        """
++        state = ctx.state
++        if getattr(state, "status", "") != "active":
++            return
++        before = int(getattr(state, "turns_used", 0) or 0)
++        state.turns_used = before + 1
++        state.last_turn_at = time.time()
++        if snapshots:
++            data = dict(snapshots[-1].data or {})
++            data["turns_used_after"] = state.turns_used
++            snapshots[-1] = PipelineSnapshot(
++                phase=snapshots[-1].phase,
++                summary=snapshots[-1].summary,
++                data=data,
++            )
++
 +    # 3. Evaluate --------------------------------------------------------
 +    def _evaluate(self, ctx: TurnContext, snapshots: list[PipelineSnapshot]) -> dict[str, Any]:
 +        state = ctx.state
@@ -7713,6 +7751,10 @@ index 000000000..c873318c3
 +            )
 +        else:
 +            verdict, reason, parse_failed = "inactive", "no active goal", False
++
++        if getattr(state, "status", "") == "active":
++            setattr(state, "last_verdict", verdict)
++            setattr(state, "last_reason", reason)
 +
 +        prepared = False
 +        critic_data: dict[str, Any] | None = None
@@ -7788,6 +7830,8 @@ index 000000000..c873318c3
 +            supergoal_observed=bool(self.observe_events),
 +            supergoal_projected=bool(self.project_state),
 +            supergoal_evaluated=bool(self.prepare_evaluation),
++            turn_accounted=True,
++            verdict_mirrored=True,
 +            judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
 +            critic_data=evaluation.get("critic_data"),
 +            critic_applied=bool(evaluation.get("critic_applied")),
@@ -10487,10 +10531,10 @@ index 000000000..91e9aff9f
 +    finally:
 +        goals._DB_CACHE.clear()
 diff --git a/tests/hermes_cli/test_goals.py b/tests/hermes_cli/test_goals.py
-index 0dae684b6..538260a2c 100644
+index 0dae684b6..862553dfb 100644
 --- a/tests/hermes_cli/test_goals.py
 +++ b/tests/hermes_cli/test_goals.py
-@@ -252,6 +252,1177 @@ class TestGoalManager:
+@@ -252,6 +252,1179 @@ class TestGoalManager:
          assert mgr2.state.goal == "do the thing"
          assert mgr2.is_active()
  
@@ -11035,6 +11079,8 @@ index 0dae684b6..538260a2c 100644
 +        assert [p["phase"] for p in decision["pipeline"]] == [
 +            "observe", "project", "evaluate", "reconcile", "decide", "render"
 +        ]
++        project_phase = next(p for p in decision["pipeline"] if p["phase"] == "project")
++        assert project_phase["data"]["turns_used_after"] == 1
 +        evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
 +        assert evaluate_phase["data"]["verdict"] == "continue"
 +        assert evaluate_phase["data"]["critic_applied"] is True
@@ -11668,7 +11714,7 @@ index 0dae684b6..538260a2c 100644
      def test_evaluate_after_turn_done(self, hermes_home):
          """Judge says done → status=done, no continuation."""
          from hermes_cli import goals
-@@ -479,7 +1650,7 @@ class TestJudgeParseFailureAutoPause:
+@@ -479,7 +1652,7 @@ class TestJudgeParseFailureAutoPause:
              assert mgr.state.consecutive_parse_failures == 0
  
      def test_parse_failure_counter_not_incremented_by_api_errors(self, hermes_home):
@@ -11677,7 +11723,7 @@ index 0dae684b6..538260a2c 100644
          from hermes_cli import goals
          from hermes_cli.goals import GoalManager
  
-@@ -489,12 +1660,60 @@ class TestJudgeParseFailureAutoPause:
+@@ -489,12 +1662,60 @@ class TestJudgeParseFailureAutoPause:
          with patch.object(
              goals, "judge_goal", return_value=("continue", "judge error: RuntimeError", False)
          ):

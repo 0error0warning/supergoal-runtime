@@ -793,6 +793,8 @@ class TestGoalManager:
         assert [p["phase"] for p in decision["pipeline"]] == [
             "observe", "project", "evaluate", "reconcile", "decide", "render"
         ]
+        project_phase = next(p for p in decision["pipeline"] if p["phase"] == "project")
+        assert project_phase["data"]["turns_used_after"] == 1
         evaluate_phase = next(p for p in decision["pipeline"] if p["phase"] == "evaluate")
         assert evaluate_phase["data"]["verdict"] == "continue"
         assert evaluate_phase["data"]["critic_applied"] is True
