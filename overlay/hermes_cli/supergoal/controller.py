@@ -31,6 +31,11 @@ ObserveEventsFn = Callable[[TurnContext], int]
 ProjectStateFn = Callable[[TurnContext], bool]
 PrepareEvaluationFn = Callable[[TurnContext], bool]
 ReconcileDoneGatesFn = Callable[[TurnContext, str, str, Any, bool], Any]
+ReplanIntervalFn = Callable[[], int]
+PersistStateFn = Callable[[], None]
+RecordEventFn = Callable[[str, str, dict[str, Any]], None]
+ContinuationPromptFn = Callable[[], str | None]
+ApplyDoneStateFn = Callable[[str], None]
 
 
 @dataclass(frozen=True)
@@ -43,6 +48,11 @@ class SupergoalController:
     project_state: ProjectStateFn | None = None
     prepare_evaluation: PrepareEvaluationFn | None = None
     reconcile_done_gates: ReconcileDoneGatesFn | None = None
+    replan_interval: ReplanIntervalFn | None = None
+    persist_state: PersistStateFn | None = None
+    record_event: RecordEventFn | None = None
+    build_continuation_prompt: ContinuationPromptFn | None = None
+    apply_done_state: ApplyDoneStateFn | None = None
 
     def decide_after_turn(self, ctx: TurnContext) -> ControllerDecision:
         snapshots: list[PipelineSnapshot] = []
@@ -126,6 +136,7 @@ class SupergoalController:
         if getattr(state, "status", "") == "active":
             setattr(state, "last_verdict", verdict)
             setattr(state, "last_reason", reason)
+            self._track_judge_health(state, reason=reason, parse_failed=parse_failed)
 
         prepared = False
         critic_data: dict[str, Any] | None = None
@@ -141,10 +152,15 @@ class SupergoalController:
                     critic_data = raw_critic_data
                     self.evaluators.strategic_critic.apply(state, critic_data)
                     critic_applied = True
-            except Exception as exc:  # pragma: no cover - fail-closed path is reconciled by legacy guards
+            except Exception as exc:  # pragma: no cover - fail-closed path is reconciled by runtime guards
                 critic_data = None
                 critic_applied = False
                 critic_error = str(exc)
+            self._track_critic_health_and_replan(
+                state,
+                reason=reason,
+                critic_applied=critic_applied,
+            )
 
         evaluation = {
             "verdict": verdict,
@@ -173,6 +189,37 @@ class SupergoalController:
             )
         )
         return evaluation
+
+    @staticmethod
+    def _track_judge_health(state: Any, *, reason: str, parse_failed: bool) -> None:
+        """Maintain judge parse/API failure counters before runtime guards run."""
+        if parse_failed:
+            state.consecutive_parse_failures += 1
+        else:
+            state.consecutive_parse_failures = 0
+
+        if reason and reason.startswith("judge error:"):
+            state.consecutive_judge_api_failures += 1
+        else:
+            state.consecutive_judge_api_failures = 0
+
+    def _track_critic_health_and_replan(self, state: Any, *, reason: str, critic_applied: bool) -> None:
+        """Maintain critic health and periodic replan counters before runtime guards run."""
+        if critic_applied:
+            state.consecutive_critic_failures = 0
+            interval = self.replan_interval() if self.replan_interval else 0
+            if interval and getattr(state, "turns_used", 0) > 0 and state.turns_used % interval == 0:
+                state.should_replan = True
+                state.replan_count += 1
+                if not getattr(state, "next_best_action", ""):
+                    state.next_best_action = "Run a strategic replan before the next concrete step."
+            return
+
+        # If the strict judge API itself is down, don't also count the optional
+        # critic path as a board failure; the separate judge-API guard owns that
+        # fail-closed path.
+        if not (reason and reason.startswith("judge error:")):
+            state.consecutive_critic_failures += 1
 
     # 4/5. Reconcile + Decide -------------------------------------------
     def _reconcile_and_decide(self, ctx: TurnContext, snapshots: list[PipelineSnapshot], evaluation: dict[str, Any]) -> DecisionDict:
@@ -203,6 +250,12 @@ class SupergoalController:
             supergoal_evaluated=bool(self.prepare_evaluation),
             turn_accounted=True,
             verdict_mirrored=True,
+            judge_health_tracked=True,
+            critic_health_tracked=True,
+            periodic_replan_checked=True,
+            continue_side_effects_applied=True,
+            done_side_effects_applied=True,
+            paused_side_effects_applied=True,
             judge_result=(evaluation["verdict"], evaluation["reason"], evaluation["parse_failed"]),
             critic_data=evaluation.get("critic_data"),
             critic_applied=bool(evaluation.get("critic_applied")),
@@ -210,6 +263,12 @@ class SupergoalController:
             gate_ids_before_critic=evaluation.get("gate_ids_before_critic"),
             done_gate_result=done_gate_result,
         )
+        if runtime.get("pause_state"):
+            self._apply_pause_side_effects(ctx.state, runtime)
+        elif runtime.get("verdict") == "done":
+            self._apply_done_side_effects(ctx.state, runtime)
+        elif runtime.get("status") == "active" and runtime.get("should_continue"):
+            self._apply_continue_side_effects(ctx.state, runtime)
         gate_decision = self._gate_decision(ctx.state, runtime)
         runtime["gate_decision"] = gate_decision.to_dict()
         snapshots.append(
@@ -234,6 +293,55 @@ class SupergoalController:
             )
         )
         return runtime
+
+    def _apply_pause_side_effects(self, state: Any, runtime: DecisionDict) -> None:
+        """Apply PAUSED mutations, persist state, and record the pause event."""
+        pause_state = runtime.get("pause_state") if isinstance(runtime.get("pause_state"), dict) else {}
+        state.status = "paused"
+        paused_reason = str(pause_state.get("paused_reason") or runtime.get("reason") or "")
+        if paused_reason:
+            state.paused_reason = paused_reason
+        if pause_state.get("should_replan"):
+            state.should_replan = True
+        next_best_action = str(pause_state.get("next_best_action") or "")
+        if next_best_action and not getattr(state, "next_best_action", ""):
+            state.next_best_action = next_best_action
+        if self.persist_state:
+            self.persist_state()
+        if self.record_event:
+            self.record_event(
+                str(pause_state.get("event_type") or "paused"),
+                str(pause_state.get("summary") or state.paused_reason or runtime.get("message") or ""),
+                dict(pause_state.get("data") or {"reason": state.paused_reason}),
+            )
+
+    def _apply_done_side_effects(self, state: Any, runtime: DecisionDict) -> None:
+        """Apply final DONE mutations, persist state, and record completion."""
+        reason = str(runtime.get("reason") or "")
+        if self.apply_done_state:
+            self.apply_done_state(reason)
+        if self.persist_state:
+            self.persist_state()
+        if self.record_event:
+            self.record_event("done", reason, {"reason": reason})
+
+    def _apply_continue_side_effects(self, state: Any, runtime: DecisionDict) -> None:
+        """Persist active continue state and attach the next continuation prompt."""
+        if self.persist_state:
+            self.persist_state()
+        reason = str(runtime.get("reason") or "")
+        if self.record_event:
+            self.record_event(
+                "turn_evaluated",
+                reason,
+                {
+                    "verdict": runtime.get("verdict"),
+                    "reason": reason,
+                    "turns_used": getattr(state, "turns_used", 0),
+                    "current_step_id": getattr(state, "current_step_id", ""),
+                },
+            )
+        runtime["continuation_prompt"] = self.build_continuation_prompt() if self.build_continuation_prompt else runtime.get("continuation_prompt")
 
     # 6. Render ----------------------------------------------------------
     def _render(

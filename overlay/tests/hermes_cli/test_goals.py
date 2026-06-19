@@ -1413,6 +1413,26 @@ class TestGoalManager:
         assert g2.blocking is False
         assert g2.status in {"followup", "passed"}
 
+    def test_supergoal_done_event_is_not_duplicated_after_completion(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-done-no-duplicate-event-sid")
+        mgr.set("finish school hub", max_turns=20, mode="supergoal")
+        mgr.state.evidence_layers = {"artifact": ["docs/school-hub-final.md"]}
+        final_response = "Completed. Changed: docs/school-hub-final.md. Verified: pytest passed."
+        with patch.object(goals, "judge_goal", return_value=("done", "complete", False)), \
+             patch.object(goals, "critic_supergoal", return_value=None):
+            decision = mgr.evaluate_after_turn(final_response)
+
+        assert decision["status"] == "done"
+        first_events = [e.type for e in mgr.recent_events(limit=20)]
+        assert first_events.count("done") == 1
+
+        second = mgr.evaluate_after_turn("late duplicate hook")
+        assert second["verdict"] == "inactive"
+        assert [e.type for e in mgr.recent_events(limit=20)].count("done") == 1
+
     def test_supergoal_continue_message_uses_supergoal_label(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager

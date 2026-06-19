@@ -2902,6 +2902,11 @@ class GoalManager:
                 project_state=self._project_supergoal_state_for_controller,
                 prepare_evaluation=self._prepare_supergoal_evaluation_for_controller,
                 reconcile_done_gates=self._reconcile_done_gates_for_controller,
+                replan_interval=_supergoal_replan_interval,
+                persist_state=self._persist_supergoal_state_for_controller,
+                record_event=self._record_supergoal_event_for_controller,
+                build_continuation_prompt=self.next_continuation_prompt,
+                apply_done_state=self._apply_supergoal_done_state_for_controller,
             )
             return controller.decide_after_turn(
                 TurnContext(
@@ -2959,6 +2964,24 @@ class GoalManager:
             apply_paused_status=False,
         )
 
+    def _persist_supergoal_state_for_controller(self) -> None:
+        if self._state is not None:
+            save_goal(self.session_id, self._state)
+
+    def _record_supergoal_event_for_controller(self, event_type: str, summary: str, data: Dict[str, Any]) -> None:
+        self._record_event(event_type, summary=summary, data=data)
+
+    def _apply_supergoal_done_state_for_controller(self, reason: str) -> None:
+        if self._state is None:
+            return
+        self._state.status = "done"
+        self._state.should_replan = False
+        self._state.next_best_action = ""
+        self._state.action_proposal = SupergoalActionProposal()
+        self._state.hard_gate_reason = ""
+        _reset_gate_stall(self._state)
+        _update_supergoal_plan_from_progress(self._state, verdict="done")
+
     def _apply_supergoal_runtime_outcome(self, last_response: str, **kwargs: Any) -> Dict[str, Any]:
         """Apply remaining /supergoal runtime side effects and render a decision.
 
@@ -2979,6 +3002,12 @@ class GoalManager:
         supergoal_evaluated: bool = False,
         turn_accounted: bool = False,
         verdict_mirrored: bool = False,
+        judge_health_tracked: bool = False,
+        critic_health_tracked: bool = False,
+        periodic_replan_checked: bool = False,
+        continue_side_effects_applied: bool = False,
+        done_side_effects_applied: bool = False,
+        paused_side_effects_applied: bool = False,
         judge_result: Optional[Tuple[str, str, bool]] = None,
         critic_data: Optional[Dict[str, Any]] = None,
         critic_applied: bool = False,
@@ -3049,15 +3078,17 @@ class GoalManager:
                 elif critic_error:
                     logger.debug("supergoal critic merge failed: %s", critic_error)
                 if critic_applied:
-                    state.consecutive_critic_failures = 0
+                    if not critic_health_tracked:
+                        state.consecutive_critic_failures = 0
                     if done_gate_result is None and _passed_gate_ids(state) != gate_ids_before_critic:
                         _reset_gate_stall(state)
-                    interval = _supergoal_replan_interval()
-                    if interval and state.turns_used > 0 and state.turns_used % interval == 0:
-                        state.should_replan = True
-                        state.replan_count += 1
-                        if not state.next_best_action:
-                            state.next_best_action = "Run a strategic replan before the next concrete step."
+                    if not periodic_replan_checked:
+                        interval = _supergoal_replan_interval()
+                        if interval and state.turns_used > 0 and state.turns_used % interval == 0:
+                            state.should_replan = True
+                            state.replan_count += 1
+                            if not state.next_best_action:
+                                state.next_best_action = "Run a strategic replan before the next concrete step."
                     if verdict == "done":
                         # Do not let the completion judge mark every supergoal gate
                         # passed before the deterministic gate override below gets
@@ -3066,11 +3097,12 @@ class GoalManager:
                     else:
                         _update_supergoal_plan_from_progress(state, verdict=verdict)
                 else:
-                    # If the strict judge API itself is down, don't also count
-                    # the optional critic path as a board failure; the separate
-                    # judge_api_failures guard owns that fail-closed path.
-                    if not (reason and reason.startswith("judge error:")):
-                        state.consecutive_critic_failures += 1
+                    if not critic_health_tracked:
+                        # If the strict judge API itself is down, don't also count
+                        # the optional critic path as a board failure; the separate
+                        # judge_api_failures guard owns that fail-closed path.
+                        if not (reason and reason.startswith("judge error:")):
+                            state.consecutive_critic_failures += 1
                     if verdict == "done":
                         _update_supergoal_gates(state)
                     else:
@@ -3092,23 +3124,21 @@ class GoalManager:
                 logger.debug("supergoal critic merge failed: %s", exc)
                 state.consecutive_critic_failures += 1
 
-        # Track consecutive judge parse failures. Reset on any usable reply,
-        # including API / transport errors (parse_failed=False) so a flaky
-        # network doesn't trip the auto-pause meant for bad judge models.
-        if parse_failed:
-            state.consecutive_parse_failures += 1
-        else:
-            state.consecutive_parse_failures = 0
+        if not judge_health_tracked:
+            # Track consecutive judge parse failures. Reset on any usable reply,
+            # including API / transport errors (parse_failed=False) so a flaky
+            # network doesn't trip the auto-pause meant for bad judge models.
+            if parse_failed:
+                state.consecutive_parse_failures += 1
+            else:
+                state.consecutive_parse_failures = 0
 
-
-
-
-        # Track consecutive judge API/transport errors separately.
-        # "judge error: ..." in the reason signals an API call failure.
-        if reason and reason.startswith("judge error:"):
-            state.consecutive_judge_api_failures += 1
-        else:
-            state.consecutive_judge_api_failures = 0
+            # Track consecutive judge API/transport errors separately.
+            # "judge error: ..." in the reason signals an API call failure.
+            if reason and reason.startswith("judge error:"):
+                state.consecutive_judge_api_failures += 1
+            else:
+                state.consecutive_judge_api_failures = 0
 
         gate_result = done_gate_result or _reconcile_done_with_supergoal_gates(
             state,
@@ -3124,6 +3154,20 @@ class GoalManager:
         gate_vetoed = gate_result.gate_vetoed
         done_followup_gate_ids = gate_result.done_followup_gate_ids
         if gate_result.paused:
+            if paused_side_effects_applied:
+                decision = _gate_pause_decision(gate_result, reason=reason)
+                paused_reason = state.paused_reason or gate_result.paused_reason
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason or gate_result.paused_message,
+                    "data": {
+                        "reason": paused_reason,
+                        "trigger": "same_gate_stall",
+                        "gate_id": gate_result.paused_gate_id,
+                        "same_gate_stall_count": state.same_gate_stall_count,
+                    },
+                }
+                return decision
             state.status = "paused"
             state.paused_reason = state.paused_reason or gate_result.paused_reason
             save_goal(self.session_id, state)
@@ -3140,15 +3184,16 @@ class GoalManager:
             return _gate_pause_decision(gate_result, reason=reason)
 
         if verdict == "done":
-            state.status = "done"
-            state.should_replan = False
-            state.next_best_action = ""
-            state.action_proposal = SupergoalActionProposal()
-            state.hard_gate_reason = ""
-            _reset_gate_stall(state)
-            _update_supergoal_plan_from_progress(state, verdict="done")
-            save_goal(self.session_id, state)
-            self._record_event("done", summary=reason, data={"reason": reason})
+            if not done_side_effects_applied:
+                state.status = "done"
+                state.should_replan = False
+                state.next_best_action = ""
+                state.action_proposal = SupergoalActionProposal()
+                state.hard_gate_reason = ""
+                _reset_gate_stall(state)
+                _update_supergoal_plan_from_progress(state, verdict="done")
+                save_goal(self.session_id, state)
+                self._record_event("done", summary=reason, data={"reason": reason})
             return _gate_done_decision(reason=reason, followup_gate_ids=done_followup_gate_ids)
 
         # Auto-pause when the judge model can't produce the expected JSON
@@ -3158,54 +3203,68 @@ class GoalManager:
         # weak judge models burn the entire turn budget returning prose or
         # empty strings.
         if state.consecutive_parse_failures >= DEFAULT_MAX_CONSECUTIVE_PARSE_FAILURES:
-            state.status = "paused"
-            state.paused_reason = (
+            paused_reason = (
                 f"judge model returned unparseable output {state.consecutive_parse_failures} turns in a row"
             )
+            message = (
+                f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
+                "isn't returning the required JSON verdict. Route the judge to a stricter "
+                "model in ~/.hermes/config.yaml:\n"
+                "  auxiliary:\n"
+                "    goal_judge:\n"
+                "      provider: openrouter\n"
+                "      model: google/gemini-3-flash-preview\n"
+                "Then /goal resume to continue."
+            )
+            if paused_side_effects_applied:
+                decision = _render_paused_decision(reason=reason, message=message)
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason,
+                    "data": {"reason": paused_reason, "trigger": "parse_failures"},
+                }
+                return decision
+            state.status = "paused"
+            state.paused_reason = paused_reason
             save_goal(self.session_id, state)
             self._record_event(
                 "paused",
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "parse_failures"},
             )
-            return _render_paused_decision(
-                reason=reason,
-                message=(
-                    f"⏸ Goal paused — the judge model ({state.consecutive_parse_failures} turns) "
-                    "isn't returning the required JSON verdict. Route the judge to a stricter "
-                    "model in ~/.hermes/config.yaml:\n"
-                    "  auxiliary:\n"
-                    "    goal_judge:\n"
-                    "      provider: openrouter\n"
-                    "      model: google/gemini-3-flash-preview\n"
-                    "Then /goal resume to continue."
-                ),
-            )
+            return _render_paused_decision(reason=reason, message=message)
 
         # Auto-pause when the judge API keeps failing (e.g. CPA exhausted,
         # endpoint down, auth errors).  Without this guard, a dead judge
         # endpoint causes the supergoal to loop forever with
         # verdict="continue" from the fallback in judge_goal().
         if state.consecutive_judge_api_failures >= DEFAULT_MAX_CONSECUTIVE_JUDGE_API_FAILURES:
-            state.status = "paused"
-            state.paused_reason = (
+            paused_reason = (
                 f"judge API failed {state.consecutive_judge_api_failures} turns in a row "
                 f"(last: {state.last_reason})"
             )
+            message = (
+                f"⏸ Goal paused — the judge API failed "
+                f"{state.consecutive_judge_api_failures} turns in a row. "
+                "Check CPA quota / endpoint health, then /goal resume."
+            )
+            if paused_side_effects_applied:
+                decision = _render_paused_decision(reason=reason, message=message)
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason,
+                    "data": {"reason": paused_reason, "trigger": "judge_api_failures"},
+                }
+                return decision
+            state.status = "paused"
+            state.paused_reason = paused_reason
             save_goal(self.session_id, state)
             self._record_event(
                 "paused",
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "judge_api_failures"},
             )
-            return _render_paused_decision(
-                reason=reason,
-                message=(
-                    f"⏸ Goal paused — the judge API failed "
-                    f"{state.consecutive_judge_api_failures} turns in a row. "
-                    "Check CPA quota / endpoint health, then /goal resume."
-                ),
-            )
+            return _render_paused_decision(reason=reason, message=message)
 
         # Supergoal board/critic is part of the control system, not a cosmetic
         # side-task. If it cannot update for several turns, fail closed only
@@ -3222,61 +3281,80 @@ class GoalManager:
             and state.consecutive_critic_failures >= DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES
             and not deterministic_board_progress
         ):
-            state.status = "paused"
-            state.paused_reason = (
-                f"supergoal critic/board update failed {state.consecutive_critic_failures} turns in a row"
+            paused_reason = f"supergoal critic/board update failed {state.consecutive_critic_failures} turns in a row"
+            next_best_action = "Repair auxiliary critic/board update path, then resume with a strategic replan."
+            message = (
+                f"⏸ Supergoal paused — critic/board update failed "
+                f"{state.consecutive_critic_failures} turns in a row. Check auxiliary goal_judge/critic health, then /supergoal resume."
             )
+            if paused_side_effects_applied:
+                decision = _render_paused_decision(reason=reason, message=message)
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason,
+                    "should_replan": True,
+                    "next_best_action": next_best_action,
+                    "data": {"reason": paused_reason, "trigger": "critic_failures"},
+                }
+                return decision
+            state.status = "paused"
+            state.paused_reason = paused_reason
             state.should_replan = True
-            state.next_best_action = state.next_best_action or "Repair auxiliary critic/board update path, then resume with a strategic replan."
+            state.next_best_action = state.next_best_action or next_best_action
             save_goal(self.session_id, state)
             self._record_event(
                 "paused",
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "critic_failures"},
             )
-            return _render_paused_decision(
-                reason=reason,
-                message=(
-                    f"⏸ Supergoal paused — critic/board update failed "
-                    f"{state.consecutive_critic_failures} turns in a row. Check auxiliary goal_judge/critic health, then /supergoal resume."
-                ),
-            )
+            return _render_paused_decision(reason=reason, message=message)
 
         if state.turns_used >= state.max_turns:
+            paused_reason = f"turn budget exhausted ({state.turns_used}/{state.max_turns})"
+            message = (
+                f"⏸ Goal paused — {state.turns_used}/{state.max_turns} turns used. "
+                "Use /goal resume to keep going, or /goal clear to stop."
+            )
+            if paused_side_effects_applied:
+                decision = _render_paused_decision(reason=reason, message=message)
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason,
+                    "data": {"reason": paused_reason, "trigger": "budget"},
+                }
+                return decision
             state.status = "paused"
-            state.paused_reason = f"turn budget exhausted ({state.turns_used}/{state.max_turns})"
+            state.paused_reason = paused_reason
             save_goal(self.session_id, state)
             self._record_event(
                 "paused",
                 summary=state.paused_reason,
                 data={"reason": state.paused_reason, "trigger": "budget"},
             )
-            return _render_paused_decision(
-                reason=reason,
-                message=(
-                    f"⏸ Goal paused — {state.turns_used}/{state.max_turns} turns used. "
-                    "Use /goal resume to keep going, or /goal clear to stop."
-                ),
-            )
+            return _render_paused_decision(reason=reason, message=message)
 
         if not gate_vetoed:
             _reset_gate_stall(state)
 
-        save_goal(self.session_id, state)
-        self._record_event(
-            "turn_evaluated",
-            summary=reason,
-            data={
-                "verdict": verdict,
-                "reason": reason,
-                "turns_used": state.turns_used,
-                "current_step_id": state.current_step_id,
-            },
-        )
+        if continue_side_effects_applied:
+            continuation_prompt = None
+        else:
+            save_goal(self.session_id, state)
+            self._record_event(
+                "turn_evaluated",
+                summary=reason,
+                data={
+                    "verdict": verdict,
+                    "reason": reason,
+                    "turns_used": state.turns_used,
+                    "current_step_id": state.current_step_id,
+                },
+            )
+            continuation_prompt = self.next_continuation_prompt()
         return _render_continue_decision(
             state,
             reason=reason,
-            continuation_prompt=self.next_continuation_prompt(),
+            continuation_prompt=continuation_prompt,
         )
 
     def next_continuation_prompt(self) -> Optional[str]:
