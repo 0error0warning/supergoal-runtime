@@ -1618,7 +1618,7 @@ def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -
     return _render_paused_decision(reason=reason, message=result.paused_message)
 
 
-def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
+def _render_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
     return {
         "status": "done",
         "control_status": "done_with_followups" if followup_gate_ids else "done",
@@ -1629,6 +1629,10 @@ def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[st
         "reason": reason,
         "message": f"✓ Goal achieved: {reason}",
     }
+
+
+def _gate_done_decision(*, reason: str, followup_gate_ids: List[str]) -> Dict[str, Any]:
+    return _render_done_decision(reason=reason, followup_gate_ids=followup_gate_ids)
 
 
 def _reconcile_done_with_supergoal_gates(
