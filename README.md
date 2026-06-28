@@ -234,7 +234,6 @@ docs/architecture.md                        # architectural rationale
 docs/principles.md                          # why Supergoal exists and what principles guide it
 docs/completion-gate-conflict.md            # real completion/gate conflict diagnosis
 scripts/apply.sh                            # helper to apply the patch to a Hermes checkout
-reference-runs/                             # redacted real run logs and state snapshots
 ```
 
 ## Apply
