@@ -9,6 +9,7 @@ controller-facing values are explicit and typed here.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import re
 from typing import Any, Callable, Dict, List, Literal, Optional, cast
 
 
@@ -16,6 +17,7 @@ ControlStatus = Literal[
     "continue",
     "done",
     "done_with_followups",
+    "partial_blocked",
     "blocked",
     "paused_budget",
     "paused_stalled",
@@ -28,6 +30,7 @@ _CONTROL_STATUS_VALUES = {
     "continue",
     "done",
     "done_with_followups",
+    "partial_blocked",
     "blocked",
     "paused_budget",
     "paused_stalled",
@@ -235,6 +238,9 @@ def _infer_control_status(
     message: str,
 ) -> ControlStatus:
     text = " ".join([legacy_status, verdict, reason, message]).lower()
+    terminal_blocker = _infer_terminal_blocker_status(text)
+    if terminal_blocker:
+        return terminal_blocker
     if legacy_status == "done" or verdict == "done":
         if "follow-up gates open" in text or "followup gates open" in text:
             return "done_with_followups"
@@ -254,3 +260,64 @@ def _infer_control_status(
     if "user" in text and ("input" in text or "need" in text):
         return "needs_user"
     return "blocked" if legacy_status == "paused" else "continue"
+
+
+_TERMINAL_BLOCKER_MARKERS = (
+    "live_forbidden",
+    "policy deny",
+    "policy denied",
+    "policy denial",
+    "blocked by policy",
+    "denied by policy",
+    "disallowed by policy",
+    "security policy",
+    "safety policy",
+    "cannot continue until",
+    "can't continue until",
+    "unable to continue until",
+    "could not continue until",
+)
+
+_PERMISSION_DENIED_ACTIVE_RE = re.compile(
+    r"\b(?:blocked|stopped|paused|prevented|unable|cannot|can't|could not)\b[^.?!;]{0,80}\bpermission denied\b"
+    r"|\bpermission denied\b[^.?!;]{0,80}\b(?:blocks?|blocked|prevents?|prevented|stops?|stopped|cannot|can't|unable|could not)\b",
+    re.IGNORECASE,
+)
+
+_NEEDS_USER_MARKERS = (
+    "needs user input",
+    "need user input",
+    "needs input from the user",
+    "need input from the user",
+    "requires user input",
+    "requires human input",
+    "waiting for user",
+)
+
+
+def _infer_terminal_blocker_status(text: str) -> ControlStatus | None:
+    """Classify terminal-looking blocker prose before DONE wins.
+
+    ``done`` means successful convergence.  Long-running /supergoal loops need
+    a separate terminal control surface for partial results stopped by policy,
+    permissions, or required human input.  Keep the markers intentionally
+    specific so phrases like "blocked/no-edge outcome recorded" in gate labels
+    do not accidentally demote a legitimate no-edge completion.
+    """
+    lowered = (text or "").lower()
+    if any(marker in lowered for marker in _NEEDS_USER_MARKERS):
+        return "needs_user"
+    resolved_markers = (
+        "resolved",
+        "resolving",
+        "completed after",
+        "successfully completed",
+        "fixed the permission denied",
+        "fixed permission denied",
+    )
+    if not any(marker in lowered for marker in resolved_markers):
+        if any(marker in lowered for marker in _TERMINAL_BLOCKER_MARKERS):
+            return "partial_blocked"
+    if _PERMISSION_DENIED_ACTIVE_RE.search(lowered):
+        return "partial_blocked"
+    return None

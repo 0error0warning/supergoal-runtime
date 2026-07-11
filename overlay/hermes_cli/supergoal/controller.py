@@ -229,7 +229,18 @@ class SupergoalController:
         # is staged: controller can precompute the done+gates result and the
         # adapter will apply persistence/return-shaping without recomputing it.
         done_gate_result = None
-        if self.reconcile_done_gates and evaluation.get("verdict") == "done":
+        terminal_blocker_status = ""
+        if evaluation.get("verdict") == "done" and getattr(ctx.state, "mode", "goal") == "supergoal":
+            from hermes_cli.supergoal.domain import _infer_terminal_blocker_status
+
+            terminal_blocker_status = _infer_terminal_blocker_status(
+                " ".join([
+                    str(evaluation.get("verdict") or ""),
+                    str(evaluation.get("reason") or ""),
+                    ctx.last_response or "",
+                ])
+            ) or ""
+        if self.reconcile_done_gates and evaluation.get("verdict") == "done" and not terminal_blocker_status:
             # Legacy gate reconciliation used to run after last_verdict/last_reason
             # were mirrored onto state. Preserve that visible state contract before
             # moving the reconciliation call into the controller.

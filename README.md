@@ -145,6 +145,8 @@ A good long-running agent must know when to stop, branch, ask, or write a no-edg
 
 Long-running agents with shell, file, network, API, database, or trading permissions need pre-execution policy, not only post-hoc judging. This patch now includes `hermes_cli/supergoal/policy.py` plus pre-tool integration in `agent/tool_executor.py` / `model_tools.py`: permission contracts, filesystem/network/destructive-action checks, and replay tests for policy decisions. The remaining work is richer user-facing policy configuration and more domain-specific verifiers, not the first policy boundary itself.
 
+Known limitation: `full_auto` currently preserves the legacy unattended behavior and does not yet enforce the stricter ask→deny / sandbox-downgrade semantics planned for policy hardening.
+
 ## What this patch currently changes
 
 1. **Compression-safe logical goal identity**

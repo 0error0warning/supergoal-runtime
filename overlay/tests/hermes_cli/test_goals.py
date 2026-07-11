@@ -1276,6 +1276,106 @@ class TestGoalManager:
         assert captured["max_tokens"] == 512
         assert captured["timeout"] == 7
 
+    def test_supergoal_blocked_done_verdict_is_partial_blocked_not_success(self, hermes_home):
+        from hermes_cli import goals
+        from hermes_cli.goals import GoalManager
+
+        mgr = GoalManager(session_id="super-terminal-blocked-sid")
+        state = mgr.set("把免费数据接满并跑完整量化评估", max_turns=240, mode="supergoal")
+        state.evidence_layers = {"artifact": ["/tmp/partial_report.md"], "verification": ["pytest passed"]}
+        for gate in state.gates:
+            if gate.id == "G2":
+                gate.status = "passed"
+                gate.evidence = "external research checked"
+
+        response = (
+            "Partial report generated, but full free-data ingestion is blocked by live_forbidden. "
+            "CoinGecko/DefiLlama/RSS remain pending; cannot continue until policy/workdir is fixed."
+        )
+        with patch.object(goals, "judge_goal", return_value=("done", "blocked by live_forbidden; partial report exists", False)), \
+             patch.object(goals, "critic_supergoal", return_value={
+                 "progress": "weak",
+                 "strategy_health": "blocked",
+                 "new_blockers": ["live_forbidden prevents remaining free-data ingestion"],
+             }):
+            decision = mgr.evaluate_after_turn(response)
+
+        assert decision["should_continue"] is False
+        assert decision["status"] == "paused"
+        assert decision["control_status"] == "partial_blocked"
+        assert decision["verdict"] == "done"
+        assert "live_forbidden" in (mgr.state.paused_reason or "")
+        assert mgr.state.status == "paused"
+        card = mgr.status_card()
+        assert card.status == "paused"
+        assert card.level == "blocked"
+        assert card.color == "red"
+
+    def test_control_status_done_reason_with_blocker_is_not_done(self, hermes_home):
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        decision = ControllerDecision.from_dict({
+            "status": "done",
+            "verdict": "done",
+            "reason": "live_forbidden prevented remaining data sources from being connected",
+            "should_continue": False,
+            "message": "Goal achieved: live_forbidden prevented completion",
+        })
+
+        assert decision.status == "partial_blocked"
+
+    def test_control_status_policy_blocker_wording_is_not_done(self, hermes_home):
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        decision = ControllerDecision.from_dict({
+            "status": "done",
+            "verdict": "done",
+            "reason": "blocked by policy before remaining data sources were connected",
+            "should_continue": False,
+            "message": "Goal achieved: blocked by policy",
+        })
+
+        assert decision.status == "partial_blocked"
+
+    def test_control_status_historical_blocker_phrase_can_still_complete(self, hermes_home):
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        decision = ControllerDecision.from_dict({
+            "status": "done",
+            "verdict": "done",
+            "reason": "completed after resolving the issue previously blocked by policy",
+            "should_continue": False,
+            "message": "Goal achieved: blocker resolved",
+        })
+
+        assert decision.status == "done"
+
+    def test_control_status_resolved_permission_denied_can_still_complete(self, hermes_home):
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        decision = ControllerDecision.from_dict({
+            "status": "done",
+            "verdict": "done",
+            "reason": "fixed the permission denied error and completed the task",
+            "should_continue": False,
+            "message": "Goal achieved: permissions fixed",
+        })
+
+        assert decision.status == "done"
+
+    def test_control_status_active_permission_denied_is_partial_blocked(self, hermes_home):
+        from hermes_cli.supergoal.domain import ControllerDecision
+
+        decision = ControllerDecision.from_dict({
+            "status": "done",
+            "verdict": "done",
+            "reason": "cannot continue because permission denied blocks the remaining writes",
+            "should_continue": False,
+            "message": "Goal achieved: blocked",
+        })
+
+        assert decision.status == "partial_blocked"
+
     def test_supergoal_critic_failures_pause_when_no_board_progress(self, hermes_home):
         from hermes_cli import goals
         from hermes_cli.goals import GoalManager, DEFAULT_MAX_CONSECUTIVE_CRITIC_FAILURES

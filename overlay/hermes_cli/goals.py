@@ -228,11 +228,13 @@ JUDGE_SYSTEM_PROMPT = (
     "achieved a user's stated goal. You receive the goal text and the "
     "agent's most recent response. Your only job is to decide whether "
     "the goal is fully satisfied based on that response.\n\n"
-    "A goal is DONE only when:\n"
+    "A goal loop may stop only when:\n"
     "- The response explicitly confirms the goal was completed, OR\n"
     "- The response clearly shows the final deliverable was produced, OR\n"
     "- The response explains the goal is unachievable / blocked / needs "
-    "user input (treat this as DONE with reason describing the block).\n\n"
+    "user input. For blockers, say DONE only as a terminal stop signal; "
+    "the controller will classify it as blocked/needs-user rather than "
+    "successful completion.\n\n"
     "Otherwise the goal is NOT done — CONTINUE.\n\n"
     "Reply ONLY with a single JSON object on one line:\n"
     '{\"done\": <true|false>, \"reason\": \"<one-sentence rationale>\"}'
@@ -415,10 +417,10 @@ def _short_session_id(session_id: str) -> str:
 def _goal_status_level(status: str, state: "GoalState") -> Tuple[str, str]:
     if status == "done":
         return "success", "green"
-    if status == "paused":
-        return "paused", "grey"
     if getattr(state, "blockers", None) or getattr(state, "hard_gate_reason", ""):
         return "blocked", "red"
+    if status == "paused":
+        return "paused", "grey"
     if getattr(state, "same_gate_stall_count", 0) >= 2:
         return "stalled", "orange"
     if getattr(state, "should_replan", False):
@@ -1603,8 +1605,8 @@ def _render_continue_decision(
     }
 
 
-def _render_paused_decision(*, reason: str, message: str) -> Dict[str, Any]:
-    return {
+def _render_paused_decision(*, reason: str, message: str, control_status: str = "") -> Dict[str, Any]:
+    decision = {
         "status": "paused",
         "should_continue": False,
         "continuation_prompt": None,
@@ -1612,6 +1614,9 @@ def _render_paused_decision(*, reason: str, message: str) -> Dict[str, Any]:
         "reason": reason,
         "message": message,
     }
+    if control_status:
+        decision["control_status"] = control_status
+    return decision
 
 
 def _gate_pause_decision(result: DoneGateReconciliationResult, *, reason: str) -> Dict[str, Any]:
@@ -3140,12 +3145,22 @@ class GoalManager:
             else:
                 state.consecutive_judge_api_failures = 0
 
-        gate_result = done_gate_result or _reconcile_done_with_supergoal_gates(
-            state,
-            verdict=verdict,
-            reason=reason,
-            last_response=last_response,
-        )
+        terminal_blocker_status = ""
+        if verdict == "done" and getattr(state, "mode", "goal") == "supergoal":
+            from hermes_cli.supergoal.domain import _infer_terminal_blocker_status
+
+            terminal_blocker_status = _infer_terminal_blocker_status(
+                " ".join([verdict or "", reason or "", last_response or ""])
+            ) or ""
+        if terminal_blocker_status:
+            gate_result = DoneGateReconciliationResult(verdict=verdict, reason=reason)
+        else:
+            gate_result = done_gate_result or _reconcile_done_with_supergoal_gates(
+                state,
+                verdict=verdict,
+                reason=reason,
+                last_response=last_response,
+            )
         verdict = gate_result.verdict
         reason = gate_result.reason
         if done_gate_result is not None:
@@ -3182,6 +3197,51 @@ class GoalManager:
                 },
             )
             return _gate_pause_decision(gate_result, reason=reason)
+
+        if terminal_blocker_status:
+            paused_reason = reason or "supergoal stopped before successful completion"
+            message = f"⏸ Supergoal blocked — {paused_reason}"
+            if paused_side_effects_applied:
+                decision = _render_paused_decision(
+                    reason=reason,
+                    message=message,
+                    control_status=terminal_blocker_status,
+                )
+                decision["verdict"] = verdict
+                decision["pause_state"] = {
+                    "paused_reason": paused_reason,
+                    "summary": paused_reason,
+                    "should_replan": True,
+                    "next_best_action": "Resolve the blocker, then resume with a strategic replan.",
+                    "event_type": "blocked",
+                    "data": {
+                        "reason": paused_reason,
+                        "trigger": "terminal_blocker",
+                        "control_status": terminal_blocker_status,
+                    },
+                }
+                return decision
+            state.status = "paused"
+            state.paused_reason = paused_reason
+            state.should_replan = True
+            state.next_best_action = state.next_best_action or "Resolve the blocker, then resume with a strategic replan."
+            save_goal(self.session_id, state)
+            self._record_event(
+                "blocked",
+                summary=paused_reason,
+                data={
+                    "reason": paused_reason,
+                    "trigger": "terminal_blocker",
+                    "control_status": terminal_blocker_status,
+                },
+            )
+            decision = _render_paused_decision(
+                reason=reason,
+                message=message,
+                control_status=terminal_blocker_status,
+            )
+            decision["verdict"] = verdict
+            return decision
 
         if verdict == "done":
             if not done_side_effects_applied:

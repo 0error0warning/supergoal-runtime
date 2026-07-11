@@ -353,8 +353,19 @@ def evaluate_gates(
                     reason="no gate-eligible tool/human artifact or verification evidence is recorded",
                 )
         elif gate_id == "G4":
-            if getattr(state, "no_edge_report", "") or getattr(state, "last_verdict", "") == "done":
-                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final/blocked/no-edge outcome recorded", [], ""
+            from hermes_cli.supergoal.domain import _infer_terminal_blocker_status
+
+            terminal_blocker = _infer_terminal_blocker_status(
+                " ".join([
+                    str(getattr(state, "last_verdict", "") or ""),
+                    str(getattr(state, "last_reason", "") or ""),
+                    " ".join(str(b) for b in (getattr(state, "blockers", []) or [])),
+                ])
+            )
+            if getattr(state, "no_edge_report", ""):
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "no-edge outcome recorded", [], ""
+            elif getattr(state, "last_verdict", "") == "done" and not terminal_blocker:
+                gate.status, gate.evidence, gate.missing, gate.reason = "passed", "final evidence outcome recorded", [], ""
             else:
                 set_gate_open(gate, missing=["done verdict", "final evidence mapping"], reason="final evidence/outcome mapping is missing")
     return list(getattr(state, "gates", []) or [])
