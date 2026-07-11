@@ -1,0 +1,7 @@
+name: supergoal-runtime
+version: 0.1.0
+description: Minimal Phase 1 Supergoal runtime ABI spike.
+kind: standalone
+provides_tools: []
+provides_hooks:
+  - on_session_rotate
