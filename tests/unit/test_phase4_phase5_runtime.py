@@ -263,6 +263,32 @@ def test_generated_continuation_prompt_does_not_trigger_user_preemption(tmp_path
     assert state.paused_reason is None
 
 
+def test_runtime_passes_persisted_state_to_judge(tmp_path):
+    observed = {}
+
+    def judge(_goal, _response, **kwargs):
+        observed["state"] = kwargs.get("state")
+        return "continue", "more work", False
+
+    manager = RuntimeManager(
+        store=SupergoalStore(db_path=tmp_path / "state.db"),
+        judge=judge,
+        critic=lambda *_a, **_k: None,
+    )
+    manager.start("sess", "mission with evidence")
+    decision = manager.after_turn(
+        "sess",
+        final_response="artifact verified",
+        user_message=f"{CONTINUATION_PROMPT_PREFIX}\nGoal: mission with evidence",
+        turn_id="turn-state",
+    )
+
+    assert decision and decision["action"] == "continue"
+    assert observed["state"] is not None
+    assert observed["state"].goal == "mission with evidence"
+    assert observed["state"].turns_used == 1
+
+
 def test_concurrent_tool_evidence_is_session_scoped_and_redacted(tmp_path):
     store = SupergoalStore(db_path=tmp_path / "state.db")
     manager = RuntimeManager(store=store)

@@ -58,7 +58,15 @@ def _judge_from_ctx(ctx: Any):
     from .prompts import build_judge_messages
 
     def judge(goal: str, last_response: str, **kwargs: Any) -> tuple[str, str, bool]:
-        messages = build_judge_messages(goal, last_response, subgoals=kwargs.get("subgoals"))
+        state = kwargs.get("state")
+        render_board = getattr(state, "render_supergoal_board", None)
+        state_board = str(render_board() or "") if callable(render_board) else ""
+        messages = build_judge_messages(
+            goal,
+            last_response,
+            subgoals=kwargs.get("subgoals"),
+            state_board=state_board,
+        )
         raw = _llm_text(getattr(ctx, "llm", None), messages)
         data = _parse_json_object(raw)
         if not data:

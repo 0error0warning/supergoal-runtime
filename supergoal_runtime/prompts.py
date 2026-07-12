@@ -37,11 +37,13 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
 
 JUDGE_SYSTEM_PROMPT = (
     "You are a strict judge evaluating whether an autonomous agent has achieved "
-    "a user's stated goal. Reply only with JSON."
+    "a user's stated goal. Treat the persisted state board as prior-turn, "
+    "tool-backed evidence; do not judge only from the latest response. Reply only with JSON."
 )
 
 JUDGE_USER_PROMPT_TEMPLATE = (
     "Goal:\n{goal}\n\n"
+    "Persisted state board and prior tool-backed evidence:\n{state_board}\n\n"
     "Agent's most recent response:\n{response}\n\n"
     "Current time: {current_time}\n\n"
     "Is the goal satisfied? Reply as "
@@ -52,6 +54,7 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
     "Goal:\n{goal}\n\n"
     "Additional criteria the user added mid-loop (all must also be satisfied "
     "for the goal to be DONE):\n{subgoals_block}\n\n"
+    "Persisted state board and prior tool-backed evidence:\n{state_board}\n\n"
     "Agent's most recent response:\n{response}\n\n"
     "Current time: {current_time}\n\n"
     "Decision: For each numbered criterion above, require concrete evidence. "
@@ -112,20 +115,24 @@ def build_judge_messages(
     last_response: str,
     *,
     subgoals: Sequence[str] | None = None,
+    state_board: str = "",
     now: datetime | None = None,
 ) -> list[dict[str, str]]:
     current_time = (now or datetime.now(timezone.utc)).astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
     clean_subgoals = [str(s).strip() for s in (subgoals or []) if str(s).strip()]
+    board = truncate(state_board or "(no persisted evidence yet)", 5000)
     if clean_subgoals:
         user = JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE.format(
             goal=truncate(goal, 2000),
             subgoals_block=truncate(render_subgoals_block(clean_subgoals), 2000),
+            state_board=board,
             response=truncate(last_response, JUDGE_RESPONSE_SNIPPET_CHARS),
             current_time=current_time,
         )
     else:
         user = JUDGE_USER_PROMPT_TEMPLATE.format(
             goal=truncate(goal, 2000),
+            state_board=board,
             response=truncate(last_response, JUDGE_RESPONSE_SNIPPET_CHARS),
             current_time=current_time,
         )

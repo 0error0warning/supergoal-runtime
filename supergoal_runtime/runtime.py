@@ -272,6 +272,7 @@ class RuntimeManager:
             subgoals=state.subgoals or None,
             background_processes=background_processes or [],
             contract=state.contract if state.has_contract() else None,
+            state=state,
         )
         verdict = str(judge_result[0] if len(judge_result) > 0 else "continue")
         reason = str(judge_result[1] if len(judge_result) > 1 else "")
