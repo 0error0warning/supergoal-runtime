@@ -64,6 +64,37 @@ def _pid_alive(pid: int | None) -> bool:
         return False
 
 
+def _has_explicit_completion_claim(text: str) -> bool:
+    normalized = " ".join(str(text or "").casefold().split())
+    if not normalized:
+        return False
+    negative = (
+        "尚未完成",
+        "任务未完成",
+        "还未完成",
+        "等待下一轮",
+        "not complete",
+        "not finished",
+        "incomplete",
+        "more work",
+    )
+    if any(marker in normalized for marker in negative):
+        return False
+    positive = (
+        "全部完成",
+        "整体完成",
+        "整个任务完成",
+        "已完成全部",
+        "任务已完成",
+        "goal is complete",
+        "task is complete",
+        "completed the entire task",
+        "all requirements are satisfied",
+        "all acceptance criteria are satisfied",
+    )
+    return any(marker in normalized for marker in positive)
+
+
 class RuntimeManager:
     def __init__(
         self,
@@ -297,16 +328,34 @@ class RuntimeManager:
             self.save_state(state, [*events, _event("blocked", turn=state.turns_used, summary=state.paused_reason, data={"control_status": terminal})])
             return {"action": "pause", "notice": status_line(state), "dedupe_key": f"{state.goal_run_id}:blocked:{turn_id}", "state_version": state.turns_used}
 
-        if verdict == "done":
+        completion_claim = _has_explicit_completion_claim(final_response)
+        verification_seen = any(event.get("type") == "verification_observed" for event in events) or any(
+            event.get("type") == "verification_observed" for event in self.store.load_events(state.goal_run_id)
+        )
+        if verdict == "done" or (completion_claim and verification_seen):
             reconcile_done_evidence_gates(state, final_response, reason)
             update_supergoal_gates(state)
             first_blocking = first_blocking_failure(state)
             if first_blocking is None:
+                completion_reason = reason if verdict == "done" else "explicit completion confirmed by tool-backed gates"
                 state.status = "done"
+                state.last_verdict = "done"
+                state.last_reason = completion_reason
                 state.should_replan = False
                 state.next_best_action = ""
                 state.action_proposal = SupergoalActionProposal()
-                self.save_state(state, [*events, _event("done", turn=state.turns_used, summary=reason, data={"reason": reason})])
+                self.save_state(
+                    state,
+                    [
+                        *events,
+                        _event(
+                            "done",
+                            turn=state.turns_used,
+                            summary=completion_reason,
+                            data={"reason": completion_reason, "local_completion": verdict != "done"},
+                        ),
+                    ],
+                )
                 return {"action": "done", "notice": status_line(state), "dedupe_key": f"{state.goal_run_id}:done", "state_version": state.turns_used}
 
         if state.turns_used >= state.max_turns:

@@ -584,6 +584,7 @@ class GoalState:
     def render_supergoal_board(self) -> str:
         parts = [
             f"objective: {self.goal}",
+            f"turns_used: {self.turns_used}/{self.max_turns}; latest_completed_turn: {self.turns_used}",
             f"progress: {self.progress}; strategy_health: {self.strategy_health}; root_cause_confidence: {self.root_cause_confidence:.2f}",
             f"literalism_risk: {self.literalism_risk}; research_sufficiency: {self.research_sufficiency}",
         ]
@@ -599,6 +600,10 @@ class GoalState:
             parts.append("hard_gate: " + self.hard_gate_reason)
         if self.evidence_layers:
             parts.append("evidence_layers: " + "; ".join(f"{k}={len(v)}" for k, v in sorted(self.evidence_layers.items())))
+        if self.evidence:
+            compact_evidence = [" ".join(str(item).split())[:240] for item in self.evidence[-8:] if str(item).strip()]
+            if compact_evidence:
+                parts.append("recent_evidence: " + " | ".join(compact_evidence))
         if self.next_best_action:
             parts.append("next_best_action: " + self.next_best_action)
         if self.should_replan:

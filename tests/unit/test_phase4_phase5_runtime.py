@@ -289,6 +289,66 @@ def test_runtime_passes_persisted_state_to_judge(tmp_path):
     assert observed["state"].turns_used == 1
 
 
+def test_explicit_completion_with_tool_backed_gates_stops_weak_judge_loop(tmp_path):
+    store = SupergoalStore(db_path=tmp_path / "state.db")
+    manager = RuntimeManager(
+        store=store,
+        judge=lambda *_a, **_k: ("continue", "weak judge is uncertain", False),
+        critic=lambda *_a, **_k: None,
+    )
+    manager.start("sess", "create and verify artifact")
+    hook = ToolHookHandler(store)
+    hook.post_tool_call(
+        session_id="sess",
+        tool_name="write_file",
+        args={"path": "/tmp/final.txt"},
+        result={"path": "/tmp/final.txt", "success": True},
+        tool_call_id="call-write",
+        turn_id="turn-final",
+    )
+    hook.post_tool_call(
+        session_id="sess",
+        tool_name="terminal",
+        args={"command": "sha256sum /tmp/final.txt"},
+        result={"output": "verification passed", "exit_code": 0},
+        tool_call_id="call-verify",
+        turn_id="turn-final",
+    )
+
+    decision = manager.after_turn(
+        "sess",
+        final_response="任务已全部完成，文件内容和 sha256 已实际验证通过。",
+        user_message=f"{CONTINUATION_PROMPT_PREFIX}\nGoal: create and verify artifact",
+        turn_id="turn-final",
+    )
+
+    assert decision and decision["action"] == "done"
+    state = manager.load_state_for_session("sess")
+    assert state is not None and state.status == "done"
+    assert state.last_verdict == "done"
+    assert state.last_reason == "explicit completion confirmed by tool-backed gates"
+
+
+def test_partial_completion_wording_does_not_trigger_local_done(tmp_path):
+    manager = RuntimeManager(
+        store=SupergoalStore(db_path=tmp_path / "state.db"),
+        judge=lambda *_a, **_k: ("continue", "phase 2 required", False),
+        critic=lambda *_a, **_k: None,
+    )
+    manager.start("sess", "two phase mission")
+
+    decision = manager.after_turn(
+        "sess",
+        final_response="阶段1已完成，但任务尚未完成，等待下一轮。",
+        user_message=f"{CONTINUATION_PROMPT_PREFIX}\nGoal: two phase mission",
+        turn_id="turn-partial",
+    )
+
+    assert decision and decision["action"] == "continue"
+    state = manager.load_state_for_session("sess")
+    assert state is not None and state.status == "active"
+
+
 def test_concurrent_tool_evidence_is_session_scoped_and_redacted(tmp_path):
     store = SupergoalStore(db_path=tmp_path / "state.db")
     manager = RuntimeManager(store=store)

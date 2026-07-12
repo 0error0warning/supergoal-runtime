@@ -66,6 +66,7 @@ def _judge_from_ctx(ctx: Any):
             last_response,
             subgoals=kwargs.get("subgoals"),
             state_board=state_board,
+            turn_number=int(getattr(state, "turns_used", 0) or 0),
         )
         raw = _llm_text(getattr(ctx, "llm", None), messages)
         data = _parse_json_object(raw)

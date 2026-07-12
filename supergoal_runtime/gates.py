@@ -169,6 +169,12 @@ _COMPLETION_MARKERS = (
     "final report",
     "goal achieved",
     "mission accomplished",
+    "已完成",
+    "全部完成",
+    "整体完成",
+    "任务完成",
+    "目标达成",
+    "验收通过",
 )
 _EVIDENCE_MARKERS = (
     "verified",
@@ -188,6 +194,14 @@ _EVIDENCE_MARKERS = (
     "report",
     "log",
     "logs",
+    "验证",
+    "校验",
+    "测试通过",
+    "证据",
+    "产物",
+    "文件",
+    "哈希",
+    "sha256",
 )
 _ARTIFACT_PATH_RE = re.compile(
     r"(?:(?:^|\s)(?:[./~][\w./-]+|[\w.-]+/[\w./-]+)\.(?:py|ts|tsx|js|json|md|txt|csv|log|html|yaml|yml|png|jpg|pdf))",

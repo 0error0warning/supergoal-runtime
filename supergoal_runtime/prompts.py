@@ -44,6 +44,8 @@ JUDGE_SYSTEM_PROMPT = (
 JUDGE_USER_PROMPT_TEMPLATE = (
     "Goal:\n{goal}\n\n"
     "Persisted state board and prior tool-backed evidence:\n{state_board}\n\n"
+    "The latest response is from completed turn {turn_number}. Constraints that explicitly apply "
+    "only to the first turn must not be applied to later turns.\n\n"
     "Agent's most recent response:\n{response}\n\n"
     "Current time: {current_time}\n\n"
     "Is the goal satisfied? Reply as "
@@ -55,6 +57,8 @@ JUDGE_USER_PROMPT_WITH_SUBGOALS_TEMPLATE = (
     "Additional criteria the user added mid-loop (all must also be satisfied "
     "for the goal to be DONE):\n{subgoals_block}\n\n"
     "Persisted state board and prior tool-backed evidence:\n{state_board}\n\n"
+    "The latest response is from completed turn {turn_number}. Constraints that explicitly apply "
+    "only to the first turn must not be applied to later turns.\n\n"
     "Agent's most recent response:\n{response}\n\n"
     "Current time: {current_time}\n\n"
     "Decision: For each numbered criterion above, require concrete evidence. "
@@ -116,6 +120,7 @@ def build_judge_messages(
     *,
     subgoals: Sequence[str] | None = None,
     state_board: str = "",
+    turn_number: int = 0,
     now: datetime | None = None,
 ) -> list[dict[str, str]]:
     current_time = (now or datetime.now(timezone.utc)).astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
@@ -126,6 +131,7 @@ def build_judge_messages(
             goal=truncate(goal, 2000),
             subgoals_block=truncate(render_subgoals_block(clean_subgoals), 2000),
             state_board=board,
+            turn_number=int(turn_number or 0),
             response=truncate(last_response, JUDGE_RESPONSE_SNIPPET_CHARS),
             current_time=current_time,
         )
@@ -133,6 +139,7 @@ def build_judge_messages(
         user = JUDGE_USER_PROMPT_TEMPLATE.format(
             goal=truncate(goal, 2000),
             state_board=board,
+            turn_number=int(turn_number or 0),
             response=truncate(last_response, JUDGE_RESPONSE_SNIPPET_CHARS),
             current_time=current_time,
         )
