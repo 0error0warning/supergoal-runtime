@@ -7,6 +7,13 @@ import pytest
 from supergoal_runtime.plugin import register
 
 
+@pytest.fixture(autouse=True)
+def _isolate_hermes_home(tmp_path, monkeypatch):
+    """Every plugin contract test uses a disposable profile home."""
+
+    monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes-home"))
+
+
 class HostCtx:
     def __init__(self):
         self.commands = {}

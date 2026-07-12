@@ -1,7 +1,11 @@
 name: supergoal-runtime
-version: 0.1.0
-description: Minimal Phase 1 Supergoal runtime ABI spike.
+version: 0.2.0
+description: Long-running mission controller plugin for Hermes Agent.
+author: 0error0warning
 kind: standalone
+plugin_abi: 1
+hermes_min_version: 0.18.2
 provides_tools: []
 provides_hooks:
   - on_session_rotate
+requires_env: []
