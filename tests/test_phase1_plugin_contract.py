@@ -37,18 +37,25 @@ async def test_sgx_start_uses_context_session_id_and_controller_continues():
 
     entry = host.commands["sgx"]
     assert entry["context_aware"] is True
-    command_ctx = SimpleNamespace(session_id="sess-1")
+    enqueued = []
 
-    result = await entry["handler"](command_ctx, "start")
+    async def enqueue_followup(prompt):
+        enqueued.append(prompt)
+        return True
 
-    assert result == "sgx started for session sess-1"
+    command_ctx = SimpleNamespace(session_id="sess-1", enqueue_followup=enqueue_followup)
+
+    result = await entry["handler"](command_ctx, "start Phase 5 mission")
+
+    assert result.startswith("Started /sgx supergoal")
+    assert enqueued
     assert host.controllers
     directive = host.controllers[0][2](
-        SimpleNamespace(session_id="sess-1")
+        SimpleNamespace(session_id="sess-1", final_response="not done", turn_id="t1")
     )
     assert directive.action == "continue"
     assert directive.continuation_prompt
-    assert directive.dedupe_key == "sgx:sess-1:1"
+    assert directive.dedupe_key
 
 
 @pytest.mark.asyncio
@@ -66,6 +73,9 @@ async def test_sgx_runs_through_real_host_command_and_controller_abi():
     manager = PluginManager()
     manager._discovered = True
     register(PluginContext(PluginManifest(name="supergoal-runtime"), manager))
+    plugin_runtime = manager._turn_controllers[0]["handler"].__self__
+    plugin_runtime.manager.judge = lambda *_a, **_k: ("continue", "needs work", False)
+    plugin_runtime.manager.critic = lambda *_a, **_k: None
 
     async def enqueue_followup(_prompt: str) -> bool:
         return True
@@ -86,17 +96,17 @@ async def test_sgx_runs_through_real_host_command_and_controller_abi():
         source=None,
         task_id="task",
         turn_id="turn-1",
-        user_message="/sgx start",
+        user_message="[Starting supergoal]\nGoal: host mission",
         final_response="started",
         interrupted=False,
         background_processes=[],
     )
 
     with patch("hermes_cli.plugins._plugin_manager", manager):
-        result = await dispatch_plugin_command_async("sgx", "start", command_ctx)
+        result = await dispatch_plugin_command_async("sgx", "start host mission", command_ctx)
         directive = await invoke_turn_controllers(turn_ctx)
 
-    assert result == "sgx started for session host-sess"
+    assert result.startswith("Started /sgx supergoal")
     assert directive.action == "continue"
     assert directive.continuation_prompt
 
@@ -105,7 +115,7 @@ def test_sgx_controller_noops_when_not_started():
     host = HostCtx()
     register(host)
 
-    directive = host.controllers[0][2](SimpleNamespace(session_id="missing"))
+    directive = host.controllers[0][2](SimpleNamespace(session_id="missing", final_response=""))
 
     assert directive is None
 
@@ -114,8 +124,14 @@ def test_sgx_controller_noops_when_not_started():
 async def test_sgx_binding_follows_compression_rotation():
     host = HostCtx()
     register(host)
-    command_ctx = SimpleNamespace(session_id="old-session")
-    await host.commands["sgx"]["handler"](command_ctx, "start")
+    enqueued = []
+
+    async def enqueue_followup(prompt):
+        enqueued.append(prompt)
+        return True
+
+    command_ctx = SimpleNamespace(session_id="old-session", enqueue_followup=enqueue_followup)
+    await host.commands["sgx"]["handler"](command_ctx, "start compression mission")
 
     host.hooks["on_session_rotate"][0](
         old_session_id="old-session",
@@ -125,10 +141,10 @@ async def test_sgx_binding_follows_compression_rotation():
         surface="gateway",
     )
 
-    assert host.controllers[0][2](SimpleNamespace(session_id="old-session")) is None
-    directive = host.controllers[0][2](SimpleNamespace(session_id="new-session"))
+    assert host.controllers[0][2](SimpleNamespace(session_id="old-session", final_response="")) is None
+    directive = host.controllers[0][2](SimpleNamespace(session_id="new-session", final_response="not done", turn_id="t2"))
     assert directive.action == "continue"
-    assert directive.dedupe_key == "sgx:new-session:1"
+    assert directive.dedupe_key
 
 
 def test_directory_plugin_loads_through_hermes_namespace():
@@ -148,4 +164,14 @@ def test_directory_plugin_loads_through_hermes_namespace():
 
     assert "sgx" in manager._plugin_commands
     assert manager._plugin_commands["sgx"]["context_aware"] is True
+    assert manager._plugin_commands["sgx"]["busy_safe_subcommands"] == (
+        "",
+        "status",
+        "pause",
+        "resume",
+        "clear",
+        "wait",
+        "unwait",
+        "replan",
+    )
     assert manager._turn_controllers

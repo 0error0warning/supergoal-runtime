@@ -1,6 +1,6 @@
 manifest_version: 1
 name: supergoal-runtime
-version: 0.2.0
+version: 0.5.0
 description: Long-running mission controller plugin for Hermes Agent.
 author: 0error0warning
 kind: standalone
@@ -8,5 +8,7 @@ plugin_abi: 1
 hermes_min_version: 0.18.2
 provides_tools: []
 provides_hooks:
+  - pre_tool_call
+  - post_tool_call
   - on_session_rotate
 requires_env: []

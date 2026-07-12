@@ -1,107 +1,115 @@
-"""Hermes registration and temporary Phase 1 command bridge.
-
-The production Supergoal command/controller moves here in later phases. Phase 2
-replaces process-global spike state with the plugin-owned SQLite repository.
-"""
+"""Hermes registration for the standalone Supergoal runtime."""
 
 from __future__ import annotations
 
+import json
 import time
-import uuid
 from typing import Any
 
+from .command import SupergoalCommandHandler, register_supergoal_command
+from .policy import ToolHookHandler
+from .runtime import RuntimeManager
 from .store import BindingConflictError, SupergoalStore
 
 
+def _parse_json_object(raw: str) -> dict[str, Any] | None:
+    if not raw:
+        return None
+    text = raw.strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        nl = text.find("\n")
+        if nl != -1:
+            text = text[nl + 1 :]
+    try:
+        data = json.loads(text)
+        return data if isinstance(data, dict) else None
+    except Exception:
+        start = text.find("{")
+        end = text.rfind("}")
+        if start == -1 or end <= start:
+            return None
+        try:
+            data = json.loads(text[start : end + 1])
+            return data if isinstance(data, dict) else None
+        except Exception:
+            return None
+
+
+def _llm_text(llm: Any, messages: list[dict[str, str]]) -> str:
+    if llm is None:
+        return ""
+    if callable(llm):
+        result = llm(messages=messages)
+    elif hasattr(llm, "complete"):
+        result = llm.complete(messages=messages)
+    elif hasattr(llm, "chat"):
+        result = llm.chat(messages=messages)
+    else:
+        return ""
+    if isinstance(result, str):
+        return result
+    if isinstance(result, dict):
+        return str(result.get("content") or result.get("text") or "")
+    return str(getattr(result, "content", "") or getattr(result, "text", "") or "")
+
+
+def _judge_from_ctx(ctx: Any):
+    from .prompts import build_judge_messages
+
+    def judge(goal: str, last_response: str, **kwargs: Any) -> tuple[str, str, bool]:
+        messages = build_judge_messages(goal, last_response, subgoals=kwargs.get("subgoals"))
+        raw = _llm_text(getattr(ctx, "llm", None), messages)
+        data = _parse_json_object(raw)
+        if not data:
+            return "continue", "judge callback unavailable or returned non-JSON", False
+        done = data.get("done")
+        if isinstance(done, str):
+            done_bool = done.strip().lower() in {"true", "yes", "1", "done"}
+        else:
+            done_bool = bool(done)
+        return ("done" if done_bool else "continue", str(data.get("reason") or "no reason provided"), False)
+
+    return judge
+
+
+def _critic_from_ctx(ctx: Any):
+    from .prompts import build_critic_messages
+
+    def critic(state: Any, last_response: str) -> dict[str, Any] | None:
+        raw = _llm_text(getattr(ctx, "llm", None), build_critic_messages(state, last_response))
+        return _parse_json_object(raw)
+
+    return critic
+
+
 class _PluginRuntime:
-    def __init__(self) -> None:
-        self._store_instance: SupergoalStore | None = None
-
-    @property
-    def store(self) -> SupergoalStore:
-        if self._store_instance is None:
-            self._store_instance = SupergoalStore()
-        return self._store_instance
-
-    async def handle_sgx(self, ctx: Any, raw_args: str) -> str:
-        args = (raw_args or "").strip().split()
-        if not args or args[0] != "start":
-            return "Usage: /sgx start"
-
-        existing = self.store.get_goal_run_id(ctx.session_id)
-        if existing:
-            return f"sgx already active for session {ctx.session_id}"
-
-        goal_run_id = f"gr_{uuid.uuid4().hex[:16]}"
-        state = {
-            "goal": "Phase 1 host ABI continuation spike",
-            "goal_run_id": goal_run_id,
-            "mode": "supergoal",
-            "status": "active",
-            "turns_used": 0,
-            "phase1_continuation_pending": True,
-            "created_at": time.time(),
-        }
-        self.store.import_run_bundle(
-            goal_run_id,
-            state,
-            bindings=[(ctx.session_id, "sgx_start")],
-            events=[
-                (
-                    {
-                        "ts": time.time(),
-                        "type": "set",
-                        "turn": 0,
-                        "summary": "temporary /sgx run started",
-                        "data": {"session_id": ctx.session_id},
-                    },
-                    "phase2:sgx_start",
-                    0,
-                )
-            ],
+    def __init__(self, ctx: Any) -> None:
+        self.store = SupergoalStore()
+        self.manager = RuntimeManager(
+            store=self.store,
+            judge=_judge_from_ctx(ctx),
+            critic=_critic_from_ctx(ctx),
         )
-        return f"sgx started for session {ctx.session_id}"
+        self.commands = SupergoalCommandHandler(self.manager)
+        self.tool_hooks = ToolHookHandler(self.store)
 
-    def after_turn(self, ctx: Any):
-        goal_run_id = self.store.get_goal_run_id(ctx.session_id)
-        if not goal_run_id or not self.store.is_current_session(ctx.session_id):
-            return None
-        state = self.store.load_run(goal_run_id)
-        if not state or state.get("status") != "active":
-            return None
-        if not state.get("phase1_continuation_pending", False):
-            return None
-
-        state["phase1_continuation_pending"] = False
-        state["turns_used"] = int(state.get("turns_used", 0) or 0) + 1
-        self.store.save_run_with_events(
-            goal_run_id,
-            state,
-            [
-                {
-                    "ts": time.time(),
-                    "type": "continuation_enqueued",
-                    "turn": state["turns_used"],
-                    "summary": "Phase 1 continuation returned to host",
-                    "data": {"session_id": ctx.session_id},
-                }
-            ],
+    def after_turn(self, ctx: Any) -> Any:
+        directive = self.manager.after_turn(
+            str(getattr(ctx, "session_id", "") or ""),
+            final_response=str(getattr(ctx, "final_response", "") or ""),
+            turn_id=str(getattr(ctx, "turn_id", "") or ""),
+            user_message=str(getattr(ctx, "user_message", "") or ""),
+            interrupted=bool(getattr(ctx, "interrupted", False)),
+            background_processes=list(getattr(ctx, "background_processes", []) or []),
         )
+        if not directive:
+            return None
         try:
             from hermes_cli.plugins import TurnDirective
         except Exception:
-            return {
-                "action": "continue",
-                "continuation_prompt": "Continue the /sgx Phase 1 spike.",
-                "dedupe_key": f"sgx:{ctx.session_id}:1",
-                "state_version": 1,
-            }
-        return TurnDirective(
-            action="continue",
-            continuation_prompt="Continue the /sgx Phase 1 spike.",
-            dedupe_key=f"sgx:{ctx.session_id}:1",
-            state_version=1,
-        )
+            return directive
+        return TurnDirective(**directive)
 
     def on_session_rotate(
         self,
@@ -111,13 +119,13 @@ class _PluginRuntime:
         reason: str,
         **_: Any,
     ) -> None:
-        if reason != "compression":
+        if reason not in {"compression", "context_compression"}:
             return
         try:
             goal_run_id = self.store.rotate_session_binding(
                 old_session_id,
                 new_session_id,
-                reason="compression",
+                reason=reason,
             )
         except BindingConflictError:
             return
@@ -128,10 +136,8 @@ class _PluginRuntime:
             {
                 "ts": time.time(),
                 "type": "session_rotated",
-                "turn": int(
-                    (self.store.load_run(goal_run_id) or {}).get("turns_used", 0) or 0
-                ),
-                "summary": "Hermes session rotated after compression",
+                "turn": int((self.store.load_run(goal_run_id) or {}).get("turns_used", 0) or 0),
+                "summary": "Hermes session rotated",
                 "data": {
                     "old_session_id": old_session_id,
                     "new_session_id": new_session_id,
@@ -142,17 +148,14 @@ class _PluginRuntime:
 
 
 def register(ctx: Any) -> None:
-    runtime = _PluginRuntime()
-    ctx.register_command(
-        "sgx",
-        runtime.handle_sgx,
-        description="Start the temporary Supergoal ABI spike",
-        args_hint="start",
-        context_aware=True,
-    )
+    runtime = _PluginRuntime(ctx)
+    for command_name in ("sgx", "supergoal", "sgoal"):
+        register_supergoal_command(ctx, runtime.commands, name=command_name)
     ctx.register_turn_controller(
-        "supergoal-runtime-phase2",
+        "supergoal-runtime",
         runtime.after_turn,
         priority=100,
     )
     ctx.register_hook("on_session_rotate", runtime.on_session_rotate)
+    ctx.register_hook("pre_tool_call", runtime.tool_hooks.pre_tool_call)
+    ctx.register_hook("post_tool_call", runtime.tool_hooks.post_tool_call)
