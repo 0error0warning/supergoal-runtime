@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = {file = "LICENSE"}
 authors = [{name = "0error0warning"}]
-dependencies = []
+dependencies = ["PyYAML>=6.0"]
 
 [project.entry-points."hermes_agent.plugins"]
 supergoal-runtime = "supergoal_runtime.plugin"
