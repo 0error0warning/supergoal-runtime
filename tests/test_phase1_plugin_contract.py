@@ -1,4 +1,7 @@
 from pathlib import Path
+import os
+import subprocess
+import sys
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -176,3 +179,60 @@ def test_directory_plugin_loads_through_hermes_namespace():
             "replan",
         )
     assert manager._turn_controllers
+
+
+def test_directory_plugin_after_turn_works_without_package_on_sys_path(tmp_path):
+    """Real directory loading must not rely on the repo parent staying on sys.path."""
+    import hermes_cli.plugins as host_plugins
+
+    plugin_root = Path(__file__).resolve().parents[1]
+    host_file = host_plugins.__file__
+    assert host_file is not None
+    core_root = Path(host_file).resolve().parents[1]
+    isolated_home = tmp_path / "isolated-home"
+    isolated_cwd = tmp_path / "cwd"
+    isolated_home.mkdir()
+    isolated_cwd.mkdir()
+    script = f'''\
+from types import SimpleNamespace
+from hermes_cli.plugins import PluginContext, PluginManager, PluginManifest
+manager = PluginManager()
+manifest = PluginManifest(name="supergoal-runtime", key="supergoal-runtime", path={str(plugin_root)!r}, source="user")
+module = manager._load_directory_module(manifest)
+module.register(PluginContext(manifest, manager))
+runtime = manager._turn_controllers[0]["handler"].__self__
+runtime.manager.judge = lambda *_a, **_k: ("continue", "phase 1 incomplete", False)
+runtime.manager.critic = lambda *_a, **_k: None
+runtime.manager.start("isolated-session", "two phase mission")
+runtime.tool_hooks.post_tool_call(
+    session_id="isolated-session",
+    tool_name="write_file",
+    args={{"path": "/tmp/phase1.txt"}},
+    result={{"ok": True}},
+    tool_call_id="call-isolated",
+    turn_id="turn-1",
+)
+directive = runtime.after_turn(SimpleNamespace(
+    session_id="isolated-session",
+    final_response="phase 1 complete; mission incomplete",
+    user_message="[Starting supergoal]\\nGoal: two phase mission",
+    turn_id="turn-1",
+    interrupted=False,
+    background_processes=[],
+))
+assert directive.action == "continue"
+print("DIRECTORY_AFTER_TURN_OK")
+'''
+    env = dict(os.environ)
+    env["HERMES_HOME"] = str(isolated_home)
+    env["PYTHONPATH"] = str(core_root)
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=isolated_cwd,
+        env=env,
+        text=True,
+        capture_output=True,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "DIRECTORY_AFTER_TURN_OK" in result.stdout

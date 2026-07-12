@@ -325,7 +325,7 @@ def project_events_to_board(
             if is_tool_backed:
                 add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", summary)
         elif etype == "tool_evidence_observed":
-            from supergoal_runtime.evidence import EvidenceRef, research_finding_from_evidence
+            from .evidence import EvidenceRef, research_finding_from_evidence
 
             ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
             if ref is not None:

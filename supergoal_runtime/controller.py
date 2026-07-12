@@ -15,7 +15,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable
 
-from supergoal_runtime.domain import (
+from .domain import (
     ActionProposal,
     ControllerDecision,
     DecisionDict,
@@ -25,7 +25,7 @@ from supergoal_runtime.domain import (
     TurnContext,
     _infer_terminal_blocker_status,
 )
-from supergoal_runtime.evaluators import EvaluatorSuite
+from .evaluators import EvaluatorSuite
 
 RuntimeOutcomeFn = Callable[..., DecisionDict]
 ObserveEventsFn = Callable[[TurnContext], int]
