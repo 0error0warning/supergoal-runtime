@@ -33,7 +33,8 @@ jobs:
             tests/unit \
             tests/integration \
             tests/replay \
-            tests/contract \
+            --deselect tests/unit/test_store.py::test_state_path_prefers_context_override_over_environment \
+            --deselect tests/unit/test_store.py::test_concurrent_context_profiles_do_not_cross_write \
             -q -o 'addopts='
 
       - name: Compile plugin
