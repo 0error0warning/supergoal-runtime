@@ -460,6 +460,28 @@ class SupergoalStore:
                 raise StoreError(f"unknown goal run {goal_run_id!r}")
             self._insert_event(conn, goal_run_id, event)
 
+    def append_event_once(
+        self,
+        goal_run_id: str,
+        event: Mapping[str, Any],
+        *,
+        source_key: str,
+        source_index: int = 0,
+    ) -> bool:
+        self.ensure_schema()
+        with self._transaction() as conn:
+            if not conn.execute(
+                "SELECT 1 FROM runs WHERE goal_run_id=?", (goal_run_id,)
+            ).fetchone():
+                raise StoreError(f"unknown goal run {goal_run_id!r}")
+            return self._insert_event(
+                conn,
+                goal_run_id,
+                event,
+                legacy_source_key=source_key,
+                legacy_source_index=source_index,
+            )
+
     def load_events(
         self, goal_run_id: str, *, limit: int = 1000
     ) -> list[dict[str, Any]]:
