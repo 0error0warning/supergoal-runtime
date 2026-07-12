@@ -162,16 +162,17 @@ def test_directory_plugin_loads_through_hermes_namespace():
     module = manager._load_directory_module(manifest)
     module.register(PluginContext(manifest, manager))
 
-    assert "sgx" in manager._plugin_commands
-    assert manager._plugin_commands["sgx"]["context_aware"] is True
-    assert manager._plugin_commands["sgx"]["busy_safe_subcommands"] == (
-        "",
-        "status",
-        "pause",
-        "resume",
-        "clear",
-        "wait",
-        "unwait",
-        "replan",
-    )
+    assert {"sgx", "supergoal", "sgoal"} <= set(manager._plugin_commands)
+    for command_name in ("sgx", "supergoal", "sgoal"):
+        assert manager._plugin_commands[command_name]["context_aware"] is True
+        assert manager._plugin_commands[command_name]["busy_safe_subcommands"] == (
+            "",
+            "status",
+            "pause",
+            "resume",
+            "clear",
+            "wait",
+            "unwait",
+            "replan",
+        )
     assert manager._turn_controllers

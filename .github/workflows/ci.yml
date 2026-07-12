@@ -27,11 +27,13 @@ jobs:
       - name: Lint
         run: python -m ruff check supergoal_runtime scripts tests
 
-      - name: Run independent storage and migration tests
+      - name: Run host-independent tests
         run: |
           python -m pytest \
             tests/unit \
             tests/integration \
+            tests/replay \
+            tests/contract \
             -q -o 'addopts='
 
       - name: Compile plugin
@@ -39,3 +41,48 @@ jobs:
 
       - name: Build wheel
         run: python -m build --wheel
+
+  latest-hermes-main-compatibility:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout supergoal-runtime
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Checkout latest Hermes main
+        uses: actions/checkout@v4
+        with:
+          repository: NousResearch/hermes-agent
+          ref: main
+          path: hermes
+          fetch-depth: 0
+
+      - name: Apply generic plugin ABI from upstream PR 63208
+        working-directory: hermes
+        run: |
+          git config user.name 'supergoal-runtime-ci'
+          git config user.email 'ci@invalid.local'
+          git fetch https://github.com/0error0warning/hermes-agent.git \
+            feature/supergoal-plugin-abi-upstream
+          git cherry-pick 8efcb2a68 01dfdc3b3 6fe5c9346
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Hermes, plugin, and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ./hermes
+          python -m pip install -e ./plugin pytest ruff
+
+      - name: Run full standalone plugin suite against latest Hermes main
+        env:
+          PYTHONPATH: ${{ github.workspace }}/plugin:${{ github.workspace }}/hermes
+        working-directory: plugin
+        run: |
+          python -m pytest tests -q -o 'addopts='
+          python -m ruff check supergoal_runtime scripts tests
+          python -m compileall -q supergoal_runtime scripts tests
