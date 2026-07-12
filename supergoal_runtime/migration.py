@@ -82,6 +82,7 @@ def _read_legacy_rows(source: Path) -> dict[str, str]:
     uri = f"file:{quote(str(source.resolve()), safe='/')}?mode=ro"
     conn = sqlite3.connect(uri, uri=True)
     try:
+        conn.execute("PRAGMA query_only=ON")
         table = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name='state_meta'"
         ).fetchone()

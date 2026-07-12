@@ -470,7 +470,7 @@ class SupergoalStore:
                 """
                 SELECT event_json FROM events
                 WHERE goal_run_id=?
-                ORDER BY observed_at ASC, id ASC
+                ORDER BY id ASC
                 LIMIT ?
                 """,
                 (str(goal_run_id), max(1, int(limit))),

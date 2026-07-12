@@ -11,17 +11,21 @@ from pathlib import Path
 
 
 def get_hermes_home() -> Path:
-    """Return the active Hermes home without caching it."""
+    """Return the active Hermes home without caching it.
 
-    explicit = os.environ.get("HERMES_HOME")
-    if explicit:
-        return Path(explicit).expanduser().resolve()
+    Prefer the host helper because it honors the task-local ContextVar used by
+    multi-profile gateway work. The environment variable is only a fallback for
+    standalone package tooling where Hermes is not importable.
+    """
 
     try:
         from hermes_constants import get_hermes_home as host_get_hermes_home
 
         return Path(host_get_hermes_home()).expanduser().resolve()
     except Exception:
+        explicit = os.environ.get("HERMES_HOME")
+        if explicit:
+            return Path(explicit).expanduser().resolve()
         return Path.home() / ".hermes"
 
 

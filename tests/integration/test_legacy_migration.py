@@ -68,6 +68,12 @@ def test_legacy_migration_preserves_run_id_bindings_and_event_ledger(tmp_path):
     assert report["errors"] == []
     assert report["backup_path"]
     assert Path(report["backup_path"]).exists()
+    with sqlite3.connect(report["backup_path"]) as conn:
+        backed_up = conn.execute(
+            "SELECT state_json FROM runs WHERE goal_run_id='preexisting'"
+        ).fetchone()
+    assert backed_up is not None
+    assert json.loads(backed_up[0])["goal"] == "forces backup"
     assert store.load_run("gr_existing")["turns_used"] == 7
     assert store.get_goal_run_id("s-old") == "gr_existing"
     assert store.get_goal_run_id("s-new") == "gr_existing"
@@ -292,3 +298,67 @@ def test_success_report_contains_per_run_results_without_raw_run_ids(tmp_path):
     assert str(target) not in rendered
     assert "source_path" not in report
     assert "target_path" not in report
+
+
+def test_normal_goal_rows_are_not_imported(tmp_path):
+    source = tmp_path / "legacy.db"
+    _make_legacy_db(
+        source,
+        {
+            "goal_run:normal-run": {
+                "goal": "ordinary goal",
+                "goal_run_id": "normal-run",
+                "mode": "goal",
+                "status": "active",
+            },
+            "goal:normal-session": {
+                "goal": "ordinary mirror",
+                "mode": "goal",
+                "status": "paused",
+            },
+            "goal_session:normal-session": "normal-run",
+            "goal_events:normal-run": [{"type": "set", "ts": 1}],
+        },
+    )
+    store = SupergoalStore(db_path=tmp_path / "plugin.db")
+
+    report = migrate_legacy_state(source, store=store, backup=False)
+
+    assert report["status"] == "migrated"
+    assert report["runs_imported"] == 0
+    assert report["bindings_imported"] == 0
+    assert report["events_imported"] == 0
+    assert store.load_run("normal-run") is None
+    assert store.get_goal_run_id("normal-session") == ""
+
+
+def test_readonly_source_sees_committed_wal_rows(tmp_path):
+    source = tmp_path / "legacy-wal.db"
+    writer = sqlite3.connect(source)
+    try:
+        assert writer.execute("PRAGMA journal_mode=WAL").fetchone()[0] == "wal"
+        writer.execute("PRAGMA wal_autocheckpoint=0")
+        writer.execute("CREATE TABLE state_meta (key TEXT PRIMARY KEY, value TEXT)")
+        writer.execute(
+            "INSERT INTO state_meta(key, value) VALUES(?, ?)",
+            (
+                "goal_run:gr_wal",
+                json.dumps(
+                    {
+                        "goal": "visible in wal",
+                        "goal_run_id": "gr_wal",
+                        "mode": "supergoal",
+                        "status": "active",
+                    }
+                ),
+            ),
+        )
+        writer.commit()
+
+        store = SupergoalStore(db_path=tmp_path / "plugin.db")
+        report = migrate_legacy_state(source, store=store, backup=False)
+
+        assert report["runs_imported"] == 1
+        assert store.load_run("gr_wal")["goal"] == "visible in wal"
+    finally:
+        writer.close()

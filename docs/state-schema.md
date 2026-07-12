@@ -67,7 +67,7 @@ Append-only mission event ledger.
 | `observed_at` | event timestamp |
 | `legacy_source_key/index` | idempotent import identity |
 
-The `(goal_run_id, legacy_source_key, legacy_source_index)` uniqueness constraint prevents duplicate legacy events during forced/retried imports.
+The `(goal_run_id, legacy_source_key, legacy_source_index)` uniqueness constraint prevents duplicate legacy events during forced/retried imports. Reads use the monotonic SQLite `id`, preserving append/source-ledger order even when event timestamps are delayed or out of order.
 
 ## Atomicity
 

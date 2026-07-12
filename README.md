@@ -86,7 +86,7 @@ The package exposes the `hermes_agent.plugins` entry point. It does not require 
 ${HERMES_HOME}/supergoal/state.db
 ```
 
-`HERMES_HOME` is resolved when a store instance is created, not when modules are imported. Therefore default and named Hermes profiles receive fully separate databases.
+`HERMES_HOME` is resolved when a store instance is created, not when modules are imported. The plugin delegates resolution to Hermes' `get_hermes_home()`, so task-local profile `ContextVar` overrides take precedence over the process environment and concurrent Gateway profiles receive separate databases.
 
 ## Legacy migration
 

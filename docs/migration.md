@@ -26,7 +26,7 @@ Only states whose `mode` is `supergoal` are imported. Ordinary Hermes `/goal` re
 
 ## Safety rules
 
-- Source SQLite is opened with `mode=ro`.
+- Source SQLite is opened with `mode=ro` and `PRAGMA query_only=ON`; it does not use `immutable=1`, so committed WAL rows remain visible.
 - Existing target DBs are backed up using SQLite's online backup API before writes.
 - The old Hermes keys remain untouched.
 - Malformed values are reported by hashed key reference and error code; raw keys/values are never included in default reports.
