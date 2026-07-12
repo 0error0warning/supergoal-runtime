@@ -9,6 +9,7 @@ import pytest
 
 from supergoal_runtime.command import SupergoalCommandHandler
 from supergoal_runtime.policy import PolicyGuard, PermissionContract, ToolHookHandler
+from supergoal_runtime.prompts import CONTINUATION_PROMPT_PREFIX
 from supergoal_runtime.runtime import RuntimeManager
 from supergoal_runtime.store import SupergoalStore
 
@@ -237,6 +238,29 @@ def test_real_user_message_preempts_automatic_loop(tmp_path):
     preempted_state = manager.load_state_for_session("sess")
     assert preempted_state is not None
     assert "real user message" in str(preempted_state.paused_reason or "")
+
+
+def test_generated_continuation_prompt_does_not_trigger_user_preemption(tmp_path):
+    manager = RuntimeManager(
+        store=SupergoalStore(db_path=tmp_path / "state.db"),
+        judge=lambda *_a, **_k: ("continue", "phase 2 required", False),
+        critic=lambda *_a, **_k: None,
+    )
+    manager.start("sess", "two phase mission")
+
+    decision = manager.after_turn(
+        "sess",
+        final_response="phase 2 complete",
+        user_message=f"{CONTINUATION_PROMPT_PREFIX}\nGoal: two phase mission",
+        turn_id="turn-continuation",
+    )
+
+    assert decision and decision["action"] == "continue"
+    state = manager.load_state_for_session("sess")
+    assert state is not None
+    assert state.status == "active"
+    assert state.turns_used == 1
+    assert state.paused_reason is None
 
 
 def test_concurrent_tool_evidence_is_session_scoped_and_redacted(tmp_path):

@@ -17,7 +17,12 @@ from .domain import DEFAULT_MAX_TURNS, GoalEvent, GoalState, SupergoalActionProp
 from .evaluators import apply_supergoal_critic
 from .gates import first_blocking_failure, reconcile_done_evidence_gates, update_supergoal_gates
 from .projection import apply_events_to_state, extract_observation_events
-from .prompts import build_continuation_prompt
+from .prompts import (
+    CONTINUATION_PROMPT_PREFIX,
+    LEGACY_CONTINUATION_PROMPT_PREFIX,
+    START_PROMPT_PREFIX,
+    build_continuation_prompt,
+)
 from .rendering import status_card, status_line
 from .store import SupergoalStore
 
@@ -221,8 +226,10 @@ class RuntimeManager:
         if state is None or state.status != "active":
             return None
         message = str(user_message or "").lstrip()
-        synthetic_turn = message.startswith("[Starting supergoal]") or message.startswith(
-            "[Continuing toward your SUPERGOAL"
+        synthetic_turn = (
+            message.startswith(START_PROMPT_PREFIX)
+            or message.startswith(CONTINUATION_PROMPT_PREFIX)
+            or message.startswith(LEGACY_CONTINUATION_PROMPT_PREFIX)
         )
         if message and not synthetic_turn:
             state.status = "paused"

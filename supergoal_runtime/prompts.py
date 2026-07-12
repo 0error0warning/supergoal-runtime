@@ -10,9 +10,12 @@ from datetime import datetime, timezone
 from typing import Any, Sequence
 
 JUDGE_RESPONSE_SNIPPET_CHARS = 4000
+START_PROMPT_PREFIX = "[Starting supergoal]"
+CONTINUATION_PROMPT_PREFIX = "[Continuing toward your standing supergoal]"
+LEGACY_CONTINUATION_PROMPT_PREFIX = "[Continuing toward your SUPERGOAL"
 
 CONTINUATION_PROMPT_TEMPLATE = (
-    "[Continuing toward your standing supergoal]\n"
+    CONTINUATION_PROMPT_PREFIX + "\n"
     "Goal: {goal}\n\n"
     "{board_block}"
     "Continue working toward this goal. Take the next concrete step. "
@@ -21,7 +24,7 @@ CONTINUATION_PROMPT_TEMPLATE = (
 )
 
 CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
-    "[Continuing toward your standing supergoal]\n"
+    CONTINUATION_PROMPT_PREFIX + "\n"
     "Goal: {goal}\n\n"
     "Additional criteria the user added mid-loop:\n"
     "{subgoals_block}\n\n"

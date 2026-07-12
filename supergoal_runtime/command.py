@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from .compat.hermes_goal import ordinary_goal_active
+from .prompts import START_PROMPT_PREFIX
 from .runtime import RuntimeManager
 
 
@@ -27,7 +28,7 @@ class SupergoalCommandHandler:
             if self.runtime.load_state_for_session(session_id) is not None:
                 return "A /sgx supergoal is already bound to this session."
             state = self.runtime.start(session_id, rest)
-            prompt = f"[Starting supergoal]\nGoal: {state.goal}"
+            prompt = f"{START_PROMPT_PREFIX}\nGoal: {state.goal}"
             enqueued = await ctx.enqueue_followup(prompt)
             return f"Started /sgx supergoal {state.goal_run_id}." if enqueued else "Started /sgx supergoal, but the host did not enqueue a follow-up turn."
 
