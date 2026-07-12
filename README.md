@@ -1,8 +1,10 @@
 # Supergoal Runtime for Hermes Agent
 
+[![CI](https://github.com/0error0warning/supergoal-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/0error0warning/supergoal-runtime/actions/workflows/ci.yml)
+
 Standalone Hermes plugin for long-running, evidence-first autonomous missions.
 
-> Status: **Phase 5 implementation complete**. The plugin owns Supergoal state, policy, evidence, controller, commands, replay tests, and compression continuity. Production cutover is governed by [`docs/repository-cleanup-and-plugin-migration-spec.md`](docs/repository-cleanup-and-plugin-migration-spec.md).
+> **Status: migration complete, production validated.** Phases 0–7 are complete: Supergoal product logic has moved out of Hermes Core, legacy state migration and two-stage production cutover have passed, and the old overlay/patch delivery path is archived. Current plugin release: **1.0.0**.
 
 ## Architecture
 
@@ -52,6 +54,19 @@ Plain `/supergoal <text>` does **not** start a mission. Start is explicit to pre
 - PID wait barriers do not burn turns and automatically release when the process exits.
 - Restart recovery uses only the plugin database.
 
+## Hermes compatibility
+
+The plugin requires the generic Hermes plugin ABI used for:
+
+- context-aware commands and native follow-up enqueue;
+- post-turn `TurnDirective` controllers;
+- busy-safe control subcommands;
+- `on_session_rotate` continuity.
+
+These interfaces are proposed upstream in [NousResearch/hermes-agent#63208](https://github.com/NousResearch/hermes-agent/pull/63208). Until that PR, or an equivalent implementation, is present in an official Hermes release, use a compatible Hermes checkout containing those generic ABI commits. The plugin CI checks every change against the latest Hermes `main` plus the upstream PR commits, so compatibility drift fails visibly.
+
+No Supergoal-specific product branch remains in Hermes Core. The only direct host imports are the generic `TurnDirective` type and a narrow ordinary `/goal` conflict adapter.
+
 ## Install
 
 Directory plugin:
@@ -71,6 +86,20 @@ hermes plugins enable supergoal-runtime --no-allow-tool-override
 ```
 
 Restart Hermes after enabling the plugin. The plugin declares no model tools and requires no plugin-specific API key; judge/critic calls use the host-owned `ctx.llm` facade.
+
+## Upgrade and maintenance
+
+Directory installation:
+
+```bash
+cd "$HERMES_HOME/plugins/supergoal-runtime"
+git pull --ff-only
+# Restart Hermes/Gateway after the pull.
+```
+
+Plugin releases normally update independently of Hermes Core. Before upgrading Hermes itself, run this repository's full test suite against the target Hermes checkout. While upstream PR #63208 remains unmerged, carry or reapply only the generic ABI commits; do not restore the retired Supergoal Core overlay.
+
+Rollback remains straightforward: disable the plugin, restore `${HERMES_HOME}/supergoal/state.db` from backup if needed, and return Hermes to the previous known-good Core commit. The legacy importer never deletes old Core keys automatically.
 
 ## Repository layout
 
