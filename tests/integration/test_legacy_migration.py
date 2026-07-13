@@ -8,7 +8,12 @@ from supergoal_runtime.migration import migrate_legacy_state
 from supergoal_runtime.store import SupergoalStore
 
 
-def _make_legacy_db(path: Path, rows: dict[str, object]) -> None:
+def _make_legacy_db(
+    path: Path,
+    rows: dict[str, object],
+    *,
+    sessions: list[str] | None = None,
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(path) as conn:
         conn.execute("CREATE TABLE state_meta (key TEXT PRIMARY KEY, value TEXT)")
@@ -22,6 +27,12 @@ def _make_legacy_db(path: Path, rows: dict[str, object]) -> None:
                 for key, value in rows.items()
             ],
         )
+        if sessions is not None:
+            conn.execute("CREATE TABLE sessions (id TEXT PRIMARY KEY)")
+            conn.executemany(
+                "INSERT INTO sessions(id) VALUES (?)",
+                [(session_id,) for session_id in sessions],
+            )
 
 
 def test_legacy_migration_preserves_run_id_bindings_and_event_ledger(tmp_path):
@@ -130,7 +141,7 @@ def test_migration_reports_malformed_rows_without_leaking_values(tmp_path):
     report = migrate_legacy_state(source, store=store, backup=False)
     rendered = json.dumps(report, ensure_ascii=False)
 
-    assert report["status"] == "migrated_with_errors"
+    assert report["status"] == "migration_blocked"
     assert report["errors"]
     assert secret not in rendered
     assert "broken-session" not in rendered
@@ -232,14 +243,14 @@ def test_import_never_overwrites_existing_live_plugin_run(tmp_path):
     first = migrate_legacy_state(source, store=store, backup=False)
     second = migrate_legacy_state(source, store=store, backup=False)
 
-    assert first["status"] == "migrated_with_errors"
-    assert second["status"] == "migrated_with_errors"
-    assert first["run_results"][0]["status"] == "run_conflict"
+    assert first["status"] == "migration_blocked"
+    assert second["status"] == "migration_blocked"
+    assert first["errors"][0]["error"] == "run_conflict"
     assert store.load_run("gr_shared")["turns_used"] == 99
     assert store.get_meta(first["marker"]) is None
 
 
-def test_partial_migration_does_not_write_success_marker(tmp_path):
+def test_partial_migration_rolls_back_the_entire_plan(tmp_path):
     source = tmp_path / "legacy.db"
     _make_legacy_db(
         source,
@@ -251,6 +262,13 @@ def test_partial_migration_does_not_write_success_marker(tmp_path):
                 "status": "active",
             },
             "goal_session:shared-session": "gr_import",
+            "goal_run:gr_safe": {
+                "goal": "must roll back",
+                "goal_run_id": "gr_safe",
+                "mode": "supergoal",
+                "status": "paused",
+            },
+            "goal_session:safe-session": "gr_safe",
         },
     )
     store = SupergoalStore(db_path=tmp_path / "plugin.db")
@@ -260,9 +278,12 @@ def test_partial_migration_does_not_write_success_marker(tmp_path):
     first = migrate_legacy_state(source, store=store, backup=False)
     second = migrate_legacy_state(source, store=store, backup=False)
 
-    assert first["status"] == "migrated_with_errors"
-    assert second["status"] == "migrated_with_errors"
-    assert first["run_results"][0]["status"] == "binding_conflict"
+    assert first["status"] == "migration_blocked"
+    assert second["status"] == "migration_blocked"
+    assert first["errors"][0]["error"] == "binding_conflict"
+    assert store.load_run("gr_import") is None
+    assert store.load_run("gr_safe") is None
+    assert store.get_goal_run_id("safe-session") == ""
     assert store.get_meta(first["marker"]) is None
 
 
@@ -298,6 +319,45 @@ def test_success_report_contains_per_run_results_without_raw_run_ids(tmp_path):
     assert str(target) not in rendered
     assert "source_path" not in report
     assert "target_path" not in report
+
+
+def test_real_hermes_source_skips_runs_without_a_surviving_session(tmp_path):
+    source = tmp_path / "legacy.db"
+    valid_state = {
+        "goal": "keep user mission",
+        "goal_run_id": "gr_valid",
+        "mode": "supergoal",
+        "status": "paused",
+    }
+    orphan_state = {
+        "goal": "fixture mission",
+        "goal_run_id": "gr_orphan",
+        "mode": "supergoal",
+        "status": "active",
+    }
+    _make_legacy_db(
+        source,
+        {
+            "goal_run:gr_valid": valid_state,
+            "goal_session:real-session": "gr_valid",
+            "goal:real-session": valid_state,
+            "goal_run:gr_orphan": orphan_state,
+            "goal_session:fixture-session": "gr_orphan",
+            "goal:fixture-session": orphan_state,
+        },
+        sessions=["real-session"],
+    )
+    store = SupergoalStore(db_path=tmp_path / "plugin.db")
+
+    report = migrate_legacy_state(source, store=store, backup=False)
+
+    assert report["status"] == "migrated"
+    assert report["runs_imported"] == 1
+    assert report["runs_skipped_orphaned"] == 1
+    assert store.load_run("gr_valid") is not None
+    assert store.get_goal_run_id("real-session") == "gr_valid"
+    assert store.load_run("gr_orphan") is None
+    assert store.get_goal_run_id("fixture-session") == ""
 
 
 def test_normal_goal_rows_are_not_imported(tmp_path):

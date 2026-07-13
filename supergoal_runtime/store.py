@@ -569,6 +569,119 @@ class SupergoalStore:
                     counts["events"] += 1
         return counts
 
+    def import_legacy_plan(
+        self,
+        runs: Mapping[str, tuple[Mapping[str, Any] | str, str | None]],
+        *,
+        bindings_by_run: Mapping[str, Iterable[tuple[str, str]]] | None = None,
+        events_by_run: Mapping[
+            str, Iterable[tuple[Mapping[str, Any], str, int]]
+        ]
+        | None = None,
+        marker_key: str,
+    ) -> dict[str, Any]:
+        """Import a complete migration plan and marker in one transaction."""
+
+        normalized_runs: dict[str, tuple[dict[str, Any], str | None]] = {}
+        normalized_bindings: dict[str, list[tuple[str, str]]] = {}
+        normalized_events: dict[
+            str, list[tuple[dict[str, Any], str, int]]
+        ] = {}
+        for goal_run_id, (state, source_key) in runs.items():
+            run_id = str(goal_run_id or "").strip()
+            if not run_id:
+                raise ValueError("goal_run_id must not be empty")
+            normalized_runs[run_id] = (_normalize_state(state), source_key)
+            normalized_bindings[run_id] = [
+                (str(session_id), str(reason))
+                for session_id, reason in (bindings_by_run or {}).get(run_id, ())
+            ]
+            normalized_events[run_id] = [
+                (_normalize_event(event), str(source_key), int(source_index))
+                for event, source_key, source_index in (events_by_run or {}).get(
+                    run_id, ()
+                )
+            ]
+
+        self.ensure_schema()
+        totals = {"runs": 0, "bindings": 0, "events": 0}
+        per_run: dict[str, dict[str, int]] = {
+            run_id: {"runs": 0, "bindings": 0, "events": 0}
+            for run_id in normalized_runs
+        }
+        with self._transaction() as conn:
+            for run_id, (_state, source_key) in normalized_runs.items():
+                existing = conn.execute(
+                    "SELECT legacy_source_key FROM runs WHERE goal_run_id=?",
+                    (run_id,),
+                ).fetchone()
+                if existing and (
+                    not source_key or str(existing[0] or "") != str(source_key)
+                ):
+                    raise RunConflictError(
+                        "legacy import refused to overwrite an existing run"
+                    )
+                for session_id, _reason in normalized_bindings[run_id]:
+                    current = conn.execute(
+                        "SELECT goal_run_id FROM session_bindings WHERE session_id=?",
+                        (session_id,),
+                    ).fetchone()
+                    if current and str(current[0]) != run_id:
+                        raise BindingConflictError(
+                            "legacy import found a conflicting session binding"
+                        )
+
+            for run_id, (state, source_key) in normalized_runs.items():
+                existing = conn.execute(
+                    "SELECT 1 FROM runs WHERE goal_run_id=?", (run_id,)
+                ).fetchone()
+                if not existing:
+                    self._upsert_run(
+                        conn,
+                        run_id,
+                        state,
+                        legacy_source_key=source_key,
+                    )
+                    totals["runs"] += 1
+                    per_run[run_id]["runs"] += 1
+                for session_id, reason in normalized_bindings[run_id]:
+                    if self._bind_session(
+                        conn, session_id, run_id, reason=reason
+                    ):
+                        totals["bindings"] += 1
+                        per_run[run_id]["bindings"] += 1
+                for event, event_source_key, source_index in normalized_events[
+                    run_id
+                ]:
+                    if self._insert_event(
+                        conn,
+                        run_id,
+                        event,
+                        legacy_source_key=event_source_key,
+                        legacy_source_index=source_index,
+                    ):
+                        totals["events"] += 1
+                        per_run[run_id]["events"] += 1
+
+            marker_value = json.dumps(
+                {
+                    "status": "migrated",
+                    "runs_imported": totals["runs"],
+                    "bindings_imported": totals["bindings"],
+                    "events_imported": totals["events"],
+                    "run_count": len(normalized_runs),
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+            conn.execute(
+                "INSERT INTO schema_meta(key, value) VALUES(?, ?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                (str(marker_key), marker_value),
+            )
+
+        return {**totals, "per_run": per_run}
+
     def backup(self, destination: str | Path | None = None) -> Path | None:
         """Create a consistent SQLite backup if the database exists."""
 

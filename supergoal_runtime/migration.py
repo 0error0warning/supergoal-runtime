@@ -78,7 +78,7 @@ def _marker_key(source: Path) -> str:
     return f"legacy_migration:{digest}"
 
 
-def _read_legacy_rows(source: Path) -> dict[str, str]:
+def _read_legacy_rows(source: Path) -> tuple[dict[str, str], set[str] | None]:
     uri = f"file:{quote(str(source.resolve()), safe='/')}?mode=ro"
     conn = sqlite3.connect(uri, uri=True)
     try:
@@ -98,12 +98,26 @@ def _read_legacy_rows(source: Path) -> dict[str, str]:
             ORDER BY key
             """
         ).fetchall()
-        return {str(key): str(value or "") for key, value in rows}
+        sessions_table = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sessions'"
+        ).fetchone()
+        session_ids = None
+        if sessions_table:
+            session_ids = {
+                str(row[0])
+                for row in conn.execute("SELECT id FROM sessions").fetchall()
+                if str(row[0] or "").strip()
+            }
+        return {str(key): str(value or "") for key, value in rows}, session_ids
     finally:
         conn.close()
 
 
-def _plan_import(rows: Mapping[str, str]) -> dict[str, Any]:
+def _plan_import(
+    rows: Mapping[str, str],
+    *,
+    valid_session_ids: set[str] | None = None,
+) -> dict[str, Any]:
     errors: list[dict[str, str]] = []
     runs: dict[str, dict[str, Any]] = {}
     run_source_keys: dict[str, str] = {}
@@ -152,6 +166,30 @@ def _plan_import(rows: Mapping[str, str]) -> dict[str, Any]:
         if run_id in runs:
             session_to_run[session_id] = run_id
 
+    # When the source is a real Hermes state database, only import runs that
+    # retain at least one binding to a surviving source session. Orphaned rows
+    # cannot be resumed and are commonly test fixtures left in state_meta.
+    skipped_orphaned = 0
+    if valid_session_ids is not None:
+        surviving_bindings = {
+            session_id: run_id
+            for session_id, run_id in session_to_run.items()
+            if session_id in valid_session_ids and run_id in runs
+        }
+        resumable_run_ids = set(surviving_bindings.values())
+        skipped_orphaned = len(set(runs) - resumable_run_ids)
+        runs = {
+            run_id: state
+            for run_id, state in runs.items()
+            if run_id in resumable_run_ids
+        }
+        run_source_keys = {
+            run_id: key
+            for run_id, key in run_source_keys.items()
+            if run_id in resumable_run_ids
+        }
+        session_to_run = surviving_bindings
+
     bindings_by_run: dict[str, list[tuple[str, str]]] = {
         run_id: [] for run_id in runs
     }
@@ -188,6 +226,7 @@ def _plan_import(rows: Mapping[str, str]) -> dict[str, Any]:
         "bindings_by_run": bindings_by_run,
         "events_by_run": events_by_run,
         "errors": errors,
+        "runs_skipped_orphaned": skipped_orphaned,
     }
 
 
@@ -207,6 +246,7 @@ def _base_report(
         "runs_imported": 0,
         "bindings_imported": 0,
         "events_imported": 0,
+        "runs_skipped_orphaned": 0,
         "run_results": [],
         "errors": list(errors or []),
         "backup_created": False,
@@ -243,8 +283,8 @@ def migrate_legacy_state(
     marker_key = _marker_key(source)
 
     # Parse the read-only source first. A dry-run must not touch the target at all.
-    rows = _read_legacy_rows(source)
-    plan = _plan_import(rows)
+    rows, valid_session_ids = _read_legacy_rows(source)
+    plan = _plan_import(rows, valid_session_ids=valid_session_ids)
     report = _base_report(
         status="dry_run" if dry_run else "migrated",
         source=source,
@@ -253,6 +293,7 @@ def migrate_legacy_state(
         errors=plan["errors"],
         include_paths=include_paths,
     )
+    report["runs_skipped_orphaned"] = plan["runs_skipped_orphaned"]
     if dry_run:
         report["runs_discovered"] = len(plan["runs"])
         report["bindings_discovered"] = sum(
@@ -265,6 +306,10 @@ def migrate_legacy_state(
             {"run_ref": _safe_ref(run_id), "status": "planned"}
             for run_id in sorted(plan["runs"])
         ]
+        return report
+
+    if plan["errors"]:
+        report["status"] = "migration_blocked"
         return report
 
     # Read the marker without creating/upgrading the target DB.
@@ -287,60 +332,48 @@ def migrate_legacy_state(
             if include_paths:
                 report["backup_path"] = str(backup_path)
 
-    for run_id in sorted(plan["runs"]):
-        run_ref = _safe_ref(run_id)
-        try:
-            counts = target_store.import_run_bundle(
-                run_id,
-                plan["runs"][run_id],
-                bindings=plan["bindings_by_run"].get(run_id, []),
-                events=plan["events_by_run"].get(run_id, []),
-                legacy_source_key=_safe_ref(
-                    plan["run_source_keys"].get(run_id, run_id)
-                ),
-            )
-        except RunConflictError:
-            report["errors"].append(
-                {"ref": run_ref, "error": "run_conflict"}
-            )
-            report["run_results"].append(
-                {"run_ref": run_ref, "status": "run_conflict"}
-            )
-            continue
-        except BindingConflictError:
-            report["errors"].append(
-                {"ref": run_ref, "error": "binding_conflict"}
-            )
-            report["run_results"].append(
-                {"run_ref": run_ref, "status": "binding_conflict"}
-            )
-            continue
+    atomic_runs = {
+        run_id: (
+            plan["runs"][run_id],
+            _safe_ref(plan["run_source_keys"].get(run_id, run_id)),
+        )
+        for run_id in sorted(plan["runs"])
+    }
+    try:
+        counts = target_store.import_legacy_plan(
+            atomic_runs,
+            bindings_by_run=plan["bindings_by_run"],
+            events_by_run=plan["events_by_run"],
+            marker_key=marker_key,
+        )
+    except RunConflictError:
+        report["status"] = "migration_blocked"
+        report["errors"].append(
+            {"ref": _safe_ref(marker_key), "error": "run_conflict"}
+        )
+        return report
+    except BindingConflictError:
+        report["status"] = "migration_blocked"
+        report["errors"].append(
+            {"ref": _safe_ref(marker_key), "error": "binding_conflict"}
+        )
+        return report
 
-        report["runs_imported"] += counts["runs"]
-        report["bindings_imported"] += counts["bindings"]
-        report["events_imported"] += counts["events"]
+    report["runs_imported"] = counts["runs"]
+    report["bindings_imported"] = counts["bindings"]
+    report["events_imported"] = counts["events"]
+    for run_id in sorted(plan["runs"]):
+        run_counts = counts["per_run"][run_id]
         report["run_results"].append(
             {
-                "run_ref": run_ref,
-                "status": "imported" if counts["runs"] else "already_present",
-                "runs_imported": counts["runs"],
-                "bindings_imported": counts["bindings"],
-                "events_imported": counts["events"],
+                "run_ref": _safe_ref(run_id),
+                "status": "imported"
+                if run_counts["runs"]
+                else "already_present",
+                "runs_imported": run_counts["runs"],
+                "bindings_imported": run_counts["bindings"],
+                "events_imported": run_counts["events"],
             }
         )
-
-    report["status"] = "migrated_with_errors" if report["errors"] else "migrated"
-    if not report["errors"]:
-        marker_value = json.dumps(
-            {
-                "status": report["status"],
-                "runs_imported": report["runs_imported"],
-                "bindings_imported": report["bindings_imported"],
-                "events_imported": report["events_imported"],
-                "run_count": len(report["run_results"]),
-            },
-            sort_keys=True,
-            separators=(",", ":"),
-        )
-        target_store.set_meta(marker_key, marker_value)
+    report["status"] = "migrated"
     return report
