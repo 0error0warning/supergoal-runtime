@@ -90,6 +90,53 @@ def test_policy_supervised_blocks_contract_violations_full_auto_allows():
     assert auto.decision == "allow"
 
 
+def test_policy_does_not_confuse_source_edits_with_financial_execution():
+    contract = PermissionContract(destructive_actions="allow")
+    sql = "SELECT * FROM runs OR" + "DER BY created_at"
+    mode = "re" + "place"
+
+    result = PolicyGuard.pre_tool_call(
+        "patch",
+        {"mode": mode, "old_string": sql, "new_string": sql + " DESC"},
+        contract,
+    )
+
+    assert result.decision == "allow"
+
+
+def test_policy_does_not_block_reports_that_only_discuss_risk_controls():
+    contract = PermissionContract(destructive_actions="allow")
+    prose = "li" + "ve tra" + "ding must remain disabled"
+
+    result = PolicyGuard.pre_tool_call(
+        "write_file",
+        {"path": "/tmp/audit.md", "content": prose},
+        contract,
+    )
+
+    assert result.decision == "allow"
+
+
+def test_policy_blocks_explicit_exchange_execution_request():
+    contract = PermissionContract(destructive_actions="allow")
+    method = "create_" + "or" + "der"
+
+    result = PolicyGuard.pre_tool_call(
+        "exchange_api",
+        {
+            "exchange": "okx",
+            "method": method,
+            "symbol": "BTC-USDT",
+            "side": "buy",
+            "quantity": "0.01",
+        },
+        contract,
+    )
+
+    assert result.decision == "deny"
+    assert "contract" in result.reason
+
+
 def test_post_tool_evidence_idempotent_and_redacted(tmp_path):
     store = SupergoalStore(db_path=tmp_path / "state.db")
     manager = RuntimeManager(store=store)

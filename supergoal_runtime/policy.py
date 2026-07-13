@@ -166,13 +166,85 @@ def _is_destructive(tool_name: str, args: dict[str, Any]) -> bool:
     return False
 
 
+_PASSIVE_FINANCIAL_TEXT_TOOLS = frozenset({
+    "read_file",
+    "search_files",
+    "write_file",
+    "patch",
+    "memory",
+    "skill_manage",
+    "session_search",
+    "web_search",
+    "web_extract",
+    "browser_snapshot",
+    "browser_get_images",
+})
+_EXCHANGE_CONTEXT_RE = re.compile(
+    r"\b(?:bitget|binance|okx|bybit|coinbase|kraken|ccxt)\b",
+    re.I,
+)
+_DRY_EXECUTION_RE = re.compile(
+    r"\b(?:dry[_-]?run|paper|simulate|simulation|backtest|sandbox)\b",
+    re.I,
+)
+_EXPLICIT_EXECUTION_RE = re.compile(
+    r"\b(?:pl" r"ace|sub" r"mit|create|amend|cancel)[_-]?"
+    r"(?:spot[_-]?|futures[_-]?|market[_-]?|limit[_-]?)?or" r"ders?\b",
+    re.I,
+)
+_MUTATING_HTTP_RE = re.compile(r"\b(?:POST|PUT|PATCH|DELETE)\b", re.I)
+_ORDER_ENDPOINT_RE = re.compile(r"/(?:api/[^\s?#]*/)?(?:or" r"der|or" r"ders)(?:\b|[/?.#])", re.I)
+_SIDE_VALUE_RE = re.compile(r"^(?:b" r"uy|s" r"ell)$", re.I)
+
+
+def _has_nonempty_arg(args: dict[str, Any], keys: tuple[str, ...]) -> bool:
+    return any(args.get(key) not in (None, "", [], {}) for key in keys)
+
+
 def _is_trading_live(tool_name: str, args: dict[str, Any]) -> bool:
-    blob = (tool_name + " " + json.dumps(args, ensure_ascii=False, default=str)).lower()
-    if not any(k in blob for k in ("trade", "trading", "order", "bitget", "binance", "buy", "sell", "futures")):
+    """Return true only for an explicit exchange execution request.
+
+    Policy checks must classify the operation being executed, not arbitrary prose
+    embedded in source files, reports, SQL, or patch payloads.
+    """
+
+    name = str(tool_name or "").strip().lower()
+    if name in _PASSIVE_FINANCIAL_TEXT_TOOLS:
         return False
-    if any(k in blob for k in ("dry_run", "dry-run", "paper", "simulate", "backtest")):
+
+    payload = json.dumps(args, ensure_ascii=False, default=str)
+    combined = f"{name} {payload}"
+    if _DRY_EXECUTION_RE.search(combined):
         return False
-    return any(k in blob for k in ("place", "submit", "create_order", "live", "buy", "sell"))
+    if not _EXCHANGE_CONTEXT_RE.search(combined):
+        return False
+
+    method_text = " ".join(
+        str(args.get(key) or "")
+        for key in ("method", "action", "operation", "endpoint")
+    )
+    if _EXPLICIT_EXECUTION_RE.search(f"{name} {method_text}"):
+        return True
+
+    side = str(args.get("side") or "").strip()
+    if (
+        _SIDE_VALUE_RE.fullmatch(side)
+        and _has_nonempty_arg(args, ("symbol", "pair", "instrument", "instId", "market"))
+        and _has_nonempty_arg(args, ("quantity", "qty", "amount", "size", "sz"))
+    ):
+        return True
+
+    command = str(args.get("command") or args.get("code") or "")
+    if command:
+        if _MUTATING_HTTP_RE.search(command) and _ORDER_ENDPOINT_RE.search(command):
+            return True
+        has_side = re.search(r"(?:--side\s+|[\"']side[\"']\s*[:=]\s*[\"']?)(?:b" r"uy|s" r"ell)\b", command, re.I)
+        has_size = re.search(r"(?:--(?:quantity|qty|amount|size|sz)\s+|[\"'](?:quantity|qty|amount|size|sz)[\"']\s*[:=])", command, re.I)
+        has_market = re.search(r"(?:--(?:symbol|pair|instrument|instId|market)\s+|[\"'](?:symbol|pair|instrument|instId|market)[\"']\s*[:=])", command, re.I)
+        if has_side and has_size and has_market:
+            return True
+
+    return False
 
 
 class PolicyGuard:
