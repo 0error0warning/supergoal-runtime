@@ -312,7 +312,7 @@ class ToolHookHandler:
     ) -> None:
         try:
             goal_run_id, state = self._load_state(session_id)
-            if not goal_run_id or state is None:
+            if not goal_run_id or state is None or state.status != "active":
                 return
             call_id = str(tool_call_id or "").strip()
             if not call_id:
@@ -330,8 +330,8 @@ class ToolHookHandler:
             )
             if ref is None:
                 return
-            self.store.append_event_once(
-                goal_run_id,
+            self.store.append_active_event_once_for_session(
+                session_id,
                 {
                     "type": "tool_evidence_observed",
                     "turn": int(getattr(state, "turns_used", 0) or 0),
@@ -340,6 +340,7 @@ class ToolHookHandler:
                     "data": {"evidence_ref": ref.to_dict()},
                 },
                 source_key=f"tool:{call_id}",
+                expected_goal_run_id=goal_run_id,
             )
         except Exception:
             return

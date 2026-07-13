@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import shutil
 import sqlite3
+import threading
 import time
 from contextlib import contextmanager
 from pathlib import Path
@@ -13,6 +14,7 @@ from typing import Any, Iterable, Iterator, Mapping, Sequence
 from .config import get_state_db_path
 
 SCHEMA_VERSION = 2
+OUTBOX_CAPABILITY = "continuation_outbox_v1"
 
 
 class StoreError(RuntimeError):
@@ -27,6 +29,10 @@ class RunConflictError(StoreError):
     """A legacy import would overwrite a plugin-owned logical run."""
 
 
+class RevisionConflictError(StoreError):
+    """A run changed after a caller loaded its state snapshot."""
+
+
 _SCHEMA_SQL = """
 CREATE TABLE IF NOT EXISTS schema_meta (
     key TEXT PRIMARY KEY,
@@ -37,6 +43,7 @@ CREATE TABLE IF NOT EXISTS runs (
     goal_run_id TEXT PRIMARY KEY,
     state_json TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT '',
+    revision INTEGER NOT NULL DEFAULT 0,
     state_schema_version INTEGER NOT NULL DEFAULT 1,
     legacy_source_key TEXT,
     created_at REAL NOT NULL,
@@ -64,10 +71,31 @@ CREATE TABLE IF NOT EXISTS events (
     UNIQUE (goal_run_id, legacy_source_key, legacy_source_index)
 );
 
+CREATE TABLE IF NOT EXISTS continuation_outbox (
+    token TEXT PRIMARY KEY,
+    goal_run_id TEXT NOT NULL,
+    session_id TEXT NOT NULL,
+    prompt TEXT NOT NULL,
+    kind TEXT NOT NULL DEFAULT 'continue',
+    state_version INTEGER NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    created_at REAL NOT NULL,
+    claimed_at REAL,
+    claim_owner TEXT NOT NULL DEFAULT '',
+    consumed_at REAL,
+    cancelled_at REAL,
+    cancel_reason TEXT NOT NULL DEFAULT '',
+    FOREIGN KEY (goal_run_id) REFERENCES runs(goal_run_id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_bindings_goal_run
     ON session_bindings(goal_run_id);
 CREATE INDEX IF NOT EXISTS idx_events_goal_run
     ON events(goal_run_id, observed_at, id);
+CREATE INDEX IF NOT EXISTS idx_outbox_pending
+    ON continuation_outbox(status, created_at, token);
+CREATE INDEX IF NOT EXISTS idx_outbox_goal_run
+    ON continuation_outbox(goal_run_id, status);
 """
 
 
@@ -133,6 +161,8 @@ class SupergoalStore:
             else get_state_db_path(hermes_home)
         )
         self.timeout = float(timeout)
+        self._schema_ready = False
+        self._schema_lock = threading.Lock()
 
     def _connect(self) -> sqlite3.Connection:
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -165,38 +195,74 @@ class SupergoalStore:
             conn.close()
 
     def ensure_schema(self) -> None:
-        with self._transaction() as conn:
-            # sqlite3.executescript() implicitly commits any active transaction.
-            # Execute these simple DDL statements individually so schema creation
-            # and the version marker stay inside this explicit transaction.
-            for statement in _SCHEMA_SQL.split(";"):
-                sql = statement.strip()
-                if sql:
-                    conn.execute(sql)
-            row = conn.execute(
-                "SELECT value FROM schema_meta WHERE key='schema_version'"
-            ).fetchone()
-            current = int(row[0]) if row and str(row[0]).isdigit() else 0
-            if current > SCHEMA_VERSION:
-                raise StoreError(
-                    f"database schema {current} is newer than supported {SCHEMA_VERSION}"
-                )
-            binding_columns = {
-                str(item[1])
-                for item in conn.execute(
-                    "PRAGMA table_info(session_bindings)"
-                ).fetchall()
-            }
-            if "is_current" not in binding_columns:
+        if self._schema_ready:
+            return
+        with self._schema_lock:
+            if self._schema_ready:
+                return
+            with self._transaction() as conn:
+                # sqlite3.executescript() implicitly commits any active
+                # transaction. Execute the simple DDL statements individually
+                # so schema creation and markers remain atomic.
+                for statement in _SCHEMA_SQL.split(";"):
+                    sql = statement.strip()
+                    if sql:
+                        conn.execute(sql)
+                row = conn.execute(
+                    "SELECT value FROM schema_meta WHERE key='schema_version'"
+                ).fetchone()
+                current = int(row[0]) if row and str(row[0]).isdigit() else 0
+                if current > SCHEMA_VERSION:
+                    raise StoreError(
+                        f"database schema {current} is newer than supported {SCHEMA_VERSION}"
+                    )
+                run_columns = {
+                    str(item[1])
+                    for item in conn.execute("PRAGMA table_info(runs)").fetchall()
+                }
+                if "revision" not in run_columns:
+                    conn.execute(
+                        "ALTER TABLE runs "
+                        "ADD COLUMN revision INTEGER NOT NULL DEFAULT 0"
+                    )
+                outbox_columns = {
+                    str(item[1])
+                    for item in conn.execute(
+                        "PRAGMA table_info(continuation_outbox)"
+                    ).fetchall()
+                }
+                if "claimed_at" not in outbox_columns:
+                    conn.execute(
+                        "ALTER TABLE continuation_outbox ADD COLUMN claimed_at REAL"
+                    )
+                if "claim_owner" not in outbox_columns:
+                    conn.execute(
+                        "ALTER TABLE continuation_outbox "
+                        "ADD COLUMN claim_owner TEXT NOT NULL DEFAULT ''"
+                    )
+                binding_columns = {
+                    str(item[1])
+                    for item in conn.execute(
+                        "PRAGMA table_info(session_bindings)"
+                    ).fetchall()
+                }
+                if "is_current" not in binding_columns:
+                    conn.execute(
+                        "ALTER TABLE session_bindings "
+                        "ADD COLUMN is_current INTEGER NOT NULL DEFAULT 1"
+                    )
                 conn.execute(
-                    "ALTER TABLE session_bindings "
-                    "ADD COLUMN is_current INTEGER NOT NULL DEFAULT 1"
+                    "INSERT INTO schema_meta(key, value) VALUES('schema_version', ?) "
+                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                    (str(SCHEMA_VERSION),),
                 )
-            conn.execute(
-                "INSERT INTO schema_meta(key, value) VALUES('schema_version', ?) "
-                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
-                (str(SCHEMA_VERSION),),
-            )
+                conn.execute(
+                    "INSERT INTO schema_meta(key, value) "
+                    "VALUES('capability:continuation_outbox', ?) "
+                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                    (OUTBOX_CAPABILITY,),
+                )
+            self._schema_ready = True
 
     def connection_pragmas(self) -> dict[str, Any]:
         self.ensure_schema()
@@ -271,12 +337,13 @@ class SupergoalStore:
         conn.execute(
             """
             INSERT INTO runs(
-                goal_run_id, state_json, status, state_schema_version,
+                goal_run_id, state_json, status, revision, state_schema_version,
                 legacy_source_key, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, 0, ?, ?, ?, ?)
             ON CONFLICT(goal_run_id) DO UPDATE SET
                 state_json=excluded.state_json,
                 status=excluded.status,
+                revision=runs.revision + 1,
                 state_schema_version=excluded.state_schema_version,
                 legacy_source_key=COALESCE(excluded.legacy_source_key, runs.legacy_source_key),
                 updated_at=excluded.updated_at
@@ -293,6 +360,91 @@ class SupergoalStore:
         )
         return normalized
 
+    @staticmethod
+    def _cancel_pending_continuations(
+        conn: sqlite3.Connection,
+        *,
+        goal_run_id: str | None = None,
+        session_id: str | None = None,
+        reason: str,
+    ) -> int:
+        clauses = ["status IN ('pending', 'claimed')"]
+        params: list[Any] = [time.time(), str(reason or "cancelled")]
+        if goal_run_id is not None:
+            clauses.append("goal_run_id=?")
+            params.append(str(goal_run_id))
+        if session_id is not None:
+            clauses.append("session_id=?")
+            params.append(str(session_id))
+        cursor = conn.execute(
+            "UPDATE continuation_outbox "
+            "SET status='cancelled', cancelled_at=?, cancel_reason=? "
+            f"WHERE {' AND '.join(clauses)}",
+            tuple(params),
+        )
+        return max(0, int(cursor.rowcount))
+
+    @staticmethod
+    def _settle_continuations(
+        conn: sqlite3.Connection,
+        *,
+        goal_run_id: str,
+        reason: str,
+    ) -> None:
+        """Consume the dispatched item and cancel anything never dispatched."""
+
+        now = time.time()
+        conn.execute(
+            "UPDATE continuation_outbox "
+            "SET status='consumed', consumed_at=? "
+            "WHERE goal_run_id=? AND status='claimed'",
+            (now, str(goal_run_id)),
+        )
+        conn.execute(
+            "UPDATE continuation_outbox "
+            "SET status='cancelled', cancelled_at=?, cancel_reason=? "
+            "WHERE goal_run_id=? AND status='pending'",
+            (now, str(reason or "superseded"), str(goal_run_id)),
+        )
+
+    @staticmethod
+    def _insert_continuation(
+        conn: sqlite3.Connection,
+        continuation: Mapping[str, Any],
+        *,
+        goal_run_id: str,
+        state_version: int,
+    ) -> dict[str, Any]:
+        token = str(continuation.get("token") or "").strip()
+        session_id = str(continuation.get("session_id") or "").strip()
+        prompt = str(continuation.get("prompt") or "")
+        kind = str(continuation.get("kind") or "continue").strip() or "continue"
+        if not token or not session_id or not prompt.strip():
+            raise ValueError("continuation token, session_id, and prompt are required")
+        conn.execute(
+            """
+            INSERT INTO continuation_outbox(
+                token, goal_run_id, session_id, prompt, kind, state_version,
+                status, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)
+            """,
+            (
+                token,
+                str(goal_run_id),
+                session_id,
+                prompt,
+                kind,
+                int(state_version),
+                time.time(),
+            ),
+        )
+        return {
+            "session_id": session_id,
+            "token": token,
+            "prompt": prompt,
+            "state_version": int(state_version),
+        }
+
     def save_run(
         self,
         goal_run_id: str,
@@ -308,6 +460,11 @@ class SupergoalStore:
                 state,
                 legacy_source_key=legacy_source_key,
             )
+            self._cancel_pending_continuations(
+                conn,
+                goal_run_id=goal_run_id,
+                reason="run state superseded",
+            )
 
     def load_run(self, goal_run_id: str) -> dict[str, Any] | None:
         self.ensure_schema()
@@ -318,6 +475,47 @@ class SupergoalStore:
                 (str(goal_run_id),),
             ).fetchone()
             return json.loads(row[0]) if row else None
+        finally:
+            conn.close()
+
+    def load_run_snapshot(
+        self, goal_run_id: str
+    ) -> tuple[dict[str, Any] | None, int]:
+        """Return a run and the revision required for a later CAS commit."""
+
+        self.ensure_schema()
+        conn = self._connect()
+        try:
+            row = conn.execute(
+                "SELECT state_json, revision FROM runs WHERE goal_run_id=?",
+                (str(goal_run_id),),
+            ).fetchone()
+            if not row:
+                return None, -1
+            return json.loads(row[0]), int(row[1])
+        finally:
+            conn.close()
+
+    def load_bound_run_snapshot(
+        self, session_id: str
+    ) -> tuple[str, dict[str, Any] | None, int]:
+        """Load the current run bound to a physical Hermes session."""
+
+        self.ensure_schema()
+        conn = self._connect()
+        try:
+            row = conn.execute(
+                """
+                SELECT r.goal_run_id, r.state_json, r.revision
+                FROM session_bindings AS b
+                JOIN runs AS r ON r.goal_run_id=b.goal_run_id
+                WHERE b.session_id=? AND b.is_current=1
+                """,
+                (str(session_id),),
+            ).fetchone()
+            if not row:
+                return "", None, -1
+            return str(row[0]), json.loads(row[1]), int(row[2])
         finally:
             conn.close()
 
@@ -421,6 +619,11 @@ class SupergoalStore:
                 reason=reason,
                 is_current=True,
             )
+            conn.execute(
+                "UPDATE continuation_outbox SET session_id=? "
+                "WHERE session_id=? AND goal_run_id=? AND status='pending'",
+                (str(new_session_id), str(old_session_id), goal_run_id),
+            )
             return goal_run_id
 
     @staticmethod
@@ -482,6 +685,47 @@ class SupergoalStore:
                 legacy_source_index=source_index,
             )
 
+    def append_active_event_once_for_session(
+        self,
+        session_id: str,
+        event: Mapping[str, Any],
+        *,
+        source_key: str,
+        source_index: int = 0,
+        expected_goal_run_id: str | None = None,
+    ) -> bool:
+        """Append evidence only while the bound run is transactionally active."""
+
+        normalized = _normalize_event(event)
+        self.ensure_schema()
+        with self._transaction() as conn:
+            clauses = [
+                "b.session_id=?",
+                "b.is_current=1",
+                "r.status='active'",
+            ]
+            params: list[Any] = [str(session_id)]
+            if expected_goal_run_id is not None:
+                clauses.append("r.goal_run_id=?")
+                params.append(str(expected_goal_run_id))
+            row = conn.execute(
+                """
+                SELECT r.goal_run_id
+                FROM session_bindings AS b
+                JOIN runs AS r ON r.goal_run_id=b.goal_run_id
+                WHERE """ + " AND ".join(clauses),
+                tuple(params),
+            ).fetchone()
+            if not row:
+                return False
+            return self._insert_event(
+                conn,
+                str(row[0]),
+                normalized,
+                legacy_source_key=source_key,
+                legacy_source_index=source_index,
+            )
+
     def load_events(
         self, goal_run_id: str, *, limit: int = 1000
     ) -> list[dict[str, Any]]:
@@ -511,8 +755,324 @@ class SupergoalStore:
         self.ensure_schema()
         with self._transaction() as conn:
             self._upsert_run(conn, goal_run_id, state)
+            self._cancel_pending_continuations(
+                conn,
+                goal_run_id=goal_run_id,
+                reason="run state superseded",
+            )
             for event in normalized_events:
                 self._insert_event(conn, goal_run_id, event)
+
+    def save_run_with_events_cas(
+        self,
+        goal_run_id: str,
+        state: Mapping[str, Any] | str,
+        events: Sequence[Mapping[str, Any]],
+        *,
+        expected_revision: int,
+        require_status: str | None = None,
+        continuation: Mapping[str, Any] | None = None,
+        cancel_pending: bool = False,
+        settle_claimed: bool = False,
+        cancel_reason: str = "run state superseded",
+        deactivate_session_id: str | None = None,
+    ) -> tuple[int, dict[str, Any] | None] | None:
+        """Commit state, events, and an optional continuation with CAS.
+
+        Returning ``None`` means another lifecycle action won the race. No
+        event or outbox row is written in that case.
+        """
+
+        normalized = _normalize_state(state)
+        normalized["goal_run_id"] = str(goal_run_id)
+        normalized_events = [_normalize_event(event) for event in events]
+        raw = _canonical_json(normalized)
+        self.ensure_schema()
+        with self._transaction() as conn:
+            row = conn.execute(
+                "SELECT revision, status FROM runs WHERE goal_run_id=?",
+                (str(goal_run_id),),
+            ).fetchone()
+            if not row or int(row[0]) != int(expected_revision):
+                return None
+            if require_status is not None and str(row[1]) != str(require_status):
+                return None
+            new_revision = int(expected_revision) + 1
+            cursor = conn.execute(
+                """
+                UPDATE runs
+                SET state_json=?, status=?, revision=?, state_schema_version=?,
+                    updated_at=?
+                WHERE goal_run_id=? AND revision=?
+                """,
+                (
+                    raw,
+                    str(normalized.get("status") or ""),
+                    new_revision,
+                    int(normalized.get("schema_version", 1) or 1),
+                    time.time(),
+                    str(goal_run_id),
+                    int(expected_revision),
+                ),
+            )
+            if cursor.rowcount != 1:
+                return None
+            for event in normalized_events:
+                self._insert_event(conn, str(goal_run_id), event)
+            if settle_claimed:
+                self._settle_continuations(
+                    conn,
+                    goal_run_id=str(goal_run_id),
+                    reason=cancel_reason,
+                )
+            elif cancel_pending or continuation is not None:
+                self._cancel_pending_continuations(
+                    conn,
+                    goal_run_id=str(goal_run_id),
+                    reason=cancel_reason,
+                )
+            if deactivate_session_id is not None:
+                conn.execute(
+                    "UPDATE session_bindings SET is_current=0 "
+                    "WHERE session_id=? AND goal_run_id=?",
+                    (str(deactivate_session_id), str(goal_run_id)),
+                )
+            envelope = None
+            if continuation is not None:
+                envelope = self._insert_continuation(
+                    conn,
+                    continuation,
+                    goal_run_id=str(goal_run_id),
+                    state_version=new_revision,
+                )
+            return new_revision, envelope
+
+    def enqueue_continuation(
+        self,
+        goal_run_id: str,
+        continuation: Mapping[str, Any],
+        *,
+        expected_revision: int,
+        cancel_reason: str = "newer continuation queued",
+    ) -> dict[str, Any] | None:
+        """Queue one command continuation without changing run state."""
+
+        self.ensure_schema()
+        with self._transaction() as conn:
+            row = conn.execute(
+                "SELECT revision, status FROM runs WHERE goal_run_id=?",
+                (str(goal_run_id),),
+            ).fetchone()
+            if (
+                not row
+                or int(row[0]) != int(expected_revision)
+                or str(row[1]) != "active"
+            ):
+                return None
+            self._cancel_pending_continuations(
+                conn,
+                goal_run_id=str(goal_run_id),
+                reason=cancel_reason,
+            )
+            return self._insert_continuation(
+                conn,
+                continuation,
+                goal_run_id=str(goal_run_id),
+                state_version=int(expected_revision),
+            )
+
+    def claim_continuation(
+        self,
+        *,
+        session_id: str,
+        token: str,
+        claim_owner: str,
+        state_version: int | None = None,
+    ) -> bool:
+        """Claim immediately before dispatch, with restart-safe ownership."""
+
+        sid = str(session_id or "").strip()
+        clean_token = str(token or "").strip()
+        owner = str(claim_owner or "").strip()
+        if not sid or not clean_token or not owner:
+            return False
+        self.ensure_schema()
+        with self._transaction() as conn:
+            row = conn.execute(
+                """
+                SELECT o.goal_run_id, o.state_version, r.revision, r.status
+                FROM continuation_outbox AS o
+                JOIN runs AS r ON r.goal_run_id=o.goal_run_id
+                JOIN session_bindings AS b
+                  ON b.goal_run_id=o.goal_run_id AND b.session_id=o.session_id
+                WHERE o.token=? AND o.session_id=?
+                  AND o.status IN ('pending', 'claimed')
+                  AND (o.status='pending' OR o.claim_owner<>?)
+                  AND b.is_current=1
+                """,
+                (clean_token, sid, owner),
+            ).fetchone()
+            if not row:
+                return False
+            outbox_version = int(row[1])
+            if state_version is not None and int(state_version) != outbox_version:
+                return False
+            if str(row[3]) != "active" or int(row[2]) != outbox_version:
+                self._cancel_pending_continuations(
+                    conn,
+                    goal_run_id=str(row[0]),
+                    session_id=sid,
+                    reason="stale continuation claim",
+                )
+                return False
+            cursor = conn.execute(
+                """
+                UPDATE continuation_outbox
+                SET status='claimed', claimed_at=?, claim_owner=?
+                WHERE token=? AND status IN ('pending', 'claimed')
+                  AND (status='pending' OR claim_owner<>?)
+                """,
+                (time.time(), owner, clean_token, owner),
+            )
+            return cursor.rowcount == 1
+
+    def recover_continuations(self, *, claim_owner: str) -> list[dict[str, Any]]:
+        """Return valid pending rows and cancel stale rows transactionally."""
+
+        owner = str(claim_owner or "").strip()
+        if not owner:
+            return []
+        self.ensure_schema()
+        with self._transaction() as conn:
+            now = time.time()
+            conn.execute(
+                """
+                UPDATE continuation_outbox
+                SET status='cancelled', cancelled_at=?,
+                    cancel_reason='stale continuation recovery'
+                WHERE status IN ('pending', 'claimed') AND NOT EXISTS (
+                    SELECT 1
+                    FROM runs AS r
+                    JOIN session_bindings AS b
+                      ON b.goal_run_id=r.goal_run_id
+                    WHERE r.goal_run_id=continuation_outbox.goal_run_id
+                      AND r.status='active'
+                      AND r.revision=continuation_outbox.state_version
+                      AND b.session_id=continuation_outbox.session_id
+                      AND b.is_current=1
+                )
+                """,
+                (now,),
+            )
+            rows = conn.execute(
+                """
+                SELECT session_id, token, prompt, state_version
+                FROM continuation_outbox
+                WHERE status='pending'
+                   OR (status='claimed' AND claim_owner<>?)
+                ORDER BY created_at ASC, token ASC
+                """,
+                (owner,),
+            ).fetchall()
+            return [
+                {
+                    "session_id": str(row[0]),
+                    "token": str(row[1]),
+                    "prompt": str(row[2]),
+                    "state_version": int(row[3]),
+                }
+                for row in rows
+            ]
+
+    def cancel_continuations(
+        self,
+        *,
+        goal_run_id: str | None = None,
+        session_id: str | None = None,
+        reason: str,
+    ) -> int:
+        self.ensure_schema()
+        with self._transaction() as conn:
+            return self._cancel_pending_continuations(
+                conn,
+                goal_run_id=goal_run_id,
+                session_id=session_id,
+                reason=reason,
+            )
+
+    def finalize_session(
+        self,
+        session_id: str,
+        *,
+        reason: str,
+    ) -> dict[str, Any] | None:
+        """Pause a live run at a real conversation boundary.
+
+        The old binding stays current so an explicit resume can recover it by
+        its durable session id. A newly-created Hermes session has no binding.
+        """
+
+        sid = str(session_id or "").strip()
+        if not sid:
+            return None
+        self.ensure_schema()
+        with self._transaction() as conn:
+            row = conn.execute(
+                """
+                SELECT r.goal_run_id, r.state_json, r.revision, r.status
+                FROM session_bindings AS b
+                JOIN runs AS r ON r.goal_run_id=b.goal_run_id
+                WHERE b.session_id=? AND b.is_current=1
+                """,
+                (sid,),
+            ).fetchone()
+            if not row:
+                self._cancel_pending_continuations(
+                    conn,
+                    session_id=sid,
+                    reason=f"session finalized: {reason}",
+                )
+                return None
+            goal_run_id = str(row[0])
+            state = json.loads(row[1])
+            if str(row[3]) == "active":
+                state["status"] = "paused"
+                state["paused_reason"] = f"session finalized: {reason}"
+                normalized = _normalize_state(state)
+                normalized["goal_run_id"] = goal_run_id
+                new_revision = int(row[2]) + 1
+                conn.execute(
+                    """
+                    UPDATE runs
+                    SET state_json=?, status='paused', revision=?, updated_at=?
+                    WHERE goal_run_id=? AND revision=?
+                    """,
+                    (
+                        _canonical_json(normalized),
+                        new_revision,
+                        time.time(),
+                        goal_run_id,
+                        int(row[2]),
+                    ),
+                )
+                self._insert_event(
+                    conn,
+                    goal_run_id,
+                    {
+                        "type": "session_finalized",
+                        "turn": int(state.get("turns_used", 0) or 0),
+                        "ts": time.time(),
+                        "summary": str(state["paused_reason"]),
+                        "data": {"session_id": sid, "reason": str(reason)},
+                    },
+                )
+            self._cancel_pending_continuations(
+                conn,
+                goal_run_id=goal_run_id,
+                session_id=sid,
+                reason=f"session finalized: {reason}",
+            )
+            return state
 
     def import_run_bundle(
         self,
@@ -522,6 +1082,7 @@ class SupergoalStore:
         bindings: Iterable[tuple[str, str]] = (),
         events: Iterable[tuple[Mapping[str, Any], str, int]] = (),
         legacy_source_key: str | None = None,
+        continuation: Mapping[str, Any] | None = None,
     ) -> dict[str, int]:
         """Atomically import one legacy run, its bindings, and its events."""
 
@@ -567,6 +1128,17 @@ class SupergoalStore:
                     legacy_source_index=source_index,
                 ):
                     counts["events"] += 1
+            if continuation is not None:
+                revision_row = conn.execute(
+                    "SELECT revision FROM runs WHERE goal_run_id=?",
+                    (str(goal_run_id),),
+                ).fetchone()
+                self._insert_continuation(
+                    conn,
+                    continuation,
+                    goal_run_id=str(goal_run_id),
+                    state_version=int(revision_row[0]) if revision_row else 0,
+                )
         return counts
 
     def import_legacy_plan(
