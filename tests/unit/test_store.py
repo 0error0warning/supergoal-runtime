@@ -171,6 +171,28 @@ def test_session_binding_is_unique_and_conflicts_fail_closed(tmp_path):
     assert store.get_goal_run_id("session") == "run-1"
 
 
+def test_rotation_rejects_a_stale_noncurrent_ancestor(tmp_path):
+    store = SupergoalStore(db_path=tmp_path / "state.db")
+    store.save_run("run-1", {"goal": "one", "status": "active"})
+    store.bind_session("old-session", "run-1", reason="start")
+
+    assert (
+        store.rotate_session_binding(
+            "old-session", "current-session", reason="compression"
+        )
+        == "run-1"
+    )
+    assert (
+        store.rotate_session_binding(
+            "old-session", "stale-retry", reason="compression"
+        )
+        == ""
+    )
+    assert store.is_current_session("old-session") is False
+    assert store.is_current_session("current-session") is True
+    assert store.get_goal_run_id("stale-retry") == ""
+
+
 def test_save_run_and_events_commit_atomically(tmp_path):
     store = SupergoalStore(db_path=tmp_path / "state.db")
 

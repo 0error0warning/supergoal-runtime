@@ -16,6 +16,8 @@ def _enable_plugin(home: Path) -> None:
 
 
 def test_formal_plugin_manifest_and_package_metadata_exist():
+    from supergoal_runtime import __version__
+
     root = Path(__file__).resolve().parents[2]
     manifest = yaml.safe_load((root / "plugin.yaml").read_text(encoding="utf-8"))
     pyproject = (root / "pyproject.toml").read_text(encoding="utf-8")
@@ -25,7 +27,12 @@ def test_formal_plugin_manifest_and_package_metadata_exist():
     assert manifest["kind"] == "standalone"
     assert manifest["provides_tools"] == []
     assert manifest["plugin_abi"] == 1
-    assert "on_session_rotate" in manifest["provides_hooks"]
+    assert manifest["version"] == "1.1.1"
+    assert __version__ == manifest["version"]
+    assert manifest["hermes_min_version"] == "0.20.5"
+    assert "post_llm_call" in manifest["provides_hooks"]
+    assert "on_session_rotate" not in manifest["provides_hooks"]
+    assert 'version = "1.1.1"' in pyproject
     assert '"hermes_agent.plugins"' in pyproject
     assert 'supergoal-runtime = "supergoal_runtime.plugin"' in pyproject
 
@@ -83,6 +90,11 @@ def test_git_install_enable_disable_uses_real_profile_plugin_flow(tmp_path, monk
     subprocess.run(["git", "commit", "-qm", "seed plugin"], cwd=seed, check=True)
 
     home = tmp_path / "profile-install"
+    home.mkdir(parents=True)
+    (home / "config.yaml").write_text(
+        yaml.safe_dump({"plugins": {"scan_on_install": False}}),
+        encoding="utf-8",
+    )
     monkeypatch.setenv("HERMES_HOME", str(home))
     monkeypatch.setattr(
         "hermes_cli.plugins.get_bundled_plugins_dir",

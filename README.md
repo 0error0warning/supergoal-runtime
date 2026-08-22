@@ -4,7 +4,7 @@
 
 Standalone Hermes plugin for long-running, evidence-first autonomous missions.
 
-> **Status: migration complete, production validated.** Phases 0–7 are complete: Supergoal product logic has moved out of Hermes Core, legacy state migration and two-stage production cutover have passed, and the old overlay/patch delivery path is archived. Current plugin release: **1.0.0**.
+> **Status: migration complete, production validated.** Phases 0–7 are complete: Supergoal product logic has moved out of Hermes Core, legacy state migration and two-stage production cutover have passed, and the old overlay/patch delivery path is archived. Current plugin release: **1.1.1**.
 
 ## Architecture
 
@@ -12,8 +12,8 @@ Standalone Hermes plugin for long-running, evidence-first autonomous missions.
 Hermes generic plugin ABI
   ├─ context-aware slash commands + busy-safe controls
   ├─ pre_tool_call / post_tool_call hooks
-  ├─ post-turn TurnDirective controller
-  └─ on_session_rotate hook
+  ├─ post_llm_call + compression lineage
+  └─ post-turn TurnDirective controller
                  │
                  ▼
        supergoal-runtime plugin
@@ -43,6 +43,10 @@ Plain `/supergoal <text>` does **not** start a mission. Start is explicit to pre
 ## Runtime guarantees
 
 - Stable logical `goal_run_id` across physical session rotation/compression.
+- Compression continuity uses Hermes' fork-aware lineage, so explicit branches,
+  delegates, and tool sessions do not inherit a mission accidentally.
+- Reconciliation is idempotent and fail-open, with a bounded five-minute miss
+  cache to keep ordinary non-Supergoal turns cheap.
 - Profile-scoped SQLite at `${HERMES_HOME}/supergoal/state.db`.
 - WAL, foreign keys, explicit transactions, schema migrations, and idempotent tool-event writes.
 - Deterministic acceptance gates, strategy gates, action taxonomy, and inertia guard.
@@ -56,14 +60,21 @@ Plain `/supergoal <text>` does **not** start a mission. Start is explicit to pre
 
 ## Hermes compatibility
 
-The plugin requires the generic Hermes plugin ABI used for:
+The plugin requires Hermes **0.20.5 or newer** and its public generic plugin ABI:
 
 - context-aware commands and native follow-up enqueue;
 - post-turn `TurnDirective` controllers;
 - busy-safe control subcommands;
-- `on_session_rotate` continuity.
+- the supported `post_llm_call` hook;
+- `SessionDB.get_compression_lineage()` for fork-aware continuity.
 
-These interfaces are proposed upstream in [NousResearch/hermes-agent#63208](https://github.com/NousResearch/hermes-agent/pull/63208). Until that PR, or an equivalent implementation, is present in an official Hermes release, use a compatible Hermes checkout containing those generic ABI commits. The plugin CI checks every change against the latest Hermes `main` plus the upstream PR commits, so compatibility drift fails visibly.
+`post_llm_call` runs after a completed, non-interrupted turn and before the
+post-turn controller. In-place compression is a no-op because the physical
+session ID is already bound. When compression creates a child session, the
+plugin walks only that child's compression ancestors and moves the current
+binding before continuation is evaluated. Missing lineage or a transient host
+read failure never breaks the Hermes response; transient failures are not
+cached, so the next completed turn can retry immediately.
 
 No Supergoal-specific product branch remains in Hermes Core. The only direct host imports are the generic `TurnDirective` type and a narrow ordinary `/goal` conflict adapter.
 

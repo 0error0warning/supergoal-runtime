@@ -19,9 +19,9 @@ VALIDATED
    - Gateway pending slot/overflow 保持用户在自动 continuation 前。
    - CLI 发现 pending input 时不运行 controller。
    - TUI 先 `_drain_queued_prompt()`，再处理自动 continuation。
-5. **compression 后触发 `on_session_rotate`**：通过。
-   - hook 在 child session 创建并更新 system prompt 后调用。
-   - `/sgx` 插件把 active binding 从旧 session 迁移到新 session。
+5. **compression 后通过官方生命周期 ABI 保持绑定**：通过。
+   - `post_llm_call` 在压缩完成后、turn controller 前调用。
+   - `/sgx` 插件用 fork-aware compression lineage 把 active binding 从旧 session 迁移到新 session；显式 branch/delegate/tool session 不继承。
 
 ## 关键不变量
 

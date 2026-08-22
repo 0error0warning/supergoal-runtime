@@ -602,7 +602,8 @@ class SupergoalStore:
         self.ensure_schema()
         with self._transaction() as conn:
             row = conn.execute(
-                "SELECT goal_run_id FROM session_bindings WHERE session_id=?",
+                "SELECT goal_run_id FROM session_bindings "
+                "WHERE session_id=? AND is_current=1",
                 (str(old_session_id),),
             ).fetchone()
             if not row:

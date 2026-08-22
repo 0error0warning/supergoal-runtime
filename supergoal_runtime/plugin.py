@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import json
+import logging
+import threading
 import time
 import uuid
+from collections import OrderedDict
 from typing import Any
 
 from .command import SupergoalCommandHandler, register_supergoal_command
@@ -15,6 +18,25 @@ from .store import BindingConflictError, SupergoalStore
 
 LLM_EVALUATION_TIMEOUT_SECONDS = 18.0
 CONTROLLER_STORE_TIMEOUT_SECONDS = 2.0
+COMPRESSION_MISS_CACHE_MAX = 1024
+COMPRESSION_MISS_CACHE_TTL_SECONDS = 300.0
+
+logger = logging.getLogger(__name__)
+
+
+def _get_compression_lineage(session_id: str) -> list[str]:
+    """Read Hermes' fork-aware compression lineage without opening a writer."""
+
+    from hermes_state import SessionDB
+
+    with SessionDB(read_only=True) as session_db:
+        get_lineage = getattr(session_db, "get_compression_lineage", None)
+        if not callable(get_lineage):
+            raise RuntimeError(
+                "Hermes SessionDB does not expose get_compression_lineage()"
+            )
+        raw_lineage = get_lineage(session_id)
+    return [str(item) for item in (raw_lineage or ()) if str(item)]
 
 
 def _parse_json_object(raw: str) -> dict[str, Any] | None:
@@ -113,6 +135,8 @@ def _critic_from_ctx(ctx: Any):
 class _PluginRuntime:
     def __init__(self, ctx: Any) -> None:
         self.boot_id = f"boot_{uuid.uuid4().hex}"
+        self._compression_misses: OrderedDict[str, float] = OrderedDict()
+        self._compression_misses_lock = threading.Lock()
         # Core bounds a turn controller at 30 seconds. The evaluators share a
         # 20-second budget, so database lock waits must stay short enough for
         # the final CAS to complete (or fail closed) before the host deadline.
@@ -127,6 +151,31 @@ class _PluginRuntime:
             continuation_provider=self,
         )
         self.tool_hooks = ToolHookHandler(self.store)
+
+    def _compression_miss_is_cached(self, session_id: str) -> bool:
+        now = time.monotonic()
+        with self._compression_misses_lock:
+            expires_at = self._compression_misses.get(session_id)
+            if expires_at is None:
+                return False
+            if expires_at <= now:
+                self._compression_misses.pop(session_id, None)
+                return False
+            self._compression_misses.move_to_end(session_id)
+            return True
+
+    def _remember_compression_miss(self, session_id: str) -> None:
+        with self._compression_misses_lock:
+            self._compression_misses.pop(session_id, None)
+            self._compression_misses[session_id] = (
+                time.monotonic() + COMPRESSION_MISS_CACHE_TTL_SECONDS
+            )
+            while len(self._compression_misses) > COMPRESSION_MISS_CACHE_MAX:
+                self._compression_misses.popitem(last=False)
+
+    def _forget_compression_miss(self, session_id: str) -> None:
+        with self._compression_misses_lock:
+            self._compression_misses.pop(session_id, None)
 
     def claim_continuation(
         self,
@@ -177,40 +226,108 @@ class _PluginRuntime:
                 return None
             return TurnDirective(**legacy)
 
-    def on_session_rotate(
+    def post_llm_call(
         self,
         *,
-        old_session_id: str,
-        new_session_id: str,
-        reason: str,
+        session_id: str | None = None,
         **_: Any,
     ) -> None:
-        if reason not in {"compression", "context_compression"}:
+        """Reconcile a compression child with its active logical mission.
+
+        Hermes invokes this supported hook after compression and before the
+        post-turn controller.  The host's compression lineage deliberately
+        excludes explicit branches, delegates, and tool sessions, so only a
+        genuine compression continuation can inherit a Supergoal binding.
+        """
+
+        current_session_id = str(session_id or "").strip()
+        if not current_session_id or not self.store.db_path.exists():
+            return
+        if self._compression_miss_is_cached(current_session_id):
             return
         try:
+            if self.store.get_goal_run_id(current_session_id):
+                self._forget_compression_miss(current_session_id)
+                return
+
+            lineage = _get_compression_lineage(current_session_id)
+            try:
+                current_index = lineage.index(current_session_id)
+            except ValueError:
+                self._remember_compression_miss(current_session_id)
+                return
+            lineage = lineage[: current_index + 1]
+            old_session_id = next(
+                (
+                    ancestor
+                    for ancestor in reversed(lineage[:-1])
+                    if self.store.is_current_session(ancestor)
+                ),
+                "",
+            )
+            if not old_session_id:
+                self._remember_compression_miss(current_session_id)
+                return
+
             goal_run_id = self.store.rotate_session_binding(
                 old_session_id,
-                new_session_id,
-                reason=reason,
+                current_session_id,
+                reason="compression",
             )
+            if not goal_run_id:
+                if self.store.get_goal_run_id(current_session_id):
+                    self._forget_compression_miss(current_session_id)
+                else:
+                    self._remember_compression_miss(current_session_id)
+                return
+            self._forget_compression_miss(current_session_id)
         except BindingConflictError:
+            logger.warning(
+                "Supergoal compression binding conflict for session %s",
+                current_session_id,
+                exc_info=True,
+            )
             return
-        if not goal_run_id:
+        except Exception:
+            logger.warning(
+                "Supergoal compression reconciliation failed open for session %s",
+                current_session_id,
+                exc_info=True,
+            )
             return
-        self.store.append_event(
-            goal_run_id,
-            {
-                "ts": time.time(),
-                "type": "session_rotated",
-                "turn": int((self.store.load_run(goal_run_id) or {}).get("turns_used", 0) or 0),
-                "summary": "Hermes session rotated",
-                "data": {
-                    "old_session_id": old_session_id,
-                    "new_session_id": new_session_id,
-                    "reason": reason,
+
+        try:
+            self.store.append_event_once(
+                goal_run_id,
+                {
+                    "ts": time.time(),
+                    "type": "session_rotated",
+                    "turn": int(
+                        (self.store.load_run(goal_run_id) or {}).get(
+                            "turns_used", 0
+                        )
+                        or 0
+                    ),
+                    "summary": "Hermes compression lineage reconciled",
+                    "data": {
+                        "old_session_id": old_session_id,
+                        "new_session_id": current_session_id,
+                        "reason": "compression",
+                    },
                 },
-            },
-        )
+                source_key=(
+                    "compression-lineage:"
+                    f"{old_session_id}:{current_session_id}"
+                ),
+            )
+        except Exception:
+            # Continuity is already durable.  An audit-row failure must not
+            # break an otherwise successful Hermes response.
+            logger.warning(
+                "Supergoal compression audit event failed for session %s",
+                current_session_id,
+                exc_info=True,
+            )
 
     def on_session_finalize(
         self,
@@ -262,6 +379,6 @@ def register(ctx: Any) -> None:
         )
     ctx.register_hook("on_session_finalize", runtime.on_session_finalize)
     ctx.register_hook("on_session_reset", runtime.on_session_reset)
-    ctx.register_hook("on_session_rotate", runtime.on_session_rotate)
+    ctx.register_hook("post_llm_call", runtime.post_llm_call)
     ctx.register_hook("pre_tool_call", runtime.tool_hooks.pre_tool_call)
     ctx.register_hook("post_tool_call", runtime.tool_hooks.post_tool_call)

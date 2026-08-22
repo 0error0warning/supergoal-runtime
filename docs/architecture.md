@@ -7,7 +7,7 @@ Supergoal is a standalone product plugin. Hermes Core supplies only generic capa
 - context-aware command dispatch;
 - busy-safe plugin control subcommands;
 - post-turn controller directives;
-- session-rotation notification;
+- the `post_llm_call` lifecycle hook and compression lineage query;
 - pre/post tool hooks;
 - host-owned LLM access.
 
@@ -37,7 +37,20 @@ ${HERMES_HOME}/supergoal/state.db
   events              append-only mission ledger
 ```
 
-`goal_run_id` is stable. Compression calls `on_session_rotate`; the new session becomes current while the old binding remains auditable. Store writes use WAL, foreign keys, explicit transactions, and idempotent event source keys.
+`goal_run_id` is stable. After each completed turn, `post_llm_call` first checks
+whether the physical session is already bound. For an unbound session it reads
+Hermes' fork-aware compression lineage and searches backward for the current
+Supergoal ancestor. A match atomically makes the compression child current;
+the old binding remains auditable and pending continuation rows follow the new
+session. Explicit branches, delegates, and tool sessions have no compression
+ancestor and therefore do not inherit the mission.
+
+The reconciliation path is idempotent and fail-open. Rotation accepts only an
+ancestor still marked current, and the audit event has a deterministic source
+key. A thread-safe, 1,024-entry cache keeps confirmed lineage misses for five
+minutes, preventing repeated reads on ordinary sessions. Host/database errors
+are not cached, so a later turn can retry immediately. Store writes use WAL,
+foreign keys, explicit transactions, and idempotent event source keys.
 
 ## Mission model
 
