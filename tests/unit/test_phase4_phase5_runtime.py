@@ -336,7 +336,7 @@ def test_runtime_passes_persisted_state_to_judge(tmp_path):
     assert observed["state"].turns_used == 1
 
 
-def test_explicit_completion_with_tool_backed_gates_stops_weak_judge_loop(tmp_path):
+def test_completion_claim_and_unrelated_tools_do_not_override_judge(tmp_path):
     store = SupergoalStore(db_path=tmp_path / "state.db")
     manager = RuntimeManager(
         store=store,
@@ -369,11 +369,11 @@ def test_explicit_completion_with_tool_backed_gates_stops_weak_judge_loop(tmp_pa
         turn_id="turn-final",
     )
 
-    assert decision and decision["action"] == "done"
+    assert decision and decision["action"] == "continue"
     state = manager.load_state_for_session("sess")
-    assert state is not None and state.status == "done"
-    assert state.last_verdict == "done"
-    assert state.last_reason == "explicit completion confirmed by tool-backed gates"
+    assert state is not None and state.status == "active"
+    assert state.last_verdict == "continue"
+    assert state.last_reason == "weak judge is uncertain"
 
 
 def test_partial_completion_wording_does_not_trigger_local_done(tmp_path):

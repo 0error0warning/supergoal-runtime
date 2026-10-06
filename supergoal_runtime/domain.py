@@ -107,9 +107,9 @@ def _default_gate_metadata(gate_id: str) -> tuple[str, str, bool]:
     if gid == "G1":
         return "intent", "run_acceptance", True
     if gid == "G2":
-        return "research", "domain_required", True
+        return "research", "quality_followup", False
     if gid == "G3":
-        return "execution", "run_acceptance", True
+        return "verification", "quality_followup", False
     if gid == "G4":
         return "finalization", "run_acceptance", True
     if gid.startswith("SG-"):
@@ -137,9 +137,18 @@ class GoalContract:
     constraints: str = ""
     boundaries: str = ""
     stop_when: str = ""
+    evidence_requirements: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        allowed = {"artifact", "verification", "external_source", "tool_result", "human_acceptance"}
+        if not isinstance(self.evidence_requirements, list):
+            raise ValueError("evidence_requirements must be a list")
+        if any(not isinstance(item, str) or item not in allowed for item in self.evidence_requirements):
+            raise ValueError("unsupported evidence requirement")
+        self.evidence_requirements = list(dict.fromkeys(self.evidence_requirements))
 
     def is_empty(self) -> bool:
-        return not any(
+        return not self.evidence_requirements and not any(
             getattr(self, field_name).strip()
             for field_name in ("outcome", "verification", "constraints", "boundaries", "stop_when")
         )
@@ -154,6 +163,7 @@ class GoalContract:
             constraints=str(data.get("constraints") or "").strip(),
             boundaries=str(data.get("boundaries") or "").strip(),
             stop_when=str(data.get("stop_when") or "").strip(),
+            evidence_requirements=data.get("evidence_requirements", []),
         )
 
 
@@ -431,15 +441,18 @@ class GoalState:
     first_principles_model: list[str] = field(default_factory=list)
     existing_solution_scan: list[str] = field(default_factory=list)
     research_findings: list[ResearchFinding] = field(default_factory=list)
+    # Historical domain data is round-tripped for migration, never used as
+    # acceptance policy or merged from the current critic response.
     hypothesis_portfolio: list[HypothesisRecord] = field(default_factory=list)
     gates: list[GoalGate] = field(default_factory=list)
+    retired_gates: list[GoalGate] = field(default_factory=list)
     action_history: list[str] = field(default_factory=list)
     current_action_class: str = "unknown"
     action_proposal: SupergoalActionProposal = field(default_factory=SupergoalActionProposal)
     last_action_evidence_count: int = 0
     same_action_no_evidence_count: int = 0
     hard_gate_reason: str = ""
-    no_edge_report: str = ""
+    no_edge_report: str = ""  # Historical compatibility data only.
     build_vs_reuse_decision: str = ""
     evidence_layers: dict[str, list[str]] = field(default_factory=dict)
     failure_taxonomy: dict[str, int] = field(default_factory=dict)
@@ -449,6 +462,7 @@ class GoalState:
     research_sufficiency: str = "unknown"
     next_best_action: str = ""
     strategy_health: str = "unknown"
+    plan_health: str = "unknown"
     progress: str = "unknown"
     root_cause_confidence: float = 0.0
     should_replan: bool = False
@@ -531,6 +545,10 @@ class GoalState:
             research_findings=findings,
             hypothesis_portfolio=hypotheses,
             gates=gates,
+            retired_gates=[
+                gate for item in (data.get("retired_gates") or [])
+                if (gate := GoalGate.from_dict(item)) is not None
+            ],
             action_history=_clean_string_list(data.get("action_history") or [], limit=12, item_limit=80),
             current_action_class=str(data.get("current_action_class") or "unknown"),
             action_proposal=SupergoalActionProposal.from_dict(data.get("action_proposal") or {}),
@@ -555,6 +573,7 @@ class GoalState:
             research_sufficiency=str(data.get("research_sufficiency") or "unknown"),
             next_best_action=str(data.get("next_best_action") or ""),
             strategy_health=str(data.get("strategy_health") or "unknown"),
+            plan_health=str(data.get("plan_health") or "unknown"),
             progress=str(data.get("progress") or "unknown"),
             root_cause_confidence=_coerce_float(data.get("root_cause_confidence"), 0.0),
             should_replan=bool(data.get("should_replan", False)),
@@ -585,25 +604,29 @@ class GoalState:
         parts = [
             f"objective: {self.goal}",
             f"turns_used: {self.turns_used}/{self.max_turns}; latest_completed_turn: {self.turns_used}",
-            f"progress: {self.progress}; strategy_health: {self.strategy_health}; root_cause_confidence: {self.root_cause_confidence:.2f}",
-            f"literalism_risk: {self.literalism_risk}; research_sufficiency: {self.research_sufficiency}",
+            f"progress: {self.progress}; plan_health: {self.plan_health}",
         ]
-        if self.inferred_user_intent:
-            parts.append("inferred_user_intent: " + self.inferred_user_intent)
-        if self.success_definition:
-            parts.append("success_definition: " + self.success_definition)
+        if self.has_contract():
+            for name in ("outcome", "verification", "constraints", "boundaries", "stop_when"):
+                value = getattr(self.contract, name)
+                if value:
+                    parts.append(f"contract.{name}: {value}")
+            if self.contract.evidence_requirements:
+                parts.append("required_evidence: " + ", ".join(self.contract.evidence_requirements))
+        if self.acceptance_criteria:
+            parts.append("acceptance_criteria: " + "; ".join(self.acceptance_criteria))
         if self.gates:
             parts.append("gates: " + "; ".join(f"{g.id}:{g.status}:{g.description}" for g in self.gates[:8]))
         if self.action_history:
             parts.append("action_history: " + " -> ".join(self.action_history[-8:]))
         if self.hard_gate_reason:
             parts.append("hard_gate: " + self.hard_gate_reason)
-        if self.evidence_layers:
-            parts.append("evidence_layers: " + "; ".join(f"{k}={len(v)}" for k, v in sorted(self.evidence_layers.items())))
-        if self.evidence:
-            compact_evidence = [" ".join(str(item).split())[:240] for item in self.evidence[-8:] if str(item).strip()]
-            if compact_evidence:
-                parts.append("recent_evidence: " + " | ".join(compact_evidence))
+        proof_layers = {"artifact", "verification", "external_prior", "tool_observation", "local_empirical", "human_acceptance"}
+        evidence_layers = {key: values for key, values in self.evidence_layers.items() if key in proof_layers and values}
+        if evidence_layers:
+            parts.append("evidence_layers: " + "; ".join(f"{k}={len(v)}" for k, v in sorted(evidence_layers.items())))
+            for key, values in sorted(evidence_layers.items()):
+                parts.append(f"recorded_evidence.{key}: " + " | ".join(" ".join(str(v).split())[:240] for v in values[-3:]))
         if self.next_best_action:
             parts.append("next_best_action: " + self.next_best_action)
         if self.should_replan:

@@ -14,7 +14,7 @@ from concurrent.futures import Future, ThreadPoolExecutor, wait
 from dataclasses import asdict
 from typing import Any, Callable
 
-from .domain import DEFAULT_MAX_TURNS, GoalEvent, GoalState, SupergoalActionProposal, _infer_terminal_blocker_status
+from .domain import DEFAULT_MAX_TURNS, GoalContract, GoalEvent, GoalState, SupergoalActionProposal, _infer_terminal_blocker_status
 from .evaluators import apply_supergoal_critic
 from .gates import first_blocking_failure, reconcile_done_evidence_gates, update_supergoal_gates
 from .projection import apply_events_to_state, extract_observation_events
@@ -80,37 +80,6 @@ def _pid_alive(pid: int | None) -> bool:
         return False
 
 
-def _has_explicit_completion_claim(text: str) -> bool:
-    normalized = " ".join(str(text or "").casefold().split())
-    if not normalized:
-        return False
-    negative = (
-        "尚未完成",
-        "任务未完成",
-        "还未完成",
-        "等待下一轮",
-        "not complete",
-        "not finished",
-        "incomplete",
-        "more work",
-    )
-    if any(marker in normalized for marker in negative):
-        return False
-    positive = (
-        "全部完成",
-        "整体完成",
-        "整个任务完成",
-        "已完成全部",
-        "任务已完成",
-        "goal is complete",
-        "task is complete",
-        "completed the entire task",
-        "all requirements are satisfied",
-        "all acceptance criteria are satisfied",
-    )
-    return any(marker in normalized for marker in positive)
-
-
 class RuntimeManager:
     def __init__(
         self,
@@ -130,11 +99,15 @@ class RuntimeManager:
             max(0.01, float(evaluation_budget_seconds)),
         )
 
-    def start(self, session_id: str, goal: str, *, max_turns: int | None = None) -> GoalState:
+    def start(
+        self, session_id: str, goal: str, *, max_turns: int | None = None,
+        contract: GoalContract | dict[str, Any] | None = None,
+    ) -> GoalState:
         state, _envelope = self._start(
             session_id,
             goal,
             max_turns=max_turns,
+            contract=contract,
             durable_continuation=False,
         )
         return state
@@ -145,11 +118,13 @@ class RuntimeManager:
         goal: str,
         *,
         max_turns: int | None = None,
+        contract: GoalContract | dict[str, Any] | None = None,
     ) -> tuple[GoalState, dict[str, Any]]:
         state, envelope = self._start(
             session_id,
             goal,
             max_turns=max_turns,
+            contract=contract,
             durable_continuation=True,
         )
         assert envelope is not None
@@ -161,6 +136,7 @@ class RuntimeManager:
         goal: str,
         *,
         max_turns: int | None,
+        contract: GoalContract | dict[str, Any] | None,
         durable_continuation: bool,
     ) -> tuple[GoalState, dict[str, Any] | None]:
         goal_text = " ".join(str(goal or "").split())
@@ -168,6 +144,13 @@ class RuntimeManager:
             raise ValueError("session_id is required")
         if not goal_text:
             raise ValueError("goal text is required")
+        if isinstance(contract, GoalContract):
+            task_contract = GoalContract.from_dict(asdict(contract))
+        elif isinstance(contract, dict) or contract is None:
+            task_contract = GoalContract.from_dict(contract)
+        else:
+            raise ValueError("contract must be a GoalContract or a mapping")
+        task_contract.outcome = task_contract.outcome or goal_text
         goal_run_id = f"gr_{uuid.uuid4().hex[:16]}"
         state = GoalState(
             goal=goal_text,
@@ -177,10 +160,8 @@ class RuntimeManager:
             max_turns=int(max_turns or self.default_max_turns),
             created_at=time.time(),
             inferred_user_intent=goal_text,
-            success_definition=(
-                "Satisfy the mission with tool-backed evidence and verified artifacts; "
-                "if success is impossible, produce a concrete blocked or no-edge report."
-            ),
+            success_definition=task_contract.outcome,
+            contract=task_contract,
         )
         update_supergoal_gates(state)
         envelope = None
@@ -188,7 +169,7 @@ class RuntimeManager:
         if durable_continuation:
             continuation = _continuation(
                 session_id=session_id,
-                prompt=f"{START_PROMPT_PREFIX}\nGoal: {state.goal}",
+                prompt=f"{START_PROMPT_PREFIX}\nGoal: {state.goal}\n{state.render_supergoal_board()}",
                 kind="start",
             )
             envelope = {**continuation, "state_version": 0}
@@ -205,7 +186,10 @@ class RuntimeManager:
         self, session_id: str
     ) -> tuple[GoalState | None, int]:
         _goal_run_id, record, revision = self.store.load_bound_run_snapshot(session_id)
-        return state_from_record(record), revision
+        state = state_from_record(record)
+        if state is not None:
+            update_supergoal_gates(state)
+        return state, revision
 
     def load_state_for_session(self, session_id: str) -> GoalState | None:
         state, _revision = self._load_state_snapshot(session_id)
@@ -625,7 +609,7 @@ class RuntimeManager:
         # Keeping database work outside the post-evaluator commit path leaves
         # enough headroom under the host's 30-second controller deadline.
         persisted_events = self.store.load_events(state.goal_run_id)
-        if events:
+        if persisted_events or events:
             # Project in-memory together with already persisted events.
             projected = [
                 GoalEvent(
@@ -678,17 +662,12 @@ class RuntimeManager:
                 return None
             return {"action": "pause", "notice": status_line(state), "dedupe_key": f"{state.goal_run_id}:blocked:{turn_id}", "state_version": committed[0]}
 
-        completion_claim = _has_explicit_completion_claim(final_response)
-        verification_seen = any(
-            event.get("type") == "verification_observed"
-            for event in [*persisted_events, *events]
-        )
-        if verdict == "done" or (completion_claim and verification_seen):
+        if verdict == "done":
             reconcile_done_evidence_gates(state, final_response, reason)
             update_supergoal_gates(state)
             first_blocking = first_blocking_failure(state)
             if first_blocking is None:
-                completion_reason = reason if verdict == "done" else "explicit completion confirmed by tool-backed gates"
+                completion_reason = reason
                 state.status = "done"
                 state.last_verdict = "done"
                 state.last_reason = completion_reason
@@ -704,7 +683,7 @@ class RuntimeManager:
                             "done",
                             turn=state.turns_used,
                             summary=completion_reason,
-                            data={"reason": completion_reason, "local_completion": verdict != "done"},
+                            data={"reason": completion_reason},
                         ),
                     ],
                     expected_revision=revision,

@@ -1,10 +1,4 @@
-"""Evaluator adapters for the /supergoal runtime.
-
-The concrete judge/critic functions remain in ``hermes_cli.goals`` for this
-migration step so existing tests can still monkeypatch them.  These adapters
-make the controller depend on explicit evaluator objects instead of reaching
-through GoalManager for everything.
-"""
+"""Evaluator adapters and advisory progress updates for the plugin runtime."""
 
 from __future__ import annotations
 
@@ -12,14 +6,11 @@ from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from .domain import (
-    HypothesisRecord,
-    ResearchFinding,
     SupergoalActionProposal,
     _clean_string_list,
-    _coerce_float,
 )
 from .gates import apply_inertia_guard, first_blocking_failure, update_supergoal_gates
-from .projection import merge_compact_list, merge_research_findings, research_sufficiency_from_findings
+from .projection import merge_compact_list
 
 JudgeResult = Tuple[str, str, bool]
 JudgeFn = Callable[[str, str], JudgeResult]
@@ -71,35 +62,6 @@ class EvaluatorSuite:
     strategic_critic: StrategicCritic
 
 
-def merge_hypothesis_portfolio(
-    existing: list[HypothesisRecord],
-    new_items: Any,
-    *,
-    max_items: int = 16,
-) -> list[HypothesisRecord]:
-    merged = list(existing or [])
-    seen = {(h.id.lower(), h.claim.lower()) for h in merged}
-    if isinstance(new_items, (dict, str)):
-        new_items = [new_items]
-    if not isinstance(new_items, list):
-        return merged[-max_items:]
-    next_num = len(merged) + 1
-    for item in new_items:
-        hypothesis = HypothesisRecord.from_dict(item)
-        if hypothesis is None:
-            continue
-        if hypothesis.id == "H?":
-            hypothesis.id = f"H{next_num}"
-            next_num += 1
-        key = (hypothesis.id.lower(), hypothesis.claim.lower())
-        claim_seen = {h.claim.lower() for h in merged}
-        if key in seen or hypothesis.claim.lower() in claim_seen:
-            continue
-        seen.add(key)
-        merged.append(hypothesis)
-    return merged[-max_items:]
-
-
 def fallback_action_proposal_for_state(state: Any, text: str = "") -> SupergoalActionProposal:
     first_gate = first_blocking_failure(state)
     action_text = text or getattr(state, "next_best_action", "") or (
@@ -133,7 +95,8 @@ def proposal_from_critic_data(state: Any, data: dict[str, Any]) -> SupergoalActi
     if nba and not proposal.text:
         proposal.text = " ".join(nba.split())[:300]
     first_gate = first_blocking_failure(state)
-    if first_gate is not None and not proposal.target_gate_id:
+    active_ids = {gate.id for gate in (getattr(state, "gates", []) or [])}
+    if first_gate is not None and proposal.target_gate_id not in active_ids:
         proposal.target_gate_id = first_gate.id
         proposal.why_this_gate_first = proposal.why_this_gate_first or "first failed blocking gate"
         if not proposal.expected_evidence:
@@ -142,101 +105,30 @@ def proposal_from_critic_data(state: Any, data: dict[str, Any]) -> SupergoalActi
 
 
 def apply_supergoal_critic(state: Any, data: Optional[dict[str, Any]]) -> None:
-    """Merge critic output into the persistent Supergoal state board."""
+    """Merge advisory progress without changing the authoritative task contract."""
     if not state or not data:
         return
-
-    intent = str(data.get("inferred_user_intent") or "").strip()
-    if intent:
-        state.inferred_user_intent = " ".join(intent.split())[:300]
-    success = str(data.get("success_definition") or "").strip()
-    if success:
-        state.success_definition = " ".join(success.split())[:300]
-    state.first_principles_model = merge_compact_list(
-        getattr(state, "first_principles_model", []) or [],
-        data.get("first_principles_model"),
-        max_items=16,
-    )
-    state.existing_solution_scan = merge_compact_list(
-        getattr(state, "existing_solution_scan", []) or [],
-        data.get("existing_solution_scan"),
-        max_items=16,
-    )
-    reuse_decision = str(data.get("build_vs_reuse_decision") or "").strip()
-    if reuse_decision:
-        state.build_vs_reuse_decision = " ".join(reuse_decision.split())[:300]
-    literalism = str(data.get("literalism_risk") or "").strip().lower()
-    if literalism in {"low", "medium", "high"}:
-        state.literalism_risk = literalism
-    research = str(data.get("research_sufficiency") or "").strip().lower()
-    if research not in {"sufficient", "thin", "missing"}:
-        research = ""
-    current_findings = list(getattr(state, "research_findings", []) or [])
-    if current_findings and not isinstance(current_findings[0], ResearchFinding):
-        current_findings = [
-            finding for item in current_findings if (finding := ResearchFinding.from_dict(item)) is not None
-        ]
-    state.research_findings = merge_research_findings(current_findings, data.get("research_findings"))
-    state.research_sufficiency = research_sufficiency_from_findings(state, research)
-    state.hypothesis_portfolio = merge_hypothesis_portfolio(
-        getattr(state, "hypothesis_portfolio", []) or [],
-        data.get("hypothesis_portfolio") or data.get("new_hypotheses"),
-    )
-    no_edge = str(data.get("no_edge_report") or "").strip()
-    if no_edge:
-        state.no_edge_report = " ".join(no_edge.split())[:500]
-
     update_supergoal_gates(state)
     proposal = proposal_from_critic_data(state, data)
     state.action_proposal = proposal
     state.current_action_class = proposal.action_class or "unknown"
-
     progress = str(data.get("progress") or "").strip().lower()
     if progress in {"real", "weak", "none", "regressed"}:
         state.progress = progress
-    health = str(data.get("strategy_health") or "").strip().lower()
-    if health in {"good", "stuck", "drifting", "repeating", "premature", "blocked"}:
-        state.strategy_health = health
-    if "root_cause_confidence" in data:
-        state.root_cause_confidence = _coerce_float(
-            data.get("root_cause_confidence"), getattr(state, "root_cause_confidence", 0.0)
-        )
-    quality_replan = getattr(state, "literalism_risk", "") == "high" or getattr(state, "research_sufficiency", "") in {"thin", "missing"}
-    state.should_replan = bool(data.get("should_replan", False)) or quality_replan or getattr(state, "strategy_health", "") in {
-        "stuck", "drifting", "repeating", "premature", "blocked"
-    } or getattr(state, "progress", "") in {"none", "regressed"}
+    health = str(data.get("plan_health") or "").strip().lower()
+    if health in {"good", "stuck", "drifting", "repeating", "blocked"}:
+        state.plan_health = health
+    state.should_replan = bool(data.get("should_replan", False)) or state.plan_health in {
+        "stuck", "drifting", "repeating", "blocked"
+    } or state.progress in {"none", "regressed"}
     if state.should_replan:
-        state.replan_count = int(getattr(state, "replan_count", 0) or 0) + 1
-    nba = proposal.text or str(data.get("next_best_action") or "").strip()
-    if nba:
-        state.next_best_action = " ".join(nba.split())[:300]
-
-    state.milestones = merge_compact_list(getattr(state, "milestones", []) or [], data.get("new_milestones"))
-    state.hypotheses = merge_compact_list(getattr(state, "hypotheses", []) or [], data.get("new_hypotheses"))
-    state.evidence = merge_compact_list(getattr(state, "evidence", []) or [], data.get("new_evidence"))
-    state.attempted_solutions = merge_compact_list(
-        getattr(state, "attempted_solutions", []) or [], data.get("new_attempted_solutions")
-    )
-    state.blockers = merge_compact_list(getattr(state, "blockers", []) or [], data.get("new_blockers"))
+        state.replan_count += 1
+    if proposal.text:
+        state.next_best_action = proposal.text
+    for name, key in (("milestones", "new_milestones"), ("attempted_solutions", "new_attempted_solutions"),
+                      ("blockers", "new_blockers"), ("risks", "new_risks")):
+        setattr(state, name, merge_compact_list(getattr(state, name, []) or [], data.get(key)))
     missing = _clean_string_list(data.get("missing_evidence"), limit=8)
     if missing:
-        state.risks = merge_compact_list(
-            getattr(state, "risks", []) or [],
-            [f"missing evidence: {item}" for item in missing],
-            max_items=20,
-        )
-    state.risks = merge_compact_list(getattr(state, "risks", []) or [], data.get("new_risks"))
-    if getattr(state, "literalism_risk", "") == "high":
-        state.risks = merge_compact_list(
-            getattr(state, "risks", []) or [],
-            ["literalism risk: agent may be following the written task without satisfying root intent"],
-            max_items=20,
-        )
-    if getattr(state, "research_sufficiency", "") in {"thin", "missing"}:
-        state.risks = merge_compact_list(
-            getattr(state, "risks", []) or [],
-            [f"tool-backed research ledger is {state.research_sufficiency}"],
-            max_items=20,
-        )
-    update_supergoal_gates(state)
+        state.risks = merge_compact_list(state.risks, [f"missing evidence: {item}" for item in missing])
     apply_inertia_guard(state)

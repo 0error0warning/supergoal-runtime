@@ -77,7 +77,9 @@ async def test_sgx_runs_through_real_host_command_and_controller_abi():
     manager = PluginManager()
     manager._discovered = True
     register(PluginContext(PluginManifest(name="supergoal-runtime"), manager))
-    plugin_runtime = manager._turn_controllers[0]["handler"].__self__
+    controllers = manager._turn_controllers
+    entries = controllers.values() if isinstance(controllers, dict) else controllers
+    plugin_runtime = next(iter(entries))["handler"].__self__
     plugin_runtime.manager.judge = lambda *_a, **_k: ("continue", "needs work", False)
     plugin_runtime.manager.critic = lambda *_a, **_k: None
 
@@ -357,7 +359,9 @@ manager = PluginManager()
 manifest = PluginManifest(name="supergoal-runtime", key="supergoal-runtime", path={str(plugin_root)!r}, source="user")
 module = manager._load_directory_module(manifest)
 module.register(PluginContext(manifest, manager))
-runtime = manager._turn_controllers[0]["handler"].__self__
+controllers = manager._turn_controllers
+entries = controllers.values() if isinstance(controllers, dict) else controllers
+runtime = next(iter(entries))["handler"].__self__
 runtime.manager.judge = lambda *_a, **_k: ("continue", "phase 1 incomplete", False)
 runtime.manager.critic = lambda *_a, **_k: None
 runtime.manager.start("isolated-session", "two phase mission")

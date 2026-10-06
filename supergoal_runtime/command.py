@@ -2,10 +2,19 @@
 
 from __future__ import annotations
 
-from typing import Any
+import inspect
+from typing import Any, Callable
 
 from .compat.hermes_goal import ordinary_goal_active
 from .runtime import RuntimeManager
+
+
+_CONTEXT_AWARE_MISSING = (
+    "/sgx requires a context-aware host CommandContext (session_id + "
+    "enqueue_followup). This Hermes build only invokes plugin commands as "
+    "fn(raw_args) and has no register_turn_controller ABI. Slash /sgx is "
+    "unavailable until the mt context-aware plugin command ABI is restored."
+)
 
 
 class SupergoalCommandHandler:
@@ -83,12 +92,26 @@ class SupergoalCommandHandler:
         return "Usage: /sgx start <mission>. Plain /sgx <text> does not start a supergoal."
 
 
+def _adapt_context_aware_handler(handler: Callable[..., Any]) -> Callable[[str], Any]:
+    async def adapted(raw_args: str) -> str:
+        return _CONTEXT_AWARE_MISSING
+
+    adapted.__name__ = getattr(handler, "__name__", "adapted_sgx")
+    adapted.__doc__ = getattr(handler, "__doc__", None)
+    return adapted
+
+
 def register_supergoal_command(ctx: Any, handler: SupergoalCommandHandler, *, name: str = "sgx") -> None:
-    ctx.register_command(
-        name,
-        handler,
+    kwargs = dict(
         description="Run a long-lived Supergoal mission",
-        args_hint="start <mission>|status|pause|resume|clear|wait|unwait|replan",
+        args_hint=getattr(handler, "args_hint", "start <mission>|status|pause|resume|clear|wait|unwait|replan"),
         context_aware=True,
-        busy_safe_subcommands=("", "status", "pause", "resume", "clear", "wait", "unwait", "replan"),
+        busy_safe_subcommands=getattr(handler, "busy_safe_subcommands", ("", "status", "pause", "resume", "clear", "wait", "unwait", "replan")),
     )
+    sig = inspect.signature(ctx.register_command)
+    accepts_extra = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+    filtered = {key: value for key, value in kwargs.items() if accepts_extra or key in sig.parameters}
+    command_handler: Callable[..., Any] = handler
+    if kwargs.get("context_aware") and not accepts_extra and "context_aware" not in sig.parameters:
+        command_handler = _adapt_context_aware_handler(handler)
+    ctx.register_command(name, command_handler, **filtered)

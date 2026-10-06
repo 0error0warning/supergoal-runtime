@@ -359,23 +359,40 @@ class _PluginRuntime:
 
 
 def register(ctx: Any) -> None:
+    get_config = getattr(ctx, "get_config", None)
+    engine = get_config("engine", "v1") if callable(get_config) else "v1"
+    if engine == "v2":
+        from .v2.plugin import register as register_v2
+        register_v2(ctx)
+        return
+    if engine != "v1":
+        raise ValueError(f"Unsupported Supergoal engine: {engine}")
     runtime = _PluginRuntime(ctx)
     for command_name in ("sgx", "supergoal", "sgoal"):
         register_supergoal_command(ctx, runtime.commands, name=command_name)
-    try:
-        ctx.register_turn_controller(
-            "supergoal-runtime",
-            runtime.after_turn,
-            priority=100,
-            continuation_provider=runtime,
-        )
-    except TypeError:
-        # The minimum supported legacy host has no provider keyword. Command
-        # enqueueing still claims locally; upgrading the host enables recovery.
-        ctx.register_turn_controller(
-            "supergoal-runtime",
-            runtime.after_turn,
-            priority=100,
+    register_turn_controller = getattr(ctx, "register_turn_controller", None)
+    if callable(register_turn_controller):
+        try:
+            register_turn_controller(
+                "supergoal-runtime",
+                runtime.after_turn,
+                priority=100,
+                continuation_provider=runtime,
+            )
+        except TypeError:
+            # The minimum supported legacy host has no provider keyword. Command
+            # enqueueing still claims locally; upgrading the host enables recovery.
+            register_turn_controller(
+                "supergoal-runtime",
+                runtime.after_turn,
+                priority=100,
+            )
+    else:
+        # Hermes >=0.21.3 dropped the turn-controller ABI. Hooks below still
+        # provide compression/session lifecycle continuity without after_turn.
+        logger.warning(
+            "supergoal-runtime: host has no register_turn_controller; "
+            "after_turn controller not registered (hooks only)"
         )
     ctx.register_hook("on_session_finalize", runtime.on_session_finalize)
     ctx.register_hook("on_session_reset", runtime.on_session_reset)

@@ -28,6 +28,8 @@ Observe → Project → Evaluate → Reconcile → Decide → Render
 
 `RuntimeManager` is the stateful application boundary. Pure modules (`domain`, `gates`, `projection`, `evaluators`, `prompts`, `rendering`) do not import Hermes internals.
 
+The pipeline above describes the steps taken by the active `RuntimeManager.after_turn` path. The older `SupergoalController` is still present as a separate callback-based abstraction and is not the plugin entry point; unifying those paths remains follow-up work.
+
 ## Identity and storage
 
 ```text
@@ -56,23 +58,26 @@ foreign keys, explicit transactions, and idempotent event source keys.
 
 A `GoalState` contains:
 
-- intent and success definition;
+- the user goal, additional criteria, and explicit task contract;
 - research findings with provenance;
-- hypothesis portfolio;
 - deterministic gates;
 - action proposal and action history;
-- evidence layers and failure taxonomy;
+- recorded evidence layers;
 - permission contract;
 - wait, pause, budget, and recovery state.
 
 Default acceptance gates:
 
 - `G1` intent contract;
-- `G2` tool-backed research provenance (blocking for research/strategy missions, follow-up otherwise);
-- `G3` verified execution artifact;
-- `G4` final evidence mapping or explicit blocked/no-edge outcome.
+- `G2` optional tool-backed external provenance; it never adds a research quota;
+- `G3` evidence types explicitly required by `GoalContract.evidence_requirements`, otherwise optional;
+- `G4` the completion judge confirms the user's requested outcome.
 
-Strategy missions also use `SG-1..SG-4` for hypothesis breadth, experiment completeness, no-edge attribution, and infrastructure-dependency proof.
+Goal text does not select domain rules. The runtime has no built-in hypothesis count, baseline experiment, failure-attribution template, or preferred task method. Text deliverables can complete without file/tool evidence. When execution or external evidence is required, prose claims cannot replace actual records, and the judge must still evaluate their relevance to the requested outcome.
+
+The critic updates advisory progress, plan health, and next steps. It cannot change the goal, success definition, contract, or grant proof. Completion requires a judge verdict plus any explicit evidence requirements; generic tool use and a sentence claiming completion do not override a continuing judge verdict.
+
+Old `SG-1..SG-4` gates are moved to `retired_gates` on load/evaluation. Historical hypothesis/no-edge fields remain readable for migration, but are omitted from evaluator boards and no longer control completion or replanning. See [task-neutral acceptance](generic-acceptance.md).
 
 ## Policy and evidence
 

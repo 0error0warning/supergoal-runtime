@@ -1,10 +1,4 @@
-"""Projection helpers for /supergoal event-derived board state.
-
-The controller will eventually own Observe → Project.  During staged migration,
-``goals.py`` still drives the full legacy path, but low-risk event projection
-helpers live here so controller.project can reuse them without inheriting the
-GoalManager monolith.
-"""
+"""Project recorded observations without inventing task requirements."""
 
 from __future__ import annotations
 
@@ -23,11 +17,11 @@ _ARTIFACT_PATH_RE = re.compile(
 
 def classify_action_text(text: str) -> str:
     t = (text or "").lower()
-    if any(k in t for k in ["no-edge", "no edge", "归因", "report", "总结", "报告"]):
+    if any(k in t for k in ["report", "总结", "报告"]):
         return "reporting"
-    if any(k in t for k in ["hypothesis", "hypotheses", "假设", "portfolio", "策略候选"]):
+    if any(k in t for k in ["hypothesis", "hypotheses", "假设"]):
         return "hypothesis_generation"
-    if any(k in t for k in ["experiment", "backtest", "验证策略", "baseline", "ledger", "acceptance", "run test"]):
+    if any(k in t for k in ["experiment", "实验"]):
         return "experiment_execution"
     if any(k in t for k in ["verify", "test", "pytest", "lint", "validate", "验证", "artifact"]):
         return "validation"
@@ -78,7 +72,7 @@ def extract_observation_events(last_response: str) -> list[tuple[str, str, dict[
 
     has_research_language = any(k in low for k in ("research", "survey", "github", "docs", "paper", "benchmark", "external", "news", "rss", "调研", "外部", "新闻"))
     if (paths or has_verification) and has_research_language:
-        source_type = "benchmark" if any(k in low for k in ("benchmark", "baseline", "backtest", "基准", "回测")) else "local"
+        source_type = "benchmark" if any(k in low for k in ("benchmark", "基准")) else "local"
         if any(k in low for k in ("github", "repo")):
             source_type = "github"
         elif any(k in low for k in ("paper", "arxiv")):
@@ -101,21 +95,6 @@ def extract_observation_events(last_response: str) -> list[tuple[str, str, dict[
             },
         ))
 
-    failure_category = ""
-    if any(k in low for k in ("buy-hold", "buy hold", "baseline", "跑不赢基线")):
-        failure_category = "baseline_underperformance"
-    elif any(k in low for k in ("drawdown", "dd", "回撤")):
-        failure_category = "drawdown_unacceptable"
-    elif any(k in low for k in ("rolling", "oos", "out-of-sample", "样本外")):
-        failure_category = "oos_instability"
-    elif any(k in low for k in ("cost", "fee", "成本")):
-        failure_category = "cost_drag"
-    elif any(k in low for k in ("beta", "market-neutral", "market neutral")):
-        failure_category = "beta_exposure"
-    elif any(k in low for k in ("failed", "fail", "失败", "打掉", "不通过")):
-        failure_category = "hypothesis_failed"
-    if failure_category:
-        events.append(("hypothesis_failed", truncate(normalized, 180), {"category": failure_category, "reason": truncate(normalized, 240)}))
     return events
 
 
@@ -151,20 +130,11 @@ def merge_research_findings(existing: list[ResearchFinding], new_items: Any, *, 
 
 
 def research_sufficiency_from_findings(state: Any, critic_value: str = "") -> str:
-    backed = [
-        finding
+    """Describe provenance presence without imposing source quotas."""
+    return "observed" if any(
+        getattr(finding, "is_tool_backed", False)
         for finding in (getattr(state, "research_findings", []) or [])
-        if getattr(finding, "is_tool_backed", False)
-    ]
-    types = {finding.source_type for finding in backed}
-    external = types.intersection({"paper", "github", "web", "docs", "benchmark"})
-    if {"paper", "github"}.issubset(types) or len(external) >= 3:
-        return "sufficient"
-    if external or any(finding.source_type in {"benchmark", "local"} for finding in backed):
-        return "thin"
-    if critic_value in {"thin", "missing"}:
-        return critic_value
-    return "missing"
+    ) else "missing"
 
 
 def truncate(text: Any, limit: int) -> str:
@@ -225,37 +195,6 @@ def increment_failure_taxonomy(
     seen_event_keys.add(event_key)
     taxonomy[normalized] = int(taxonomy.get(normalized, 0) or 0) + 1
     return True
-
-
-def apply_failure_taxonomy_policy(
-    state: Any,
-    *,
-    merge_compact_list: Callable[..., list[str]],
-) -> bool:
-    """Update search/admission state when failures suggest no-edge risk."""
-    changed = False
-    failed_count = sum(
-        1
-        for hypothesis in (getattr(state, "hypothesis_portfolio", []) or [])
-        if getattr(hypothesis, "status", "") in {"failed", "killed"}
-    )
-    failure_taxonomy = getattr(state, "failure_taxonomy", {}) or {}
-    if failed_count >= 5 or len(failure_taxonomy) >= 3:
-        if getattr(state, "search_phase", "") != "failure_taxonomy":
-            state.search_phase = "failure_taxonomy"
-            changed = True
-        criteria = [
-            "new hypothesis must name an independent information source, not only OHLCV/beta proxy",
-            "must define baseline, kill criteria, rolling/OOS gate, and artifact before execution",
-            "if next path is another failed family variant, produce no-edge attribution instead",
-        ]
-        before = list(getattr(state, "admission_criteria", []) or [])
-        state.admission_criteria = merge_compact_list(before, criteria, max_items=8)
-        changed = changed or state.admission_criteria != before
-        if not getattr(state, "no_edge_report", "") and failed_count >= 8:
-            state.no_edge_report = "multiple hypotheses failed; require failure taxonomy before more benchmark variants"
-            changed = True
-    return changed
 
 
 def project_events_to_board(
@@ -325,12 +264,12 @@ def project_events_to_board(
             if is_tool_backed:
                 add_layer("external_prior" if data.get("source_type") in {"paper", "github", "web", "docs"} else "local_empirical", summary)
         elif etype == "tool_evidence_observed":
-            from .evidence import EvidenceRef, research_finding_from_evidence
+            from .evidence import EvidenceRef, EvidenceSource, research_finding_from_evidence
 
             ref = EvidenceRef.from_dict(data.get("evidence_ref") or data)
             if ref is not None:
                 locator = ref.artifact_path or ref.locator or ref.id
-                if ref.trust_level in {"observed", "verified"}:
+                if ref.trust_level in {"observed", "verified"} and ref.source != EvidenceSource.ASSISTANT_CLAIM:
                     layer = "verification" if ref.trust_level == "verified" else "tool_observation"
                     if ref.source.value in {"web_source", "github_source"}:
                         layer = "external_prior"
@@ -338,6 +277,8 @@ def project_events_to_board(
                         layer = "artifact"
                     elif ref.source.value == "test_run":
                         layer = "verification"
+                    elif ref.source.value == "human_input":
+                        layer = "human_acceptance"
                     add_layer(layer, locator)
                     before_evidence = list(getattr(state, "evidence", []) or [])
                     state.evidence = merge_compact_list(getattr(state, "evidence", []) or [], [locator], max_items=20)
@@ -368,11 +309,6 @@ def project_events_to_board(
     if derived_failure_taxonomy != (getattr(state, "failure_taxonomy", {}) or {}):
         state.failure_taxonomy = derived_failure_taxonomy
         changed = True
-
-    changed = apply_failure_taxonomy_policy(
-        state,
-        merge_compact_list=merge_compact_list,
-    ) or changed
 
     update_gates(state)
     return changed

@@ -38,7 +38,11 @@ CONTINUATION_PROMPT_WITH_SUBGOALS_TEMPLATE = (
 JUDGE_SYSTEM_PROMPT = (
     "You are a strict judge evaluating whether an autonomous agent has achieved "
     "a user's stated goal. Treat the persisted state board as prior-turn, "
-    "tool-backed evidence; do not judge only from the latest response. Reply only with JSON."
+    "tool-backed evidence; do not judge only from the latest response. "
+    "Evaluate only the user's goal, additional criteria, and explicit task contract. "
+    "Do not add domain workflows, research quotas, or artifact requirements. "
+    "A requested text response can be a deliverable; an execution claim needs execution evidence. "
+    "Optional observations are not additional acceptance criteria. Reply only with JSON."
 )
 
 JUDGE_USER_PROMPT_TEMPLATE = (
@@ -76,13 +80,11 @@ SUPERGOAL_CRITIC_USER_PROMPT_TEMPLATE = (
     "Supergoal:\n{goal}\n\n"
     "Existing state board:\n{board}\n\n"
     "Most recent agent response:\n{response}\n\n"
-    "Return JSON with keys such as inferred_user_intent, success_definition, "
-    "first_principles_model, existing_solution_scan, research_findings, "
-    "hypothesis_portfolio, action_proposal, no_edge_report, "
-    "build_vs_reuse_decision, literalism_risk, research_sufficiency, progress, "
-    "strategy_health, root_cause_confidence, should_replan, next_best_action, "
-    "missing_evidence, new_milestones, new_hypotheses, new_evidence, "
-    "new_attempted_solutions, new_blockers, and new_risks."
+    "Review progress against the user's goal and explicit contract. Do not invent "
+    "acceptance criteria or prescribe a domain workflow. Return JSON with keys "
+    "such as progress, plan_health, should_replan, next_best_action, action_proposal, "
+    "missing_evidence, new_milestones, new_attempted_solutions, new_blockers, and new_risks. "
+    "Describe what remains unmet and a concrete next step."
 )
 
 

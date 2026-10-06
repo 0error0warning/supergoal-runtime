@@ -12,7 +12,7 @@ FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures"
 
 
 def load_trace(name: str) -> list[dict]:
-    return [json.loads(line) for line in (FIXTURE_DIR / name).read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in (FIXTURE_DIR / name).read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 class Replay:
@@ -65,15 +65,16 @@ class Replay:
         return self
 
 
-def test_real_bitget_fixture_replays_infra_gate_invariant(tmp_path):
+def test_real_bitget_fixture_does_not_restore_builtin_strategy_policy(tmp_path):
     replay = Replay(tmp_path).run(load_trace("bitget_20260608_trace.jsonl"))
     state = replay.manager.load_state_for_session("replay-bitget")
 
     assert state is not None
-    assert state.hard_gate_reason
-    assert "infra_engineering" in state.hard_gate_reason
-    assert state.action_proposal.action_class == "hypothesis_generation"
-    assert state.action_proposal.target_gate_id == "SG-1"
+    assert not state.hard_gate_reason
+    assert state.action_proposal.action_class == "infra_engineering"
+    assert state.action_proposal.target_gate_id in {gate.id for gate in state.gates}
+    assert not any(gate.id.startswith("SG-") for gate in state.gates)
+    assert state.evidence_layers.get("external_prior")
     assert any(decision["action"] == "continue" for decision in replay.decisions)
 
 

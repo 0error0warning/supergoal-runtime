@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from supergoal_runtime.domain import (
     GoalEvent,
+    GoalContract,
     GoalState,
     HypothesisRecord,
     ResearchFinding,
@@ -20,7 +21,10 @@ from supergoal_runtime.store import SupergoalStore
 
 
 def new_state(goal: str, *, goal_run_id: str = "gr_replay") -> GoalState:
-    state = GoalState(goal=goal, goal_run_id=goal_run_id, mode="supergoal")
+    state = GoalState(
+        goal=goal, goal_run_id=goal_run_id, mode="supergoal",
+        contract=GoalContract(outcome=goal, evidence_requirements=["artifact"]),
+    )
     update_supergoal_gates(state)
     return state
 
@@ -45,6 +49,7 @@ def test_assistant_claims_do_not_pass_tool_backed_research_gate() -> None:
     state = new_state("research existing AI digest systems")
     state.inferred_user_intent = state.goal
     state.success_definition = "tool-backed research summary"
+    state.contract.evidence_requirements = ["external_source"]
     state.research_findings.append(
         ResearchFinding(
             source_type="docs",
@@ -62,6 +67,8 @@ def test_assistant_claims_do_not_pass_tool_backed_research_gate() -> None:
     g2 = next(gate for gate in state.gates if gate.id == "G2")
     assert g2.status != "passed"
     assert "tool-backed" in g2.reason or "provenance" in g2.reason
+    g3 = next(gate for gate in state.gates if gate.id == "G3")
+    assert g3.blocking and g3.status == "pending"
 
 
 def test_assistant_prose_does_not_satisfy_g3_or_done_reconcile() -> None:
@@ -227,31 +234,31 @@ def test_real_tool_evidence_resets_no_evidence_inertia() -> None:
     assert state.same_action_no_evidence_count == 0
 
 
-def test_infra_inertia_replans_to_first_strategy_gate() -> None:
-    state = new_state("Bitget trading strategy with edge hypothesis")
+def test_stagnation_replans_without_prescribing_a_domain_workflow() -> None:
+    state = new_state("build an edge AI scheduler")
     state.inferred_user_intent = state.goal
-    state.success_definition = "find a strategy edge or produce no-edge attribution"
-    state.research_sufficiency = "sufficient"
-    state.evidence_layers = {"external_prior": ["github:strategy research"]}
+    state.success_definition = state.goal
     update_supergoal_gates(state)
     state.action_proposal = SupergoalActionProposal(
         action_class="infra_engineering",
-        target_gate_id="SG-1",
+        target_gate_id="G3",
         text="build another validator",
     )
     state.action_history = ["infra_engineering", "infra_engineering"]
+    state.same_action_no_evidence_count = 2
 
     apply_inertia_guard(state)
 
     assert state.hard_gate_reason
-    assert "infra_engineering" in state.hard_gate_reason
     assert state.should_replan is True
     assert state.replan_count > 0
-    assert state.action_proposal.action_class == "hypothesis_generation"
-    assert state.action_proposal.target_gate_id == "SG-1"
+    assert state.action_proposal.action_class != "hypothesis_generation"
+    assert state.action_proposal.target_gate_id == "G3"
+    assert not any(gate.id.startswith("SG-") for gate in state.gates)
+    assert "unmet user criteria" in state.next_best_action
 
 
-def test_trace_fixture_strategy_events_keep_goal_run_id_and_gate_pressure() -> None:
+def test_legacy_strategy_diagnostics_do_not_count_as_execution_evidence() -> None:
     state = new_state("Bitget trading strategy with edge hypothesis")
     for item in [
         HypothesisRecord(id="H1", claim="momentum edge", baseline="buy hold", experiment="backtest", kill_criteria="underperform", artifacts=["sha256:observed"], status="failed"),
@@ -263,10 +270,8 @@ def test_trace_fixture_strategy_events_keep_goal_run_id_and_gate_pressure() -> N
         [GoalEvent(ts=0.0, type="hypothesis_failed", turn=1, summary="failed baseline", data={"category": "baseline_underperformance"})],
         update_gates=update_supergoal_gates,
     )
-    state.action_proposal = SupergoalActionProposal(action_class="infra_engineering", target_gate_id="SG-4")
-
-    apply_inertia_guard(state)
-
-    first_open = next(gate for gate in state.gates if gate.status != "passed" and gate.blocking)
     assert state.goal_run_id == "gr_replay"
-    assert state.action_proposal.target_gate_id == first_open.id or state.hard_gate_reason
+    assert len(state.hypothesis_portfolio) == 2
+    assert gate_eligible_evidence_count(state) == 0
+    assert next(gate for gate in state.gates if gate.id == "G3").status == "pending"
+    assert not any(gate.id.startswith("SG-") for gate in state.gates)
