@@ -4,6 +4,8 @@
 
 先读[最终研究结论](research-findings-2026-10-06.md)。不同研究采用不同任务、验收与统计单位；不要跨基准汇成一个成功率，也不要把阶段数当作独立任务数。
 
+项目去留与范围判断另见[项目价值复审](project-direction-2026-10-06.md)；该文的建议与已经取得的实验结果分开表述。
+
 ## 保留的结论
 
 - 最大公开对照中，SG 为 15/22，原生 Hermes 为 13/22，普通重发为 17/22；SG 对原生多用约 56% 的物理请求，稳定收益尚未建立。
@@ -59,3 +61,7 @@
 ```
 
 初次未排除 PID 用例的本地运行在该已知边界处中断；没有把它记录为完整通过。默认 CI 在 Linux 执行该 PID 用例。本地虚拟环境、缓存与 wheel 输出均被 Git 忽略；原始观测文件不按临时缓存处理。
+
+提交 `45e4544` 的 [GitHub CI](https://github.com/0error0warning/supergoal-runtime/actions/runs/37430966315) 在 Linux / Python 3.11 与 3.13 上均得到 **216 passed、1 skipped、2 deselected**，含上述 3 项分析器回归；两组 Ruff、730 个归档引用校验、编译与 wheel 构建全部通过。真实宿主 ABI 因未安装 Hermes 而跳过，两个 profile 用例按原 CI 配置排除。
+
+同次 CI 的 `latest-hermes-main-compatibility` **失败**：旧通用接口补丁 `8efcb2a68` 在当前上游 Hermes 的命令、插件、压缩及网关文件发生 cherry-pick 冲突，尚未执行插件测试。这条失败记录保留，未改成允许失败或静默跳过。当前提交不能声称兼容最新原生 Hermes；更新宿主接口补丁属于独立的兼容性工作。

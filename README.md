@@ -31,6 +31,7 @@ Production Hermes continues on its existing deployment.
 
 - [Research index: conclusions, studies, code and evidence](docs/research-index.md)
 - [Final findings and limitations](docs/research-findings-2026-10-06.md)
+- [Project value and scope reassessment](docs/project-direction-2026-10-06.md)
 - [Task-defined acceptance and compatibility](docs/generic-acceptance.md)
 - [Opt-in v2 operator guide](docs/v2-plugin-and-acceptance.md)
 - [Research tools and reproduction scope](experiments/README.md)
