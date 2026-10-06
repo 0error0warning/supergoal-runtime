@@ -1,0 +1,62 @@
+{
+  "assessed_at_utc": "2026-10-05T15:34:19.651960+00:00",
+  "host": "supergoal-gcp",
+  "read_only_assessment": true,
+  "model_concurrency_load_test_performed": false,
+  "running_cohort_modified": false,
+  "gcp_sample": {
+    "captured_at_utc": "2026-10-05T15:29:49Z",
+    "cpu_count": 8,
+    "cpu_sample_seconds": 3,
+    "cpu_busy_percent": 4.8,
+    "load_average": [
+      0.33984375,
+      0.3623046875,
+      0.26611328125
+    ],
+    "memory_total_bytes": 67419480064,
+    "memory_available_bytes": 65756667904,
+    "data_disk_free_bytes": 205577617408,
+    "memory_pressure_avg10": 0.0,
+    "io_pressure_some_avg10": 2.87
+  },
+  "current_cohort": {
+    "label": "public-gcp01",
+    "registered_concurrency": 1,
+    "task_cpus": 1,
+    "task_memory_mib": 2048,
+    "review_snapshot_cpus": 1,
+    "review_snapshot_memory_mib": 2048,
+    "graded_trials_at_sample": 3,
+    "next_active_index": 3
+  },
+  "model_route_read_only_sample": {
+    "host": "hermes",
+    "cpu_count": 2,
+    "memory_total_bytes": 3904790528,
+    "memory_available_bytes": 2008719360,
+    "load_average": [
+      2.29052734375,
+      0.89306640625,
+      0.7275390625
+    ],
+    "service": "upi-plus-cliproxyapi.service",
+    "swe2_upstream_concurrency_limit": "unverified"
+  },
+  "proposed_initial_concurrency_not_validated": {
+    "light_cli": {
+      "initial": 2,
+      "target_after_measurement": 4
+    },
+    "four_cpu_eight_gib_cpu_heavy": 1,
+    "office_browser": 2,
+    "desktop_vm": 1
+  },
+  "interpretation": [
+    "Single short sample does not establish sustained capacity or model API concurrency.",
+    "The registered serial cohort remains unchanged. Parallelism belongs to a new declared cohort.",
+    "Account for persistent executor containers, reviewer snapshots, model workers, verifiers, image builds and retained artifacts together.",
+    "Measure throughput, model request latency/timeouts/429s, CPU and memory pressure, disk IO and artifact growth before raising concurrency.",
+    "Higher throughput does not establish hours or days of autonomous task progress."
+  ]
+}

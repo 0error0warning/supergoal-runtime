@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "candidate": "public-dev04",
+  "audited_at_utc": "2026-10-05T12:06:04.085207+00:00",
+  "control_id": "8bd427d7cb8b4dcba191c6d02e2cdcad",
+  "registered_index": 15,
+  "task_id": "schemelike-metacircular-eval",
+  "arm": "sg_no_context",
+  "disposition": "retain_failure_continue_unstarted",
+  "next_registered_index": 16,
+  "failure_kind": "runtime_failure_with_transport_interruption",
+  "end_to_end_outcome": "failure",
+  "official_reward": null,
+  "official_tests_ran": false,
+  "exclude_from_end_to_end_denominator": false,
+  "requests": 93,
+  "http_status_counts": {
+    "200": 89,
+    "None": 4
+  },
+  "exception": {
+    "exception_type": "StaleLease",
+    "exception_message": "expired, cancelled or superseded execution",
+    "exception_traceback": "Traceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 500, in run\n    await self._run()\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/single_step.py\", line 40, in _run\n    await self._run_agent()\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/single_step.py\", line 76, in _run_agent\n    await self._run_agent_phase(\n    ...<5 lines>...\n    )\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 651, in _run_agent_phase\n    await asyncio.wait_for(\n    ...<6 lines>...\n    )\n  File \"/usr/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/public-dev04/experiments/public_benchmarks/harbor_agent.py\", line 246, in run\n    state = kernel.finish(lease, verdict)\n  File \"/var/lib/supergoal-lab/candidates/public-dev04/supergoal_runtime/v2/kernel.py\", line 150, in finish\n    goal = self._check(db, lease)\n  File \"/var/lib/supergoal-lab/candidates/public-dev04/supergoal_runtime/v2/kernel.py\", line 125, in _check\n    raise StaleLease(\"expired, cancelled or superseded execution\")\nsupergoal_runtime.v2.kernel.StaleLease: expired, cancelled or superseded execution\n",
+    "occurred_at": "2026-10-05T09:45:06.661643Z"
+  },
+  "kernel_status": "active",
+  "lease_expires_unix": 1791192469.6576312,
+  "seconds_past_lease_at_exception": 1037.0040118694305,
+  "executor_and_review_monotonic_seconds": 2091.489556362998,
+  "long_request_gap_after_80_seconds": 1433.1636357307434,
+  "timing_interpretation": "Realtime timestamps include a long gap inconsistent with the recorded monotonic execution duration. Host suspension or a clock change is possible but not established. The lease expired and the runtime failed to reconcile it.",
+  "original_artifact_image_id": "sha256:e2cc5adfabb1eda9ac606853a0c6de20f81a95e326eac57c6c352f7aebb94826",
+  "trajectory_receipts": [
+    {
+      "path": "/var/lib/supergoal-lab/control/8bd427d7cb8b4dcba191c6d02e2cdcad/01-executor/result.json",
+      "sha256": "dfd3db573bcd9f59834c88de6d8f41a6174f0ff2fe13c066247b8c555b042d1d",
+      "bytes": 584163,
+      "tool_result_counts": {
+        "terminal": 61,
+        "read_file": 5,
+        "write_file": 2,
+        "patch": 13
+      }
+    },
+    {
+      "path": "/var/lib/supergoal-lab/control/8bd427d7cb8b4dcba191c6d02e2cdcad/02-review/result.json",
+      "sha256": "95ab48c3fa1bf0181c0d4dfb3f560cff7320a15bb5c1728e9b31dfee4345c11a",
+      "bytes": 43902,
+      "tool_result_counts": {
+        "search_files": 2,
+        "read_file": 5,
+        "terminal": 6
+      }
+    }
+  ],
+  "bundle_sha256": "426a18c70bb748094b506756cb847add74d085e88ac02c2ce2b1d6aa904abcb1",
+  "bundle_collected_at": "2026-10-05T11:59:15.912105+00:00",
+  "audit_model_requests": 0,
+  "original_trial_modified": false,
+  "rerun_failed_trial": false,
+  "resume_conditions": {
+    "available_memory_gib": 4.5,
+    "free_disk_gib": 15,
+    "model_endpoint_healthy": true
+  },
+  "resource_observation": {
+    "checked_at_utc": "2026-10-05T12:01:41.753715+00:00",
+    "available_memory_kib": 3193368,
+    "running_lab_containers": 0,
+    "lab_processes_only": [
+      "dockerd",
+      "containerd"
+    ]
+  }
+}

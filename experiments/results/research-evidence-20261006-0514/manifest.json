@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-05T21:13:50.234286+00:00",
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/public-parallel24-v1-observation-211317.json": {
+      "sha256": "cc1d1888fac2942c983534d2d44ca818dd057957ffe5c307e041ad08a85cf99b",
+      "bytes": 2718836
+    },
+    "setup/scb-transfer01-observation-211317.json": {
+      "sha256": "ecf27199e91bd10c6f2cf0ee26b183b11f49d046202bebed4d666d604381603b",
+      "bytes": 928022
+    },
+    "setup/longhorizon-smoke01.json": {
+      "sha256": "38e2dd8b6a3693b269b64ba312e51b62094ec6f5b681ef005204f5898b8e31c0",
+      "bytes": 23064
+    },
+    "setup/registration-longhorizon-smoke01.json": {
+      "sha256": "e47ba5859e5243ff6e342f0c6d535483e376acf69faff9c4d9e0062e78a5626b",
+      "bytes": 11955
+    },
+    "setup/harness-transfer01-selection-abort01.json": {
+      "sha256": "a3ac96d2c175c14563ba552431a549335b69cccbe562b8b986a06464a7ce9d56",
+      "bytes": 1943
+    },
+    "setup/selection-harness-transfer01.json": {
+      "sha256": "942b735c7ddbc9b9fd7c515228185ac5c25cf34ee27dc756c88bda981555e9e8",
+      "bytes": 9270
+    },
+    "setup/harness-transfer01-preparation.json": {
+      "sha256": "ae3e8c00cd5b0a3184ea870758dce2fbfb0caf59ce5e1ceca79a39707063dc1e",
+      "bytes": 2146
+    },
+    "harness-transfer-operator01/prepare_harness_transfer.py": {
+      "sha256": "f256dba4cca61306cd0f753c0a5edd1b7ee63f34da2bf40d6d484960972be607",
+      "bytes": 6884
+    },
+    "harness-transfer-operator02/prepare_harness_transfer.py": {
+      "sha256": "7ff9c69ec3c8b43e5c3151743f787a506331a55d17aa9c9aecd489259bc20f00",
+      "bytes": 7128
+    },
+    "control/4bff2e78bb6c4756a7930dc4f37d8c5b/report.json": {
+      "sha256": "54f3ea1fc577696a01f890c9a7924a81a8515707f302d07d6a98c300c14cb6b4",
+      "bytes": 32637
+    },
+    "control/4bff2e78bb6c4756a7930dc4f37d8c5b/request-journal.json": {
+      "sha256": "5227cc5cbb1519da4151f6005c3bf7d295e02a825fddb5041078cbc32287c3f4",
+      "bytes": 4666
+    }
+  }
+}

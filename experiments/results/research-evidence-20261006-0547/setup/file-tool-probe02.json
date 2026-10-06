@@ -1,0 +1,8 @@
+{
+  "status": "waiting_capacity",
+  "model_calls": 0,
+  "image_id": "sha256:f0d6e67fe473a244c4e7c3d980df8651e5e05f823a3a4b662490a5bb2188c9c2",
+  "operator_sha256": "b6a8839c134904fe71d81911bcfb11a289dd88666f2829a796470e60639af951",
+  "scope": "One disposable fixed-text container; no benchmark rerun or production changes",
+  "calls": []
+}

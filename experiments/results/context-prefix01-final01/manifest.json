@@ -1,0 +1,120 @@
+{
+  "captured_at": "2026-10-06T01:21:36.383215+00:00",
+  "files": [
+    {
+      "path": "analysis-prefix01/audit_completed_context.py",
+      "sha256": "3cf3255956050e8e66f612d84924747c3042d9120f5a7b47e3348e3c20af9c6c",
+      "bytes": 9989
+    },
+    {
+      "path": "analysis-prefix01/audit_completed_prefix.py",
+      "sha256": "07018e8854edb0b68d27119768aef0adfee9ce9f215a23d5c58c19b6fbb58fa1",
+      "bytes": 7755
+    },
+    {
+      "path": "analysis-prefix01/experiments/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_context.py",
+      "sha256": "d1abe911790ad3fdbf019ac123c8c79fea8960b2945d6985ac9d2e2bbb688a42",
+      "bytes": 15623
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_context_details.py",
+      "sha256": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3",
+      "bytes": 9982
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_prefix.py",
+      "sha256": "0750ef0e7ec6a64ddb6bca84bd9fbd69a2458a2d3f981f414f04707c0835138a",
+      "bytes": 8949
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/audit_multistep_regressions.py",
+      "sha256": "6ed967627292d35f7b8814b4c53cfb8e7942ef37de72fad233ae7488ee1a9925",
+      "bytes": 6985
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/collect_multistep.py",
+      "sha256": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55",
+      "bytes": 8877
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/context_policy.py",
+      "sha256": "ab5c2fdc0ac20d103e17ae88cbcc255dd1687059c3ac27f2d8cb11297892bcdc",
+      "bytes": 1981
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/prefix_inputs.py",
+      "sha256": "cf8b0380b990fe0f4ed3048b7265dd9e2057d0e2417d5df2612db152437fd5aa",
+      "bytes": 3051
+    },
+    {
+      "path": "analysis-prefix01/finalize_prefix_study.py",
+      "sha256": "ea538778c430c9511a401f63a04f6a64eb7b966937b06f67cc58a972f151a95d",
+      "bytes": 4971
+    },
+    {
+      "path": "setup/checkpoint-retention01.json",
+      "sha256": "f5baea8a13c82014e3a3a8e6e16000afbd9eddbbeb4e26722dae96ed3e754cea",
+      "bytes": 115345
+    },
+    {
+      "path": "setup/context-prefix01-final-analysis01.json",
+      "sha256": "3c819f4df2ac61f38a7ffa518ce2c1364a164f0d2014e88ace4dacb6db26a487",
+      "bytes": 41909
+    },
+    {
+      "path": "setup/context-prefix01-final-audit01.json",
+      "sha256": "3f0428349c1c7cbe2a4ae345610346320049b4e495769a362bacaa6f96cb5a63",
+      "bytes": 37081
+    },
+    {
+      "path": "setup/context-prefix01-final-observation01.json",
+      "sha256": "8e097fc38b09c2499c901029b61df8fbcbaf6ddf5ee5420f472869d7b8da5cf3",
+      "bytes": 937746
+    },
+    {
+      "path": "setup/context-prefix01-final-progress01.md",
+      "sha256": "87476f77be4f996dcce3cbdbdafda5cf554b8eefd3f662f2fd9d91eb6b945f43",
+      "bytes": 5177
+    },
+    {
+      "path": "setup/context-prefix01-final-regressions01.json",
+      "sha256": "da7301b92312a2091a25bc00de1a8fab9c4dfbae89ec361064c442cf986ecbcf",
+      "bytes": 171798
+    },
+    {
+      "path": "setup/context-prefix01-finalizer01.json",
+      "sha256": "186b0def278cfe8b9713d6f34ce42b626a4c299e57ef0c1d2626dc9743174f77",
+      "bytes": 3401
+    },
+    {
+      "path": "setup/context-prefix01-finished-host01.json",
+      "sha256": "599dcc6393430c17d0566a7baa86596f61cbced276758311b9d54fd63af9a336",
+      "bytes": 2830
+    },
+    {
+      "path": "setup/context-prefix01-receipt.json",
+      "sha256": "96f7f27654d844a688af0ec69596a7e0bb9771167e52758fe93d84af8a6f3f0d",
+      "bytes": 34694
+    },
+    {
+      "path": "setup/context-prefix01-source.tar.gz",
+      "sha256": "23ae6e824d0d7059db33174316dd1283c2a789fc09d748044b17af591f8c59ca",
+      "bytes": 219949
+    },
+    {
+      "path": "setup/registration-context-prefix01.json",
+      "sha256": "82063d4449cbd833f5c04c51a8f9a1a3684d509d92ef6430c427b7038fa4b490",
+      "bytes": 71890
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "captured_at": 1791141298.4175432,
+  "frozen_bundle_files_checked": 58,
+  "frozen_bundle_mismatches": [],
+  "experimental_units": {
+    "supergoal-holdout01": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "supergoal-context-reset01": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "supergoal-context-reset02": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "supergoal-soak-v2-20261005": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    },
+    "supergoal-soak-v2-r3-20261005": {
+      "LoadState": "not-found",
+      "ActiveState": "inactive",
+      "SubState": "dead"
+    }
+  },
+  "hermes_source_hashes": {
+    "run_agent.py": "dc125031d13e2a341eec473bcfcafce16c7356505dcbc560bec562b1ecaddc04",
+    "agent/conversation_loop.py": "2086d4d084a7cba728a5862f2f27d172860908af967e2b83a43d22fe757548c2",
+    "agent/turn_facade_lease.py": "ee332da6d22fb526e59764550598ff8750c668372e8dc95103cd4e0aaca33f16",
+    "hermes_cli/goals.py": "0410062025f6a2175adc202c69730266499a2d161a43be9d91bc4af91f02822b",
+    "hermes_cli/plugins.py": "8455c80c52af129a173f0836955f9a1b2d2bcadeee1d9baf4b5e6270b10c152d"
+  },
+  "production_services": {
+    "hermes-gateway": "active",
+    "hermes-dashboard": "active"
+  },
+  "soak_accepted_artifact_hashes_match_current": {
+    "summary.json": true,
+    "update.py": true
+  },
+  "experiment_disk_usage": "144M\t/var/lib/supergoal-lab",
+  "previously_recorded_hermes_hashes_unchanged": true
+}

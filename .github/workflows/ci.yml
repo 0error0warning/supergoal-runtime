@@ -25,7 +25,14 @@ jobs:
           python -m pip install -e . pytest pytest-asyncio ruff build
 
       - name: Lint
-        run: python -m ruff check supergoal_runtime scripts tests
+        # Frozen evidence and historical host launch helpers keep their original bytes.
+        run: >-
+          python -m ruff check supergoal_runtime scripts tests
+          experiments/analysis experiments/public_benchmarks
+          experiments/infrastructure experiments/*.py
+
+      - name: Verify archived research evidence
+        run: python scripts/verify_research_archive.py
 
       - name: Run host-independent tests
         run: |
@@ -33,6 +40,7 @@ jobs:
             tests/unit \
             tests/integration \
             tests/replay \
+            experiments/analysis/test_registered_results.py \
             --deselect tests/unit/test_store.py::test_state_path_prefers_context_override_over_environment \
             --deselect tests/unit/test_store.py::test_concurrent_context_profiles_do_not_cross_write \
             -q -o 'addopts='

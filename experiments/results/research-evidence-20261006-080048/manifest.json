@@ -1,0 +1,54 @@
+{
+  "captured_at": "2026-10-06T00:00:37.297853+00:00",
+  "scope": "Partial context-study outcomes and actual process state; finalizer sources and launch proof. No model retries.",
+  "files": {
+    "setup/context-handoff01-observation-20261006T000037Z.json": {
+      "sha256": "dca0036ffd8d9b65a67eb2e4a32a6fb8be8b34a33b337583de7a099f69cba184",
+      "bytes": 1240507
+    },
+    "setup/context-handoff01-live-20261006T000037Z.json": {
+      "sha256": "803d0624dc54829390473c3901ebc91b5e42020e045eada21257993d7fd03892",
+      "bytes": 3008
+    },
+    "setup/context-handoff01-finalizer-launch01.json": {
+      "sha256": "ea5631d050608756db57580e685daf3e4a868dd4e7d955ab90c8cc8ff15337f2",
+      "bytes": 881
+    },
+    "setup/context-handoff01-finalizer01.json": {
+      "sha256": "68aa806dfc416a66afe72a7ef6e94b1d655a50201469da66dea7e834fc872b61",
+      "bytes": 878
+    },
+    "setup/context-handoff01-partial-identity01.json": {
+      "sha256": "216e234866239d9f86ba4ffea8effc2e94650bfe0441f6814d78d8d5117d35f1",
+      "bytes": 27796
+    },
+    "setup/context-handoff01-receipt.json": {
+      "sha256": "a57554e7611252eeb3a47037579749ae1836856cf72971e0e6ba9a057cb4d490",
+      "bytes": 47220
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "e8f33aac46a9847bc1826e0c0cd3fda7e17455d9afdaa871caebd9b90a1a537d",
+      "bytes": 100783
+    },
+    "analysis-context01/analyze_context.py": {
+      "sha256": "ea44eb9239f9ed0d4b243fc47226b6d4045c0ce1613616b9886e9efc33c30e16",
+      "bytes": 15147
+    },
+    "analysis-context01/audit_multistep_regressions.py": {
+      "sha256": "798e769f1244516e06596f36d46d17a3db66c6b59e05f1cccb946acd80e8da23",
+      "bytes": 6284
+    },
+    "analysis-context01/finalize_context_study.py": {
+      "sha256": "073deb94575b9a5d98bbbeddd3e2ed713119b7ae6a9ff8c0d922e12030216a02",
+      "bytes": 5275
+    },
+    "analysis-context01/audit_completed_context.py": {
+      "sha256": "cccda287c628ff5d4ea5944b36369b503749304da37d791ba7cacb18493a648b",
+      "bytes": 9865
+    },
+    "analysis-context01/collect_multistep.py": {
+      "sha256": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55",
+      "bytes": 8877
+    }
+  }
+}

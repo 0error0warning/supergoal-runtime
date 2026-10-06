@@ -1,0 +1,1335 @@
+{
+  "status": "running",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "file_backup",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "started_epoch": 1791242751.4097762,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-01-file_backup-carry_ledger",
+      "harbor_pid": 1931089,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791243617.5278022,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-01-file_backup-carry_ledger/file_backup__oF8PCjC/result.json",
+      "raw_rewards": {
+        "erosion": 0.487832832538615,
+        "verbosity_increased": 0.5,
+        "core_pass_rate": 1.0,
+        "step_has_prior": 0.75,
+        "verbosity": 0.6247384653929228,
+        "strict_pass_rate": 0.6139237029081296,
+        "erosion_increased": 0.5,
+        "isolated_pass_rate": 0.6462053571428572
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 100049,
+            "n_cache_tokens": 49862,
+            "n_output_tokens": 5437,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_ledger",
+              "control_id": "3b60feb3069641378ced42106a83072c",
+              "study_status": "succeeded",
+              "physical_requests": 12,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "40c28896815c43cb9227c49ea8c52a0e",
+              "checkpoint": 1,
+              "problem_requests_total": 12,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6925488004228544,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.65625,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.65625,
+              "verbosity": 0.2922077922077922,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:25:53.830379Z",
+            "finished_at": "2026-10-05T23:27:42.308440Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:27:42.999807Z",
+            "finished_at": "2026-10-05T23:27:53.437954Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 420487,
+            "n_cache_tokens": 253202,
+            "n_output_tokens": 8471,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_ledger",
+              "control_id": "ebd5898b418a4f59aa3f40b4107afd92",
+              "study_status": "succeeded",
+              "physical_requests": 22,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "40c28896815c43cb9227c49ea8c52a0e",
+              "checkpoint": 2,
+              "problem_requests_total": 34,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8264235950030708,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.5555555555555556,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.62,
+              "verbosity": 0.5151515151515151,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:27:54.125292Z",
+            "finished_at": "2026-10-05T23:30:37.890340Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:30:38.529423Z",
+            "finished_at": "2026-10-05T23:30:49.519459Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 998676,
+            "n_cache_tokens": 787162,
+            "n_output_tokens": 11165,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_ledger",
+              "control_id": "76e4224efafe4691a91f0ccb4aaf0e73",
+              "study_status": "succeeded",
+              "physical_requests": 31,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "40c28896815c43cb9227c49ea8c52a0e",
+              "checkpoint": 3,
+              "problem_requests_total": 65,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.18878130230176887,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6111111111111112,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6176470588235294,
+              "verbosity": 0.8501023192360164,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:30:50.064817Z",
+            "finished_at": "2026-10-05T23:36:44.440953Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:36:45.135907Z",
+            "finished_at": "2026-10-05T23:37:03.239160Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 852525,
+            "n_cache_tokens": 709193,
+            "n_output_tokens": 8156,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_ledger",
+              "control_id": "fb540104d03a482cae6b633d28cda4fd",
+              "study_status": "succeeded",
+              "physical_requests": 16,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "40c28896815c43cb9227c49ea8c52a0e",
+              "checkpoint": 4,
+              "problem_requests_total": 81,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.24357763242676594,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7619047619047619,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5617977528089888,
+              "verbosity": 0.8414922349763673,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:37:03.510400Z",
+            "finished_at": "2026-10-05T23:39:40.289144Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:39:40.949137Z",
+            "finished_at": "2026-10-05T23:39:59.174536Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "task_id": "database_migration",
+      "arm": "carry_current",
+      "status": "returned",
+      "started_epoch": 1791242751.4125543,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-02-database_migration-carry_current",
+      "harbor_pid": 1931090,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791243883.5841477,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-02-database_migration-carry_current/database_migration__Ks7Lzqx/result.json",
+      "raw_rewards": {
+        "isolated_pass_rate": 0.8459130434782608,
+        "verbosity": 0.5974934421588494,
+        "step_has_prior": 0.8,
+        "strict_pass_rate": 0.9240222834613319,
+        "core_pass_rate": 0.7666666666666666,
+        "verbosity_increased": 0.4,
+        "erosion_increased": 0.4,
+        "erosion": 0.6742733449768493
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 96027,
+            "n_cache_tokens": 44392,
+            "n_output_tokens": 4627,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "c04df5cc5b20423aa00596b43f9208c4",
+              "study_status": "succeeded",
+              "physical_requests": 11,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+              "checkpoint": 1,
+              "problem_requests_total": 11,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6321329563101177,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.5882352941176471,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:25:53.736768Z",
+            "finished_at": "2026-10-05T23:29:08.409060Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:29:09.052176Z",
+            "finished_at": "2026-10-05T23:29:19.576608Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 153698,
+            "n_cache_tokens": 92170,
+            "n_output_tokens": 4030,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "49ce68a741b24b76832504c0c847bdeb",
+              "study_status": "succeeded",
+              "physical_requests": 11,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+              "checkpoint": 2,
+              "problem_requests_total": 22,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.5885950218932151,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8695652173913043,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9516129032258065,
+              "verbosity": 0.6363636363636364,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:29:19.893350Z",
+            "finished_at": "2026-10-05T23:30:57.968579Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:30:58.561188Z",
+            "finished_at": "2026-10-05T23:31:10.082951Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 844001,
+            "n_cache_tokens": 695249,
+            "n_output_tokens": 14457,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "64790c63d1854229bb0c439c2b5b5b5c",
+              "study_status": "succeeded",
+              "physical_requests": 30,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+              "checkpoint": 3,
+              "problem_requests_total": 52,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.5806908650879308,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.96,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9534883720930233,
+              "verbosity": 0.5748407643312102,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:31:10.377890Z",
+            "finished_at": "2026-10-05T23:36:01.863268Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:36:02.509206Z",
+            "finished_at": "2026-10-05T23:36:12.300854Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 1076880,
+            "n_cache_tokens": 987126,
+            "n_output_tokens": 11996,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "7775e79f495a4641ba69782025ae1f59",
+              "study_status": "succeeded",
+              "physical_requests": 27,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+              "checkpoint": 4,
+              "problem_requests_total": 79,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.5,
+              "erosion": 0.7729551332972188,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.6,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8620689655172413,
+              "verbosity": 0.6184510250569476,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:36:12.594318Z",
+            "finished_at": "2026-10-05T23:40:49.239517Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:40:49.823361Z",
+            "finished_at": "2026-10-05T23:41:03.855670Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": 942040,
+            "n_cache_tokens": 739520,
+            "n_output_tokens": 9132,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "afc0c64ce922458eab0b5fff4993e5c1",
+              "study_status": "succeeded",
+              "physical_requests": 19,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+              "checkpoint": 5,
+              "problem_requests_total": 98,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.796992748295764,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8529411764705882,
+              "verbosity": 0.5695764909248056,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:41:04.129804Z",
+            "finished_at": "2026-10-05T23:43:52.306734Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:43:52.977895Z",
+            "finished_at": "2026-10-05T23:44:25.129687Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791242751.4162667,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-03-dag_execution-fresh_ledger",
+      "harbor_pid": 1931091,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791244164.785217,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-03-dag_execution-fresh_ledger/dag_execution__3g4wrAn/result.json",
+      "raw_rewards": {
+        "erosion": 0.8073567132036382,
+        "step_has_prior": 0.6666666666666666,
+        "core_pass_rate": 0.08333333333333333,
+        "erosion_increased": 0.6666666666666666,
+        "strict_pass_rate": 0.558946712461777,
+        "verbosity_increased": 0.3333333333333333,
+        "verbosity": 0.31069361002374757,
+        "isolated_pass_rate": 0.36035353535353537
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 912755,
+            "n_cache_tokens": 852937,
+            "n_output_tokens": 27423,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "ca5fe245147748a98f07694d62411986",
+              "study_status": "succeeded",
+              "physical_requests": 43,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5f332ecaf1a84ce8ab58269e107e681d",
+              "checkpoint": 1,
+              "problem_requests_total": 43,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.25,
+              "erosion": 0.7539865867293266,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6060606060606061,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.6060606060606061,
+              "verbosity": 0.2861150070126227,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:25:53.754010Z",
+            "finished_at": "2026-10-05T23:39:05.760187Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:39:06.414352Z",
+            "finished_at": "2026-10-05T23:39:17.621061Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 690270,
+            "n_cache_tokens": 588829,
+            "n_output_tokens": 12870,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "b0d10b2b8a1e4d6eb69511bb9c402c65",
+              "study_status": "succeeded",
+              "physical_requests": 32,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5f332ecaf1a84ce8ab58269e107e681d",
+              "checkpoint": 2,
+              "problem_requests_total": 75,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.8184805092489427,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.375,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5609756097560976,
+              "verbosity": 0.3358208955223881,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:39:17.887855Z",
+            "finished_at": "2026-10-05T23:42:44.672522Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:42:45.319228Z",
+            "finished_at": "2026-10-05T23:42:56.650633Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 780175,
+            "n_cache_tokens": 721637,
+            "n_output_tokens": 15135,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "9ffb70f965e045e89cb937e2c984b7fe",
+              "study_status": "succeeded",
+              "physical_requests": 34,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5f332ecaf1a84ce8ab58269e107e681d",
+              "checkpoint": 3,
+              "problem_requests_total": 109,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.8496030436326455,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.1,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5098039215686274,
+              "verbosity": 0.3101449275362319,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:42:57.168673Z",
+            "finished_at": "2026-10-05T23:48:52.451333Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:48:53.114677Z",
+            "finished_at": "2026-10-05T23:49:08.977342Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "task_id": "file_backup",
+      "arm": "carry_current",
+      "status": "returned",
+      "started_epoch": 1791242751.418665,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-04-file_backup-carry_current",
+      "harbor_pid": 1931092,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791243597.262128,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-04-file_backup-carry_current/file_backup__2kGwxpr/result.json",
+      "raw_rewards": {
+        "core_pass_rate": 1.0,
+        "erosion_increased": 0.5,
+        "step_has_prior": 0.75,
+        "erosion": 0.5729839901329483,
+        "isolated_pass_rate": 0.7116815476190477,
+        "strict_pass_rate": 0.6539980584930601,
+        "verbosity": 0.4564687477509513,
+        "verbosity_increased": 0.25
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 114267,
+            "n_cache_tokens": 78814,
+            "n_output_tokens": 6550,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "4ef6ba5af67040b4b41b76c8e47c545b",
+              "study_status": "succeeded",
+              "physical_requests": 13,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "ea9d7fdac30848f2ae857bcf35ae0ed4",
+              "checkpoint": 1,
+              "problem_requests_total": 13,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8626682875535742,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.65625,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.65625,
+              "verbosity": 0.08994708994708994,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:25:53.766451Z",
+            "finished_at": "2026-10-05T23:28:25.397022Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:28:26.099810Z",
+            "finished_at": "2026-10-05T23:28:36.741378Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 190564,
+            "n_cache_tokens": 154668,
+            "n_output_tokens": 3983,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "7c26ce9b7f8e4ac5bffe5e523b181606",
+              "study_status": "succeeded",
+              "physical_requests": 12,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "ea9d7fdac30848f2ae857bcf35ae0ed4",
+              "checkpoint": 2,
+              "problem_requests_total": 25,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.9164000999053702,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7222222222222222,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.68,
+              "verbosity": 0.06204379562043796,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:28:38.676811Z",
+            "finished_at": "2026-10-05T23:30:05.626460Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:30:06.262207Z",
+            "finished_at": "2026-10-05T23:30:17.267762Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 365043,
+            "n_cache_tokens": 311850,
+            "n_output_tokens": 5724,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "6b1a2b5a9df3452c8630e6eb73789cb4",
+              "study_status": "succeeded",
+              "physical_requests": 17,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "ea9d7fdac30848f2ae857bcf35ae0ed4",
+              "checkpoint": 3,
+              "problem_requests_total": 42,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.22282668807641678,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6111111111111112,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6617647058823529,
+              "verbosity": 0.8431405799559097,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:30:17.570885Z",
+            "finished_at": "2026-10-05T23:32:56.039339Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:32:56.629563Z",
+            "finished_at": "2026-10-05T23:33:11.143055Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 797615,
+            "n_cache_tokens": 649438,
+            "n_output_tokens": 11501,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "carry_current",
+              "control_id": "3b48c949361141249a3038efecf9f627",
+              "study_status": "succeeded",
+              "physical_requests": 29,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "ea9d7fdac30848f2ae857bcf35ae0ed4",
+              "checkpoint": 4,
+              "problem_requests_total": 71,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.29004088499643205,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8571428571428571,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6179775280898876,
+              "verbosity": 0.8307435254803676,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:33:11.421393Z",
+            "finished_at": "2026-10-05T23:39:20.880381Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:39:21.503522Z",
+            "finished_at": "2026-10-05T23:39:39.650021Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791243104.7954974,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-05-database_migration-fresh_ledger",
+      "harbor_pid": 1961692,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791244562.1167483,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-05-database_migration-fresh_ledger/database_migration__fhfgKuQ/result.json",
+      "raw_rewards": {
+        "verbosity": 0.24866451655105282,
+        "isolated_pass_rate": 0.912608695652174,
+        "erosion": 0.6535646612637884,
+        "strict_pass_rate": 0.9589276502695654,
+        "step_has_prior": 0.8,
+        "verbosity_increased": 0.4,
+        "erosion_increased": 0.2,
+        "core_pass_rate": 0.9
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 123145,
+            "n_cache_tokens": 88816,
+            "n_output_tokens": 4958,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "73ae0fd71ca845a782dcf6abcd561bf2",
+              "study_status": "succeeded",
+              "physical_requests": 14,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "57ff3a6774c74a91b50f6b8fb8f4a317",
+              "checkpoint": 1,
+              "problem_requests_total": 14,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6410764879546715,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.32748538011695905,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:31:48.828502Z",
+            "finished_at": "2026-10-05T23:33:37.854073Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:33:38.578297Z",
+            "finished_at": "2026-10-05T23:33:50.478272Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 335038,
+            "n_cache_tokens": 252098,
+            "n_output_tokens": 7636,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "81c9f1accfaa42f9a365384025f7f78b",
+              "study_status": "succeeded",
+              "physical_requests": 23,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "57ff3a6774c74a91b50f6b8fb8f4a317",
+              "checkpoint": 2,
+              "problem_requests_total": 37,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.5838399421442804,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.9130434782608695,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.967741935483871,
+              "verbosity": 0.24334600760456274,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:33:50.776706Z",
+            "finished_at": "2026-10-05T23:36:48.945986Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:36:49.651042Z",
+            "finished_at": "2026-10-05T23:37:05.336201Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 510929,
+            "n_cache_tokens": 445068,
+            "n_output_tokens": 21040,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "f6d4ff73821c4b299399e732f6d624e7",
+              "study_status": "succeeded",
+              "physical_requests": 22,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "57ff3a6774c74a91b50f6b8fb8f4a317",
+              "checkpoint": 3,
+              "problem_requests_total": 59,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.5815794171409946,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9767441860465116,
+              "verbosity": 0.2027729636048527,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:37:05.626124Z",
+            "finished_at": "2026-10-05T23:43:20.871393Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:43:21.543349Z",
+            "finished_at": "2026-10-05T23:43:49.574759Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 1045204,
+            "n_cache_tokens": 891189,
+            "n_output_tokens": 19477,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "7ce4056b4cb64e4c9eebc09659211271",
+              "study_status": "succeeded",
+              "physical_requests": 35,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "57ff3a6774c74a91b50f6b8fb8f4a317",
+              "checkpoint": 4,
+              "problem_requests_total": 94,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.8333333333333334,
+              "erosion": 0.7347251280787177,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9310344827586207,
+              "verbosity": 0.2048780487804878,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:43:49.938065Z",
+            "finished_at": "2026-10-05T23:51:34.293208Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:51:36.335460Z",
+            "finished_at": "2026-10-05T23:51:56.813947Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": 687044,
+            "n_cache_tokens": 525984,
+            "n_output_tokens": 10576,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "d61b229e7d154e66bb0be47616f046f6",
+              "study_status": "succeeded",
+              "physical_requests": 20,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "57ff3a6774c74a91b50f6b8fb8f4a317",
+              "checkpoint": 5,
+              "problem_requests_total": 114,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.7266023310002779,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.85,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9191176470588235,
+              "verbosity": 0.2648401826484018,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:51:57.122810Z",
+            "finished_at": "2026-10-05T23:55:11.038764Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:55:11.693815Z",
+            "finished_at": "2026-10-05T23:55:30.357314Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791243104.7989335,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-06-dag_execution-fresh_current",
+      "harbor_pid": 1961693,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 6,
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791243602.5188353,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-07-file_backup-fresh_ledger",
+      "harbor_pid": 2087454,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791244290.2294807,
+      "result_path": "/var/lib/supergoal-lab/jobs/context-handoff01-07-file_backup-fresh_ledger/file_backup__3uxHpKi/result.json",
+      "raw_rewards": {
+        "core_pass_rate": 1.0,
+        "erosion_increased": 0.5,
+        "step_has_prior": 0.75,
+        "isolated_pass_rate": 0.7374751984126984,
+        "strict_pass_rate": 0.6632925066093853,
+        "erosion": 0.5641049978309342,
+        "verbosity_increased": 0.5,
+        "verbosity": 0.4592650322227667
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 160566,
+            "n_cache_tokens": 122972,
+            "n_output_tokens": 6363,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "264d3d5f449e4e66b80335fc7a9ad220",
+              "study_status": "succeeded",
+              "physical_requests": 17,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5b421e03af1b418fad1169a6c3a1a336",
+              "checkpoint": 1,
+              "problem_requests_total": 17,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8660683128621725,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.65625,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.65625,
+              "verbosity": 0.06369426751592357,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:40:04.465585Z",
+            "finished_at": "2026-10-05T23:42:33.696512Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:42:34.322000Z",
+            "finished_at": "2026-10-05T23:42:43.217411Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 212894,
+            "n_cache_tokens": 125097,
+            "n_output_tokens": 6333,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "54ede7daa39746af83a677b54cd658a0",
+              "study_status": "succeeded",
+              "physical_requests": 15,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5b421e03af1b418fad1169a6c3a1a336",
+              "checkpoint": 2,
+              "problem_requests_total": 32,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.9252757883892723,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7222222222222222,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.68,
+              "verbosity": 0.044444444444444446,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:42:43.620175Z",
+            "finished_at": "2026-10-05T23:44:59.081902Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:44:59.700347Z",
+            "finished_at": "2026-10-05T23:45:09.355036Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 259736,
+            "n_cache_tokens": 213278,
+            "n_output_tokens": 4768,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "3b54a6acbfa44db1a525fe738544dd3c",
+              "study_status": "succeeded",
+              "physical_requests": 16,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5b421e03af1b418fad1169a6c3a1a336",
+              "checkpoint": 3,
+              "problem_requests_total": 48,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.19672036660141473,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6666666666666666,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6764705882352942,
+              "verbosity": 0.8518264448636598,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:45:10.233196Z",
+            "finished_at": "2026-10-05T23:47:41.675169Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:47:42.263809Z",
+            "finished_at": "2026-10-05T23:47:56.543621Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 441463,
+            "n_cache_tokens": 372634,
+            "n_output_tokens": 7842,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "fresh_ledger",
+              "control_id": "6bea6cb3ac9b4102a07c7ef679b4e526",
+              "study_status": "succeeded",
+              "physical_requests": 21,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "5b421e03af1b418fad1169a6c3a1a336",
+              "checkpoint": 4,
+              "problem_requests_total": 69,
+              "multistep_adapter": "context-handoff-dev09"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.26835552347087704,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.9047619047619048,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6404494382022472,
+              "verbosity": 0.8770949720670391,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T23:47:56.823466Z",
+            "finished_at": "2026-10-05T23:50:46.113408Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T23:50:46.853905Z",
+            "finished_at": "2026-10-05T23:51:07.629098Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791243622.5339317,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-08-database_migration-fresh_current",
+      "harbor_pid": 2089926,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 8,
+      "task_id": "dag_execution",
+      "arm": "carry_ledger",
+      "status": "running",
+      "started_epoch": 1791243888.7183068,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-09-dag_execution-carry_ledger",
+      "harbor_pid": 2120091,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 9,
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791244169.792553,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-10-file_backup-fresh_current",
+      "harbor_pid": 2145804,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 10,
+      "task_id": "database_migration",
+      "arm": "carry_ledger",
+      "status": "running",
+      "started_epoch": 1791244295.6304185,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-11-database_migration-carry_ledger",
+      "harbor_pid": 2162496,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 11,
+      "task_id": "dag_execution",
+      "arm": "carry_current",
+      "status": "running",
+      "started_epoch": 1791244567.9570425,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-12-dag_execution-carry_current",
+      "harbor_pid": 2195478,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "registration_sha256": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+  "heartbeat_epoch": 1791244834.3605103
+}

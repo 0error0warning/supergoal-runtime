@@ -1,0 +1,2584 @@
+[
+  {
+    "run_id": "context-reset02-8701-minimal_continue",
+    "seed": 8701,
+    "policy": "minimal_continue",
+    "started": 1791139121.4624722,
+    "task_sha256": "7f02dc132cf17b7b5200ceca4aaac526aadd7abf914da7f669471a417b248165",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "45ed06152066fd305bea3e9c9c69f9e6fca3da136decfff53602675feacf3432",
+            "reproduce.py": "321cd973a035bb9beaa6e18fb6176db8f8deee0e84ddf095d994737026314e27"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 28.378781175997574,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139192259131876,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "583df60a5e32a4607ef525f946ca0bae7e67066643d188c0253d7dbeb9fb6c7a",
+            "reproduce.py": "321cd973a035bb9beaa6e18fb6176db8f8deee0e84ddf095d994737026314e27"
+          }
+        },
+        "api_calls": 7,
+        "seconds": 29.115435093990527,
+        "prompt_bytes": 98,
+        "prompt_sha256": "0661711c0b54288eda1c2ea84782e99e9e478a80037a216ac770c6e9c4c29e2e",
+        "worker_instance": 1791139272879470952,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "88a151b59d3a34a4eae9760fd6e08c73994f19bac7b1c48d131e1127ece83078",
+            "reproduce.py": "321cd973a035bb9beaa6e18fb6176db8f8deee0e84ddf095d994737026314e27"
+          }
+        },
+        "api_calls": 7,
+        "seconds": 32.11197422299301,
+        "prompt_bytes": 98,
+        "prompt_sha256": "0661711c0b54288eda1c2ea84782e99e9e478a80037a216ac770c6e9c4c29e2e",
+        "worker_instance": 1791139343674322779,
+        "error": null
+      }
+    ],
+    "executor_calls": 19,
+    "queue_seconds": 111.4295117855072,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791139166.866129,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 80,
+          "total_tokens": 3683,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_4002d2f3-9be",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 6.334389686584473
+      },
+      {
+        "index": 2,
+        "started": 1791139173.5914793,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4443,
+          "output_tokens": 121,
+          "total_tokens": 4564,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_e753881f-a93",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.6491179466247559
+      },
+      {
+        "index": 3,
+        "started": 1791139175.2769182,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6062,
+          "output_tokens": 587,
+          "total_tokens": 6649,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_84e2e408-207",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 8.102830171585083
+      },
+      {
+        "index": 4,
+        "started": 1791139183.4759107,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6711,
+          "output_tokens": 62,
+          "total_tokens": 6773,
+          "input_tokens_details": {
+            "cached_tokens": 6016
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_3df26f14-c77",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 5.984214782714844
+      },
+      {
+        "index": 5,
+        "started": 1791139189.5978851,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7117,
+          "output_tokens": 217,
+          "total_tokens": 7334,
+          "input_tokens_details": {
+            "cached_tokens": 6656
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_2b679d9f-722",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.6025390625
+      },
+      {
+        "index": 6,
+        "started": 1791139246.0674663,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3442,
+          "output_tokens": 139,
+          "total_tokens": 3581,
+          "input_tokens_details": {
+            "cached_tokens": 320
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_b810d904-868",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 8.459425926208496
+      },
+      {
+        "index": 7,
+        "started": 1791139254.7606623,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3676,
+          "output_tokens": 116,
+          "total_tokens": 3792,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_d2e61f5e-01a",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.1820883750915527
+      },
+      {
+        "index": 8,
+        "started": 1791139256.1492155,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5104,
+          "output_tokens": 100,
+          "total_tokens": 5204,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_0c989a8d-2b8",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5974290370941162
+      },
+      {
+        "index": 9,
+        "started": 1791139257.9041336,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5607,
+          "output_tokens": 200,
+          "total_tokens": 5807,
+          "input_tokens_details": {
+            "cached_tokens": 5056
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_a71256e4-f22",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.4589710235595703
+      },
+      {
+        "index": 10,
+        "started": 1791139260.4237957,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6952,
+          "output_tokens": 133,
+          "total_tokens": 7085,
+          "input_tokens_details": {
+            "cached_tokens": 5568
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_15dd9f75-1b0",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.2181177139282227
+      },
+      {
+        "index": 11,
+        "started": 1791139262.709436,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 8013,
+          "output_tokens": 299,
+          "total_tokens": 8312,
+          "input_tokens_details": {
+            "cached_tokens": 6912
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_d2429f29-8ee",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.360980749130249
+      },
+      {
+        "index": 12,
+        "started": 1791139266.1952972,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 8807,
+          "output_tokens": 282,
+          "total_tokens": 9089,
+          "input_tokens_details": {
+            "cached_tokens": 8000
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_75f8e747-f7a",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 6.614563465118408
+      },
+      {
+        "index": 13,
+        "started": 1791139314.1912,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3442,
+          "output_tokens": 184,
+          "total_tokens": 3626,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_f94e3099-417",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.2206852436065674
+      },
+      {
+        "index": 14,
+        "started": 1791139316.7591054,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3787,
+          "output_tokens": 251,
+          "total_tokens": 4038,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_f304378d-be0",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 5.023997783660889
+      },
+      {
+        "index": 15,
+        "started": 1791139321.8896677,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5833,
+          "output_tokens": 150,
+          "total_tokens": 5983,
+          "input_tokens_details": {
+            "cached_tokens": 3840
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_776cc9c7-075",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.9933111667633057
+      },
+      {
+        "index": 16,
+        "started": 1791139325.006567,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6071,
+          "output_tokens": 673,
+          "total_tokens": 6744,
+          "input_tokens_details": {
+            "cached_tokens": 5824
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_66b42dce-2f8",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 7.437306880950928
+      },
+      {
+        "index": 17,
+        "started": 1791139332.574486,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6981,
+          "output_tokens": 70,
+          "total_tokens": 7051,
+          "input_tokens_details": {
+            "cached_tokens": 6016
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_87a4c4fb-13e",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 0.9973657131195068
+      },
+      {
+        "index": 18,
+        "started": 1791139333.664183,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7301,
+          "output_tokens": 137,
+          "total_tokens": 7438,
+          "input_tokens_details": {
+            "cached_tokens": 6976
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_7de2b214-3c1",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.884450912475586
+      },
+      {
+        "index": 19,
+        "started": 1791139335.6045108,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 9650,
+          "output_tokens": 924,
+          "total_tokens": 10574,
+          "input_tokens_details": {
+            "cached_tokens": 7424
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_29d75635-5e1",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 7.976682662963867
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791139163.8015163,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139163.876235,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139243.6629305,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139243.7601938,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139311.4534671,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139311.5560532,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 225.15503120422363,
+    "passed": true,
+    "final_artifact_pass": true
+  },
+  {
+    "run_id": "context-reset02-8701-durable_state",
+    "seed": 8701,
+    "policy": "durable_state",
+    "started": 1791139346.6248493,
+    "task_sha256": "7f02dc132cf17b7b5200ceca4aaac526aadd7abf914da7f669471a417b248165",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "bdf7f545aa6c1018a4f89968b4e542b7c9f10ab7a871b080c8c3523a1c659c33",
+            "reproduce.py": "740ee93b59a6d7f7d3cba94e24d272ce9c2550ad2e9d56764f492013f81d017d"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 35.91985816200031,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139435018320881,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "abcd680e14f5976823c6cda598d8bfdd95abbad3adbe3b13932353664068446b",
+            "reproduce.py": "740ee93b59a6d7f7d3cba94e24d272ce9c2550ad2e9d56764f492013f81d017d"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 26.300554441986606,
+        "prompt_bytes": 1820,
+        "prompt_sha256": "194cb539bc1273c48d50424b3dc86f0060742199eb15fca15d0a6af28eb82b9e",
+        "worker_instance": 1791139501673408318,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "0245a49d82c1add650eff46b7d41ef1d01ea44f59d099859c860072099b20412",
+            "reproduce.py": "740ee93b59a6d7f7d3cba94e24d272ce9c2550ad2e9d56764f492013f81d017d"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 20.52457442705054,
+        "prompt_bytes": 1820,
+        "prompt_sha256": "bc985db40236d40db765cfc3b8790f4732fd9ef62cec3bf8ebf8f4e5589dab47",
+        "worker_instance": 1791139560078553019,
+        "error": null
+      }
+    ],
+    "executor_calls": 13,
+    "queue_seconds": 110.5635118484497,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791139401.4041777,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3606,
+          "output_tokens": 112,
+          "total_tokens": 3718,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_deae2a7a-47b",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.83739972114563
+      },
+      {
+        "index": 2,
+        "started": 1791139405.5608003,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4873,
+          "output_tokens": 66,
+          "total_tokens": 4939,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_4b94b671-14e",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.7686805725097656
+      },
+      {
+        "index": 3,
+        "started": 1791139409.3781428,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6025,
+          "output_tokens": 667,
+          "total_tokens": 6692,
+          "input_tokens_details": {
+            "cached_tokens": 4872
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_7e3d85a7-0c1",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 11.325309991836548
+      },
+      {
+        "index": 4,
+        "started": 1791139420.9144568,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6698,
+          "output_tokens": 73,
+          "total_tokens": 6771,
+          "input_tokens_details": {
+            "cached_tokens": 6024
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_ad3ba3de-8df",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.659063816070557
+      },
+      {
+        "index": 5,
+        "started": 1791139425.7086546,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7068,
+          "output_tokens": 229,
+          "total_tokens": 7297,
+          "input_tokens_details": {
+            "cached_tokens": 6697
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_f854129b-f8b",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 9.172592401504517
+      },
+      {
+        "index": 6,
+        "started": 1791139477.894957,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3862,
+          "output_tokens": 106,
+          "total_tokens": 3968,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_63ddf69c-2d1",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.172145128250122
+      },
+      {
+        "index": 7,
+        "started": 1791139481.3923442,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4793,
+          "output_tokens": 142,
+          "total_tokens": 4935,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_209e8e29-f3c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.210950136184692
+      },
+      {
+        "index": 8,
+        "started": 1791139485.6637328,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6173,
+          "output_tokens": 477,
+          "total_tokens": 6650,
+          "input_tokens_details": {
+            "cached_tokens": 4792
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_9ed0151d-47e",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 10.824208974838257
+      },
+      {
+        "index": 9,
+        "started": 1791139496.818498,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6625,
+          "output_tokens": 141,
+          "total_tokens": 6766,
+          "input_tokens_details": {
+            "cached_tokens": 6172
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_6c035ef1-2ef",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.6984031200408936
+      },
+      {
+        "index": 10,
+        "started": 1791139541.7976165,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3852,
+          "output_tokens": 80,
+          "total_tokens": 3932,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_a9085ec3-633",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.4135243892669678
+      },
+      {
+        "index": 11,
+        "started": 1791139544.624311,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4827,
+          "output_tokens": 201,
+          "total_tokens": 5028,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5c19a6df-ff9",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.184611082077026
+      },
+      {
+        "index": 12,
+        "started": 1791139548.9416022,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7938,
+          "output_tokens": 101,
+          "total_tokens": 8039,
+          "input_tokens_details": {
+            "cached_tokens": 4826
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_9449ae2f-a5c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.3148484230041504
+      },
+      {
+        "index": 13,
+        "started": 1791139552.4811456,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 8242,
+          "output_tokens": 264,
+          "total_tokens": 8506,
+          "input_tokens_details": {
+            "cached_tokens": 7937
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_92233ad8-ba2",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 7.501716613769531
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791139398.9822469,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139399.093041,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139475.2847376,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139475.3691154,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139539.3990245,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139539.5495205,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 215.3661024570465,
+    "passed": true,
+    "final_artifact_pass": true
+  },
+  {
+    "run_id": "context-reset02-8701-original_goal",
+    "seed": 8701,
+    "policy": "original_goal",
+    "started": 1791139561.9992323,
+    "task_sha256": "7f02dc132cf17b7b5200ceca4aaac526aadd7abf914da7f669471a417b248165",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "bdf7f545aa6c1018a4f89968b4e542b7c9f10ab7a871b080c8c3523a1c659c33",
+            "reproduce.py": "2a1ade286e4a1409ddf64d7244d291e47a6b7881cb129914f85e9f83aca44561"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 17.136710238992237,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139644812135460,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "abcd680e14f5976823c6cda598d8bfdd95abbad3adbe3b13932353664068446b",
+            "reproduce.py": "2a1ade286e4a1409ddf64d7244d291e47a6b7881cb129914f85e9f83aca44561"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 11.971628226980101,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139696656763364,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "0245a49d82c1add650eff46b7d41ef1d01ea44f59d099859c860072099b20412",
+            "reproduce.py": "2a1ade286e4a1409ddf64d7244d291e47a6b7881cb129914f85e9f83aca44561"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 11.329674554988742,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139759885590770,
+        "error": null
+      }
+    ],
+    "executor_calls": 13,
+    "queue_seconds": 136.84144639968872,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791139630.1884418,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 74,
+          "total_tokens": 3677,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5f3f13b4-c94",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5575263500213623
+      },
+      {
+        "index": 2,
+        "started": 1791139632.0723808,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4237,
+          "output_tokens": 101,
+          "total_tokens": 4338,
+          "input_tokens_details": {
+            "cached_tokens": 3584
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_3aef368e-013",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.4807016849517822
+      },
+      {
+        "index": 3,
+        "started": 1791139634.6144319,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5155,
+          "output_tokens": 571,
+          "total_tokens": 5726,
+          "input_tokens_details": {
+            "cached_tokens": 4224
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_8dc8ebaa-879",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 5.381276607513428
+      },
+      {
+        "index": 4,
+        "started": 1791139640.097576,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5785,
+          "output_tokens": 66,
+          "total_tokens": 5851,
+          "input_tokens_details": {
+            "cached_tokens": 5120
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_f045a00e-d1b",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.4265716075897217
+      },
+      {
+        "index": 5,
+        "started": 1791139641.6589763,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6162,
+          "output_tokens": 312,
+          "total_tokens": 6474,
+          "input_tokens_details": {
+            "cached_tokens": 5760
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_097c3256-f5d",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.0973591804504395
+      },
+      {
+        "index": 6,
+        "started": 1791139687.2015984,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 107,
+          "total_tokens": 3710,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_14c5e8d1-5fe",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.7625272274017334
+      },
+      {
+        "index": 7,
+        "started": 1791139689.2811682,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4321,
+          "output_tokens": 156,
+          "total_tokens": 4477,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_ddd95ae5-eba",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5703909397125244
+      },
+      {
+        "index": 8,
+        "started": 1791139690.89497,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7868,
+          "output_tokens": 102,
+          "total_tokens": 7970,
+          "input_tokens_details": {
+            "cached_tokens": 4352
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_7338c944-26f",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.8016679286956787
+      },
+      {
+        "index": 9,
+        "started": 1791139694.8272896,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 8261,
+          "output_tokens": 170,
+          "total_tokens": 8431,
+          "input_tokens_details": {
+            "cached_tokens": 7808
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5cb13c0f-cb2",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.743208408355713
+      },
+      {
+        "index": 10,
+        "started": 1791139750.8768957,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 115,
+          "total_tokens": 3718,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_36480ea8-585",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.903503656387329
+      },
+      {
+        "index": 11,
+        "started": 1791139753.1914632,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4878,
+          "output_tokens": 170,
+          "total_tokens": 5048,
+          "input_tokens_details": {
+            "cached_tokens": 3584
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_687b9fcb-e60",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.6381587982177734
+      },
+      {
+        "index": 12,
+        "started": 1791139754.882397,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6499,
+          "output_tokens": 100,
+          "total_tokens": 6599,
+          "input_tokens_details": {
+            "cached_tokens": 3648
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_4efb577c-a94",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.6759357452392578
+      },
+      {
+        "index": 13,
+        "started": 1791139756.7757049,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6817,
+          "output_tokens": 257,
+          "total_tokens": 7074,
+          "input_tokens_details": {
+            "cached_tokens": 6464
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_cacc7fb4-b37",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.078747272491455
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791139627.5645413,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139627.6704888,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139684.5514286,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139684.6781862,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139748.3790672,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139748.493002,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 199.78292322158813,
+    "passed": true,
+    "final_artifact_pass": true
+  },
+  {
+    "run_id": "context-reset02-8702-minimal_continue",
+    "seed": 8702,
+    "policy": "minimal_continue",
+    "started": 1791139761.7899566,
+    "task_sha256": "c01a0d11a2a8e63f9ca4dc35edc4c40e3d0603a20cb91ccb3f88aaca87b7f732",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "184e222db7f10b3ca19980b387ffecd47aa2f6af7729f3030adb0b3b9e820fc1",
+            "reproduce.py": "afb79e04ddd36aeb7e9154ce49a193dae67f8bd7396417677292ac0780ccefed"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 20.002214815001935,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791139813076339299,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "64c00bd717a1809e1660bf508b4cf628cb1cdbbf204fbfb3d651b995261d82b8",
+            "reproduce.py": "afb79e04ddd36aeb7e9154ce49a193dae67f8bd7396417677292ac0780ccefed"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 23.48925258399686,
+        "prompt_bytes": 98,
+        "prompt_sha256": "0661711c0b54288eda1c2ea84782e99e9e478a80037a216ac770c6e9c4c29e2e",
+        "worker_instance": 1791139940369411402,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "8b385eef1a2b5a0312c561b0b89d329a9c48db08096ca3ade9f5c6abce2ef63f",
+            "reproduce.py": "afb79e04ddd36aeb7e9154ce49a193dae67f8bd7396417677292ac0780ccefed"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 15.691571197006851,
+        "prompt_bytes": 98,
+        "prompt_sha256": "0661711c0b54288eda1c2ea84782e99e9e478a80037a216ac770c6e9c4c29e2e",
+        "worker_instance": 1791140036764034352,
+        "error": null
+      }
+    ],
+    "executor_calls": 14,
+    "queue_seconds": 193.8799340724945,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791139795.464159,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 95,
+          "total_tokens": 3698,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_57184cd8-c3c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5938246250152588
+      },
+      {
+        "index": 2,
+        "started": 1791139797.3746493,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4511,
+          "output_tokens": 121,
+          "total_tokens": 4632,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_720bfe12-9e5",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.8366694450378418
+      },
+      {
+        "index": 3,
+        "started": 1791139799.2483296,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6136,
+          "output_tokens": 469,
+          "total_tokens": 6605,
+          "input_tokens_details": {
+            "cached_tokens": 4608
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_4b43dcbf-efa",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 6.195950508117676
+      },
+      {
+        "index": 4,
+        "started": 1791139805.5594447,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6676,
+          "output_tokens": 71,
+          "total_tokens": 6747,
+          "input_tokens_details": {
+            "cached_tokens": 6080
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_323506cb-e94",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.1095376014709473
+      },
+      {
+        "index": 5,
+        "started": 1791139806.8678067,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6955,
+          "output_tokens": 529,
+          "total_tokens": 7484,
+          "input_tokens_details": {
+            "cached_tokens": 6656
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_85e990a4-58e",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 6.152602195739746
+      },
+      {
+        "index": 6,
+        "started": 1791139919.4730098,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3442,
+          "output_tokens": 81,
+          "total_tokens": 3523,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_c295a320-79c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.7546286582946777
+      },
+      {
+        "index": 7,
+        "started": 1791139921.55692,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3769,
+          "output_tokens": 190,
+          "total_tokens": 3959,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_48ac65d8-9c9",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.724290132522583
+      },
+      {
+        "index": 8,
+        "started": 1791139923.3360064,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7202,
+          "output_tokens": 977,
+          "total_tokens": 8179,
+          "input_tokens_details": {
+            "cached_tokens": 3840
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_4c098f9c-dc0",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 8.824071407318115
+      },
+      {
+        "index": 9,
+        "started": 1791139932.3251078,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7441,
+          "output_tokens": 554,
+          "total_tokens": 7995,
+          "input_tokens_details": {
+            "cached_tokens": 7168
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_319f9cce-c40",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 5.236486196517944
+      },
+      {
+        "index": 10,
+        "started": 1791139938.0384338,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 8086,
+          "output_tokens": 250,
+          "total_tokens": 8336,
+          "input_tokens_details": {
+            "cached_tokens": 7424
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_cf89659c-321",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.2877910137176514
+      },
+      {
+        "index": 11,
+        "started": 1791140023.3831205,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3442,
+          "output_tokens": 79,
+          "total_tokens": 3521,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_2086823f-b93",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5955500602722168
+      },
+      {
+        "index": 12,
+        "started": 1791140025.270575,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3917,
+          "output_tokens": 130,
+          "total_tokens": 4047,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_97ea5f76-2ad",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.1135566234588623
+      },
+      {
+        "index": 13,
+        "started": 1791140026.4738457,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6682,
+          "output_tokens": 218,
+          "total_tokens": 6900,
+          "input_tokens_details": {
+            "cached_tokens": 3904
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_472ca26a-ab3",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.687034845352173
+      },
+      {
+        "index": 14,
+        "started": 1791140030.2571564,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6875,
+          "output_tokens": 634,
+          "total_tokens": 7509,
+          "input_tokens_details": {
+            "cached_tokens": 6656
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_8a0cd99f-007",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 6.407427787780762
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791139792.9819365,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139793.0698571,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139916.7593849,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791139916.8754272,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140020.9729764,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140021.066961,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 276.9760539531708,
+    "passed": true,
+    "final_artifact_pass": true
+  },
+  {
+    "run_id": "context-reset02-8702-durable_state",
+    "seed": 8702,
+    "policy": "durable_state",
+    "started": 1791140038.775276,
+    "task_sha256": "c01a0d11a2a8e63f9ca4dc35edc4c40e3d0603a20cb91ccb3f88aaca87b7f732",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "184e222db7f10b3ca19980b387ffecd47aa2f6af7729f3030adb0b3b9e820fc1",
+            "reproduce.py": "20ac1eae0845ab40db7e6dce87efbfa5c7e96df231399cbe61a16334fdad24c7"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 18.47774451097939,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791140129460103637,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "64c00bd717a1809e1660bf508b4cf628cb1cdbbf204fbfb3d651b995261d82b8",
+            "reproduce.py": "20ac1eae0845ab40db7e6dce87efbfa5c7e96df231399cbe61a16334fdad24c7"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 17.520248665008694,
+        "prompt_bytes": 1820,
+        "prompt_sha256": "21eb22e3138e9d3fa214f9c08071114635fac8a74f8666e0182a9de4abd00012",
+        "worker_instance": 1791140202886024427,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "8b385eef1a2b5a0312c561b0b89d329a9c48db08096ca3ade9f5c6abce2ef63f",
+            "reproduce.py": "20ac1eae0845ab40db7e6dce87efbfa5c7e96df231399cbe61a16334fdad24c7"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 10.091236142034177,
+        "prompt_bytes": 1820,
+        "prompt_sha256": "01912b4a7b06dfc8a3d924fe1330934e76d6fd22b054daa27addb0798645ce10",
+        "worker_instance": 1791140279851124115,
+        "error": null
+      }
+    ],
+    "executor_calls": 14,
+    "queue_seconds": 173.69758796691895,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791140113.6917772,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 107,
+          "total_tokens": 3710,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5dc78da8-d58",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.115682601928711
+      },
+      {
+        "index": 2,
+        "started": 1791140116.0899098,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4235,
+          "output_tokens": 120,
+          "total_tokens": 4355,
+          "input_tokens_details": {
+            "cached_tokens": 3584
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_212cd55c-334",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.2498595714569092
+      },
+      {
+        "index": 3,
+        "started": 1791140117.3743563,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6195,
+          "output_tokens": 537,
+          "total_tokens": 6732,
+          "input_tokens_details": {
+            "cached_tokens": 4352
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_90c7a123-fba",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 5.8008034229278564
+      },
+      {
+        "index": 4,
+        "started": 1791140123.2764468,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6757,
+          "output_tokens": 59,
+          "total_tokens": 6816,
+          "input_tokens_details": {
+            "cached_tokens": 6144
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_71c93b5d-752",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.1606874465942383
+      },
+      {
+        "index": 5,
+        "started": 1791140124.588565,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 7119,
+          "output_tokens": 580,
+          "total_tokens": 7699,
+          "input_tokens_details": {
+            "cached_tokens": 6720
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_f32023fb-34a",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.817012310028076
+      },
+      {
+        "index": 6,
+        "started": 1791140187.9882543,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3851,
+          "output_tokens": 105,
+          "total_tokens": 3956,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_08d0262b-92e",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.4108607769012451
+      },
+      {
+        "index": 7,
+        "started": 1791140189.7941566,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4306,
+          "output_tokens": 131,
+          "total_tokens": 4437,
+          "input_tokens_details": {
+            "cached_tokens": 3840
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_c688708c-078",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.273893117904663
+      },
+      {
+        "index": 8,
+        "started": 1791140191.1210775,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5523,
+          "output_tokens": 94,
+          "total_tokens": 5617,
+          "input_tokens_details": {
+            "cached_tokens": 4288
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_05af46e1-f98",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.814772129058838
+      },
+      {
+        "index": 9,
+        "started": 1791140193.232308,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6366,
+          "output_tokens": 183,
+          "total_tokens": 6549,
+          "input_tokens_details": {
+            "cached_tokens": 5504
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_eec9bc2a-a04",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 7.502531051635742
+      },
+      {
+        "index": 10,
+        "started": 1791140200.852298,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6732,
+          "output_tokens": 181,
+          "total_tokens": 6913,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_ae27c0cd-73a",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.9819915294647217
+      },
+      {
+        "index": 11,
+        "started": 1791140272.1979032,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3848,
+          "output_tokens": 81,
+          "total_tokens": 3929,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_6df27cc8-e3c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.9116551876068115
+      },
+      {
+        "index": 12,
+        "started": 1791140274.3757544,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4823,
+          "output_tokens": 186,
+          "total_tokens": 5009,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_6e661e5d-e2c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.5756099224090576
+      },
+      {
+        "index": 13,
+        "started": 1791140276.058885,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6345,
+          "output_tokens": 72,
+          "total_tokens": 6417,
+          "input_tokens_details": {
+            "cached_tokens": 4800
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5db2d969-a4c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.2798993587493896
+      },
+      {
+        "index": 14,
+        "started": 1791140277.4984105,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6924,
+          "output_tokens": 198,
+          "total_tokens": 7122,
+          "input_tokens_details": {
+            "cached_tokens": 6400
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_7fb4a073-9d4",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.294363260269165
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791140110.8837643,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140110.976608,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140185.2643456,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140185.362054,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140269.6537452,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140269.7538981,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 243.22923231124878,
+    "passed": true,
+    "final_artifact_pass": true
+  },
+  {
+    "run_id": "context-reset02-8702-original_goal",
+    "seed": 8702,
+    "policy": "original_goal",
+    "started": 1791140282.024476,
+    "task_sha256": "c01a0d11a2a8e63f9ca4dc35edc4c40e3d0603a20cb91ccb3f88aaca87b7f732",
+    "episodes": [
+      {
+        "episode": 1,
+        "delivery_phase": 0,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "184e222db7f10b3ca19980b387ffecd47aa2f6af7729f3030adb0b3b9e820fc1",
+            "reproduce.py": "74fcb439e838bb71851771be4c2b48b02270b09faa8da195c011dc927d907ce1"
+          }
+        },
+        "api_calls": 5,
+        "seconds": 22.734757855010685,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791140370499424836,
+        "error": null
+      },
+      {
+        "episode": 2,
+        "delivery_phase": 1,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "waiting",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "64c00bd717a1809e1660bf508b4cf628cb1cdbbf204fbfb3d651b995261d82b8",
+            "reproduce.py": "74fcb439e838bb71851771be4c2b48b02270b09faa8da195c011dc927d907ce1"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 20.283730804978404,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791140487057516591,
+        "error": null
+      },
+      {
+        "episode": 3,
+        "delivery_phase": 2,
+        "history_reset": true,
+        "fresh_hermes_home": true,
+        "status": "succeeded",
+        "score": {
+          "passed": true,
+          "checks_passed": 3,
+          "checks_total": 3,
+          "hashes": {
+            "result.json": "8b385eef1a2b5a0312c561b0b89d329a9c48db08096ca3ade9f5c6abce2ef63f",
+            "reproduce.py": "74fcb439e838bb71851771be4c2b48b02270b09faa8da195c011dc927d907ce1"
+          }
+        },
+        "api_calls": 4,
+        "seconds": 16.017483055009507,
+        "prompt_bytes": 901,
+        "prompt_sha256": "1c63ba6171014a856cf8616c072c885fb607d7d144f0bc96ff09cebe2c3ce44e",
+        "worker_instance": 1791140555569770355,
+        "error": null
+      }
+    ],
+    "executor_calls": 13,
+    "queue_seconds": 188.6206192970276,
+    "status": "succeeded",
+    "requests": [
+      {
+        "index": 1,
+        "started": 1791140350.069609,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 111,
+          "total_tokens": 3714,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_6e93fe7b-1cb",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.603116750717163
+      },
+      {
+        "index": 2,
+        "started": 1791140352.1044457,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4528,
+          "output_tokens": 88,
+          "total_tokens": 4616,
+          "input_tokens_details": {
+            "cached_tokens": 3392
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_ab96146c-cd4",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.4015824794769287
+      },
+      {
+        "index": 3,
+        "started": 1791140353.5323896,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5866,
+          "output_tokens": 612,
+          "total_tokens": 6478,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_85ade208-bf7",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 12.076931715011597
+      },
+      {
+        "index": 4,
+        "started": 1791140365.7022905,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6532,
+          "output_tokens": 67,
+          "total_tokens": 6599,
+          "input_tokens_details": {
+            "cached_tokens": 5824
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_5a4e14f5-40f",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.1682651042938232
+      },
+      {
+        "index": 5,
+        "started": 1791140367.0025487,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6962,
+          "output_tokens": 266,
+          "total_tokens": 7228,
+          "input_tokens_details": {
+            "cached_tokens": 6528
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_bf38d541-5de",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 3.450669050216675
+      },
+      {
+        "index": 6,
+        "started": 1791140470.1939096,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 85,
+          "total_tokens": 3688,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_3af6b48d-1ff",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.9961764812469482
+      },
+      {
+        "index": 7,
+        "started": 1791140472.8985107,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4570,
+          "output_tokens": 171,
+          "total_tokens": 4741,
+          "input_tokens_details": {
+            "cached_tokens": 3584
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_af60d9d8-a7c",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 9.28263807296753
+      },
+      {
+        "index": 8,
+        "started": 1791140482.2945719,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6512,
+          "output_tokens": 100,
+          "total_tokens": 6612,
+          "input_tokens_details": {
+            "cached_tokens": 4608
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_2d6af002-a56",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.0137312412261963
+      },
+      {
+        "index": 9,
+        "started": 1791140484.6785328,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6906,
+          "output_tokens": 134,
+          "total_tokens": 7040,
+          "input_tokens_details": {
+            "cached_tokens": 6464
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_24cb3d95-675",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 2.2642507553100586
+      },
+      {
+        "index": 10,
+        "started": 1791140542.77336,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 3603,
+          "output_tokens": 105,
+          "total_tokens": 3708,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_96b8aeb2-715",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.6771962642669678
+      },
+      {
+        "index": 11,
+        "started": 1791140545.3235266,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 4831,
+          "output_tokens": 71,
+          "total_tokens": 4902,
+          "input_tokens_details": {
+            "cached_tokens": 3584
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_c1b0d998-ed2",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 1.0015099048614502
+      },
+      {
+        "index": 12,
+        "started": 1791140546.4102516,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 5960,
+          "output_tokens": 128,
+          "total_tokens": 6088,
+          "input_tokens_details": {
+            "cached_tokens": 4864
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_1a8c7a6d-afa",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.281835079193115
+      },
+      {
+        "index": 13,
+        "started": 1791140551.0502977,
+        "request_model": "devin/swe-2",
+        "stream": true,
+        "usage": {
+          "input_tokens": 6259,
+          "output_tokens": 313,
+          "total_tokens": 6572,
+          "input_tokens_details": {
+            "cached_tokens": 5952
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "response_model": "devin/swe-2",
+        "response_id": "interaction_edd996af-d4b",
+        "status": "completed",
+        "http_status": 200,
+        "seconds": 4.455371856689453
+      }
+    ],
+    "rejected_requests": [
+      {
+        "time": 1791140347.657166,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140347.7586155,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140466.6541123,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140466.7610884,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140539.448024,
+        "path": "/api/show",
+        "model": "None"
+      },
+      {
+        "time": 1791140539.5022428,
+        "path": "/api/show",
+        "model": "None"
+      }
+    ],
+    "seconds": 276.5474419593811,
+    "passed": true,
+    "final_artifact_pass": true
+  }
+]

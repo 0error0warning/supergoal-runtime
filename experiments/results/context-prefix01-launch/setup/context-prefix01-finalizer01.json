@@ -1,0 +1,27 @@
+{
+  "status": "waiting_registered_process",
+  "started_epoch": 1791248476.2069542,
+  "operator_sha256": {
+    "audit_completed_prefix.py": "07018e8854edb0b68d27119768aef0adfee9ce9f215a23d5c58c19b6fbb58fa1",
+    "finalize_prefix_study.py": "ea538778c430c9511a401f63a04f6a64eb7b966937b06f67cc58a972f151a95d",
+    "audit_completed_context.py": "3cf3255956050e8e66f612d84924747c3042d9120f5a7b47e3348e3c20af9c6c",
+    "experiments/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "experiments/public_benchmarks/analyze_context.py": "d1abe911790ad3fdbf019ac123c8c79fea8960b2945d6985ac9d2e2bbb688a42",
+    "experiments/public_benchmarks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "experiments/public_benchmarks/audit_multistep_regressions.py": "6ed967627292d35f7b8814b4c53cfb8e7942ef37de72fad233ae7488ee1a9925",
+    "experiments/public_benchmarks/context_policy.py": "ab5c2fdc0ac20d103e17ae88cbcc255dd1687059c3ac27f2d8cb11297892bcdc",
+    "experiments/public_benchmarks/analyze_prefix.py": "0750ef0e7ec6a64ddb6bca84bd9fbd69a2458a2d3f981f414f04707c0835138a",
+    "experiments/public_benchmarks/analyze_context_details.py": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3",
+    "experiments/public_benchmarks/prefix_inputs.py": "cf8b0380b990fe0f4ed3048b7265dd9e2057d0e2417d5df2612db152437fd5aa",
+    "experiments/public_benchmarks/collect_multistep.py": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55"
+  },
+  "new_model_calls": 0,
+  "automatic_trial_retries": 0,
+  "checked_epoch": 1791248536.243568,
+  "controller_unit": {
+    "MainPID": "2326341",
+    "ActiveState": "active",
+    "InvocationID": "1b5d59b1dd5a457e9536f69a6d5887c8"
+  },
+  "controller_process_alive": true
+}

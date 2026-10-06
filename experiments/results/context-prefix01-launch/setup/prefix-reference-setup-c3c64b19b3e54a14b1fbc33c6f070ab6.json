@@ -1,0 +1,19 @@
+{
+  "prefix_spec_sha256": "ea9f9e3e99b30fcb73d09adcf68685197bf4d6ba7a9cc485e17d58a6f652d5ee",
+  "model_calls": 0,
+  "status": "ready",
+  "container": "4c0cc26842d2755602b82b448e78e536dc7ce67e6fde61223bfc78282de902f3",
+  "binding": {
+    "method": "harbor-0.24-compose-main-service",
+    "mount_namespace": "mnt:[4026532420]",
+    "namespace_match": true
+  },
+  "image_id": "sha256:7052b2b0def884de36808f4f8aae941d37089438c439edababcdbc845f41856c",
+  "workspace_sha256": "0ec2d48a07f8ff20d0879203a286d9538bbe46acca3a86563dcd6c147b86e8cb",
+  "file_entries": 3,
+  "grader_history_restoration": {
+    "status": "restored",
+    "original_exists": true,
+    "sha256": "a26bf186a129c77470780f8a44189260de2877bc6b29898171fb9bb6483a7170"
+  }
+}

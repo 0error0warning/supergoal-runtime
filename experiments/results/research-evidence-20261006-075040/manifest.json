@@ -1,0 +1,42 @@
+{
+  "captured_at": "2026-10-05T23:50:30.375533+00:00",
+  "scope": "Read-only partial context study observation, live process verification, and completed cache maintenance receipts; no model reruns.",
+  "files": {
+    "setup/context-handoff01-observation-20261005T235030Z.json": {
+      "sha256": "60f3d69268d7f1a9f5b8471ad1f037fc6d21272684b0e278d34a5fabdf621326",
+      "bytes": 797306
+    },
+    "setup/context-handoff01-live-20261005T235030Z.json": {
+      "sha256": "f48403f28a223e6d060c295196b63f58d62b28f939d1a5013a07251892c353d4",
+      "bytes": 1261
+    },
+    "analysis-context01/collect_multistep.py": {
+      "sha256": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55",
+      "bytes": 8877
+    },
+    "setup/context-handoff01-receipt.json": {
+      "sha256": "97db2e1623ecc309c8f450e8c66e1bc9cd383b93ba901b9b53da001d984bd534",
+      "bytes": 31497
+    },
+    "setup/checkpoint-cache-eviction02.json": {
+      "sha256": "d7ddb70f896c35fda1672dfe2c0a9d19209fecac54076386eeaeb50c06c1402a",
+      "bytes": 86948
+    },
+    "setup/checkpoint-cache-eviction02-priority.json": {
+      "sha256": "b7bec00efbc2e7d35509b562d3ec67bd295fb2354e2dea3e65f4716584c199ac",
+      "bytes": 47724
+    },
+    "setup/checkpoint-cache-eviction02-docker-df.json": {
+      "sha256": "dd32b34c3d2d3e3185c0aa1a48c0e20ccd75e2f3bc69acb0adf9c5b497325776",
+      "bytes": 132456
+    },
+    "cache-maintenance02/evict_checkpoint_cache.py": {
+      "sha256": "7bfedcd1b73e204919522d83220631b503fcebbf49c79949b56a32a5b54b6f72",
+      "bytes": 5334
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "71e304ec41e0393ac20accb83cc2309a0cd0bd5a2aa8d1ea47a2f236e5ceb7c8",
+      "bytes": 94554
+    }
+  }
+}

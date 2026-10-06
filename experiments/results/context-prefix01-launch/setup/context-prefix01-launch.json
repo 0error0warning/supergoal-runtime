@@ -1,0 +1,16 @@
+{
+  "command": [
+    "systemd-run",
+    "--unit=supergoal-context-prefix01",
+    "--property=RuntimeMaxSec=48107",
+    "--property=CPUQuota=600%",
+    "--property=MemoryMax=48G",
+    "--property=KillMode=control-group",
+    "--property=Nice=5",
+    "--setenv=PYTHONPATH=/var/lib/supergoal-lab/candidates/context-prefix01:/var/lib/supergoal-lab/candidates/context-prefix01/experiments:/var/lib/supergoal-lab/candidates/context-prefix01/experiments/public_benchmarks:/var/lib/supergoal-lab/candidates/context-prefix01/experiments/infrastructure",
+    "/var/lib/supergoal-lab/harbor-venv/bin/python",
+    "/var/lib/supergoal-lab/candidates/context-prefix01/experiments/infrastructure/run_prefix_study.py"
+  ],
+  "state": "MainPID=2326341\nActiveState=active\nInvocationID=1b5d59b1dd5a457e9536f69a6d5887c8\n",
+  "at": "2026-10-06T00:58:18.784669+00:00"
+}

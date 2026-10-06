@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "child_exit_code": 73,
+  "old_owner_fenced": true,
+  "consumed_interrupted_turn": true,
+  "workspace_sha256": "sha256:654b8df5ad646829187ccae8714ffda2f386180ab463ce56f013bb06dbf54a35",
+  "scope": "Real kernel process death and disk state recovery; not full Harbor/controller/VM restart",
+  "model_calls": 0
+}

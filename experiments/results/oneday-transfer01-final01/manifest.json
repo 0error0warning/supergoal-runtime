@@ -1,0 +1,47 @@
+{
+  "captured_at": "2026-10-05T23:00:14.695048+00:00",
+  "scope": "Original 18 solver outcomes plus the separate 3 eligible parser-repair grades; previous partial canonical files also preserved.",
+  "new_model_calls": 0,
+  "files": {
+    "original-analysis.json": {
+      "source": "experiments/results/research-observation-20261006-0240/exports/experiments/results/oneday-transfer01-analysis.json",
+      "sha256": "164781fa5e0d2bba76c215ff5f3e23c91f405751cacc8ed2a54557438543fa7b",
+      "bytes": 21699
+    },
+    "parser-repair.json": {
+      "source": "experiments/results/research-evidence-20261006-0315/setup/oneday-memory-audit01.json",
+      "sha256": "b34775cafb82902ca390a6102b21b57ce0f0b776043890cc93221171556c987a",
+      "bytes": 1961
+    },
+    "registration.json": {
+      "source": "experiments/public_benchmarks/registration-oneday-transfer01-amendment02.json",
+      "sha256": "ed6d17dc1485a7b9e8a9c576305ec12e3f3d078b0ce4724f63c0d2dea7a218ea",
+      "bytes": 32670
+    },
+    "analysis.json": {
+      "source": "experiments/results/oneday-transfer01-final-analysis.json",
+      "sha256": "eb5a494ff08d0cec8d6b67373bd2dbc9ee11a13f6db038b1171edd47f986105f",
+      "bytes": 13763
+    },
+    "analyze_oneday_final.py": {
+      "source": "experiments/public_benchmarks/analyze_oneday_final.py",
+      "sha256": "7d123ad453b03d34aa5738be065e117f34238948930027daf00c4b4539158b93",
+      "bytes": 5042
+    },
+    "original-receipt.json": {
+      "source": "experiments/results/research-evidence-20261006-0315/setup/oneday-transfer01-receipt.json",
+      "sha256": "c0b2d856fbfb8b9b12c8c9ca0facc67e64a29c3fae6bd4dbb0ca826f8a7221b0",
+      "bytes": 12554
+    },
+    "early-analysis-170321.json": {
+      "source": "experiments/results/oneday-transfer01-analysis.json",
+      "sha256": "a01bebfedbacdba6f35402fff99fbf9f0caaf3dadfef9565f4919800e5982bf8",
+      "bytes": 9612
+    },
+    "early-receipt.json": {
+      "source": "experiments/results/oneday-transfer01-receipt.json",
+      "sha256": "bc0dfccf3d4a3f7bbde317c5553db362e14aa11cb8d2f45cda05908b6be0f01d",
+      "bytes": 5426
+    }
+  }
+}

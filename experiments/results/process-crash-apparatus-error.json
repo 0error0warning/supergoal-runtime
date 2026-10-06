@@ -1,0 +1,10 @@
+{
+  "kind": "supplementary_probe_apparatus_error",
+  "platform": "local Windows",
+  "stage": "temporary-directory cleanup before result serialization",
+  "error": "WinError 32: reference SQLite connection remained open",
+  "cause": "The probe used sqlite3.Connection as a context manager, which commits or rolls back but does not close the connection.",
+  "correction": "Explicitly close snapshot and backup connections with contextlib.closing, then rerun the entire fixed set of conditions.",
+  "frozen_candidate_modified": false,
+  "interpretation": "This is a probe implementation failure. No primary matrix results or runtime operations were replaced. The initial invocation produced no completed result artifact."
+}

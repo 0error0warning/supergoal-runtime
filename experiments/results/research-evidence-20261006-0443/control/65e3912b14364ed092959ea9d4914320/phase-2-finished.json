@@ -1,0 +1,31 @@
+{
+  "state": {
+    "status": "succeeded",
+    "turns": 2,
+    "version": 3
+  },
+  "acceptance": {
+    "verdict": "pass",
+    "reason": "Trusted fixture checker; recovery integration scope only",
+    "checker_exit": 0,
+    "observations": "{\"count\": 200, \"artifacts_sha256\": {\"normalized.jsonl\": \"3e6c88f97186cb3d0965bb1b1fe2d942a187a29768b4d1a16fe661c522f273d0\", \"summary.json\": \"b8f12c2269e1740e47d27e2b146fd211a1710b689c4b72e64532765747c851c9\"}}\n"
+  },
+  "used_requests": 5,
+  "sdk_completed": true,
+  "rounds": [
+    {
+      "role": "executor",
+      "exit_code": -9,
+      "model_calls": 2,
+      "interrupted": true
+    },
+    {
+      "role": "executor",
+      "pid": 1405961,
+      "exit_code": 0,
+      "seconds": 31.86317495500043,
+      "model_calls": 3,
+      "result_relative_path": "02-executor/result.json"
+    }
+  ]
+}

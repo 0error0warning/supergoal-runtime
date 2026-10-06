@@ -1,0 +1,296 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T18:06:31.444715+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:16:22.518798Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-001-configure-git-webserver-native",
+      "harbor_pid": 741444,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-001-configure-git-webserver-native/configure-git-webserver__Gxjr26r/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "ca9e26ba3c0141a4ab7fc73cfa78d4e5",
+        "study_status": "agent_stopped",
+        "physical_requests": 12,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 145353,
+      "n_output_tokens": 2272,
+      "n_cache_tokens": 74816,
+      "finished_at": "2026-10-05T18:18:06.606026+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "dna-assembly",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:16:22.513929Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-002-dna-assembly-sg_v2",
+      "harbor_pid": 741445,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-002-dna-assembly-sg_v2/dna-assembly__Y9CYd25/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "b240fe1594204cdab4be1c7656a5988f",
+        "study_status": "succeeded",
+        "physical_requests": 31,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 273975,
+      "n_output_tokens": 23573,
+      "n_cache_tokens": 237092,
+      "finished_at": "2026-10-05T18:26:11.658894+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "write-compressor",
+      "arm": "sg_fresh",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T18:18:12.339216Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-003-write-compressor-sg_fresh",
+      "harbor_pid": 751294,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-003-write-compressor-sg_fresh/write-compressor__SeLMYYc/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "sg_fresh",
+        "control_id": "ee53cc5916184cea9c4578807bbd746e",
+        "study_status": "adapter_error",
+        "physical_requests": 29,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 443414,
+      "n_output_tokens": 40031,
+      "n_cache_tokens": 410234,
+      "finished_at": "2026-10-05T18:33:47.211462+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "extract-elf",
+      "arm": "sg_retry_unknown",
+      "status": "graded",
+      "started_at": "2026-10-05T18:26:17.405663Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-004-extract-elf-sg_retry_unknown",
+      "harbor_pid": 779557,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-004-extract-elf-sg_retry_unknown/extract-elf__LCUCu3M/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_retry_unknown",
+        "control_id": "8ecc806dff4345b99e0a4ffaa014d76a",
+        "study_status": "succeeded",
+        "physical_requests": 14,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 88904,
+      "n_output_tokens": 4728,
+      "n_cache_tokens": 47785,
+      "finished_at": "2026-10-05T18:28:16.882974+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "configure-git-webserver",
+      "arm": "mini_swe",
+      "status": "graded",
+      "started_at": "2026-10-05T18:28:22.697156Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-005-configure-git-webserver-mini_swe",
+      "harbor_pid": 791723,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-005-configure-git-webserver-mini_swe/configure-git-webserver__Q6JE3Vk/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "8693be23affd4bcc833e49390fd0ba5d",
+        "study_status": "agent_stopped",
+        "physical_requests": 15,
+        "adapter": "mini-swe-agent-2.4.6-04d809c-transport01"
+      },
+      "n_input_tokens": 81262,
+      "n_output_tokens": 11163,
+      "n_cache_tokens": 72332,
+      "finished_at": "2026-10-05T18:33:37.206689+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "dna-assembly",
+      "arm": "sg_no_context",
+      "status": "running",
+      "started_at": "2026-10-05T18:33:42.208227+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-006-dna-assembly-sg_no_context",
+      "harbor_pid": 829667
+    },
+    {
+      "index": 6,
+      "task_id": "write-compressor",
+      "arm": "sg_fresh_no_context",
+      "status": "running",
+      "started_at": "2026-10-05T18:33:52.213052+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-007-write-compressor-sg_fresh_no_context",
+      "harbor_pid": 830795
+    },
+    {
+      "index": 7,
+      "task_id": "extract-elf",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "write-compressor",
+      "arm": "sg_retry_unknown",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "extract-elf",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 12,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 13,
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 14,
+      "task_id": "write-compressor",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 15,
+      "task_id": "extract-elf",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 16,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh",
+      "status": "pending"
+    },
+    {
+      "index": 17,
+      "task_id": "dna-assembly",
+      "arm": "sg_retry_unknown",
+      "status": "pending"
+    },
+    {
+      "index": 18,
+      "task_id": "write-compressor",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 19,
+      "task_id": "extract-elf",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 20,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 21,
+      "task_id": "dna-assembly",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 22,
+      "task_id": "write-compressor",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 23,
+      "task_id": "extract-elf",
+      "arm": "sg_fresh",
+      "status": "pending"
+    },
+    {
+      "index": 24,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_retry_unknown",
+      "status": "pending"
+    },
+    {
+      "index": 25,
+      "task_id": "dna-assembly",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 26,
+      "task_id": "write-compressor",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 27,
+      "task_id": "extract-elf",
+      "arm": "sg_fresh_no_context",
+      "status": "pending"
+    }
+  ],
+  "registration_sha256": "2ddbe8eef4f7f9e24c1af8f8c0acecd232e058e8cb2815f48700e1bf28f95aaa",
+  "cpu_limit": 2,
+  "memory_limit_mb": 12288,
+  "automatic_retries": 0,
+  "heartbeat_at": "2026-10-05T18:36:42.404614+00:00",
+  "capacity_opened_at": "2026-10-05T18:16:21.491525+00:00"
+}

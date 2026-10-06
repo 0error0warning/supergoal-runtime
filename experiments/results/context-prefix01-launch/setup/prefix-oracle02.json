@@ -1,0 +1,491 @@
+{
+  "status": "passed",
+  "rows": [
+    {
+      "task_id": "file_backup",
+      "status": "reference_passed",
+      "job": "/var/lib/supergoal-lab/jobs/prefix-oracle02-file_backup",
+      "harbor_pid": 2298199,
+      "started_epoch": 1791247830.321568,
+      "expected_checkpoints": 3,
+      "exit_code": 0,
+      "finished_epoch": 1791247900.3406317,
+      "result_path": "/var/lib/supergoal-lab/jobs/prefix-oracle02-file_backup/file_backup__LCGV39P/result.json",
+      "result_sha256": "a7d3d2dcf96f8320c2436e254d650c5f435372832cd0d45990764e25d9c495c9",
+      "raw_rewards": {
+        "verbosity_increased": 0.0,
+        "step_has_prior": 1.0,
+        "strict_pass_rate": 1.0,
+        "erosion_increased": 0.6666666666666666,
+        "erosion": 0.6205486253877864,
+        "isolated_pass_rate": 1.0,
+        "verbosity": 0.23136915676877887,
+        "core_pass_rate": 1.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.591408304216619,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.25,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:33.065700Z",
+            "finished_at": "2026-10-06T00:50:38.775909Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:39.990037Z",
+            "finished_at": "2026-10-06T00:50:48.851874Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6184161308455481,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.23220704529115743,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:49.126161Z",
+            "finished_at": "2026-10-06T00:50:54.054339Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:54.640337Z",
+            "finished_at": "2026-10-06T00:51:04.527431Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.651821441101192,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.2119004250151791,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:51:04.776984Z",
+            "finished_at": "2026-10-06T00:51:09.485800Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:51:10.047747Z",
+            "finished_at": "2026-10-06T00:51:23.026316Z"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "status": "reference_passed",
+      "job": "/var/lib/supergoal-lab/jobs/prefix-oracle02-database_migration",
+      "harbor_pid": 2298200,
+      "started_epoch": 1791247830.3268409,
+      "expected_checkpoints": 4,
+      "exit_code": 0,
+      "finished_epoch": 1791247915.346135,
+      "result_path": "/var/lib/supergoal-lab/jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/result.json",
+      "result_sha256": "59d51a088266e056ad15c5dc6812c68549e351058e23ebe20abca95f1caa9871",
+      "raw_rewards": {
+        "step_has_prior": 1.0,
+        "strict_pass_rate": 1.0,
+        "core_pass_rate": 1.0,
+        "erosion_increased": 0.75,
+        "isolated_pass_rate": 1.0,
+        "verbosity_increased": 0.5,
+        "verbosity": 0.5328018607645193,
+        "erosion": 0.6700199643499258
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.47387222357030184,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.46547884187082406,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:32.995833Z",
+            "finished_at": "2026-10-06T00:50:36.481128Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:37.104147Z",
+            "finished_at": "2026-10-06T00:50:46.826442Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6577435370710117,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.4223856209150327,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:47.084825Z",
+            "finished_at": "2026-10-06T00:50:50.272726Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:50.820362Z",
+            "finished_at": "2026-10-06T00:51:00.051334Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7563055236944606,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.6044776119402985,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:51:00.341330Z",
+            "finished_at": "2026-10-06T00:51:03.378525Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:51:03.925974Z",
+            "finished_at": "2026-10-06T00:51:16.845420Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7921585730639292,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.6388653683319221,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:51:17.129423Z",
+            "finished_at": "2026-10-06T00:51:20.295594Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:51:20.850525Z",
+            "finished_at": "2026-10-06T00:51:37.065611Z"
+          }
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "status": "reference_passed",
+      "job": "/var/lib/supergoal-lab/jobs/prefix-oracle02-dag_execution",
+      "harbor_pid": 2298202,
+      "started_epoch": 1791247830.3296638,
+      "expected_checkpoints": 2,
+      "exit_code": 0,
+      "finished_epoch": 1791247890.3369112,
+      "result_path": "/var/lib/supergoal-lab/jobs/prefix-oracle02-dag_execution/dag_execution__8FyGzri/result.json",
+      "result_sha256": "60dfb7b98c68c7bce1f8389b34a56f22f26ff6f662c0281bb2645666f125ab59",
+      "raw_rewards": {
+        "erosion_increased": 0.5,
+        "erosion": 0.45682212280931833,
+        "verbosity": 0.2950103051132471,
+        "strict_pass_rate": 1.0,
+        "isolated_pass_rate": 1.0,
+        "step_has_prior": 1.0,
+        "core_pass_rate": 1.0,
+        "verbosity_increased": 1.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.44356736753208903,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.28810126582278484,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:32.973572Z",
+            "finished_at": "2026-10-06T00:50:36.436115Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:37.069455Z",
+            "finished_at": "2026-10-06T00:50:49.695191Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.4700768780865477,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.3019193444037093,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-06T00:50:49.956216Z",
+            "finished_at": "2026-10-06T00:50:53.090749Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-06T00:50:53.691249Z",
+            "finished_at": "2026-10-06T00:51:15.049758Z"
+          }
+        }
+      ]
+    }
+  ],
+  "model_calls": 0,
+  "automatic_retries": 0,
+  "inputs_sha256": "902aa6819f21e325d91c1d96720af7ae52555492cf4720d6ac69e3adfbb8fb7f",
+  "candidate_source_sha256": {
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "experiments/supervisor.py": "d37389fa9bff35c8e9c96b04068857399e76750795a3bdd39a688373aa496795",
+    "experiments/tasks.py": "12b4dd6890a78f129309c77f38aedbd8071762a75c49d883ce72edccd2455ab9",
+    "experiments/worker.py": "1815264cc69eb4b229d836fe4403a2fcccb49d32f1dbe1b1028bf313aa3ad1d6",
+    "experiments/study_hooks.py": "de59f14ab9ca66476f40ebe2138f3d1fb62a6faea670362075e43ac3f14475ee",
+    "experiments/summarize.py": "743bea711fc290c4884c32d8e761914f11b8f3bc2c40d08899947d6627f4994b",
+    "experiments/freeze.py": "cad60abc7079bf91e16df9f1c7d5f6027b2a93c58b327e54de8eb35f50900daf",
+    "experiments/host_probe.py": "703c220ce9479a79344525dad7bffe673019c373ff4bcc893faa0199a8473480",
+    "experiments/soak.py": "947f70b1f4cefd3683e5c1806d06b9fcceca34d88fb3e8be1623277f948162e0",
+    "experiments/check_worker.py": "3026b0d471a9fea5d0be61756faaed70ecbae4f4a51073da7b3b0b0412005823",
+    "experiments/model_proxy.py": "c555c7f8a963ad84573eec7a82fc1f032ecca0a8a26c6fcad906c6e11f469c16",
+    "experiments/grade_code.py": "5cb52be1cfccf898717f3ad31a7124946636687a363496c435968b15a5af1c4e",
+    "experiments/preflight.py": "79522e108e181c2b74fe84b907a446c142f1ac2fe662ea443fd69b8f88972b1a",
+    "experiments/host-support/registered_matrix.py": "900288e0405f1f38d0d810b5ee56d4b4b68b4bb74929a084fff9ef7b8999b153",
+    "experiments/host-support/launch.py": "754b0ac14080761b2885f173a9e024338b52065993312bf7e89e50c8c16d13ee",
+    "experiments/public_benchmarks/harbor_agent.py": "3f37c29f28848bafdae7394a128bd768fd8e3cd78ad566dfaa8253759efd0c0f",
+    "experiments/public_benchmarks/run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+    "experiments/public_benchmarks/snapshot_lifecycle.py": "6abd103b16fdc24bb4603db9e7c877f034e42a17f13b0700ca19c37e143246bb",
+    "experiments/public_benchmarks/analyze_public.py": "e5d18a582f12302b7238679413b301eddb90bea98762b8fc09a156f10fd147f5",
+    "experiments/public_benchmarks/finish_oneday.py": "cd559ca9fef519cc7de3ca50e6d94e44d0e7cce315cb4d8fb852123a63351347",
+    "experiments/public_benchmarks/hermes_bridge.py": "d933eddd2dead165049c5d238f99fec2b7e07a388f68ae16a4a80394b3cda251",
+    "experiments/public_benchmarks/regrade_snapshot.py": "9d9eda4f61bbb1f82fec64b7ba2c86660a23e80a84b0fe43d876b71fdf8805de",
+    "experiments/public_benchmarks/multistep_agent.py": "c5e25c9b2901c75495238c180db1f699a02aaa3aa22a81e7ba01a9d600a2d503",
+    "experiments/public_benchmarks/environment_bootstrap.py": "89953fe011bb95bde8facb8b8b7f6dd763f8c0b1b14afd512a61790c8fc84da4",
+    "experiments/public_benchmarks/grader_history.py": "65f469df54b3f6838a6d8d16c991babf5dec35d726942d7133a5d024961d8971",
+    "experiments/public_benchmarks/finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "experiments/public_benchmarks/mini_episode.py": "492b6567508e4c1834d16671981ee7fb6834238eb512a0731b3ff9d7a193f8e9",
+    "experiments/public_benchmarks/task_resources.py": "a11c3088563e4e638b6df49fba55acf14ad095f67e72b56831b3d5f3a5d18239",
+    "experiments/public_benchmarks/resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "experiments/public_benchmarks/await_registered_resume.py": "920c058a5b93dfb2ce0a72427a2f6a3d98c0f69ebad0360b9a9844a74d3d74c9",
+    "experiments/public_benchmarks/mini_agent.py": "424ed10a7e05c1c429e23394e67b85530d4a3a0d6cf397c855027766b4f56376",
+    "experiments/public_benchmarks/swe2_request.py": "aba0e2d697529c0e580762f1c95883ebd1c57ad15c327d198a9968d3008a8750",
+    "experiments/public_benchmarks/run_mechanism.py": "a55614e943732bfce4fa023c32f0ce9686bc0cac92fd9d2fe61f2fc1b2dc9b18",
+    "experiments/public_benchmarks/context_policy.py": "ab5c2fdc0ac20d103e17ae88cbcc255dd1687059c3ac27f2d8cb11297892bcdc",
+    "experiments/public_benchmarks/environment_binding.py": "ee0644377ccb7b7e1db366feb655c84b0b4d4159449541c461beade7aae196ee",
+    "experiments/public_benchmarks/checkpoint_agent.py": "ee2d9b5eaa0fbf03522064d3d43de496ad03770692ff00391bebcde3f71e2274",
+    "experiments/public_benchmarks/prefix_agent.py": "325e792fa2295c82fd79508aa802c0f5e870375e8be207c616a65f98ec04743f",
+    "experiments/public_benchmarks/oracle_preflight.py": "a587dfe2e4e1bcac885849f2bf6d03758b1aca5b250fbd362fc15e29dfa9973a",
+    "experiments/public_benchmarks/oneday_judge.py": "fbcd134411b0b0090fe8f7dd17b883852526231dab25e85c3242b16a1757b114",
+    "experiments/public_benchmarks/oneday_operator.py": "97d53cbe293f71142aabebf23bf6c4558c0c0dcbad964ecfae19128124614480",
+    "experiments/public_benchmarks/context_multistep_agent.py": "4c4314b74858e6adfa8e3b4d92641c61aeeaec18e778e7151c5f4e9f58e1fc70",
+    "experiments/public_benchmarks/mechanism_agent.py": "e756c1988e6b53dcaa1c12b6aa872bcee46b9a6467e457316c1968f01e47b0e1",
+    "experiments/public_benchmarks/run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+    "experiments/public_benchmarks/prefix_inputs.py": "cf8b0380b990fe0f4ed3048b7265dd9e2057d0e2417d5df2612db152437fd5aa",
+    "experiments/public_benchmarks/preflight.py": "40fd14bb0de6abc74ffa3718f9803fece5520fc05ccce337a02d8a1e7b8e7c27",
+    "experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "experiments/public_benchmarks/collect_public.py": "5a18e2f41169c9793515061af27cf54d96f268eaa5967f2261f1d2af14a08fab",
+    "experiments/public_benchmarks/longhorizon_agent.py": "e5e60e2162fe3dac3540908094107f6d23461824553e3b6258911d6b472e7a89",
+    "experiments/analysis/context_reset02.py": "7c872d0a2e4707014d9df90a63bda708e5b9394fe149fee7428b0b9e58933e3c",
+    "experiments/analysis/context_results.py": "0a5a7e241fc322f3edf5d8447c554767a14f433a56821927a7782120615007bc",
+    "experiments/analysis/test_registered_results.py": "36ec982a7b1cc4223213ea719da291af41ca5409836906ac16be357966450bcb",
+    "experiments/analysis/plot_results.py": "370d068751a9f6e7f6f76b7500e2a202994d92a28c4f4479f597bc9e896d3a0b",
+    "experiments/analysis/soak_audit.py": "56da34e75b2e231afa8bc3484b8379dd74b66d1cf8df84870a9ab34f4265346e",
+    "experiments/analysis/context_reset.py": "d36c4fe233709df9179f9b4d58b577874ba3b4f833e961af7168ce3fe7ac96f4",
+    "experiments/analysis/fault_replay.py": "967dfdb0f900873ace3864f62f1e6d3870711617f7655403ca68577e952e5663",
+    "experiments/analysis/registered_results.py": "ca1110ad0e650f1649c95b289a95dfab181ab3577993220ecf1e7cb151f22bc8",
+    "experiments/analysis/process_crash.py": "c024942813ef5c2b6302b88a807029be6e090ebb14af9b9d5247b45f5864528d",
+    "experiments/infrastructure/multistep_smoke_agent.py": "cae3613072ff80e5daad28ad13f7e0f774c5098bf3c4031a726969fab7015873",
+    "experiments/infrastructure/run_worker_faults.py": "e80d83019f7c99427e10affb99ea93d0f250bdb7900da964aefa4d14ee84e4de",
+    "experiments/infrastructure/mini_smoke.py": "f1424dcf8f7563e2e8580385bd31addbc874bbb68b56d6cb8c6c457cd628ef3a",
+    "experiments/infrastructure/oneday_memory_audit.py": "9068fc89569cc1dac31c66a3defc6389d8090d662d9715d601b0c2cce5330d65",
+    "experiments/infrastructure/gcp_hermes_smoke.py": "810a238717af776254dbb7854060ff197d16dfdad8bb11f85ecefdd23b67cafa",
+    "experiments/infrastructure/host_profile.py": "70f6c05cdbdb0f8254c84ab3fab63d870b1d4e828b7ec7076127845b3694737a",
+    "experiments/infrastructure/gcp_v2_abi_smoke.py": "816b280dbd0ff23a6ffcd4110863011265624967de30d82b47f400a67acd4325",
+    "experiments/infrastructure/gcp_prepare_cohort.py": "493619fcda96cf255d6d22a804275a4f246ab57c8651d6964c3301005968152e",
+    "experiments/infrastructure/prepare_prefix_study.py": "b9120ba3a7798fa44a5b9776962ffa2527e93c97fc16ca435c44876ce45ebe06",
+    "experiments/infrastructure/gcp_preflight.py": "779d9e947af9188870713f0bed91d0cf65cecd4aeaf817fb146c4fc436996662",
+    "experiments/infrastructure/gcp_run_cohort.py": "7a70cddd5ba72efb7be1ec00d9e142dca6dbdca9be5350891b27e7b9c15082b4",
+    "experiments/infrastructure/run_multistep_smoke.py": "42383ca206e221fe0fa28eb8255b47c9162d1251c34b7e25dc824da0b9ae24fe",
+    "experiments/infrastructure/run_snapshot_regression.py": "7e9556d9254f21ee18d2fab89af1b80b2b5a0dfe4cf28518d8c709098aa329e8",
+    "experiments/infrastructure/model_capacity_probe.py": "99a68e7fd74f28892fe9eb6996116be194e4f31e431270a41d5955ca48fa364f",
+    "experiments/infrastructure/gcp_runtime.py": "b80f600655a1efc9c9c8f703b58264bc2e469fb45840a901d579540053139379",
+    "experiments/infrastructure/prepare_oneday.py": "db3aa37adda5d5a3ec08fa3eed0172fe0bf0f0f2b1f532a78a399752a9f4e6a8",
+    "experiments/infrastructure/oneday_vision_probe.py": "0570c6095abd6e519524bf8857368b6d80895631e2db2dd98f17056d2effa1ef",
+    "experiments/infrastructure/prepare_parallel24.py": "19b8594c86f9e90c24b3d3e391d2f83cf0c54820d61a7cbca963718f4bd49bd0",
+    "experiments/infrastructure/run_context_smoke.py": "b2c34f97aa7d47ea6479218ebfbd0a3f6e3c9ef6d1cc488c81d0b82285d1a6af",
+    "experiments/infrastructure/run_context_study.py": "c97998e87a14acacc984ce473f2f063584280d24ea57488bda75b2bdb0542a5a",
+    "experiments/infrastructure/run_multistep_study.py": "2377d4b7200c5df18fb2fd6980c865ac22ba3e4bee0ec7f979c39520aa6f012f",
+    "experiments/infrastructure/freeze_context_study.py": "435ebfe9d520c1c9f422d4be54897e49fa8a00d64bb799557fd13c9fe608c439",
+    "experiments/infrastructure/oneday_judge_calibration.py": "536a82100f486af6aa3260c65c1c9fa20dad7535162ec3f1940c7f19982187c1",
+    "tests/unit/test_longhorizon_backend.py": "d686aa24dd1de264beec2a019561162babdd8eeae6a7b389470d777f12480d06",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e",
+    "supergoal_runtime/v2/kernel.py": "23d0127190b58fdba3c20b6d3915ef4a844e62fb2de47dce1b6bf5ac8d16d791"
+  },
+  "operator_sha256": "6796ee6818ec7566eebeee6cc3e5eac5c4d3e676663f1f4e0d09ea4af2f06012",
+  "prior_attempt": "prefix-oracle01: constructor argument failure before reference execution or model calls; retained unchanged",
+  "scope": "Original Harbor oracle and official suffix tests with exactly the fixed prefix setup; not model capability results",
+  "heartbeat_epoch": 1791247915.3487084
+}

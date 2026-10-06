@@ -1,0 +1,53 @@
+{
+  "captured_at": "2026-10-05T20:41:25.266667+00:00",
+  "files": {
+    "setup/controller-restart02.json": {
+      "sha256": "1875fbe6afba3a7d2ab08abf47e2813aa51ef77f206a6ed75196f8c9fd3e021c",
+      "bytes": 2810
+    },
+    "setup/registration-controller-restart02.json": {
+      "sha256": "6950809d9966717c99832168981c16d53fb7c274738e614f1bfeaa498d511c23",
+      "bytes": 13085
+    },
+    "setup/model-service-incident01.json": {
+      "sha256": "f02e5bab6cb2ade4598db9401961ea6d677c6835a5f06f31dc29cb88603d6713",
+      "bytes": 3350
+    },
+    "setup/scb-transfer01-receipt.json": {
+      "sha256": "f0e425576c877e00b30a231a666f4dc790c5810083287eb31b377aa59013999b",
+      "bytes": 29977
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "a1980b260359a3187c14f5b0be153971cd6dd2e577177923f417d51d46b29aec",
+      "bytes": 92710
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "756a4b97f07c39fff480c09c373046d97ca5c04e20daf026919f3d835c4efad5",
+      "bytes": 41284
+    },
+    "control/65e3912b14364ed092959ea9d4914320/request-journal.json": {
+      "sha256": "dbd81f977a830ff04929da305abf7794632daca9a2909d80d203f1a58f996bf4",
+      "bytes": 2390
+    },
+    "control/65e3912b14364ed092959ea9d4914320/phase-1-started.json": {
+      "sha256": "166eea515990e804d21c33bb23f900418590cbaa3ad6df3ee82e7c9a9e483546",
+      "bytes": 53
+    },
+    "control/65e3912b14364ed092959ea9d4914320/phase-2-started.json": {
+      "sha256": "0af68e037cf6b1a90f6ccaace768a2ee88a849d6b67f1ffc3d1b713219923b83",
+      "bytes": 53
+    },
+    "control/65e3912b14364ed092959ea9d4914320/phase-2-finished.json": {
+      "sha256": "a57fb9aada88260746e540bc16255dc793ad7065387e4dcc80142372d4516a0d",
+      "bytes": 844
+    },
+    "control/65e3912b14364ed092959ea9d4914320/02-executor/result.json": {
+      "sha256": "6696ec6d909afa7eefdeb674dadc83851b677684c9708ea362651ddd7fbd32fb",
+      "bytes": 25901
+    },
+    "checkpoint-store/manifests/3e9b17eb8ff0ee3807d17dcaa2dc9ee19628c21df0b7506aedd5e166d73278c3.json": {
+      "sha256": "e6be40a000e56aa3161b83f5a90ce185a0864b72bab199fbebd3621a42852c9f",
+      "bytes": 6372
+    }
+  }
+}

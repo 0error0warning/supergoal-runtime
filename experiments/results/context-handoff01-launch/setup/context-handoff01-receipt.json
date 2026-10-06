@@ -1,0 +1,108 @@
+{
+  "status": "running",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "file_backup",
+      "arm": "carry_ledger",
+      "status": "running",
+      "started_epoch": 1791242751.4097762,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-01-file_backup-carry_ledger",
+      "harbor_pid": 1931089,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "database_migration",
+      "arm": "carry_current",
+      "status": "running",
+      "started_epoch": 1791242751.4125543,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-02-database_migration-carry_current",
+      "harbor_pid": 1931090,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 2,
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "running",
+      "started_epoch": 1791242751.4162667,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-03-dag_execution-fresh_ledger",
+      "harbor_pid": 1931091,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 3,
+      "task_id": "file_backup",
+      "arm": "carry_current",
+      "status": "running",
+      "started_epoch": 1791242751.418665,
+      "job": "/var/lib/supergoal-lab/jobs/context-handoff01-04-file_backup-carry_current",
+      "harbor_pid": 1931092,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 4,
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "pending"
+    },
+    {
+      "index": 5,
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "pending"
+    },
+    {
+      "index": 6,
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "pending"
+    },
+    {
+      "index": 7,
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "dag_execution",
+      "arm": "carry_ledger",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "database_migration",
+      "arm": "carry_ledger",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "dag_execution",
+      "arm": "carry_current",
+      "status": "pending"
+    }
+  ],
+  "automatic_retries": 0,
+  "registration_sha256": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+  "heartbeat_epoch": 1791242821.6544967
+}

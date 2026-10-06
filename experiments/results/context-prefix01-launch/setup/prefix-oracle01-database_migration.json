@@ -1,0 +1,23 @@
+{
+  "job_name": "prefix-oracle01-database_migration",
+  "jobs_dir": "/var/lib/supergoal-lab/jobs",
+  "n_concurrent_trials": 1,
+  "environment": {
+    "type": "docker",
+    "delete": true
+  },
+  "agents": [
+    {
+      "import_path": "prefix_agent:PrefixOracleAgent",
+      "kwargs": {
+        "prefix_path": "/var/lib/supergoal-lab/prefix-inputs01/database_migration/prefix.json",
+        "prefix_sha256": "cb38d54074ee22d174563361b5da75a033ca3b95e5863d2e70eee1b631b5c97d"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "path": "/var/lib/supergoal-lab/tasks/context-prefix01/database_migration"
+    }
+  ]
+}

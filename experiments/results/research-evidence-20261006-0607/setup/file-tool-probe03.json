@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "model_calls": 0,
+  "image_id": "sha256:f0d6e67fe473a244c4e7c3d980df8651e5e05f823a3a4b662490a5bb2188c9c2",
+  "source_sha256": {
+    "/var/lib/supergoal-lab/file-tool-operator03/file_tool_fix_probe.py": "4fab13a4da2ce6eda765fa57b52a3cc7243b182683bebe5ab4e1215f2b58ab94",
+    "/var/lib/supergoal-lab/candidates/harness-transfer01/experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "/var/lib/supergoal-lab/file-tool-operator03/hermes_bridge.py": "d933eddd2dead165049c5d238f99fec2b7e07a388f68ae16a4a80394b3cda251"
+  },
+  "scope": "Fixed-text tool contracts only; not a model task sample or benchmark replacement",
+  "container_id": "94ac5bf27b5c7c16437ed381a421601943334be75af3a965e33d8dce1e5764f3",
+  "old_write": {
+    "bytes_written": 0,
+    "dirs_created": false,
+    "error": "Failed to write file: "
+  },
+  "old_readback": "old-content\n",
+  "old_export": {
+    "output": "missing",
+    "returncode": 0,
+    "cwd_observed": true,
+    "cwd": "/app"
+  },
+  "login_trace": {
+    "returncode": 1,
+    "stdout": "\n__HERMES_CWD_8793e0b66f77__/app__HERMES_CWD_8793e0b66f77__\n",
+    "stderr": "++ id -u\n+ '[' 0 -eq 0 ']'\n+ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\n+ export PATH\n+ '[' '' ']'\n+ '[' -d /etc/profile.d ']'\n++ run-parts --list --regex '^[a-zA-Z0-9_][a-zA-Z0-9._-]*\\.sh$' /etc/profile.d\n+ unset i\n+ '[' -n '5.2.37(1)-release' ']'\n+ '[' -f /tmp/agent_home/.bashrc ']'\n+ . /tmp/agent_home/.bashrc\n++ case $- in\n++ return\n+ '[' -d /tmp/agent_home/bin ']'\n+ '[' -d /tmp/agent_home/.local/bin ']'\n+ export AI_AGENT=hermes-agent HERMES_AGENT=true\n+ AI_AGENT=hermes-agent\n+ HERMES_AGENT=true\n+ export GIT_PAGER=cat PAGER=cat\n+ GIT_PAGER=cat\n+ PAGER=cat\n+ builtin cd -- /app\n+ eval 'set -e; d='\\''/app'\\''; t='\\''/app/old.txt'\\''; if [ -L \"$t\" ]; then rt=\"$(readlink -f \"$t\" 2>/dev/null || realpath \"$t\" 2>/dev/null || true)\"; [ -n \"$rt\" ] && { t=\"$rt\"; d=\"$(dirname \"$t\")\"; }; fi; mkdir -p \"$d\"; tmp=\"$(mktemp -p \"$d\" '\\''.hermes-tmp.XXXXXX'\\'' 2>/dev/null || mktemp \"$d/.hermes-tmp.$$.XXXXXX\" 2>/dev/null || { tmp=\"$d/.hermes-tmp.$$\"; : > \"$tmp\" && echo \"$tmp\"; })\"; [ -n \"$tmp\" ] || { echo \"atomic write: could not create temp file\" >&2; exit 1; }; trap '\\''rm -f \\\"$tmp\\\"'\\'' EXIT; if [ -e \"$t\" ]; then m=\"$(stat -c%a \"$t\" 2>/dev/null || stat -f%Lp \"$t\" 2>/dev/null || true)\"; [ -n \"$m\" ] && chmod \"$m\" \"$tmp\" 2>/dev/null || true; fi; cat > \"$tmp\"; if [ ! -e \"$t\" ]; then chmod \"=rw\" \"$tmp\" 2>/dev/null || true; fi; mv -f \"$tmp\" \"$t\"; trap - EXIT'\n++ set -e\n++ d=/app\n++ t=/app/old.txt\n++ '[' -L /app/old.txt ']'\n++ mkdir -p /app\n+++ mktemp -p /app .hermes-tmp.XXXXXX\n++ tmp=/app/.hermes-tmp.QpZDCs\n++ '[' -n /app/.hermes-tmp.QpZDCs ']'\n++ trap 'rm -f \\\"$tmp\\\"' EXIT\n++ '[' -e /app/old.txt ']'\n+++ stat -c%a /app/old.txt\n++ m=666\n++ '[' -n 666 ']'\n++ chmod 666 /app/.hermes-tmp.QpZDCs\n++ cat\n++ '[' '!' -e /app/old.txt ']'\n++ mv -f /app/.hermes-tmp.QpZDCs /app/old.txt\n++ trap - EXIT\n+ __hermes_ec=0\n+ umask 077\n++ pwd -P\n+ printf '\\n__HERMES_CWD_8793e0b66f77__%s__HERMES_CWD_8793e0b66f77__\\n' /app\n+ exit 0\n++ '[' 1 = 1 ']'\n++ '[' -x /usr/bin/clear_console ']'\n++ /usr/bin/clear_console -q\n"
+  },
+  "snapshot_ready": true,
+  "fixed_write": {
+    "bytes_written": 200017,
+    "dirs_created": true,
+    "verified": true,
+    "lint": {
+      "status": "skipped",
+      "message": "No linter for .txt files"
+    }
+  },
+  "expected_sha256": "56b01a8ef36ccd8c65be55dc53f5c2dee6ee76be1c097a65cc949252ac7dd349",
+  "observed_sha256": "56b01a8ef36ccd8c65be55dc53f5c2dee6ee76be1c097a65cc949252ac7dd349",
+  "fixed_export": {
+    "output": "retained",
+    "returncode": 0,
+    "cwd_observed": true,
+    "cwd": "/app"
+  },
+  "real_command_failure": {
+    "output": "",
+    "returncode": 1
+  },
+  "denied_write": {
+    "bytes_written": 0,
+    "dirs_created": false,
+    "error": "Failed to write file: bash: line 5: /proc/.hermes-tmp.190: No such file or directory\n"
+  },
+  "isolation_check": {
+    "output": "",
+    "returncode": 0,
+    "cwd_observed": true,
+    "cwd": "/app"
+  },
+  "cleanup_exit": 0
+}

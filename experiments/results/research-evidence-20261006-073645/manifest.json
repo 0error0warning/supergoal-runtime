@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-10-05T23:36:45.758858+00:00",
+  "scope": "Final public-parallel24-v1 outcomes, frozen identity/budget audit and contemporaneous retention observation.",
+  "files": {
+    "setup/public-parallel24-v1-final-observation01.json": {
+      "sha256": "70de9c801202d1dfa8005dc79e021fadc01c605c4152331761bbe3a07587157f",
+      "bytes": 3940309
+    },
+    "setup/public-parallel24-v1-final-audit01.json": {
+      "sha256": "d76c1927cbd17c76fed8014e961ca2226dc0b78d12dc6fc06bfdcbfbcb55c350",
+      "bytes": 64093
+    },
+    "analysis-final-public01/audit_completed_public.py": {
+      "sha256": "9ca32e9f8a69b11ea015f437e2b739573156c064f3bd6640a2556e8fb9eb19c2",
+      "bytes": 6982
+    },
+    "analysis-operator02/collect_public.py": {
+      "sha256": "5a18e2f41169c9793515061af27cf54d96f268eaa5967f2261f1d2af14a08fab",
+      "bytes": 6981
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "2bdef10ea6724368c562989d87bdc23452a309f8aafa5f4dd17f5f3816a56045",
+      "bytes": 124725
+    },
+    "setup/environment-parallel24.json": {
+      "sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+      "bytes": 37051
+    },
+    "setup/tb-oracle-parallel24-receipt.json": {
+      "sha256": "3f8ffc4142da1fc87e58940e954d132549359de70ca0a65c84f17afe24b6fd14",
+      "bytes": 16691
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "76697e8a1c67f6d6721f45d8567e48999aad26d33fde6fe32c0135c635a561bf",
+      "bytes": 86763
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "captured_at": "2026-10-05T18:36:43.236952+00:00",
+  "files": {
+    "setup/public-gcp01-rows-00-30.json": {
+      "sha256": "470cfe5e0793dbfcb98ed0511cb87da1084a57b36d3424f1768a02f10eaf1061",
+      "bytes": 34152
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "35d8acc4ed3a7536ac0c40d06b2a355cb053c7876f5cc5b6b9cd7cd2add02e36",
+      "bytes": 58243
+    },
+    "setup/oneday-transfer01-receipt.json": {
+      "sha256": "c0b2d856fbfb8b9b12c8c9ca0facc67e64a29c3fae6bd4dbb0ca826f8a7221b0",
+      "bytes": 12554
+    },
+    "setup/mechanism01-receipt.json": {
+      "sha256": "31e730f2e4c920ef88db83457003481f006b343d97a2ce677f68bc4ee9aed42d",
+      "bytes": 8590
+    },
+    "setup/audit-claim-masking01.json": {
+      "sha256": "6258302448fb98ce1f83d26a4a4db80374da6e214e2f7fd80c5c98bde67c1a62",
+      "bytes": 14443
+    },
+    "setup/registration-audit-claim-masking01.json": {
+      "sha256": "48d24ef74f34bc9bfecc935b7f732ff21577523d3b23c3d93fa95518ebc1ada3",
+      "bytes": 4023
+    },
+    "setup/oneday-memory-audit01.json": {
+      "sha256": "77d416be3fea442abc141e8b4efb700022ef3bae2e5581ed2f0bed89a157eda7",
+      "bytes": 1130
+    },
+    "setup/artifact-retention-probe01.json": {
+      "sha256": "6d3451f70168f467d0da4c9c6ca7d4fdafd6cca2b69801384de0281ece1f72d2",
+      "bytes": 225
+    },
+    "setup/artifact-retention-probe02.json": {
+      "sha256": "a1acf7b13f93bafa945a5f431e52ec7653185d92051bfa0bd42417b8a5216e7f",
+      "bytes": 525
+    },
+    "setup/host-load-mechanism01.json": {
+      "sha256": "f721852d58670ea89a0d5b3661d8d4fbde14ff6bac7f84149c205f500cacbca5",
+      "bytes": 13358
+    },
+    "setup/snapshot-storage-audit01.json": {
+      "sha256": "ba5c79265398f4f20eee7940d22a2c43daed6b3886ec2a2acfb5c6a77d5f377d",
+      "bytes": 24328
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "ac090298fd4716092be16233c3ac13114b3b3485e898a281a80607d008f8f33b",
+      "bytes": 863
+    },
+    "exports/experiments/results/public-gcp01-analysis.json": {
+      "sha256": "24b0ab6a4f633cdc878155547034799c065fe6d0ce948b716c19c510d309a68a",
+      "bytes": 22337
+    },
+    "exports/experiments/results/public-gcp01-bundle.json": {
+      "sha256": "4de0a88c14eb6977f24b589e9460017dae8cae3686d7e97edef7623602897278",
+      "bytes": 1426457
+    },
+    "exports/experiments/results/oneday-transfer01-analysis.json": {
+      "sha256": "164781fa5e0d2bba76c215ff5f3e23c91f405751cacc8ed2a54557438543fa7b",
+      "bytes": 21699
+    }
+  }
+}

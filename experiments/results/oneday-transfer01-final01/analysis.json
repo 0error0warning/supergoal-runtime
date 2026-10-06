@@ -1,0 +1,427 @@
+{
+  "experiment": "oneday-transfer01",
+  "status": "complete_with_disclosed_parser_repair",
+  "statistical_unit": "task ID, not individual criterion or arm",
+  "distinct_task_ids": 6,
+  "score_sources": {
+    "original": 15,
+    "supplementary": 3
+  },
+  "official_gemini_reproduction": false,
+  "raw_scores_unchanged": true,
+  "new_model_calls": 0,
+  "request_scope": "Solver plus online review; excludes final artifact-grader calls.",
+  "score_scope": "Descriptive mean of per-task rubric fractions, not all-correct task rate.",
+  "by_arm": {
+    "native": {
+      "original_graded_tasks": 5,
+      "original_graded_task_mean": 0.9272727272727272,
+      "with_supplementary_tasks": 6,
+      "task_mean_with_supplementary": 0.9090909090909091,
+      "solver_and_online_review_requests": 75
+    },
+    "sg_v2": {
+      "original_graded_tasks": 5,
+      "original_graded_task_mean": 0.9418181818181818,
+      "with_supplementary_tasks": 6,
+      "task_mean_with_supplementary": 0.9515151515151515,
+      "solver_and_online_review_requests": 119
+    },
+    "repeat_goal": {
+      "original_graded_tasks": 5,
+      "original_graded_task_mean": 0.9454545454545454,
+      "with_supplementary_tasks": 6,
+      "task_mean_with_supplementary": 0.9545454545454546,
+      "solver_and_online_review_requests": 197
+    }
+  },
+  "rows": [
+    {
+      "task_id": "taskif_83",
+      "arm": "native",
+      "index": 0,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 7,
+        "max_score": 11,
+        "percentage": 63.64,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 0.6363636363636364,
+      "solver_and_online_review_requests": 9
+    },
+    {
+      "task_id": "taskif_83",
+      "arm": "sg_v2",
+      "index": 1,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 10,
+        "max_score": 11,
+        "percentage": 90.91,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 0.9090909090909091,
+      "solver_and_online_review_requests": 16
+    },
+    {
+      "task_id": "taskif_83",
+      "arm": "repeat_goal",
+      "index": 2,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 8,
+        "max_score": 11,
+        "percentage": 72.73,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 0.7272727272727273,
+      "solver_and_online_review_requests": 20
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "sg_v2",
+      "index": 3,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 9,
+        "max_score": 9,
+        "percentage": 100.0,
+        "criteria": 17,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 18
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "repeat_goal",
+      "index": 4,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 9,
+        "max_score": 9,
+        "percentage": 100.0,
+        "criteria": 17,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 18
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "native",
+      "index": 5,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 9,
+        "max_score": 9,
+        "percentage": 100.0,
+        "criteria": 17,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 7
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "repeat_goal",
+      "index": 6,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 5,
+        "max_score": 5,
+        "percentage": 100.0,
+        "criteria": 6,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 20
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "native",
+      "index": 7,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 5,
+        "max_score": 5,
+        "percentage": 100.0,
+        "criteria": 6,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 12
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "sg_v2",
+      "index": 8,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 5,
+        "max_score": 5,
+        "percentage": 100.0,
+        "criteria": 6,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 14
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "native",
+      "index": 9,
+      "original_status": "requires_audit",
+      "original_grade": null,
+      "supplementary_grade": {
+        "index": 9,
+        "status": "adapted_judge_graded",
+        "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+        "config_sha256": "9c2348f4114d09e8fd2e91cc41c5fe263f1788186536129ee60f70cd7e0454de",
+        "artifact_manifest_sha256": "f9a5d479714e429ed82f74da4c8eb0b3f0ed5951d1a9dc6f29c01d21dc704769",
+        "score": 9,
+        "max_score": 11,
+        "percentage": 81.82,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "score_source": "supplementary",
+      "score_fraction": 0.8181818181818182,
+      "solver_and_online_review_requests": 18
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "sg_v2",
+      "index": 10,
+      "original_status": "requires_audit",
+      "original_grade": null,
+      "supplementary_grade": {
+        "index": 10,
+        "status": "adapted_judge_graded",
+        "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+        "config_sha256": "471452d90df7e41751fed71ee4eb40be19264273aa16a8a54c7a70568cc33741",
+        "artifact_manifest_sha256": "c08b1044d48c8e0b6c550d0b23ed8980b70c7307aa6daf75224e92cd3c2f1eff",
+        "score": 11,
+        "max_score": 11,
+        "percentage": 100.0,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "score_source": "supplementary",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 43
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "repeat_goal",
+      "index": 11,
+      "original_status": "requires_audit",
+      "original_grade": null,
+      "supplementary_grade": {
+        "index": 11,
+        "status": "adapted_judge_graded",
+        "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+        "config_sha256": "18a1c04faab3b01b6349c73f011ba30aae9c49ce622d883dfd14399c45b2352c",
+        "artifact_manifest_sha256": "17432a09ebb9d165ebd074c3d81f7de99092740d100e1ee3e10c13073d78a0f7",
+        "score": 11,
+        "max_score": 11,
+        "percentage": 100.0,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "score_source": "supplementary",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 87
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "sg_v2",
+      "index": 12,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 4,
+        "max_score": 5,
+        "percentage": 80.0,
+        "criteria": 5,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 0.8,
+      "solver_and_online_review_requests": 19
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "repeat_goal",
+      "index": 13,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 5,
+        "max_score": 5,
+        "percentage": 100.0,
+        "criteria": 5,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 28
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "native",
+      "index": 14,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 5,
+        "max_score": 5,
+        "percentage": 100.0,
+        "criteria": 5,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 15
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "repeat_goal",
+      "index": 15,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 10,
+        "max_score": 10,
+        "percentage": 100.0,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 24
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "native",
+      "index": 16,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 10,
+        "max_score": 10,
+        "percentage": 100.0,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 14
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "sg_v2",
+      "index": 17,
+      "original_status": "finished",
+      "original_grade": {
+        "status": "adapted_judge_graded",
+        "score": 10,
+        "max_score": 10,
+        "percentage": 100.0,
+        "criteria": 15,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "supplementary_grade": null,
+      "score_source": "original",
+      "score_fraction": 1.0,
+      "solver_and_online_review_requests": 9
+    }
+  ],
+  "source_files": {
+    "original": {
+      "path": "experiments\\results\\research-observation-20261006-0240\\exports\\experiments\\results\\oneday-transfer01-analysis.json",
+      "sha256": "164781fa5e0d2bba76c215ff5f3e23c91f405751cacc8ed2a54557438543fa7b"
+    },
+    "supplementary": {
+      "path": "experiments\\results\\research-evidence-20261006-0315\\setup\\oneday-memory-audit01.json",
+      "sha256": "b34775cafb82902ca390a6102b21b57ce0f0b776043890cc93221171556c987a"
+    },
+    "registration": {
+      "path": "experiments\\public_benchmarks\\registration-oneday-transfer01-amendment02.json",
+      "sha256": "ed6d17dc1485a7b9e8a9c576305ec12e3f3d078b0ce4724f63c0d2dea7a218ea"
+    }
+  },
+  "analysis_source_sha256": "7d123ad453b03d34aa5738be065e117f34238948930027daf00c4b4539158b93"
+}

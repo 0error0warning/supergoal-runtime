@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-10-05T21:27:50.841112+00:00",
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/scb-regression-audit01.json": {
+      "sha256": "ca7b0461721f442bc4eaa059f658665705ec430787dd633df9e6af60871a117f",
+      "bytes": 237458
+    },
+    "setup/scb-regression-audit02.json": {
+      "sha256": "58dec154e52c4458046dbe9bc0f254eeeed4bc6a484b57f22befc5c4fa8df822",
+      "bytes": 245326
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "bdc8e106c746b8a6a85133bb7eac1ab16b2c0f33d9bb6486a26466b57390498b",
+      "bytes": 64012
+    },
+    "setup/harness-transfer01-receipt.json": {
+      "sha256": "593d25b55a4f2c3b6787c3abef8f01a6450387108a80a92d7fa622c2d93a20b1",
+      "bytes": 3063
+    },
+    "setup/scb-transfer01-receipt.json": {
+      "sha256": "40bd72b7933a8bdb7f99aca2e7995f41d566c5ff4136f016ea493d2c751e172d",
+      "bytes": 72046
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "3a50f533e6b000118c1f738da996f7f55062eb4fcc6332cb745b03cdc4d9fdec",
+      "bytes": 103865
+    },
+    "analysis-regression01/audit_multistep_regressions.py": {
+      "sha256": "3598182cfff08e9a3e348aee6df24172137a8c6d6fe489f5940dd01a5e4a467c",
+      "bytes": 5513
+    },
+    "analysis-regression02/audit_multistep_regressions.py": {
+      "sha256": "798e769f1244516e06596f36d46d17a3db66c6b59e05f1cccb946acd80e8da23",
+      "bytes": 6284
+    },
+    "setup/public-parallel24-v1-observation-212749.json": {
+      "sha256": "67ea74fbaa3f3cf17d6de530aaa48dc9235a049a74f02ca98638049717fa9cba",
+      "bytes": 2975795
+    },
+    "setup/harness-transfer01-observation-212749.json": {
+      "sha256": "7da53e191e4ddecac9e4ff65f652b6e96a0bc26ddf7743437193d8fec00fb805",
+      "bytes": 102032
+    },
+    "setup/scb-transfer01-observation-212749.json": {
+      "sha256": "04b6f111349dd24875141279204ea49e117612c22d801b11e1f9079a29cadbe5",
+      "bytes": 1058053
+    }
+  }
+}

@@ -1,0 +1,1190 @@
+{
+  "experiment": "context-prefix01",
+  "collected_at": "2026-10-06T01:18:18.151253+00:00",
+  "cohort_status": "complete_with_itemized_outcomes",
+  "statistical_units": 3,
+  "scope": "Three outcome-informed development problems, two suffix branches per frozen first-stage artifact. One continuation per condition, not a holdout or statistical superiority claim. No change to raw grades and no independent-task inflation from stages or shared prefixes.",
+  "arms": [
+    "fresh_ledger",
+    "fresh_current"
+  ],
+  "prefix_checkpoint_count": 1,
+  "interaction_direction": null,
+  "missing_outcomes_imputed": false,
+  "new_model_calls": 0,
+  "rows": [
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.6656400088125137,
+      "available_checkpoint_mean": 0.6656400088125137,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 53,
+      "observed_input_tokens": 933998,
+      "observed_output_tokens": 20557,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.68,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6764705882352942,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6404494382022472,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ],
+      "usage": {
+        "requests": 53,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 933998,
+        "output_tokens": 20557,
+        "observed_input_tokens": 933998,
+        "observed_output_tokens": 20557,
+        "role_episode_seconds": {
+          "executor": 354.2833613910043,
+          "review": 114.29934800699994
+        },
+        "trial_wall_seconds": 572.0190885066986,
+        "solver_and_online_review_seconds": 496.72301100000004,
+        "official_grading_seconds": 48.60176
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 13,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 34,
+              "FAILED": 16
+            },
+            "current_module": {
+              "PASSED": 12,
+              "FAILED": 6
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 38,
+              "FAILED": 30
+            },
+            "current_module": {
+              "PASSED": 19,
+              "FAILED": 2
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 8,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.9526529705448674,
+      "available_checkpoint_mean": 0.9526529705448674,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 86,
+      "observed_input_tokens": 2127878,
+      "observed_output_tokens": 55430,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.967741935483871,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9767441860465116,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9396551724137931,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9264705882352942,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ],
+      "usage": {
+        "requests": 86,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2127878,
+        "output_tokens": 55430,
+        "observed_input_tokens": 2127878,
+        "observed_output_tokens": 55430,
+        "role_episode_seconds": {
+          "executor": 617.1882420299953,
+          "review": 260.58054938999703
+        },
+        "trial_wall_seconds": 1078.3131837844849,
+        "solver_and_online_review_seconds": 950.5585289999999,
+        "official_grading_seconds": 87.42935800000001
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 2
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 59,
+              "FAILED": 2
+            },
+            "current_module": {
+              "PASSED": 25
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 84,
+              "FAILED": 2
+            },
+            "current_module": {
+              "PASSED": 25,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 109,
+              "FAILED": 7
+            },
+            "current_module": {
+              "PASSED": 17,
+              "FAILED": 3
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.5255858440937351,
+      "available_checkpoint_mean": 0.5255858440937351,
+      "scored_checkpoints": 2,
+      "expected_checkpoints": 2,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 45,
+      "observed_input_tokens": 966437,
+      "observed_output_tokens": 23406,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5609756097560976,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.49019607843137253,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ],
+      "usage": {
+        "requests": 45,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 966437,
+        "output_tokens": 23406,
+        "observed_input_tokens": 966437,
+        "observed_output_tokens": 23406,
+        "role_episode_seconds": {
+          "executor": 380.45449655899574,
+          "review": 105.62935154300794
+        },
+        "trial_wall_seconds": 557.0039982795715,
+        "solver_and_online_review_seconds": 504.571553,
+        "official_grading_seconds": 28.49022
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 20,
+              "FAILED": 13
+            },
+            "current_module": {
+              "PASSED": 3,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 25,
+              "FAILED": 16
+            },
+            "current_module": {
+              "FAILED": 10
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 2
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.6122075346992729,
+      "available_checkpoint_mean": 0.6122075346992729,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 59,
+      "observed_input_tokens": 888384,
+      "observed_output_tokens": 25403,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.62,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6323529411764706,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5842696629213483,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ],
+      "usage": {
+        "requests": 59,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 888384,
+        "output_tokens": 25403,
+        "observed_input_tokens": 888384,
+        "observed_output_tokens": 25403,
+        "role_episode_seconds": {
+          "executor": 395.69888112000626,
+          "review": 188.13428614700388
+        },
+        "trial_wall_seconds": 682.1428635120392,
+        "solver_and_online_review_seconds": 608.379835,
+        "official_grading_seconds": 49.075004
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 10,
+              "FAILED": 8
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 31,
+              "FAILED": 19
+            },
+            "current_module": {
+              "PASSED": 12,
+              "FAILED": 6
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 35,
+              "FAILED": 33
+            },
+            "current_module": {
+              "PASSED": 17,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 8,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.8722899379763804,
+      "available_checkpoint_mean": 0.8722899379763804,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 90,
+      "observed_input_tokens": 2865041,
+      "observed_output_tokens": 56073,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9354838709677419,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9418604651162791,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8103448275862069,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8014705882352942,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ],
+      "usage": {
+        "requests": 90,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2865041,
+        "output_tokens": 56073,
+        "observed_input_tokens": 2865041,
+        "observed_output_tokens": 56073,
+        "role_episode_seconds": {
+          "executor": 795.8750627769914,
+          "review": 232.62466966499778
+        },
+        "trial_wall_seconds": 1198.6517295837402,
+        "solver_and_online_review_seconds": 1090.63132,
+        "official_grading_seconds": 72.949506
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 19,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 57,
+              "FAILED": 4
+            },
+            "current_module": {
+              "PASSED": 24,
+              "FAILED": 1
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 81,
+              "FAILED": 5
+            },
+            "current_module": {
+              "PASSED": 13,
+              "FAILED": 17
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 94,
+              "FAILED": 22
+            },
+            "current_module": {
+              "PASSED": 15,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.5671927307508369,
+      "available_checkpoint_mean": 0.5671927307508369,
+      "scored_checkpoints": 2,
+      "expected_checkpoints": 2,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 70,
+      "observed_input_tokens": 1757695,
+      "observed_output_tokens": 29341,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5853658536585366,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5490196078431373,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ],
+      "usage": {
+        "requests": 70,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 1757695,
+        "output_tokens": 29341,
+        "observed_input_tokens": 1757695,
+        "observed_output_tokens": 29341,
+        "role_episode_seconds": {
+          "executor": 520.2865609159999,
+          "review": 134.07257060000848
+        },
+        "trial_wall_seconds": 732.277747631073,
+        "solver_and_online_review_seconds": 668.997885,
+        "official_grading_seconds": 38.008826
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 20,
+              "FAILED": 13
+            },
+            "current_module": {
+              "PASSED": 4,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 27,
+              "FAILED": 14
+            },
+            "current_module": {
+              "PASSED": 1,
+              "FAILED": 9
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 3
+        }
+      ]
+    }
+  ],
+  "contrasts": [
+    {
+      "control": "fresh_current",
+      "treatment": "fresh_ledger",
+      "direction": "treatment minus control",
+      "pairs": [
+        {
+          "task_id": "file_backup",
+          "strict_mean_difference": 0.05343247411324081,
+          "request_difference": -6
+        },
+        {
+          "task_id": "database_migration",
+          "strict_mean_difference": -0.08036303256848698,
+          "request_difference": 4
+        },
+        {
+          "task_id": "dag_execution",
+          "strict_mean_difference": -0.04160688665710177,
+          "request_difference": -25
+        }
+      ]
+    }
+  ],
+  "interactions": [],
+  "audit_errors": [],
+  "prefix_requests_observed_once": 66,
+  "prefix_requests_charged_to_suffix": 0,
+  "source_sha256": {
+    "/var/lib/supergoal-lab/setup/context-prefix01-final-observation01.json": "8e097fc38b09c2499c901029b61df8fbcbaf6ddf5ee5420f472869d7b8da5cf3",
+    "/var/lib/supergoal-lab/setup/context-prefix01-receipt.json": "96f7f27654d844a688af0ec69596a7e0bb9771167e52758fe93d84af8a6f3f0d",
+    "/var/lib/supergoal-lab/setup/context-prefix01-final-regressions01.json": "da7301b92312a2091a25bc00de1a8fab9c4dfbae89ec361064c442cf986ecbcf",
+    "/var/lib/supergoal-lab/setup/registration-context-prefix01.json": "82063d4449cbd833f5c04c51a8f9a1a3684d509d92ef6430c427b7038fa4b490",
+    "/var/lib/supergoal-lab/analysis-prefix01/experiments/public_benchmarks/analyze_prefix.py": "0750ef0e7ec6a64ddb6bca84bd9fbd69a2458a2d3f981f414f04707c0835138a",
+    "/var/lib/supergoal-lab/analysis-prefix01/experiments/public_benchmarks/analyze_context.py": "d1abe911790ad3fdbf019ac123c8c79fea8960b2945d6985ac9d2e2bbb688a42",
+    "/var/lib/supergoal-lab/analysis-prefix01/experiments/public_benchmarks/analyze_context_details.py": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3"
+  }
+}

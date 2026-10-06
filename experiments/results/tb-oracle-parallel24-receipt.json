@@ -1,0 +1,492 @@
+{
+  "status": "complete_with_unavailable_tasks",
+  "started_at": "2026-10-05T16:08:23.043883+00:00",
+  "model_calls": 0,
+  "selection_sha256": "ce1e8e18497a6f9f3ef3868164a79dd4297aaa215e6b7dc44db66a0d5281e051",
+  "max_concurrent_oracles": 2,
+  "cpu_pool": 4,
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "bn-fit-modify",
+      "status": "graded",
+      "started_at": "2026-10-05T16:12:39.747812Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-01-bn-fit-modify/bn-fit-modify__s3yWkfq/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:13:47.761412+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 1,
+      "task_id": "circuit-fibsqrt",
+      "status": "graded",
+      "started_at": "2026-10-05T16:12:39.748186Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-02-circuit-fibsqrt/circuit-fibsqrt__ALzM4SJ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:13:56.803324+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 2,
+      "task_id": "compile-compcert",
+      "status": "graded",
+      "started_at": "2026-10-05T16:13:54.838217Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-03-compile-compcert/compile-compcert__CDmA4Fx/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:38:42.935223+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 3,
+      "task_id": "constraints-scheduling",
+      "status": "graded",
+      "started_at": "2026-10-05T16:14:04.849373Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-04-constraints-scheduling/constraints-scheduling__Q4XJrn4/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:14:33.429338+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 4,
+      "task_id": "custom-memory-heap-crash",
+      "status": "graded",
+      "started_at": "2026-10-05T16:14:39.856382Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-05-custom-memory-heap-crash/custom-memory-heap-crash__gAEANzS/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:15:15.727063+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 5,
+      "task_id": "extract-elf",
+      "status": "graded",
+      "started_at": "2026-10-05T16:15:24.872148Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-06-extract-elf/extract-elf__BdsZoYq/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:15:50.236138+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 6,
+      "task_id": "feal-linear-cryptanalysis",
+      "status": "graded",
+      "started_at": "2026-10-05T16:15:59.860609Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-07-feal-linear-cryptanalysis/feal-linear-cryptanalysis__PDKoeGd/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:16:21.829524+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 7,
+      "task_id": "financial-document-processor",
+      "status": "graded",
+      "started_at": "2026-10-05T16:16:29.956104Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-08-financial-document-processor/financial-document-processor__X7pPSNL/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:17:51.759830+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 8,
+      "task_id": "git-leak-recovery",
+      "status": "graded",
+      "started_at": "2026-10-05T16:17:59.998753Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-09-git-leak-recovery/git-leak-recovery__ddkgK7s/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:18:29.190861+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 9,
+      "task_id": "install-windows-3.11",
+      "status": "graded",
+      "started_at": "2026-10-05T16:18:35.050304Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-10-install-windows-3.11/install-windows-3.11__zGefp8K/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:25:56.629251+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 10,
+      "task_id": "large-scale-text-editing",
+      "status": "graded",
+      "started_at": "2026-10-05T16:26:05.131262Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-11-large-scale-text-editing/large-scale-text-editing__uvZGygt/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:28:01.588029+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 11,
+      "task_id": "mcmc-sampling-stan",
+      "status": "graded",
+      "started_at": "2026-10-05T16:49:46.365228Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-12-mcmc-sampling-stan/mcmc-sampling-stan__yYwH4GC/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:55:23.045183+00:00",
+      "exit_code": 0,
+      "oracle_passed": false
+    },
+    {
+      "index": 12,
+      "task_id": "model-extraction-relu-logits",
+      "status": "graded",
+      "started_at": "2026-10-05T16:28:10.167296Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-13-model-extraction-relu-logits/model-extraction-relu-logits__NdA28gf/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:28:41.588609+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 13,
+      "task_id": "modernize-scientific-stack",
+      "status": "graded",
+      "started_at": "2026-10-05T16:28:50.170860Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-14-modernize-scientific-stack/modernize-scientific-stack__FwW4SxR/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:29:15.400974+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 14,
+      "task_id": "nginx-request-logging",
+      "status": "graded",
+      "started_at": "2026-10-05T16:29:25.258139Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-15-nginx-request-logging/nginx-request-logging__vRm4eou/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:30:26.398212+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 15,
+      "task_id": "password-recovery",
+      "status": "graded",
+      "started_at": "2026-10-05T16:30:35.434010Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-16-password-recovery/password-recovery__XeAGPWh/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:31:00.817108+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 16,
+      "task_id": "portfolio-optimization",
+      "status": "graded",
+      "started_at": "2026-10-05T16:31:10.364473Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-17-portfolio-optimization/portfolio-optimization__ycppRNK/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:33:58.915999+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 17,
+      "task_id": "protein-assembly",
+      "status": "graded",
+      "started_at": "2026-10-05T16:34:05.386838Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-18-protein-assembly/protein-assembly__h5wQyQ8/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:36:27.603093+00:00",
+      "exit_code": 0,
+      "oracle_passed": false
+    },
+    {
+      "index": 18,
+      "task_id": "pytorch-model-recovery",
+      "status": "graded",
+      "started_at": "2026-10-05T16:36:35.528504Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-19-pytorch-model-recovery/pytorch-model-recovery__rVWxDdK/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:38:05.093590+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 19,
+      "task_id": "query-optimize",
+      "status": "graded",
+      "started_at": "2026-10-05T16:38:15.663313Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-20-query-optimize/query-optimize__ETQ2rNj/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:49:36.098505+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 20,
+      "task_id": "sqlite-db-truncate",
+      "status": "graded",
+      "started_at": "2026-10-05T16:38:50.666321Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-21-sqlite-db-truncate/sqlite-db-truncate__Jfsfkjd/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:39:12.714133+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 21,
+      "task_id": "torch-tensor-parallelism",
+      "status": "graded",
+      "started_at": "2026-10-05T16:39:20.731894Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-22-torch-tensor-parallelism/torch-tensor-parallelism__uX98sDh/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:41:55.474294+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 22,
+      "task_id": "train-fasttext",
+      "status": "graded",
+      "started_at": "2026-10-05T16:42:06.085637Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-23-train-fasttext/train-fasttext__QtThY86/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:45:13.647284+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    },
+    {
+      "index": 23,
+      "task_id": "video-processing",
+      "status": "graded",
+      "started_at": "2026-10-05T16:45:21.272256Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-24-video-processing/video-processing__pCJ7wVW/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:45:50.475545+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    }
+  ],
+  "heartbeat_at": "2026-10-05T16:55:25.753059+00:00",
+  "finished_at": "2026-10-05T16:55:25.753707+00:00"
+}

@@ -1,0 +1,27 @@
+{
+  "captured_at": "2026-10-06T01:32:00.689718+00:00",
+  "status": "temporary_instance_stopped_disks_retained",
+  "files": [
+    {
+      "path": "gcp-final-instance.json",
+      "sha256": "45913dc613c85c4561a7ee9ce412d6c1f72abdce00d2e9b8b9825a8e593c6c7a",
+      "bytes": 30177
+    },
+    {
+      "path": "gcp-final-summary.json",
+      "sha256": "57082cf1a1238f588dd83c836fefcf64ff27001820e353f17ddfc3ae51680d67",
+      "bytes": 754
+    },
+    {
+      "path": "gcp-stop-command.json",
+      "sha256": "e7a3bd8a4f13ce9773f7934047c9925c379c9ecaafd90ea84f3c8cb5ac5004c5",
+      "bytes": 774
+    },
+    {
+      "path": "tencent-model-tunnel.json",
+      "sha256": "28ac3c15640cdb9280cd19a58088cb4ed88682e4ea25be96eb954d9fce7e72d8",
+      "bytes": 2188
+    }
+  ],
+  "production_services_unchanged": true
+}

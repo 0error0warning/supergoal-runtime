@@ -1,0 +1,122 @@
+{
+  "kind": "supplementary_context_policy_analysis",
+  "studies": {
+    "context-reset01": {
+      "complete": true,
+      "audit_errors": [],
+      "runs": 6,
+      "policies": {
+        "minimal_continue": {
+          "runs": 2,
+          "registered_successes": 1,
+          "final_artifact_passes": 2,
+          "physical_requests": 47,
+          "continuation_episodes": 7,
+          "continuation_prompt_bytes": 686,
+          "tokens": {
+            "usage_present": 47,
+            "input_tokens": 264220,
+            "output_tokens": 12149,
+            "total_tokens": 276369,
+            "cached_input_tokens": 189883
+          }
+        },
+        "original_goal": {
+          "runs": 2,
+          "registered_successes": 1,
+          "final_artifact_passes": 1,
+          "physical_requests": 28,
+          "continuation_episodes": 4,
+          "continuation_prompt_bytes": 3604,
+          "tokens": {
+            "usage_present": 28,
+            "input_tokens": 178359,
+            "output_tokens": 8013,
+            "total_tokens": 186372,
+            "cached_input_tokens": 131072
+          }
+        },
+        "durable_state": {
+          "runs": 2,
+          "registered_successes": 1,
+          "final_artifact_passes": 1,
+          "physical_requests": 32,
+          "continuation_episodes": 4,
+          "continuation_prompt_bytes": 7280,
+          "tokens": {
+            "usage_present": 32,
+            "input_tokens": 192183,
+            "output_tokens": 6900,
+            "total_tokens": 199083,
+            "cached_input_tokens": 153408
+          }
+        }
+      },
+      "invalid_efficacy_fixture_seeds": [
+        8602
+      ],
+      "input_sha256": {
+        "context-reset01-registration.json": "621502532b85a32e6defffedf474d212a04ba5e9fe065f051ba62f272d7df0a5",
+        "context-reset01-results.json": "11e63a58feb4055bcdf708b05ce63a07439957c9a5b8eb93b24892353faebf16"
+      }
+    },
+    "context-reset02": {
+      "complete": true,
+      "audit_errors": [],
+      "runs": 6,
+      "policies": {
+        "minimal_continue": {
+          "runs": 2,
+          "registered_successes": 2,
+          "final_artifact_passes": 2,
+          "physical_requests": 33,
+          "continuation_episodes": 4,
+          "continuation_prompt_bytes": 392,
+          "tokens": {
+            "usage_present": 33,
+            "input_tokens": 191339,
+            "output_tokens": 9123,
+            "total_tokens": 200462,
+            "cached_input_tokens": 135296
+          }
+        },
+        "original_goal": {
+          "runs": 2,
+          "registered_successes": 2,
+          "final_artifact_passes": 2,
+          "physical_requests": 26,
+          "continuation_episodes": 4,
+          "continuation_prompt_bytes": 3604,
+          "tokens": {
+            "usage_present": 26,
+            "input_tokens": 140527,
+            "output_tokens": 4552,
+            "total_tokens": 145079,
+            "cached_input_tokens": 89344
+          }
+        },
+        "durable_state": {
+          "runs": 2,
+          "registered_successes": 2,
+          "final_artifact_passes": 2,
+          "physical_requests": 27,
+          "continuation_episodes": 4,
+          "continuation_prompt_bytes": 7280,
+          "tokens": {
+            "usage_present": 27,
+            "input_tokens": 151209,
+            "output_tokens": 5293,
+            "total_tokens": 156502,
+            "cached_input_tokens": 93736
+          }
+        }
+      },
+      "invalid_efficacy_fixture_seeds": [],
+      "input_sha256": {
+        "context-reset02-registration.json": "f51ec5265b79c5b09917093344497ae51ab08511e574761c4202f21840aabe7d",
+        "context-reset02-results.json": "4d16d2723c6bd34868fb1fc0a6176cbb13c971570960c8a50f04d9c4638eabd0"
+      }
+    }
+  },
+  "source_sha256": "0a5a7e241fc322f3edf5d8447c554767a14f433a56821927a7782120615007bc"
+}

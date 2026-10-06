@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-05T20:14:29.995509+00:00",
+  "sha256": {
+    "setup/scb-transfer01-observation-2010.json": "bc3a0441142cd0b04d4ee460b3300beeccb728beab1452ed8e008a7ac1731c81",
+    "setup/scb-transfer01-receipt.json": "2110f64a458f924abe4704ee35e10f35d3ea611eb8c1460c895fea7c50da270e",
+    "setup/mechanism01-receipt.json": "11f74912d4d41bda1523745d29dea2cd3beaf80740736e7a1fbe17d29d208da7",
+    "setup/controller-restart01.json": "c6fd9d399c72bc8c80cf7aab8f01d6dea990e06ad7dc74bdd86c29d8abd310ea"
+  }
+}

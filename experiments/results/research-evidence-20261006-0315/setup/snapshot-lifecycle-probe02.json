@@ -1,0 +1,155 @@
+{
+  "status": "passed",
+  "model_calls": 0,
+  "rows": [
+    {
+      "method": "implicit",
+      "fault": "timeout",
+      "status": "passed",
+      "container_id": "5779b5f6e946471fe13b8a6f9acebe136ae1096bcefa4eaea7ba45aa64dfba53",
+      "observed_exception": "TimeoutError",
+      "state_after_client_failure": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 913853,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T18:47:42.955088845Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "verifier_can_run": false,
+      "verifier_error": "Docker exec exit 1: Error response from daemon: Container 5779b5f6e946471fe13b8a6f9acebe136ae1096bcefa4eaea7ba45aa64dfba53 is paused, unpause the container before exec\n",
+      "late_untrusted_image": "sha256:f64c1f6244b9faac9baafb0b0c37be63585477acc991671635f8036038f8b09e"
+    },
+    {
+      "method": "explicit",
+      "fault": "timeout",
+      "status": "passed",
+      "container_id": "9622e3f89158cfbf8e5709376100ba7cfbaca1b5b13d67e7cd259cb90a219c2f",
+      "capture": {
+        "container_id": "9622e3f89158cfbf8e5709376100ba7cfbaca1b5b13d67e7cd259cb90a219c2f",
+        "image_tag": "sg-snapshot-probe:snapshot-lifecycle-probe02-explicit-timeout",
+        "state_before": {
+          "Status": "running",
+          "Running": true,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 915741,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-05T18:48:01.25314972Z",
+          "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "owns_pause": true,
+        "started_monotonic": 15811.303354398,
+        "status": "capture_failed",
+        "error_type": "TimeoutError",
+        "error": "injected commit client timeout",
+        "state_after": {
+          "Status": "running",
+          "Running": true,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 915741,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-05T18:48:01.25314972Z",
+          "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "state_restored": true,
+        "finished_monotonic": 15812.67833561
+      },
+      "observed_exception": "TimeoutError",
+      "state_after_client_failure": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 915741,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T18:48:01.25314972Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "verifier_output": "VERIFIER_CAN_RUN",
+      "verifier_can_run": true,
+      "late_untrusted_image": "sha256:c20ac541320871c4cf0aaa2f58746afcd3216756bd3f7441e5ae8a1d3dfd44d3"
+    },
+    {
+      "method": "explicit",
+      "fault": "cancel",
+      "status": "passed",
+      "container_id": "ed9be4c8dcb7e6509bd382c6ad596807609c676290aba6b8475a593cede7fd82",
+      "capture": {
+        "container_id": "ed9be4c8dcb7e6509bd382c6ad596807609c676290aba6b8475a593cede7fd82",
+        "image_tag": "sg-snapshot-probe:snapshot-lifecycle-probe02-explicit-cancel",
+        "state_before": {
+          "Status": "running",
+          "Running": true,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 918179,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-05T18:48:23.666130489Z",
+          "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "owns_pause": true,
+        "started_monotonic": 15833.628093649,
+        "status": "capture_failed",
+        "error_type": "CancelledError",
+        "error": "injected caller cancellation",
+        "state_after": {
+          "Status": "running",
+          "Running": true,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 918179,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-05T18:48:23.666130489Z",
+          "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "state_restored": true,
+        "finished_monotonic": 15834.334352293
+      },
+      "observed_exception": "CancelledError",
+      "state_after_client_failure": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 918179,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T18:48:23.666130489Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "verifier_output": "VERIFIER_CAN_RUN",
+      "verifier_can_run": true,
+      "late_untrusted_image": "sha256:9a4fe20b192b937bbe3391b86480f37f5949f68878836c3066d870c8638a13a0"
+    }
+  ],
+  "source_sha256": {
+    "snapshot_lifecycle.py": "3cbf6dc2fd7cf8a87558ba578621ee4c07d973331afd821f70168c819d12f587",
+    "probe_snapshot_lifecycle.py": "593e5e3de816a1e2463510296bbea4bf512110b90586864a15846bb4681aa5b3"
+  },
+  "base_image": "sha256:c83674e1999044d33d751661371b873539f47e5b5c5ca3320c7e0377acca6238",
+  "fault_activations": 3
+}

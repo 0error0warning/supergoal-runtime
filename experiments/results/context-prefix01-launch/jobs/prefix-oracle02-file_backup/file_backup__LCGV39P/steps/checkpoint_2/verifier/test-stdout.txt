@@ -1,0 +1,97 @@
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 10 packages in 14ms
+============================================================================================================= test session starts ==============================================================================================================
+platform linux -- Python 3.12.15, pytest-9.0.3, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.4.1, json-report-1.5.0, metadata-3.1.1, timeout-2.4.0
+timeout: 20.0s
+timeout method: signal
+timeout func_only: False
+collected 50 items
+
+../tests/test_checkpoint_1.py ................................                                                                                                                                                                           [ 64%]
+../tests/test_checkpoint_2.py ..................                                                                                                                                                                                         [100%]
+
+=============================================================================================================== warnings summary ===============================================================================================================
+../tests/test_checkpoint_1.py:92
+  /tests/test_checkpoint_1.py:92: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:114
+  /tests/test_checkpoint_1.py:114: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:136
+  /tests/test_checkpoint_1.py:136: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:97
+  /tests/test_checkpoint_2.py:97: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:119
+  /tests/test_checkpoint_2.py:119: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:141
+  /tests/test_checkpoint_2.py:141: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================================================================================================== PASSES ====================================================================================================================
+----------------------------------------------------------------------------------------------------------------- JSON report ------------------------------------------------------------------------------------------------------------------
+report saved to: /tmp/pytest-report.json
+=========================================================================================================== short test summary info ============================================================================================================
+PASSED ../tests/test_checkpoint_1.py::test_core_cases[daily_due_simple]
+PASSED ../tests/test_checkpoint_1.py::test_extended_core_cases[daily_due_within_duration_no_select]
+PASSED ../tests/test_checkpoint_1.py::test_extended_core_cases[daily_not_due]
+PASSED ../tests/test_checkpoint_1.py::test_extended_core_cases[disabled_job]
+PASSED ../tests/test_checkpoint_1.py::test_extended_core_cases[multiple_jobs_sorting]
+PASSED ../tests/test_checkpoint_1.py::test_extended_core_cases[rel_mount]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[complex_globs]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[daily_multi_trigger]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[default_enabled]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[default_timezone]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[duration_zero_exact]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[exact_duration_boundary]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[exact_now_time]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[first_pattern_wins]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[glob_case_sensitive]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[glob_character_class]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[glob_doublestar_crosses_dirs]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[glob_question_mark]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[mixed_enabled_disabled]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[no_exclusions]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[once_due]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[once_future]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[timestamp_floored]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[timezone_non_utc]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[weekly_multi_trigger]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[weekly_multiple_days]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[weekly_single_day]
+PASSED ../tests/test_checkpoint_1.py::test_hidden_cases[weekly_wrong_day]
+PASSED ../tests/test_checkpoint_1.py::test_error_cases[error_schema_daily_missing_at]
+PASSED ../tests/test_checkpoint_1.py::test_error_cases[error_schema_once_missing_when]
+PASSED ../tests/test_checkpoint_1.py::test_error_cases[error_schema_timezone]
+PASSED ../tests/test_checkpoint_1.py::test_error_cases[error_yaml_parse]
+PASSED ../tests/test_checkpoint_2.py::test_core_cases[full]
+PASSED ../tests/test_checkpoint_2.py::test_extended_core_cases[pack]
+PASSED ../tests/test_checkpoint_2.py::test_extended_core_cases[verify]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[full_no_exclusions]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[full_rel_mount]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[full_with_exclusions]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[multi_strategy_jobs]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[no_strategy]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_default_max]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_exact_fit]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_no_files]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_no_incremental]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_single_large_file]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[pack_tiny_max]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[strategy_sorting]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[verify_complex_globs]
+PASSED ../tests/test_checkpoint_2.py::test_hidden_cases[verify_no_files]
+PASSED ../tests/test_checkpoint_2.py::test_jsonl_output_is_compact_and_newline_terminated
+======================================================================================================== 50 passed, 6 warnings in 5.56s ========================================================================================================
+[shim:pytest-json-report] checkpoint_2: core=1.000 (1/1) isolated=1.000 (18/18) strict=1.000 (50/50) verbosity=0.250 erosion=0.591 has_prior=1 v_up=0 e_up=0

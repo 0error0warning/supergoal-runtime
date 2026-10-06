@@ -1,0 +1,18 @@
+{
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-05T18:39:00.988940191Z",
+    "FinishedAt": "2026-10-05T18:47:43.308401601Z"
+  },
+  "memory_limit_bytes": 8589934592,
+  "container_id": "1cf84eeccf115e54ea55693cde6cdf39977d6831a307dbe0d696fc8b6e38f907",
+  "image_id": "sha256:723f1c1b0dc8d2976a2db4c4a1ca8a98fa7d7725ab99d627e306d5f32647c7b3"
+}

@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-05T12:06:37.440097+00:00",
+  "pid": 379408,
+  "command": [
+    "/usr/bin/python3",
+    "/var/lib/supergoal-lab/study-resume-20261005/await_registered_resume.py",
+    "--root",
+    "/var/lib/supergoal-lab",
+    "--candidate",
+    "/var/lib/supergoal-lab/candidates/public-dev04",
+    "--audit",
+    "/var/lib/supergoal-lab/audits/public-dev04-row16-interruption/receipt.json",
+    "--previous-receipt",
+    "/var/lib/supergoal-lab/setup/public-dev04-rows-02-30.json",
+    "--start",
+    "16",
+    "--stop",
+    "30",
+    "--max-wait-seconds",
+    "21600"
+  ],
+  "source_sha256": "920c058a5b93dfb2ce0a72427a2f6a3d98c0f69ebad0360b9a9844a74d3d74c9",
+  "new_model_trials_started_by_launch": 0
+}

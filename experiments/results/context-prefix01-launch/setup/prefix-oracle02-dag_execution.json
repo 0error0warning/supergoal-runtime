@@ -1,0 +1,25 @@
+{
+  "job_name": "prefix-oracle02-dag_execution",
+  "jobs_dir": "/var/lib/supergoal-lab/jobs",
+  "n_concurrent_trials": 1,
+  "environment": {
+    "type": "docker",
+    "delete": true
+  },
+  "agents": [
+    {
+      "import_path": "prefix_agent:PrefixOracleAgent",
+      "kwargs": {
+        "prefix_path": "/var/lib/supergoal-lab/prefix-inputs01/dag_execution/prefix.json",
+        "prefix_sha256": "ea9f9e3e99b30fcb73d09adcf68685197bf4d6ba7a9cc485e17d58a6f652d5ee",
+        "task_dir": "/var/lib/supergoal-lab/tasks/context-prefix01/dag_execution",
+        "agent_timeout_sec": 1800
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "path": "/var/lib/supergoal-lab/tasks/context-prefix01/dag_execution"
+    }
+  ]
+}

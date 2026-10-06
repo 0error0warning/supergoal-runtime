@@ -1,0 +1,4381 @@
+{
+  "schema": 1,
+  "collected_at": "2026-10-05T17:03:46.315769+00:00",
+  "host": "supergoal-gcp",
+  "raw_scores_unchanged": true,
+  "trials": [
+    {
+      "job_name": "tb-public-parallel24-v1-001-bn-fit-modify-native",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native/bn-fit-modify__Gate7VV/result.json",
+      "result": {
+        "id": "f36bf4d8-c616-4f88-a47b-d8f22e7699e3",
+        "task_name": "terminal-bench/bn-fit-modify",
+        "trial_name": "bn-fit-modify__Gate7VV",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native/bn-fit-modify__Gate7VV",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify"
+        },
+        "source": null,
+        "task_checksum": "454bfa8137cdac00b085ad27568437e1031ecaa2456669e5632f11aeb96a5c62",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "bn-fit-modify__Gate7VV",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "native",
+              "max_requests": 192,
+              "max_episodes": 6,
+              "budget_seconds": 3600.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "e8bcb413-52f6-466e-968d-f3ad97a55070",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev05",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 60339,
+          "n_cache_tokens": 47481,
+          "n_output_tokens": 2884,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "native",
+            "control_id": "8756feb38c934b49a3b8782c002fd268",
+            "study_status": "agent_stopped",
+            "physical_requests": 10,
+            "adapter": "public-dev05"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T16:52:12.331896Z",
+        "finished_at": "2026-10-05T16:54:41.998929Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T16:52:12.351216Z",
+          "finished_at": "2026-10-05T16:52:13.338770Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T16:52:13.338816Z",
+          "finished_at": "2026-10-05T16:52:13.521999Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T16:52:13.522118Z",
+          "finished_at": "2026-10-05T16:54:14.614638Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T16:54:14.908448Z",
+          "finished_at": "2026-10-05T16:54:30.576383Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:8 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2164 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2135 kB]\nGet:11 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1693 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:16 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:17 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:18 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:19 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nFetched 33.2 MB in 2s (15.2 MB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  libcurl4t64\nThe following packages will be upgraded:\n  curl libcurl4t64\n2 upgraded, 0 newly installed, 0 to remove and 112 not upgraded.\nNeed to get 570 kB of archives.\nAfter this operation, 4096 B of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 570 kB in 0s (1646 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 16778 files and directories currently installed.)\nPreparing to unpack .../curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nPreparing to unpack .../libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\nDownloading pandas (11.5MiB)\nDownloading numpy (15.9MiB)\nDownloading scipy (33.5MiB)\n Downloading pygments\n Downloading numpy\n Downloading pandas\n Downloading scipy\nInstalled 13 packages in 674ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 9 items\n\n../tests/test_outputs.py .........                                       [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_bn_sample_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_learned_dag_structure\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_intervened__data_structure\nPASSED ../tests/test_outputs.py::test_sampled_csv_col_names\nPASSED ../tests/test_outputs.py::test_sampled_data\n============================== 9 passed in 3.64s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-public-parallel24-v1-002-bn-fit-modify-sg_v2",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2/bn-fit-modify__thtmyL2/result.json",
+      "result": {
+        "id": "a7bf7aa6-6a47-49e7-b40c-0bcfb6e3ae02",
+        "task_name": "terminal-bench/bn-fit-modify",
+        "trial_name": "bn-fit-modify__thtmyL2",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2/bn-fit-modify__thtmyL2",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify"
+        },
+        "source": null,
+        "task_checksum": "454bfa8137cdac00b085ad27568437e1031ecaa2456669e5632f11aeb96a5c62",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "bn-fit-modify__thtmyL2",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "sg_v2",
+              "max_requests": 192,
+              "max_episodes": 6,
+              "budget_seconds": 3600.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "774396b2-671b-4319-8ec8-de5c774da3cc",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev05",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 136786,
+          "n_cache_tokens": 98224,
+          "n_output_tokens": 6503,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "sg_v2",
+            "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+            "study_status": "succeeded",
+            "physical_requests": 17,
+            "adapter": "public-dev05"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T16:55:31.576850Z",
+        "finished_at": "2026-10-05T16:58:58.546808Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T16:55:31.598123Z",
+          "finished_at": "2026-10-05T16:55:32.604637Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T16:55:32.604697Z",
+          "finished_at": "2026-10-05T16:55:32.800506Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T16:55:32.800614Z",
+          "finished_at": "2026-10-05T16:58:26.173348Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T16:58:26.453902Z",
+          "finished_at": "2026-10-05T16:58:45.862090Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:3 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nGet:4 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:5 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:6 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:8 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2135 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1693 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2164 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:18 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:19 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nFetched 33.2 MB in 3s (11.7 MB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  libcurl4t64\nThe following packages will be upgraded:\n  curl libcurl4t64\n2 upgraded, 0 newly installed, 0 to remove and 112 not upgraded.\nNeed to get 570 kB of archives.\nAfter this operation, 4096 B of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 570 kB in 0s (1561 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 16778 files and directories currently installed.)\nPreparing to unpack .../curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nPreparing to unpack .../libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\nDownloading numpy (15.9MiB)\nDownloading scipy (33.5MiB)\nDownloading pandas (11.5MiB)\n Downloading pygments\n Downloading numpy\n Downloading scipy\n Downloading pandas\nInstalled 13 packages in 101ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 9 items\n\n../tests/test_outputs.py .........                                       [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_bn_sample_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_learned_dag_structure\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_intervened__data_structure\nPASSED ../tests/test_outputs.py::test_sampled_csv_col_names\nPASSED ../tests/test_outputs.py::test_sampled_data\n============================== 9 passed in 4.45s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal/bn-fit-modify__9okgreZ/result.json",
+      "result": {
+        "id": "0150fc5c-b080-4da4-8330-ad38c94d0262",
+        "task_name": "terminal-bench/bn-fit-modify",
+        "trial_name": "bn-fit-modify__9okgreZ",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal/bn-fit-modify__9okgreZ",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify"
+        },
+        "source": null,
+        "task_checksum": "454bfa8137cdac00b085ad27568437e1031ecaa2456669e5632f11aeb96a5c62",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "bn-fit-modify__9okgreZ",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "repeat_goal",
+              "max_requests": 192,
+              "max_episodes": 6,
+              "budget_seconds": 3600.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "732b59cf-000b-4f93-9ceb-d4c14b5c71b6",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev05",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 147208,
+          "n_cache_tokens": 74895,
+          "n_output_tokens": 4072,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "repeat_goal",
+            "control_id": "4cc232836c5945baae3581d2b90d256f",
+            "study_status": "repeat_round_limit",
+            "physical_requests": 20,
+            "adapter": "public-dev05"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T16:53:24.870966Z",
+        "finished_at": "2026-10-05T16:56:36.877436Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T16:53:24.890794Z",
+          "finished_at": "2026-10-05T16:53:25.837109Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T16:53:25.837155Z",
+          "finished_at": "2026-10-05T16:53:26.013371Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T16:53:26.013492Z",
+          "finished_at": "2026-10-05T16:56:06.895097Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T16:56:07.213187Z",
+          "finished_at": "2026-10-05T16:56:25.509010Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:3 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:7 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:8 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:9 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2135 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1693 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2164 kB]\nGet:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:18 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:19 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nFetched 33.2 MB in 4s (7995 kB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  libcurl4t64\nThe following packages will be upgraded:\n  curl libcurl4t64\n2 upgraded, 0 newly installed, 0 to remove and 112 not upgraded.\nNeed to get 570 kB of archives.\nAfter this operation, 4096 B of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 570 kB in 0s (1364 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 16778 files and directories currently installed.)\nPreparing to unpack .../curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nPreparing to unpack .../libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\nDownloading numpy (15.9MiB)\nDownloading pandas (11.5MiB)\nDownloading scipy (33.5MiB)\n Downloading pygments\n Downloading numpy\n Downloading pandas\n Downloading scipy\nInstalled 13 packages in 586ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 9 items\n\n../tests/test_outputs.py .........                                       [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_bn_sample_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_learned_dag_structure\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_intervened__data_structure\nPASSED ../tests/test_outputs.py::test_sampled_csv_col_names\nPASSED ../tests/test_outputs.py::test_sampled_data\n============================== 9 passed in 3.34s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context/bn-fit-modify__cWPux9a/result.json",
+      "result": {
+        "id": "99dfd5ca-d2e7-45cc-81d9-2df53ac5a10b",
+        "task_name": "terminal-bench/bn-fit-modify",
+        "trial_name": "bn-fit-modify__cWPux9a",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context/bn-fit-modify__cWPux9a",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify"
+        },
+        "source": null,
+        "task_checksum": "454bfa8137cdac00b085ad27568437e1031ecaa2456669e5632f11aeb96a5c62",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "bn-fit-modify__cWPux9a",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "sg_no_context",
+              "max_requests": 192,
+              "max_episodes": 6,
+              "budget_seconds": 3600.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "bf064b0d-8f71-4f40-8b61-de80972e47f4",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev05",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 110444,
+          "n_cache_tokens": 86982,
+          "n_output_tokens": 4150,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "sg_no_context",
+            "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+            "study_status": "succeeded",
+            "physical_requests": 18,
+            "adapter": "public-dev05"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T16:55:31.576642Z",
+        "finished_at": "2026-10-05T16:59:11.353105Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T16:55:31.597657Z",
+          "finished_at": "2026-10-05T16:55:32.582070Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T16:55:32.582133Z",
+          "finished_at": "2026-10-05T16:55:32.779388Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T16:55:32.779504Z",
+          "finished_at": "2026-10-05T16:58:44.515061Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T16:58:44.816582Z",
+          "finished_at": "2026-10-05T16:59:00.020807Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:8 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2135 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2164 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1693 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:14 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:16 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:17 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:18 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:19 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nFetched 33.2 MB in 2s (14.7 MB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  libcurl4t64\nThe following packages will be upgraded:\n  curl libcurl4t64\n2 upgraded, 0 newly installed, 0 to remove and 112 not upgraded.\nNeed to get 570 kB of archives.\nAfter this operation, 4096 B of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 570 kB in 1s (624 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 16778 files and directories currently installed.)\nPreparing to unpack .../curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nPreparing to unpack .../libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading numpy (15.9MiB)\nDownloading pandas (11.5MiB)\nDownloading pygments (1.2MiB)\nDownloading scipy (33.5MiB)\n Downloading pygments\n Downloading numpy\n Downloading pandas\n Downloading scipy\nInstalled 13 packages in 485ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 9 items\n\n../tests/test_outputs.py .........                                       [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_bn_sample_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_learned_dag_structure\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_intervened__data_structure\nPASSED ../tests/test_outputs.py::test_sampled_csv_col_names\nPASSED ../tests/test_outputs.py::test_sampled_data\n============================== 9 passed in 3.39s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review/bn-fit-modify__GGDQwCg/result.json",
+      "result": {
+        "id": "5e0aeee2-9244-4f46-8fab-65d4182244e4",
+        "task_name": "terminal-bench/bn-fit-modify",
+        "trial_name": "bn-fit-modify__GGDQwCg",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review/bn-fit-modify__GGDQwCg",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify"
+        },
+        "source": null,
+        "task_checksum": "454bfa8137cdac00b085ad27568437e1031ecaa2456669e5632f11aeb96a5c62",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/bn-fit-modify",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "bn-fit-modify__GGDQwCg",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "sg_no_review",
+              "max_requests": 192,
+              "max_episodes": 6,
+              "budget_seconds": 3600.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "53021fad-ccdb-4319-b3b2-99f13edac1ad",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev05",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 40747,
+          "n_cache_tokens": 30068,
+          "n_output_tokens": 1789,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "sg_no_review",
+            "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+            "study_status": "unverified_done",
+            "physical_requests": 8,
+            "adapter": "public-dev05"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T16:59:10.160598Z",
+        "finished_at": "2026-10-05T17:01:02.771996Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T16:59:10.180105Z",
+          "finished_at": "2026-10-05T16:59:11.279902Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T16:59:11.279947Z",
+          "finished_at": "2026-10-05T16:59:11.484363Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T16:59:11.484480Z",
+          "finished_at": "2026-10-05T17:00:36.535639Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T17:00:36.811069Z",
+          "finished_at": "2026-10-05T17:00:50.279909Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:8 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2135 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2164 kB]\nGet:11 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1693 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:17 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nGet:18 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:19 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nFetched 33.2 MB in 2s (15.5 MB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  libcurl4t64\nThe following packages will be upgraded:\n  curl libcurl4t64\n2 upgraded, 0 newly installed, 0 to remove and 112 not upgraded.\nNeed to get 570 kB of archives.\nAfter this operation, 4096 B of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 570 kB in 0s (1739 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 16778 files and directories currently installed.)\nPreparing to unpack .../curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nPreparing to unpack .../libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) over (8.5.0-2ubuntu10.6) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\nDownloading numpy (15.9MiB)\nDownloading scipy (33.5MiB)\nDownloading pandas (11.5MiB)\n Downloading pygments\n Downloading numpy\n Downloading pandas\n Downloading scipy\nInstalled 13 packages in 488ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 9 items\n\n../tests/test_outputs.py .........                                       [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_bn_sample_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_learned_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_learned_dag_structure\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_exists\nPASSED ../tests/test_outputs.py::test_intervened_dag_structure_csv_col_names\nPASSED ../tests/test_outputs.py::test_intervened__data_structure\nPASSED ../tests/test_outputs.py::test_sampled_csv_col_names\nPASSED ../tests/test_outputs.py::test_sampled_data\n============================== 9 passed in 2.95s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    }
+  ],
+  "setup": {
+    "public-parallel24-v1-rows-000-120.json": {
+      "status": "running",
+      "started_at": "2026-10-05T16:52:11.553308+00:00",
+      "rows": [
+        {
+          "index": 0,
+          "task_id": "bn-fit-modify",
+          "arm": "native",
+          "status": "graded",
+          "started_at": "2026-10-05T16:52:12.331896Z",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native",
+          "harbor_pid": 251832,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          },
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native/bn-fit-modify__Gate7VV/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "native",
+            "control_id": "8756feb38c934b49a3b8782c002fd268",
+            "study_status": "agent_stopped",
+            "physical_requests": 10,
+            "adapter": "public-dev05"
+          },
+          "n_input_tokens": 60339,
+          "n_output_tokens": 2884,
+          "n_cache_tokens": 47481,
+          "finished_at": "2026-10-05T16:54:49.557584+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 1,
+          "task_id": "bn-fit-modify",
+          "arm": "sg_v2",
+          "status": "graded",
+          "started_at": "2026-10-05T16:55:31.576850Z",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2",
+          "harbor_pid": 263087,
+          "reservation": {
+            "cpus": 2,
+            "memory_mb": 4096
+          },
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2/bn-fit-modify__thtmyL2/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "sg_v2",
+            "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+            "study_status": "succeeded",
+            "physical_requests": 17,
+            "adapter": "public-dev05"
+          },
+          "n_input_tokens": 136786,
+          "n_output_tokens": 6503,
+          "n_cache_tokens": 98224,
+          "finished_at": "2026-10-05T16:59:04.365716+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 2,
+          "task_id": "bn-fit-modify",
+          "arm": "repeat_goal",
+          "status": "graded",
+          "started_at": "2026-10-05T16:53:24.870966Z",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal",
+          "harbor_pid": 255655,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          },
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal/bn-fit-modify__9okgreZ/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "repeat_goal",
+            "control_id": "4cc232836c5945baae3581d2b90d256f",
+            "study_status": "repeat_round_limit",
+            "physical_requests": 20,
+            "adapter": "public-dev05"
+          },
+          "n_input_tokens": 147208,
+          "n_output_tokens": 4072,
+          "n_cache_tokens": 74895,
+          "finished_at": "2026-10-05T16:56:44.080530+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 3,
+          "task_id": "bn-fit-modify",
+          "arm": "sg_no_context",
+          "status": "graded",
+          "started_at": "2026-10-05T16:55:31.576642Z",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context",
+          "harbor_pid": 263100,
+          "reservation": {
+            "cpus": 2,
+            "memory_mb": 4096
+          },
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context/bn-fit-modify__cWPux9a/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "sg_no_context",
+            "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+            "study_status": "succeeded",
+            "physical_requests": 18,
+            "adapter": "public-dev05"
+          },
+          "n_input_tokens": 110444,
+          "n_output_tokens": 4150,
+          "n_cache_tokens": 86982,
+          "finished_at": "2026-10-05T16:59:14.749868+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 4,
+          "task_id": "bn-fit-modify",
+          "arm": "sg_no_review",
+          "status": "graded",
+          "started_at": "2026-10-05T16:59:10.160598Z",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review",
+          "harbor_pid": 275271,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          },
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review/bn-fit-modify__GGDQwCg/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "sg_no_review",
+            "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+            "study_status": "unverified_done",
+            "physical_requests": 8,
+            "adapter": "public-dev05"
+          },
+          "n_input_tokens": 40747,
+          "n_output_tokens": 1789,
+          "n_cache_tokens": 30068,
+          "finished_at": "2026-10-05T17:01:08.299631+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 5,
+          "task_id": "circuit-fibsqrt",
+          "arm": "sg_v2",
+          "status": "running",
+          "started_at": "2026-10-05T16:59:19.775673+00:00",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-006-circuit-fibsqrt-sg_v2",
+          "harbor_pid": 276361,
+          "reservation": {
+            "cpus": 2,
+            "memory_mb": 4096
+          }
+        },
+        {
+          "index": 6,
+          "task_id": "circuit-fibsqrt",
+          "arm": "repeat_goal",
+          "status": "running",
+          "started_at": "2026-10-05T16:59:09.411419+00:00",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-007-circuit-fibsqrt-repeat_goal",
+          "harbor_pid": 275284,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          }
+        },
+        {
+          "index": 7,
+          "task_id": "circuit-fibsqrt",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 8,
+          "task_id": "circuit-fibsqrt",
+          "arm": "sg_no_review",
+          "status": "running",
+          "started_at": "2026-10-05T16:59:40.490263+00:00",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-009-circuit-fibsqrt-sg_no_review",
+          "harbor_pid": 277787,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          }
+        },
+        {
+          "index": 9,
+          "task_id": "circuit-fibsqrt",
+          "arm": "native",
+          "status": "running",
+          "started_at": "2026-10-05T17:01:23.618517+00:00",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-010-circuit-fibsqrt-native",
+          "harbor_pid": 283342,
+          "reservation": {
+            "cpus": 1,
+            "memory_mb": 2048
+          }
+        },
+        {
+          "index": 10,
+          "task_id": "compile-compcert",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 11,
+          "task_id": "compile-compcert",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 12,
+          "task_id": "compile-compcert",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 13,
+          "task_id": "compile-compcert",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 14,
+          "task_id": "compile-compcert",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 15,
+          "task_id": "constraints-scheduling",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 16,
+          "task_id": "constraints-scheduling",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 17,
+          "task_id": "constraints-scheduling",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 18,
+          "task_id": "constraints-scheduling",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 19,
+          "task_id": "constraints-scheduling",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 20,
+          "task_id": "custom-memory-heap-crash",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 21,
+          "task_id": "custom-memory-heap-crash",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 22,
+          "task_id": "custom-memory-heap-crash",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 23,
+          "task_id": "custom-memory-heap-crash",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 24,
+          "task_id": "custom-memory-heap-crash",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 25,
+          "task_id": "extract-elf",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 26,
+          "task_id": "extract-elf",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 27,
+          "task_id": "extract-elf",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 28,
+          "task_id": "extract-elf",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 29,
+          "task_id": "extract-elf",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 30,
+          "task_id": "feal-linear-cryptanalysis",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 31,
+          "task_id": "feal-linear-cryptanalysis",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 32,
+          "task_id": "feal-linear-cryptanalysis",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 33,
+          "task_id": "feal-linear-cryptanalysis",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 34,
+          "task_id": "feal-linear-cryptanalysis",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 35,
+          "task_id": "financial-document-processor",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 36,
+          "task_id": "financial-document-processor",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 37,
+          "task_id": "financial-document-processor",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 38,
+          "task_id": "financial-document-processor",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 39,
+          "task_id": "financial-document-processor",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 40,
+          "task_id": "git-leak-recovery",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 41,
+          "task_id": "git-leak-recovery",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 42,
+          "task_id": "git-leak-recovery",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 43,
+          "task_id": "git-leak-recovery",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 44,
+          "task_id": "git-leak-recovery",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 45,
+          "task_id": "install-windows-3.11",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 46,
+          "task_id": "install-windows-3.11",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 47,
+          "task_id": "install-windows-3.11",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 48,
+          "task_id": "install-windows-3.11",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 49,
+          "task_id": "install-windows-3.11",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 50,
+          "task_id": "large-scale-text-editing",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 51,
+          "task_id": "large-scale-text-editing",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 52,
+          "task_id": "large-scale-text-editing",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 53,
+          "task_id": "large-scale-text-editing",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 54,
+          "task_id": "large-scale-text-editing",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 55,
+          "task_id": "mcmc-sampling-stan",
+          "arm": "sg_v2",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 56,
+          "task_id": "mcmc-sampling-stan",
+          "arm": "repeat_goal",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 57,
+          "task_id": "mcmc-sampling-stan",
+          "arm": "sg_no_context",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 58,
+          "task_id": "mcmc-sampling-stan",
+          "arm": "sg_no_review",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 59,
+          "task_id": "mcmc-sampling-stan",
+          "arm": "native",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 60,
+          "task_id": "model-extraction-relu-logits",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 61,
+          "task_id": "model-extraction-relu-logits",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 62,
+          "task_id": "model-extraction-relu-logits",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 63,
+          "task_id": "model-extraction-relu-logits",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 64,
+          "task_id": "model-extraction-relu-logits",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 65,
+          "task_id": "modernize-scientific-stack",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 66,
+          "task_id": "modernize-scientific-stack",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 67,
+          "task_id": "modernize-scientific-stack",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 68,
+          "task_id": "modernize-scientific-stack",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 69,
+          "task_id": "modernize-scientific-stack",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 70,
+          "task_id": "nginx-request-logging",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 71,
+          "task_id": "nginx-request-logging",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 72,
+          "task_id": "nginx-request-logging",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 73,
+          "task_id": "nginx-request-logging",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 74,
+          "task_id": "nginx-request-logging",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 75,
+          "task_id": "password-recovery",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 76,
+          "task_id": "password-recovery",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 77,
+          "task_id": "password-recovery",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 78,
+          "task_id": "password-recovery",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 79,
+          "task_id": "password-recovery",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 80,
+          "task_id": "portfolio-optimization",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 81,
+          "task_id": "portfolio-optimization",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 82,
+          "task_id": "portfolio-optimization",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 83,
+          "task_id": "portfolio-optimization",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 84,
+          "task_id": "portfolio-optimization",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 85,
+          "task_id": "protein-assembly",
+          "arm": "repeat_goal",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 86,
+          "task_id": "protein-assembly",
+          "arm": "sg_no_context",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 87,
+          "task_id": "protein-assembly",
+          "arm": "sg_no_review",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 88,
+          "task_id": "protein-assembly",
+          "arm": "native",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 89,
+          "task_id": "protein-assembly",
+          "arm": "sg_v2",
+          "status": "environment_unavailable"
+        },
+        {
+          "index": 90,
+          "task_id": "pytorch-model-recovery",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 91,
+          "task_id": "pytorch-model-recovery",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 92,
+          "task_id": "pytorch-model-recovery",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 93,
+          "task_id": "pytorch-model-recovery",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 94,
+          "task_id": "pytorch-model-recovery",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 95,
+          "task_id": "query-optimize",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 96,
+          "task_id": "query-optimize",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 97,
+          "task_id": "query-optimize",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 98,
+          "task_id": "query-optimize",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 99,
+          "task_id": "query-optimize",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 100,
+          "task_id": "sqlite-db-truncate",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 101,
+          "task_id": "sqlite-db-truncate",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 102,
+          "task_id": "sqlite-db-truncate",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 103,
+          "task_id": "sqlite-db-truncate",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 104,
+          "task_id": "sqlite-db-truncate",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 105,
+          "task_id": "torch-tensor-parallelism",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 106,
+          "task_id": "torch-tensor-parallelism",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 107,
+          "task_id": "torch-tensor-parallelism",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 108,
+          "task_id": "torch-tensor-parallelism",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 109,
+          "task_id": "torch-tensor-parallelism",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 110,
+          "task_id": "train-fasttext",
+          "arm": "repeat_goal",
+          "status": "pending"
+        },
+        {
+          "index": 111,
+          "task_id": "train-fasttext",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 112,
+          "task_id": "train-fasttext",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 113,
+          "task_id": "train-fasttext",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 114,
+          "task_id": "train-fasttext",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 115,
+          "task_id": "video-processing",
+          "arm": "sg_no_context",
+          "status": "pending"
+        },
+        {
+          "index": 116,
+          "task_id": "video-processing",
+          "arm": "sg_no_review",
+          "status": "pending"
+        },
+        {
+          "index": 117,
+          "task_id": "video-processing",
+          "arm": "native",
+          "status": "pending"
+        },
+        {
+          "index": 118,
+          "task_id": "video-processing",
+          "arm": "sg_v2",
+          "status": "pending"
+        },
+        {
+          "index": 119,
+          "task_id": "video-processing",
+          "arm": "repeat_goal",
+          "status": "pending"
+        }
+      ],
+      "automatic_trial_retries": 0,
+      "registration_sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+      "operator_sha256": {
+        "run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+        "analyze_public.py": "e95068f9ad5e9d10258f05d17554728d7935967b8dd2259173787cf35476f210",
+        "finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+        "resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+        "run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+        "collect_public.py": "5f93e29fb58f1d20de953b552c26bf14d8e9e7b59d1c0e03758e99908be47bd2"
+      },
+      "shared_pool": {
+        "cpus": 6,
+        "memory_mb": 49152,
+        "max_workers": 6
+      },
+      "environment_lock_sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+      "dispatch_policy": "Per-task reference gate; reserve all four oracle CPUs until preflight finishes",
+      "heartbeat_at": "2026-10-05T17:03:42.752768+00:00"
+    },
+    "tb-oracle-parallel24-receipt.json": {
+      "status": "complete_with_unavailable_tasks",
+      "started_at": "2026-10-05T16:08:23.043883+00:00",
+      "model_calls": 0,
+      "selection_sha256": "ce1e8e18497a6f9f3ef3868164a79dd4297aaa215e6b7dc44db66a0d5281e051",
+      "max_concurrent_oracles": 2,
+      "cpu_pool": 4,
+      "rows": [
+        {
+          "index": 0,
+          "task_id": "bn-fit-modify",
+          "status": "graded",
+          "started_at": "2026-10-05T16:12:39.747812Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-01-bn-fit-modify/bn-fit-modify__s3yWkfq/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:13:47.761412+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 1,
+          "task_id": "circuit-fibsqrt",
+          "status": "graded",
+          "started_at": "2026-10-05T16:12:39.748186Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-02-circuit-fibsqrt/circuit-fibsqrt__ALzM4SJ/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:13:56.803324+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 2,
+          "task_id": "compile-compcert",
+          "status": "graded",
+          "started_at": "2026-10-05T16:13:54.838217Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-03-compile-compcert/compile-compcert__CDmA4Fx/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:38:42.935223+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 3,
+          "task_id": "constraints-scheduling",
+          "status": "graded",
+          "started_at": "2026-10-05T16:14:04.849373Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-04-constraints-scheduling/constraints-scheduling__Q4XJrn4/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:14:33.429338+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 4,
+          "task_id": "custom-memory-heap-crash",
+          "status": "graded",
+          "started_at": "2026-10-05T16:14:39.856382Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-05-custom-memory-heap-crash/custom-memory-heap-crash__gAEANzS/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:15:15.727063+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 5,
+          "task_id": "extract-elf",
+          "status": "graded",
+          "started_at": "2026-10-05T16:15:24.872148Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-06-extract-elf/extract-elf__BdsZoYq/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:15:50.236138+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 6,
+          "task_id": "feal-linear-cryptanalysis",
+          "status": "graded",
+          "started_at": "2026-10-05T16:15:59.860609Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-07-feal-linear-cryptanalysis/feal-linear-cryptanalysis__PDKoeGd/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:16:21.829524+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 7,
+          "task_id": "financial-document-processor",
+          "status": "graded",
+          "started_at": "2026-10-05T16:16:29.956104Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-08-financial-document-processor/financial-document-processor__X7pPSNL/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:17:51.759830+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 8,
+          "task_id": "git-leak-recovery",
+          "status": "graded",
+          "started_at": "2026-10-05T16:17:59.998753Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-09-git-leak-recovery/git-leak-recovery__ddkgK7s/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:18:29.190861+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 9,
+          "task_id": "install-windows-3.11",
+          "status": "graded",
+          "started_at": "2026-10-05T16:18:35.050304Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-10-install-windows-3.11/install-windows-3.11__zGefp8K/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:25:56.629251+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 10,
+          "task_id": "large-scale-text-editing",
+          "status": "graded",
+          "started_at": "2026-10-05T16:26:05.131262Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-11-large-scale-text-editing/large-scale-text-editing__uvZGygt/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:28:01.588029+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 11,
+          "task_id": "mcmc-sampling-stan",
+          "status": "graded",
+          "started_at": "2026-10-05T16:49:46.365228Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-12-mcmc-sampling-stan/mcmc-sampling-stan__yYwH4GC/result.json",
+          "raw_rewards": {
+            "reward": 0.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:55:23.045183+00:00",
+          "exit_code": 0,
+          "oracle_passed": false
+        },
+        {
+          "index": 12,
+          "task_id": "model-extraction-relu-logits",
+          "status": "graded",
+          "started_at": "2026-10-05T16:28:10.167296Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-13-model-extraction-relu-logits/model-extraction-relu-logits__NdA28gf/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:28:41.588609+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 13,
+          "task_id": "modernize-scientific-stack",
+          "status": "graded",
+          "started_at": "2026-10-05T16:28:50.170860Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-14-modernize-scientific-stack/modernize-scientific-stack__FwW4SxR/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:29:15.400974+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 14,
+          "task_id": "nginx-request-logging",
+          "status": "graded",
+          "started_at": "2026-10-05T16:29:25.258139Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-15-nginx-request-logging/nginx-request-logging__vRm4eou/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:30:26.398212+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 15,
+          "task_id": "password-recovery",
+          "status": "graded",
+          "started_at": "2026-10-05T16:30:35.434010Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-16-password-recovery/password-recovery__XeAGPWh/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:31:00.817108+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 16,
+          "task_id": "portfolio-optimization",
+          "status": "graded",
+          "started_at": "2026-10-05T16:31:10.364473Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-17-portfolio-optimization/portfolio-optimization__ycppRNK/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:33:58.915999+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 17,
+          "task_id": "protein-assembly",
+          "status": "graded",
+          "started_at": "2026-10-05T16:34:05.386838Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-18-protein-assembly/protein-assembly__h5wQyQ8/result.json",
+          "raw_rewards": {
+            "reward": 0.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:36:27.603093+00:00",
+          "exit_code": 0,
+          "oracle_passed": false
+        },
+        {
+          "index": 18,
+          "task_id": "pytorch-model-recovery",
+          "status": "graded",
+          "started_at": "2026-10-05T16:36:35.528504Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-19-pytorch-model-recovery/pytorch-model-recovery__rVWxDdK/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:38:05.093590+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 19,
+          "task_id": "query-optimize",
+          "status": "graded",
+          "started_at": "2026-10-05T16:38:15.663313Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-20-query-optimize/query-optimize__ETQ2rNj/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:49:36.098505+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 20,
+          "task_id": "sqlite-db-truncate",
+          "status": "graded",
+          "started_at": "2026-10-05T16:38:50.666321Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-21-sqlite-db-truncate/sqlite-db-truncate__Jfsfkjd/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:39:12.714133+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 21,
+          "task_id": "torch-tensor-parallelism",
+          "status": "graded",
+          "started_at": "2026-10-05T16:39:20.731894Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-22-torch-tensor-parallelism/torch-tensor-parallelism__uX98sDh/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:41:55.474294+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 22,
+          "task_id": "train-fasttext",
+          "status": "graded",
+          "started_at": "2026-10-05T16:42:06.085637Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-23-train-fasttext/train-fasttext__QtThY86/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:45:13.647284+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        },
+        {
+          "index": 23,
+          "task_id": "video-processing",
+          "status": "graded",
+          "started_at": "2026-10-05T16:45:21.272256Z",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-24-video-processing/video-processing__pCJ7wVW/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "finished_at": "2026-10-05T16:45:50.475545+00:00",
+          "exit_code": 0,
+          "oracle_passed": true
+        }
+      ],
+      "heartbeat_at": "2026-10-05T16:55:25.753059+00:00",
+      "finished_at": "2026-10-05T16:55:25.753707+00:00"
+    },
+    "tb-oracle-public-gcp01-receipt.json": {
+      "started_at": "2026-10-05T15:15:11.173106+00:00",
+      "model_calls": 0,
+      "status": "complete",
+      "rows": [
+        {
+          "task_id": "configure-git-webserver",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:15:12.722750Z",
+          "finished_at": "2026-10-05T15:16:02.010705Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "fix-code-vulnerability",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-02-fix-code-vulnerability/fix-code-vulnerability__nWaVtTS/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:08.330255Z",
+          "finished_at": "2026-10-05T15:16:23.268169Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "sparql-university",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-03-sparql-university/sparql-university__KT2DvDz/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:27.020873Z",
+          "finished_at": "2026-10-05T15:16:52.509558Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "write-compressor",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:56.262809Z",
+          "finished_at": "2026-10-05T15:18:12.571187Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "dna-assembly",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:18:16.331730Z",
+          "finished_at": "2026-10-05T15:18:59.186476Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "llm-inference-batching-scheduler",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-06-llm-inference-batching-scheduler/llm-inference-batching-scheduler__LtpQoui/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:19:02.868135Z",
+          "finished_at": "2026-10-05T15:19:26.491895Z",
+          "exit_code": 0
+        }
+      ],
+      "finished_at": "2026-10-05T15:19:29.487884+00:00"
+    }
+  },
+  "model_runs": {
+    "8756feb38c934b49a3b8782c002fd268": {
+      "report": {
+        "arm": "native",
+        "status": "agent_stopped",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev05",
+        "max_requests": 192,
+        "budget_seconds": 3600.0,
+        "original_instruction_sha256": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "control_id": "8756feb38c934b49a3b8782c002fd268",
+        "official_verifier_visible": false,
+        "last_executor_claim": "Done. Summary:\n\n**DAG recovery:** Exhaustive search over all 6-edge DAGs with U root, scored by Gaussian linear-model BIC. Best score shared by a Markov-equivalent set; ambiguous directions resolved per your tie-break rule (earlier letter = child), giving:\n- U→Y, U→R, U→D, U→M, Y→D, R→M → `/app/learned_dag.csv`\n\n**Fitting:** Each node fit as linear regression on its parents with Gaussian noise (matches the data well — it's clearly linear-Gaussian).\n\n**Intervention do(Y=0):** Removed the incoming edge U→Y; Y is set to exactly 0. → `/app/intervened_dag.csv` (5 edges)\n\n**Sampling:** 10k ancestral samples with Y=0 → `/app/final_bn_sample.csv`. Sanity check: Y column is all 0.0; D's mean dropped to ~15.6 (it loses the Y contribution), R, M, U distributions unchanged.",
+        "artifact_image_id": "sha256:f9683ac39143ee634e670befae72d540a017c23d645cf7864a968dc24288a416",
+        "artifact_image_tag": "sg-artifact:8756feb38c934b49a3b8782c002fd268",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 252285,
+            "exit_code": 0,
+            "seconds": 112.50707410299947,
+            "model_calls": 10,
+            "result_relative_path": "01-executor/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791219138.3683708,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3820,
+              "output_tokens": 102,
+              "total_tokens": 3922,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_965b45a1-41a",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.1409778594970703
+          },
+          {
+            "index": 2,
+            "started": 1791219141.6543717,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4211,
+              "output_tokens": 106,
+              "total_tokens": 4317,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_9caeaf85-0eb",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.750363349914551
+          },
+          {
+            "index": 3,
+            "started": 1791219147.52801,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4506,
+              "output_tokens": 78,
+              "total_tokens": 4584,
+              "input_tokens_details": {
+                "cached_tokens": 4210
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ede267ad-83a",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.543549060821533
+          },
+          {
+            "index": 4,
+            "started": 1791219152.6570048,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4684,
+              "output_tokens": 82,
+              "total_tokens": 4766,
+              "input_tokens_details": {
+                "cached_tokens": 4505
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_9a2e17ea-2c5",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.628767490386963
+          },
+          {
+            "index": 5,
+            "started": 1791219183.888419,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5270,
+              "output_tokens": 129,
+              "total_tokens": 5399,
+              "input_tokens_details": {
+                "cached_tokens": 4683
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ddfbbff7-718",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.3776443004608154
+          },
+          {
+            "index": 6,
+            "started": 1791219187.8558652,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5829,
+              "output_tokens": 744,
+              "total_tokens": 6573,
+              "input_tokens_details": {
+                "cached_tokens": 5269
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ba1044e7-eae",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 13.071684122085571
+          },
+          {
+            "index": 7,
+            "started": 1791219203.7456577,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6502,
+              "output_tokens": 548,
+              "total_tokens": 7050,
+              "input_tokens_details": {
+                "cached_tokens": 5828
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_22507420-f54",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.76496171951294
+          },
+          {
+            "index": 8,
+            "started": 1791219215.1192985,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7696,
+              "output_tokens": 704,
+              "total_tokens": 8400,
+              "input_tokens_details": {
+                "cached_tokens": 6501
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_64c2efd5-513",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 16.103318691253662
+          },
+          {
+            "index": 9,
+            "started": 1791219232.0897157,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 8791,
+              "output_tokens": 90,
+              "total_tokens": 8881,
+              "input_tokens_details": {
+                "cached_tokens": 7695
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_db97a0db-591",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.8146376609802246
+          },
+          {
+            "index": 10,
+            "started": 1791219235.0947926,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 9030,
+              "output_tokens": 301,
+              "total_tokens": 9331,
+              "input_tokens_details": {
+                "cached_tokens": 8790
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_c99b2567-d42",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 9.545079708099365
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791219137.2779615,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219137.3406298,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 10,
+        "kernel_status": null
+      },
+      "environment": {
+        "container_id": "b77a1e8d062a0603a6feb72d4384e14f884e803c7a98bbdeae73abce9d970012",
+        "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/8756feb38c934b49a3b8782c002fd268/01-executor/result.json",
+          "sha256": "6abc7f3cfaa3fc66216fdd95c8b7ca466c32738ec5e3495d41092564647e9e50",
+          "bytes": 33230,
+          "tool_result_counts": {
+            "terminal": 9
+          }
+        }
+      ]
+    },
+    "63a599c071944fd6b4cbddb6fbf783c6": {
+      "report": {
+        "arm": "sg_v2",
+        "status": "succeeded",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev05",
+        "max_requests": 192,
+        "budget_seconds": 3600.0,
+        "original_instruction_sha256": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+        "official_verifier_visible": false,
+        "last_executor_claim": "Done. Recovered the 6-edge DAG via partial-correlation screening (the skeleton U–Y, U–R, U–M, U–D, Y–D, R–M; non-edges Y–R, Y–M, R–D, D–M all drop to ~0 under conditioning), oriented edges out of U (no parents) and alphabetically otherwise.\n\nFiles written:\n- `/app/learned_dag.csv`: Y←U, R←U, M←U, D←U, D←Y, M←R\n- `/app/intervened_dag.csv`: same minus edges into Y (do(Y=0) removes incoming)\n- `/app/final_bn_sample.csv`: 10k rows from the intervened linear-Gaussian BN, Y pinned to 0.0\n\nVerification: refit model reproduces observed means (within ~0.3) and correlations (within ~0.03); intervened sample has Y≡0 and downstream D mean shifted 38→16 as expected.",
+        "last_acceptance": {
+          "verdict": "pass",
+          "reason": "Independently verified. Partial correlations confirm the skeleton (non-edges Y–R≈0.01, Y–M≈−0.03, R–D≈0.00, D–M≈−0.01 conditioned appropriately; real edges Y–D≈0.32, R–M≈0.25). Six edges in learned_dag.csv match, orientations consistent with U having no parents and alphabetical rule for D←Y, M←R. intervened_dag.csv correctly drops Y←U (do-operation removes incoming edges). final_bn_sample.csv has 10,000 rows, identical column names, Y identically 0.0, and downstream D mean shifted 38→15.6 as expected while unaffected nodes keep original means.",
+          "evidence": [
+            "learned_dag.csv contains exactly 6 edges (Y←U,R←U,M←U,D←U,D←Y,M←R) matching verified skeleton and orientation rules",
+            "intervened_dag.csv = learned DAG minus edges into Y, consistent with do(Y=0)",
+            "final_bn_sample.csv: 10001 lines incl. header, same columns U,Y,R,D,M, Y constant 0.0",
+            "Intervention effect verified: D mean 38.0→15.6, U/R/M means preserved (~50.6/46.3/41.5)"
+          ],
+          "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+          "tool_observation_count": 3,
+          "snapshot_image_id": "sha256:f59719bf9feea4436bfd9673f60edb13a52a70ec9a761ccb8a8a03f5c9736881"
+        },
+        "artifact_image_id": "sha256:846ba9c1d3577108e99f2501307ec3c75ab320fd0fd879e097ef026ea7c81368",
+        "artifact_image_tag": "sg-artifact:63a599c071944fd6b4cbddb6fbf783c6",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 263943,
+            "exit_code": 0,
+            "seconds": 113.9238689369995,
+            "model_calls": 13,
+            "result_relative_path": "01-executor/result.json"
+          },
+          {
+            "role": "review",
+            "pid": 271880,
+            "exit_code": 0,
+            "seconds": 35.89299821500026,
+            "model_calls": 4,
+            "result_relative_path": "02-review/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791219338.0996962,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3895,
+              "output_tokens": 114,
+              "total_tokens": 4009,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ecb5aa93-8b6",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.133793354034424
+          },
+          {
+            "index": 2,
+            "started": 1791219343.8817077,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4158,
+              "output_tokens": 137,
+              "total_tokens": 4295,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_a3f75f12-8b4",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.475224733352661
+          },
+          {
+            "index": 3,
+            "started": 1791219346.4821517,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4415,
+              "output_tokens": 114,
+              "total_tokens": 4529,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_3e198893-e3f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.8700289726257324
+          },
+          {
+            "index": 4,
+            "started": 1791219348.5297065,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4610,
+              "output_tokens": 79,
+              "total_tokens": 4689,
+              "input_tokens_details": {
+                "cached_tokens": 3200
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_19529035-690",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.5881223678588867
+          },
+          {
+            "index": 5,
+            "started": 1791219350.700473,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4789,
+              "output_tokens": 66,
+              "total_tokens": 4855,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_f63156d7-b1d",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.921473503112793
+          },
+          {
+            "index": 6,
+            "started": 1791219387.2301934,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5359,
+              "output_tokens": 177,
+              "total_tokens": 5536,
+              "input_tokens_details": {
+                "cached_tokens": 4608
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_1b1ff280-69a",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.1897013187408447
+          },
+          {
+            "index": 7,
+            "started": 1791219393.6146514,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 10806,
+              "output_tokens": 441,
+              "total_tokens": 11247,
+              "input_tokens_details": {
+                "cached_tokens": 5376
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_19b57866-331",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.629556179046631
+          },
+          {
+            "index": 8,
+            "started": 1791219400.4327507,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 11287,
+              "output_tokens": 879,
+              "total_tokens": 12166,
+              "input_tokens_details": {
+                "cached_tokens": 10752
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_a71efbcb-a38",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 10.911146879196167
+          },
+          {
+            "index": 9,
+            "started": 1791219411.9317985,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 12099,
+              "output_tokens": 1159,
+              "total_tokens": 13258,
+              "input_tokens_details": {
+                "cached_tokens": 11264
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_4351c2dd-734",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 11.81445860862732
+          },
+          {
+            "index": 10,
+            "started": 1791219424.3344047,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 12781,
+              "output_tokens": 485,
+              "total_tokens": 13266,
+              "input_tokens_details": {
+                "cached_tokens": 12096
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_63f298b3-05b",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.073316812515259
+          },
+          {
+            "index": 11,
+            "started": 1791219427.999425,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 13445,
+              "output_tokens": 1331,
+              "total_tokens": 14776,
+              "input_tokens_details": {
+                "cached_tokens": 13056
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_938abf93-ee0",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 9.623599529266357
+          },
+          {
+            "index": 12,
+            "started": 1791219440.3257143,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 14653,
+              "output_tokens": 118,
+              "total_tokens": 14771,
+              "input_tokens_details": {
+                "cached_tokens": 13440
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_a2d34ad8-676",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.9193341732025146
+          },
+          {
+            "index": 13,
+            "started": 1791219442.8296387,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 14924,
+              "output_tokens": 234,
+              "total_tokens": 15158,
+              "input_tokens_details": {
+                "cached_tokens": 14656
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_85a5769a-86c",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.7289085388183594
+          },
+          {
+            "index": 14,
+            "started": 1791219467.6727643,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4218,
+              "output_tokens": 114,
+              "total_tokens": 4332,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_21d3ab20-207",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.4372265338897705
+          },
+          {
+            "index": 15,
+            "started": 1791219471.256131,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4677,
+              "output_tokens": 226,
+              "total_tokens": 4903,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_87de62c7-db3",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.94435453414917
+          },
+          {
+            "index": 16,
+            "started": 1791219477.7859626,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5101,
+              "output_tokens": 371,
+              "total_tokens": 5472,
+              "input_tokens_details": {
+                "cached_tokens": 4676
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_47f1e80f-ecf",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.77761459350586
+          },
+          {
+            "index": 17,
+            "started": 1791219487.1545293,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5569,
+              "output_tokens": 458,
+              "total_tokens": 6027,
+              "input_tokens_details": {
+                "cached_tokens": 5100
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_a47d9212-586",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 10.533796787261963
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791219336.8414042,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219336.9286916,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219466.5344346,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219466.599972,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 17,
+        "kernel_status": "succeeded"
+      },
+      "environment": {
+        "container_id": "71a8d73fbffe8213726fb433ba51c0ac38af4eb44d2c33e04f8869b2010d8112",
+        "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/63a599c071944fd6b4cbddb6fbf783c6/01-executor/result.json",
+          "sha256": "8f5bdb3270764ce9ef439ce615bcbcfe9e14a671a81ee33507dbc5fda009382b",
+          "bytes": 64110,
+          "tool_result_counts": {
+            "terminal": 12
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/63a599c071944fd6b4cbddb6fbf783c6/02-review/result.json",
+          "sha256": "a5d639f511de829cd8464592c6a56aa56c8ffa8599ad30ae3c18caf62142d2a9",
+          "bytes": 17724,
+          "tool_result_counts": {
+            "terminal": 3
+          }
+        }
+      ]
+    },
+    "4cc232836c5945baae3581d2b90d256f": {
+      "report": {
+        "arm": "repeat_goal",
+        "status": "repeat_round_limit",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev05",
+        "max_requests": 192,
+        "budget_seconds": 3600.0,
+        "original_instruction_sha256": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "control_id": "4cc232836c5945baae3581d2b90d256f",
+        "official_verifier_visible": false,
+        "last_executor_claim": "The task is fully complete — verified again just now:\n\n- **`/app/learned_dag.csv`**: recovered DAG, 6 edges in `to,from` format — Y←U, R←U, D←U, M←U, D←Y, M←R\n- **BN fitted** on `bn_sample_10k.csv` (linear-Gaussian CPDs via pgmpy)\n- **do(Y=0)** intervention applied (U→Y removed, Y ~ N(0, 1e-9))\n- **`/app/intervened_dag.csv`**: 5 edges — R←U, D←U, M←U, M←R, D←Y\n- **`/app/final_bn_sample.csv`**: 10,000 rows, header `\"U\",\"Y\",\"R\",\"D\",\"M\"` matching the original format, Y pinned at ~0\n\nNo remaining work.",
+        "artifact_image_id": "sha256:016c27b2371ce0555c44f2a683c205567563b0bf67112bba2814e1c6b0311171",
+        "artifact_image_tag": "sg-artifact:4cc232836c5945baae3581d2b90d256f",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 256102,
+            "exit_code": 0,
+            "seconds": 69.28380142499918,
+            "model_calls": 11,
+            "result_relative_path": "01-executor/result.json"
+          },
+          {
+            "role": "executor",
+            "pid": 259143,
+            "exit_code": 0,
+            "seconds": 15.815795083999546,
+            "model_calls": 2,
+            "result_relative_path": "02-executor/result.json"
+          },
+          {
+            "role": "executor",
+            "pid": 260418,
+            "exit_code": 0,
+            "seconds": 23.422201328001393,
+            "model_calls": 2,
+            "result_relative_path": "03-executor/result.json"
+          },
+          {
+            "role": "executor",
+            "pid": 262510,
+            "exit_code": 0,
+            "seconds": 16.588181646999146,
+            "model_calls": 2,
+            "result_relative_path": "04-executor/result.json"
+          },
+          {
+            "role": "executor",
+            "pid": 263101,
+            "exit_code": 0,
+            "seconds": 14.89161966499887,
+            "model_calls": 2,
+            "result_relative_path": "05-executor/result.json"
+          },
+          {
+            "role": "executor",
+            "pid": 267277,
+            "exit_code": 0,
+            "seconds": 11.280404121000174,
+            "model_calls": 1,
+            "result_relative_path": "06-executor/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791219210.9175532,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3818,
+              "output_tokens": 119,
+              "total_tokens": 3937,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_608cf916-094",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.837554931640625
+          },
+          {
+            "index": 2,
+            "started": 1791219213.3955379,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4137,
+              "output_tokens": 98,
+              "total_tokens": 4235,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_e662198e-462",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.769812822341919
+          },
+          {
+            "index": 3,
+            "started": 1791219215.751367,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4372,
+              "output_tokens": 71,
+              "total_tokens": 4443,
+              "input_tokens_details": {
+                "cached_tokens": 3200
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_cb0190e4-b7a",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.3766708374023438
+          },
+          {
+            "index": 4,
+            "started": 1791219217.712498,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4550,
+              "output_tokens": 121,
+              "total_tokens": 4671,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_7886f81b-2cb",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.8823721408843994
+          },
+          {
+            "index": 5,
+            "started": 1791219219.7745762,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4808,
+              "output_tokens": 105,
+              "total_tokens": 4913,
+              "input_tokens_details": {
+                "cached_tokens": 4608
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_55105f35-599",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.5607805252075195
+          },
+          {
+            "index": 6,
+            "started": 1791219250.7436032,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5010,
+              "output_tokens": 280,
+              "total_tokens": 5290,
+              "input_tokens_details": {
+                "cached_tokens": 4864
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_bba157c8-4c1",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.599297523498535
+          },
+          {
+            "index": 7,
+            "started": 1791219254.5624049,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5310,
+              "output_tokens": 55,
+              "total_tokens": 5365,
+              "input_tokens_details": {
+                "cached_tokens": 4992
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_42bb3ae8-015",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.4380435943603516
+          },
+          {
+            "index": 8,
+            "started": 1791219256.5849915,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5997,
+              "output_tokens": 869,
+              "total_tokens": 6866,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_5fc78929-0d7",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.54135537147522
+          },
+          {
+            "index": 9,
+            "started": 1791219263.3707352,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6563,
+              "output_tokens": 57,
+              "total_tokens": 6620,
+              "input_tokens_details": {
+                "cached_tokens": 5952
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_d0865aca-b04",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.4835293292999268
+          },
+          {
+            "index": 10,
+            "started": 1791219267.4659405,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7095,
+              "output_tokens": 77,
+              "total_tokens": 7172,
+              "input_tokens_details": {
+                "cached_tokens": 6528
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_cfa17359-7ef",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.7950215339660645
+          },
+          {
+            "index": 11,
+            "started": 1791219269.3450785,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7359,
+              "output_tokens": 358,
+              "total_tokens": 7717,
+              "input_tokens_details": {
+                "cached_tokens": 7168
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ea9b0f45-b1d",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.414776086807251
+          },
+          {
+            "index": 12,
+            "started": 1791219280.112818,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7967,
+              "output_tokens": 108,
+              "total_tokens": 8075,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_4690758d-013",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.57350754737854
+          },
+          {
+            "index": 13,
+            "started": 1791219283.8279488,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 8288,
+              "output_tokens": 294,
+              "total_tokens": 8582,
+              "input_tokens_details": {
+                "cached_tokens": 7966
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_3a15c88a-af4",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.261636018753052
+          },
+          {
+            "index": 14,
+            "started": 1791219295.98918,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 8889,
+              "output_tokens": 207,
+              "total_tokens": 9096,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_bd81b6c7-a1f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.113949775695801
+          },
+          {
+            "index": 15,
+            "started": 1791219302.7481267,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 9324,
+              "output_tokens": 308,
+              "total_tokens": 9632,
+              "input_tokens_details": {
+                "cached_tokens": 8888
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_44f770fe-d7e",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 10.93350601196289
+          },
+          {
+            "index": 16,
+            "started": 1791219319.805449,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 9947,
+              "output_tokens": 233,
+              "total_tokens": 10180,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_08b7df75-432",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.851639032363892
+          },
+          {
+            "index": 17,
+            "started": 1791219326.2909644,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 10288,
+              "output_tokens": 147,
+              "total_tokens": 10435,
+              "input_tokens_details": {
+                "cached_tokens": 9946
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_161f29e7-6f8",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.7805521488189697
+          },
+          {
+            "index": 18,
+            "started": 1791219336.390804,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 10784,
+              "output_tokens": 155,
+              "total_tokens": 10939,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_017efd1b-d1d",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.180981397628784
+          },
+          {
+            "index": 19,
+            "started": 1791219341.220445,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 11081,
+              "output_tokens": 191,
+              "total_tokens": 11272,
+              "input_tokens_details": {
+                "cached_tokens": 10783
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_d0652a97-51f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.010471343994141
+          },
+          {
+            "index": 20,
+            "started": 1791219350.8788657,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 11621,
+              "output_tokens": 219,
+              "total_tokens": 11840,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_ca140083-47f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.833396673202515
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791219209.7949767,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219209.856524,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219279.0008502,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219279.065739,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219294.8749194,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219294.937427,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219318.1540542,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219318.2144146,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219334.9954772,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219335.103279,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219349.7578795,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219349.819263,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 20,
+        "kernel_status": null
+      },
+      "environment": {
+        "container_id": "aedbee8b65779384f575b81ef22e25d1df130d677eeea3789a7c65337b60dbbe",
+        "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/01-executor/result.json",
+          "sha256": "3ca144c474ed998e65ec2037382c58b9d1688f5d0f7df91efaa1e88c52bba09b",
+          "bytes": 26826,
+          "tool_result_counts": {
+            "terminal": 8,
+            "write_file": 2
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/02-executor/result.json",
+          "sha256": "aec149ce5f455a1232069d305a983b0600b612283e7bde4ebfbe7280f5d59821",
+          "bytes": 32863,
+          "tool_result_counts": {
+            "terminal": 9,
+            "write_file": 2
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/03-executor/result.json",
+          "sha256": "4aa5ff2c2eef240dee2b644321261c83d669d555d9a3ef8ae9e644687c22699a",
+          "bytes": 39956,
+          "tool_result_counts": {
+            "terminal": 10,
+            "write_file": 2
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/04-executor/result.json",
+          "sha256": "a29fc844b84b3e5da0a6b7db92c8247918fe88532ed109a0ccb3ab182d9fbe2d",
+          "bytes": 43898,
+          "tool_result_counts": {
+            "terminal": 11,
+            "write_file": 2
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/05-executor/result.json",
+          "sha256": "6b6ae16d54baef7d41058077ecb9dba12059140fc7d0b171fb304844cafb5ff6",
+          "bytes": 49164,
+          "tool_result_counts": {
+            "terminal": 12,
+            "write_file": 2
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/4cc232836c5945baae3581d2b90d256f/06-executor/result.json",
+          "sha256": "42e0cb4aa5983accfcc2c6e1b3af67ebfdfd3f06920d3ad8bc379e3836cf4fa6",
+          "bytes": 52459,
+          "tool_result_counts": {
+            "terminal": 12,
+            "write_file": 2
+          }
+        }
+      ]
+    },
+    "88068cc8a4db44e09d9048c8c76dc5f7": {
+      "report": {
+        "arm": "sg_no_context",
+        "status": "succeeded",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev05",
+        "max_requests": 192,
+        "budget_seconds": 3600.0,
+        "original_instruction_sha256": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+        "official_verifier_visible": false,
+        "last_executor_claim": "Done. All artifacts verified.\n\n**DAG recovered** (via partial-correlation skeleton + CI tests; U as root; alphabetical rule for the two non-U edges):\n- U→Y, U→R, U→D, U→M (U has no parents)\n- Y→D (D before Y in alphabet), R→M (M before R)\n\nNon-edges confirmed separable: Y⊥R | {U,D}, R⊥D | {U,Y}, D⊥M | {U,Y}, Y⊥M.\n\n**Files written:**\n- `/app/learned_dag.csv` — 6 edges\n- `/app/intervened_dag.csv` — 5 edges (U→Y removed under do(Y))\n- `/app/final_bn_sample.csv` — 10,000 rows, same columns\n\n**Intervened sample sanity check:** Y ≈ 0 (mean −4e-12, std ~8e-9 via `LinearGaussianCPD('Y', [0.0], 1e-9)`); D's mean dropped from ~15.5 original → consistent with E[D|do(Y=0)] = 0.55·E[U] − 12.3 ≈ 15.5.",
+        "last_acceptance": {
+          "verdict": "pass",
+          "reason": "Recovered DAG is consistent with the data's dependence structure; intervention and sampling artifacts are correct.",
+          "evidence": [
+            "learned_dag.csv contains 6 edges: U→Y,U→R,U→D,U→M,Y→D,M's parent R (to,from format)",
+            "U has no parents; partial correlations support skeleton: pcorr(Y,R|U)=0.01, pcorr(R,D|U,Y)=0.002, pcorr(D,M|U)=-0.012, pcorr(Y,M|U)=-0.02 (non-edges), while Y-D|U=0.32 and R-M|U=0.25 (real edges)",
+            "intervened_dag.csv has 5 edges with U→Y removed, correct for do(Y)",
+            "final_bn_sample.csv: 10,000 rows, columns U,Y,R,D,M; Y mean=-4.3e-12, std=8e-9 (degenerate at 0); D mean shifted 38.0→15.5 consistent with removing Y's contribution while U,R,M unchanged"
+          ],
+          "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+          "tool_observation_count": 2,
+          "snapshot_image_id": "sha256:0b281bae926ec507270be8a77d650731da596e0720a4aeb8d927dfb95ee05b29"
+        },
+        "artifact_image_id": "sha256:d20e73a44fe58d84b27e6c8252b70e943ded6ffdb0d6f3f0a1cc66d4a692cb0c",
+        "artifact_image_tag": "sg-artifact:88068cc8a4db44e09d9048c8c76dc5f7",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 263940,
+            "exit_code": 0,
+            "seconds": 145.0518886890004,
+            "model_calls": 15,
+            "result_relative_path": "01-executor/result.json"
+          },
+          {
+            "role": "review",
+            "pid": 272946,
+            "exit_code": 0,
+            "seconds": 25.508219330999054,
+            "model_calls": 3,
+            "result_relative_path": "02-review/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791219338.0639198,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3824,
+              "output_tokens": 97,
+              "total_tokens": 3921,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_9bf0682d-2f1",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.2613937854766846
+          },
+          {
+            "index": 2,
+            "started": 1791219341.5087152,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4175,
+              "output_tokens": 80,
+              "total_tokens": 4255,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_958a1a02-178",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.529711008071899
+          },
+          {
+            "index": 3,
+            "started": 1791219346.6235096,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4305,
+              "output_tokens": 91,
+              "total_tokens": 4396,
+              "input_tokens_details": {
+                "cached_tokens": 4174
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_28ab645a-dda",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.6229591369628906
+          },
+          {
+            "index": 4,
+            "started": 1791219350.6373618,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4586,
+              "output_tokens": 65,
+              "total_tokens": 4651,
+              "input_tokens_details": {
+                "cached_tokens": 4304
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_0b948d24-7c6",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.145320415496826
+          },
+          {
+            "index": 5,
+            "started": 1791219354.1744664,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4769,
+              "output_tokens": 69,
+              "total_tokens": 4838,
+              "input_tokens_details": {
+                "cached_tokens": 4585
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_9434d6ab-6ba",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.266736268997192
+          },
+          {
+            "index": 6,
+            "started": 1791219391.2464569,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5392,
+              "output_tokens": 97,
+              "total_tokens": 5489,
+              "input_tokens_details": {
+                "cached_tokens": 4768
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_46911111-5ff",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.040166616439819
+          },
+          {
+            "index": 7,
+            "started": 1791219397.0833654,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5733,
+              "output_tokens": 229,
+              "total_tokens": 5962,
+              "input_tokens_details": {
+                "cached_tokens": 5391
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_c3ea3a1b-b40",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 7.554958820343018
+          },
+          {
+            "index": 8,
+            "started": 1791219405.2303298,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6102,
+              "output_tokens": 710,
+              "total_tokens": 6812,
+              "input_tokens_details": {
+                "cached_tokens": 5732
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_f179ec8b-b3d",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 14.30558156967163
+          },
+          {
+            "index": 9,
+            "started": 1791219420.9582593,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6615,
+              "output_tokens": 353,
+              "total_tokens": 6968,
+              "input_tokens_details": {
+                "cached_tokens": 6101
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_04795717-63b",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.317562580108643
+          },
+          {
+            "index": 10,
+            "started": 1791219427.6809623,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7125,
+              "output_tokens": 555,
+              "total_tokens": 7680,
+              "input_tokens_details": {
+                "cached_tokens": 6614
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_60d28850-729",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 11.679728031158447
+          },
+          {
+            "index": 11,
+            "started": 1791219441.7605324,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7538,
+              "output_tokens": 85,
+              "total_tokens": 7623,
+              "input_tokens_details": {
+                "cached_tokens": 7124
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_cb975f0f-2c0",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.50495457649231
+          },
+          {
+            "index": 12,
+            "started": 1791219451.0527964,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 7760,
+              "output_tokens": 166,
+              "total_tokens": 7926,
+              "input_tokens_details": {
+                "cached_tokens": 7537
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_0b2be32b-a4b",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.5334854125976562
+          },
+          {
+            "index": 13,
+            "started": 1791219456.7933743,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 8595,
+              "output_tokens": 346,
+              "total_tokens": 8941,
+              "input_tokens_details": {
+                "cached_tokens": 7759
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_39b0e154-1f0",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.3704588413238525
+          },
+          {
+            "index": 14,
+            "started": 1791219465.3905294,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 9449,
+              "output_tokens": 74,
+              "total_tokens": 9523,
+              "input_tokens_details": {
+                "cached_tokens": 8594
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_6656cc2c-155",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.4327337741851807
+          },
+          {
+            "index": 15,
+            "started": 1791219467.9060657,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 9705,
+              "output_tokens": 307,
+              "total_tokens": 10012,
+              "input_tokens_details": {
+                "cached_tokens": 9448
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_e05949c6-b40",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.385775804519653
+          },
+          {
+            "index": 16,
+            "started": 1791219491.0491455,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4275,
+              "output_tokens": 93,
+              "total_tokens": 4368,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_66f4f926-7bb",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.163992643356323
+          },
+          {
+            "index": 17,
+            "started": 1791219495.3523903,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4852,
+              "output_tokens": 343,
+              "total_tokens": 5195,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_c7509b05-1c3",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.844700574874878
+          },
+          {
+            "index": 18,
+            "started": 1791219502.9930634,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5644,
+              "output_tokens": 390,
+              "total_tokens": 6034,
+              "input_tokens_details": {
+                "cached_tokens": 4851
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_5eca6378-edf",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.09090781211853
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791219336.9046402,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219336.9672956,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219489.944095,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219490.00525,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 18,
+        "kernel_status": "succeeded"
+      },
+      "environment": {
+        "container_id": "185b47f4edea67b072bbacac6b723ef4000dae3f6ae01adf03248367892785a5",
+        "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/88068cc8a4db44e09d9048c8c76dc5f7/01-executor/result.json",
+          "sha256": "1cd3d58d33afb8782e8694e0e27550c80991071b2d8faf5ce6930aa3da07c7e5",
+          "bytes": 39989,
+          "tool_result_counts": {
+            "terminal": 14
+          }
+        },
+        {
+          "path": "/var/lib/supergoal-lab/control/88068cc8a4db44e09d9048c8c76dc5f7/02-review/result.json",
+          "sha256": "38168dc881b8f27f8a8ba5a78c1f6301f3dfa3dd844559832dee71c631f7cc64",
+          "bytes": 13572,
+          "tool_result_counts": {
+            "terminal": 2
+          }
+        }
+      ]
+    },
+    "791e160a4b6e4a8fa7d524f660060d76": {
+      "report": {
+        "arm": "sg_no_review",
+        "status": "unverified_done",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev05",
+        "max_requests": 192,
+        "budget_seconds": 3600.0,
+        "original_instruction_sha256": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+        "official_verifier_visible": false,
+        "last_executor_claim": "Done. All three artifacts written and verified.\n\n**DAG recovery** (via precision matrix / partial correlations — exact skeleton for linear Gaussians):\n- Significant partial correlations: U–Y, U–R, U–D, U–M, Y–D, R–M → 6 edges, matching the given count\n- U is root (no parents); remaining ambiguous directions assigned alphabetically: D→? no — rule says first-in-alphabet letter is the *child*, so D→Y... actually applied: `D,Y` means Y→D? No — `to,from` = D←Y, so Y→D (Y is alphabetically after D, so D is the child — correct). Similarly M is child of R.\n\n**Files:**\n- `/app/learned_dag.csv`: Y←U, R←U, D←U, M←U, D←Y, M←R\n- `/app/intervened_dag.csv`: same minus edges into Y (Y set to 0.0 exactly)\n- `/app/final_bn_sample.csv`: 10,000 rows, original column order, Y column all 0.0; marginals consistent with fitted linear-Gaussian parameters (e.g. R ≈ 0.98·U − 3.2)",
+        "last_acceptance": {
+          "verdict": "unverified",
+          "reason": "online review ablated"
+        },
+        "artifact_image_id": "sha256:b6b2da43e56501906e27979033420abda6ee6faac5c6343fd2f54489f9361458",
+        "artifact_image_tag": "sg-artifact:791e160a4b6e4a8fa7d524f660060d76",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 276218,
+            "exit_code": 0,
+            "seconds": 81.27629982299914,
+            "model_calls": 8,
+            "result_relative_path": "01-executor/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791219556.381187,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3900,
+              "output_tokens": 92,
+              "total_tokens": 3992,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_217f153d-e52",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.968316555023193
+          },
+          {
+            "index": 2,
+            "started": 1791219562.487794,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4225,
+              "output_tokens": 92,
+              "total_tokens": 4317,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_dbef9b36-9cb",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.275837659835815
+          },
+          {
+            "index": 3,
+            "started": 1791219567.8869996,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4498,
+              "output_tokens": 63,
+              "total_tokens": 4561,
+              "input_tokens_details": {
+                "cached_tokens": 4224
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_1ee56944-0b7",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 5.250132083892822
+          },
+          {
+            "index": 4,
+            "started": 1791219573.5280893,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4661,
+              "output_tokens": 85,
+              "total_tokens": 4746,
+              "input_tokens_details": {
+                "cached_tokens": 4497
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_0324f81a-59b",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 6.781404733657837
+          },
+          {
+            "index": 5,
+            "started": 1791219594.9020214,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4839,
+              "output_tokens": 249,
+              "total_tokens": 5088,
+              "input_tokens_details": {
+                "cached_tokens": 4660
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_3b1659ac-94c",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.322925806045532
+          },
+          {
+            "index": 6,
+            "started": 1791219603.813375,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5338,
+              "output_tokens": 836,
+              "total_tokens": 6174,
+              "input_tokens_details": {
+                "cached_tokens": 4838
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_e2101855-eae",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 15.147976160049438
+          },
+          {
+            "index": 7,
+            "started": 1791219619.806089,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6513,
+              "output_tokens": 85,
+              "total_tokens": 6598,
+              "input_tokens_details": {
+                "cached_tokens": 5337
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_8fcddd51-e06",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.1349592208862305
+          },
+          {
+            "index": 8,
+            "started": 1791219624.0226922,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6773,
+              "output_tokens": 287,
+              "total_tokens": 7060,
+              "input_tokens_details": {
+                "cached_tokens": 6512
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_24fc9bbc-492",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 8.016526937484741
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791219555.2641313,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791219555.326894,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 8,
+        "kernel_status": "unverified_done"
+      },
+      "environment": {
+        "container_id": "138b2a710a1d9835093b699f8b0c836764eff9a183e0a06e42d13f32f3159a34",
+        "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/791e160a4b6e4a8fa7d524f660060d76/01-executor/result.json",
+          "sha256": "bbf064ddaae82eaca8a9e461e43e9eacd66ba8f6ba1f2852d38433c095c6d94e",
+          "bytes": 22350,
+          "tool_result_counts": {
+            "terminal": 7
+          }
+        }
+      ]
+    }
+  }
+}

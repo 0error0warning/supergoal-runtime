@@ -1,0 +1,14 @@
+{
+  "kind": "project_owned_frozen_source_archives",
+  "includes_private_hermes_source": false,
+  "sha256": {
+    "sg-v1-prestudy.tar.gz": "e3e89f8c0763b8732f7d490b1476fa4b89489dca829f6809a96aa54b8a84a605",
+    "sg-v2-r3.tar.gz": "ecd000f796b449fece9b1978458538fa99f1da0185af27848e69b4c90485cf20",
+    "sg-public-dev01.tar.gz": "cadf68b6d17a36dee752868d825cc9d73affa3b4b3babacc4d6300115956e9d0",
+    "sg-public-dev02.tar.gz": "36d643b4c0b606b771a9e39a60e17e67b13bef5efb7b89f6bb23e88aa979da86",
+    "sg-public-dev03.tar.gz": "912c7b92aaaed4a01fada5fe71ca179ed72113d16d92f46867b8dbba0f7f576c",
+    "sg-public-dev04.tar.gz": "93fd6e4fe13613c045a33c364f8bc56b24a4a78de9057094e1e00b8986f8bd45",
+    "public-dev04-operators.tar.gz": "0d3d0e082dfdd2fb7406cead7630ecd03c0a9b622d5f2cee9132ccdce3b51f1e",
+    "public-dev04-reporting.tar.gz": "6aa1a8f0fbe72fab1a394c5345c8ecc1f5ad3a51c0bcd09478a8e925c6d62cb4"
+  }
+}

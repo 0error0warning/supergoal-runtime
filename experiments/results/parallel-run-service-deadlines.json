@@ -1,0 +1,24 @@
+{
+  "at_utc": "2026-10-05T16:54:04.208591+00:00",
+  "reason": "Avoid an earlier relative systemd timeout truncating a trial admitted against the absolute GCP stop deadline. Absolute GCP STOP stays 2026-10-06T14:24:06Z.",
+  "services": [
+    {
+      "unit": "supergoal-public-parallel24-v1-run",
+      "exit_code": 1,
+      "error": "Failed to set unit properties on supergoal-public-parallel24-v1-run.service: Cannot set property RuntimeMaxUSec, or unknown property.",
+      "state": "RuntimeMaxUSec=20h\nExecMainStartTimestamp=Mon 2026-10-05 16:52:10 UTC\nActiveState=active\n"
+    },
+    {
+      "unit": "supergoal-oneday-transfer01-run",
+      "exit_code": 1,
+      "error": "Failed to set unit properties on supergoal-oneday-transfer01-run.service: Cannot set property RuntimeMaxUSec, or unknown property.",
+      "state": "RuntimeMaxUSec=20h\nExecMainStartTimestamp=Mon 2026-10-05 16:38:37 UTC\nActiveState=active\n"
+    },
+    {
+      "unit": "supergoal-oneday-final-report",
+      "exit_code": 1,
+      "error": "Failed to set unit properties on supergoal-oneday-final-report.service: Cannot set property RuntimeMaxUSec, or unknown property.",
+      "state": "RuntimeMaxUSec=20h\nExecMainStartTimestamp=Mon 2026-10-05 16:43:21 UTC\nActiveState=active\n"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "status": "trial_exception",
+  "model_calls_before_admission": 0,
+  "registration_sha256": "7ffe28f726aff472d42a0bd228a49214983dba7726ab1f2c724ff7ea374cfcd5",
+  "original_failed_trials_unchanged": true,
+  "started_epoch": 1791226668.3048623,
+  "job": "/var/lib/supergoal-lab/jobs/tb-checkpoint-handoff01-001-compile-compcert-native",
+  "result_path": "/var/lib/supergoal-lab/jobs/tb-checkpoint-handoff01-001-compile-compcert-native/compile-compcert__bc3CCLr/result.json",
+  "raw_rewards": {
+    "reward": 0.0
+  },
+  "tests_completed_marker": true,
+  "dependency_failure_marker": false,
+  "exception_type": "AgentTimeoutError",
+  "agent_metadata": {
+    "study_arm": "native",
+    "control_id": "432d2a33a1884127836b8ceeb198a6eb",
+    "study_status": "adapter_error",
+    "physical_requests": 31,
+    "adapter": "checkpoint-dev07"
+  },
+  "n_input_tokens": 244448,
+  "n_output_tokens": 4854,
+  "n_cache_tokens": 121833,
+  "started_at": "2026-10-05T18:57:49.357855Z",
+  "finished_at": "2026-10-05T19:39:02.406286Z",
+  "exit_code": 0,
+  "finished_epoch": 1791229146.0653222,
+  "snapshot_lifecycle": [
+    {
+      "container_id": "aae6a0755be7",
+      "image_tag": "sg-artifact:432d2a33a1884127836b8ceeb198a6eb",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 978209,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T18:57:51.349372062Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "started_monotonic": 18798.838609345,
+      "status": "capture_failed",
+      "error_type": "TimeoutError",
+      "error": "",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 978209,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T18:57:51.349372062Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 18845.418608592
+    }
+  ],
+  "artifact_snapshot_error": "TimeoutError: "
+}

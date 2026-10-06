@@ -1,0 +1,217 @@
+{
+  "schema": 1,
+  "experiment": "public-gcp01",
+  "host": "supergoal-gcp",
+  "kernel": "7.0.0-1011-gcp",
+  "platform": "Linux-7.0.0-1011-gcp-x86_64-with-glibc2.39",
+  "harbor_version": "0.24.0",
+  "hermes_version": "0.21.3",
+  "hermes_host_python": "3.13.5",
+  "tasks": [
+    {
+      "task_id": "configure-git-webserver",
+      "image_tag": "alexgshaw/configure-git-webserver:20251031",
+      "image_id": "sha256:ec4bd4a5223850005caf80b223cbd98adb8999dbc5326786169d7998db53b65f",
+      "repo_digests": [
+        "alexgshaw/configure-git-webserver@sha256:9e48389b917fd4650dda1f64406bd7198bbf20dc1c6b0e5c4d81a3c16369f88c"
+      ],
+      "image_size_bytes": 143238589,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "d1db8dfb8883e39adf902eced862bfd7bf8240f2fc7eb6364a74d77b09b899b5",
+        "environment/Dockerfile": "8c87039a43581841b7ef11d80c4ff1a5c5f43011877e167403063d55435aaa19",
+        "instruction.md": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+        "solution/solve.sh": "921ff9c1dabdbd130e1a6616c24b236b7ba9a1517b3dff4c33fe8c8a129e2e7a",
+        "task.toml": "ebb40d72f689512cbd90d865d88ef966b6665ab215544f9247b898b7fa94751b",
+        "tests/test.sh": "afafc3ffdaf911f7a93003c0746f217188099c174e5d3eb7dada17133df15895",
+        "tests/test_outputs.py": "526aee3dfe952cc4c7574361012712e389d6fba7222c005fc3e939fc53346b37",
+        "tests/verify.sh": "49a02f5267a892824e023ce05eb1ac6132a44854cc47f20feba312c4a3d05568"
+      }
+    },
+    {
+      "task_id": "fix-code-vulnerability",
+      "image_tag": "alexgshaw/fix-code-vulnerability:20251031",
+      "image_id": "sha256:fe9be33bb13823b31284102c8b366e3fc83f5e84cedbba42d2540081c2d9899a",
+      "repo_digests": [
+        "alexgshaw/fix-code-vulnerability@sha256:cac325252991f823713b2d0441502972901dd782bd67f66c03d9b1e410dac5c0"
+      ],
+      "image_size_bytes": 460167777,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "87f28dbad183c3a634887696d328ca68a8a0858f132bc48cb7341c22267d38f7",
+        "environment/Dockerfile": "0917470986224df4daf4854a71302ae81c73ba5dd6e25be1232d29b758a5b3ab",
+        "instruction.md": "89b1abdf0af19399f720233b5cdf6b2e8e0ff7b6e3fe3e2a3af0d4d298a8641a",
+        "solution/solve.sh": "7a0131b369d83ae8546ecc3f9b4e23d38240f1bd1f0941e4430fa85b5182ee03",
+        "task.toml": "9aa2bd14ce9408289d199d0608bc3fa65b8b5e23374c9641020de62197dbf1e2",
+        "tests/test.sh": "f1611da693cb4cfc5e8482698c6a1858a5c67220ae9db89b50aed66584e9b17f",
+        "tests/test_outputs.py": "c006a5de95b69bd78055aa26cc055734dbd50718ede25d331f767bfee4ef7f26"
+      }
+    },
+    {
+      "task_id": "sparql-university",
+      "image_tag": "alexgshaw/sparql-university:20251031",
+      "image_id": "sha256:4b477a009da63f0cff40da8caa52e09a382bf4a0ce011cd371c09650e665ba9c",
+      "repo_digests": [
+        "alexgshaw/sparql-university@sha256:92fa4304e51167f9fb4466144eba33ef9272a7df0ac1cab9fc3986bccd1ab708"
+      ],
+      "image_size_bytes": 78133337,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "947086de0f27f93c2d8700dcba8c3bfc96b289fc62dec6f956d86388dc908d05",
+        "environment/Dockerfile": "dd0abcd64e90ab16141169bcbf88a8e5f52732f207cb37765d351cc7a48916a9",
+        "environment/university_graph.ttl": "0b0b1f2c0ee7ea7ddc9382f94ff8181996ffa7be60a1651111c1f57b49e09a85",
+        "instruction.md": "22eeab47d3b27b06df2627b3c21cfbd579ed7dcc85ebcb7c4b3a241c3c35f449",
+        "solution/solve.sh": "d17995a8f29c6d656c749271fd28e10d31afee6aa75f40ad28fea1c907f2a791",
+        "task.toml": "47a6f6dd9ce0fc7631ef607e900fcd039b2d064ea90545645b49c678cddc9585",
+        "tests/test.sh": "45902b57bd0f1dd6959216bc9943ab27bb349edc7ff557035a1ecc8732e4cc6b",
+        "tests/test_outputs.py": "ecf15840fc14f1eeff2f3b6317d7f0febc8fa81f688d24e3054205ba13207b39",
+        "tests/university_graph_test.ttl": "368ce01d32513ee04dfe592784b0c976086e514c1eab9b3165a016ca7b0192cb"
+      }
+    },
+    {
+      "task_id": "write-compressor",
+      "image_tag": "alexgshaw/write-compressor:20251031",
+      "image_id": "sha256:795a10ee52aa610a840b6587c5a1d2194175faa76c58879c8846a115b601902a",
+      "repo_digests": [
+        "alexgshaw/write-compressor@sha256:3618e1f8a997b437c09cd3dbaac736705809c05f6f12f584b65722175970ebe1"
+      ],
+      "image_size_bytes": 777076255,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "603015a28500a28f0838fea2c43a5168613746bfd07737920f4bae40b5a326f7",
+        "environment/Dockerfile": "9a583d29d46818f6ff2be7c6a0879d03343106e5376fd5a48eb5926b402bb93b",
+        "environment/data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+        "environment/decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+        "environment/main.rs": "fa53d6572fca95903e30d2d953f1e428bb8b63513ff218ebee9bc60a425ab389",
+        "instruction.md": "c4fc3e73e44deeac95f1cd4a34a2d87e853b22ceec2b2824767f5f087b470bb2",
+        "solution/solve.sh": "01550b7de7ab1320b1898eae055226bb7c73bee259c75102d2240c974a730409",
+        "task.toml": "6066a509066433c97c417fea68c4e3e73996f698dcdcbabe07718835eea355a6",
+        "tests/original-data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+        "tests/original-decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "809f486053e3ffbce852111dee1f63d80ab31297bd33172389e50278bed384e2"
+      }
+    },
+    {
+      "task_id": "dna-assembly",
+      "image_tag": "alexgshaw/dna-assembly:20251031",
+      "image_id": "sha256:940e10327e89b8034aa335c48e8e643414809f5ee2ffd2d2854688b996c822ee",
+      "repo_digests": [
+        "alexgshaw/dna-assembly@sha256:d1adf6835f1dd91205ba70e452c699d0aea601010038e5617f370716efb50569"
+      ],
+      "image_size_bytes": 78130568,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "e7855c23d9822f688eec4dd89ca0f1caf91c6a69e1c8f3c9eb544b4ab2a94821",
+        "environment/Dockerfile": "26e9e43a98f0b1d132bb638f44b7dc882b0d0ca32d56fa33048adeee00ab600d",
+        "environment/sequences.fasta": "ebdc361b5fba28eb0a2c7a8a8a444ccb12cc842c8cbc6df5a2c24254f130736f",
+        "instruction.md": "88998c98beabdd966ab46c04ede822bbc74796696aa1bf87c567a9131210533c",
+        "solution/solve.sh": "c976cb118c8ef1befd846ba05fd5cadb1b1f529bc76b9f2ea9cb3049e6e11a47",
+        "task.toml": "7b571544b64d9be1c91526837e5d805c2181afe0e6fd57a7f0676bba36c868d7",
+        "tests/test.sh": "271c8317c98539e3b49233d017fe51fb0e5fba8114e76830fe698565499b2b1d",
+        "tests/test_outputs.py": "5c2d0fd2e5f6303263e9750f67acda7db491ef04841832b4fc62bcfb61b08924"
+      }
+    },
+    {
+      "task_id": "llm-inference-batching-scheduler",
+      "image_tag": "alexgshaw/llm-inference-batching-scheduler:20251031",
+      "image_id": "sha256:0aff6db1f586c1b1e14999750d1cdf8fb94f11bc69c700fcad9b43a7c2ef5686",
+      "repo_digests": [
+        "alexgshaw/llm-inference-batching-scheduler@sha256:19e79aa49be4e55dccca1dde966515ebe6852314b6010bcb9230afb48b996774"
+      ],
+      "image_size_bytes": 120443537,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "ecc9dd635357c184742cf72fc1e452a8946e207b183fc9a7eebbcf07133b911f",
+        "environment/Dockerfile": "10a6193904ee0022ac098504182989893b196dfc74e626a3ca48534a8eacde48",
+        "environment/task_file/input_data/requests_bucket_1.jsonl": "8b3cf1e2b06074162038064dd2c114abe308acd32cec7d365ee63ee81978f7de",
+        "environment/task_file/input_data/requests_bucket_2.jsonl": "e15e2d4c4d55f875c42a6042610d6282f6c0657c39d3e0d0f087268252525cb5",
+        "environment/task_file/scripts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "environment/task_file/scripts/baseline_packer.py": "547d230d5e6d93197803480cb81cab0ec6ac63fcfa0a24b246f549523f216c4e",
+        "environment/task_file/scripts/cost_model.py": "0cf417fd5ff0112defcd46970d37a290c0763c5a9092e91cb3ebb86c3f20e6ce",
+        "instruction.md": "0817374767533fbf51bb93345ee1bba266263c216c6cc55c096e71b4a1d37dfc",
+        "solution/solve.sh": "cb9efb586d76a893c3027e62029e286eb6c7583dc92dbf1840a3adc236a926d7",
+        "task.toml": "52aaac942f917e6a91ff658e0272195bd1cd842d41d71e302414c52603cc588b",
+        "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "tests/cost_model_for_tests.py": "d3e810a99d40327fb8317f6512d879c52c6aeebdf5dcdc0c5e117c7df61c9ab9",
+        "tests/test.sh": "005f980332355e2fe143d4ff4aac11828adf070594bbe7055399c238f06953ca",
+        "tests/test_outputs.py": "80b06b7c4ba0db28832b767d48be74bb462d7f5df5798d9cb58c4f1160d96ffa"
+      }
+    }
+  ],
+  "model_trials_started": 0,
+  "registration_sha256": "e622f2ade86e9cae593ebd20cec395e1e0dcde1301d3fcde42d364b940736037",
+  "runtime_receipt_sha256": "8d6a4c303c6e784a488c8401f3471cfcce182c5466fffc00413b7ca38f85b284",
+  "docker_version": {
+    "Client": {
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Version": "29.8.2",
+      "ApiVersion": "1.56",
+      "DefaultAPIVersion": "1.56",
+      "GitCommit": "7fc2dff",
+      "GoVersion": "go1.26.8",
+      "Os": "linux",
+      "Arch": "amd64",
+      "BuildTime": "Wed Sep 30 19:32:28 2026",
+      "Context": "default"
+    },
+    "Server": {
+      "Platform": {
+        "Name": "Docker Engine - Community"
+      },
+      "Version": "29.8.2",
+      "ApiVersion": "1.56",
+      "MinAPIVersion": "1.40",
+      "Os": "linux",
+      "Arch": "amd64",
+      "Components": [
+        {
+          "Name": "Engine",
+          "Version": "29.8.2",
+          "Details": {
+            "ApiVersion": "1.56",
+            "Arch": "amd64",
+            "BuildTime": "Wed Sep 30 19:32:28 2026",
+            "Experimental": "false",
+            "GitCommit": "8af9fe3",
+            "GoVersion": "go1.26.8",
+            "KernelVersion": "7.0.0-1011-gcp",
+            "MinAPIVersion": "1.40",
+            "Module": "github.com/moby/moby/v2",
+            "ModuleVersion": "v2.0.0+unknown",
+            "Os": "linux"
+          }
+        },
+        {
+          "Name": "containerd",
+          "Version": "v2.3.6",
+          "Details": {
+            "GitCommit": "ee2735368117d2eb259779949d5e75cdafec9761"
+          }
+        },
+        {
+          "Name": "runc",
+          "Version": "1.5.1",
+          "Details": {
+            "GitCommit": "v1.5.1-0-g8f2685a4"
+          }
+        },
+        {
+          "Name": "docker-init",
+          "Version": "0.19.0",
+          "Details": {
+            "GitCommit": "de40ad0"
+          }
+        }
+      ],
+      "GitCommit": "8af9fe3",
+      "GoVersion": "go1.26.8",
+      "KernelVersion": "7.0.0-1011-gcp",
+      "BuildTime": "2026-09-30T19:32:28.000000000+00:00"
+    }
+  },
+  "compose_version": "5.6.0",
+  "frozen_at": "2026-10-05T15:15:10.593398+00:00"
+}

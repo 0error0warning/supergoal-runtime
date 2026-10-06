@@ -1,0 +1,70 @@
+{
+  "captured_at": "2026-10-06T00:18:46.613922+00:00",
+  "scope": "Complete context-handoff01 results, final source/budget and regression audits, frozen observers, and post-run host state. No reruns or regrading.",
+  "files": {
+    "setup/context-handoff01-final-observation01.json": {
+      "sha256": "3edfb94e4b5835dd4bbfd6c5f7292a4852b9c71895e7f16c05471c389bf180ef",
+      "bytes": 2418480
+    },
+    "setup/context-handoff01-final-audit01.json": {
+      "sha256": "55791dfb0db9d1e0ade2714c231cee9d0da09b1fe406a221ba5a9a9d4aea6fc1",
+      "bytes": 66823
+    },
+    "setup/context-handoff01-final-regressions01.json": {
+      "sha256": "465d63676874f6369b24dc31ae52f1608df37e59e99163fbc2b4e854d8dd64dd",
+      "bytes": 344899
+    },
+    "setup/context-handoff01-final-analysis01.json": {
+      "sha256": "38d5c9edc8cc1cff52545f9b979881fb8a643cbfb0f61ca593f872dd2b0112a8",
+      "bytes": 51218
+    },
+    "setup/context-handoff01-final-progress01.md": {
+      "sha256": "90a7e2f0acad84553d071f3789c3524416b2b390430a1a0e4ba926dff8d00122",
+      "bytes": 5068
+    },
+    "setup/context-handoff01-receipt.json": {
+      "sha256": "d54d6b32efc722a67174c9bbdfc15d6d24990becee082b52f0b6cb6334ddbe8e",
+      "bytes": 87020
+    },
+    "setup/context-handoff01-finalizer01.json": {
+      "sha256": "948679a1b6c14fbc9a4e6826d51d32090ac550176bd28ab6444532b289b5a352",
+      "bytes": 2270
+    },
+    "setup/context-handoff01-finalizer-launch01.json": {
+      "sha256": "ea5631d050608756db57580e685daf3e4a868dd4e7d955ab90c8cc8ff15337f2",
+      "bytes": 881
+    },
+    "setup/registration-context-handoff01.json": {
+      "sha256": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+      "bytes": 133629
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "db1ef461ddb79d68e8aa5abc3f581d2de87ab593bb7ad1619ec3a4a139c4c7cf",
+      "bytes": 105675
+    },
+    "analysis-context01/analyze_context.py": {
+      "sha256": "ea44eb9239f9ed0d4b243fc47226b6d4045c0ce1613616b9886e9efc33c30e16",
+      "bytes": 15147
+    },
+    "analysis-context01/audit_multistep_regressions.py": {
+      "sha256": "798e769f1244516e06596f36d46d17a3db66c6b59e05f1cccb946acd80e8da23",
+      "bytes": 6284
+    },
+    "analysis-context01/finalize_context_study.py": {
+      "sha256": "073deb94575b9a5d98bbbeddd3e2ed713119b7ae6a9ff8c0d922e12030216a02",
+      "bytes": 5275
+    },
+    "analysis-context01/audit_completed_context.py": {
+      "sha256": "cccda287c628ff5d4ea5944b36369b503749304da37d791ba7cacb18493a648b",
+      "bytes": 9865
+    },
+    "analysis-context01/collect_multistep.py": {
+      "sha256": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55",
+      "bytes": 8877
+    },
+    "setup/context-handoff01-finished-host01.json": {
+      "sha256": "78a9f2e2f64655ccce366ce4cd245f6c59f2ce891713fa7a8bc50d0d939723bf",
+      "bytes": 414
+    }
+  }
+}

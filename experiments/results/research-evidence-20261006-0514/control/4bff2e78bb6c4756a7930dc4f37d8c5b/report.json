@@ -1,0 +1,432 @@
+{
+  "arm": "longhorizon",
+  "status": "succeeded",
+  "upstream_commit": "a1dd930614972b92361c1b9cd6aac441a6db5a65",
+  "control_id": "4bff2e78bb6c4756a7930dc4f37d8c5b",
+  "adapter": "longhorizon-0.1.7-hermes-dev01",
+  "adaptation": "Unmodified upstream control loop; Hermes backend; terminal-only shared workspace tools for all roles",
+  "claude_backend_readonly_guard": false,
+  "max_requests": 32,
+  "max_manager_rounds": 4,
+  "budget_seconds": 360.0,
+  "upstream_result": {
+    "schema_version": 2,
+    "variant": "lh_harness_role_managed",
+    "mode": "role_orchestration",
+    "status": "complete",
+    "task": "Create /app/probe.json containing exactly the JSON object {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}. Read it back and verify both values before finishing.",
+    "completion_satisfied": true,
+    "completion_authority": "manager_with_role_auditors",
+    "rounds_run": 2,
+    "max_rounds": 4,
+    "abort_reason": "",
+    "failure_reason": "",
+    "error": null,
+    "last_plan": "Current task state:\n- Completed: /app/probe.json created containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read the file back and verified marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (integer), exactly 2 keys, no extra content (round_001).\n- Incomplete: Nothing.\n- Blockers/Risks: None. The verifier warning about a failed write_file was explained — the executor's shell fallback wrote the file and the auditor verified on-disk state directly (round_001).\n- Untrusted/Do not reuse: None.\n\nTask contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing; the shell fallback after a failed write_file is a legitimate production path.\n- Persistence boundary: file written to disk and confirmed readable by an independent read-back, satisfying \"Read it back and verify.\"\n- Acceptance constraints: exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; no extra keys or non-JSON content; verification from real read-back — all confirmed satisfied in round_001.\n- Acceptable evidence: auditor-observed file read and JSON parse — received in round_001.\n- Unacceptable shortcuts: none taken; auditor confirmed no contamination and a single correct candidate.\n\nDependency assessment:\n- Target state: /app/probe.json on disk with the exact JSON object, verified by read-back.\n- State creator: CLI (already executed).\n- Satisfied prerequisites: all — file exists, content exact, read-back verified (round_001).\n- Unsatisfied prerequisites: none.\n- Routing rationale: no further work required; auditor's first three control lines are Status: complete, Integrity: clean, Contract audit: aligned, and the report supports every original requirement including the read-back verification.\n\nNext: done\n- /app/probe.json exists with exact content {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521} (round_001).\n- Auditor independently read and parsed the file: marker == \"LH_REAL_ROLE_LOOP_01\", square == 1521 as integer, 2 keys, no extras (round_001).\n- All acceptance constraints backchecked as aligned; no blockers, no untrusted artifacts (round_001).",
+    "current_task_state": "Current task state:\n- Completed: /app/probe.json created containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read the file back and verified marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (integer), exactly 2 keys, no extra content (round_001).\n- Incomplete: Nothing.\n- Blockers/Risks: None. The verifier warning about a failed write_file was explained — the executor's shell fallback wrote the file and the auditor verified on-disk state directly (round_001).\n- Untrusted/Do not reuse: None.",
+    "current_task_contract": "Task contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing; the shell fallback after a failed write_file is a legitimate production path.\n- Persistence boundary: file written to disk and confirmed readable by an independent read-back, satisfying \"Read it back and verify.\"\n- Acceptance constraints: exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; no extra keys or non-JSON content; verification from real read-back — all confirmed satisfied in round_001.\n- Acceptable evidence: auditor-observed file read and JSON parse — received in round_001.\n- Unacceptable shortcuts: none taken; auditor confirmed no contamination and a single correct candidate.",
+    "latest_auditor_report": "Status: complete\nIntegrity: clean\nContract audit: aligned\n\nAudit facts:\n- /app/probe.json exists on disk (47 bytes, real file confirmed via ls).\n- Independent read-back shows the entire file content is a single line: {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}\n- Python json.load parses it successfully: marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (int, not string), key count == 2, no extra keys, no wrapping structure.\n- Note on verifier warning: the file-mutation verifier reported the executor's write_file failed, but the executor fell back to a shell write. The persisted on-disk state is verified directly by my own read, so the warning is explained and does not indicate contamination.\n- No stray artifacts observed at the target path; single candidate file, correct path, correct content.\n\nEvidence:\n- read_file returned exactly one line matching the required object.\n- python3 json parse output: {'marker': 'LH_REAL_ROLE_LOOP_01', 'square': 1521} 2 <class 'int'>\n\nGaps: none.\n\nNext step: none for this subtask; the target state is durably persisted and verified.\n\nTrustworthy artifacts: /app/probe.json (independently read and parsed by auditor).\nUntrusted artifacts: none.\n\nAcceptance-constraint backcheck:\n- Contract conclusion: aligned\n- Original constraint inventory: state carrier is the file /app/probe.json consumed via filesystem; authoritative inputs are the literal marker and square values from the request; exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; exactly two keys, no extra content; verification must come from a real read-back, not the write payload; no files elsewhere; no substituted values or filenames.\n- Contract coverage check: contract accurately\n\n...[auditor report truncated 1094 chars; kept head and tail]...\n\n: authoritative-input closure — satisfied (literal values only, no external inputs needed). Final-state carrier — satisfied (real file on disk). State-production process — satisfied (normal file write; shell fallback after a failed write_file is a legitimate production path, not forgery). Commit/persistence boundary — satisfied (file persists and is readable). Candidate contamination — not_applicable beyond the single target path; only one candidate exists and it is correct.\n\nState update for manager: /app/probe.json exists with exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read and parsed it — both values verified, integer type confirmed, no extra keys. Subtask complete; no blockers; no untrusted artifacts.",
+    "final_response": "Done. `/app/probe.json` exists and contains exactly `{\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}`.\n\nThe file was read back and parsed to confirm: `marker` is the string `\"LH_REAL_ROLE_LOOP_01\"`, `square` is the integer `1521`, and there are exactly 2 keys with no extra content. Nothing else remains to do.",
+    "rounds": [
+      {
+        "round_index": 1,
+        "next_step": "cli",
+        "plan_text": "Current task state:\n- Completed: Nothing yet; no executor or auditor rounds have run. Target file /app/probe.json does not exist or is unverified.\n- Incomplete: Create /app/probe.json containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; read it back and verify both values.\n- Blockers/Risks: None known; environment facts are unverified.\n- Untrusted/Do not reuse: No prior state exists.\n\nTask contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing (e.g., write_file or shell redirect); no forgery concern.\n- Persistence boundary: file must be written to disk and remain readable; a write without a real read-back does not satisfy \"Read it back and verify.\"\n- Acceptance constraints: (1) path must be exactly /app/probe.json — wrong path is blocking; (2) marker must equal \"LH_REAL_ROLE_LOOP_01\" exactly — blocking; (3) square must equal integer 1521 — blocking; (4) no extra keys or non-JSON content — blocking; (5) verification must come from actually reading the file back, not from the written payload.\n- Acceptable evidence: auditor-observed file read showing the exact content or parsed values.\n- Unacceptable shortcuts: asserting success from the write command alone; substituting a different marker/value or filename.\n\nDependency assessment:\n- Target state: /app/probe.json with exact content, verified by read-back.\n- State creator: CLI — pure filesystem work; write and read-back are one cohesive operation.\n- Satisfied prerequisites: None needed; no external inputs required.\n- Unsatisfied prerequisites: None.\n- Routing rationale: Single dominant state change (file creation) with built-in read-back verification; CLI is correct for file work. One round suffices for execution; audit follows.\n\nNext: cli\n- Task: Write the file /app/probe.json containing exactly the JSON object {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521} — exactly two keys, no extra content. Then read the file back from disk (e.g., cat it and parse with python or jq) and verify marker equals \"LH_REAL_ROLE_LOOP_01\" and square equals 1521. Report the exact file content and verification result.\n- Acceptance criteria: File exists at /app/probe.json; read-back content parses as JSON with marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521 and no additional keys.\n- Related audit reports: None yet (first execution round).\n- Related audited state: None; all environment facts unverified.\n- Boundaries: Do not create files elsewhere; do not add extra keys or formatting changes to the JSON object; verification must come from reading the actual file, not echoing the write payload.",
+        "executor_output": "Done. The `write_file` call returned an error, so I wrote the file via shell and verified it.\n\n- **File:** `/app/probe.json`\n- **Read-back content:** `{\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}` (exact, via `cat`)\n- **Verification (python json.load):** `marker == \"LH_REAL_ROLE_LOOP_01\"` → True, `square == 1521` → True, key count == 2 → True\n\nNo extra files created; all acceptance constraints satisfied.\n\n⚠️ File-mutation verifier: 1 file(s) were NOT modified this turn despite any wording above that may suggest otherwise. Run `git status` or `read_file` to confirm.\n  • `/app/probe.json` — [write_file] Failed to write file:",
+        "auditor_report": "Status: complete\nIntegrity: clean\nContract audit: aligned\n\nAudit facts:\n- /app/probe.json exists on disk (47 bytes, real file confirmed via ls).\n- Independent read-back shows the entire file content is a single line: {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}\n- Python json.load parses it successfully: marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (int, not string), key count == 2, no extra keys, no wrapping structure.\n- Note on verifier warning: the file-mutation verifier reported the executor's write_file failed, but the executor fell back to a shell write. The persisted on-disk state is verified directly by my own read, so the warning is explained and does not indicate contamination.\n- No stray artifacts observed at the target path; single candidate file, correct path, correct content.\n\nEvidence:\n- read_file returned exactly one line matching the required object.\n- python3 json parse output: {'marker': 'LH_REAL_ROLE_LOOP_01', 'square': 1521} 2 <class 'int'>\n\nGaps: none.\n\nNext step: none for this subtask; the target state is durably persisted and verified.\n\nTrustworthy artifacts: /app/probe.json (independently read and parsed by auditor).\nUntrusted artifacts: none.\n\nAcceptance-constraint backcheck:\n- Contract conclusion: aligned\n- Original constraint inventory: state carrier is the file /app/probe.json consumed via filesystem; authoritative inputs are the literal marker and square values from the request; exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; exactly two keys, no extra content; verification must come from a real read-back, not the write payload; no files elsewhere; no substituted values or filenames.\n- Contract coverage check: contract accurately\n\n...[auditor report truncated 1094 chars; kept head and tail]...\n\n: authoritative-input closure — satisfied (literal values only, no external inputs needed). Final-state carrier — satisfied (real file on disk). State-production process — satisfied (normal file write; shell fallback after a failed write_file is a legitimate production path, not forgery). Commit/persistence boundary — satisfied (file persists and is readable). Candidate contamination — not_applicable beyond the single target path; only one candidate exists and it is correct.\n\nState update for manager: /app/probe.json exists with exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read and parsed it — both values verified, integer type confirmed, no extra keys. Subtask complete; no blockers; no untrusted artifacts.",
+        "harness_feedback": "",
+        "task_state": "Current task state:\n- Completed: Nothing yet; no executor or auditor rounds have run. Target file /app/probe.json does not exist or is unverified.\n- Incomplete: Create /app/probe.json containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; read it back and verify both values.\n- Blockers/Risks: None known; environment facts are unverified.\n- Untrusted/Do not reuse: No prior state exists.",
+        "task_contract": "Task contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing (e.g., write_file or shell redirect); no forgery concern.\n- Persistence boundary: file must be written to disk and remain readable; a write without a real read-back does not satisfy \"Read it back and verify.\"\n- Acceptance constraints: (1) path must be exactly /app/probe.json — wrong path is blocking; (2) marker must equal \"LH_REAL_ROLE_LOOP_01\" exactly — blocking; (3) square must equal integer 1521 — blocking; (4) no extra keys or non-JSON content — blocking; (5) verification must come from actually reading the file back, not from the written payload.\n- Acceptable evidence: auditor-observed file read showing the exact content or parsed values.\n- Unacceptable shortcuts: asserting success from the write command alone; substituting a different marker/value or filename.",
+        "related_report_refs": [],
+        "manager_status": {},
+        "executor_status": {
+          "status": "done",
+          "error": null,
+          "duration_ms": 18253,
+          "agent_done": true,
+          "exit_code": 0,
+          "runtime_signals": null
+        },
+        "auditor_status": {
+          "status": "done",
+          "error": null,
+          "duration_ms": 30157,
+          "agent_done": true,
+          "exit_code": 0,
+          "runtime_signals": null
+        }
+      },
+      {
+        "round_index": 2,
+        "next_step": "done",
+        "plan_text": "Current task state:\n- Completed: /app/probe.json created containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read the file back and verified marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (integer), exactly 2 keys, no extra content (round_001).\n- Incomplete: Nothing.\n- Blockers/Risks: None. The verifier warning about a failed write_file was explained — the executor's shell fallback wrote the file and the auditor verified on-disk state directly (round_001).\n- Untrusted/Do not reuse: None.\n\nTask contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing; the shell fallback after a failed write_file is a legitimate production path.\n- Persistence boundary: file written to disk and confirmed readable by an independent read-back, satisfying \"Read it back and verify.\"\n- Acceptance constraints: exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; no extra keys or non-JSON content; verification from real read-back — all confirmed satisfied in round_001.\n- Acceptable evidence: auditor-observed file read and JSON parse — received in round_001.\n- Unacceptable shortcuts: none taken; auditor confirmed no contamination and a single correct candidate.\n\nDependency assessment:\n- Target state: /app/probe.json on disk with the exact JSON object, verified by read-back.\n- State creator: CLI (already executed).\n- Satisfied prerequisites: all — file exists, content exact, read-back verified (round_001).\n- Unsatisfied prerequisites: none.\n- Routing rationale: no further work required; auditor's first three control lines are Status: complete, Integrity: clean, Contract audit: aligned, and the report supports every original requirement including the read-back verification.\n\nNext: done\n- /app/probe.json exists with exact content {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521} (round_001).\n- Auditor independently read and parsed the file: marker == \"LH_REAL_ROLE_LOOP_01\", square == 1521 as integer, 2 keys, no extras (round_001).\n- All acceptance constraints backchecked as aligned; no blockers, no untrusted artifacts (round_001).",
+        "executor_output": "",
+        "auditor_report": "",
+        "harness_feedback": "",
+        "task_state": "Current task state:\n- Completed: /app/probe.json created containing exactly {\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}; auditor independently read the file back and verified marker == \"LH_REAL_ROLE_LOOP_01\" (string), square == 1521 (integer), exactly 2 keys, no extra content (round_001).\n- Incomplete: Nothing.\n- Blockers/Risks: None. The verifier warning about a failed write_file was explained — the executor's shell fallback wrote the file and the auditor verified on-disk state directly (round_001).\n- Untrusted/Do not reuse: None.",
+        "task_contract": "Task contract:\n- Interpretation calibration: \"containing exactly the JSON object\" means the file's entire content is that single JSON object with exactly the two keys marker and square, no extra keys, no wrapping structure.\n- Final success state: /app/probe.json exists on disk; its parsed JSON has marker == \"LH_REAL_ROLE_LOOP_01\" and square == 1521.\n- Authoritative input: the literal values from the original request; no external inputs needed.\n- State carrier: the file /app/probe.json itself, as consumed by the filesystem.\n- Production process: normal file creation/editing; the shell fallback after a failed write_file is a legitimate production path.\n- Persistence boundary: file written to disk and confirmed readable by an independent read-back, satisfying \"Read it back and verify.\"\n- Acceptance constraints: exact path /app/probe.json; marker exactly \"LH_REAL_ROLE_LOOP_01\"; square exactly integer 1521; no extra keys or non-JSON content; verification from real read-back — all confirmed satisfied in round_001.\n- Acceptable evidence: auditor-observed file read and JSON parse — received in round_001.\n- Unacceptable shortcuts: none taken; auditor confirmed no contamination and a single correct candidate.",
+        "related_report_refs": [
+          "round_001"
+        ],
+        "manager_status": {},
+        "executor_status": {},
+        "auditor_status": {}
+      }
+    ],
+    "elapsed_seconds": 98.245
+  },
+  "last_executor_claim": "Done. `/app/probe.json` exists and contains exactly `{\"marker\":\"LH_REAL_ROLE_LOOP_01\",\"square\":1521}`.\n\nThe file was read back and parsed to confirm: `marker` is the string `\"LH_REAL_ROLE_LOOP_01\"`, `square` is the integer `1521`, and there are exactly 2 keys with no extra content. Nothing else remains to do.",
+  "last_acceptance": {
+    "verdict": "pass",
+    "reason": "Actual upstream completion gate",
+    "scope": "Online harness decision, not official grade"
+  },
+  "artifact_image_id": "sha256:5300e8ee13aa75da0597a62015ea5fecb5c57bbc6e21a5f27613ea2db41ed793",
+  "rounds": [
+    {
+      "role": "manager",
+      "pid": 1502745,
+      "exit_code": 0,
+      "seconds": 13.31466146800085,
+      "model_calls": 1,
+      "result_relative_path": "01-manager/result.json",
+      "longhorizon_role": "manager",
+      "role_budget_seconds": 300,
+      "prompt_sha256": "b364f93518d7bb1d4631d711f5c6009c13d2dd2983660e6496472fd8047367b1"
+    },
+    {
+      "role": "executor",
+      "pid": 1503828,
+      "exit_code": 0,
+      "seconds": 18.251488744001108,
+      "model_calls": 3,
+      "result_relative_path": "02-executor/result.json",
+      "longhorizon_role": "cli_executor",
+      "role_budget_seconds": 360,
+      "prompt_sha256": "74eb6c08ac89501fc8876888df7fa5e45ea9e16b29f9914b115b0806e072cdc1"
+    },
+    {
+      "role": "review",
+      "pid": 1505078,
+      "exit_code": 0,
+      "seconds": 30.155918356998882,
+      "model_calls": 2,
+      "result_relative_path": "03-review/result.json",
+      "longhorizon_role": "cli_auditor",
+      "role_budget_seconds": 300,
+      "prompt_sha256": "7670e236dbbfcb25e9b95027f2b12417b450b77f5becf51a5358b811ba9f18f7"
+    },
+    {
+      "role": "manager",
+      "pid": 1506689,
+      "exit_code": 0,
+      "seconds": 17.32689479200053,
+      "model_calls": 1,
+      "result_relative_path": "04-manager/result.json",
+      "longhorizon_role": "manager",
+      "role_budget_seconds": 300,
+      "prompt_sha256": "75c23e6dd4c7a998255ff7c12a670f3bf30ef00cf9583f4e3818b557c9b4159e"
+    },
+    {
+      "role": "final_response",
+      "pid": 1507843,
+      "exit_code": 0,
+      "seconds": 13.542875852999714,
+      "model_calls": 1,
+      "result_relative_path": "05-final_response/result.json",
+      "longhorizon_role": "final_response",
+      "role_budget_seconds": 180,
+      "prompt_sha256": "55e185cc453a31c5782ce1b08ef93eafe17597f807b08ba7ef5d1cd2bd4ae2b7"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791233946.4179435,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5253,
+        "output_tokens": 712,
+        "total_tokens": 5965,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_e590f897-282",
+      "status": "completed",
+      "seconds": 5.926556825637817
+    },
+    {
+      "index": 2,
+      "started": 1791233961.098937,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5880,
+        "output_tokens": 92,
+        "total_tokens": 5972,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_2b5f14e0-a07",
+      "status": "completed",
+      "seconds": 2.765436887741089
+    },
+    {
+      "index": 3,
+      "started": 1791233964.1717799,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6035,
+        "output_tokens": 134,
+        "total_tokens": 6169,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1d3edc7f-514",
+      "status": "completed",
+      "seconds": 2.8160979747772217
+    },
+    {
+      "index": 4,
+      "started": 1791233967.2997768,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6245,
+        "output_tokens": 139,
+        "total_tokens": 6384,
+        "input_tokens_details": {
+          "cached_tokens": 6034
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_fcc7adc8-408",
+      "status": "completed",
+      "seconds": 4.027011156082153
+    },
+    {
+      "index": 5,
+      "started": 1791233981.203825,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6094,
+        "output_tokens": 131,
+        "total_tokens": 6225,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b4bffb28-0ad",
+      "status": "completed",
+      "seconds": 3.2040679454803467
+    },
+    {
+      "index": 6,
+      "started": 1791233984.9167218,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6394,
+        "output_tokens": 792,
+        "total_tokens": 7186,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_f8b33688-c7a",
+      "status": "completed",
+      "seconds": 17.294631958007812
+    },
+    {
+      "index": 7,
+      "started": 1791234011.4658496,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6563,
+        "output_tokens": 607,
+        "total_tokens": 7170,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_28c82c39-537",
+      "status": "completed",
+      "seconds": 10.207749366760254
+    },
+    {
+      "index": 8,
+      "started": 1791234031.5359993,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4429,
+        "output_tokens": 101,
+        "total_tokens": 4530,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_80ac8847-582",
+      "status": "completed",
+      "seconds": 4.853520393371582
+    }
+  ],
+  "used_requests": 8,
+  "snapshot_lifecycle": [
+    {
+      "container_id": "45860c74e96b8692cc9a094ccfb3091528d708381871a58bcfc259800f5603b7",
+      "image_tag": "sg-artifact:4bff2e78bb6c4756a7930dc4f37d8c5b",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1502343,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T20:58:58.708872392Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.project",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 23764.537916865,
+      "status": "captured",
+      "image_id": "sha256:5300e8ee13aa75da0597a62015ea5fecb5c57bbc6e21a5f27613ea2db41ed793",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1502343,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-05T20:58:58.708872392Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 23764.712994247
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791233944.9081905,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791233944.998524,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791233959.552086,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791233959.6770263,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791233979.6278987,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791233979.7222111,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791234009.875173,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791234009.9567723,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791234029.858155,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791234029.9826486,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ]
+}

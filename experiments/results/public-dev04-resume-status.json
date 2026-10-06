@@ -1,0 +1,20 @@
+{
+  "started_at": "2026-10-05T12:06:37.493191+00:00",
+  "pid": 379408,
+  "status": "waiting_for_capacity",
+  "start": 16,
+  "stop": 30,
+  "audit_sha256": "88a90a39a2e5867fcf80a557cb8e425351b6e2ac02d3cac1f82bbf55b0b42a71",
+  "operator_sha256": "920c058a5b93dfb2ce0a72427a2f6a3d98c0f69ebad0360b9a9844a74d3d74c9",
+  "min_available_memory_bytes": 4831838208,
+  "min_free_disk_bytes": 16106127360,
+  "max_wait_seconds": 21600,
+  "retries_of_started_trials": 0,
+  "batch_receipt": "/var/lib/supergoal-lab/setup/public-dev04-rows-16-30.json",
+  "heartbeat_at": "2026-10-05T12:08:07.495651+00:00",
+  "available_memory_bytes": 3105251328,
+  "free_disk_bytes": 110048661504,
+  "checked_at": "2026-10-05T12:08:36.797948+00:00",
+  "process_alive": true,
+  "new_batch_receipt_exists": false
+}

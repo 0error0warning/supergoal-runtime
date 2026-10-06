@@ -1,0 +1,65 @@
+{
+  "experiment": "public-gcp01",
+  "collected_at": "2026-10-05T15:24:20.827383+00:00",
+  "host": "supergoal-gcp",
+  "planned_tasks": 6,
+  "planned_arms": 5,
+  "planned_trials": 30,
+  "observed_trials": 1,
+  "valid_trials": 1,
+  "raw_trial_count_including_oracles_and_prior_candidates": 7,
+  "paired_native_full": {},
+  "apparatus_or_unresolved": [],
+  "paired_native_full_end_to_end": {},
+  "end_to_end_by_arm": {
+    "native": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    },
+    "sg_v2": {
+      "observed_evaluable_trials": 0,
+      "successes": 0,
+      "controller_failures": 0
+    },
+    "repeat_goal": {
+      "observed_evaluable_trials": 0,
+      "successes": 0,
+      "controller_failures": 0
+    },
+    "sg_no_context": {
+      "observed_evaluable_trials": 0,
+      "successes": 0,
+      "controller_failures": 0
+    },
+    "sg_no_review": {
+      "observed_evaluable_trials": 0,
+      "successes": 0,
+      "controller_failures": 0
+    }
+  },
+  "rows": [
+    {
+      "task_id": "configure-git-webserver",
+      "upstream_task_name": "terminal-bench/configure-git-webserver",
+      "arm": "native",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 13,
+      "status": "agent_stopped",
+      "input_tokens": 65726,
+      "output_tokens": 1761,
+      "cache_tokens": 37504,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "episode_seconds": 62.817092592000336,
+      "last_online_verdict": null,
+      "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    }
+  ],
+  "bundle_file": "public-gcp01-bundle.json"
+}

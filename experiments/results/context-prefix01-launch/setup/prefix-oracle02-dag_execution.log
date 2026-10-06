@@ -1,0 +1,29 @@
+  1/1 Core_Pass_Rate: 1.000 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0:00:54 0:00:00
+adhoc • oracle
+┏━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━━┓
+┃ Tria… ┃ Exce… ┃ Core… ┃ Eros… ┃ Eros… ┃ Isol… ┃ Step… ┃ Stri… ┃ Ver… ┃ Verb… ┃
+┡━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━━┩
+│     1 │     0 │ 1.000 │ 0.457 │ 0.500 │ 1.000 │ 1.000 │ 1.000 │ 0.2… │ 1.000 │
+└───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┴──────┴───────┘
+
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃ Reward              ┃ Count ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│ 0.5                 │     1 │
+│ 0.45682212280931833 │     1 │
+│ 0.2950103051132471  │     1 │
+│ 1.0                 │     1 │
+│ 1.0                 │     1 │
+│ 1.0                 │     1 │
+│ 1.0                 │     1 │
+│ 1.0                 │     1 │
+└─────────────────────┴───────┘
+
+Job Info
+Total runtime: 54s
+Results written to 
+/var/lib/supergoal-lab/jobs/prefix-oracle02-dag_execution/result.json
+Inspect results by running `harbor view /var/lib/supergoal-lab/jobs`
+Share results by running `harbor upload 
+/var/lib/supergoal-lab/jobs/prefix-oracle02-dag_execution`
+

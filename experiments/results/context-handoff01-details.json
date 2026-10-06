@@ -1,0 +1,1506 @@
+{
+  "experiment": "context-handoff01",
+  "collected_at": "2026-10-06T00:16:50.120166+00:00",
+  "rows": [
+    {
+      "task_id": "file_backup",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 81,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2371737,
+        "output_tokens": 33229,
+        "observed_input_tokens": 2371737,
+        "observed_output_tokens": 33229,
+        "role_episode_seconds": {
+          "executor": 362.6214512789884,
+          "review": 364.8420920010067
+        },
+        "trial_wall_seconds": 866.1180260181427,
+        "solver_and_online_review_seconds": 783.3979889999999,
+        "official_grading_seconds": 57.756834999999995
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 10,
+              "FAILED": 8
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 31,
+              "FAILED": 19
+            },
+            "current_module": {
+              "PASSED": 11,
+              "FAILED": 7
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 34,
+              "FAILED": 34
+            },
+            "current_module": {
+              "PASSED": 16,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 8,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "carry_current",
+      "status": "returned",
+      "usage": {
+        "requests": 98,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 3112646,
+        "output_tokens": 44242,
+        "observed_input_tokens": 3112646,
+        "observed_output_tokens": 44242,
+        "role_episode_seconds": {
+          "executor": 594.4880277589982,
+          "review": 349.3353113180019
+        },
+        "trial_wall_seconds": 1132.171593427658,
+        "solver_and_online_review_seconds": 1029.055028,
+        "official_grading_seconds": 78.021944
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 39
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 20,
+              "FAILED": 3
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 58,
+              "FAILED": 3
+            },
+            "current_module": {
+              "PASSED": 24,
+              "FAILED": 1
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 82,
+              "FAILED": 4
+            },
+            "current_module": {
+              "PASSED": 18,
+              "FAILED": 12
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 100,
+              "FAILED": 16
+            },
+            "current_module": {
+              "PASSED": 16,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 109,
+        "requests_with_incomplete_token_usage": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "observed_input_tokens": 2383200,
+        "observed_output_tokens": 55428,
+        "role_episode_seconds": {
+          "executor": 1112.4636029369976,
+          "review": 209.715826216001
+        },
+        "trial_wall_seconds": 1413.3689503669739,
+        "solver_and_online_review_seconds": 1354.073504,
+        "official_grading_seconds": 38.400779
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 20,
+              "FAILED": 13
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 20,
+              "FAILED": 13
+            },
+            "current_module": {
+              "PASSED": 3,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 25,
+              "FAILED": 16
+            },
+            "current_module": {
+              "PASSED": 1,
+              "FAILED": 9
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 2
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "carry_current",
+      "status": "returned",
+      "usage": {
+        "requests": 71,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 1467489,
+        "output_tokens": 27758,
+        "observed_input_tokens": 1467489,
+        "observed_output_tokens": 27758,
+        "role_episode_seconds": {
+          "executor": 396.8629486590071,
+          "review": 323.34030589100803
+        },
+        "trial_wall_seconds": 845.8434631824493,
+        "solver_and_online_review_seconds": 766.507662,
+        "official_grading_seconds": 54.307114
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 13,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 34,
+              "FAILED": 16
+            },
+            "current_module": {
+              "PASSED": 11,
+              "FAILED": 7
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 37,
+              "FAILED": 31
+            },
+            "current_module": {
+              "PASSED": 18,
+              "FAILED": 3
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 8,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 114,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2701360,
+        "output_tokens": 63687,
+        "observed_input_tokens": 2701360,
+        "observed_output_tokens": 63687,
+        "role_episode_seconds": {
+          "executor": 839.7411234599931,
+          "review": 372.8721415290056
+        },
+        "trial_wall_seconds": 1457.3212509155273,
+        "solver_and_online_review_seconds": 1320.711217,
+        "official_grading_seconds": 94.75853000000001
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 39
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 2
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 59,
+              "FAILED": 2
+            },
+            "current_module": {
+              "PASSED": 25
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 84,
+              "FAILED": 2
+            },
+            "current_module": {
+              "PASSED": 24,
+              "FAILED": 6
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 108,
+              "FAILED": 8
+            },
+            "current_module": {
+              "PASSED": 17,
+              "FAILED": 3
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "returned",
+      "usage": {
+        "requests": 138,
+        "requests_with_incomplete_token_usage": 2,
+        "input_tokens": null,
+        "output_tokens": null,
+        "observed_input_tokens": 3525134,
+        "observed_output_tokens": 64028,
+        "role_episode_seconds": {
+          "executor": 1113.7242953859968,
+          "review": 474.96321953299775
+        },
+        "trial_wall_seconds": 2697.0241310596466,
+        "solver_and_online_review_seconds": 1641.502648,
+        "official_grading_seconds": 1026.406833
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 28,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 28,
+              "FAILED": 5
+            },
+            "current_module": {
+              "PASSED": 4,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 32,
+              "FAILED": 9
+            },
+            "current_module": {
+              "FAILED": 10
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 69,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 1074659,
+        "output_tokens": 25306,
+        "observed_input_tokens": 1074659,
+        "observed_output_tokens": 25306,
+        "role_episode_seconds": {
+          "executor": 351.716264925999,
+          "review": 209.8692761420025
+        },
+        "trial_wall_seconds": 687.7106454372406,
+        "solver_and_online_review_seconds": 605.424569,
+        "official_grading_seconds": 53.605105
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 13,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 34,
+              "FAILED": 16
+            },
+            "current_module": {
+              "PASSED": 12,
+              "FAILED": 6
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 38,
+              "FAILED": 30
+            },
+            "current_module": {
+              "PASSED": 19,
+              "FAILED": 2
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 8,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "returned",
+      "usage": {
+        "requests": 104,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2377433,
+        "output_tokens": 59272,
+        "observed_input_tokens": 2377433,
+        "observed_output_tokens": 59272,
+        "role_episode_seconds": {
+          "executor": 825.0700221610095,
+          "review": 251.44114809900202
+        },
+        "trial_wall_seconds": 1287.1413478851318,
+        "solver_and_online_review_seconds": 1160.124276,
+        "official_grading_seconds": 89.535055
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 39
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 2
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 59,
+              "FAILED": 2
+            },
+            "current_module": {
+              "PASSED": 24,
+              "FAILED": 1
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 83,
+              "FAILED": 3
+            },
+            "current_module": {
+              "PASSED": 13,
+              "FAILED": 17
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 96,
+              "FAILED": 20
+            },
+            "current_module": {
+              "PASSED": 16,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 103,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 3244204,
+        "output_tokens": 47797,
+        "observed_input_tokens": 3244204,
+        "observed_output_tokens": 47797,
+        "role_episode_seconds": {
+          "executor": 723.9192647390082,
+          "review": 201.95558125901152
+        },
+        "trial_wall_seconds": 1061.605728149414,
+        "solver_and_online_review_seconds": 986.638516,
+        "official_grading_seconds": 46.246339
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 14,
+              "FAILED": 19
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 25,
+              "FAILED": 8
+            },
+            "current_module": {
+              "PASSED": 4,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 30,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 9,
+              "FAILED": 1
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 1,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 12
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 1
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "returned",
+      "usage": {
+        "requests": 68,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 881604,
+        "output_tokens": 24480,
+        "observed_input_tokens": 881604,
+        "observed_output_tokens": 24480,
+        "role_episode_seconds": {
+          "executor": 354.9076265160038,
+          "review": 189.51269940000202
+        },
+        "trial_wall_seconds": 679.5707743167877,
+        "solver_and_online_review_seconds": 593.21646,
+        "official_grading_seconds": 60.52064
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 21,
+              "FAILED": 11
+            },
+            "current_module": {
+              "PASSED": 10,
+              "FAILED": 8
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 31,
+              "FAILED": 19
+            },
+            "current_module": {
+              "PASSED": 12,
+              "FAILED": 6
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 28,
+              "FAILED": 40
+            },
+            "current_module": {
+              "PASSED": 16,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 15,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "usage": {
+        "requests": 76,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 2658449,
+        "output_tokens": 43518,
+        "observed_input_tokens": 2658449,
+        "observed_output_tokens": 43518,
+        "role_episode_seconds": {
+          "executor": 509.31210871099756,
+          "review": 309.6220655040088
+        },
+        "trial_wall_seconds": 1000.8048295974731,
+        "solver_and_online_review_seconds": 901.1945010000001,
+        "official_grading_seconds": 76.075377
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 39
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 39
+            },
+            "current_module": {
+              "PASSED": 19,
+              "FAILED": 4
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 57,
+              "FAILED": 4
+            },
+            "current_module": {
+              "PASSED": 24,
+              "FAILED": 1
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 81,
+              "FAILED": 5
+            },
+            "current_module": {
+              "PASSED": 21,
+              "FAILED": 9
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 102,
+              "FAILED": 14
+            },
+            "current_module": {
+              "PASSED": 15,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [
+            {
+              "count": 1,
+              "source_and_reason": "../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2"
+            }
+          ],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_3",
+          "to_checkpoint": "checkpoint_4",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_4",
+          "to_checkpoint": "checkpoint_5",
+          "status": "measured",
+          "identity_scope": "reported_test_ids_only; anonymous skips have no inferred node identity",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "carry_current",
+      "status": "returned",
+      "usage": {
+        "requests": 114,
+        "requests_with_incomplete_token_usage": 0,
+        "input_tokens": 4209931,
+        "output_tokens": 53719,
+        "observed_input_tokens": 4209931,
+        "observed_output_tokens": 53719,
+        "role_episode_seconds": {
+          "executor": 741.1887346939911,
+          "review": 221.1315655110011
+        },
+        "trial_wall_seconds": 1038.8028535842896,
+        "solver_and_online_review_seconds": 972.386364,
+        "official_grading_seconds": 40.661791
+      },
+      "modules": [
+        {
+          "checkpoint": "checkpoint_1",
+          "groups": {
+            "prior_modules": {},
+            "current_module": {
+              "PASSED": 15,
+              "FAILED": 18
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 15,
+              "FAILED": 18
+            },
+            "current_module": {
+              "PASSED": 5,
+              "FAILED": 3
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "groups": {
+            "prior_modules": {
+              "PASSED": 20,
+              "FAILED": 21
+            },
+            "current_module": {
+              "PASSED": 5,
+              "FAILED": 5
+            },
+            "unmapped_modules": {},
+            "future_modules": {}
+          },
+          "all_collected_outcomes_accounted": true,
+          "anonymous_skipped_summaries": [],
+          "scope": "Upstream test-module number; not a semantic requirement classifier. Anonymous skips have no inferred ownership."
+        }
+      ],
+      "regressions": [
+        {
+          "from_checkpoint": "checkpoint_1",
+          "to_checkpoint": "checkpoint_2",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        },
+        {
+          "from_checkpoint": "checkpoint_2",
+          "to_checkpoint": "checkpoint_3",
+          "status": "measured",
+          "identity_scope": "all_test_ids",
+          "pass_to_fail_count": 0,
+          "pass_to_error_count": 0,
+          "fail_to_pass_count": 0
+        }
+      ]
+    }
+  ],
+  "new_model_calls": 0,
+  "scores_unchanged": true,
+  "scope": "Supplementary descriptive accounting. Wall time includes setup, grading and cleanup after dispatch, not admission queueing. Shared-host concurrency affects time. Missing token usage is not zero. Test module grouping and same-ID regressions do not prove complete requirement coverage.",
+  "source_sha256": {
+    "experiments\\results\\research-evidence-20261006-081902\\setup\\context-handoff01-final-observation01.json": "3edfb94e4b5835dd4bbfd6c5f7292a4852b9c71895e7f16c05471c389bf180ef",
+    "experiments\\results\\research-evidence-20261006-081902\\setup\\context-handoff01-receipt.json": "d54d6b32efc722a67174c9bbdfc15d6d24990becee082b52f0b6cb6334ddbe8e",
+    "experiments\\results\\research-evidence-20261006-081902\\setup\\context-handoff01-final-regressions01.json": "465d63676874f6369b24dc31ae52f1608df37e59e99163fbc2b4e854d8dd64dd",
+    "experiments\\public_benchmarks\\registration-context-handoff01.json": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+    "experiments\\public_benchmarks\\analyze_context_details.py": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3"
+  }
+}

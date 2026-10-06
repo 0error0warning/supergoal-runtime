@@ -1,0 +1,115 @@
+{
+  "status": "waiting_for_oracles",
+  "started_at": 1791218196.9610105,
+  "registration_sha256": "caf6607e6bdd4de893d60afde7cdee01f26823cf9f86deb9cfb2a60fa1ae5812",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "taskif_83",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 1,
+      "task_id": "taskif_83",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 2,
+      "task_id": "taskif_83",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 3,
+      "task_id": "taskif_112",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 4,
+      "task_id": "taskif_112",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 5,
+      "task_id": "taskif_112",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 6,
+      "task_id": "taskif_57",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 7,
+      "task_id": "taskif_57",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "taskif_57",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "taskif_94",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "taskif_94",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "taskif_94",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 12,
+      "task_id": "taskif_13",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 13,
+      "task_id": "taskif_13",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 14,
+      "task_id": "taskif_13",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 15,
+      "task_id": "taskif_155",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 16,
+      "task_id": "taskif_155",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 17,
+      "task_id": "taskif_155",
+      "arm": "sg_v2",
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "captured_at": "2026-10-06T00:27:26.626936+00:00",
+  "scope": "All twelve registered trajectories and 48 grades, actual context activation, frozen-source and budget audit, same-test-ID regressions, and supplementary cost/time analysis. Three development problems, no new independent task IDs.",
+  "files": {
+    "bundle.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-final-observation01.json",
+      "sha256": "3edfb94e4b5835dd4bbfd6c5f7292a4852b9c71895e7f16c05471c389bf180ef",
+      "bytes": 2418480
+    },
+    "receipt.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-receipt.json",
+      "sha256": "d54d6b32efc722a67174c9bbdfc15d6d24990becee082b52f0b6cb6334ddbe8e",
+      "bytes": 87020
+    },
+    "runtime-audit.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-final-audit01.json",
+      "sha256": "55791dfb0db9d1e0ade2714c231cee9d0da09b1fe406a221ba5a9a9d4aea6fc1",
+      "bytes": 66823
+    },
+    "regressions.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-final-regressions01.json",
+      "sha256": "465d63676874f6369b24dc31ae52f1608df37e59e99163fbc2b4e854d8dd64dd",
+      "bytes": 344899
+    },
+    "server-analysis.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-final-analysis01.json",
+      "sha256": "38d5c9edc8cc1cff52545f9b979881fb8a643cbfb0f61ca593f872dd2b0112a8",
+      "bytes": 51218
+    },
+    "finalizer.json": {
+      "source": "experiments/results/research-evidence-20261006-081902/setup/context-handoff01-finalizer01.json",
+      "sha256": "948679a1b6c14fbc9a4e6826d51d32090ac550176bd28ab6444532b289b5a352",
+      "bytes": 2270
+    },
+    "analysis.json": {
+      "source": "experiments/results/context-handoff01-analysis.json",
+      "sha256": "8c8ca9af2f3c99e8a3f509abe1a41a36dac90b30168124201f7d31accac4f2b7",
+      "bytes": 52651
+    },
+    "details.json": {
+      "source": "experiments/results/context-handoff01-details.json",
+      "sha256": "c12ec51eb8d6f73566d7049d785924fbd0838830a9049b98b85c81681af2ca2d",
+      "bytes": 51807
+    },
+    "registration.json": {
+      "source": "experiments/public_benchmarks/registration-context-handoff01.json",
+      "sha256": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+      "bytes": 133629
+    },
+    "analyze_context.py": {
+      "source": "experiments/public_benchmarks/analyze_context.py",
+      "sha256": "ea44eb9239f9ed0d4b243fc47226b6d4045c0ce1613616b9886e9efc33c30e16",
+      "bytes": 15147
+    },
+    "analyze_context_details.py": {
+      "source": "experiments/public_benchmarks/analyze_context_details.py",
+      "sha256": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3",
+      "bytes": 9982
+    },
+    "context_policy.py": {
+      "source": "experiments/public_benchmarks/context_policy.py",
+      "sha256": "ab5c2fdc0ac20d103e17ae88cbcc255dd1687059c3ac27f2d8cb11297892bcdc",
+      "bytes": 1981
+    },
+    "audit_completed_context.py": {
+      "source": "experiments/infrastructure/audit_completed_context.py",
+      "sha256": "cccda287c628ff5d4ea5944b36369b503749304da37d791ba7cacb18493a648b",
+      "bytes": 9865
+    },
+    "report.md": {
+      "source": "docs/context-handoff01-progress.md",
+      "sha256": "62043e3ebe8329f0f874b096fb1c97401a71699fd0c0bb2c2bdd36d70687d0fa",
+      "bytes": 5139
+    },
+    "details.md": {
+      "source": "docs/context-handoff01-details.md",
+      "sha256": "325bbaef314b091c2b2cea1333b1434d67ab2eebae78577d376136eaaa72ed68",
+      "bytes": 6095
+    },
+    "candidate.tar.gz": {
+      "source": "experiments/baselines/sg-context-handoff01.tar.gz",
+      "sha256": "6ee48fbf62d2e8b5ca2ba4be84a89a95b6351dbb77ec1d3ef7d0c8a8320887b4",
+      "bytes": 212677
+    }
+  }
+}

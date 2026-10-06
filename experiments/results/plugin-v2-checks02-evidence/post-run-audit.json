@@ -1,0 +1,9 @@
+{
+  "captured_at": "2026-10-05T22:54:34.525078+00:00",
+  "host": "supergoal-gcp",
+  "source": "/var/lib/supergoal-lab/plugin-v2-checks02",
+  "unit_observation": "MainPID=0\nResult=success\nPrivateNetwork=no\nLoadState=not-found\nActiveState=inactive\nFragmentPath=\n",
+  "network_evidence_note": "The original receipt private_network field is an environment marker, not a measured network namespace. PrivateNetwork=yes was requested at launch; the completed transient unit was garbage collected (LoadState=not-found), so later default PrivateNetwork=no is not a measurement of the test process. Actual namespace isolation was not independently recorded. This does not change the test results.",
+  "model_calls": 0,
+  "production_deployed": false
+}

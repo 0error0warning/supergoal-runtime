@@ -1,0 +1,10 @@
+{
+  "recorded_at": "2026-10-05T14:28:05.020253+00:00",
+  "project": "gen-lang-client-0258124817",
+  "instance": "supergoal-lab-20261005",
+  "zone": "us-central1-a",
+  "exit_code": 0,
+  "passed": true,
+  "stdout": "KVM_GUEST_BOOT_PASS /var/lib/supergoal-lab/probes/kvm-cZst23rg\n[    1.434455] Freeing unused kernel image (text/rodata gap) memory: 1164K\r\n[    1.434937] Freeing unused kernel image (rodata/data gap) memory: 1836K\r\n[    1.451051] x86/mm: Checked W+X mappings: passed, no W+X pages found.\r\n[    1.451077] Run /init as init process\r\nSUPERGOAL_NESTED_KVM_GUEST_BOOTED\r\nLinux (none) 7.0.0-1011-gcp #11~24.04.1-Ubuntu SMP PREEMPT Tue Aug 11 20:14:48 UTC 2026 x86_64 GNU/Linux\r\n[    1.464080] ACPI: PM: Preparing to enter system sleep state S5\r\n[    1.466223] reboot: Power down\r\n",
+  "stderr": "4153 blocks\n"
+}

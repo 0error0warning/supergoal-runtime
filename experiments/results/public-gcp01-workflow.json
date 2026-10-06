@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-10-05T15:20:35.409261+00:00",
+  "status": "running",
+  "automatic_trial_retries": 0,
+  "host": "supergoal-gcp",
+  "source_sha256": {
+    "analyze_public.py": "18f1b6dc412865caa0adca2614843ceff8fc5e2cc06e604b44f26f36fd0c611f",
+    "collect_public.py": "5f93e29fb58f1d20de953b552c26bf14d8e9e7b59d1c0e03758e99908be47bd2",
+    "finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "gcp_run_cohort.py": "7a70cddd5ba72efb7be1ec00d9e142dca6dbdca9be5350891b27e7b9c15082b4",
+    "run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98"
+  }
+}

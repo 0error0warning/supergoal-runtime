@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "model_calls": 0,
+  "base_image": "sha256:c83674e1999044d33d751661371b873539f47e5b5c5ca3320c7e0377acca6238",
+  "started": 1791226699.4811487,
+  "error": "CalledProcessError: Command '['docker', '-H', 'unix:///var/lib/supergoal-lab/run/docker.sock', 'compose', '--project-name', 'sg-retention-diagnostic01', '--file', '/var/lib/supergoal-lab/probes/compose-retention01/compose.yaml', 'up', '--build', '-d']' returned non-zero exit status 1.",
+  "finished": 1791226701.9762795
+}

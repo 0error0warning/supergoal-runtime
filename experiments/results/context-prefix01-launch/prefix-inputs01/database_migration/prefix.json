@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "task_id": "database_migration",
+  "prefix_checkpoint_count": 1,
+  "image_id": "sha256:e5760e50620db4ac5f674d1458ba60395a71d8e4d5d5d203023e004b2d9c559c",
+  "workspace_sha256": "ad24ace66b2cbdceeb71c511b609a6ef3d396f5cfdb109d416d6c20bc20d51a9",
+  "file_entries": 3,
+  "public_requirement": {
+    "path": "/var/lib/supergoal-lab/prefix-inputs01/database_migration/prefix-instruction.md",
+    "sha256": "9b0ad9d700780172737979600d581da10dc7239f9ce21c7cda1892fa01422689"
+  },
+  "grader_history": {
+    "path": "/var/lib/supergoal-lab/prefix-inputs01/database_migration/grader-history.json",
+    "sha256": "18c9fac7d3ce015c0f717032cdd17030fd897fd6ba0fdb01ad6d2b6b9bc9a7b0"
+  },
+  "prefix_requests": 11,
+  "origin": {
+    "experiment": "context-handoff01",
+    "registered_index": 1,
+    "arm": "carry_current",
+    "problem_id": "1faa16ebe5544c43b86f2f440feb1fa8",
+    "control_id": "c04df5cc5b20423aa00596b43f9208c4",
+    "result_sha256": "6c0c1389c20b3f0bb52a6e5982d7cc17d78a81798f34eb9fce883b25679d5e83",
+    "report_sha256": "107846e18ec7d95e1683328d7b4e8934d393d96a1f17b090d7b0953362677073"
+  }
+}

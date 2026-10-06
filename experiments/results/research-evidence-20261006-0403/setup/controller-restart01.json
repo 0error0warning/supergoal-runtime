@@ -1,0 +1,9 @@
+{
+  "status": "waiting_reserved_capacity",
+  "model": "devin/swe-2",
+  "max_requests": 32,
+  "scope": "Synthetic process/controller-loss integration, not benchmark capability or production recovery",
+  "automatic_trial_retries": 0,
+  "source_sha256": "30b203e9430c5f0295d94b06ec3a827b70698ae8ded0d8cfe340003eb4238275",
+  "registration_sha256": "0a27bf205f66866306bfe90ae170cc3d6976ee10f707b1d1745624ad08bba4e0"
+}

@@ -1,0 +1,315 @@
+{
+  "tasks": [
+    {
+      "task_id": "configure-git-webserver",
+      "metadata_path": "tasks/configure-git-webserver/task.toml",
+      "metadata_git_blob_sha": "f2e7ecdee53ae81d5afa928333908e3e7945f386",
+      "category": "system-administration",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/configure-git-webserver:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "write-compressor",
+      "metadata_path": "tasks/write-compressor/task.toml",
+      "metadata_git_blob_sha": "ef8bc825dced411ecc37c987bfa3774d08bcc060",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/write-compressor:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "dna-assembly",
+      "metadata_path": "tasks/dna-assembly/task.toml",
+      "metadata_git_blob_sha": "b09ebdc64a4a6b6b35a69a2bc64c786dff597428",
+      "category": "scientific-computing",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/dna-assembly:20251031",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "extract-elf",
+      "metadata_path": "tasks/extract-elf/task.toml",
+      "metadata_git_blob_sha": "e96fdeff8886bb786f40601407737535039ee94a",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/extract-elf:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    }
+  ],
+  "environment": [
+    {
+      "task_id": "configure-git-webserver",
+      "image_tag": "alexgshaw/configure-git-webserver:20251031",
+      "image_id": "sha256:ec4bd4a5223850005caf80b223cbd98adb8999dbc5326786169d7998db53b65f",
+      "repo_digests": [
+        "alexgshaw/configure-git-webserver@sha256:9e48389b917fd4650dda1f64406bd7198bbf20dc1c6b0e5c4d81a3c16369f88c"
+      ],
+      "image_size_bytes": 143238589,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "d1db8dfb8883e39adf902eced862bfd7bf8240f2fc7eb6364a74d77b09b899b5",
+        "environment/Dockerfile": "8c87039a43581841b7ef11d80c4ff1a5c5f43011877e167403063d55435aaa19",
+        "instruction.md": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+        "solution/solve.sh": "921ff9c1dabdbd130e1a6616c24b236b7ba9a1517b3dff4c33fe8c8a129e2e7a",
+        "task.toml": "ebb40d72f689512cbd90d865d88ef966b6665ab215544f9247b898b7fa94751b",
+        "tests/test.sh": "afafc3ffdaf911f7a93003c0746f217188099c174e5d3eb7dada17133df15895",
+        "tests/test_outputs.py": "526aee3dfe952cc4c7574361012712e389d6fba7222c005fc3e939fc53346b37",
+        "tests/verify.sh": "49a02f5267a892824e023ce05eb1ac6132a44854cc47f20feba312c4a3d05568"
+      }
+    },
+    {
+      "task_id": "write-compressor",
+      "image_tag": "alexgshaw/write-compressor:20251031",
+      "image_id": "sha256:795a10ee52aa610a840b6587c5a1d2194175faa76c58879c8846a115b601902a",
+      "repo_digests": [
+        "alexgshaw/write-compressor@sha256:3618e1f8a997b437c09cd3dbaac736705809c05f6f12f584b65722175970ebe1"
+      ],
+      "image_size_bytes": 777076255,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "603015a28500a28f0838fea2c43a5168613746bfd07737920f4bae40b5a326f7",
+        "environment/Dockerfile": "9a583d29d46818f6ff2be7c6a0879d03343106e5376fd5a48eb5926b402bb93b",
+        "environment/data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+        "environment/decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+        "environment/main.rs": "fa53d6572fca95903e30d2d953f1e428bb8b63513ff218ebee9bc60a425ab389",
+        "instruction.md": "c4fc3e73e44deeac95f1cd4a34a2d87e853b22ceec2b2824767f5f087b470bb2",
+        "solution/solve.sh": "01550b7de7ab1320b1898eae055226bb7c73bee259c75102d2240c974a730409",
+        "task.toml": "6066a509066433c97c417fea68c4e3e73996f698dcdcbabe07718835eea355a6",
+        "tests/original-data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+        "tests/original-decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "809f486053e3ffbce852111dee1f63d80ab31297bd33172389e50278bed384e2"
+      }
+    },
+    {
+      "task_id": "dna-assembly",
+      "image_tag": "alexgshaw/dna-assembly:20251031",
+      "image_id": "sha256:940e10327e89b8034aa335c48e8e643414809f5ee2ffd2d2854688b996c822ee",
+      "repo_digests": [
+        "alexgshaw/dna-assembly@sha256:d1adf6835f1dd91205ba70e452c699d0aea601010038e5617f370716efb50569"
+      ],
+      "image_size_bytes": 78130568,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "e7855c23d9822f688eec4dd89ca0f1caf91c6a69e1c8f3c9eb544b4ab2a94821",
+        "environment/Dockerfile": "26e9e43a98f0b1d132bb638f44b7dc882b0d0ca32d56fa33048adeee00ab600d",
+        "environment/sequences.fasta": "ebdc361b5fba28eb0a2c7a8a8a444ccb12cc842c8cbc6df5a2c24254f130736f",
+        "instruction.md": "88998c98beabdd966ab46c04ede822bbc74796696aa1bf87c567a9131210533c",
+        "solution/solve.sh": "c976cb118c8ef1befd846ba05fd5cadb1b1f529bc76b9f2ea9cb3049e6e11a47",
+        "task.toml": "7b571544b64d9be1c91526837e5d805c2181afe0e6fd57a7f0676bba36c868d7",
+        "tests/test.sh": "271c8317c98539e3b49233d017fe51fb0e5fba8114e76830fe698565499b2b1d",
+        "tests/test_outputs.py": "5c2d0fd2e5f6303263e9750f67acda7db491ef04841832b4fc62bcfb61b08924"
+      }
+    },
+    {
+      "task_id": "extract-elf",
+      "image_tag": "alexgshaw/extract-elf:20251031",
+      "image_id": "sha256:ce2d818d338482f97d2dc224b884271798ccd801e922ef08606a64103e08489f",
+      "repo_digests": [
+        "alexgshaw/extract-elf@sha256:6932e4cb318464307eacd497ef8dc617eaf551b6a90231f815ec0b911895cfed"
+      ],
+      "image_size_bytes": 998373805,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "fded9e044b44e8ac84d083f5d915e6f6e4bccfc008537edc1fd2c6cd63feacbc",
+        "environment/Dockerfile": "1c5c0a227bee1f5e2933710f3c9d89848a4dc9353c2516a549196fb18b842606",
+        "environment/task-deps/hi.c": "9f6343607512e0439ba459adc5cbf209691332afd93f39360b0b261afd6cb0f2",
+        "instruction.md": "f1dd8c8fd9f01101d2ecb65665bdedc33adc868abd853b3adf556f6aa4982073",
+        "solution/solve.sh": "c72b1715a26c4eefe4c53934243a1d67f7560b3c126f82d2c98c92870f69df40",
+        "task.toml": "14e2c28fd7cc1c9c7b64ab0db5565899fed538e38c55074824647cacc3f7a172",
+        "tests/test.sh": "84ee50194effb4c72b9cbd0306cccaf0f855f3634227cd8359928722a53bbdaf",
+        "tests/test_outputs.py": "825569115217f1cea7b0f3c7547d60d21e6ea36f587d82cc9dfdd5dd98c04570"
+      }
+    }
+  ],
+  "oracles": [
+    {
+      "task_id": "configure-git-webserver",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:15:12.722750Z",
+      "finished_at": "2026-10-05T15:16:02.010705Z",
+      "exit_code": 0
+    },
+    {
+      "task_id": "write-compressor",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:16:56.262809Z",
+      "finished_at": "2026-10-05T15:18:12.571187Z",
+      "exit_code": 0
+    },
+    {
+      "task_id": "dna-assembly",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:18:16.331730Z",
+      "finished_at": "2026-10-05T15:18:59.186476Z",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "extract-elf",
+      "status": "graded",
+      "started_at": "2026-10-05T16:15:24.872148Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-06-extract-elf/extract-elf__BdsZoYq/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:15:50.236138+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    }
+  ],
+  "mini_source_sha256": {
+    "src/minisweagent/__main__.py": "148c803a2c3ef9cdc5436836e3414e33515d2f4964fcfc52a62c6ed2943b585a",
+    "src/minisweagent/__init__.py": "0a708308b1b62cc020b60799c3d54f665845f795b3f0c4fdac787c96a38d12c7",
+    "src/minisweagent/exceptions.py": "0590393c56bee873c79a691dcb4f15cb39c85f1658598b84bfb295bfde56921d",
+    "src/minisweagent/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/agents/__init__.py": "f95a9f4d1dcc08a05ba6263c5da562b3a7e9e3ae07734f2b9f0d83153c8d0cab",
+    "src/minisweagent/agents/interactive.py": "d68236832ce2a8c65340fdfd4cdb6df2a24818691112f83bc229197203521cce",
+    "src/minisweagent/agents/README.md": "9a446af17787fd7fd8f8f6c963edd4fed50865ed2a39f4acf6632239be7c6fd9",
+    "src/minisweagent/agents/default.py": "e8ef8aa365942d739c2ec5cb0879f60f377d2dc2de8ec670aaedf3bafb45a4c2",
+    "src/minisweagent/environments/singularity.py": "5d75c3977c4ebe728778f25bc231f5876d857c837c30fd42845a64b48e10ac68",
+    "src/minisweagent/environments/__init__.py": "7a02c4576d3e95ca21f243919e5bc5b94d183df35b24d778c0b35b776c3a426b",
+    "src/minisweagent/environments/local.py": "01dd33ae6be897458611911cc0eee1389092ea9fc6788c7eb24773e7c6342b1c",
+    "src/minisweagent/environments/docker.py": "21d389122b008e7b743d1e640207fda0b08d9010cf6323ddd02f0742b33b96a6",
+    "src/minisweagent/environments/README.md": "6e6a15ff869f9835d3d607ffcac854920585675215039b196eb17f08df5f0481",
+    "src/minisweagent/models/portkey_model.py": "d5e2bb009791e0d00745d95cb142d090531f28bda6e3782b8ba94d2ac1b2f528",
+    "src/minisweagent/models/litellm_model.py": "6df4483bcdc9620b2f9d7f8bb1027a7fb9729b739976cbcf1a9d18fb58c48227",
+    "src/minisweagent/models/test_models.py": "44330685739f47e554b90fa73ccf019bc2e2b80e4c287c025f63ea4f5263b23e",
+    "src/minisweagent/models/openrouter_response_model.py": "19284d9f6ba6ec95b60cc0e91f06be3ff6e1976e204633f533076db0c1e499dd",
+    "src/minisweagent/models/__init__.py": "eb141eae346d51af407b4faf868ad7e869fa4fff275415381fa8ef845616f351",
+    "src/minisweagent/models/openrouter_textbased_model.py": "61944531db221e4d668b245d1ccfec022110906fd732397a49f9d3b01e510573",
+    "src/minisweagent/models/litellm_response_model.py": "968de298d508b0de58f52548472e47135efff3891ddda157a9740e7571a6e8c8",
+    "src/minisweagent/models/openrouter_model.py": "6f217e91d04da906ea8e8a156f710e19ddbcf5ab6397b329a2abb66a95a80313",
+    "src/minisweagent/models/litellm_textbased_model.py": "395bc9bc4a06c18577e73b21c5465f9d22a6d0cc45b006f3d7c9fdaae399e732",
+    "src/minisweagent/models/portkey_response_model.py": "b491e7dd2db134667e2733be944b0b2edfcd928b02edb53db9ee1c4922e64b89",
+    "src/minisweagent/models/requesty_model.py": "b8b52e125b0cc75ec144b40e3ca4d996f469aca5acedaa3ed41446dede171063",
+    "src/minisweagent/models/README.md": "971ef8cbf7e283e081ba01766a0c9e71c7832db8c45b28ed3743597dee591347",
+    "src/minisweagent/utils/log.py": "aee0cc34a32b542f4d3ef09e1f03b7418cf98ec54d506401d9d4401003c05a9f",
+    "src/minisweagent/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/utils/serialize.py": "3035b27cfeffdf91117c72bc8131340bd9c5f67a3010baeb4ecd6b0c7406f462",
+    "src/minisweagent/run/mini.py": "ae9c82013afbc8e0320dc1e55600eed9d9ee6dec5acbc59763ff984a0594f9a9",
+    "src/minisweagent/run/__init__.py": "588a18807565ee2645d989dcadf57722db6ea46e8fe4aa20ae82872840a46b70",
+    "src/minisweagent/run/hello_world.py": "e1d2b259e5716167e3066ce406d91e51d67b432dd49d47342e1306d25f5cf2f6",
+    "src/minisweagent/run/README.md": "f2cda2f2abb04839f629e9fb65a25d86cb7882c40e447c6925ee0f68d272aa84",
+    "src/minisweagent/config/__init__.py": "ec19d21c65d1d720e80847e85a4d2752b6f5be30b1bfc9f0f1f97d342f20ba94",
+    "src/minisweagent/config/default.yaml": "112aa58328f478a41cc2630702a4b89ef459e912870e05065157ed221f56701f",
+    "src/minisweagent/config/mini_textbased.yaml": "a8c19b95fba2af792b22b4fa58b7ce70357b721a877fd713852abedb650216cf",
+    "src/minisweagent/config/inspector.tcss": "00c13651164c3042e780bed1675cf0ef6371bea92a7c388319c9205d54966e05",
+    "src/minisweagent/config/mini.yaml": "b539a8965f5bf41dd0f32daafa5d2db22581923d13812fa378fd09569b9d6b0c",
+    "src/minisweagent/config/README.md": "1430bac6ef75c27cbf838a6ce4130cba74e58826518194df9dc53492b3f1ac7a",
+    "src/minisweagent/agents/utils/prompt_user.py": "4fc4ca772db13067ebad7fdce8b3ec0ab229e1b3e764f3abd4412522b73cab3e",
+    "src/minisweagent/agents/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/environments/extra/swerex_docker.py": "2f200454247aaf299d851d6db02869fee88e1254c0b4f1e79f2c2a899b659fd8",
+    "src/minisweagent/environments/extra/swerex_modal.py": "34155d79bb72648eaf765116d03255e697fc9546164f69d842bc5e759878a3de",
+    "src/minisweagent/environments/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/environments/extra/contree.py": "88ddea919f18c2e0ea85dd8a3b2483836098afd668b6bdd7fe518675bcfb6ff7",
+    "src/minisweagent/environments/extra/bubblewrap.py": "9aceddac6efdce92926f0de8b13f974c66c58544bc87facba7d61878df4a44c0",
+    "src/minisweagent/models/extra/roulette.py": "74aa8c1b4389097031944382b7461457875902eb98c8aa761060a07d8fb2e09f",
+    "src/minisweagent/models/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/models/utils/actions_text.py": "e5997bba3ae3d541ff418317cc8dd9e9e17657de806679ef38ab1ad74e294047",
+    "src/minisweagent/models/utils/actions_toolcall.py": "47b666412e4f838508b50009cf34c7f63fe15e9e40affc257a17c0829896526f",
+    "src/minisweagent/models/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/models/utils/retry.py": "fb9dd9d9ca0253a2b2ac86907fea4c34fe75c55af6d443781e1ab02229a1ac18",
+    "src/minisweagent/models/utils/actions_toolcall_response.py": "36244c4383dde6059742eb1f99fe96b2a91f214f558ece463f81baef96018bcf",
+    "src/minisweagent/models/utils/anthropic_utils.py": "1355c546d7d217502f4aeb5ba87513f55720f8d4d2c1247b8fc5d793078d170e",
+    "src/minisweagent/models/utils/cache_control.py": "edbb8952195d1d9dbef45ed7cad910a50b1cdec08175de74dbffc9414f3da5ba",
+    "src/minisweagent/models/utils/openai_multimodal.py": "c498ec2e97c0bf45c212a10de9f5d1b2d24d4de46a05fd0eaea975c1abe3f81f",
+    "src/minisweagent/models/utils/content_string.py": "17ea19b28a2298abaeb51d70f2dcc94e62098a758ecb2dcb98f27f546cd87fc3",
+    "src/minisweagent/run/utilities/__init__.py": "4fb745f3835e4282a02703d444dcb7178082af189c8beec0c068b257466c0e5a",
+    "src/minisweagent/run/utilities/config.py": "c9a6955ca3f6de180ddc4bc5a54d7c7d49e96d996c9b80e2d146630230aaf954",
+    "src/minisweagent/run/utilities/mini_extra.py": "52ac1ef811c1fb23a0ee0e3cf0a093c99ca8cbe2c31345e18c8762451508da59",
+    "src/minisweagent/run/utilities/inspector.py": "5a9deb60c7462ade44c6b364af0aca4fd4b9b394f117247592c70dde7b706a1a",
+    "src/minisweagent/run/benchmarks/__init__.py": "c7b08a7fc761427203f3bacfdffd4a7ee0d19e62c8d869cdab71744962ef90ac",
+    "src/minisweagent/run/benchmarks/swebench.py": "4bc6cfc0a388ba14b8c9cd7278f15efaef654f7f79b3b252208f8fdb11a0fc99",
+    "src/minisweagent/run/benchmarks/programbench.py": "25c67a662a665781d60193a2cb441f13ec5a25d6530a4fd087b4e6f68b9be374",
+    "src/minisweagent/run/benchmarks/swebench_single.py": "52bac3804b388aee49dc8b29c03c16a92a2d2fce321fa55622ff3bd993936296",
+    "src/minisweagent/run/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/run/benchmarks/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/run/benchmarks/utils/common.py": "618776d688f11018827ea8eb48ab20839d2d0ec182b4bd844a08af48937df398",
+    "src/minisweagent/run/benchmarks/utils/batch_progress.py": "b1928297576b6d9f4f75b38397e29a0d93851e9c66ebf267a03ce4d2051a5287",
+    "src/minisweagent/config/benchmarks/swebench.yaml": "9a9c86ac10428b86b932c972b15fefc2f7b6e92230bac5ebdc47e83232a8315e",
+    "src/minisweagent/config/benchmarks/__init__.py": "7b53280250e7ff073d1e75cda2771fd4ff81e0343e8917fa9fb43fb718d91912",
+    "src/minisweagent/config/benchmarks/swebench_backticks.yaml": "fdc45d1310b045814a0bca7fa4c9e0ed42d86142b5b5f6139d204fd4a0546677",
+    "src/minisweagent/config/benchmarks/programbench.yaml": "8792ec3f630393c238645b6229e7f2a0e4448050169ea35d1454b0b5f5cb2f63",
+    "src/minisweagent/config/benchmarks/swebench_xml.yaml": "4c4beda6df79a73615350ac67a10a0bdb00385a5d7f7b3a9799a79cb1406b749",
+    "src/minisweagent/config/benchmarks/swebench_modal.yaml": "02b7d798cbb4c654e5211841e0b73fd288c3ac70838ca120bbca3522bd392d59"
+  },
+  "mini_dependency_lock": "annotated-types==0.8.0\ncertifi==2026.7.22\ncharset-normalizer==3.5.2\nidna==3.20\nJinja2==3.1.6\nmarkdown-it-py==4.2.0\nMarkupSafe==3.0.4\nmdurl==0.1.2\nplatformdirs==4.12.3\npydantic==2.13.5\npydantic_core==2.46.5\nPygments==2.21.0\npython-dotenv==1.2.4\nPyYAML==6.0.3\nrequests==2.34.2\nrich==15.0.0\ntenacity==9.1.4\ntyping-inspection==0.4.4\ntyping_extensions==4.16.0\nurllib3==2.8.0\n"
+}

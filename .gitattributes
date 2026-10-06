@@ -1,0 +1,11 @@
+# Registrations, frozen sources and evidence receipts are hashed as raw bytes.
+# Do not let a Windows checkout rewrite their line endings.
+experiments/** -text whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+
+# Keep duplicate frozen sources and raw observations out of the default PR diff.
+# They remain versioned, downloadable and covered by the archive integrity check.
+experiments/results/** linguist-generated=true -whitespace
+experiments/baselines/** linguist-generated=true -whitespace
+experiments/host-support/** -whitespace
+experiments/results/README.md linguist-generated=false
+experiments/baselines/README.md linguist-generated=false

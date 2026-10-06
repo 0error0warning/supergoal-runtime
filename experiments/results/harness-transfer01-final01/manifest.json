@@ -1,0 +1,37 @@
+{
+  "captured_at": "2026-10-05T22:29:20.984421+00:00",
+  "scope": "Immutable final twelve-cell dataset and supplementary analysis source; analysis added after registration, no new model calls.",
+  "observation_source": "experiments/results/research-evidence-20261006-062415/setup/harness-transfer01-observation-222414.json",
+  "files": {
+    "analyze_public.py": {
+      "source": "experiments/public_benchmarks/analyze_public.py",
+      "sha256": "4910049ded6fdf00828335fa149fb4998a1340f9d48d3ed895e1c9e403a1cee2",
+      "bytes": 24349
+    },
+    "registration.json": {
+      "source": "experiments/public_benchmarks/registration-harness-transfer01.json",
+      "sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+      "bytes": 22993
+    },
+    "bundle.json": {
+      "source": "experiments/results/harness-transfer01-audited-bundle.json",
+      "sha256": "073afbf5132dedd4223e772387e0cdb5286688faeccf0927d7501689de4ff379",
+      "bytes": 753310
+    },
+    "analysis.json": {
+      "source": "experiments/results/harness-transfer01-analysis.json",
+      "sha256": "8fac826dbc9c0edec9cf07bcab2ecf67fa6a54fa615b4f793d2d461a9ad77a0e",
+      "bytes": 29285
+    },
+    "report.md": {
+      "source": "docs/harness-transfer01-progress.md",
+      "sha256": "3f479d13c206f1aabac7e617caea88cebb11cde8fda71db6156839e6dd3ca242",
+      "bytes": 12014
+    },
+    "frozen-runtime-audit.json": {
+      "source": "experiments/results/harness-transfer01-final-audit01.json",
+      "sha256": "1dfbf172a49595b78e3659e1eaf4fc97714525b3a7e26a7c3bdfc7246d765aff",
+      "bytes": 7113
+    }
+  }
+}

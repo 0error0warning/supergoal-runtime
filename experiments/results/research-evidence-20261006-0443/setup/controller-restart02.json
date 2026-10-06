@@ -1,0 +1,80 @@
+{
+  "status": "passed",
+  "fault_activated": true,
+  "model": "devin/swe-2",
+  "max_requests": 32,
+  "scope": "Synthetic process/controller-loss integration, not benchmark capability or production recovery",
+  "automatic_trial_retries": 0,
+  "source_sha256": "6081789dcf59fac369919f012fab4d2932efadcd28dcb492aa8be5990b609fc5",
+  "registration_sha256": "6950809d9966717c99832168981c16d53fb7c274738e614f1bfeaa498d511c23",
+  "control_id": "65e3912b14364ed092959ea9d4914320",
+  "started_epoch": 1791232443.4039552,
+  "killed_unit": "supergoal-controller-restart02-phase1",
+  "prior_requests": 2,
+  "old_task_stopped": true,
+  "stale_owner_rejected": true,
+  "recovery_idempotent": true,
+  "snapshot": {
+    "container_id": "c9ff133853774d431f956a89678660feaf032328cb48e14ceb871244ababb841",
+    "image_tag": "sg-restart:65e3912b14364ed092959ea9d4914320",
+    "state_before": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-05T20:34:23.439160379Z",
+      "FinishedAt": "2026-10-05T20:34:41.205828914Z"
+    },
+    "owns_pause": false,
+    "detached_compose_labels": [
+      "com.docker.compose.project",
+      "com.docker.compose.service",
+      "com.docker.compose.version"
+    ],
+    "started_monotonic": 22208.671830543,
+    "status": "captured",
+    "image_id": "sha256:3e9b17eb8ff0ee3807d17dcaa2dc9ee19628c21df0b7506aedd5e166d73278c3",
+    "state_after": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-10-05T20:34:23.439160379Z",
+      "FinishedAt": "2026-10-05T20:34:41.205828914Z"
+    },
+    "state_restored": true,
+    "finished_monotonic": 22208.824140109
+  },
+  "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3e9b17eb8ff0ee3807d17dcaa2dc9ee19628c21df0b7506aedd5e166d73278c3.json",
+  "recovery": {
+    "status": "active",
+    "turns": 1
+  },
+  "final_state": {
+    "status": "succeeded",
+    "turns": 2,
+    "version": 3
+  },
+  "acceptance": {
+    "verdict": "pass",
+    "reason": "Trusted fixture checker; recovery integration scope only",
+    "checker_exit": 0,
+    "observations": "{\"count\": 200, \"artifacts_sha256\": {\"normalized.jsonl\": \"3e6c88f97186cb3d0965bb1b1fe2d942a187a29768b4d1a16fe661c522f273d0\", \"summary.json\": \"b8f12c2269e1740e47d27e2b146fd211a1710b689c4b72e64532765747c851c9\"}}\n"
+  },
+  "used_requests": 5,
+  "old_reservations_preserved": true,
+  "request_limit_preserved": true,
+  "new_controller_loaded_prior_budget": true,
+  "cleanup_errors": [],
+  "finished_epoch": 1791232567.4073727
+}

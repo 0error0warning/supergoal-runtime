@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "task_id": "dag_execution",
+  "prefix_checkpoint_count": 1,
+  "image_id": "sha256:7052b2b0def884de36808f4f8aae941d37089438c439edababcdbc845f41856c",
+  "workspace_sha256": "0ec2d48a07f8ff20d0879203a286d9538bbe46acca3a86563dcd6c147b86e8cb",
+  "file_entries": 3,
+  "public_requirement": {
+    "path": "/var/lib/supergoal-lab/prefix-inputs01/dag_execution/prefix-instruction.md",
+    "sha256": "ee7d40120c75c7a21abf435e487af8502ffebda5edc0c4595d316fd2924819ee"
+  },
+  "grader_history": {
+    "path": "/var/lib/supergoal-lab/prefix-inputs01/dag_execution/grader-history.json",
+    "sha256": "72ed49420c6fc12061b043ba468b66b5be0083930867b32adc2d8cab3ddee1d6"
+  },
+  "prefix_requests": 43,
+  "origin": {
+    "experiment": "context-handoff01",
+    "registered_index": 2,
+    "arm": "fresh_ledger",
+    "problem_id": "5f332ecaf1a84ce8ab58269e107e681d",
+    "control_id": "ca5fe245147748a98f07694d62411986",
+    "result_sha256": "97a559953b5e83fe99f3f037e0b75cacedf811526ebfb115ede901b51cf944b7",
+    "report_sha256": "e0ba7c36a05822767a7a79c1564e2cc42139b25bcb0699b38532d9683a462c44"
+  }
+}

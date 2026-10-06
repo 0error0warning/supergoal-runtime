@@ -1,0 +1,33 @@
+{
+  "kind": "known_good_fixture_acceptance_preflight",
+  "performed_at": 1791139121.4581099,
+  "live_model_calls": 0,
+  "rows": [
+    {
+      "seed": 8602,
+      "reference_matches_expected": true,
+      "old_checker_exit_code": 1,
+      "corrected_checker_exit_code": 0,
+      "corrected_checker_sha256": "0bbaeaa85f3b3f876eb8952cb857dd4a8292ff35cdeb2a8f9b92da259cbefe8b",
+      "reference_output_sha256": "be68b5a0f4da3ced39255c32711c5153824fae362ee1e5ca7360d4066d1ffee1"
+    },
+    {
+      "seed": 8701,
+      "reference_matches_expected": true,
+      "old_checker_exit_code": 0,
+      "corrected_checker_exit_code": 0,
+      "corrected_checker_sha256": "0bbaeaa85f3b3f876eb8952cb857dd4a8292ff35cdeb2a8f9b92da259cbefe8b",
+      "reference_output_sha256": "624d5cea45b896d73be28075b29466ee5ab671fd5dd23807252adc70d23f4628"
+    },
+    {
+      "seed": 8702,
+      "reference_matches_expected": true,
+      "old_checker_exit_code": 0,
+      "corrected_checker_exit_code": 0,
+      "corrected_checker_sha256": "0bbaeaa85f3b3f876eb8952cb857dd4a8292ff35cdeb2a8f9b92da259cbefe8b",
+      "reference_output_sha256": "a945adf127fb37d9ca74ba7ea0f8941384a64cf7521acd6fb50a55619ed02787"
+    }
+  ],
+  "passed": true,
+  "limit": "Satisfiability on these known-correct fixtures, not complete verifier coverage."
+}

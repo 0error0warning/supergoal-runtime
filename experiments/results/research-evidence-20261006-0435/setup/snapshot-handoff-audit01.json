@@ -1,0 +1,40 @@
+{
+  "recorded_at": "2026-10-05T18:45:44.407352+00:00",
+  "raw_results_unchanged": true,
+  "adjudications": {
+    "e1627923e6244a5b9948cb5099cc5e96": {
+      "kind": "harness_snapshot_handoff_failure",
+      "container_id": "4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a",
+      "artifact_snapshot_error": "TimeoutError: ",
+      "daemon_lines": [
+        "time=\"2026-10-05T18:05:56.818024921Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=0588b9a98b33c4c7 traceID=8c778720a494950df1c3a50c56e07b91",
+        "time=\"2026-10-05T18:05:56.892678201Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=cd4d26ebc1d75a39 traceID=6d0334598cc7ec1ccfc11596d9b91b3e",
+        "time=\"2026-10-05T18:05:56.963470547Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=cc88b67d500cfc5f traceID=80c0ae21b6eee4116fee5ec87b870773",
+        "time=\"2026-10-05T18:05:57.110782434Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=b24fc2ce2c89f2b2 traceID=010891e77bd101d080c053f91e796752",
+        "time=\"2026-10-05T18:05:57.195139115Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=d4bae963ee8739e9 traceID=4978415dc97466aac87ab19c2fdf6624",
+        "time=\"2026-10-05T18:05:57.265096288Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=35586cbdf9bea7e3 traceID=ebb68adb7e8a9ff232690fda176f580f",
+        "time=\"2026-10-05T18:05:57.333110478Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=8bbfc415dd58f331 traceID=eea786b7fb0a276649f4f2782dec4790",
+        "time=\"2026-10-05T18:05:57.395506928Z\" level=error msg=\"Error setting up exec command in container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a: Container 4627118c27b62549e9f7d384f0bd9216cf2cfbe3b7d9d0e503c002d37860891a is paused, unpause the container before exec\" spanID=2ff5b5e5779ccd2a traceID=a0d0daef2e1321c36ee6ac1c95b67129"
+      ],
+      "report_sha256": "82e7157116a428b5f2d67a13206fbb007a97be0442403726ec657e17168318a4",
+      "explanation": "Commit client timed out; paused actor rejected verifier exec. No official reward was produced. Count in harness end-to-end failure, preserve official missing score."
+    },
+    "9ab4d291034d4d9f820bb7dc47737d0b": {
+      "kind": "harness_snapshot_handoff_failure",
+      "container_id": "69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381",
+      "artifact_snapshot_error": "TimeoutError: ",
+      "daemon_lines": [
+        "time=\"2026-10-05T18:17:01.830153043Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=9130b455837a90e6 traceID=42d417b1827e3e5b96f0f54b65c6d062",
+        "time=\"2026-10-05T18:17:01.901821522Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=880f5b9e4abac1df traceID=de9b1f0a911b8227c1ee2557cab1a3b6",
+        "time=\"2026-10-05T18:17:01.962591158Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=8f7cc08db55ed37b traceID=a75dacedc9409f3c6d5b146c6e56656b",
+        "time=\"2026-10-05T18:17:02.101279394Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=bf72b367178fabac traceID=175322a6a4c2d825dc7cf8d9ac4476a3",
+        "time=\"2026-10-05T18:17:02.162479037Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=88f228813e870483 traceID=f250c0db56a1e21d3138f7d0fa1bcbf6",
+        "time=\"2026-10-05T18:17:02.228353559Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=68577841886e4741 traceID=0fd08eb824779c9e93175dd58c6b1283",
+        "time=\"2026-10-05T18:17:02.292369777Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=db8b5c37d5b63aaa traceID=cb8e8f00cae5f2ae4e75339524e8f0ea",
+        "time=\"2026-10-05T18:17:02.348051553Z\" level=error msg=\"Error setting up exec command in container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381: Container 69625bc301e9279b3c92567b427d74e54faa1920bfa7f587a3f94edd1e4d7381 is paused, unpause the container before exec\" spanID=79fc37ea9f7e9f4e traceID=7ee856475ad5f32f68734cd82ba6eedd"
+      ],
+      "report_sha256": "cce6adfb0beb372938701348c44f58521ea84a8a7420e7f9f06fc3665e0c94bd",
+      "explanation": "Commit client timed out; paused actor rejected verifier exec. No official reward was produced. Count in harness end-to-end failure, preserve official missing score."
+    }
+  }
+}

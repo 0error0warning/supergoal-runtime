@@ -1,0 +1,97 @@
+{
+  "status": "diagnostic_complete",
+  "model_calls": 0,
+  "image_id": "sha256:f0d6e67fe473a244c4e7c3d980df8651e5e05f823a3a4b662490a5bb2188c9c2",
+  "operator_sha256": "b6a8839c134904fe71d81911bcfb11a289dd88666f2829a796470e60639af951",
+  "scope": "One disposable fixed-text container; no benchmark rerun or production changes",
+  "calls": [
+    {
+      "command_sha256": "957a6efc37ff9757483291f5bcabd5424ae18e5056bd03f4864239ee6a2e7076",
+      "command": "cat > /app/direct.txt",
+      "stdin_bytes": 13,
+      "result": {
+        "output": "",
+        "returncode": 0,
+        "cwd_observed": true,
+        "cwd": "/app"
+      }
+    },
+    {
+      "command_sha256": "94df3eeb0a07b5cde544c86d0f40291488a7a484005d910c46067fc6da140548",
+      "command": "set -e; d='/app'; t='/app/atomic.txt'; if [ -L \"$t\" ]; then rt=\"$(readlink -f \"$t\" 2>/dev/null || realpath \"$t\" 2>/dev/null || true)\"; [ -n \"$rt\" ] && { t=\"$rt\"; d=\"$(dirname \"$t\")\"; }; fi; mkdir -p \"$d\"; tmp=\"$(mktemp -p \"$d\" '.hermes-tmp.XXXXXX' 2>/dev/null || mktemp \"$d/.hermes-tmp.$$.XXXXXX\" 2>/dev/null || { tmp=\"$d/.hermes-tmp.$$\"; : > \"$tmp\" && echo \"$tmp\"; })\"; [ -n \"$tmp\" ] || { echo \"atomic write: could not create temp file\" >&2; exit 1; }; trap 'rm -f \\\"$tmp\\\"' EXIT; if [ -e \"$t\" ]; then m=\"$(stat -c%a \"$t\" 2>/dev/null || stat -f%Lp \"$t\" 2>/dev/null || true)\"; [ -n \"$m\" ] && chmod \"$m\" \"$tmp\" 2>/dev/null || true; fi; cat > \"$tmp\"; if [ ! -e \"$t\" ]; then chmod \"=rw\" \"$tmp\" 2>/dev/null || true; fi; mv -f \"$tmp\" \"$t\"; trap - EXIT",
+      "stdin_bytes": 13,
+      "result": {
+        "output": "",
+        "returncode": 1,
+        "cwd_observed": true,
+        "cwd": "/app"
+      }
+    },
+    {
+      "command_sha256": "117d8a23aefac55459f99b6b369f7ea30926162d02da1cd3caf9e2baf50d3bef",
+      "command": "if [ -f '/app/write.txt' ]; then head -c 3 '/app/write.txt' 2>/dev/null | base64 2>/dev/null; echo __HERMES_WF_8fd577f634478faa6eb27f643d45282c__; head -c 4096 '/app/write.txt' 2>/dev/null; else echo __hermes_missing__; fi",
+      "stdin_bytes": 0,
+      "result": {
+        "output": "__hermes_missing__\n",
+        "returncode": 0,
+        "cwd_observed": true,
+        "cwd": "/app"
+      }
+    },
+    {
+      "command_sha256": "ef82ce30acff1db90ca4715e864e27620c4e613731e5a640ec20de2cba153502",
+      "command": "set -e; d='/app'; t='/app/write.txt'; if [ -L \"$t\" ]; then rt=\"$(readlink -f \"$t\" 2>/dev/null || realpath \"$t\" 2>/dev/null || true)\"; [ -n \"$rt\" ] && { t=\"$rt\"; d=\"$(dirname \"$t\")\"; }; fi; mkdir -p \"$d\"; tmp=\"$(mktemp -p \"$d\" '.hermes-tmp.XXXXXX' 2>/dev/null || mktemp \"$d/.hermes-tmp.$$.XXXXXX\" 2>/dev/null || { tmp=\"$d/.hermes-tmp.$$\"; : > \"$tmp\" && echo \"$tmp\"; })\"; [ -n \"$tmp\" ] || { echo \"atomic write: could not create temp file\" >&2; exit 1; }; trap 'rm -f \\\"$tmp\\\"' EXIT; if [ -e \"$t\" ]; then m=\"$(stat -c%a \"$t\" 2>/dev/null || stat -f%Lp \"$t\" 2>/dev/null || true)\"; [ -n \"$m\" ] && chmod \"$m\" \"$tmp\" 2>/dev/null || true; fi; cat > \"$tmp\"; if [ ! -e \"$t\" ]; then chmod \"=rw\" \"$tmp\" 2>/dev/null || true; fi; mv -f \"$tmp\" \"$t\"; trap - EXIT",
+      "stdin_bytes": 11,
+      "result": {
+        "output": "",
+        "returncode": 1,
+        "cwd_observed": true,
+        "cwd": "/app"
+      }
+    },
+    {
+      "command_sha256": "8fb1eaa25dd848e10bc938a4e049c9c0b1e84aed9a06fbb7a3b4b523dbe17a8a",
+      "command": "(set -e; d='/app'; t='/app/atomic.txt'; if [ -L \"$t\" ]; then rt=\"$(readlink -f \"$t\" 2>/dev/null || realpath \"$t\" 2>/dev/null || true)\"; [ -n \"$rt\" ] && { t=\"$rt\"; d=\"$(dirname \"$t\")\"; }; fi; mkdir -p \"$d\"; tmp=\"$(mktemp -p \"$d\" '.hermes-tmp.XXXXXX' 2>/dev/null || mktemp \"$d/.hermes-tmp.$$.XXXXXX\" 2>/dev/null || { tmp=\"$d/.hermes-tmp.$$\"; : > \"$tmp\" && echo \"$tmp\"; })\"; [ -n \"$tmp\" ] || { echo \"atomic write: could not create temp file\" >&2; exit 1; }; trap 'rm -f \\\"$tmp\\\"' EXIT; if [ -e \"$t\" ]; then m=\"$(stat -c%a \"$t\" 2>/dev/null || stat -f%Lp \"$t\" 2>/dev/null || true)\"; [ -n \"$m\" ] && chmod \"$m\" \"$tmp\" 2>/dev/null || true; fi; cat > \"$tmp\"; if [ ! -e \"$t\" ]; then chmod \"=rw\" \"$tmp\" 2>/dev/null || true; fi; mv -f \"$tmp\" \"$t\"; trap - EXIT)",
+      "stdin_bytes": 13,
+      "result": {
+        "output": "",
+        "returncode": 0,
+        "cwd_observed": true,
+        "cwd": "/app"
+      }
+    }
+  ],
+  "direct_stdin": {
+    "output": "",
+    "returncode": 0,
+    "cwd_observed": true,
+    "cwd": "/app"
+  },
+  "atomic_write": {
+    "stdout": "",
+    "exit_code": 1
+  },
+  "write_file": {
+    "bytes_written": 0,
+    "dirs_created": false,
+    "error": "Failed to write file: "
+  },
+  "unwrapped_atomic": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "subshell_atomic": {
+    "output": "",
+    "returncode": 0,
+    "cwd_observed": true,
+    "cwd": "/app"
+  },
+  "wrapped_shell_trace": {
+    "returncode": 0,
+    "stdout": "\n__HERMES_CWD_96b1b7b1510f__/app__HERMES_CWD_96b1b7b1510f__\n",
+    "stderr": "+ export AI_AGENT=hermes-agent HERMES_AGENT=true\n+ AI_AGENT=hermes-agent\n+ HERMES_AGENT=true\n+ export GIT_PAGER=cat PAGER=cat\n+ GIT_PAGER=cat\n+ PAGER=cat\n+ builtin cd -- /app\n+ eval 'set -e; d='\\''/app'\\''; t='\\''/app/atomic.txt'\\''; if [ -L \"$t\" ]; then rt=\"$(readlink -f \"$t\" 2>/dev/null || realpath \"$t\" 2>/dev/null || true)\"; [ -n \"$rt\" ] && { t=\"$rt\"; d=\"$(dirname \"$t\")\"; }; fi; mkdir -p \"$d\"; tmp=\"$(mktemp -p \"$d\" '\\''.hermes-tmp.XXXXXX'\\'' 2>/dev/null || mktemp \"$d/.hermes-tmp.$$.XXXXXX\" 2>/dev/null || { tmp=\"$d/.hermes-tmp.$$\"; : > \"$tmp\" && echo \"$tmp\"; })\"; [ -n \"$tmp\" ] || { echo \"atomic write: could not create temp file\" >&2; exit 1; }; trap '\\''rm -f \\\"$tmp\\\"'\\'' EXIT; if [ -e \"$t\" ]; then m=\"$(stat -c%a \"$t\" 2>/dev/null || stat -f%Lp \"$t\" 2>/dev/null || true)\"; [ -n \"$m\" ] && chmod \"$m\" \"$tmp\" 2>/dev/null || true; fi; cat > \"$tmp\"; if [ ! -e \"$t\" ]; then chmod \"=rw\" \"$tmp\" 2>/dev/null || true; fi; mv -f \"$tmp\" \"$t\"; trap - EXIT'\n++ set -e\n++ d=/app\n++ t=/app/atomic.txt\n++ '[' -L /app/atomic.txt ']'\n++ mkdir -p /app\n+++ mktemp -p /app .hermes-tmp.XXXXXX\n++ tmp=/app/.hermes-tmp.oELNQA\n++ '[' -n /app/.hermes-tmp.oELNQA ']'\n++ trap 'rm -f \\\"$tmp\\\"' EXIT\n++ '[' -e /app/atomic.txt ']'\n+++ stat -c%a /app/atomic.txt\n++ m=666\n++ '[' -n 666 ']'\n++ chmod 666 /app/.hermes-tmp.oELNQA\n++ cat\n++ '[' '!' -e /app/atomic.txt ']'\n++ mv -f /app/.hermes-tmp.oELNQA /app/atomic.txt\n++ trap - EXIT\n+ __hermes_ec=0\n+ umask 077\n++ pwd -P\n+ printf '\\n__HERMES_CWD_96b1b7b1510f__%s__HERMES_CWD_96b1b7b1510f__\\n' /app\n+ exit 0\n"
+  },
+  "readback": "{\"direct.txt\": \"direct-stdin\\n\", \"atomic.txt\": \"atomic-stdin\\n\", \"write.txt\": \"write-file\\n\"}",
+  "cleanup_exit": 0
+}

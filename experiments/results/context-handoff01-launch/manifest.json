@@ -1,0 +1,58 @@
+{
+  "captured_at": "2026-10-05T23:27:09.407264+00:00",
+  "scope": "Prospective new context mechanism study: integration gate, source freeze and actual launch; no claim of completed formal results.",
+  "files": {
+    "setup/registration-context-handoff01.json": {
+      "sha256": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+      "bytes": 133629
+    },
+    "setup/context-dev01-source.json": {
+      "sha256": "d0a6faa73ba77d073482c8d3293f595988457ead07265b8860c84efdda334e54",
+      "bytes": 12779
+    },
+    "setup/context-smoke01.json": {
+      "sha256": "fc430c65dff16dd092ff3696c252a240e6d1277171ad41f8a75806aea4e2c004",
+      "bytes": 18573
+    },
+    "setup/context-handoff01-receipt.json": {
+      "sha256": "be1d9e56c88a5fa2226ee8565fcdb4045ea359ca4838cdfcc3989434f0e5246c",
+      "bytes": 2627
+    },
+    "setup/context-handoff01-source.tar.gz": {
+      "sha256": "6ee48fbf62d2e8b5ca2ba4be84a89a95b6351dbb77ec1d3ef7d0c8a8320887b4",
+      "bytes": 212677
+    },
+    "grader-history-checks01/junit.xml": {
+      "sha256": "6f84a1f61a8f3a8d84b2fec4b751b6ab626933a7b7ea5ccc14c98f287d213adf",
+      "bytes": 800
+    },
+    "grader-history-checks01/manifest.json": {
+      "sha256": "ec74b211f4dbc85c5883e503c19ac9f8b520240d584c13cc1685af4ca18ebd4c",
+      "bytes": 203
+    },
+    "grader-history-checks01/test_grader_history.py": {
+      "sha256": "1c5419eb63d18b8cd02e163b6e7b24f8e4fdf88021d0f52393219add8208d172",
+      "bytes": 3263
+    },
+    "context-operator01/freeze_context_study.py": {
+      "sha256": "435ebfe9d520c1c9f422d4be54897e49fa8a00d64bb799557fd13c9fe608c439",
+      "bytes": 6807
+    },
+    "context-operator01/run_context_study.py": {
+      "sha256": "c97998e87a14acacc984ce473f2f063584280d24ea57488bda75b2bdb0542a5a",
+      "bytes": 6464
+    },
+    "context-operator01/pre-freeze-source-update.json": {
+      "sha256": "b30c76e65a85997fd6b1208ecaea425ccbacaa2dd867548ca4ac028aa8dbc4b9",
+      "bytes": 286
+    },
+    "candidates/context-handoff01/docs/context-handoff-study-2026-10-06.md": {
+      "sha256": "3361a122c71da5384f421c3c262beab661b10b88299a0f8e2f284213cfeb7a68",
+      "bytes": 4468
+    },
+    "launch-state.json": {
+      "sha256": "fdf968feb0a534942c6a8918930eefaefa51b41b339479fdecbd57e3044a3c74",
+      "bytes": 128
+    }
+  }
+}

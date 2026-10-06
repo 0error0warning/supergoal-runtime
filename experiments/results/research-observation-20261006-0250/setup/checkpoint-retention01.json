@@ -1,0 +1,71 @@
+{
+  "status": "running",
+  "capture_is_best_effort": true,
+  "model_calls": 0,
+  "source_sha256": {
+    "probe.py": "1c8d7a5d9ea3043e52111bb8da8e2024e286b5c7e4250b154a1e2814870275e6",
+    "watch_checkpoints.py": "a993604e07076c1c4e6948ea72c80cee66d95e596827a5ecd000e3c5f4c7f313",
+    "artifact_store.py": "b2d433bbaf9ebc753a9d27b4b32842612c831b6af2f49d2438c1051df9a70a33"
+  },
+  "images": {
+    "sha256:9bf3fd6e19a031510c6c8f253d73639fb88a7d9a973313d2e3dd50c47a3d414a": {
+      "tag": "sg-artifact:75fd9c587f4e4f808cc44db2237548b6",
+      "status": "durable",
+      "started": 1791225349.7665925,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9bf3fd6e19a031510c6c8f253d73639fb88a7d9a973313d2e3dd50c47a3d414a.json",
+      "manifest_sha256": "00f4d5a91feebf7172c80f89c92449ed8fb2356b8ca44dc8532a368a7944f1c5",
+      "finished": 1791225750.4121504
+    },
+    "sha256:a49e88791799277ff2b78134e883a485824b1f8bc4cce2642bc2d8ee5a683b27": {
+      "tag": "sg-artifact:84e62a9235ea4062923b1f34a63e5ae3",
+      "status": "durable",
+      "started": 1791225349.805489,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/a49e88791799277ff2b78134e883a485824b1f8bc4cce2642bc2d8ee5a683b27.json",
+      "manifest_sha256": "15742f0cc522bd848fbfce56d8758d29b7a173d757d68f8ca64fc477b2cb5d3c",
+      "finished": 1791225829.8906069
+    },
+    "sha256:72749ad0086d86c52c7e6ab32a193d857ff2d572cc98273f4d8f1bd182c56af1": {
+      "tag": "sg-artifact:28c1ca7dd9b9464cb2010e8a9335e117",
+      "status": "capturing",
+      "started": 1791225751.5416622
+    },
+    "sha256:c60d975b66848327687d3001cee701a14577f30ce822fb6b0cbe0be37c5f71cf": {
+      "tag": "sg-artifact:45c3366bd06e446dab92fd4d0fb41dab",
+      "status": "durable",
+      "started": 1791225830.940819,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/c60d975b66848327687d3001cee701a14577f30ce822fb6b0cbe0be37c5f71cf.json",
+      "manifest_sha256": "8c31e29d2978e1d5df5fe8f6bb76ee35ccac2d4904c39aab06ae4917b1642633",
+      "finished": 1791225840.6915507
+    },
+    "sha256:cd179a4953df7a63421fc76051d7741d5dbf2a306675681e32af130b45cccb22": {
+      "tag": "sg-artifact:032591ababb84ca29b5a26063aa068f9",
+      "status": "durable",
+      "started": 1791225841.7467391,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/cd179a4953df7a63421fc76051d7741d5dbf2a306675681e32af130b45cccb22.json",
+      "manifest_sha256": "93cfa0d86e7950db07e3335c508696ffc31d07401e918fd864b614ffeb0c2516",
+      "finished": 1791225848.363783
+    },
+    "sha256:04a0ac59d0ca36b008564add71365dcb173b7eb188334b77c487f2d461c05b7c": {
+      "tag": "sg-artifact:e1627923e6244a5b9948cb5099cc5e96",
+      "status": "durable",
+      "started": 1791225849.4135678,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/04a0ac59d0ca36b008564add71365dcb173b7eb188334b77c487f2d461c05b7c.json",
+      "manifest_sha256": "537f59ee382a720897d627693347a4d8327f2c6ff3a2ce155b39b03440b4ad1f",
+      "finished": 1791226000.0100956
+    },
+    "sha256:ff4c213ecffbb32eaf10301ac47ae54611c6aa4604ffcd3c65349545567665bd": {
+      "tag": "sg-artifact:7dbb1d22c4f04e2eae73bdb6000e3075",
+      "status": "durable",
+      "started": 1791226001.1100788,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/ff4c213ecffbb32eaf10301ac47ae54611c6aa4604ffcd3c65349545567665bd.json",
+      "manifest_sha256": "8b4433eb802d58279b5f3fbe4c9a552d71d06cc3145658c01dc0652afbe05a76",
+      "finished": 1791226009.309282
+    },
+    "sha256:4d83088922e86740a067412ebcbaf0b925b09f6d8302e07360731ee92bc7f935": {
+      "tag": "sg-artifact:d3950090b5c44b55902e113c223ad056",
+      "status": "capturing",
+      "started": 1791226010.4087229
+    }
+  },
+  "heartbeat_epoch": 1791226040.088025
+}

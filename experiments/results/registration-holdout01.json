@@ -1,0 +1,38 @@
+{
+  "registered_utc": "2026-10-04T17:18:23.399158+00:00",
+  "candidate": "candidate-r3",
+  "manifest_file": "freeze-candidate-r3-final.json",
+  "manifest_file_sha256": "83d22bd50cd883c2d625c29c075a139a9c9011e868ce5934c8ff07c6c9ded001",
+  "runs": 108,
+  "arms": [
+    "hermes",
+    "native_goal",
+    "sg_v1",
+    "sg_v2",
+    "sg_v2_no_context",
+    "sg_v2_no_verification"
+  ],
+  "independent_generated_fixtures": 9,
+  "replicates_per_fixture_arm": 2,
+  "batches": [
+    {
+      "tag": "holdout01a",
+      "seeds": [
+        7201,
+        7202,
+        7203
+      ]
+    },
+    {
+      "tag": "holdout01b",
+      "seeds": [
+        7203,
+        7202,
+        7201
+      ]
+    }
+  ],
+  "within_batch_order_seed": 41005,
+  "interpretation": "Descriptive paired pilot; seeds within a family and repeated runs are not independent real-world tasks. Report exposure to continuation; do not claim efficacy for a mechanism never activated. No tuning on these outcomes.",
+  "synthesis_scoring_limit": "Structured facts, source paths and brief presence; full narrative quality is not graded."
+}

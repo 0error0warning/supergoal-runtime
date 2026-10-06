@@ -1,0 +1,23 @@
+{
+  "job_name": "prefix-oracle01-file_backup",
+  "jobs_dir": "/var/lib/supergoal-lab/jobs",
+  "n_concurrent_trials": 1,
+  "environment": {
+    "type": "docker",
+    "delete": true
+  },
+  "agents": [
+    {
+      "import_path": "prefix_agent:PrefixOracleAgent",
+      "kwargs": {
+        "prefix_path": "/var/lib/supergoal-lab/prefix-inputs01/file_backup/prefix.json",
+        "prefix_sha256": "513fc0a0d20c0edccd0a9b316fa95f26a108bfd3393cd95a36e1c11490e645ff"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "path": "/var/lib/supergoal-lab/tasks/context-prefix01/file_backup"
+    }
+  ]
+}

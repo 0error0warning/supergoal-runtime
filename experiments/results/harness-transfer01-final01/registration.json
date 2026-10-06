@@ -1,0 +1,388 @@
+{
+  "schema": 1,
+  "experiment": "harness-transfer01",
+  "kind": "frozen_new_task_transfer_descriptive",
+  "registered_at_utc": "2026-10-05T21:18:21.562625+00:00",
+  "model_calls_before_registration": 0,
+  "tasks": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "metadata_path": "tasks/adaptive-rejection-sampler/task.toml",
+      "metadata_git_blob_sha": "cf4699bf288095a71e5bd6bc99ef88c198b5bdfe",
+      "category": "scientific-computing",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/adaptive-rejection-sampler:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "95408217b9c484ffc18a02a91b7706323b6902919c72b24866a32e27a23543e2",
+        "environment/Dockerfile": "e644a3343e339303230f1441b7383f076d21c69a5a7aa6430b4f8a9d27f15c8b",
+        "environment/protected.tar.gz.enc": "7fc9bf1347bb97da8dede04b2c58638f225070913e222d76627068aebd1b1df2",
+        "instruction.md": "e6d28c28acd76bef61817427c74c2a29e3e8d75f535cbd708afcbfd02c54013f",
+        "solution/solve.sh": "fe443a8082b5183ba1623311ba0ee958888aefa633eff93766b9ae14e9bdd84d",
+        "task.toml": "6ed7b37f74beb46e9d47b0f5fad53025667c9548baff4e96d467b56d429fab1a",
+        "tests/test.sh": "38b43560d173cc2b952c3a3e17b8a480216d84e33450515e047bcb0d806b1e0a",
+        "tests/test_outputs.py": "547dc6e107f034f41703722aeceb6d0236e3fb69116fc3f2fbaba11884de352f"
+      }
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "metadata_path": "tasks/polyglot-rust-c/task.toml",
+      "metadata_git_blob_sha": "05e6b8c6604104ad8e4c1eae44997c264ae04788",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/polyglot-rust-c:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "6e091c5e7d2c1634b4527361385563f6afee3d9b184ec5c587f686fdd2b1504d",
+        "environment/Dockerfile": "d8a3dc4dc57fa9dac783a029aef3b3094d99a6fdbff57e5201a5fb16e84dee0d",
+        "instruction.md": "b0fbcd99a97fc886e4e198b6189b977409dada47cae0a87ac7dc185b440b2355",
+        "solution/solve.sh": "f3b101d9528efb3997937fa134b10e3773521bf83d576dab3183e977d12c9638",
+        "task.toml": "3c41e83437068c62a3fdff74641899146e34907aefd9e47346213f47caeb82de",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "c6fc2ceb4de3651fef05b9577835603376c45d4f7ebefa833a8370e5accfb7aa"
+      }
+    },
+    {
+      "task_id": "gcode-to-text",
+      "metadata_path": "tasks/gcode-to-text/task.toml",
+      "metadata_git_blob_sha": "e48763aa5fcb3bb2448bf8272cb1de51cd5b797e",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/gcode-to-text:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "06f4c8b746d5509618247dbff0ff7474ef95813a8c6f161b0a0955c020a9fe53",
+        "environment/Dockerfile": "5383f514233180e5a264c1b3180d33b00f14f622217c5062a96d4aa970d4102e",
+        "environment/text.gcode.gz": "edc008516eb0c30cd2540649642c52f78894b99dc4f79547064e9ffbfbc0e55f",
+        "instruction.md": "ee524a8f846b35f1784a7c9fb01c17f077f6b3b61c8b61d0d2f2a87c0be3166b",
+        "solution/solve.sh": "22dbd3a33750fae3c9e15c669e0f0dcbc2262434fb534bf0c2019269c044792b",
+        "task.toml": "3aa7a504fe5b3c6eaab16881b0e6dbbe8ac6d4f59084fa49b1e98ad9c71ea00c",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "6b049dc626aa103b20d165552e5cb39ba02c6803b04ba06a43d79435b5f701a6"
+      }
+    }
+  ],
+  "arms": [
+    "native",
+    "sg_v2",
+    "mini_swe",
+    "longhorizon"
+  ],
+  "planned_order": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "native"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "longhorizon"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "longhorizon"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "native"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "longhorizon"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "native"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "sg_v2"
+    }
+  ],
+  "max_upstream_requests_per_trial": 192,
+  "max_output_tokens_per_request": 6000,
+  "max_outer_episodes": 6,
+  "repeats_per_task_arm": 1,
+  "executor_description": "Hermes 0.21.3; actual upstream mini-SWE-agent 2.4.6; actual upstream LongHorizon 0.1.7 with Hermes role backend; all devin/swe-2",
+  "agent_import_paths": {
+    "native": "checkpoint_agent:CheckpointStudy",
+    "sg_v2": "checkpoint_agent:CheckpointStudy",
+    "mini_swe": "checkpoint_agent:CheckpointMiniStudy",
+    "longhorizon": "longhorizon_agent:LongHorizonStudy"
+  },
+  "source_sha256": {
+    "docs/harness-transfer-study-2026-10-06.md": "a94b4f01736b584a552b638baa0438c5d524d6d0e9eca0fd5baef7bf29f14f28",
+    "docs/mechanism-study-2026-10-06.md": "972ae81cdf16b82e91e4ed2d8d6858d2c12c76936d218481593fa16abeb1ffa7",
+    "experiments/analysis/context_reset.py": "d36c4fe233709df9179f9b4d58b577874ba3b4f833e961af7168ce3fe7ac96f4",
+    "experiments/analysis/context_reset02.py": "7c872d0a2e4707014d9df90a63bda708e5b9394fe149fee7428b0b9e58933e3c",
+    "experiments/analysis/context_results.py": "0a5a7e241fc322f3edf5d8447c554767a14f433a56821927a7782120615007bc",
+    "experiments/analysis/fault_replay.py": "967dfdb0f900873ace3864f62f1e6d3870711617f7655403ca68577e952e5663",
+    "experiments/analysis/plot_results.py": "370d068751a9f6e7f6f76b7500e2a202994d92a28c4f4479f597bc9e896d3a0b",
+    "experiments/analysis/process_crash.py": "c024942813ef5c2b6302b88a807029be6e090ebb14af9b9d5247b45f5864528d",
+    "experiments/analysis/registered_results.py": "ca1110ad0e650f1649c95b289a95dfab181ab3577993220ecf1e7cb151f22bc8",
+    "experiments/analysis/soak_audit.py": "56da34e75b2e231afa8bc3484b8379dd74b66d1cf8df84870a9ab34f4265346e",
+    "experiments/analysis/test_registered_results.py": "36ec982a7b1cc4223213ea719da291af41ca5409836906ac16be357966450bcb",
+    "experiments/check_worker.py": "3026b0d471a9fea5d0be61756faaed70ecbae4f4a51073da7b3b0b0412005823",
+    "experiments/freeze.py": "cad60abc7079bf91e16df9f1c7d5f6027b2a93c58b327e54de8eb35f50900daf",
+    "experiments/grade_code.py": "5cb52be1cfccf898717f3ad31a7124946636687a363496c435968b15a5af1c4e",
+    "experiments/host-support/launch.py": "754b0ac14080761b2885f173a9e024338b52065993312bf7e89e50c8c16d13ee",
+    "experiments/host-support/registered_matrix.py": "900288e0405f1f38d0d810b5ee56d4b4b68b4bb74929a084fff9ef7b8999b153",
+    "experiments/host_probe.py": "703c220ce9479a79344525dad7bffe673019c373ff4bcc893faa0199a8473480",
+    "experiments/infrastructure/gcp_hermes_smoke.py": "810a238717af776254dbb7854060ff197d16dfdad8bb11f85ecefdd23b67cafa",
+    "experiments/infrastructure/gcp_preflight.py": "779d9e947af9188870713f0bed91d0cf65cecd4aeaf817fb146c4fc436996662",
+    "experiments/infrastructure/gcp_prepare_cohort.py": "493619fcda96cf255d6d22a804275a4f246ab57c8651d6964c3301005968152e",
+    "experiments/infrastructure/gcp_run_cohort.py": "7a70cddd5ba72efb7be1ec00d9e142dca6dbdca9be5350891b27e7b9c15082b4",
+    "experiments/infrastructure/gcp_runtime.py": "b80f600655a1efc9c9c8f703b58264bc2e469fb45840a901d579540053139379",
+    "experiments/infrastructure/gcp_v2_abi_smoke.py": "816b280dbd0ff23a6ffcd4110863011265624967de30d82b47f400a67acd4325",
+    "experiments/infrastructure/host_profile.py": "70f6c05cdbdb0f8254c84ab3fab63d870b1d4e828b7ec7076127845b3694737a",
+    "experiments/infrastructure/mini_smoke.py": "f1424dcf8f7563e2e8580385bd31addbc874bbb68b56d6cb8c6c457cd628ef3a",
+    "experiments/infrastructure/model_capacity_probe.py": "99a68e7fd74f28892fe9eb6996116be194e4f31e431270a41d5955ca48fa364f",
+    "experiments/infrastructure/multistep_smoke_agent.py": "cae3613072ff80e5daad28ad13f7e0f774c5098bf3c4031a726969fab7015873",
+    "experiments/infrastructure/oneday_judge_calibration.py": "536a82100f486af6aa3260c65c1c9fa20dad7535162ec3f1940c7f19982187c1",
+    "experiments/infrastructure/oneday_memory_audit.py": "9068fc89569cc1dac31c66a3defc6389d8090d662d9715d601b0c2cce5330d65",
+    "experiments/infrastructure/oneday_vision_probe.py": "0570c6095abd6e519524bf8857368b6d80895631e2db2dd98f17056d2effa1ef",
+    "experiments/infrastructure/prepare_oneday.py": "db3aa37adda5d5a3ec08fa3eed0172fe0bf0f0f2b1f532a78a399752a9f4e6a8",
+    "experiments/infrastructure/prepare_parallel24.py": "19b8594c86f9e90c24b3d3e391d2f83cf0c54820d61a7cbca963718f4bd49bd0",
+    "experiments/infrastructure/run_multistep_smoke.py": "42383ca206e221fe0fa28eb8255b47c9162d1251c34b7e25dc824da0b9ae24fe",
+    "experiments/infrastructure/run_multistep_study.py": "2377d4b7200c5df18fb2fd6980c865ac22ba3e4bee0ec7f979c39520aa6f012f",
+    "experiments/infrastructure/run_snapshot_regression.py": "7e9556d9254f21ee18d2fab89af1b80b2b5a0dfe4cf28518d8c709098aa329e8",
+    "experiments/infrastructure/run_worker_faults.py": "e80d83019f7c99427e10affb99ea93d0f250bdb7900da964aefa4d14ee84e4de",
+    "experiments/model_proxy.py": "c555c7f8a963ad84573eec7a82fc1f032ecca0a8a26c6fcad906c6e11f469c16",
+    "experiments/preflight.py": "79522e108e181c2b74fe84b907a446c142f1ac2fe662ea443fd69b8f88972b1a",
+    "experiments/public_benchmarks/analyze_public.py": "e5d18a582f12302b7238679413b301eddb90bea98762b8fc09a156f10fd147f5",
+    "experiments/public_benchmarks/await_registered_resume.py": "920c058a5b93dfb2ce0a72427a2f6a3d98c0f69ebad0360b9a9844a74d3d74c9",
+    "experiments/public_benchmarks/checkpoint_agent.py": "ee2d9b5eaa0fbf03522064d3d43de496ad03770692ff00391bebcde3f71e2274",
+    "experiments/public_benchmarks/collect_public.py": "5a18e2f41169c9793515061af27cf54d96f268eaa5967f2261f1d2af14a08fab",
+    "experiments/public_benchmarks/environment_binding.py": "ee0644377ccb7b7e1db366feb655c84b0b4d4159449541c461beade7aae196ee",
+    "experiments/public_benchmarks/environment_bootstrap.py": "89953fe011bb95bde8facb8b8b7f6dd763f8c0b1b14afd512a61790c8fc84da4",
+    "experiments/public_benchmarks/finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "experiments/public_benchmarks/finish_oneday.py": "cd559ca9fef519cc7de3ca50e6d94e44d0e7cce315cb4d8fb852123a63351347",
+    "experiments/public_benchmarks/harbor_agent.py": "3f37c29f28848bafdae7394a128bd768fd8e3cd78ad566dfaa8253759efd0c0f",
+    "experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "experiments/public_benchmarks/longhorizon_agent.py": "e5e60e2162fe3dac3540908094107f6d23461824553e3b6258911d6b472e7a89",
+    "experiments/public_benchmarks/mechanism_agent.py": "e756c1988e6b53dcaa1c12b6aa872bcee46b9a6467e457316c1968f01e47b0e1",
+    "experiments/public_benchmarks/mini_agent.py": "424ed10a7e05c1c429e23394e67b85530d4a3a0d6cf397c855027766b4f56376",
+    "experiments/public_benchmarks/mini_episode.py": "492b6567508e4c1834d16671981ee7fb6834238eb512a0731b3ff9d7a193f8e9",
+    "experiments/public_benchmarks/multistep_agent.py": "a79c14f0c91fb2f1e8b4d2ba61b9790a50dcf57797a9e7776ef72a9ac7bf60a3",
+    "experiments/public_benchmarks/oneday_judge.py": "fbcd134411b0b0090fe8f7dd17b883852526231dab25e85c3242b16a1757b114",
+    "experiments/public_benchmarks/oneday_operator.py": "97d53cbe293f71142aabebf23bf6c4558c0c0dcbad964ecfae19128124614480",
+    "experiments/public_benchmarks/oracle_preflight.py": "a587dfe2e4e1bcac885849f2bf6d03758b1aca5b250fbd362fc15e29dfa9973a",
+    "experiments/public_benchmarks/preflight.py": "40fd14bb0de6abc74ffa3718f9803fece5520fc05ccce337a02d8a1e7b8e7c27",
+    "experiments/public_benchmarks/regrade_snapshot.py": "9d9eda4f61bbb1f82fec64b7ba2c86660a23e80a84b0fe43d876b71fdf8805de",
+    "experiments/public_benchmarks/resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "experiments/public_benchmarks/run_mechanism.py": "a55614e943732bfce4fa023c32f0ce9686bc0cac92fd9d2fe61f2fc1b2dc9b18",
+    "experiments/public_benchmarks/run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+    "experiments/public_benchmarks/run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+    "experiments/public_benchmarks/snapshot_lifecycle.py": "6abd103b16fdc24bb4603db9e7c877f034e42a17f13b0700ca19c37e143246bb",
+    "experiments/public_benchmarks/swe2_request.py": "aba0e2d697529c0e580762f1c95883ebd1c57ad15c327d198a9968d3008a8750",
+    "experiments/public_benchmarks/task_resources.py": "a11c3088563e4e638b6df49fba55acf14ad095f67e72b56831b3d5f3a5d18239",
+    "experiments/soak.py": "947f70b1f4cefd3683e5c1806d06b9fcceca34d88fb3e8be1623277f948162e0",
+    "experiments/study_hooks.py": "de59f14ab9ca66476f40ebe2138f3d1fb62a6faea670362075e43ac3f14475ee",
+    "experiments/summarize.py": "743bea711fc290c4884c32d8e761914f11b8f3bc2c40d08899947d6627f4994b",
+    "experiments/supervisor.py": "d37389fa9bff35c8e9c96b04068857399e76750795a3bdd39a688373aa496795",
+    "experiments/tasks.py": "12b4dd6890a78f129309c77f38aedbd8071762a75c49d883ce72edccd2455ab9",
+    "experiments/worker.py": "1815264cc69eb4b229d836fe4403a2fcccb49d32f1dbe1b1028bf313aa3ad1d6",
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/kernel.py": "23d0127190b58fdba3c20b6d3915ef4a844e62fb2de47dce1b6bf5ac8d16d791",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e",
+    "tests/unit/test_longhorizon_backend.py": "d686aa24dd1de264beec2a019561162babdd8eeae6a7b389470d777f12480d06"
+  },
+  "upstream_commits": {
+    "mini-swe-agent": "04d809ceab9df28f9adaed044884180159172930",
+    "longhorizon-harness": "a1dd930614972b92361c1b9cd6aac441a6db5a65",
+    "terminal-bench-2-1": "7131e4375048a0e408a8fb404b5f499d726b695b"
+  },
+  "official_source_commit": "7131e4375048a0e408a8fb404b5f499d726b695b",
+  "mini_upstream_commit": "04d809ceab9df28f9adaed044884180159172930",
+  "longhorizon_upstream_commit": "a1dd930614972b92361c1b9cd6aac441a6db5a65",
+  "environment_lock_file": "environment-harness-transfer01.json",
+  "environment_lock_sha256": "d3c3551a47c41a8ad1fc6bbfb650bbe9001a883a46b053b5cf165a0def1642cb",
+  "environment_unavailable_tasks": [],
+  "oracles": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "status": "graded",
+      "pid": 1543642,
+      "started_at": "2026-10-05T21:11:49.035174Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler/adaptive-rejection-sampler__4fcbfvk/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:12:50.297918+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:65b25be2c34967a7db2332794da5a1f6d8235e1792a1d747aff46b5bff77b9d7"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "status": "graded",
+      "pid": 1551302,
+      "started_at": "2026-10-05T21:12:51.169941Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c/polyglot-rust-c__qRdsYjw/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:13:39.684550+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:42e1c101034156ab6a0cbefc63ee654ab7fccb668e1580a090abba89244f6a93"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "status": "graded",
+      "pid": 1556708,
+      "started_at": "2026-10-05T21:13:40.563917Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-03-gcode-to-text",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-03-gcode-to-text/gcode-to-text__S6UnyH6/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:15:56.232782+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:174ac52b2c4ae7e2bad19ae1f5e61ee91b1344c8ab1bf57bed5333c15249a402"
+    }
+  ],
+  "start_after_receipt": "harness-transfer01-preparation.json",
+  "mini_integration_gate": "mini-transport-smoke02.json",
+  "pause_integration_gate": "mechanism-pause-smoke01.json",
+  "additional_integration_gates": [
+    "longhorizon-smoke01.json",
+    "scb-multistep-smoke02.json"
+  ],
+  "integration_gate_sha256": {
+    "mini-transport-smoke02.json": "157376918989375c2f52a6537fd9d40cdf64989c49e1f9a539a51427e81ba6f8",
+    "mechanism-pause-smoke01.json": "ac177c07636b68131c79213975c2ca0c1a3cc00e0a07aca141b507fd5db7f28c",
+    "longhorizon-smoke01.json": "38e2dd8b6a3693b269b64ba312e51b62094ec6f5b681ef005204f5898b8e31c0",
+    "scb-multistep-smoke02.json": "8363f455374dc58116aa2bbd5585c2d9a012c1def0e5fb39c924a606cd5ab9e4"
+  },
+  "selection_sha256": "942b735c7ddbc9b9fd7c515228185ac5c25cf34ee27dc756c88bda981555e9e8",
+  "preparation_sha256": "59c44d93dc64f13b6e53ef15c8cbfb4e9f8f6218661167afc28d59e3417cf5bc",
+  "freeze_operator_sha256": "6977d6a469deb01b2833972c54a8380f2b7ed1d91f61b7865ce2a35dbe891bd9",
+  "method_document": "harness-transfer-study-2026-10-06.md",
+  "concurrency": {
+    "new_cohort_cpu_peak": 2,
+    "workers": 2,
+    "memory_mb": 12288,
+    "other_pool_cpus": 6
+  },
+  "disk_reserve_gib": 60,
+  "automatic_retries": 0,
+  "stop_admission_at_utc": "2026-10-06T14:14:06+00:00",
+  "cloud_stop_at_utc": "2026-10-06T14:24:06+00:00",
+  "contrasts": [
+    {
+      "control": "native",
+      "treatment": "sg_v2",
+      "hypothesis": "whole_framework"
+    },
+    {
+      "control": "mini_swe",
+      "treatment": "sg_v2",
+      "hypothesis": "external_harness"
+    },
+    {
+      "control": "longhorizon",
+      "treatment": "sg_v2",
+      "hypothesis": "external_harness"
+    }
+  ],
+  "disclosures": [
+    "Three task IDs, deliberate metadata selection, no training-contamination guarantee",
+    "Original preparation attempt rejected prior-registration overlap before oracle or model calls",
+    "LongHorizon unmodified upstream loop, CLI Hermes custom backend, writable tools for all roles; no Claude-specific readonly guard or GUI",
+    "LongHorizon dev02 adds failure handoff classification to smoke dev01; seven local boundary tests passed",
+    "Six manager rounds differ from six SG executor episodes; shared physical/time caps are the comparable budgets",
+    "Existing frozen cohorts unchanged; transport/binding/snapshot fixes shared by all conditions here",
+    "All failures retained; no task replacements or best-of-N retries; no post-result tuning in this cohort"
+  ]
+}

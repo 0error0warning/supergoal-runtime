@@ -1,0 +1,18 @@
+{
+  "recorded_at": "2026-10-05T14:39:24.287229+00:00",
+  "exit_code": 0,
+  "passed": true,
+  "stdout": "RESOURCE_LIMITS_HTTPS_AND_ISOLATION_PASS\n",
+  "stderr": "",
+  "docker_version": "29.8.2",
+  "storage_driver": "overlay2",
+  "docker_root": "/var/lib/supergoal-lab/docker",
+  "cgroup_version": "2",
+  "compose_version": "Docker Compose version v5.6.0",
+  "probe_image_id": "sha256:c83674e1999044d33d751661371b873539f47e5b5c5ca3320c7e0377acca6238",
+  "probe_image_digests": [
+    "alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8"
+  ],
+  "isolation_counters": "Chain SG-LAB-EGRESS (2 references)\n    pkts      bytes target     prot opt in     out     source               destination         \n      18     4710 ACCEPT     0    --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED\n       0        0 DROP       0    --  *      *       0.0.0.0/0            10.0.0.0/8          \n       0        0 DROP       0    --  *      *       0.0.0.0/0            172.16.0.0/12       \n       0        0 DROP       0    --  *      *       0.0.0.0/0            192.168.0.0/16      \n       0        0 DROP       0    --  *      *       0.0.0.0/0            100.64.0.0/10       \n       2      120 DROP       0    --  *      *       0.0.0.0/0            169.254.0.0/16      \n      10      576 ACCEPT     0    --  *      *       0.0.0.0/0            0.0.0.0/0           \n",
+  "remaining_container_ids": []
+}

@@ -1,0 +1,777 @@
+{
+  "captured_at": "2026-10-05T23:32:52.582272+00:00",
+  "target_free_gib": 85,
+  "free_bytes_observed": 72716128256,
+  "scope": "Unused sg-artifact image caches with durable archives; current context-study artifacts and the live final public trial excluded. Operator rechecks full blob hashes, current tags and all container references before each non-forced removal.",
+  "inventory_sha256": "dd32b34c3d2d3e3185c0aa1a48c0e20ccd75e2f3bc69acb0adf9c5b497325776",
+  "candidates": [
+    {
+      "image_id": "sha256:e03ad0b358ca1910eaa476487f39be87aba8aa91f9827e86a9cd8e3ccdb1d382",
+      "tag": "sg-artifact:53ca319cd2c342a28b7aed1a1a503585",
+      "docker_reported_size_bytes": 12700000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/e03ad0b358ca1910eaa476487f39be87aba8aa91f9827e86a9cd8e3ccdb1d382.json",
+      "manifest_sha256": "1b77543d7014ee6e0a9d15806a1a001151cf6e22bbc02d4f787f532b67bb3735",
+      "estimated_unique_bytes": 12610000000.0
+    },
+    {
+      "image_id": "sha256:653d3432a23c96fc064de5fcb55bedcae537bf6501673e17941ca9dbddbf480a",
+      "tag": "sg-artifact:60dd6a8c51134776b69ed151f8098704",
+      "docker_reported_size_bytes": 1070000000.0000001,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/653d3432a23c96fc064de5fcb55bedcae537bf6501673e17941ca9dbddbf480a.json",
+      "manifest_sha256": "dc812551ac101cef0ad10a5485b394614211c8d0f26421177a23f95971d564b2",
+      "estimated_unique_bytes": 990400000.0
+    },
+    {
+      "image_id": "sha256:e08285d50132398c4f983f0f6327ec2bcf981fdd92985cfdabcc2a66914ed0cd",
+      "tag": "sg-artifact:d7e372f9283b4eb5b515d4ed9b3f7fba",
+      "docker_reported_size_bytes": 1070000000.0000001,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/e08285d50132398c4f983f0f6327ec2bcf981fdd92985cfdabcc2a66914ed0cd.json",
+      "manifest_sha256": "74f7c455229e625639d7925d41f3b291ced0765a4862d2b744a4ede6a80ff7f9",
+      "estimated_unique_bytes": 990100000.0
+    },
+    {
+      "image_id": "sha256:db66186d20bf277568d9049154d7765505076949d54a261b6aa6bbea2585d62c",
+      "tag": "sg-artifact:cbdc59a226f0473eb8b0a3ec222c36d7",
+      "docker_reported_size_bytes": 412000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/db66186d20bf277568d9049154d7765505076949d54a261b6aa6bbea2585d62c.json",
+      "manifest_sha256": "2dae9d2493f775c34b3be2bcd184770e1b132d3254fd9e063f3c991a10545307",
+      "estimated_unique_bytes": 289600000.0
+    },
+    {
+      "image_id": "sha256:84a2534ffbbf81eab8d830f0c99041033b72fed51a3b37f931fb68c2a0ba352c",
+      "tag": "sg-artifact:d55e6bc4c0224cb6a6f692d1da4c5e36",
+      "docker_reported_size_bytes": 385000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/84a2534ffbbf81eab8d830f0c99041033b72fed51a3b37f931fb68c2a0ba352c.json",
+      "manifest_sha256": "fb035afd7be03c2adfe21aaeae5cf30639c6a0cb4175f18a3129918b80aad003",
+      "estimated_unique_bytes": 241600000.0
+    },
+    {
+      "image_id": "sha256:12d6746618fadda3b43c4f8423a451508b73172d4d1aa5ff791ac4a335b3bd22",
+      "tag": "sg-artifact:f15a983c3236499089d7c5d87825d6a2",
+      "docker_reported_size_bytes": 363000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/12d6746618fadda3b43c4f8423a451508b73172d4d1aa5ff791ac4a335b3bd22.json",
+      "manifest_sha256": "b9797614ca05d081bdfff1927e6300127f77419124bbb0903b6851c0c6605979",
+      "estimated_unique_bytes": 240600000.0
+    },
+    {
+      "image_id": "sha256:2ca37aafebd88f2eb2a1c1f997cf62505effb13a99b08c00991c2368b5de042f",
+      "tag": "sg-artifact:9ebdd9dbe72141cb997fa1339e714d59",
+      "docker_reported_size_bytes": 380000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/2ca37aafebd88f2eb2a1c1f997cf62505effb13a99b08c00991c2368b5de042f.json",
+      "manifest_sha256": "9772167b08d1621e76ad084de365faa82b476306d9e0753c3f4e7fbf869e53b4",
+      "estimated_unique_bytes": 236400000.0
+    },
+    {
+      "image_id": "sha256:d7a5fb59e5b8a6af06e81c66054d52f110ee1a2eb9ad3323b37bf11166185059",
+      "tag": "sg-artifact:b96deda8334144c3b6f15eace64da269",
+      "docker_reported_size_bytes": 353000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/d7a5fb59e5b8a6af06e81c66054d52f110ee1a2eb9ad3323b37bf11166185059.json",
+      "manifest_sha256": "d1886d28e7f2132a27e790dc66ac4560f20298c53a67ba0d646214f66b91c0c4",
+      "estimated_unique_bytes": 230300000.0
+    },
+    {
+      "image_id": "sha256:3ebbf9bbd72f8c569fa318ededc87634b8ba0b580ce7398dafd8a949ba74db73",
+      "tag": "sg-artifact:8dd5f1dc679a45dea7a9f246c8c4d296",
+      "docker_reported_size_bytes": 285000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3ebbf9bbd72f8c569fa318ededc87634b8ba0b580ce7398dafd8a949ba74db73.json",
+      "manifest_sha256": "41665d0bc36bb71ebb21088c6eb6420187b48703a74191a1201a728c0cc24cf5",
+      "estimated_unique_bytes": 141800000.0
+    },
+    {
+      "image_id": "sha256:4f48a6f3f1d3fbd0ea98ff8f733c23f351017a727980e342cf6647376de3253d",
+      "tag": "sg-artifact:9af2f90a819547ce9fbca5a152ea246c",
+      "docker_reported_size_bytes": 253000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4f48a6f3f1d3fbd0ea98ff8f733c23f351017a727980e342cf6647376de3253d.json",
+      "manifest_sha256": "2d0aa27ec982e0d7108dc9c95375d9eab863c0f3104830938fe5d09db2bfc543",
+      "estimated_unique_bytes": 110200000.0
+    },
+    {
+      "image_id": "sha256:1c188f4b1ec87c798eaf2d436ff97ddd421503fcd96f58341bffd0581780929f",
+      "tag": "sg-artifact:0bfbc5f9459a45ffbd92504cfcc0aca6",
+      "docker_reported_size_bytes": 180000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/1c188f4b1ec87c798eaf2d436ff97ddd421503fcd96f58341bffd0581780929f.json",
+      "manifest_sha256": "e1ff91ca8ae9acba190e5d8d3af03248df2f7e946ba3703bd31e4aaf04606e9c",
+      "estimated_unique_bytes": 101600000.0
+    },
+    {
+      "image_id": "sha256:4058409ae0f34a7da7c2378c798049a21c4d82453ef6b960e60c236bd06e50d0",
+      "tag": "sg-artifact:a9ff3c7bde804b4fab0b2a428a902a6e",
+      "docker_reported_size_bytes": 180000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4058409ae0f34a7da7c2378c798049a21c4d82453ef6b960e60c236bd06e50d0.json",
+      "manifest_sha256": "154b275de6f872b1ce0e4cd4fcf7564f9311dd7e02dbbbb026512721a862f15c",
+      "estimated_unique_bytes": 101600000.0
+    },
+    {
+      "image_id": "sha256:0311e6a2eebe39afb256347d15005948fda735f7ad6bf2ce1d12f6c15abdaa2c",
+      "tag": "sg-artifact:0c31b49cd3c84ea4b8b491fe995392af",
+      "docker_reported_size_bytes": 134000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/0311e6a2eebe39afb256347d15005948fda735f7ad6bf2ce1d12f6c15abdaa2c.json",
+      "manifest_sha256": "eb8469a2d9af10ce0cc3dac82721bb808a06a669a8021f8e48c66cf9f6a9d807",
+      "estimated_unique_bytes": 55380000.0
+    },
+    {
+      "image_id": "sha256:7340e69e1920a5b40ce14a9fa48d0e6f29083ddf1820f4dfffa743190753a040",
+      "tag": "sg-artifact:1bda08ae2c7d4a48bccd172c4f2cda22",
+      "docker_reported_size_bytes": 134000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/7340e69e1920a5b40ce14a9fa48d0e6f29083ddf1820f4dfffa743190753a040.json",
+      "manifest_sha256": "1e4151cf06f84016b156495a34f872405ed77f630f9a8c293553d2c508efcdd1",
+      "estimated_unique_bytes": 55380000.0
+    },
+    {
+      "image_id": "sha256:6df5b13e62b8bdd9efd2da975564347a68e963a34f93d9a291fb477c29aebaef",
+      "tag": "sg-artifact:fcfb859157e844ff91e5db3534ac864b",
+      "docker_reported_size_bytes": 134000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6df5b13e62b8bdd9efd2da975564347a68e963a34f93d9a291fb477c29aebaef.json",
+      "manifest_sha256": "73fc3ba21518b09621cad656dc2c3c6fcae9a423ec2f976e85a1bffd1674ceb8",
+      "estimated_unique_bytes": 55370000.0
+    },
+    {
+      "image_id": "sha256:411c32907cfb7964c31470e7729c281f6428442b7cbee371ff3d7cba0ba62858",
+      "tag": "sg-artifact:2d97f43e11244fbe93444baf0f99c3a3",
+      "docker_reported_size_bytes": 816000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/411c32907cfb7964c31470e7729c281f6428442b7cbee371ff3d7cba0ba62858.json",
+      "manifest_sha256": "f4715143b8da1f1337603d85b6090a72a037d4258350e79184c9a29b0f6d3445",
+      "estimated_unique_bytes": 39840000.0
+    },
+    {
+      "image_id": "sha256:a0b5ab1cb85a2c739016508dbbb1b5718560540766ecd9d8b5b27c136ec193be",
+      "tag": "sg-artifact:e5b8ff807f334ca29cd0420e946a44a9",
+      "docker_reported_size_bytes": 9440000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/a0b5ab1cb85a2c739016508dbbb1b5718560540766ecd9d8b5b27c136ec193be.json",
+      "manifest_sha256": "2af493b046d48cfbc0d24ab5bfd05309db3f6ddf397d873c3b6577d54b9a6c37",
+      "estimated_unique_bytes": 28740000.0
+    },
+    {
+      "image_id": "sha256:9bf3fd6e19a031510c6c8f253d73639fb88a7d9a973313d2e3dd50c47a3d414a",
+      "tag": "sg-artifact:75fd9c587f4e4f808cc44db2237548b6",
+      "docker_reported_size_bytes": 9440000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9bf3fd6e19a031510c6c8f253d73639fb88a7d9a973313d2e3dd50c47a3d414a.json",
+      "manifest_sha256": "00f4d5a91feebf7172c80f89c92449ed8fb2356b8ca44dc8532a368a7944f1c5",
+      "estimated_unique_bytes": 28540000.0
+    },
+    {
+      "image_id": "sha256:d0185983509b94e2f516373258c414f4cdcfff43014bc3a00b45f422c969451e",
+      "tag": "sg-artifact:e481f2ce0b474f8b9012e43fc09dba0f",
+      "docker_reported_size_bytes": 9440000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/d0185983509b94e2f516373258c414f4cdcfff43014bc3a00b45f422c969451e.json",
+      "manifest_sha256": "5579f683421aa775dabff5e41aaebd2ec4c8007f1e6b73080ac7f993d617f9a4",
+      "estimated_unique_bytes": 28510000.0
+    },
+    {
+      "image_id": "sha256:3519571a330a35fb882591f70618a67974c4e7c864e9f0a5071503e59313f838",
+      "tag": "sg-artifact:55a044fb0c994e08887a73a559667399",
+      "docker_reported_size_bytes": 803000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3519571a330a35fb882591f70618a67974c4e7c864e9f0a5071503e59313f838.json",
+      "manifest_sha256": "d795f21fdb2f819dfa8a014d37b5297b762b676f10bbf6a9a75c1daec89e85d5",
+      "estimated_unique_bytes": 26710000.0
+    },
+    {
+      "image_id": "sha256:9f5369a759df4c0b942133ad85d854228de2bf42bb085479a0781a8c28e5161f",
+      "tag": "sg-artifact:f959fc5b7dd040e3b507b5a3acf1ce25",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9f5369a759df4c0b942133ad85d854228de2bf42bb085479a0781a8c28e5161f.json",
+      "manifest_sha256": "80d60f9a2e304c2a5dbbdea8e373dd199d7cc49d6bf604becf8a1e7daff82fd0",
+      "estimated_unique_bytes": 17210000.0
+    },
+    {
+      "image_id": "sha256:9c042bf4327fff8ad3921e10c040bacd35f286c21085bcd421ba8a75e80921ae",
+      "tag": "sg-artifact:eebcba82a6424e898b48a174363dfb89",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9c042bf4327fff8ad3921e10c040bacd35f286c21085bcd421ba8a75e80921ae.json",
+      "manifest_sha256": "6c7695b31b4e070f9fb0e7c07132d15f50059568e65a5b857d294a002097772f",
+      "estimated_unique_bytes": 17180000.0
+    },
+    {
+      "image_id": "sha256:069a9006ac9ef4666862ede5d9aecd630393a34d67906025bd186c581a6f5172",
+      "tag": "sg-artifact:660b03819b23434fa7c5a931a7fe0308",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/069a9006ac9ef4666862ede5d9aecd630393a34d67906025bd186c581a6f5172.json",
+      "manifest_sha256": "c722117ea1b2f4983356b496d0fe412b46bd2fa7e0f40158574c48e5101b1f4e",
+      "estimated_unique_bytes": 16530000.000000002
+    },
+    {
+      "image_id": "sha256:b4d52fcded4ef231d03ac55d8de7dda72a25157b313e2297445b47addf388933",
+      "tag": "sg-artifact:dd8e9549482b446abd1b172f7c0880e6",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/b4d52fcded4ef231d03ac55d8de7dda72a25157b313e2297445b47addf388933.json",
+      "manifest_sha256": "9638a37a7b550c4e3fd59a47d4eb5b63f7479918be7e02f9d5f77abb31c74312",
+      "estimated_unique_bytes": 16530000.000000002
+    },
+    {
+      "image_id": "sha256:a1cd9a16a08c2248e7a84b99ec6e432b2c341c6b030afcab759c565724e8e0ae",
+      "tag": "sg-artifact:4be719656ab74033bdbc7e9ad3acfb90",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/a1cd9a16a08c2248e7a84b99ec6e432b2c341c6b030afcab759c565724e8e0ae.json",
+      "manifest_sha256": "9530d13102fb387c72cd400682bde44837c9c02db6a61aa77bc3641256bd2bff",
+      "estimated_unique_bytes": 16489999.999999998
+    },
+    {
+      "image_id": "sha256:0589b7b4f0e087c28fa2079e955ebc7551e595cb062b9b62b0c635e288d3de12",
+      "tag": "sg-artifact:320ca65c60a44edbbb61b32b493ad5bc",
+      "docker_reported_size_bytes": 720000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/0589b7b4f0e087c28fa2079e955ebc7551e595cb062b9b62b0c635e288d3de12.json",
+      "manifest_sha256": "9079a1dab6d6493709392da615416bcba99d40bedb1daa7e75d96b36d60c700e",
+      "estimated_unique_bytes": 16480000.0
+    },
+    {
+      "image_id": "sha256:5e76223e1693ec4d942fd249c4fa932ea5dff7d19418fbe12ebc050661f290cc",
+      "tag": "sg-artifact:025161acf9014935893b2360cbea3931",
+      "docker_reported_size_bytes": 719000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/5e76223e1693ec4d942fd249c4fa932ea5dff7d19418fbe12ebc050661f290cc.json",
+      "manifest_sha256": "4ed668d1e533688d3ae53d06e29d1b784f8a905462067bfba2df3ca6faff0866",
+      "estimated_unique_bytes": 15420000.0
+    },
+    {
+      "image_id": "sha256:3436404fa3346ee83de0d93167ae12286cd1b88e4bb6546f8cdd87e4e777f3c2",
+      "tag": "sg-artifact:a0c5b5c622984a59823d7ee2f754c950",
+      "docker_reported_size_bytes": 718000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3436404fa3346ee83de0d93167ae12286cd1b88e4bb6546f8cdd87e4e777f3c2.json",
+      "manifest_sha256": "61d434262a114329af779f9471134a97dff806fa0b9ee050fbd3b3b924dfc6c3",
+      "estimated_unique_bytes": 14750000.0
+    },
+    {
+      "image_id": "sha256:3c32b68f717626e3389eb14afbd2d8a63120028bf7c275e683060b461378ba37",
+      "tag": "sg-artifact:8669c7ec09ec4201a65ce0433ed53311",
+      "docker_reported_size_bytes": 718000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3c32b68f717626e3389eb14afbd2d8a63120028bf7c275e683060b461378ba37.json",
+      "manifest_sha256": "6cb5ae9abe837f3cfa32ba2aa207d8a649a81062de39c896a8ec148c4a826f98",
+      "estimated_unique_bytes": 14620000.0
+    },
+    {
+      "image_id": "sha256:c9f302fcf7432bddd18fb61b134b72ccc7b38eebbba23ba8c66b11cd8195bd8f",
+      "tag": "sg-artifact:c383a509e6854b3cb37b5bc51f857dfc",
+      "docker_reported_size_bytes": 718000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/c9f302fcf7432bddd18fb61b134b72ccc7b38eebbba23ba8c66b11cd8195bd8f.json",
+      "manifest_sha256": "733c5baea12e1ee8c0c787a8cec0db229dd21f9208c3016003d67463a3573260",
+      "estimated_unique_bytes": 14420000.0
+    },
+    {
+      "image_id": "sha256:537695488f807e57b3fc2b5907d68eb7b40255461601af5a0d340028986814d8",
+      "tag": "sg-artifact:67b9b889ad634c03bb8486d6c395b1d1",
+      "docker_reported_size_bytes": 717000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/537695488f807e57b3fc2b5907d68eb7b40255461601af5a0d340028986814d8.json",
+      "manifest_sha256": "583a11fa57b812b7e082b24bdc71f13cdac879f17e56fb0d84d74613f7f753f3",
+      "estimated_unique_bytes": 14330000.0
+    },
+    {
+      "image_id": "sha256:c8f520ba31e03b463d947c581a68ca6bea5318214482d91c58592e121e98ac11",
+      "tag": "sg-artifact:dee692447a10457d92fdd9ed1ff2570e",
+      "docker_reported_size_bytes": 789000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/c8f520ba31e03b463d947c581a68ca6bea5318214482d91c58592e121e98ac11.json",
+      "manifest_sha256": "af1767201b254fc76176dd7cf0ce113910525bbac1c2d8d5a759f1089d14ebe2",
+      "estimated_unique_bytes": 13310000.0
+    },
+    {
+      "image_id": "sha256:f156c93785282f5c087d438decd3542cba40a47b2ac099bafbe9d5736f59f49f",
+      "tag": "sg-artifact:b300b86a9fc1411aa9352443b3050d14",
+      "docker_reported_size_bytes": 789000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/f156c93785282f5c087d438decd3542cba40a47b2ac099bafbe9d5736f59f49f.json",
+      "manifest_sha256": "d29173c2028d46cb4a3abfc2eecc26e0c3082e086c81ce8940a14485be8c6f07",
+      "estimated_unique_bytes": 13310000.0
+    },
+    {
+      "image_id": "sha256:64f5e574ba779f91c4aef18a43e1b1d858589497c042ca9d0d7a83f40eb9d53e",
+      "tag": "sg-artifact:2a9e940480674ddea45af057dff0c271",
+      "docker_reported_size_bytes": 716000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/64f5e574ba779f91c4aef18a43e1b1d858589497c042ca9d0d7a83f40eb9d53e.json",
+      "manifest_sha256": "d0b04cda9149a2f17952174d9fdf337d19bc31ccc59b61bebec428a129a3fbf1",
+      "estimated_unique_bytes": 13140000.0
+    },
+    {
+      "image_id": "sha256:21f88cad674b24c0ceb4e2a3305875de04e0d7c188d56e434c0f691244548246",
+      "tag": "sg-artifact:0669cb9f29854d82993706a8be159d77",
+      "docker_reported_size_bytes": 716000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/21f88cad674b24c0ceb4e2a3305875de04e0d7c188d56e434c0f691244548246.json",
+      "manifest_sha256": "37ad3f32ce4583dd61c2259a77a9c45d722cf838868a48757b8ecb38db146094",
+      "estimated_unique_bytes": 13130000.0
+    },
+    {
+      "image_id": "sha256:4640efaa6e50f787b75e05a7a596a711e47d232ba0ebe553c890832833c7bae6",
+      "tag": "sg-artifact:a10191103a3c4842baad031754720bba",
+      "docker_reported_size_bytes": 716000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4640efaa6e50f787b75e05a7a596a711e47d232ba0ebe553c890832833c7bae6.json",
+      "manifest_sha256": "4b5202a469892d99177fd34db37b1b98e078baf6119f13e21148e3f18a5d611a",
+      "estimated_unique_bytes": 13100000.0
+    },
+    {
+      "image_id": "sha256:9472fe13ad1afe5eca9d025b267274365a5f0887883e339fddb4031cc447973c",
+      "tag": "sg-artifact:db6ce251d0b643e58fe96a480c7a83e0",
+      "docker_reported_size_bytes": 716000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9472fe13ad1afe5eca9d025b267274365a5f0887883e339fddb4031cc447973c.json",
+      "manifest_sha256": "d32130329e8480cf816bc84dc73bf7e94d96eb1a64cdf22d4dd04a7738cb0f10",
+      "estimated_unique_bytes": 13100000.0
+    },
+    {
+      "image_id": "sha256:646a976e96e4a9fd40ebb5e5e6e7c12e1d90a28ee7ce7d79dbe3769bed8001ad",
+      "tag": "sg-artifact:4474fa5f01ab4fa5909ae5f9d9088e1a",
+      "docker_reported_size_bytes": 9430000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/646a976e96e4a9fd40ebb5e5e6e7c12e1d90a28ee7ce7d79dbe3769bed8001ad.json",
+      "manifest_sha256": "f6389e1b70c1b4704c4c0069ceba914985192a9a15cd8bb5bfb097c129a542c9",
+      "estimated_unique_bytes": 11920000.0
+    },
+    {
+      "image_id": "sha256:9953085d19bdae3058306e099ccafc80edde977977312bf86176e68bc59e0522",
+      "tag": "sg-artifact:4d7f2e863ba44573884067f630d6afd4",
+      "docker_reported_size_bytes": 9430000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9953085d19bdae3058306e099ccafc80edde977977312bf86176e68bc59e0522.json",
+      "manifest_sha256": "fe53e3668f819e699eeefb6b3f97b2101d44e4f81a0106e181ccafdf5aad8c94",
+      "estimated_unique_bytes": 11890000.0
+    },
+    {
+      "image_id": "sha256:a49e88791799277ff2b78134e883a485824b1f8bc4cce2642bc2d8ee5a683b27",
+      "tag": "sg-artifact:84e62a9235ea4062923b1f34a63e5ae3",
+      "docker_reported_size_bytes": 9430000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/a49e88791799277ff2b78134e883a485824b1f8bc4cce2642bc2d8ee5a683b27.json",
+      "manifest_sha256": "15742f0cc522bd848fbfce56d8758d29b7a173d757d68f8ca64fc477b2cb5d3c",
+      "estimated_unique_bytes": 11140000.0
+    },
+    {
+      "image_id": "sha256:b1b52231fab04ccbc1381a3d4defdd6f18b45a717e9e5437b91faa5107c06c04",
+      "tag": "sg-artifact:2ca02f43ab964d798f46aab2b0891a87",
+      "docker_reported_size_bytes": 708000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/b1b52231fab04ccbc1381a3d4defdd6f18b45a717e9e5437b91faa5107c06c04.json",
+      "manifest_sha256": "3424cc67c87d01a2dcdd93c245137be90567776952e8974c6ceb6b312848755f",
+      "estimated_unique_bytes": 4820000.0
+    },
+    {
+      "image_id": "sha256:5052fe654486694fd61e48b59255bf6a8e2cdbdb80efc41fe6c2cf9b1b0a9080",
+      "tag": "sg-artifact:c71442c9f0c04383981d382b90f9e7d3",
+      "docker_reported_size_bytes": 706000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/5052fe654486694fd61e48b59255bf6a8e2cdbdb80efc41fe6c2cf9b1b0a9080.json",
+      "manifest_sha256": "37c175d027c282e0f249ed40958ffd2e176388475c90cb3823f7eadd3062e2fd",
+      "estimated_unique_bytes": 3165000.0
+    },
+    {
+      "image_id": "sha256:9cb2a3b85a2ceaf5b3663b6ba470adc22c2f22584ab8b1eb976a82daf848c9e1",
+      "tag": "sg-artifact:fc220311fb5f42fba4d6b2a766789b87",
+      "docker_reported_size_bytes": 706000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9cb2a3b85a2ceaf5b3663b6ba470adc22c2f22584ab8b1eb976a82daf848c9e1.json",
+      "manifest_sha256": "3390b34051f3d720e1c7cd51434a07355ae53fd82fac0553e577ec3adde01135",
+      "estimated_unique_bytes": 3163000.0
+    },
+    {
+      "image_id": "sha256:ce3048b05e1e651a8ac17966363b16ba5d0c90c987fcb9b3935b5285399acae7",
+      "tag": "sg-artifact:3073db7a0d7045b1a29e562ed1a7ecec",
+      "docker_reported_size_bytes": 705000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/ce3048b05e1e651a8ac17966363b16ba5d0c90c987fcb9b3935b5285399acae7.json",
+      "manifest_sha256": "99aa1a23495fcc62592301ef3daf37c7689d1f30c0fa9f1def87461f84dafbef",
+      "estimated_unique_bytes": 1986000.0
+    },
+    {
+      "image_id": "sha256:9190c5137d350e95c84681d0e9cfa60656e8c16108bd9faa1ec77d70f4670da8",
+      "tag": "sg-artifact:a5cda006de664667973063eebb755de8",
+      "docker_reported_size_bytes": 9420000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/9190c5137d350e95c84681d0e9cfa60656e8c16108bd9faa1ec77d70f4670da8.json",
+      "manifest_sha256": "1edbc884c1d7c9f15b2f501543ad358ddc16a0933c3a5ee5126dbf4cc1d09ee4",
+      "estimated_unique_bytes": 1103000.0
+    },
+    {
+      "image_id": "sha256:2d62142b152abda9c61a7733ceec8428449de6dcf328d9c240a3daadb2b715df",
+      "tag": "sg-artifact:44e6b1ba1a29494fbb1dbb5c628cddbe",
+      "docker_reported_size_bytes": 2240000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/2d62142b152abda9c61a7733ceec8428449de6dcf328d9c240a3daadb2b715df.json",
+      "manifest_sha256": "cb4c21b6b6cc757d29698d745c09fda3602816b953c35da2c930b59b107a2f09",
+      "estimated_unique_bytes": 1002000.0
+    },
+    {
+      "image_id": "sha256:db9e4e406323b143de308dcb40e4ee4d27cd4b4ba7e971303a8b846e94dfb54e",
+      "tag": "sg-artifact:30adb6a77ccb489ba8ace74c22c1c211",
+      "docker_reported_size_bytes": 9420000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/db9e4e406323b143de308dcb40e4ee4d27cd4b4ba7e971303a8b846e94dfb54e.json",
+      "manifest_sha256": "b54f189192bdc39874e5f06707382d02bdb4ce963cf68a8c015dbda064e4a258",
+      "estimated_unique_bytes": 923800.0
+    },
+    {
+      "image_id": "sha256:6dde2d336702946e369833a1a0f137af7ee6d09d5bb326ba52c8c3fc0ac13ae8",
+      "tag": "sg-artifact:b91b80721d4c445db23d365820003b30",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6dde2d336702946e369833a1a0f137af7ee6d09d5bb326ba52c8c3fc0ac13ae8.json",
+      "manifest_sha256": "0d31735d05227bb0d89242ca4f6c9e5beea9eae188c77cb0e7f394c8b60cceef",
+      "estimated_unique_bytes": 544100.0
+    },
+    {
+      "image_id": "sha256:4073db975f9c86e54d16fa1e5e1782eda5289dbae9d708e497b4b9a6a2256cac",
+      "tag": "sg-artifact:4c47ffb42f494475aee806250b5eee71",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4073db975f9c86e54d16fa1e5e1782eda5289dbae9d708e497b4b9a6a2256cac.json",
+      "manifest_sha256": "a82f8b2759d728791aae0960ff42d15a4b4330bc5d21ae3e03d4d53ed79fa3cd",
+      "estimated_unique_bytes": 523400.0
+    },
+    {
+      "image_id": "sha256:3bb507f916c0fced5e33d17fda4ffa2e972b9a1627d534b7dc078b8cf1058c70",
+      "tag": "sg-artifact:fb484606bbd94a13bce6f70812f2d6e1",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3bb507f916c0fced5e33d17fda4ffa2e972b9a1627d534b7dc078b8cf1058c70.json",
+      "manifest_sha256": "7c02e9d5d7635f37eef72ed5d76812fe82c3d6816527fb069d2f7ac5e5853350",
+      "estimated_unique_bytes": 433400.0
+    },
+    {
+      "image_id": "sha256:c60d975b66848327687d3001cee701a14577f30ce822fb6b0cbe0be37c5f71cf",
+      "tag": "sg-artifact:45c3366bd06e446dab92fd4d0fb41dab",
+      "docker_reported_size_bytes": 121000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/c60d975b66848327687d3001cee701a14577f30ce822fb6b0cbe0be37c5f71cf.json",
+      "manifest_sha256": "8c31e29d2978e1d5df5fe8f6bb76ee35ccac2d4904c39aab06ae4917b1642633",
+      "estimated_unique_bytes": 390400.0
+    },
+    {
+      "image_id": "sha256:72749ad0086d86c52c7e6ab32a193d857ff2d572cc98273f4d8f1bd182c56af1",
+      "tag": "sg-artifact:28c1ca7dd9b9464cb2010e8a9335e117",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/72749ad0086d86c52c7e6ab32a193d857ff2d572cc98273f4d8f1bd182c56af1.json",
+      "manifest_sha256": "b799f59f04239c6bb88ca09b1093e21f287df2776877304ca221392311b87e2b",
+      "estimated_unique_bytes": 381600.0
+    },
+    {
+      "image_id": "sha256:6fedf382b1be346a3fedba6502958422bcc97a2a7491d424fd14ded009f8d6fa",
+      "tag": "sg-artifact:a714a862a78b4d1b991d9f912343531b",
+      "docker_reported_size_bytes": 777000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6fedf382b1be346a3fedba6502958422bcc97a2a7491d424fd14ded009f8d6fa.json",
+      "manifest_sha256": "3009c35882f296286ddba06a00b43ce240c1d952e35273152f2904278d1e578e",
+      "estimated_unique_bytes": 344800.0
+    },
+    {
+      "image_id": "sha256:123af094112f892a7f90527957ec396230555c04c80d3c728c588b2e8280db12",
+      "tag": "sg-artifact:59da246dae95451c8f79ff739ea0f7a1",
+      "docker_reported_size_bytes": 460000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/123af094112f892a7f90527957ec396230555c04c80d3c728c588b2e8280db12.json",
+      "manifest_sha256": "e3b193884072765ae246089a760d2a2de429f6871f4b7daa7fd1951c0459ec1d",
+      "estimated_unique_bytes": 222800.0
+    },
+    {
+      "image_id": "sha256:317108ec54dbc74bfe9ff27fbe8597b068bfe854c45e8f2733e4095d5f1fbd52",
+      "tag": "sg-artifact:55e062a5f636481596fda8f8aef0deb7",
+      "docker_reported_size_bytes": 460000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/317108ec54dbc74bfe9ff27fbe8597b068bfe854c45e8f2733e4095d5f1fbd52.json",
+      "manifest_sha256": "ef0659338e1197331b78f1df617a8c10fc7677fdee87f2a4172969be60f55af2",
+      "estimated_unique_bytes": 222800.0
+    },
+    {
+      "image_id": "sha256:57146e9be9859589e8bb66489564f0de4dfb0c09627f7b74887dfe6de018dbed",
+      "tag": "sg-artifact:6d85125691ea4d99857ff2e5ae60a88b",
+      "docker_reported_size_bytes": 460000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/57146e9be9859589e8bb66489564f0de4dfb0c09627f7b74887dfe6de018dbed.json",
+      "manifest_sha256": "6e63487ded644d0d6c6087ded20993085af277caac16729b02ef1cdc9eef7809",
+      "estimated_unique_bytes": 222800.0
+    },
+    {
+      "image_id": "sha256:93335ff79943f1c08deb7447b19572c1340dab7282ad556bdaa3661e0dd74b7f",
+      "tag": "sg-artifact:5784967de5514507a1cbd647e344c89b",
+      "docker_reported_size_bytes": 460000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/93335ff79943f1c08deb7447b19572c1340dab7282ad556bdaa3661e0dd74b7f.json",
+      "manifest_sha256": "e9e5b1200ce5d683eab3957edddb066b4cbd6fc0bc152982e219e0284a2da96b",
+      "estimated_unique_bytes": 222800.0
+    },
+    {
+      "image_id": "sha256:e93ab399ffb90ba1fe9d825c40fd35b74c9deedc0b7eea9045ce7ab6c22c2feb",
+      "tag": "sg-artifact:962b5f57d5774af584f0f120bf409df3",
+      "docker_reported_size_bytes": 460000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/e93ab399ffb90ba1fe9d825c40fd35b74c9deedc0b7eea9045ce7ab6c22c2feb.json",
+      "manifest_sha256": "5334de2ef68c101f4ca7cb500506c3efbe6e95df56381eed9d04040112d56e90",
+      "estimated_unique_bytes": 222800.0
+    },
+    {
+      "image_id": "sha256:4787da1fb20736aa6b57680b896a77c56309ac3af1efc0e8fc46c49be09fdd95",
+      "tag": "sg-artifact:5492134b4aff469e85524c9c96ab70a5",
+      "docker_reported_size_bytes": 121000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4787da1fb20736aa6b57680b896a77c56309ac3af1efc0e8fc46c49be09fdd95.json",
+      "manifest_sha256": "6043012565ad57c8b1919403b6b524e83b66987bab2dce616e4d03f3d7a4cfdd",
+      "estimated_unique_bytes": 205800.0
+    },
+    {
+      "image_id": "sha256:cd179a4953df7a63421fc76051d7741d5dbf2a306675681e32af130b45cccb22",
+      "tag": "sg-artifact:032591ababb84ca29b5a26063aa068f9",
+      "docker_reported_size_bytes": 121000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/cd179a4953df7a63421fc76051d7741d5dbf2a306675681e32af130b45cccb22.json",
+      "manifest_sha256": "93cfa0d86e7950db07e3335c508696ffc31d07401e918fd864b614ffeb0c2516",
+      "estimated_unique_bytes": 204500.0
+    },
+    {
+      "image_id": "sha256:4fd9dd70fd9ccc2be227893494d516bcae82dbc9bd3c149ac5f4dc14f2fb53c1",
+      "tag": "sg-artifact:1c7ac2925389495f8eef5e47c8231708",
+      "docker_reported_size_bytes": 121000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4fd9dd70fd9ccc2be227893494d516bcae82dbc9bd3c149ac5f4dc14f2fb53c1.json",
+      "manifest_sha256": "2b27e5acb821063fef4094eee81c724247b74190823df5efeb6c51a2c2ecf265",
+      "estimated_unique_bytes": 202100.0
+    },
+    {
+      "image_id": "sha256:ff4c213ecffbb32eaf10301ac47ae54611c6aa4604ffcd3c65349545567665bd",
+      "tag": "sg-artifact:7dbb1d22c4f04e2eae73bdb6000e3075",
+      "docker_reported_size_bytes": 121000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/ff4c213ecffbb32eaf10301ac47ae54611c6aa4604ffcd3c65349545567665bd.json",
+      "manifest_sha256": "8b4433eb802d58279b5f3fbe4c9a552d71d06cc3145658c01dc0652afbe05a76",
+      "estimated_unique_bytes": 201700.0
+    },
+    {
+      "image_id": "sha256:5300e8ee13aa75da0597a62015ea5fecb5c57bbc6e21a5f27613ea2db41ed793",
+      "tag": "sg-artifact:4bff2e78bb6c4756a7930dc4f37d8c5b",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/5300e8ee13aa75da0597a62015ea5fecb5c57bbc6e21a5f27613ea2db41ed793.json",
+      "manifest_sha256": "ef92857a2e06d2b5b511c3aaaa55f1706137bed90ba13f2acc5c6db38fcb3615",
+      "estimated_unique_bytes": 130699.99999999999
+    },
+    {
+      "image_id": "sha256:60c590aa8e7355353f3626b668bf32470ae6b16e1e445fc686560a8b29826a33",
+      "tag": "sg-artifact:eb3b41f597d94fe789be645c56673cf1",
+      "docker_reported_size_bytes": 2230000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/60c590aa8e7355353f3626b668bf32470ae6b16e1e445fc686560a8b29826a33.json",
+      "manifest_sha256": "cd36efc811ca72ab4bad0ef8e09f383dab1e11b292ec16d181dfcb90509ab204",
+      "estimated_unique_bytes": 98470.0
+    },
+    {
+      "image_id": "sha256:4cbe43080bc1245142602d47ccf3f6858855df8499f91c41178b780c3e83d186",
+      "tag": "sg-artifact:86b9ce8bbdff4eef8d771a05117b5277",
+      "docker_reported_size_bytes": 777000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4cbe43080bc1245142602d47ccf3f6858855df8499f91c41178b780c3e83d186.json",
+      "manifest_sha256": "3b36942df22c582011a68a4f839bf4e7df456f4d6d56da433175a134a2bad4d9",
+      "estimated_unique_bytes": 51720.0
+    },
+    {
+      "image_id": "sha256:3a1f683414cc948225b12a76ca4cf8b6cd569f7322ffbc6e3ddc98f8baa28d83",
+      "tag": "sg-artifact:996e61da8bb34e47aebaddbc37619a0a",
+      "docker_reported_size_bytes": 2230000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3a1f683414cc948225b12a76ca4cf8b6cd569f7322ffbc6e3ddc98f8baa28d83.json",
+      "manifest_sha256": "03f689849eb8d72a15240c977048b3e9824cca800065530f9b191acb86c00294",
+      "estimated_unique_bytes": 50660.0
+    },
+    {
+      "image_id": "sha256:0b1054c6498c99085687613ba72f56f3a980408430fba80dde3a0980698715d9",
+      "tag": "sg-artifact:e7f00f5784b246f89a60cf6f467f95f7",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/0b1054c6498c99085687613ba72f56f3a980408430fba80dde3a0980698715d9.json",
+      "manifest_sha256": "a03ab0baf7a8bc1dbae7907bb511d6903b17208dd19fa8f26d9e91a6b5a95011",
+      "estimated_unique_bytes": 46220.0
+    },
+    {
+      "image_id": "sha256:3ad886f8d8475ad88d7fbe787b0b7cebf8d8a9f2baede27b762205596dbed4b8",
+      "tag": "sg-artifact:222c8a98e44341debf7c06af05bee12e",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/3ad886f8d8475ad88d7fbe787b0b7cebf8d8a9f2baede27b762205596dbed4b8.json",
+      "manifest_sha256": "5f6818d1403818748528d91cf077c5735e6c34ece05707419006b928dacff4a1",
+      "estimated_unique_bytes": 41460.0
+    },
+    {
+      "image_id": "sha256:4745e9a763530e689a6731b4dcb89ca75e723768139881a937677c5fbe74b05a",
+      "tag": "sg-artifact:7a7ab17913104cba8b7c3b80c51db0c0",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4745e9a763530e689a6731b4dcb89ca75e723768139881a937677c5fbe74b05a.json",
+      "manifest_sha256": "8d75a9d881f5ffde66d51b81dde9b3995dcec1183177871b305f8fff855cbfe6",
+      "estimated_unique_bytes": 39410.0
+    },
+    {
+      "image_id": "sha256:6eebca73bb4ba7651456ab32d36d621575bcff1a55feef2db8290b2cc0e2a65d",
+      "tag": "sg-artifact:98d32ec7481a40d3b07d4fe091133b79",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6eebca73bb4ba7651456ab32d36d621575bcff1a55feef2db8290b2cc0e2a65d.json",
+      "manifest_sha256": "66426186fa151d52dfe7a65a94b68f501f94f2ae75431914c5f6488541077122",
+      "estimated_unique_bytes": 39290.0
+    },
+    {
+      "image_id": "sha256:a732cbeffe9463f8169bda29331e66609d69ab85112e1ee471c0cee9bcfb988f",
+      "tag": "sg-artifact:43b9e9a2bf4944cd89c7c405d48f6f08",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/a732cbeffe9463f8169bda29331e66609d69ab85112e1ee471c0cee9bcfb988f.json",
+      "manifest_sha256": "451bbdd93e9c5e151daad42c490a08ab71d3813302f09f4c46f566a202d639d9",
+      "estimated_unique_bytes": 38620.0
+    },
+    {
+      "image_id": "sha256:6a88e71ffdc64c330c9605bcc345d2105e4c3c1b7810072b5e50af7ee3f41420",
+      "tag": "sg-artifact:dbbacc2c4bf64620a20f1740da7435b0",
+      "docker_reported_size_bytes": 777000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6a88e71ffdc64c330c9605bcc345d2105e4c3c1b7810072b5e50af7ee3f41420.json",
+      "manifest_sha256": "fd236cc5de94e87a6d2ee422b818466345cfa55205e9c0978152cb12e7f5835f",
+      "estimated_unique_bytes": 36580.0
+    },
+    {
+      "image_id": "sha256:4f6c677a2c9125a7b743be154376789a47fb9cba3260ea16f534b076a6603eb4",
+      "tag": "sg-artifact:f8accb3d74c54988a520b041751ca11e",
+      "docker_reported_size_bytes": 777000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4f6c677a2c9125a7b743be154376789a47fb9cba3260ea16f534b076a6603eb4.json",
+      "manifest_sha256": "e29163a5cb2c2ead6a8ece7121ae834f8ae6a624b413d8588c3838f019a97d5d",
+      "estimated_unique_bytes": 30680.0
+    },
+    {
+      "image_id": "sha256:e88aca8f6c6ba55ed7fe1b474c8ed874714a3186a9c0be5096ddf91fb642ebad",
+      "tag": "sg-artifact:d7319fa038b24f95bba6360bf6efc9d0",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/e88aca8f6c6ba55ed7fe1b474c8ed874714a3186a9c0be5096ddf91fb642ebad.json",
+      "manifest_sha256": "baf8b251fe15b75423ff0e89a2d02626ef8c3fde844fa0f2774e4beb396b7c9f",
+      "estimated_unique_bytes": 24390.0
+    },
+    {
+      "image_id": "sha256:18db0ed43fd80146872a97f7fdef7b99adeda7108854d0c31f16be36e845397c",
+      "tag": "sg-artifact:e633795cc0404e08ab4e6984cb8be62f",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/18db0ed43fd80146872a97f7fdef7b99adeda7108854d0c31f16be36e845397c.json",
+      "manifest_sha256": "e1dd1b1c7a21a6242e29d4df6d65d2cb1c0e3fb842cab8f5cdf85ad333931706",
+      "estimated_unique_bytes": 23760.0
+    },
+    {
+      "image_id": "sha256:73a8573fdc4f444fa0e37b8a18e85f72a312751f71050e139be48b5437759344",
+      "tag": "sg-artifact:ad015b7aabc547d08241575172908bec",
+      "docker_reported_size_bytes": 777000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/73a8573fdc4f444fa0e37b8a18e85f72a312751f71050e139be48b5437759344.json",
+      "manifest_sha256": "82fce2a4ff2fc37cc93ccf0008d6d6ec160a5ba85a310f2b0330b239b296c5db",
+      "estimated_unique_bytes": 15480.0
+    },
+    {
+      "image_id": "sha256:6cc84546db1d2254c4747fef796f1844785532fb785be75352356d8152e9935b",
+      "tag": "sg-artifact:3c4614ea9ebe404f91ff9a12ae9d4554",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/6cc84546db1d2254c4747fef796f1844785532fb785be75352356d8152e9935b.json",
+      "manifest_sha256": "01ecf278616c984450a6a20d3de28cb9b0ce631d132ce68ae0355a83f0af2f93",
+      "estimated_unique_bytes": 4415.0
+    },
+    {
+      "image_id": "sha256:450ce8e3960abc37beb8a4caa1657c331e58cd7be6b2058d3f9c2aed14f9cc3a",
+      "tag": "sg-artifact:e30a55af4f4047879e5fcceac4b8c684",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/450ce8e3960abc37beb8a4caa1657c331e58cd7be6b2058d3f9c2aed14f9cc3a.json",
+      "manifest_sha256": "e36ebdd1764a6e77235fda6c9c2c2e4fad4de0bd0291c361cf6080a98dd24f47",
+      "estimated_unique_bytes": 4181.0
+    },
+    {
+      "image_id": "sha256:89e5ea2f9686b457164783c01dc40507d145cb31e11ae2a435020b285793d57b",
+      "tag": "sg-artifact:822b8f5d54b447c6ad021cb7005a9836",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/89e5ea2f9686b457164783c01dc40507d145cb31e11ae2a435020b285793d57b.json",
+      "manifest_sha256": "d68fe7d2f09b11b2599aaaedf2d08b137482c199562477bbae4754d327b3a7b3",
+      "estimated_unique_bytes": 4167.0
+    },
+    {
+      "image_id": "sha256:63be99910b0abb38646899be8ebb67f82fdab48c53ce3c9fd49ceda92ad4c7b8",
+      "tag": "sg-artifact:52e46678f4df46bd827621f9b88cc714",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/63be99910b0abb38646899be8ebb67f82fdab48c53ce3c9fd49ceda92ad4c7b8.json",
+      "manifest_sha256": "4f358ebe28e35dd1b86a7c89ed98d8bfa5caf5e3038caf904cdaf6f415f80687",
+      "estimated_unique_bytes": 3925.0
+    },
+    {
+      "image_id": "sha256:271d2210a76724fb2fc5330929d5e318086101a839138b591b645c57e761608a",
+      "tag": "sg-artifact:640bf2b9e0214539983970a934586c0f",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/271d2210a76724fb2fc5330929d5e318086101a839138b591b645c57e761608a.json",
+      "manifest_sha256": "6c9866121cbac7b00e01f47c4e44f001792b1ad7fff9a36666828403c6c32c86",
+      "estimated_unique_bytes": 3461.0
+    },
+    {
+      "image_id": "sha256:bee6eb814c2ccdabc346f41fa3afba57fb1680a4aeb11e903f3cb621dfd25266",
+      "tag": "sg-artifact:b8452488f8d8408c813d5d80e0d57236",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/bee6eb814c2ccdabc346f41fa3afba57fb1680a4aeb11e903f3cb621dfd25266.json",
+      "manifest_sha256": "f22e9746e3c5fcc78a8b9b74917b7bfda7134d57a6897a98bd7c9d2405264329",
+      "estimated_unique_bytes": 3418.0
+    },
+    {
+      "image_id": "sha256:50f9bda023048cc921ec1159aa75039009164f4ff2cd204255fd0cfb2569ccae",
+      "tag": "sg-artifact:06d3d83eec23497ebc733de4874047cd",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/50f9bda023048cc921ec1159aa75039009164f4ff2cd204255fd0cfb2569ccae.json",
+      "manifest_sha256": "4afd14e2bc81d2a079af01305ebcea69480c4bfdc567479bd13859a3cecc48c9",
+      "estimated_unique_bytes": 533.0
+    },
+    {
+      "image_id": "sha256:4cdc0542009d8c9724aa947b1257e0dcf81b07dc3e8f054bdbe355d9a0b081ee",
+      "tag": "sg-artifact:e24962a04d0542c4a1b52122d1bcd608",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4cdc0542009d8c9724aa947b1257e0dcf81b07dc3e8f054bdbe355d9a0b081ee.json",
+      "manifest_sha256": "e8762ef391a9cee8b1e80a66761585e25aab440a2b8dd4136826b1f2d8a9b093",
+      "estimated_unique_bytes": 461.0
+    },
+    {
+      "image_id": "sha256:4d83088922e86740a067412ebcbaf0b925b09f6d8302e07360731ee92bc7f935",
+      "tag": "sg-artifact:d3950090b5c44b55902e113c223ad056",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/4d83088922e86740a067412ebcbaf0b925b09f6d8302e07360731ee92bc7f935.json",
+      "manifest_sha256": "b99ff67f24eab911e1a4bb884e8c22e6dccef822a7728f0fd7773b91db7d2166",
+      "estimated_unique_bytes": 461.0
+    },
+    {
+      "image_id": "sha256:69a1cd2ef5bb9bd5356adf24822646061df4f438d9497dbbfdab91784aa49de5",
+      "tag": "sg-artifact:233eec8e9b7146b48f23540ab5acdc78",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/69a1cd2ef5bb9bd5356adf24822646061df4f438d9497dbbfdab91784aa49de5.json",
+      "manifest_sha256": "d1e341de3d0e5a621169a6a1c6ea9cc3af023819a05121339f6fc32d01b3136b",
+      "estimated_unique_bytes": 450.0
+    },
+    {
+      "image_id": "sha256:991b55a3e4f661502d7ba4281270c369c99323704ba5c378e2d0996b1e216e36",
+      "tag": "sg-artifact:332a2bd9290c4785a5558d61c9d0c521",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/991b55a3e4f661502d7ba4281270c369c99323704ba5c378e2d0996b1e216e36.json",
+      "manifest_sha256": "794db23d179c4c2b25c62f4b16c5b22495a5c25eaca200ca906029e4094ae9e5",
+      "estimated_unique_bytes": 450.0
+    },
+    {
+      "image_id": "sha256:ce18dead430827d683d83e519d6d0db28e904b693f295ee4b8cbb2625a42a85f",
+      "tag": "sg-artifact:7766c06a85274b0abd3190f9d7b65a01",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/ce18dead430827d683d83e519d6d0db28e904b693f295ee4b8cbb2625a42a85f.json",
+      "manifest_sha256": "00a2555e2829870cc932cc1b5a0db8678cd02d6bd2cfc046994fdf8b87d7af9a",
+      "estimated_unique_bytes": 450.0
+    },
+    {
+      "image_id": "sha256:22b763e7b8a07382a010dd4a3e68b1e3ba3324b0c83c34afcd37829ab73f4cce",
+      "tag": "sg-artifact:c5501133a5e547c097842116cea9e064",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/22b763e7b8a07382a010dd4a3e68b1e3ba3324b0c83c34afcd37829ab73f4cce.json",
+      "manifest_sha256": "1c80ce674dbd8e2772afc3e19d45608ffe45b67c30b218a283f452ef43876149",
+      "estimated_unique_bytes": 445.0
+    },
+    {
+      "image_id": "sha256:5fad2d0d368cc6d130c748b66c445e1bbbdda9b920845aa7ae6027e23249497d",
+      "tag": "sg-artifact:3d71a22be8d040d39e385a1fb654a928",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/5fad2d0d368cc6d130c748b66c445e1bbbdda9b920845aa7ae6027e23249497d.json",
+      "manifest_sha256": "43c6378ee184fabe94b90249469f56983cc5ef71f808ba1e57586840d12f266b",
+      "estimated_unique_bytes": 445.0
+    },
+    {
+      "image_id": "sha256:86ce8d4d3d9955d4383987cf982d52516984b9aefb6463e22febf290f3272320",
+      "tag": "sg-artifact:1e68f142b0d347b09d06fe5f7d6e0a74",
+      "docker_reported_size_bytes": 703000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/86ce8d4d3d9955d4383987cf982d52516984b9aefb6463e22febf290f3272320.json",
+      "manifest_sha256": "8692ec1d80ffacce7fa488118f81e16043b18c6af5ea484c60dd51ae4f776e4c",
+      "estimated_unique_bytes": 445.0
+    },
+    {
+      "image_id": "sha256:d68aef4745d9fb14b280450f6982389fded8a6922709ae6706b83ae5420a66b1",
+      "tag": "sg-artifact:ede45e34b391472a9518ae0b717a4b04",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/d68aef4745d9fb14b280450f6982389fded8a6922709ae6706b83ae5420a66b1.json",
+      "manifest_sha256": "ed06d1702d831f1b40bd54cb5ffbaa65b7c10d93763f9fc18ede9b9e90d94915",
+      "estimated_unique_bytes": 439.0
+    },
+    {
+      "image_id": "sha256:1885931abe26d8daa92b3f226c88fb124551fa22b6956ffcc52c66146cb9c7ea",
+      "tag": "sg-artifact:0225dcbc63e24abb90ffd0ae36c37d76",
+      "docker_reported_size_bytes": 9410000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/1885931abe26d8daa92b3f226c88fb124551fa22b6956ffcc52c66146cb9c7ea.json",
+      "manifest_sha256": "66864a42a46f79cfbf4b86a7acf1acb3fd9a537f960b6ecb7df3d91776513611",
+      "estimated_unique_bytes": 0.0
+    },
+    {
+      "image_id": "sha256:275b66a71ade7a1fe18e1c23695dba2be7fdd85f5c5e1074472e458921d83228",
+      "tag": "sg-artifact:5ec7ab26d471496c9cf575731c3e6e24",
+      "docker_reported_size_bytes": 3690000000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/275b66a71ade7a1fe18e1c23695dba2be7fdd85f5c5e1074472e458921d83228.json",
+      "manifest_sha256": "f056bf8e83c96072e99f1b8d451bc6991ef58598ac4d477b2dc4a55acb1113e5",
+      "estimated_unique_bytes": 0.0
+    },
+    {
+      "image_id": "sha256:7e820f9041332a5fc837e3f6fa2ad7ceb79dca30dc5dfeac5bad7190f8246321",
+      "tag": "sg-artifact:eeca137a353340f3863d83f339ed25be",
+      "docker_reported_size_bytes": 52100000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/7e820f9041332a5fc837e3f6fa2ad7ceb79dca30dc5dfeac5bad7190f8246321.json",
+      "manifest_sha256": "a153f6c59fd147585e9f38626410d80da48f4e363ea68b8e1a7373ce2d006175",
+      "estimated_unique_bytes": 0.0
+    },
+    {
+      "image_id": "sha256:968aa869e9ea643fba77f8472dafc8d64df3c4e810aee542d8212dc8dc0b7330",
+      "tag": "sg-artifact:978c834347fd4110ad1a50aa87e56c40",
+      "docker_reported_size_bytes": 52100000.0,
+      "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/968aa869e9ea643fba77f8472dafc8d64df3c4e810aee542d8212dc8dc0b7330.json",
+      "manifest_sha256": "ec5271675cf86fd8b3235a2629de91e1eaba0e358e1ffd76732a9f724d7c2a92",
+      "estimated_unique_bytes": 0.0
+    }
+  ]
+}

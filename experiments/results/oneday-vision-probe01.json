@@ -1,0 +1,19 @@
+{
+  "text": "R7K3P9",
+  "usage": {
+    "input_tokens": 201,
+    "output_tokens": 46,
+    "total_tokens": 247,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "model": "devin/swe-2",
+  "status": "completed",
+  "passed": true,
+  "synthetic": true,
+  "actual_model_requests": 1
+}

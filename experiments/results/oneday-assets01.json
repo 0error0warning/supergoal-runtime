@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-10-05T15:51:48.657843+00:00",
+  "status": "complete",
+  "model_calls": 0,
+  "source_commit": "f29f6d496437c9ea7b8b5e8fe232d186b868b9f5",
+  "phase": "pulling_environment",
+  "image_tag": "johnsonzheng03/onedayagent:dev",
+  "image_id": "sha256:723f1c1b0dc8d2976a2db4c4a1ca8a98fa7d7725ab99d627e306d5f32647c7b3",
+  "repo_digests": [
+    "johnsonzheng03/onedayagent@sha256:376b190a101149a3c373a0014184caee9e07857f570f8c554bbfb587ebdde848"
+  ],
+  "image_size_bytes": 9414128544,
+  "finished_at": "2026-10-05T15:54:44.041383+00:00"
+}

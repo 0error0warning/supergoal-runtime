@@ -1,0 +1,25 @@
+{
+  "state": {
+    "status": "verification_unavailable",
+    "turns": 1,
+    "version": 1
+  },
+  "acceptance": {
+    "verdict": "unknown",
+    "reason": "Trusted fixture checker; recovery integration scope only",
+    "checker_exit": 1,
+    "observations": ""
+  },
+  "used_requests": 3,
+  "sdk_completed": false,
+  "rounds": [
+    {
+      "role": "executor",
+      "pid": 1378522,
+      "exit_code": 0,
+      "seconds": 14.67553945599866,
+      "model_calls": 3,
+      "result_relative_path": "01-executor/result.json"
+    }
+  ]
+}

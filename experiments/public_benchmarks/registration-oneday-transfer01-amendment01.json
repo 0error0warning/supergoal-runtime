@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "experiment": "oneday-transfer01",
+  "registered_at_utc": "2026-10-05T16:29:46.268415+00:00",
+  "source_commit": "f29f6d496437c9ea7b8b5e8fe232d186b868b9f5",
+  "dataset_sha256": "7558b42d1eebf531e6c7841f7926d480646a96240d2454cf86857c39e855346b",
+  "image_id": "sha256:723f1c1b0dc8d2976a2db4c4a1ca8a98fa7d7725ab99d627e306d5f32647c7b3",
+  "tasks": [
+    {
+      "task_id": "taskif_83",
+      "title": "Task Prioritization and Schedule Adjustment",
+      "description": "Suppose you are a product manager at a tech company. The current time is 2:00 PM on July 29, 2025, and you only have 5 hours of effective time today. Your schedule system is fully packed with tasks, which are stored in the file arrangement.xlsx. Some tasks are urgent, some are important, and some are easy to overlook but have long-term impact. In addition, your team works in a “strong collaboration + high responsiveness” style, which means you must not only consider the priority of your own tasks but also respond to others’ requests in a timely manner and handle unexpected issues.\nFirst, you need to evaluate the urgency of the tasks based on their descriptions and importance.\n According to the urgency and importance of the tasks, establish appropriate evaluation criteria, and arrange the tasks using a priority queue as the standard.\n I am providing you with a set of tools for simulating simple Google Calendar API operations, which include a program named googlecalendar_api_simulator.py and a supporting instruction document simulator_introduction.md. You need to read the instruction document and try interacting with the program in order to record your schedule plan on the calendar. You must save both the JSON-format requests you submit and the JSON-format responses from the program into a file named history.jsonl. The available calendar_id is \"Hk9Nw8KsRd5X\".\nSuppose that after you finish communicating with team member 1, two urgent ad-hoc tasks appear. Please adjust the original plan accordingly. The ad-hoc tasks are stored in the file emergency.xlsx.\n Synchronize the adjustments to the calendar: first delete the original plan, then insert the revised plan.\n Finally, please help summarize the completion status of each task.",
+      "upstream_human_effort_label": "4h",
+      "attachments": [
+        {
+          "filename": "taskif_83 + attachment + simulator_introduction.md",
+          "sha256": "73cb1864795b865710ebb368593fbae44260d68b8f7ee60532506c3e8b847423",
+          "bytes": 2610
+        },
+        {
+          "filename": "taskif_83 + attachment + googlecalendar_api_simulator.py",
+          "sha256": "d515c2e084c0a6cb95b6dfdf633770d44fb3c9105884b5edb610416b0652a182",
+          "bytes": 3785
+        },
+        {
+          "filename": "taskif_83 + attachment + arrangement.xlsx",
+          "sha256": "87c367d42f5e8d3a0775ed201cf0b2b09ac3bea781de4dac8e6d9f37cb762f2b",
+          "bytes": 11229
+        },
+        {
+          "filename": "taskif_83 + attachment + emergency.xlsx",
+          "sha256": "b0f8caa3ed7e929e9104d9e16f139ca4dc892b31a60b363d928b836fc05f8d36",
+          "bytes": 10594
+        }
+      ]
+    },
+    {
+      "task_id": "taskif_112",
+      "title": "Training Camp Registration Analysis",
+      "description": "1. First, filter by theme to select activities with the theme \"TitanData Data & AI Training Camp\".\n2. Remove supplier test data, i.e., data where company is \"Xinda, Xinda Tech, or X-Tech\".\n3. Separate registration data between CloudEngine employees and non-CloudEngine employees. CloudEngine employees are filtered by company field values of \"Yunqing Tech、Qingtian Data、Feiteng Network、Feiteng Network Limited Company, CloudEngine, TitanData\".\n4. Output CloudEngine's registration information.\n5. Perform data analysis on non-CloudEngine registration data: \n  1. Count total number of registrations\n  2. Count number of registrations by each registration channel\n  3. List companies of registrants and the number of registrants from each company\n  4. Analyze registrants' industry/job role/city information, preferably with visualization\n6. Based on the above statistical information, provide a brief written summary and suggestions on how to focus future promotional efforts for this event.\n7. Format as a message suitable for posting on office platforms like Teams/Feishu, rather than outputting a document or report.",
+      "upstream_human_effort_label": "2h",
+      "attachments": [
+        {
+          "filename": "taskif_112 + attachment + TitanData_Training Event.xlsx",
+          "sha256": "12d5b2e461ceca9fea4bedcbee73704b892b7a338cc72ef49c5648a141f08144",
+          "bytes": 57662
+        }
+      ]
+    },
+    {
+      "task_id": "taskif_57",
+      "title": "Rust Tutorial Website Development",
+      "description": "I need to create a tutorial website for developers who are completely new to Rust. Please edit the attached content further according to the following instructions:\nBetween the sections “Ownership” and “Guessing Game”, add a new section titled “Core Concept 3: Borrowing and References (&)”. You need to explain what “Borrowing” is and how it differs from “Ownership Transfer (Move)”. Explain the rules of immutable references (&T) and mutable references (&mut T). Provide a code example that demonstrates how to use references to let a function access a value without taking ownership of it.\nFor all section titles (h2), add an id attribute, and create a navigation bar (nav) at the top of the page. This navigation bar should include in-page links to the five sections: “Introduction”, “Variables”, “Ownership”, “Borrowing and References”, and “Guessing Game”.\nIn the “Guessing Game” section, remove the paragraph about Cargo.toml, and at the very beginning of this section, add a new heading titled “Preparation: Creating a Project with Cargo”. In this new heading, you need to provide the two commands: cargo new guessing_game and cd guessing_game, and explain their purposes.\nModify the style.css file to add styles for the navigation bar. The navigation bar must be fixed at the top of the page (i.e., it does not move when the page scrolls), and it should have a light background color and a shadow, making it visually distinct from the main page content.\nCreate a new script.js file and write JavaScript code to implement a “one-click copy code” feature. Dynamically add a “Copy” button to the top-right corner of each code block (pre). When the user clicks this button, all the code inside the corresponding code block should be copied to the clipboard. After being clicked, the button’s text should briefly change to “Copied!” to provide feedback.\nDo not forget to correctly reference the newly created script.js file at the bottom of index.html using a script tag.\nFinally, package the modified files (index.html, style.css, script.js) into a new .zip archive and name it rust_tutorial_site_final.zip.",
+      "upstream_human_effort_label": "2h",
+      "attachments": [
+        {
+          "filename": "taskif_57 + attachment + rust_tutorial_site.tar.gz",
+          "sha256": "93d606e19e8d2c51e8377c4033fc23a6a1fe834d2d81203ca9832e06278b5509",
+          "bytes": 3629
+        }
+      ]
+    },
+    {
+      "task_id": "taskif_94",
+      "title": "Enterprise Name Matching and Updating",
+      "description": "Law_Target List - The \"Enterprise Name\" field contains legal names/full company names:\nPlease create a new field called \"Enterprise Short Name\" and populate it with the commonly used short names for these companies. This requires online research.\nDepartment+F2000+List_300+500 Table - In the \"2. Region_F2000 Subs_500\" sheet, which contains the international top 2000 companies list and information, where \"F2000 Acct_500\" field contains the top 2000 company names:\nPlease add two fields to the right of \"F2000 Acct_500\": \"International Enterprise Full Name\" and \"International Enterprise Short Name\" \nResearch the full/short name for each value (i.e., each company name)\nAfter finding the information, populate the complete name field and corresponding values for each company in the appropriate positions\nDepartment+F2000+List_300+500 Table - In the \"1. Region_F2000 Subs_300\" sheet, which contains the international top 2000 Chinese companies list and information:\nPlease add two fields to the right of \"F2000 Acct_500\": \"Chinese Enterprise Full Name\" and \"Chinese Enterprise Short Name\" \nResearch the full/short name for each value (i.e., each company name)\nAfter finding the information, populate the complete name field and corresponding values for each company in the appropriate positions\nSearch the Law_Target List table to check if \"Enterprise Name\" or \"Enterprise Short Name\" can be matched in the international companies full names or short names field in the sheet \"2. Region_F2000 Subs_500\". If found, enter \"Y\" in the corresponding row under the \"Exists in International Enterprise\" column.\nSimilarly, search to check \"Enterprise Name\" or \"Enterprise Short Name\" can be matched in the Chinese companies full names or short names field in the sheet \"1. Region_F2000 Subs_300\". If found, enter \"Y\" in the corresponding row under the \"Exists in Chinese Enterprise\" column.\nOutput the updated Law_Target List_Y file.",
+      "upstream_human_effort_label": "8-24h",
+      "attachments": [
+        {
+          "filename": "taskif_94 + attachment + Department+F2000+List_300+500.xlsx",
+          "sha256": "2fa486356a9caa91c3ab2407e983d234dccc00f0bbf939267305ea648a002a96",
+          "bytes": 16861095
+        },
+        {
+          "filename": "taskif_94 + attachment + Law_Target List.xlsx",
+          "sha256": "143bce12a99fefa8c67d416855c34e37968e3c0da80fb805904ba94cd02406e7",
+          "bytes": 45778
+        }
+      ]
+    },
+    {
+      "task_id": "taskif_13",
+      "title": "Industrial Value-Added Growth Analysis",
+      "description": "You are required to perform an analysis of national data on industrial value-added growth, following the steps below:Please visit the National Data page (reference link: https://data.stats.gov.cn/tablequery.htm?code=AA020B)In the “Monthly” section, go to “Industry” and locate the main value-added growth and growth rate. Select the nationwide region for June 2025, and in the indicators, retain only those with year-on-year growth greater than zero. Write these into an Excel file; set the Excel title as “June 2025 Nationwide Industrial Value-Added Growth Rate.” The first column should contain the names of the retained indicators, the second column should contain the data for this month, and the third column should contain the year-on-year growth (%) for this month.Select the top 10 indicators in June 2025 by year-on-year growth, create a pie chart, and calculate the proportion of each indicator converted into ten thousand tons as the unit. The title should be “Proportion of the Top 10 Indicators by Year-on-Year Growth in June 2025 Nationwide Region.” Also provide a legend below the pie chart. 【Note: all calculations must be performed using Excel formulas, written into the table, and save the Excel file as [data_analysis.xlsx]】Save the pie chart as a .jpg file with the filename [The_proportion_of_the_top_ten_indicators.jpg]",
+      "upstream_human_effort_label": "2h",
+      "attachments": [
+        {
+          "filename": "taskif_13 + attachment + 数据增长.xls",
+          "sha256": "c4317acb9c58eda1157dc7171dab8fdaad5f6871476a2b0e69ba57f7121a4420",
+          "bytes": 35328
+        }
+      ]
+    },
+    {
+      "task_id": "taskif_155",
+      "title": "Sales Dashboard Prototype Design",
+      "description": "You are a business analyst tasked with creating a static, single-page HTML prototype for a new 'Sales Pipeline Dashboard'. Your goal is to follow industry best practices for dashboard design. First, analyze the attached documents to identify common KPIs, chart types, and layout principles for effective sales dashboards. Next, using this analysis as your guide, research and define the specific components needed for a 'Sales Pipeline Dashboard', such as pipeline stages, conversion rates, and sales velocity metrics. Then, draft a textual layout and content plan for the dashboard. After that, find or describe placeholder images for the charts and KPI widgets. Finally, combine all these elements into a single HTML file named `dashboard.html`, ensuring the layout and styling reflect the best practices you identified.",
+      "upstream_human_effort_label": "4h",
+      "attachments": [
+        {
+          "filename": "taskif_155 + attachment + Top 9 Power BI Dashboard Examples (Zebra BI).pdf",
+          "sha256": "69b4cd7c88da462b994f462856618799f65f8b30f2d53554890faedfc2984838",
+          "bytes": 1317393
+        },
+        {
+          "filename": "taskif_155 + attachment + Enterprise Dashboards – Design and Best Practices for IT.pdf",
+          "sha256": "e749908dd1ad689962c33a741f35e1d271f537bfc60ca2852de3e83b74e2cfca",
+          "bytes": 7493711
+        },
+        {
+          "filename": "taskif_155 + attachment + 6 Brilliant Sales Leader Dashboards (Business Analyze eBook).pdf",
+          "sha256": "d790ba41ec913bb07415a43ee387e31464dd81e7b4151ba77daf368d4d877556",
+          "bytes": 2316778
+        }
+      ]
+    }
+  ],
+  "arms": [
+    "native",
+    "sg_v2",
+    "repeat_goal"
+  ],
+  "max_requests": 384,
+  "max_episodes": 8,
+  "budget_seconds": 14400,
+  "concurrency": {
+    "max_oneday_trials": 2,
+    "global_max_workers": 6,
+    "global_cpu_pool": 6,
+    "global_memory_mb": 49152
+  },
+  "planned_order": [
+    {
+      "task_id": "taskif_83",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_83",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "taskif_83",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_112",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_57",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "taskif_94",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_13",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "native"
+    },
+    {
+      "task_id": "taskif_155",
+      "arm": "sg_v2"
+    }
+  ],
+  "cloud_stop_epoch": 1791296646.0,
+  "solver_candidate": "public-parallel24-v1",
+  "tool_contract": "Hermes 0.21.3 terminal/file tools inside pinned OneDay image; browser/office CLI available. Public read-only network and local simulators only.",
+  "selection_basis": "Multi-stage tasks with diverse delivery formats, local attachments and public research; selected before solver outcomes. No duplicate seed expansion.",
+  "primary_comparison": "SWE2-judged artifact rubric score, full vs native paired by task. repeat_goal is the restart/continuation baseline. Exploratory transfer evaluation, six task IDs.",
+  "judge": "Official loader, artifact parsers, scoring prompt, criterion parser and score aggregation; SWE2 Responses replaces Gemini. Blinded arm, one final call; development calibration task 47. Prior calibration attempts retained.",
+  "limitations": [
+    "Adapted judge scores are not official leaderboard reproduction.",
+    "The original human effort labels are not measured autonomous run durations.",
+    "Web availability, unavailable tools and judge failures are reported separately."
+  ],
+  "amended_at_utc": "2026-10-05T16:36:36.666395+00:00",
+  "amends_sha256": "566da84019ca7af877670e72c580e6418b2b027a825dcf6cd25e7ded8eecba74",
+  "amendment_reason": "Before any solver trial: upstream aggregation now called directly; no official reference supplied for calibration task 2; artifact calibration task 47 passes, prior failed calibration retained.",
+  "judge_calibration_receipt": "oneday-judge-calibration02.json",
+  "source_sha256": {
+    "oneday-operator/oneday_judge.py": "fbcd134411b0b0090fe8f7dd17b883852526231dab25e85c3242b16a1757b114",
+    "oneday-operator/oneday_judge_calibration.py": "536a82100f486af6aa3260c65c1c9fa20dad7535162ec3f1940c7f19982187c1",
+    "oneday-operator/oneday_operator.py": "1d22b6931855c8e6f85abff1645459eb2f76bf92ffd93f2294b10f6a08102f70",
+    "oneday-operator/oneday_vision_probe.py": "0570c6095abd6e519524bf8857368b6d80895631e2db2dd98f17056d2effa1ef",
+    "oneday-operator/resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "oneday-operator/swe2_request.py": "aba0e2d697529c0e580762f1c95883ebd1c57ad15c327d198a9968d3008a8750",
+    "upstream/onedayagent/src/onedayagent/__init__.py": "c92d9e7034e5cf3f050feadb4cc6f83a1b808a41e4f1ee3d17f97ac9006e5c55",
+    "upstream/onedayagent/src/onedayagent/agents/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/agents/react/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/agents/react/decompose_workflow.py": "6aa01ff54d43a5bd77e2c390df4e4ed44c72d4c77d9264c7cdfdc74152c4b16c",
+    "upstream/onedayagent/src/onedayagent/agents/react/react_agent.py": "dbab2f0b1ff0771f6c9a94c50271211c9ca676ca8fa3ea0fcb00a613ca4de21c",
+    "upstream/onedayagent/src/onedayagent/agents/react/verify/__init__.py": "756010f2fef60f7a9f727540611a3869ec0ce8a2281f37bdc07e43dbeebd84e4",
+    "upstream/onedayagent/src/onedayagent/agents/react/verify/llm_verifier.py": "622e879f9cf244b939b127e819dbbfac03051f06dc0597b2c377210e8a301000",
+    "upstream/onedayagent/src/onedayagent/engine/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/engine/engine_config.py": "e519e6ceae593ef9e2a6a310cf07137dcf73a227335eaa46e332c60ec4032b9f",
+    "upstream/onedayagent/src/onedayagent/engine/enums/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/engine/enums/app_type.py": "1622a4319e591b565db6b36893070fcd33f4a88e63bf5d02081d8bd9710780d9",
+    "upstream/onedayagent/src/onedayagent/engine/enums/env_mode.py": "b1ef02b03e031316c743193517cb508a52287cd0821359ea0d082a50e9c222f4",
+    "upstream/onedayagent/src/onedayagent/engine/enums/json_type.py": "052e6b42d4e13a95c9e9722c02d2816dd56062a73044d7fab4531f8b6282298f",
+    "upstream/onedayagent/src/onedayagent/engine/enums/lang_type.py": "d59dacedcfb1a9c89166ba387f328d0ede4715305c6491bb3f0f4b1ed2fb5d1d",
+    "upstream/onedayagent/src/onedayagent/engine/enums/model_type.py": "b3d7fe20d2e5e56510938ca8f92aede855bb1cb845e2345cc35760e703525acc",
+    "upstream/onedayagent/src/onedayagent/engine/enums/phase_type.py": "c5011e7c6f7ef5d7d6190237a03bdbb759267b23ab98123f1e03cb67877fa2c4",
+    "upstream/onedayagent/src/onedayagent/engine/enums/toolkit_type.py": "f5639e28d44829cd137056194e26243044513c3acec459be9d580f099e19c9af",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/builder.py": "98cdf26941afc13945fd90bb6a3ed758324b3760e511ed0578976fc2b1b11b79",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/formatters/__init__.py": "9807da5c2ab55e99a495bbaed911bf31961984dc5d2a5619dd71976a157556eb",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/formatters/formatter.py": "790951207744177a7d3e6f624ce74c21623e2c556ed1a5efbce3eb97c0cf9557",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/formatters/ling_formatter.py": "e4389d7784ebabbd43ff69e8ea04ff2e48ab0c8b7b7ae1a33f0066a22bdec28f",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/message.py": "2787a7941109356c434deab047b0b81cc26dc3a88baddfd06b58e63f566f4452",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/tool.py": "31cc8a860cebfe9d92ea5b5afbae5268194a3b4be7dbc24418c4e4c2dc835124",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/traj_ext_info.py": "64eba9f3b00f82c44540b8039111a8eebf7a11c69b9b36b311008a23ee4b454b",
+    "upstream/onedayagent/src/onedayagent/engine/trajectory/trajectory.py": "7318df689d77888a6af3fbdbf75e4365e55092e8baa16bcdcb7d73e65599e848",
+    "upstream/onedayagent/src/onedayagent/engine/utils/__init__.py": "3a36dfd5598c0dd1114ae7a81ee6c38f2d451cfb919c33ebe64cdd570616cffb",
+    "upstream/onedayagent/src/onedayagent/engine/utils/base.py": "9916695e65531ca284f4df2d2968cced495c90c3925a9884b719b1b5b69ec773",
+    "upstream/onedayagent/src/onedayagent/engine/utils/date.py": "e993b3f01e8c8955896d09d196fe2953811f8bc3fcbca8047fa893dedb36f9f0",
+    "upstream/onedayagent/src/onedayagent/engine/utils/env.py": "638f5655d2f05f3a9380c848380e73ad2cdb4467c32450c8356f0d06d2b25453",
+    "upstream/onedayagent/src/onedayagent/engine/utils/file.py": "494f724e96aa38e52c160e0557708ed2f2920fdc4c398bf520f1a4fa81947c91",
+    "upstream/onedayagent/src/onedayagent/engine/utils/proc.py": "47501b56df35628befa578811b7a2cda648ec7c5613a4530a8c6dc83a071f050",
+    "upstream/onedayagent/src/onedayagent/engine/utils/secret.py": "60699fe55184435074e142a5c48bcf78dadf4da576d2ab30ed789732f92654a4",
+    "upstream/onedayagent/src/onedayagent/engine/utils/text.py": "5cef3fb4354c6bc5848a25755aba5993216799f6fdce32afbd1e4931d2bd56a0",
+    "upstream/onedayagent/src/onedayagent/engine/utils/token.py": "9c7501194aac85b189f6791ab2d6cac24b6e0e6199c7027d473d4e45efad3dfd",
+    "upstream/onedayagent/src/onedayagent/engine/utils/tokenizer/__init__.py": "3d5b6ca013d77741f05627723a8ff49b268d9c3fa7608dd330d72d1feda8b5a7",
+    "upstream/onedayagent/src/onedayagent/engine/utils/typing.py": "68c05f198f41e4f93c6e7e007383798ed5203f000b5fc8cb0250a3735a924074",
+    "upstream/onedayagent/src/onedayagent/judge/__init__.py": "03c7dbe966b6f5a184729c98d273ba3199f634f05c2c7309a64a6d5e689fde59",
+    "upstream/onedayagent/src/onedayagent/judge/_env_shim.py": "1a04a71f9d7b6bd6e9bf8d9356c220e8c6b32d969f277d672143f9df7a1c7b30",
+    "upstream/onedayagent/src/onedayagent/judge/analyze_agent_scores.py": "6021f074166a5384cdba8f5b3f21f1635832aa97be90b988ebcdc6c1bcde162e",
+    "upstream/onedayagent/src/onedayagent/judge/evaluate.py": "828f29951c47d95bc2f798f48e0fefa9d4a140a56438732c8ce82ebf1b45ea6b",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/__init__.py": "e85a7eb624b91e7ebbfb8a21acf8724b4c1b16c8666fe3350aa687b253b05c53",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/config.py": "1f059e023b74e91a11fc3ac9ae5468f77a3a07e8383c9775bc1da32688b180b5",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/data_loader.py": "582ffa33806a8adabc3b2b0b50f9c7b1567ef78f6f7e1f556bb9a76548d52832",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/base.py": "d304fee87bd633bfc4f6c6a037baf7883960daecdcf195c05a6cb1bef83261c4",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/chatgpt.py": "4eb5cc33e25e0c3e493a34b1949a802d95f3bf84c6a946ffab974c0aca8f5dab",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/factory.py": "7cb070c2cbc692325801216d5b4890e922e78b7c415a7d94839fbf9c5ef2cc26",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/gemini.py": "e32fcbb3917af02c685bbd6eb8907bbef329b6b2922631b14977a8d69e2991d8",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/openrouter.py": "c8277ee789afcf7e3801f566da54feefc026abe53237409aff44bc7299448a62",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/client/web_search.py": "4c59c81b0c39182a34c8b35953aae26ab344ba78d233da2d9eddc5c4f5be756d",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/prompts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/prompts/batch_score/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/prompts/batch_score/prompt_template.py": "cfbdfa2ef972cb859da4e8323b155bb348f2c7ba8a81f8a6e03b5026f19844f3",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/schemas/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/schemas/types.py": "617d144c02e4cd064db5a1c59339ff6f45091f86b0c13f2bafe90cfcbd247536",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/archive_parser.py": "b566b42eb81635ffb17403ed28a363d19bf7dba6f7e025dd3b56a9d5bd1f813b",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/attachment_parser.py": "2c4ec74dd62ec3dc4283d5cbc81079502448adf8c30e03c90d40a5067332435f",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/html_parser.py": "835d71e72a768ce0df2c9068e9f54813f3e81aa668fe12075099e8285e65c28b",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/image_parser.py": "e29234a2dc592da18d4292298954fd81b9216059de933a758b4550d480f2c446",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/notebook_parser.py": "628523f6ef2d080b3974c89bb32da0450225129942358ba1013d3f27aa823467",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/office_parser.py": "64875006e2f71b12bc4cc6bd5114fbb4ecab52eb205999efbb9a8aec9e1f6f31",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/subtitle_parser.py": "b5ed0f967dc8ee2de51c57c6895631986ee1a1c5d5b1b7dbef6e1cf6775edb9b",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/text_parser.py": "cd23bcda924876732e99eef39c5f3ee884e3e74518e31bce6e68248c79be9b07",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/llm/utils/web_renderer.py": "ccf8da3dde42d99da2cb2129d8174b8ad1151ba982387ede4bcbdb24f3365380",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/logging_config.py": "a9afc76970b0d48877f73facebe34a4e291776dd8cc613adbd9f1339effbceca",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/main.py": "bbcfe571c668b952892f05096096caca82f1dd8bb24a11e9896f39ab67209758",
+    "upstream/onedayagent/src/onedayagent/judge/llm_score/scorer.py": "e9f8736f7ed1b9091801d60c27b19e944953a51263c4846a52c5b099e1b4c264",
+    "upstream/onedayagent/src/onedayagent/sdk/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/fs/__init__.py": "bf54482a987d5ed9d93d192b06a99f0919f3993ff6f853d27bd51a3380907a20",
+    "upstream/onedayagent/src/onedayagent/sdk/fs/file_system.py": "eed416783d84401b5c66bbd0e4da09b8307548e63779b7bc408325d25e3f6d29",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/__init__.py": "e4740e81b348b285771c24b69fd7105cd4f2e1880b82d3730d60ace6427eea05",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/llms/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/llms/base.py": "79ce621511274d9ee6af55d14e5329ebfebda3946c2c66e59f40ead64de8583b",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/llms/openai_compatible.py": "e892e427f8dfa389c486e3b58708e135ff89da1ebb13aabd68f3fb3790c11045",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/llms/wrappers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/llms/wrappers/openai_wrapper.py": "ec2194ef9a53f2613c9daee4a8b864b4e9d292b63d440d1cc4f4606fb66b4c22",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/provider.py": "cb31b25551a21ac37b8168576f694625b4e9a3e9f3cf367694753b2ba3a5f146",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/registries/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/registries/llm_registry.py": "f083b2605156cde6a36cec5b2444c6d7db954c50ad20221f007e32bcc06f2a4a",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/registries/tool_registry.py": "5f3d252da744b1e118b05e2f9fbb9fe4edea981e7c11a584811813371654789a",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/registries/toolkit_registry.py": "b98d76b5546575451b46f1dfe46cd51992040a8517631c6b10b3889c862d9be3",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/resource.py": "3daae82a1ff7bae54c311849618a410d667398aa69c86050b6efe765e9682a44",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/base.py": "13dd1c5157f5fc850476b8f7e9d599becd84fa3072a26b66675ae74c8dfc9d4f",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/builtin_tookit.py": "1230e56ce8700eec53aecdbe153e18bf79dfbac12d2552edba9228947cb20f45",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/camel_tookit.py": "64f826ac940f9a056e14c1c08e1636f2eda60ffc0dcc2113d36036fc4cbbeb34",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/composite_toolkit.py": "d6c8c14fa503401f10a1656bb71ec43982baf29260a4dbead21d779809f194c3",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/toolkits/custom_toolkit.py": "758554e77860395d607fd491f27aba70c40523471ac7db4cb5374c6a1dd7227c",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/analyze_image.py": "4791b62755598468db038c25136007f3cf5d17e5beddead19db67d36d1904977",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/base.py": "f6b27320f145b2ab65b6059ec84e6872be04c2a6ea426ccc8e9a09f8561958dc",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/file_tools/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/file_tools/file_parser.py": "7e8d5db9a066afaaab8e605a83dfe2147b0745e07d39e027f4b5516e4d3ac9f6",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/file_tools/video_analysis.py": "21f66689aa8d5dddb28d85139ec7f7c03a6218ed0d210a404954ceaf4f60a8d2",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/image_gen.py": "2c50b78ca3730619515c1374bfbbd68aee8913bdb3266061aba2ae321326acc6",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/openalex.py": "0548ff53fb55451130e44934c1bea9ddf647ce18f6ee5a925069efbe6b9c02ba",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/parse_file.py": "5b159ac76d52fb181a82f84edc1f903bca6bccefe467a201430ebc1832033a61",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/python.py": "838a66249403640786c9e87130d5b7cdf632c5991bb3d81dfcae9bb1c1aa140f",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/read_file.py": "9b2961312088f6a8103f74536142ae35a5c3cf3036d949f59a778583fdffe586",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/scholar.py": "73af7aac3c6736b9695fa2bb03279c45ad8676ddfccac290504e85026af6e85b",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/search.py": "b4be8080826d9236d251c5975849702968e485ba71e04f701090ece05b5523ef",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/visit.py": "103ef5a7dfe0e1ac1b83050ec6d3515d680ae182d89d9eb1d2e663d4531bfb60",
+    "upstream/onedayagent/src/onedayagent/sdk/resources/tools/write_file.py": "5ac37ce0eb57a0cea1085627e9eb3ca28efc8d3049f289df82be5100f2c487c4",
+    "upstream/onedayagent/src/onedayagent/sdk/synthesis_sdk.py": "d41d7369bdef77c7a64d55de4e3b33a88cd9c6f91601d5accd02660e5ba7d984"
+  }
+}

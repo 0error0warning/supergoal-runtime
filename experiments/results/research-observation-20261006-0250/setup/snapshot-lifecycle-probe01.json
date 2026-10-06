@@ -1,0 +1,17 @@
+{
+  "status": "running",
+  "model_calls": 0,
+  "rows": [
+    {
+      "method": "implicit",
+      "fault": "timeout",
+      "status": "failed",
+      "error": "RuntimeError: "
+    }
+  ],
+  "source_sha256": {
+    "snapshot_lifecycle.py": "3cbf6dc2fd7cf8a87558ba578621ee4c07d973331afd821f70168c819d12f587",
+    "probe_snapshot_lifecycle.py": "2d0b73d7b67e4ee992053da6b3a9585e10d044f63dc5e039b1d688605ecbae20"
+  },
+  "base_image": "sha256:c83674e1999044d33d751661371b873539f47e5b5c5ca3320c7e0377acca6238"
+}

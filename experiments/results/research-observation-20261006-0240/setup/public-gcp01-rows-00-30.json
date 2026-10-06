@@ -1,0 +1,913 @@
+{
+  "started_at": "2026-10-05T15:20:35.549888+00:00",
+  "pid": 27555,
+  "candidate": "/var/lib/supergoal-lab/candidates/public-gcp01",
+  "registration_sha256": "e622f2ade86e9cae593ebd20cec395e1e0dcde1301d3fcde42d364b940736037",
+  "environment_lock_sha256": "6cac483eec5c0a0c0dbfc2d2d7ea8d3d913138a2e984ba8f861f461d33e6f6ed",
+  "runner_sha256": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+  "status": "complete",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native",
+      "started_at": "2026-10-05T15:20:36.417490Z",
+      "admission_available_memory_bytes": 66047676416,
+      "admission_free_disk_bytes": 207749083136,
+      "status": "graded",
+      "harbor_pid": 27702,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native/configure-git-webserver__zcZ43z2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+        "study_status": "agent_stopped",
+        "physical_requests": 13,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 65726,
+      "n_output_tokens": 1761,
+      "n_cache_tokens": 37504,
+      "finished_at": "2026-10-05T15:22:15.658600+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-02-configure-git-webserver-sg_v2",
+      "started_at": "2026-10-05T15:22:16.488081Z",
+      "admission_available_memory_bytes": 66026848256,
+      "admission_free_disk_bytes": 207039000576,
+      "status": "graded",
+      "harbor_pid": 32269,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-02-configure-git-webserver-sg_v2/configure-git-webserver__kGDqLU7/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "d55e6bc4c0224cb6a6f692d1da4c5e36",
+        "study_status": "succeeded",
+        "physical_requests": 18,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 95001,
+      "n_output_tokens": 3644,
+      "n_cache_tokens": 65546,
+      "finished_at": "2026-10-05T15:24:55.773446+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "configure-git-webserver",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-03-configure-git-webserver-repeat_goal",
+      "started_at": "2026-10-05T15:24:56.620928Z",
+      "admission_available_memory_bytes": 66000228352,
+      "admission_free_disk_bytes": 206316691456,
+      "status": "graded",
+      "harbor_pid": 37672,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-03-configure-git-webserver-repeat_goal/configure-git-webserver__GqeVQwL/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "9af2f90a819547ce9fbca5a152ea246c",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 23,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 244474,
+      "n_output_tokens": 3305,
+      "n_cache_tokens": 166754,
+      "finished_at": "2026-10-05T15:28:35.890549+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-04-configure-git-webserver-sg_no_context",
+      "started_at": "2026-10-05T15:28:36.743960Z",
+      "admission_available_memory_bytes": 66012307456,
+      "admission_free_disk_bytes": 205893492736,
+      "status": "graded",
+      "harbor_pid": 41173,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-04-configure-git-webserver-sg_no_context/configure-git-webserver__v7Rym6R/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "8dd5f1dc679a45dea7a9f246c8c4d296",
+        "study_status": "budget_exhausted",
+        "physical_requests": 49,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 258066,
+      "n_output_tokens": 8521,
+      "n_cache_tokens": 141784,
+      "finished_at": "2026-10-05T15:34:56.014963+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-05-configure-git-webserver-sg_no_review",
+      "started_at": "2026-10-05T15:34:56.839471Z",
+      "admission_available_memory_bytes": 66017337344,
+      "admission_free_disk_bytes": 205397118976,
+      "status": "graded",
+      "harbor_pid": 47879,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-05-configure-git-webserver-sg_no_review/configure-git-webserver__naqL7HY/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "535d095484a44653aef022abdb9e7833",
+        "study_status": "unverified_done",
+        "physical_requests": 8,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 36949,
+      "n_output_tokens": 1543,
+      "n_cache_tokens": 27724,
+      "finished_at": "2026-10-05T15:36:56.125443+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "fix-code-vulnerability",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-06-fix-code-vulnerability-sg_v2",
+      "started_at": "2026-10-05T15:36:56.948745Z",
+      "admission_available_memory_bytes": 66017468416,
+      "admission_free_disk_bytes": 204675072000,
+      "status": "graded",
+      "harbor_pid": 51756,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-06-fix-code-vulnerability-sg_v2/fix-code-vulnerability__2FEWotK/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "55e062a5f636481596fda8f8aef0deb7",
+        "study_status": "succeeded",
+        "physical_requests": 8,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 43920,
+      "n_output_tokens": 1313,
+      "n_cache_tokens": 5376,
+      "finished_at": "2026-10-05T15:38:16.240639+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 6,
+      "task_id": "fix-code-vulnerability",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-07-fix-code-vulnerability-repeat_goal",
+      "started_at": "2026-10-05T15:38:17.060683Z",
+      "admission_available_memory_bytes": 66006839296,
+      "admission_free_disk_bytes": 204666880000,
+      "status": "graded",
+      "harbor_pid": 54169,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-07-fix-code-vulnerability-repeat_goal/fix-code-vulnerability__7bGvV9U/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "962b5f57d5774af584f0f120bf409df3",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 177148,
+      "n_output_tokens": 2893,
+      "n_cache_tokens": 97889,
+      "finished_at": "2026-10-05T15:41:16.352171+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 7,
+      "task_id": "fix-code-vulnerability",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-08-fix-code-vulnerability-sg_no_context",
+      "started_at": "2026-10-05T15:41:17.198793Z",
+      "admission_available_memory_bytes": 66016444416,
+      "admission_free_disk_bytes": 204656717824,
+      "status": "graded",
+      "harbor_pid": 56633,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-08-fix-code-vulnerability-sg_no_context/fix-code-vulnerability__UfUvQzx/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "59da246dae95451c8f79ff739ea0f7a1",
+        "study_status": "succeeded",
+        "physical_requests": 9,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 51902,
+      "n_output_tokens": 1298,
+      "n_cache_tokens": 33954,
+      "finished_at": "2026-10-05T15:42:36.466247+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 8,
+      "task_id": "fix-code-vulnerability",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-09-fix-code-vulnerability-sg_no_review",
+      "started_at": "2026-10-05T15:42:37.370937Z",
+      "admission_available_memory_bytes": 66013696000,
+      "admission_free_disk_bytes": 204648521728,
+      "status": "graded",
+      "harbor_pid": 58736,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-09-fix-code-vulnerability-sg_no_review/fix-code-vulnerability__eSuNnrS/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "6d85125691ea4d99857ff2e5ae60a88b",
+        "study_status": "unverified_done",
+        "physical_requests": 7,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 50281,
+      "n_output_tokens": 1086,
+      "n_cache_tokens": 30464,
+      "finished_at": "2026-10-05T15:43:36.595340+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 9,
+      "task_id": "fix-code-vulnerability",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-10-fix-code-vulnerability-native",
+      "started_at": "2026-10-05T15:43:37.446312Z",
+      "admission_available_memory_bytes": 66004914176,
+      "admission_free_disk_bytes": 204640690176,
+      "status": "graded",
+      "harbor_pid": 60517,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-10-fix-code-vulnerability-native/fix-code-vulnerability__8K6vGq9/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "5784967de5514507a1cbd647e344c89b",
+        "study_status": "agent_stopped",
+        "physical_requests": 11,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 75569,
+      "n_output_tokens": 2344,
+      "n_cache_tokens": 61809,
+      "finished_at": "2026-10-05T15:45:16.712639+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 10,
+      "task_id": "sparql-university",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-11-sparql-university-repeat_goal",
+      "started_at": "2026-10-05T15:45:17.625883Z",
+      "admission_available_memory_bytes": 66011856896,
+      "admission_free_disk_bytes": 204632883200,
+      "status": "graded",
+      "harbor_pid": 62689,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-11-sparql-university-repeat_goal/sparql-university__LswTfy9/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "50ea7dcdcee046ba8d603e56fa3effd6",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 20,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 219161,
+      "n_output_tokens": 5482,
+      "n_cache_tokens": 110333,
+      "finished_at": "2026-10-05T15:48:57.030128+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 11,
+      "task_id": "sparql-university",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-12-sparql-university-sg_no_context",
+      "started_at": "2026-10-05T15:48:57.868696Z",
+      "admission_available_memory_bytes": 65994776576,
+      "admission_free_disk_bytes": 203348836352,
+      "status": "graded",
+      "harbor_pid": 69748,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-12-sparql-university-sg_no_context/sparql-university__R6ZqMSx/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "8bc78587914145a0a9eaeb4956bff72a",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 131996,
+      "n_output_tokens": 3974,
+      "n_cache_tokens": 97793,
+      "finished_at": "2026-10-05T15:51:57.146973+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 12,
+      "task_id": "sparql-university",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-13-sparql-university-sg_no_review",
+      "started_at": "2026-10-05T15:51:57.980887Z",
+      "admission_available_memory_bytes": 65786122240,
+      "admission_free_disk_bytes": 201636577280,
+      "status": "graded",
+      "harbor_pid": 76734,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-13-sparql-university-sg_no_review/sparql-university__hxttzKb/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "dc6a62e297d94c4b9f2996a92c280cd3",
+        "study_status": "unverified_done",
+        "physical_requests": 12,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 107436,
+      "n_output_tokens": 4397,
+      "n_cache_tokens": 92703,
+      "finished_at": "2026-10-05T15:55:37.547966+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 13,
+      "task_id": "sparql-university",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-14-sparql-university-native",
+      "started_at": "2026-10-05T15:55:38.384878Z",
+      "admission_available_memory_bytes": 65858813952,
+      "admission_free_disk_bytes": 190260916224,
+      "status": "graded",
+      "harbor_pid": 83458,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-14-sparql-university-native/sparql-university__DCg5sPK/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "0d458a43176d416aaa820c552550b735",
+        "study_status": "agent_stopped",
+        "physical_requests": 11,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 97783,
+      "n_output_tokens": 2729,
+      "n_cache_tokens": 82958,
+      "finished_at": "2026-10-05T15:58:17.662736+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 14,
+      "task_id": "sparql-university",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-15-sparql-university-sg_v2",
+      "started_at": "2026-10-05T15:58:18.497599Z",
+      "admission_available_memory_bytes": 65894809600,
+      "admission_free_disk_bytes": 188979343360,
+      "status": "graded",
+      "harbor_pid": 89948,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-15-sparql-university-sg_v2/sparql-university__dwYrCZc/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "b216d3b7eee444df867f55906663e068",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 136098,
+      "n_output_tokens": 7461,
+      "n_cache_tokens": 105660,
+      "finished_at": "2026-10-05T16:01:57.782610+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 15,
+      "task_id": "write-compressor",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-16-write-compressor-sg_no_context",
+      "started_at": "2026-10-05T16:01:58.637084Z",
+      "admission_available_memory_bytes": 65860542464,
+      "admission_free_disk_bytes": 187697291264,
+      "status": "graded",
+      "harbor_pid": 96839,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-16-write-compressor-sg_no_context/write-compressor__evMkkJ3/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "a714a862a78b4d1b991d9f912343531b",
+        "study_status": "succeeded",
+        "physical_requests": 28,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 352655,
+      "n_output_tokens": 33143,
+      "n_cache_tokens": 284128,
+      "finished_at": "2026-10-05T16:08:37.904595+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 16,
+      "task_id": "write-compressor",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-17-write-compressor-sg_no_review",
+      "started_at": "2026-10-05T16:08:38.764954Z",
+      "admission_available_memory_bytes": 65814568960,
+      "admission_free_disk_bytes": 186564661248,
+      "status": "graded",
+      "harbor_pid": 103557,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-17-write-compressor-sg_no_review/write-compressor__9CHwUq6/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "86b9ce8bbdff4eef8d771a05117b5277",
+        "study_status": "unverified_done",
+        "physical_requests": 32,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 581035,
+      "n_output_tokens": 33062,
+      "n_cache_tokens": 543510,
+      "finished_at": "2026-10-05T16:20:38.406550+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 17,
+      "task_id": "write-compressor",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-18-write-compressor-native",
+      "started_at": "2026-10-05T16:20:39.468676Z",
+      "admission_available_memory_bytes": 64397807616,
+      "admission_free_disk_bytes": 171097919488,
+      "status": "graded",
+      "harbor_pid": 152873,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-18-write-compressor-native/write-compressor__Gtk9xF8/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "f8accb3d74c54988a520b041751ca11e",
+        "study_status": "agent_stopped",
+        "physical_requests": 12,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 94747,
+      "n_output_tokens": 16489,
+      "n_cache_tokens": 78778,
+      "finished_at": "2026-10-05T16:27:58.581384+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 18,
+      "task_id": "write-compressor",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-19-write-compressor-sg_v2",
+      "started_at": "2026-10-05T16:27:59.448672Z",
+      "admission_available_memory_bytes": 63095029760,
+      "admission_free_disk_bytes": 171321483264,
+      "status": "graded",
+      "harbor_pid": 187788,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-19-write-compressor-sg_v2/write-compressor__xfHBeuA/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "ad015b7aabc547d08241575172908bec",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 115526,
+      "n_output_tokens": 17631,
+      "n_cache_tokens": 89767,
+      "finished_at": "2026-10-05T16:35:38.900143+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 19,
+      "task_id": "write-compressor",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-20-write-compressor-repeat_goal",
+      "started_at": "2026-10-05T16:35:39.748088Z",
+      "admission_available_memory_bytes": 64386502656,
+      "admission_free_disk_bytes": 170709241856,
+      "status": "graded",
+      "harbor_pid": 216600,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-20-write-compressor-repeat_goal/write-compressor__sChLtSM/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "dbbacc2c4bf64620a20f1740da7435b0",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 25,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 282865,
+      "n_output_tokens": 15652,
+      "n_cache_tokens": 168034,
+      "finished_at": "2026-10-05T16:42:59.257755+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 20,
+      "task_id": "dna-assembly",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-21-dna-assembly-sg_no_review",
+      "started_at": "2026-10-05T16:43:00.125518Z",
+      "admission_available_memory_bytes": 64427417600,
+      "admission_free_disk_bytes": 171750920192,
+      "status": "graded",
+      "harbor_pid": 239510,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-21-dna-assembly-sg_no_review/dna-assembly__upoHdjm/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "1bda08ae2c7d4a48bccd172c4f2cda22",
+        "study_status": "unverified_done",
+        "physical_requests": 30,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 454860,
+      "n_output_tokens": 35143,
+      "n_cache_tokens": 423808,
+      "finished_at": "2026-10-05T16:56:19.506192+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 21,
+      "task_id": "dna-assembly",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-22-dna-assembly-native",
+      "started_at": "2026-10-05T16:56:20.435259Z",
+      "admission_available_memory_bytes": 64572571648,
+      "admission_free_disk_bytes": 169843593216,
+      "status": "graded",
+      "harbor_pid": 268882,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-22-dna-assembly-native/dna-assembly__cQXvQQ8/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "0bfbc5f9459a45ffbd92504cfcc0aca6",
+        "study_status": "agent_stopped",
+        "physical_requests": 16,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 153683,
+      "n_output_tokens": 11932,
+      "n_cache_tokens": 135463,
+      "finished_at": "2026-10-05T17:02:19.881448+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 22,
+      "task_id": "dna-assembly",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-23-dna-assembly-sg_v2",
+      "started_at": "2026-10-05T17:02:20.712753Z",
+      "admission_available_memory_bytes": 64669589504,
+      "admission_free_disk_bytes": 172192346112,
+      "status": "graded",
+      "harbor_pid": 285738,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-23-dna-assembly-sg_v2/dna-assembly__kgtqiqx/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "0c31b49cd3c84ea4b8b491fe995392af",
+        "study_status": "succeeded",
+        "physical_requests": 55,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 824677,
+      "n_output_tokens": 54786,
+      "n_cache_tokens": 725491,
+      "finished_at": "2026-10-05T17:16:00.018252+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 23,
+      "task_id": "dna-assembly",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-24-dna-assembly-repeat_goal",
+      "started_at": "2026-10-05T17:16:00.891394Z",
+      "admission_available_memory_bytes": 64521633792,
+      "admission_free_disk_bytes": 171832152064,
+      "status": "graded",
+      "harbor_pid": 320639,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-24-dna-assembly-repeat_goal/dna-assembly__ahqjrGL/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "fcfb859157e844ff91e5db3534ac864b",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 24,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 375945,
+      "n_output_tokens": 21082,
+      "n_cache_tokens": 252062,
+      "finished_at": "2026-10-05T17:25:20.217559+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 24,
+      "task_id": "dna-assembly",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-25-dna-assembly-sg_no_context",
+      "started_at": "2026-10-05T17:25:21.215638Z",
+      "admission_available_memory_bytes": 61510049792,
+      "admission_free_disk_bytes": 168975511552,
+      "status": "graded",
+      "harbor_pid": 377125,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-25-dna-assembly-sg_no_context/dna-assembly__HMBtnuS/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "a9ff3c7bde804b4fab0b2a428a902a6e",
+        "study_status": "succeeded",
+        "physical_requests": 25,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 224826,
+      "n_output_tokens": 25954,
+      "n_cache_tokens": 176722,
+      "finished_at": "2026-10-05T17:31:20.437080+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 25,
+      "task_id": "llm-inference-batching-scheduler",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-26-llm-inference-batching-scheduler-native",
+      "started_at": "2026-10-05T17:31:21.477942Z",
+      "admission_available_memory_bytes": 60953694208,
+      "admission_free_disk_bytes": 167197069312,
+      "status": "graded",
+      "harbor_pid": 440629,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-26-llm-inference-batching-scheduler-native/llm-inference-batching-scheduler__93qmEvG/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "5492134b4aff469e85524c9c96ab70a5",
+        "study_status": "agent_stopped",
+        "physical_requests": 41,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 1231962,
+      "n_output_tokens": 27116,
+      "n_cache_tokens": 1172500,
+      "finished_at": "2026-10-05T17:42:40.680851+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 26,
+      "task_id": "llm-inference-batching-scheduler",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-27-llm-inference-batching-scheduler-sg_v2",
+      "started_at": "2026-10-05T17:42:41.697360Z",
+      "admission_available_memory_bytes": 63796334592,
+      "admission_free_disk_bytes": 165661585408,
+      "status": "graded",
+      "harbor_pid": 526393,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-27-llm-inference-batching-scheduler-sg_v2/llm-inference-batching-scheduler__e2NsdAZ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "1c7ac2925389495f8eef5e47c8231708",
+        "study_status": "succeeded",
+        "physical_requests": 46,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 852119,
+      "n_output_tokens": 21195,
+      "n_cache_tokens": 623232,
+      "finished_at": "2026-10-05T18:00:20.938327+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 27,
+      "task_id": "llm-inference-batching-scheduler",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-28-llm-inference-batching-scheduler-repeat_goal",
+      "started_at": "2026-10-05T18:00:22.093048Z",
+      "admission_available_memory_bytes": 60374876160,
+      "admission_free_disk_bytes": 162692431872,
+      "status": "graded",
+      "harbor_pid": 663490,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-28-llm-inference-batching-scheduler-repeat_goal/llm-inference-batching-scheduler__iN3ckbw/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "7dbb1d22c4f04e2eae73bdb6000e3075",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 35,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 769999,
+      "n_output_tokens": 18580,
+      "n_cache_tokens": 512043,
+      "finished_at": "2026-10-05T18:07:01.131302+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 28,
+      "task_id": "llm-inference-batching-scheduler",
+      "arm": "sg_no_context",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-29-llm-inference-batching-scheduler-sg_no_context",
+      "started_at": "2026-10-05T18:07:02.241813Z",
+      "admission_available_memory_bytes": 56637661184,
+      "admission_free_disk_bytes": 160478302208,
+      "status": "graded",
+      "harbor_pid": 714508,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-29-llm-inference-batching-scheduler-sg_no_context/llm-inference-batching-scheduler__UiFbjWy/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "032591ababb84ca29b5a26063aa068f9",
+        "study_status": "succeeded",
+        "physical_requests": 26,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 391110,
+      "n_output_tokens": 17753,
+      "n_cache_tokens": 295655,
+      "finished_at": "2026-10-05T18:11:21.290863+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 29,
+      "task_id": "llm-inference-batching-scheduler",
+      "arm": "sg_no_review",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-30-llm-inference-batching-scheduler-sg_no_review",
+      "started_at": "2026-10-05T18:11:22.174432Z",
+      "admission_available_memory_bytes": 54894284800,
+      "admission_free_disk_bytes": 162731012096,
+      "status": "graded",
+      "harbor_pid": 731184,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-30-llm-inference-batching-scheduler-sg_no_review/llm-inference-batching-scheduler__t3HSFzH/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "45c3366bd06e446dab92fd4d0fb41dab",
+        "study_status": "unverified_done",
+        "physical_requests": 17,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 241001,
+      "n_output_tokens": 13701,
+      "n_cache_tokens": 213580,
+      "finished_at": "2026-10-05T18:16:21.418735+00:00",
+      "exit_code": 0
+    }
+  ],
+  "heartbeat_at": "2026-10-05T18:16:21.417478+00:00",
+  "finished_at": "2026-10-05T18:16:21.419124+00:00"
+}

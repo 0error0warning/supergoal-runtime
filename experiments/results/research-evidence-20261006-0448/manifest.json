@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-10-05T20:46:28.651985+00:00",
+  "files": {
+    "setup/scb-transfer01-observation-2048.json": {
+      "sha256": "052bb50b1bf770c4d2f951c79e884f98def1bcf78c36c68e4b27df0cb1ac3591",
+      "bytes": 429116
+    },
+    "setup/public-parallel24-v1-observation-2048.json": {
+      "sha256": "608fa2926447764bcabc086d4c0ccca749ff6d021808564436a5137867e03173",
+      "bytes": 2546149
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "be23752e627c17e7ffac734c15fee86a33f172b4ea7d0f9b4c61a5d298bc7f16",
+      "bytes": 93707
+    },
+    "setup/scb-transfer01-receipt.json": {
+      "sha256": "c2d5acaaf7187573705184de9eb1984e5020f0c412db461f027bf138f6803427",
+      "bytes": 29977
+    },
+    "analysis-multistep03/collect_multistep.py": {
+      "sha256": "7516e9cd250ec35ad4568f37ca9ed385fceaa183ee69bf4293cf81b3daeb3e00",
+      "bytes": 7848
+    }
+  }
+}

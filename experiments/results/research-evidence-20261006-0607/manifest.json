@@ -1,0 +1,62 @@
+{
+  "captured_at": "2026-10-05T22:06:21.233061+00:00",
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/public-parallel24-v1-observation-220620.json": {
+      "sha256": "eae12e44e6a581163364500ddbaca7ad0b969abdfb27d0978529adc6dda90ec6",
+      "bytes": 3376426
+    },
+    "setup/harness-transfer01-observation-220620.json": {
+      "sha256": "fe85a49419c64ea84b5576f87af47f965b83f4e0246ff2a613bb12979cffc941",
+      "bytes": 504188
+    },
+    "setup/file-tool-probe02.json": {
+      "sha256": "1f9eb99f4c4ea62701bfd2b1550403796c417538e665f2aaa8f515ac04d2c0d7",
+      "bytes": 6834
+    },
+    "setup/file-tool-probe03.json": {
+      "sha256": "6de00dead19bddce385b3f12337eada8902f12ed06f7475a41189f0cb399f119",
+      "bytes": 4243
+    },
+    "file-tool-operator03/file_tool_fix_probe.py": {
+      "sha256": "4fab13a4da2ce6eda765fa57b52a3cc7243b182683bebe5ab4e1215f2b58ab94",
+      "bytes": 6165
+    },
+    "file-tool-operator03/hermes_bridge.py": {
+      "sha256": "d933eddd2dead165049c5d238f99fec2b7e07a388f68ae16a4a80394b3cda251",
+      "bytes": 3053
+    },
+    "setup/checkpoint-cache-eviction01-plan.json": {
+      "sha256": "4e734a6b1f609a72bea4bc0bf2d5db4f0ace0a9f586a06d840095b6257e8de55",
+      "bytes": 49042
+    },
+    "setup/checkpoint-cache-eviction01-priority.json": {
+      "sha256": "796fb9c562e96e684e54727fb8dae71eead4392897f139ce035b541fd0a3e5ac",
+      "bytes": 53719
+    },
+    "setup/checkpoint-cache-eviction01-docker-inventory.json": {
+      "sha256": "bdf27b49f05c78b6e0f470fc5d7c2d9b1bbf586d7727c9037124177400f75c78",
+      "bytes": 58812
+    },
+    "setup/checkpoint-cache-eviction01.json": {
+      "sha256": "f251690cc632af810c90038e5cabebd074887a1656b0f3612a27a6413d8d0f45",
+      "bytes": 19443
+    },
+    "cache-eviction-operator01/evict_checkpoint_cache.py": {
+      "sha256": "a0f5d0c3b366967c03d463c90cb9c4774d7817a1e9710586a892b21042710141",
+      "bytes": 4913
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "8dcadd8da9f768f7c26718a08c28588dd233d410b32641c6bd3a8f5e4ad667de",
+      "bytes": 71571
+    },
+    "setup/harness-transfer01-receipt.json": {
+      "sha256": "022b2ae4edf69f7729a885ebf1b76aa163b4dc6f302d23d2d326b8851a15e7be",
+      "bytes": 9657
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "15be2c7d99028b46ab1d2ed0a29e4ec45d18608b1dc272a8bf05bf9d6bd4ec4f",
+      "bytes": 113430
+    }
+  }
+}

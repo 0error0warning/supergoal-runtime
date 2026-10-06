@@ -1,0 +1,68 @@
+{
+  "state": {
+    "at": "2026-10-06T01:12:04.304378+00:00",
+    "batch_status": "running",
+    "rows": [
+      {
+        "task_id": "file_backup",
+        "arm": "fresh_ledger",
+        "status": "returned",
+        "harbor_pid": 2326343
+      },
+      {
+        "task_id": "database_migration",
+        "arm": "fresh_current",
+        "status": "running",
+        "harbor_pid": 2326344
+      },
+      {
+        "task_id": "dag_execution",
+        "arm": "fresh_ledger",
+        "status": "returned",
+        "harbor_pid": 2326345
+      },
+      {
+        "task_id": "file_backup",
+        "arm": "fresh_current",
+        "status": "returned",
+        "harbor_pid": 2326346
+      },
+      {
+        "task_id": "database_migration",
+        "arm": "fresh_ledger",
+        "status": "running",
+        "harbor_pid": 2326347
+      },
+      {
+        "task_id": "dag_execution",
+        "arm": "fresh_current",
+        "status": "returned",
+        "harbor_pid": 2326348
+      }
+    ],
+    "units": "MainPID=2326341\nResult=success\nId=supergoal-context-prefix01.service\nActiveState=active\nInvocationID=1b5d59b1dd5a457e9536f69a6d5887c8\n\nMainPID=2355739\nResult=success\nId=supergoal-prefix-finalizer01.service\nActiveState=active\nInvocationID=1835172da3504bd1b08787378ace3840\n",
+    "free_disk_gib": 70.46297454833984
+  },
+  "files": [
+    {
+      "path": "setup/checkpoint-cache-eviction03.json",
+      "sha256": "f53e58faf0325df8227208df2219cb81675e7998703c53f91d8c0afb1ba2ab0a",
+      "bytes": 34539
+    },
+    {
+      "path": "setup/checkpoint-cache-eviction03-priority.json",
+      "sha256": "9e3efc05260d5d3d6b1fff132c29f7bff96495b47499e8571e3a7834f7471a78",
+      "bytes": 18650
+    },
+    {
+      "path": "setup/checkpoint-cache-eviction03-inventory.json",
+      "sha256": "c83fe7adba9d7146f08b37c5d7dd997889212e819edbbbf5ea2b7b00de7c43b4",
+      "bytes": 44103
+    },
+    {
+      "path": "cache-maintenance03/evict_checkpoint_cache.py",
+      "sha256": "7bfedcd1b73e204919522d83220631b503fcebbf49c79949b56a32a5b54b6f72",
+      "bytes": 5334
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "kind": "synthetic_counterfactual_replay",
+  "live_model_calls": 0,
+  "scope": "A decision probe; not an estimate of live task performance or fault prevalence.",
+  "source_sha256": {
+    "experiments/analysis/fault_replay.py": "967dfdb0f900873ace3864f62f1e6d3870711617f7655403ca68577e952e5663",
+    "supergoal_runtime/v2/kernel.py": "0a80de06c283d2eb95ea4d2aa1b7e3c5b8de8af6eebb2531bbcec57ee60707cf",
+    "supergoal_runtime/v2/verification.py": "9dea77ccafecd57c7e4141e55848f49361826afac443c547015daa4d02eca7d0"
+  },
+  "rows": [
+    {
+      "case": "valid",
+      "verification_enabled": true,
+      "status": "succeeded",
+      "oracle_pass": true,
+      "unmet_terminal_stop": false,
+      "verified_success": true,
+      "verdict": "pass"
+    },
+    {
+      "case": "valid",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": true,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "unverified"
+    },
+    {
+      "case": "missing_artifact",
+      "verification_enabled": true,
+      "status": "active",
+      "oracle_pass": false,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "fail"
+    },
+    {
+      "case": "missing_artifact",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": false,
+      "unmet_terminal_stop": true,
+      "verified_success": false,
+      "verdict": "unverified"
+    },
+    {
+      "case": "incorrect_value",
+      "verification_enabled": true,
+      "status": "active",
+      "oracle_pass": false,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "fail"
+    },
+    {
+      "case": "incorrect_value",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": false,
+      "unmet_terminal_stop": true,
+      "verified_success": false,
+      "verdict": "unverified"
+    },
+    {
+      "case": "positive_log_failed_exit",
+      "verification_enabled": true,
+      "status": "active",
+      "oracle_pass": false,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "fail"
+    },
+    {
+      "case": "positive_log_failed_exit",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": false,
+      "unmet_terminal_stop": true,
+      "verified_success": false,
+      "verdict": "unverified"
+    },
+    {
+      "case": "checker_unavailable",
+      "verification_enabled": true,
+      "status": "verification_unavailable",
+      "oracle_pass": true,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "unknown"
+    },
+    {
+      "case": "checker_unavailable",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": true,
+      "unmet_terminal_stop": false,
+      "verified_success": false,
+      "verdict": "unverified"
+    },
+    {
+      "case": "weak_checker",
+      "verification_enabled": true,
+      "status": "succeeded",
+      "oracle_pass": false,
+      "unmet_terminal_stop": true,
+      "verified_success": true,
+      "verdict": "pass"
+    },
+    {
+      "case": "weak_checker",
+      "verification_enabled": false,
+      "status": "unverified_done",
+      "oracle_pass": false,
+      "unmet_terminal_stop": true,
+      "verified_success": false,
+      "verdict": "unverified"
+    }
+  ]
+}

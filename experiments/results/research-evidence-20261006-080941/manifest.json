@@ -1,0 +1,26 @@
+{
+  "captured_at": "2026-10-06T00:09:23.410497+00:00",
+  "scope": "Read-only partial outcomes and same-test-ID regression audit; no new model calls.",
+  "files": {
+    "setup/context-handoff01-observation-20261006T000923Z.json": {
+      "sha256": "0c1c96bbb166dcd697e3719d6f786ba51fb0d47f944bd40da1db98fe68a9b120",
+      "bytes": 2050259
+    },
+    "setup/context-handoff01-regressions-partial01.json": {
+      "sha256": "a549cb96030621b7bf0a150b5bd9cb35bf2c82db459398414e8a16ed93ed71ae",
+      "bytes": 319095
+    },
+    "setup/context-handoff01-receipt.json": {
+      "sha256": "963331b9adb421d7a62e3fd5f265cd5d81d46dfe4bd6ebff0f3c32cba95dcfbd",
+      "bytes": 76264
+    },
+    "setup/context-handoff01-finalizer01.json": {
+      "sha256": "342139af005abcedc80cea8e3195d186e0de5da8a12f9701310405f300f4c71f",
+      "bytes": 878
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "3f9fceed20dcc1b6bc2995a13b59cedef7a89c50a7883ba084c6edc5fdf2aa0d",
+      "bytes": 104709
+    }
+  }
+}

@@ -1,0 +1,1827 @@
+{
+  "status": "complete_with_itemized_outcomes",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "file_backup",
+      "arm": "native",
+      "status": "returned",
+      "started_epoch": 1791229305.0395417,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-01-file_backup-native",
+      "harbor_pid": 1215269,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791229877.6394944,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-01-file_backup-native/file_backup__uwDeAvx/result.json",
+      "raw_rewards": {
+        "verbosity": 0.4412773802445335,
+        "verbosity_increased": 0.5,
+        "isolated_pass_rate": 0.7255704365079365,
+        "erosion_increased": 0.5,
+        "strict_pass_rate": 0.6604835178453404,
+        "core_pass_rate": 1.0,
+        "step_has_prior": 0.75,
+        "erosion": 0.5340584472186398
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 78897,
+            "n_cache_tokens": 62178,
+            "n_output_tokens": 5059,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "c71442c9f0c04383981d382b90f9e7d3",
+              "study_status": "agent_stopped",
+              "physical_requests": 10,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d55f536d8dea4f10b1e23b5a5e964a57",
+              "checkpoint": 1,
+              "problem_requests_total": 10,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8297015725481792,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.65625,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.65625,
+              "verbosity": 0.04522613065326633,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:42:07.129454Z",
+            "finished_at": "2026-10-05T19:43:59.134290Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:44:01.010688Z",
+            "finished_at": "2026-10-05T19:44:18.322736Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 179070,
+            "n_cache_tokens": 123392,
+            "n_output_tokens": 3728,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "4be719656ab74033bdbc7e9ad3acfb90",
+              "study_status": "agent_stopped",
+              "physical_requests": 12,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d55f536d8dea4f10b1e23b5a5e964a57",
+              "checkpoint": 2,
+              "problem_requests_total": 22,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8798517087718853,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7222222222222222,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.68,
+              "verbosity": 0.04983388704318937,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:44:18.667272Z",
+            "finished_at": "2026-10-05T19:45:22.979012Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:45:23.688748Z",
+            "finished_at": "2026-10-05T19:45:34.728168Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 360585,
+            "n_cache_tokens": 332949,
+            "n_output_tokens": 5709,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "660b03819b23434fa7c5a931a7fe0308",
+              "study_status": "agent_stopped",
+              "physical_requests": 19,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d55f536d8dea4f10b1e23b5a5e964a57",
+              "checkpoint": 3,
+              "problem_requests_total": 41,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.18747162815086632,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6666666666666666,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6764705882352942,
+              "verbosity": 0.8395748987854251,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:45:35.516318Z",
+            "finished_at": "2026-10-05T19:48:03.636221Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:48:04.225297Z",
+            "finished_at": "2026-10-05T19:48:18.343398Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 196850,
+            "n_cache_tokens": 167338,
+            "n_output_tokens": 6255,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "f959fc5b7dd040e3b507b5a3acf1ce25",
+              "study_status": "agent_stopped",
+              "physical_requests": 10,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d55f536d8dea4f10b1e23b5a5e964a57",
+              "checkpoint": 4,
+              "problem_requests_total": 51,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.23920887940362856,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8571428571428571,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6292134831460674,
+              "verbosity": 0.8304746044962531,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:48:18.615098Z",
+            "finished_at": "2026-10-05T19:50:39.235419Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:50:39.934232Z",
+            "finished_at": "2026-10-05T19:51:01.203389Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "task_id": "database_migration",
+      "arm": "sg_v2",
+      "status": "returned",
+      "started_epoch": 1791229470.3652017,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-02-database_migration-sg_v2",
+      "harbor_pid": 1224612,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791230849.6490607,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-02-database_migration-sg_v2/database_migration__W4iQipr/result.json",
+      "raw_rewards": {
+        "verbosity": 0.7153340435242423,
+        "erosion": 0.8250336189973492,
+        "erosion_increased": 0.2,
+        "strict_pass_rate": 0.9574881423195556,
+        "step_has_prior": 0.8,
+        "isolated_pass_rate": 0.8966376811594203,
+        "core_pass_rate": 0.9,
+        "verbosity_increased": 0.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 264558,
+            "n_cache_tokens": 221608,
+            "n_output_tokens": 9211,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "996e61da8bb34e47aebaddbc37619a0a",
+              "study_status": "succeeded",
+              "physical_requests": 22,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "4134bca709254a089d14219fc087646e",
+              "checkpoint": 1,
+              "problem_requests_total": 22,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8964913503767007,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.7868852459016393,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:45:23.531768Z",
+            "finished_at": "2026-10-05T19:48:47.784606Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:48:48.432000Z",
+            "finished_at": "2026-10-05T19:49:06.538106Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 202239,
+            "n_cache_tokens": 128768,
+            "n_output_tokens": 4473,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "ab79a4fd1c4047efb84c635d856ae170",
+              "study_status": "succeeded",
+              "physical_requests": 14,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "4134bca709254a089d14219fc087646e",
+              "checkpoint": 2,
+              "problem_requests_total": 36,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8342229022437538,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.9565217391304348,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9838709677419355,
+              "verbosity": 0.7676056338028169,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:49:07.493418Z",
+            "finished_at": "2026-10-05T19:50:46.600886Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:50:47.329524Z",
+            "finished_at": "2026-10-05T19:50:55.981475Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 585916,
+            "n_cache_tokens": 514552,
+            "n_output_tokens": 14222,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "b16e6df66f114864a40f90528a6c5c28",
+              "study_status": "verification_unavailable",
+              "physical_requests": 23,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "4134bca709254a089d14219fc087646e",
+              "checkpoint": 3,
+              "problem_requests_total": 59,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7903344824385963,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.96,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9767441860465116,
+              "verbosity": 0.7121820615796519,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:50:56.268693Z",
+            "finished_at": "2026-10-05T19:56:13.929927Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:56:14.784041Z",
+            "finished_at": "2026-10-05T19:56:26.220472Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 840656,
+            "n_cache_tokens": 777802,
+            "n_output_tokens": 12220,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "b30a1cb2654f40bc829b03a8352b496b",
+              "study_status": "succeeded",
+              "physical_requests": 30,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "4134bca709254a089d14219fc087646e",
+              "checkpoint": 4,
+              "problem_requests_total": 89,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.8333333333333334,
+              "erosion": 0.809807259883555,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7666666666666667,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9224137931034483,
+              "verbosity": 0.6705314009661836,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:56:26.559345Z",
+            "finished_at": "2026-10-05T20:02:31.320268Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:02:31.990201Z",
+            "finished_at": "2026-10-05T20:02:51.055824Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": 649746,
+            "n_cache_tokens": 565103,
+            "n_output_tokens": 10694,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "d795b4ce8ec34671b2b5650b1808367e",
+              "study_status": "succeeded",
+              "physical_requests": 19,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "4134bca709254a089d14219fc087646e",
+              "checkpoint": 5,
+              "problem_requests_total": 108,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.79431210004414,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9044117647058824,
+              "verbosity": 0.6394658753709199,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:02:51.338499Z",
+            "finished_at": "2026-10-05T20:06:50.995529Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:06:51.621031Z",
+            "finished_at": "2026-10-05T20:07:06.878740Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "task_id": "dag_execution",
+      "arm": "mini_swe",
+      "status": "returned",
+      "started_epoch": 1791229470.3676164,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-03-dag_execution-mini_swe",
+      "harbor_pid": 1224613,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791234279.232616,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-03-dag_execution-mini_swe/dag_execution__RVeqmBE/result.json",
+      "raw_rewards": {
+        "verbosity_increased": 0.3333333333333333,
+        "step_has_prior": 0.6666666666666666,
+        "strict_pass_rate": 0.5096300160862571,
+        "verbosity": 0.4038186487711996,
+        "erosion_increased": 0.3333333333333333,
+        "erosion": 0.8059866445777993,
+        "isolated_pass_rate": 0.6224747474747475,
+        "core_pass_rate": 0.49444444444444446
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 427349,
+            "n_cache_tokens": 393340,
+            "n_output_tokens": 93066,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "3073db7a0d7045b1a29e562ed1a7ecec",
+              "study_status": "adapter_error",
+              "physical_requests": 23,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "98b4606c38964aba84b1d0c6085a2283",
+              "checkpoint": 1,
+              "problem_requests_total": 23,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.08333333333333333,
+              "erosion": 0.8146433532673147,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.24242424242424243,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.24242424242424243,
+              "verbosity": 0.4093765103914935,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": {
+            "exception_type": "AgentTimeoutError",
+            "exception_message": "Agent execution timed out after 1800.0 seconds",
+            "exception_traceback": "Traceback (most recent call last):\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/multistep_agent.py\", line 92, in run\n    await child.run(prompt, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/checkpoint_agent.py\", line 29, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/mini_agent.py\", line 21, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 287, in run\n    result = await self.episode(prompt, proxy, role=\"executor\", container=self.container, history=history)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 174, in episode\n    await asyncio.wait_for(proc.wait(), 2)\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/subprocess.py\", line 137, in wait\n    return await self._transport._wait()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/base_subprocess.py\", line 253, in _wait\n    return await waiter\n           ^^^^^^^^^^^^\nasyncio.exceptions.CancelledError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 651, in _run_agent_phase\n    await asyncio.wait_for(\n    ...<6 lines>...\n    )\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 506, in wait_for\n    async with timeouts.timeout(timeout):\n               ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/timeouts.py\", line 116, in __aexit__\n    raise TimeoutError from exc_val\nTimeoutError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/multi_step.py\", line 181, in _run_step_agent\n    await self._run_agent_phase(\n    ...<7 lines>...\n    )\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 660, in _run_agent_phase\n    raise AgentTimeoutError(\n        f\"Agent execution timed out after {timeout_sec} seconds\"\n    ) from exc\nharbor.trial.errors.AgentTimeoutError: Agent execution timed out after 1800.0 seconds\n",
+            "occurred_at": "2026-10-05T20:15:24.194838Z"
+          },
+          "agent_execution": {
+            "started_at": "2026-10-05T19:45:23.505658Z",
+            "finished_at": "2026-10-05T20:15:24.191821Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:15:24.935862Z",
+            "finished_at": "2026-10-05T20:15:33.916917Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 1411358,
+            "n_cache_tokens": 1356130,
+            "n_output_tokens": 90921,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "67b9b889ad634c03bb8486d6c395b1d1",
+              "study_status": "adapter_error",
+              "physical_requests": 41,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "98b4606c38964aba84b1d0c6085a2283",
+              "checkpoint": 2,
+              "problem_requests_total": 64,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.4,
+              "erosion": 0.7836201866303858,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.625,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5609756097560976,
+              "verbosity": 0.3895440251572327,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": {
+            "exception_type": "AgentTimeoutError",
+            "exception_message": "Agent execution timed out after 1800.0 seconds",
+            "exception_traceback": "Traceback (most recent call last):\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/multistep_agent.py\", line 92, in run\n    await child.run(prompt, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/checkpoint_agent.py\", line 29, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/mini_agent.py\", line 21, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 287, in run\n    result = await self.episode(prompt, proxy, role=\"executor\", container=self.container, history=history)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/scb-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 174, in episode\n    await asyncio.wait_for(proc.wait(), 2)\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/subprocess.py\", line 137, in wait\n    return await self._transport._wait()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/base_subprocess.py\", line 253, in _wait\n    return await waiter\n           ^^^^^^^^^^^^\nasyncio.exceptions.CancelledError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 651, in _run_agent_phase\n    await asyncio.wait_for(\n    ...<6 lines>...\n    )\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 506, in wait_for\n    async with timeouts.timeout(timeout):\n               ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/timeouts.py\", line 116, in __aexit__\n    raise TimeoutError from exc_val\nTimeoutError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/multi_step.py\", line 181, in _run_step_agent\n    await self._run_agent_phase(\n    ...<7 lines>...\n    )\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 660, in _run_agent_phase\n    raise AgentTimeoutError(\n        f\"Agent execution timed out after {timeout_sec} seconds\"\n    ) from exc\nharbor.trial.errors.AgentTimeoutError: Agent execution timed out after 1800.0 seconds\n",
+            "occurred_at": "2026-10-05T20:45:39.288798Z"
+          },
+          "agent_execution": {
+            "started_at": "2026-10-05T20:15:34.226899Z",
+            "finished_at": "2026-10-05T20:45:39.287018Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:45:40.139299Z",
+            "finished_at": "2026-10-05T20:46:51.479856Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 5355621,
+            "n_cache_tokens": 4950336,
+            "n_output_tokens": 96322,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "c383a509e6854b3cb37b5bc51f857dfc",
+              "study_status": "agent_stopped",
+              "physical_requests": 85,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "98b4606c38964aba84b1d0c6085a2283",
+              "checkpoint": 3,
+              "problem_requests_total": 149,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8196963938356974,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.7254901960784313,
+              "verbosity": 0.41253541076487255,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:46:51.782824Z",
+            "finished_at": "2026-10-05T21:03:48.940630Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:03:50.554444Z",
+            "finished_at": "2026-10-05T21:04:18.170217Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "task_id": "file_backup",
+      "arm": "sg_v2",
+      "status": "returned",
+      "started_epoch": 1791229882.645684,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-04-file_backup-sg_v2",
+      "harbor_pid": 1265742,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791230783.302296,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-04-file_backup-sg_v2/file_backup__GNYJ6KC/result.json",
+      "raw_rewards": {
+        "core_pass_rate": 1.0,
+        "erosion_increased": 0.5,
+        "verbosity": 0.44817110251265296,
+        "erosion": 0.5916483331083456,
+        "isolated_pass_rate": 0.7646329365079365,
+        "strict_pass_rate": 0.7569733146067416,
+        "verbosity_increased": 0.25,
+        "step_has_prior": 0.75
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 176261,
+            "n_cache_tokens": 111507,
+            "n_output_tokens": 5134,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "fc220311fb5f42fba4d6b2a766789b87",
+              "study_status": "succeeded",
+              "physical_requests": 20,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d2cf9806f45a414c877f3993499d70f0",
+              "checkpoint": 1,
+              "problem_requests_total": 20,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.9188880737459715,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8125,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.8125,
+              "verbosity": 0.05128205128205128,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:51:25.392155Z",
+            "finished_at": "2026-10-05T19:53:40.236799Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:53:40.871085Z",
+            "finished_at": "2026-10-05T19:53:52.976970Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 362154,
+            "n_cache_tokens": 317611,
+            "n_output_tokens": 8885,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "320ca65c60a44edbbb61b32b493ad5bc",
+              "study_status": "succeeded",
+              "physical_requests": 22,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d2cf9806f45a414c877f3993499d70f0",
+              "checkpoint": 2,
+              "problem_requests_total": 42,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.950930935148835,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7222222222222222,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.78,
+              "verbosity": 0.03587443946188341,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:53:53.243980Z",
+            "finished_at": "2026-10-05T19:57:06.365577Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:57:07.175402Z",
+            "finished_at": "2026-10-05T19:57:17.665317Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 312061,
+            "n_cache_tokens": 260983,
+            "n_output_tokens": 6209,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "dd8e9549482b446abd1b172f7c0880e6",
+              "study_status": "succeeded",
+              "physical_requests": 18,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d2cf9806f45a414c877f3993499d70f0",
+              "checkpoint": 3,
+              "problem_requests_total": 60,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.219506975757138,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6666666666666666,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.75,
+              "verbosity": 0.856359273225917,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:57:17.954231Z",
+            "finished_at": "2026-10-05T20:00:47.893069Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:00:48.654955Z",
+            "finished_at": "2026-10-05T20:01:08.178312Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 592330,
+            "n_cache_tokens": 530386,
+            "n_output_tokens": 10466,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "eebcba82a6424e898b48a174363dfb89",
+              "study_status": "succeeded",
+              "physical_requests": 26,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d2cf9806f45a414c877f3993499d70f0",
+              "checkpoint": 4,
+              "problem_requests_total": 86,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.27726734778143813,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8571428571428571,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.6853932584269663,
+              "verbosity": 0.8491686460807601,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:01:09.933787Z",
+            "finished_at": "2026-10-05T20:05:42.412833Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:05:43.439255Z",
+            "finished_at": "2026-10-05T20:06:03.602188Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "task_id": "database_migration",
+      "arm": "mini_swe",
+      "status": "returned",
+      "started_epoch": 1791230886.2308948,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-05-database_migration-mini_swe",
+      "harbor_pid": 1345282,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791234493.3894806,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-05-database_migration-mini_swe/database_migration__JKf7DV5/result.json",
+      "raw_rewards": {
+        "isolated_pass_rate": 0.8638840579710145,
+        "step_has_prior": 0.8,
+        "erosion_increased": 0.4,
+        "erosion": 0.6423060611938716,
+        "verbosity_increased": 0.6,
+        "strict_pass_rate": 0.9346980761417536,
+        "core_pass_rate": 0.7666666666666667,
+        "verbosity": 0.35489626821214
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 143679,
+            "n_cache_tokens": 126448,
+            "n_output_tokens": 19924,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "44e6b1ba1a29494fbb1dbb5c628cddbe",
+              "study_status": "agent_stopped",
+              "physical_requests": 15,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "90f322bd464b463cba59c52733eabffd",
+              "checkpoint": 1,
+              "problem_requests_total": 15,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7352717685898975,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.23393316195372751,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:08:09.925414Z",
+            "finished_at": "2026-10-05T20:13:47.550804Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:13:48.390504Z",
+            "finished_at": "2026-10-05T20:13:58.923834Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 257340,
+            "n_cache_tokens": 237732,
+            "n_output_tokens": 12309,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "ec56b1d280934b91b46f602a24fbe09d",
+              "study_status": "agent_stopped",
+              "physical_requests": 19,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "90f322bd464b463cba59c52733eabffd",
+              "checkpoint": 2,
+              "problem_requests_total": 34,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.5966866430767959,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8260869565217391,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9354838709677419,
+              "verbosity": 0.30393996247654786,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:13:59.292219Z",
+            "finished_at": "2026-10-05T20:18:00.545803Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:18:01.769867Z",
+            "finished_at": "2026-10-05T20:18:13.710824Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 1144821,
+            "n_cache_tokens": 1092316,
+            "n_output_tokens": 74903,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "925d45ca17d74ed890ca01a071d56150",
+              "study_status": "agent_stopped",
+              "physical_requests": 34,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "90f322bd464b463cba59c52733eabffd",
+              "checkpoint": 3,
+              "problem_requests_total": 68,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.578416326395938,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.96,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9418604651162791,
+              "verbosity": 0.36837455830388693,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:18:14.050625Z",
+            "finished_at": "2026-10-05T20:41:45.975912Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:41:46.722302Z",
+            "finished_at": "2026-10-05T20:42:00.340627Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 2374327,
+            "n_cache_tokens": 2131904,
+            "n_output_tokens": 102178,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "a177b1115fed4658a36128aa24fbcf7a",
+              "study_status": "agent_stopped",
+              "physical_requests": 49,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "90f322bd464b463cba59c52733eabffd",
+              "checkpoint": 4,
+              "problem_requests_total": 117,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.8333333333333334,
+              "erosion": 0.6478722095710351,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.8333333333333334,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9137931034482759,
+              "verbosity": 0.44922913343965976,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:42:00.604726Z",
+            "finished_at": "2026-10-05T20:56:11.032616Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:56:11.688131Z",
+            "finished_at": "2026-10-05T20:56:27.413311Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": 867250,
+            "n_cache_tokens": 825432,
+            "n_output_tokens": 35226,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "3b4285fca85a49209ce994f4e0c71a45",
+              "study_status": "agent_stopped",
+              "physical_requests": 28,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "90f322bd464b463cba59c52733eabffd",
+              "checkpoint": 5,
+              "problem_requests_total": 145,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.3333333333333333,
+              "erosion": 0.6532833583356916,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8823529411764706,
+              "verbosity": 0.41900452488687784,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:56:27.769144Z",
+            "finished_at": "2026-10-05T21:07:04.809928Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:07:05.727868Z",
+            "finished_at": "2026-10-05T21:07:52.753822Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "task_id": "dag_execution",
+      "arm": "native",
+      "status": "returned",
+      "started_epoch": 1791230886.2341356,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-06-dag_execution-native",
+      "harbor_pid": 1345283,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791231880.367837,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-06-dag_execution-native/dag_execution__W8Ef3Vj/result.json",
+      "raw_rewards": {
+        "isolated_pass_rate": 0.0,
+        "core_pass_rate": 0.0,
+        "erosion": 0.0,
+        "step_has_prior": 0.6666666666666666,
+        "erosion_increased": 0.0,
+        "verbosity_increased": 0.0,
+        "verbosity": 0.0,
+        "strict_pass_rate": 0.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 17843,
+            "n_cache_tokens": 11860,
+            "n_output_tokens": 9703,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "06d3d83eec23497ebc733de4874047cd",
+              "study_status": "worker_incomplete",
+              "physical_requests": 7,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f79104b501534d86862429d93b37ee67",
+              "checkpoint": 1,
+              "problem_requests_total": 7,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.0,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.0,
+              "verbosity": 0.0,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:08:09.935490Z",
+            "finished_at": "2026-10-05T20:19:40.849419Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:19:41.904060Z",
+            "finished_at": "2026-10-05T20:19:47.213574Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 14674,
+            "n_cache_tokens": 0,
+            "n_output_tokens": 242,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "a10191103a3c4842baad031754720bba",
+              "study_status": "worker_incomplete",
+              "physical_requests": 5,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f79104b501534d86862429d93b37ee67",
+              "checkpoint": 2,
+              "problem_requests_total": 12,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.0,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.0,
+              "verbosity": 0.0,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:19:47.534691Z",
+            "finished_at": "2026-10-05T20:23:52.447034Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:23:53.098781Z",
+            "finished_at": "2026-10-05T20:23:57.242532Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 0,
+            "n_cache_tokens": 0,
+            "n_output_tokens": 0,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "db6ce251d0b643e58fe96a480c7a83e0",
+              "study_status": "worker_incomplete",
+              "physical_requests": 3,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f79104b501534d86862429d93b37ee67",
+              "checkpoint": 3,
+              "problem_requests_total": 15,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.0,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.0,
+              "verbosity": 0.0,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:23:57.560645Z",
+            "finished_at": "2026-10-05T20:24:18.608616Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:24:19.334062Z",
+            "finished_at": "2026-10-05T20:24:23.635225Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "task_id": "file_backup",
+      "arm": "mini_swe",
+      "status": "returned",
+      "started_epoch": 1791231916.448645,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-07-file_backup-mini_swe",
+      "harbor_pid": 1382495,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791233620.0508182,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-07-file_backup-mini_swe/file_backup__XuNiuZa/result.json",
+      "raw_rewards": {
+        "step_has_prior": 0.75,
+        "erosion_increased": 0.25,
+        "verbosity": 0.471820888130646,
+        "isolated_pass_rate": 0.6247519841269842,
+        "verbosity_increased": 0.5,
+        "strict_pass_rate": 0.5597062954395241,
+        "erosion": 0.5702242812229914,
+        "core_pass_rate": 1.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 194530,
+            "n_cache_tokens": 178114,
+            "n_output_tokens": 19331,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "2ca02f43ab964d798f46aab2b0891a87",
+              "study_status": "agent_stopped",
+              "physical_requests": 19,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "ad257a7cb14a4d0593a8fd96d4ca4c80",
+              "checkpoint": 1,
+              "problem_requests_total": 19,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8810633548185721,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.5625,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.5625,
+              "verbosity": 0.12173913043478261,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:25:19.880584Z",
+            "finished_at": "2026-10-05T20:31:26.551800Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:31:27.240014Z",
+            "finished_at": "2026-10-05T20:31:33.880313Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 600974,
+            "n_cache_tokens": 563438,
+            "n_output_tokens": 32752,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "8669c7ec09ec4201a65ce0433ed53311",
+              "study_status": "agent_stopped",
+              "physical_requests": 25,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "ad257a7cb14a4d0593a8fd96d4ca4c80",
+              "checkpoint": 2,
+              "problem_requests_total": 44,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.8371138954222223,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.5555555555555556,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.56,
+              "verbosity": 0.12981744421906694,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:31:34.195577Z",
+            "finished_at": "2026-10-05T20:42:12.416720Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:42:13.011937Z",
+            "finished_at": "2026-10-05T20:42:21.256703Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 350959,
+            "n_cache_tokens": 320705,
+            "n_output_tokens": 22009,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "a0c5b5c622984a59823d7ee2f754c950",
+              "study_status": "agent_stopped",
+              "physical_requests": 17,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "ad257a7cb14a4d0593a8fd96d4ca4c80",
+              "checkpoint": 3,
+              "problem_requests_total": 61,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.2671302463624183,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.6666666666666666,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5882352941176471,
+              "verbosity": 0.8237597911227154,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:42:21.552172Z",
+            "finished_at": "2026-10-05T20:49:27.281574Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:49:29.092931Z",
+            "finished_at": "2026-10-05T20:49:40.911805Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 373803,
+            "n_cache_tokens": 231872,
+            "n_output_tokens": 24116,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "025161acf9014935893b2360cbea3931",
+              "study_status": "agent_stopped",
+              "physical_requests": 16,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "ad257a7cb14a4d0593a8fd96d4ca4c80",
+              "checkpoint": 4,
+              "problem_requests_total": 77,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.29558962828875274,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.7142857142857143,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.5280898876404494,
+              "verbosity": 0.811967186746019,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:49:41.497384Z",
+            "finished_at": "2026-10-05T20:53:08.941586Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:53:09.564824Z",
+            "finished_at": "2026-10-05T20:53:22.494346Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "task_id": "database_migration",
+      "arm": "native",
+      "status": "returned",
+      "started_epoch": 1791233715.984128,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-08-database_migration-native",
+      "harbor_pid": 1484687,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791234616.2184377,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-08-database_migration-native/database_migration__G4YV2ZR/result.json",
+      "raw_rewards": {
+        "strict_pass_rate": 0.9184708956143701,
+        "verbosity": 0.28505251406192655,
+        "verbosity_increased": 0.4,
+        "step_has_prior": 0.8,
+        "core_pass_rate": 0.7333333333333333,
+        "erosion_increased": 0.4,
+        "isolated_pass_rate": 0.8438840579710145,
+        "erosion": 0.6995977532843147
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 91673,
+            "n_cache_tokens": 73763,
+            "n_output_tokens": 4995,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "eb3b41f597d94fe789be645c56673cf1",
+              "study_status": "agent_stopped",
+              "physical_requests": 9,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "e7e5b4430f984bb5bd4972d3372579bf",
+              "checkpoint": 1,
+              "problem_requests_total": 9,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6683387741262287,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.2876712328767123,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:55:20.108097Z",
+            "finished_at": "2026-10-05T20:57:05.831644Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:57:06.645171Z",
+            "finished_at": "2026-10-05T20:57:24.650923Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 110516,
+            "n_cache_tokens": 73344,
+            "n_output_tokens": 3287,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "49ba8a879d584b479182f558ed5a5784",
+              "study_status": "agent_stopped",
+              "physical_requests": 9,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "e7e5b4430f984bb5bd4972d3372579bf",
+              "checkpoint": 2,
+              "problem_requests_total": 18,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.6088946615263429,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8260869565217391,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9354838709677419,
+              "verbosity": 0.31313131313131315,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:57:24.990187Z",
+            "finished_at": "2026-10-05T20:58:22.095591Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T20:58:22.775883Z",
+            "finished_at": "2026-10-05T20:58:37.522373Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 545013,
+            "n_cache_tokens": 513189,
+            "n_output_tokens": 11459,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "868cb7f981114d75a8e4fee5b04bf33f",
+              "study_status": "agent_stopped",
+              "physical_requests": 21,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "e7e5b4430f984bb5bd4972d3372579bf",
+              "checkpoint": 3,
+              "problem_requests_total": 39,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7056116048058717,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.96,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.9418604651162791,
+              "verbosity": 0.2659235668789809,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T20:58:37.916508Z",
+            "finished_at": "2026-10-05T21:03:15.023269Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:03:16.258275Z",
+            "finished_at": "2026-10-05T21:03:28.016753Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": 453325,
+            "n_cache_tokens": 408285,
+            "n_output_tokens": 9627,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "b2c9d2d9a5da4f37bf24ae77742ed323",
+              "study_status": "agent_stopped",
+              "physical_requests": 15,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "e7e5b4430f984bb5bd4972d3372579bf",
+              "checkpoint": 4,
+              "problem_requests_total": 54,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.3333333333333333,
+              "erosion": 0.7804807385636522,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.6333333333333333,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8620689655172413,
+              "verbosity": 0.31684210526315787,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T21:03:28.363062Z",
+            "finished_at": "2026-10-05T21:06:47.630746Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:06:48.541856Z",
+            "finished_at": "2026-10-05T21:07:05.818533Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": 772699,
+            "n_cache_tokens": 674112,
+            "n_output_tokens": 8922,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "6a7d5ff6855a4f688812d5064af56146",
+              "study_status": "agent_stopped",
+              "physical_requests": 18,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "e7e5b4430f984bb5bd4972d3372579bf",
+              "checkpoint": 5,
+              "problem_requests_total": 72,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.6666666666666666,
+              "erosion": 0.734662987399478,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.8,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8529411764705882,
+              "verbosity": 0.24169435215946844,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T21:07:06.231869Z",
+            "finished_at": "2026-10-05T21:09:22.825484Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:09:23.607591Z",
+            "finished_at": "2026-10-05T21:09:45.657645Z"
+          }
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "task_id": "dag_execution",
+      "arm": "sg_v2",
+      "status": "returned",
+      "started_epoch": 1791234667.2105994,
+      "job": "/var/lib/supergoal-lab/jobs/scb-transfer01-09-dag_execution-sg_v2",
+      "harbor_pid": 1541898,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "exit_code": 0,
+      "finished_epoch": 1791235639.5598075,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-transfer01-09-dag_execution-sg_v2/dag_execution__jZzNhsP/result.json",
+      "raw_rewards": {
+        "strict_pass_rate": 0.8411083576076402,
+        "core_pass_rate": 0.4388888888888889,
+        "erosion_increased": 0.6666666666666666,
+        "isolated_pass_rate": 0.5214646464646465,
+        "verbosity": 0.5266838124170642,
+        "step_has_prior": 0.6666666666666666,
+        "verbosity_increased": 0.3333333333333333,
+        "erosion": 0.7928762392059251
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 695055,
+            "n_cache_tokens": 589573,
+            "n_output_tokens": 31475,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "e7f00f5784b246f89a60cf6f467f95f7",
+              "study_status": "succeeded",
+              "physical_requests": 32,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f9239e3d45f54133976aa6aa7b6edfaf",
+              "checkpoint": 1,
+              "problem_requests_total": 32,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.9166666666666666,
+              "erosion": 0.7792374814577298,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 0.9393939393939394,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 0.9393939393939394,
+              "verbosity": 0.5449490268767377,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T21:11:09.679894Z",
+            "finished_at": "2026-10-05T21:16:50.015988Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:16:50.922069Z",
+            "finished_at": "2026-10-05T21:17:10.285991Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 1613750,
+            "n_cache_tokens": 1378641,
+            "n_output_tokens": 17256,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "0669cb9f29854d82993706a8be159d77",
+              "study_status": "succeeded",
+              "physical_requests": 48,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f9239e3d45f54133976aa6aa7b6edfaf",
+              "checkpoint": 2,
+              "problem_requests_total": 80,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.4,
+              "erosion": 0.7871887093490425,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.625,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.8780487804878049,
+              "verbosity": 0.5155010814708003,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T21:17:10.643970Z",
+            "finished_at": "2026-10-05T21:22:16.185490Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:22:16.945477Z",
+            "finished_at": "2026-10-05T21:22:32.713642Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": 444959,
+            "n_cache_tokens": 373799,
+            "n_output_tokens": 10683,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "2a9e940480674ddea45af057dff0c271",
+              "study_status": "succeeded",
+              "physical_requests": 20,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "f9239e3d45f54133976aa6aa7b6edfaf",
+              "checkpoint": 3,
+              "problem_requests_total": 100,
+              "multistep_adapter": "scb-transfer01-checkpoint08"
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 0.0,
+              "erosion": 0.812202526811003,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 0.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 0.7058823529411765,
+              "verbosity": 0.5196013289036545,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T21:22:33.028991Z",
+            "finished_at": "2026-10-05T21:26:34.525079Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T21:26:35.145849Z",
+            "finished_at": "2026-10-05T21:26:52.935897Z"
+          }
+        }
+      ]
+    }
+  ],
+  "automatic_retries": 0,
+  "registration_sha256": "ba34df11c6e597e823ddf921066cdd91ad8043ddac272a6ae643065a13c6438f",
+  "heartbeat_epoch": 1791235639.5628073
+}

@@ -1,0 +1,83 @@
+{
+  "started_at": "2026-10-05T15:20:35.549888+00:00",
+  "pid": 27555,
+  "candidate": "/var/lib/supergoal-lab/candidates/public-gcp01",
+  "registration_sha256": "e622f2ade86e9cae593ebd20cec395e1e0dcde1301d3fcde42d364b940736037",
+  "environment_lock_sha256": "6cac483eec5c0a0c0dbfc2d2d7ea8d3d913138a2e984ba8f861f461d33e6f6ed",
+  "runner_sha256": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+  "status": "running",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native",
+      "started_at": "2026-10-05T15:20:36.417490Z",
+      "admission_available_memory_bytes": 66047676416,
+      "admission_free_disk_bytes": 207749083136,
+      "status": "graded",
+      "harbor_pid": 27702,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native/configure-git-webserver__zcZ43z2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+        "study_status": "agent_stopped",
+        "physical_requests": 13,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 65726,
+      "n_output_tokens": 1761,
+      "n_cache_tokens": 37504,
+      "finished_at": "2026-10-05T15:22:15.658600+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-02-configure-git-webserver-sg_v2",
+      "started_at": "2026-10-05T15:22:16.488081Z",
+      "admission_available_memory_bytes": 66026848256,
+      "admission_free_disk_bytes": 207039000576,
+      "status": "graded",
+      "harbor_pid": 32269,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-02-configure-git-webserver-sg_v2/configure-git-webserver__kGDqLU7/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "d55e6bc4c0224cb6a6f692d1da4c5e36",
+        "study_status": "succeeded",
+        "physical_requests": 18,
+        "adapter": "public-dev04"
+      },
+      "n_input_tokens": 95001,
+      "n_output_tokens": 3644,
+      "n_cache_tokens": 65546,
+      "finished_at": "2026-10-05T15:24:55.773446+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "configure-git-webserver",
+      "arm": "repeat_goal",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-03-configure-git-webserver-repeat_goal",
+      "started_at": "2026-10-05T15:24:55.882731+00:00",
+      "admission_available_memory_bytes": 66000228352,
+      "admission_free_disk_bytes": 206316691456,
+      "status": "running",
+      "harbor_pid": 37672
+    }
+  ],
+  "heartbeat_at": "2026-10-05T15:26:35.885571+00:00"
+}

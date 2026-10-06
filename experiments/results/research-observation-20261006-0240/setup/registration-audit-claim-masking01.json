@@ -1,0 +1,90 @@
+{
+  "experiment": "audit-claim-masking01",
+  "registered_at_utc": "2026-10-05T18:16:03.323322+00:00",
+  "kind": "development_paired_fixed_artifact_calibration",
+  "cases": [
+    {
+      "case_id": "dna_incorrect",
+      "task_id": "dna-assembly",
+      "control_id": "a9ff3c7bde804b4fab0b2a428a902a6e",
+      "official_reward": 0,
+      "live_state_required": false,
+      "artifact_image_id": "sha256:4058409ae0f34a7da7c2378c798049a21c4d82453ef6b960e60c236bd06e50d0",
+      "artifact_available_at_registration": true,
+      "instruction_sha256": "88998c98beabdd966ab46c04ede822bbc74796696aa1bf87c567a9131210533c",
+      "order": [
+        "claim_visible",
+        "claim_masked"
+      ]
+    },
+    {
+      "case_id": "dna_correct",
+      "task_id": "dna-assembly",
+      "control_id": "0c31b49cd3c84ea4b8b491fe995392af",
+      "official_reward": 1,
+      "live_state_required": false,
+      "artifact_image_id": "sha256:0311e6a2eebe39afb256347d15005948fda735f7ad6bf2ce1d12f6c15abdaa2c",
+      "artifact_available_at_registration": true,
+      "instruction_sha256": "88998c98beabdd966ab46c04ede822bbc74796696aa1bf87c567a9131210533c",
+      "order": [
+        "claim_masked",
+        "claim_visible"
+      ]
+    },
+    {
+      "case_id": "elf_incorrect",
+      "task_id": "extract-elf",
+      "control_id": "7e9e979ef31946f9ac1cf3600392b9f2",
+      "official_reward": 0,
+      "live_state_required": false,
+      "artifact_image_id": "sha256:69d23b3c3a33e7a9bed23f7ac8b9980a45377396b8eec506366360e3d91bd680",
+      "artifact_available_at_registration": false,
+      "instruction_sha256": "f1dd8c8fd9f01101d2ecb65665bdedc33adc868abd853b3adf556f6aa4982073",
+      "order": [
+        "claim_visible",
+        "claim_masked"
+      ]
+    },
+    {
+      "case_id": "compressor_correct",
+      "task_id": "write-compressor",
+      "control_id": "f8accb3d74c54988a520b041751ca11e",
+      "official_reward": 1,
+      "live_state_required": false,
+      "artifact_image_id": "sha256:4f6c677a2c9125a7b743be154376789a47fb9cba3260ea16f534b076a6603eb4",
+      "artifact_available_at_registration": true,
+      "instruction_sha256": "c4fc3e73e44deeac95f1cd4a34a2d87e853b22ceec2b2824767f5f087b470bb2",
+      "order": [
+        "claim_masked",
+        "claim_visible"
+      ]
+    },
+    {
+      "case_id": "service_correct",
+      "task_id": "configure-git-webserver",
+      "control_id": "d55e6bc4c0224cb6a6f692d1da4c5e36",
+      "official_reward": 1,
+      "live_state_required": true,
+      "artifact_image_id": "sha256:84a2534ffbbf81eab8d830f0c99041033b72fed51a3b37f931fb68c2a0ba352c",
+      "artifact_available_at_registration": true,
+      "instruction_sha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+      "order": [
+        "claim_visible",
+        "claim_masked"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "review-operator01/audit_claim_masking.py": "a1b34b2dfc594b47107525598e334f7fc2936349ab4d3b34748a644982dfe3ea",
+    "candidates/mechanism01/experiments/public_benchmarks/harbor_agent.py": "3f79ce8ffe29424eff145f25b0637aafd41bc8cca278facce4597b9221a2e768",
+    "candidates/mechanism01/experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "candidates/mechanism01/experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "candidates/mechanism01/experiments/model_proxy.py": "47298abf6bc13fdc812394a6b67e5e37f5a2c74a68347e036a8d0421bdabf2de"
+  },
+  "max_requests_per_audit": 16,
+  "max_seconds_per_audit": 600,
+  "stop_admission_epoch": 1791296046.0,
+  "model": "devin/swe-2",
+  "hidden_grader_visible_to_reviewer": false,
+  "interpretation": "Five purposively selected artifacts from four tasks; extract-elf snapshot missing, so two artifact_unavailable cells and eight executable audits across three tasks. Paired claim-visible/masked audits, not held-out inference. One audit per condition, no best-of-N. Live service scope is missing from filesystem snapshots."
+}

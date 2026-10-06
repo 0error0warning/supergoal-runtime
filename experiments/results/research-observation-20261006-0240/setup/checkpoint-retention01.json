@@ -1,0 +1,23 @@
+{
+  "status": "running",
+  "capture_is_best_effort": true,
+  "model_calls": 0,
+  "source_sha256": {
+    "probe.py": "1c8d7a5d9ea3043e52111bb8da8e2024e286b5c7e4250b154a1e2814870275e6",
+    "watch_checkpoints.py": "a993604e07076c1c4e6948ea72c80cee66d95e596827a5ecd000e3c5f4c7f313",
+    "artifact_store.py": "b2d433bbaf9ebc753a9d27b4b32842612c831b6af2f49d2438c1051df9a70a33"
+  },
+  "images": {
+    "sha256:9bf3fd6e19a031510c6c8f253d73639fb88a7d9a973313d2e3dd50c47a3d414a": {
+      "tag": "sg-artifact:75fd9c587f4e4f808cc44db2237548b6",
+      "status": "capturing",
+      "started": 1791225349.7665925
+    },
+    "sha256:a49e88791799277ff2b78134e883a485824b1f8bc4cce2642bc2d8ee5a683b27": {
+      "tag": "sg-artifact:84e62a9235ea4062923b1f34a63e5ae3",
+      "status": "capturing",
+      "started": 1791225349.805489
+    }
+  },
+  "heartbeat_epoch": 1791225402.5233362
+}

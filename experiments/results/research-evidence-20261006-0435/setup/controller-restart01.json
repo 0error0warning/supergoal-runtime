@@ -1,0 +1,20 @@
+{
+  "status": "failed",
+  "model": "devin/swe-2",
+  "max_requests": 32,
+  "scope": "Synthetic process/controller-loss integration, not benchmark capability or production recovery",
+  "automatic_trial_retries": 0,
+  "source_sha256": "30b203e9430c5f0295d94b06ec3a827b70698ae8ded0d8cfe340003eb4238275",
+  "registration_sha256": "0a27bf205f66866306bfe90ae170cc3d6976ee10f707b1d1745624ad08bba4e0",
+  "control_id": "9edbd110ab554b3d8b68ff6e12e12dbb",
+  "started_epoch": 1791231864.4846754,
+  "error_type": "RuntimeError",
+  "error": "Initial controller ended before the registered fault point",
+  "cleanup_errors": [
+    {
+      "unit": "supergoal-controller-restart01-phase1",
+      "error": "Failed to stop supergoal-controller-restart01-phase1.service: Unit supergoal-controller-restart01-phase1.service not loaded.\n"
+    }
+  ],
+  "finished_epoch": 1791231882.1154757
+}

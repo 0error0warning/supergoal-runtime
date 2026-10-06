@@ -1,0 +1,23 @@
+{
+  "status": "observed",
+  "model_calls": 0,
+  "base_image": "alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+  "started": 1791226777.388127,
+  "snapshot_id": "sha256:f0b3b46b64c616e99d7311c0b0b7dbb8fa8fbd08d0826e706c30e05e7923d920",
+  "labels": {
+    "com.docker.compose.config-hash": "9e7894c700b7a1c64b247c8d680528698b3a06142724858863b51fa08dc60a02",
+    "com.docker.compose.container-number": "1",
+    "com.docker.compose.depends_on": "",
+    "com.docker.compose.image": "sha256:6d830378e13bfed3389be6f2f495559fc04d8a8df6c8e70cd4cc857f974a7635",
+    "com.docker.compose.oneoff": "False",
+    "com.docker.compose.project": "sg-retention-diagnostic02",
+    "com.docker.compose.project.config_files": "/var/lib/supergoal-lab/probes/compose-retention02/compose.yaml",
+    "com.docker.compose.project.working_dir": "/var/lib/supergoal-lab/probes/compose-retention02",
+    "com.docker.compose.service": "main",
+    "com.docker.compose.version": "5.6.0"
+  },
+  "container_id": "04a8fe0975b87529526123199c1d8614ba7d64fc47770ed5c96e1f1df1ba6951",
+  "cleanup_output": "Container sg-retention-diagnostic02-main-1 Stopping \n Container sg-retention-diagnostic02-main-1 Stopped \n Container sg-retention-diagnostic02-main-1 Removing \n Container sg-retention-diagnostic02-main-1 Removed \n Image sg-retention-probe:compose02 Removing \n Image sg-retention-diagnostic02-main:latest Removing \n Image sg-retention-diagnostic02-main:latest Removed \n Image sg-retention-probe:compose02 Removed",
+  "image_survived_cleanup": false,
+  "finished": 1791226789.411918
+}

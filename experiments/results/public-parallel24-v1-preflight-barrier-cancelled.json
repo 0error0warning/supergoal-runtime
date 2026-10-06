@@ -1,0 +1,14 @@
+{
+  "status": "waiting_for_oracles",
+  "started_at": "2026-10-05T16:25:42.517737+00:00",
+  "rows": [],
+  "automatic_trial_retries": 0,
+  "registration_sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+  "shared_pool": {
+    "cpus": 6,
+    "memory_mb": 49152,
+    "max_workers": 6
+  },
+  "environment_lock_sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+  "heartbeat_at": "2026-10-05T16:52:02.905574+00:00"
+}

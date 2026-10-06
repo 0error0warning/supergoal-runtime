@@ -1,0 +1,14 @@
+{
+  "registration_sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+  "archive_sha256": "52ea030323371960b6720d05a7e363c25a68173e6da90de850fa782e088547c8",
+  "candidate": "/var/lib/supergoal-lab/candidates/harness-transfer01",
+  "sources": 98,
+  "planned_cells": 12,
+  "reference_passed_task_ids": [
+    "adaptive-rejection-sampler",
+    "polyglot-rust-c",
+    "gcode-to-text"
+  ],
+  "environment_unavailable_task_ids": [],
+  "model_calls": 0
+}

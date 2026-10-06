@@ -1,0 +1,902 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T16:52:11.553308+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "bn-fit-modify",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T16:52:12.331896Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native",
+      "harbor_pid": 251832,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native/bn-fit-modify__Gate7VV/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "8756feb38c934b49a3b8782c002fd268",
+        "study_status": "agent_stopped",
+        "physical_requests": 10,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 60339,
+      "n_output_tokens": 2884,
+      "n_cache_tokens": 47481,
+      "finished_at": "2026-10-05T16:54:49.557584+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T16:55:31.576850Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2",
+      "harbor_pid": 263087,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2/bn-fit-modify__thtmyL2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+        "study_status": "succeeded",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 136786,
+      "n_output_tokens": 6503,
+      "n_cache_tokens": 98224,
+      "finished_at": "2026-10-05T16:59:04.365716+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "bn-fit-modify",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T16:53:24.870966Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal",
+      "harbor_pid": 255655,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal/bn-fit-modify__9okgreZ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "4cc232836c5945baae3581d2b90d256f",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 20,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 147208,
+      "n_output_tokens": 4072,
+      "n_cache_tokens": 74895,
+      "finished_at": "2026-10-05T16:56:44.080530+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T16:55:31.576642Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context",
+      "harbor_pid": 263100,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context/bn-fit-modify__cWPux9a/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+        "study_status": "succeeded",
+        "physical_requests": 18,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 110444,
+      "n_output_tokens": 4150,
+      "n_cache_tokens": 86982,
+      "finished_at": "2026-10-05T16:59:14.749868+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T16:59:10.160598Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review",
+      "harbor_pid": 275271,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review/bn-fit-modify__GGDQwCg/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+        "study_status": "unverified_done",
+        "physical_requests": 8,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 40747,
+      "n_output_tokens": 1789,
+      "n_cache_tokens": 30068,
+      "finished_at": "2026-10-05T17:01:08.299631+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_v2",
+      "status": "running",
+      "started_at": "2026-10-05T16:59:19.775673+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-006-circuit-fibsqrt-sg_v2",
+      "harbor_pid": 276361,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 6,
+      "task_id": "circuit-fibsqrt",
+      "arm": "repeat_goal",
+      "status": "running",
+      "started_at": "2026-10-05T16:59:09.411419+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-007-circuit-fibsqrt-repeat_goal",
+      "harbor_pid": 275284,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      }
+    },
+    {
+      "index": 7,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_review",
+      "status": "running",
+      "started_at": "2026-10-05T16:59:40.490263+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-009-circuit-fibsqrt-sg_no_review",
+      "harbor_pid": 277787,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      }
+    },
+    {
+      "index": 9,
+      "task_id": "circuit-fibsqrt",
+      "arm": "native",
+      "status": "running",
+      "started_at": "2026-10-05T17:01:23.618517+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-010-circuit-fibsqrt-native",
+      "harbor_pid": 283342,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      }
+    },
+    {
+      "index": 10,
+      "task_id": "compile-compcert",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "compile-compcert",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 12,
+      "task_id": "compile-compcert",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 13,
+      "task_id": "compile-compcert",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 14,
+      "task_id": "compile-compcert",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 15,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 16,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 17,
+      "task_id": "constraints-scheduling",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 18,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 19,
+      "task_id": "constraints-scheduling",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 20,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 21,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 22,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 23,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 24,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 25,
+      "task_id": "extract-elf",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 26,
+      "task_id": "extract-elf",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 27,
+      "task_id": "extract-elf",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 28,
+      "task_id": "extract-elf",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 29,
+      "task_id": "extract-elf",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 30,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 31,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 32,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 33,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 34,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 35,
+      "task_id": "financial-document-processor",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 36,
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 37,
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 38,
+      "task_id": "financial-document-processor",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 39,
+      "task_id": "financial-document-processor",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 40,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 41,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 42,
+      "task_id": "git-leak-recovery",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 43,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 44,
+      "task_id": "git-leak-recovery",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 45,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 46,
+      "task_id": "install-windows-3.11",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 47,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 48,
+      "task_id": "install-windows-3.11",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 49,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 50,
+      "task_id": "large-scale-text-editing",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 51,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 52,
+      "task_id": "large-scale-text-editing",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 53,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 54,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 55,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 56,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 57,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 58,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 59,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 60,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 61,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 62,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 63,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 64,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 65,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 66,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 67,
+      "task_id": "modernize-scientific-stack",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 68,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 69,
+      "task_id": "modernize-scientific-stack",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 70,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 71,
+      "task_id": "nginx-request-logging",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 72,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 73,
+      "task_id": "nginx-request-logging",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 74,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 75,
+      "task_id": "password-recovery",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 76,
+      "task_id": "password-recovery",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 77,
+      "task_id": "password-recovery",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 78,
+      "task_id": "password-recovery",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 79,
+      "task_id": "password-recovery",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 80,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 81,
+      "task_id": "portfolio-optimization",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 82,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 83,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 84,
+      "task_id": "portfolio-optimization",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 85,
+      "task_id": "protein-assembly",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 86,
+      "task_id": "protein-assembly",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 87,
+      "task_id": "protein-assembly",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 88,
+      "task_id": "protein-assembly",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 89,
+      "task_id": "protein-assembly",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 90,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 91,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 92,
+      "task_id": "pytorch-model-recovery",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 93,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 94,
+      "task_id": "pytorch-model-recovery",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 95,
+      "task_id": "query-optimize",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 96,
+      "task_id": "query-optimize",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 97,
+      "task_id": "query-optimize",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 98,
+      "task_id": "query-optimize",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 99,
+      "task_id": "query-optimize",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 100,
+      "task_id": "sqlite-db-truncate",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 101,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 102,
+      "task_id": "sqlite-db-truncate",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 103,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 104,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 105,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 106,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 107,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 108,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 109,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 110,
+      "task_id": "train-fasttext",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 111,
+      "task_id": "train-fasttext",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 112,
+      "task_id": "train-fasttext",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 113,
+      "task_id": "train-fasttext",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 114,
+      "task_id": "train-fasttext",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 115,
+      "task_id": "video-processing",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 116,
+      "task_id": "video-processing",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 117,
+      "task_id": "video-processing",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 118,
+      "task_id": "video-processing",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 119,
+      "task_id": "video-processing",
+      "arm": "repeat_goal",
+      "status": "pending"
+    }
+  ],
+  "automatic_trial_retries": 0,
+  "registration_sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+  "operator_sha256": {
+    "run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+    "analyze_public.py": "e95068f9ad5e9d10258f05d17554728d7935967b8dd2259173787cf35476f210",
+    "finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+    "collect_public.py": "5f93e29fb58f1d20de953b552c26bf14d8e9e7b59d1c0e03758e99908be47bd2"
+  },
+  "shared_pool": {
+    "cpus": 6,
+    "memory_mb": 49152,
+    "max_workers": 6
+  },
+  "environment_lock_sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+  "dispatch_policy": "Per-task reference gate; reserve all four oracle CPUs until preflight finishes",
+  "heartbeat_at": "2026-10-05T17:03:42.752768+00:00"
+}

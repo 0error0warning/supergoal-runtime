@@ -1,0 +1,5 @@
+{
+  "captured_at": "2026-10-06T00:18:46.613922+00:00",
+  "active_research_services": "  supergoal-checkpoint-retention01.service loaded active running /var/lib/supergoal-lab/harbor-venv/bin/python /var/lib/supergoal-lab/evidence-operator01/watch_checkpoints.py\n  supergoal-docker.service                 loaded active running Dedicated Docker daemon for Supergoal experiments\n",
+  "free_gib": 66.07974243164062
+}

@@ -1,0 +1,156 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T21:18:53.344863+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T21:18:54.462751Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-001-adaptive-rejection-sampler-native",
+      "harbor_pid": 1576536,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-001-adaptive-rejection-sampler-native/adaptive-rejection-sampler__Pr8eWWc/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "be7213a8b08b48ca9dcc12e2ea1ac8c7",
+        "study_status": "agent_stopped",
+        "physical_requests": 26,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 294482,
+      "n_output_tokens": 10774,
+      "n_cache_tokens": 272851,
+      "finished_at": "2026-10-05T21:28:30.710490+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "polyglot-rust-c",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T21:18:54.544794Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-002-polyglot-rust-c-sg_v2",
+      "harbor_pid": 1576570,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-002-polyglot-rust-c-sg_v2/polyglot-rust-c__M8pjRjj/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "2d97f43e11244fbe93444baf0f99c3a3",
+        "study_status": "succeeded",
+        "physical_requests": 17,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 91566,
+      "n_output_tokens": 14301,
+      "n_cache_tokens": 45828,
+      "finished_at": "2026-10-05T21:24:04.894142+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "gcode-to-text",
+      "arm": "mini_swe",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T21:24:10.878455Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-003-gcode-to-text-mini_swe",
+      "harbor_pid": 1608620,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-003-gcode-to-text-mini_swe/gcode-to-text__wvNFxih/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "53ca319cd2c342a28b7aed1a1a503585",
+        "study_status": "adapter_error",
+        "physical_requests": 57,
+        "adapter": "mini-swe-agent-2.4.6-checkpoint08"
+      },
+      "n_input_tokens": 1948298,
+      "n_output_tokens": 27318,
+      "n_cache_tokens": 1875399,
+      "finished_at": "2026-10-05T21:40:27.128808+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "sg_v2",
+      "status": "running",
+      "started_at": "2026-10-05T21:28:35.785510+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-004-adaptive-rejection-sampler-sg_v2",
+      "harbor_pid": 1627110
+    },
+    {
+      "index": 4,
+      "task_id": "polyglot-rust-c",
+      "arm": "mini_swe",
+      "status": "running",
+      "started_at": "2026-10-05T21:40:32.306804+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-005-polyglot-rust-c-mini_swe",
+      "harbor_pid": 1661174
+    },
+    {
+      "index": 5,
+      "task_id": "gcode-to-text",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 6,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 7,
+      "task_id": "polyglot-rust-c",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "gcode-to-text",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "polyglot-rust-c",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "gcode-to-text",
+      "arm": "sg_v2",
+      "status": "pending"
+    }
+  ],
+  "registration_sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+  "cpu_limit": 2,
+  "memory_limit_mb": 12288,
+  "automatic_retries": 0,
+  "capacity_opened_at": "2026-10-05T21:18:53.345208+00:00",
+  "heartbeat_at": "2026-10-05T21:41:47.551002+00:00"
+}

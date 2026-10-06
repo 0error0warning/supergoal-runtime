@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "model_calls": 0,
+  "started": 1791224829.660153,
+  "original_image": "sha256:113a42af354f8dbc7781d9709a3623e41d303c26b2489ed0ec5379c0acdd794c",
+  "manifest": "/var/lib/supergoal-lab/checkpoint-store/manifests/113a42af354f8dbc7781d9709a3623e41d303c26b2489ed0ec5379c0acdd794c.json",
+  "absent_before_restore": true,
+  "restored_image": "sha256:113a42af354f8dbc7781d9709a3623e41d303c26b2489ed0ec5379c0acdd794c",
+  "content": "DURABLE_CHECKPOINT_06",
+  "members": 16,
+  "finished": 1791224847.6529102
+}

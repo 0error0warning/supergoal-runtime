@@ -1,0 +1,117 @@
+{
+  "captured_at": "2026-10-06T00:00:37.297853+00:00",
+  "unit": "MainPID=1931087\nActiveState=active\nInvocationID=1b2d67f71002474a93e288df8417b333\n",
+  "parent_alive": true,
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "file_backup",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "started_epoch": 1791242751.4097762,
+      "harbor_pid": 1931089,
+      "finished_epoch": 1791243617.5278022
+    },
+    {
+      "index": 1,
+      "task_id": "database_migration",
+      "arm": "carry_current",
+      "status": "returned",
+      "started_epoch": 1791242751.4125543,
+      "harbor_pid": 1931090,
+      "finished_epoch": 1791243883.5841477
+    },
+    {
+      "index": 2,
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791242751.4162667,
+      "harbor_pid": 1931091,
+      "finished_epoch": 1791244164.785217
+    },
+    {
+      "index": 3,
+      "task_id": "file_backup",
+      "arm": "carry_current",
+      "status": "returned",
+      "started_epoch": 1791242751.418665,
+      "harbor_pid": 1931092,
+      "finished_epoch": 1791243597.262128
+    },
+    {
+      "index": 4,
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791243104.7954974,
+      "harbor_pid": 1961692,
+      "finished_epoch": 1791244562.1167483
+    },
+    {
+      "index": 5,
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791243104.7989335,
+      "harbor_pid": 1961693,
+      "pid_alive": true
+    },
+    {
+      "index": 6,
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "started_epoch": 1791243602.5188353,
+      "harbor_pid": 2087454,
+      "finished_epoch": 1791244290.2294807
+    },
+    {
+      "index": 7,
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791243622.5339317,
+      "harbor_pid": 2089926,
+      "pid_alive": true
+    },
+    {
+      "index": 8,
+      "task_id": "dag_execution",
+      "arm": "carry_ledger",
+      "status": "running",
+      "started_epoch": 1791243888.7183068,
+      "harbor_pid": 2120091,
+      "pid_alive": true
+    },
+    {
+      "index": 9,
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791244169.792553,
+      "harbor_pid": 2145804,
+      "pid_alive": true
+    },
+    {
+      "index": 10,
+      "task_id": "database_migration",
+      "arm": "carry_ledger",
+      "status": "running",
+      "started_epoch": 1791244295.6304185,
+      "harbor_pid": 2162496,
+      "pid_alive": true
+    },
+    {
+      "index": 11,
+      "task_id": "dag_execution",
+      "arm": "carry_current",
+      "status": "running",
+      "started_epoch": 1791244567.9570425,
+      "harbor_pid": 2195478,
+      "pid_alive": true
+    }
+  ],
+  "free_gib": 63.96001052856445,
+  "load": "4.09 4.77 4.15 8/529 2226560"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "supergoal-lab-20261005",
+  "status": "TERMINATED",
+  "lastStopTimestamp": "2026-10-05T18:31:15.633-07:00",
+  "disks": [
+    {
+      "deviceName": "persistent-disk-0",
+      "diskSizeGb": "40",
+      "autoDelete": true,
+      "boot": true,
+      "source": "https://www.googleapis.com/compute/v1/projects/gen-lang-client-0258124817/zones/us-central1-a/disks/supergoal-lab-20261005",
+      "type": "PERSISTENT"
+    },
+    {
+      "deviceName": "supergoal-data",
+      "diskSizeGb": "200",
+      "autoDelete": false,
+      "boot": false,
+      "source": "https://www.googleapis.com/compute/v1/projects/gen-lang-client-0258124817/zones/us-central1-a/disks/supergoal-lab-data-20261005",
+      "type": "PERSISTENT"
+    }
+  ]
+}

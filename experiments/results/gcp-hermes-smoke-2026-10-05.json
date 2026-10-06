@@ -1,0 +1,100 @@
+{
+  "started_at": "2026-10-05T15:16:05.637988+00:00",
+  "model": "devin/swe-2",
+  "container": "576691bcc012df4f10d116bbfb88540a6f5bb5a328a9a57036421cb1621a6585",
+  "image_id": "sha256:ec4bd4a5223850005caf80b223cbd98adb8999dbc5326786169d7998db53b65f",
+  "official_task_outcome": false,
+  "status": "passed",
+  "tool_results": {
+    "terminal": {
+      "output": "/app\nisolated",
+      "exit_code": 0,
+      "error": null
+    },
+    "write": {
+      "bytes_written": 19,
+      "dirs_created": true,
+      "verified": true,
+      "lint": {
+        "status": "skipped",
+        "message": "No linter for .txt files"
+      },
+      "resolved_path": "/tmp/supergoal-bridge-smoke.txt",
+      "files_modified": [
+        "/tmp/supergoal-bridge-smoke.txt"
+      ]
+    },
+    "read": {
+      "content": "1|hermes_bridge_smoke",
+      "total_lines": 1,
+      "file_size": 19,
+      "truncated": false,
+      "is_binary": false,
+      "is_image": false
+    },
+    "hidden_read": {
+      "content": "",
+      "total_lines": 0,
+      "file_size": 0,
+      "truncated": false,
+      "is_binary": false,
+      "is_image": false,
+      "error": "File not found: /var/lib/supergoal-lab/control/gcp-hermes-smoke01/host-marker.txt"
+    },
+    "timeout": {
+      "output": "",
+      "exit_code": 124,
+      "error": null,
+      "hint": "Exit 124: the command hit its timeout. Raise timeout= (foreground max 600s) or run it with background=true and notify_on_complete=true."
+    }
+  },
+  "model_completed": true,
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791213380.9544792,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 3519,
+        "output_tokens": 106,
+        "total_tokens": 3625,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_20b52ad1-d25",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 5.812674283981323
+    },
+    {
+      "index": 2,
+      "started": 1791213386.9019103,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 3638,
+        "output_tokens": 20,
+        "total_tokens": 3658,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ca658ddc-f2b",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 2.5441625118255615
+    }
+  ],
+  "physical_model_requests": 2,
+  "finished_at": "2026-10-05T15:16:30.488457+00:00"
+}

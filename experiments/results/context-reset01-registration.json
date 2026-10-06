@@ -1,0 +1,43 @@
+{
+  "kind": "supplementary_exploratory_context_policy_study",
+  "registered": 1791137364.7456,
+  "script_sha256": "d36c4fe233709df9179f9b4d58b577874ba3b4f833e961af7168ce3fe7ac96f4",
+  "candidate": "candidate-r3",
+  "plan": [
+    [
+      8601,
+      "minimal_continue"
+    ],
+    [
+      8601,
+      "durable_state"
+    ],
+    [
+      8601,
+      "original_goal"
+    ],
+    [
+      8602,
+      "minimal_continue"
+    ],
+    [
+      8602,
+      "durable_state"
+    ],
+    [
+      8602,
+      "original_goal"
+    ]
+  ],
+  "fixture_sha256": {
+    "8601": "1dd3262681887c85390f3fe9009d5725f5e5b2861a068fe20469ea7ffb7e9330",
+    "8602": "36b6456d070dcdcc197deafd391840f51f660b1c228ab80d5958aff69957e674"
+  },
+  "limits": {
+    "outer_episodes": 6,
+    "executor_calls": 48,
+    "physical_requests": 60,
+    "wall_seconds": 1200
+  },
+  "scope": "Three context policies; same control and verification, two related staged-data fixtures. No previous conversation history. Workspace and public goal file remain accessible to every arm. No duration or generality claim."
+}

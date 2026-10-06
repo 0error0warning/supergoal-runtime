@@ -1,0 +1,50 @@
+{
+  "status": "complete_with_itemized_outcomes",
+  "memory_gb": 8,
+  "original_results_unchanged": true,
+  "rule": "taskif_94 rows with parser failure and no original judge request",
+  "rows": [
+    {
+      "index": 9,
+      "status": "adapted_judge_graded",
+      "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+      "config_sha256": "9c2348f4114d09e8fd2e91cc41c5fe263f1788186536129ee60f70cd7e0454de",
+      "artifact_manifest_sha256": "f9a5d479714e429ed82f74da4c8eb0b3f0ed5951d1a9dc6f29c01d21dc704769",
+      "score": 9,
+      "max_score": 11,
+      "percentage": 81.82,
+      "criteria": 15,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "index": 10,
+      "status": "adapted_judge_graded",
+      "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+      "config_sha256": "471452d90df7e41751fed71ee4eb40be19264273aa16a8a54c7a70568cc33741",
+      "artifact_manifest_sha256": "c08b1044d48c8e0b6c550d0b23ed8980b70c7307aa6daf75224e92cd3c2f1eff",
+      "score": 11,
+      "max_score": 11,
+      "percentage": 100.0,
+      "criteria": 15,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "index": 11,
+      "status": "adapted_judge_graded",
+      "original_error": "RuntimeError: Official artifact pipeline failed; preserve judge logs, no automatic regrade",
+      "config_sha256": "18a1c04faab3b01b6349c73f011ba30aae9c49ce622d883dfd14399c45b2352c",
+      "artifact_manifest_sha256": "17432a09ebb9d165ebd074c3d81f7de99092740d100e1ee3e10c13073d78a0f7",
+      "score": 11,
+      "max_score": 11,
+      "percentage": 100.0,
+      "criteria": 15,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    }
+  ]
+}

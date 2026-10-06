@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "kind": "docker_save_cas",
+  "image_id": "sha256:f6bfdba5107f7699846ba40193c2348843b2c4e8d3e18ea9f1aeaf784e57793c",
+  "original_tags": [
+    "sg-retention-probe:compose04"
+  ],
+  "created_at_epoch": 1791227148.4417253,
+  "members": [
+    {
+      "path": "blobs/sha256/553dcb5ef3dba96407dccf8005f3862030513f40dbccd9a67244e0d7657aefaa",
+      "sha256": "553dcb5ef3dba96407dccf8005f3862030513f40dbccd9a67244e0d7657aefaa",
+      "size": 2560,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/5ff245b1b8467ebd27ce0c481375bbfcb5f9d05ac556312386814eaa6fcb1498",
+      "sha256": "5ff245b1b8467ebd27ce0c481375bbfcb5f9d05ac556312386814eaa6fcb1498",
+      "size": 2071,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/6c0e902a7898fb8c98d88f16db3902590d23bbb953068585f67e70948f4f5d32",
+      "sha256": "6c0e902a7898fb8c98d88f16db3902590d23bbb953068585f67e70948f4f5d32",
+      "size": 386,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/944485d9d31824e9fbfbe6134456937c3642bb98b292a92c97a4c52dc02f9e8e",
+      "sha256": "944485d9d31824e9fbfbe6134456937c3642bb98b292a92c97a4c52dc02f9e8e",
+      "size": 551,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/e477571b896b8d18635f33e4efb8851e6c4929111b0a4fe9b17b34a16fd9c37f",
+      "sha256": "e477571b896b8d18635f33e4efb8851e6c4929111b0a4fe9b17b34a16fd9c37f",
+      "size": 8581632,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/f6bfdba5107f7699846ba40193c2348843b2c4e8d3e18ea9f1aeaf784e57793c",
+      "sha256": "f6bfdba5107f7699846ba40193c2348843b2c4e8d3e18ea9f1aeaf784e57793c",
+      "size": 2669,
+      "mode": 420
+    },
+    {
+      "path": "index.json",
+      "sha256": "1326c98b965975bca88a1032bf79c82a27134b675b721a3831729283c932b39f",
+      "size": 380,
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "902f17da70053a92b0ad0cfef5b5360dda9fd0efc71c2161c726dda05652b15d",
+      "size": 776,
+      "mode": 420
+    },
+    {
+      "path": "oci-layout",
+      "sha256": "0cdedc0869d60bb59e3dde736f996025e70318180587e049cfa22f80d67aa8e5",
+      "size": 31,
+      "mode": 420
+    },
+    {
+      "path": "repositories",
+      "sha256": "43e856935a7e27a4bca241a2aa1f2706c151c25581a198c6217f4a15e171e791",
+      "size": 104,
+      "mode": 420
+    }
+  ],
+  "process_state_included": false,
+  "mounted_volumes_included": false
+}

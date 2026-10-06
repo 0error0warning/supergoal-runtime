@@ -1,0 +1,206 @@
+{
+  "captured_at": "2026-10-05T22:54:37.641560+00:00",
+  "scope": "Current plugin tests on pinned real Hermes; original receipt and raw tests preserved; network-marker limitation in post-run-audit.json.",
+  "current_local_sources_matched": [
+    "supergoal_runtime/command.py",
+    "supergoal_runtime/config.py",
+    "supergoal_runtime/controller.py",
+    "supergoal_runtime/domain.py",
+    "supergoal_runtime/evaluators.py",
+    "supergoal_runtime/evidence.py",
+    "supergoal_runtime/gates.py",
+    "supergoal_runtime/migration.py",
+    "supergoal_runtime/plugin.py",
+    "supergoal_runtime/policy.py",
+    "supergoal_runtime/projection.py",
+    "supergoal_runtime/prompts.py",
+    "supergoal_runtime/rendering.py",
+    "supergoal_runtime/runtime.py",
+    "supergoal_runtime/store.py",
+    "supergoal_runtime/__init__.py",
+    "supergoal_runtime/compat/hermes_goal.py",
+    "supergoal_runtime/compat/legacy_gates.py",
+    "supergoal_runtime/compat/__init__.py",
+    "supergoal_runtime/v2/acceptance.py",
+    "supergoal_runtime/v2/kernel.py",
+    "supergoal_runtime/v2/plugin.py",
+    "supergoal_runtime/v2/verification.py",
+    "supergoal_runtime/v2/workflow.py",
+    "supergoal_runtime/v2/__init__.py",
+    "__init__.py",
+    "plugin.yaml",
+    "pyproject.toml",
+    "tests/conftest.py",
+    "tests/integration/test_v2_host_abi.py",
+    "tests/unit/test_v2_acceptance_workflow.py",
+    "tests/unit/test_v2_kernel.py",
+    "tests/unit/test_v2_sqlite_compatibility.py",
+    "verify_plugin_candidate.py"
+  ],
+  "files": {
+    "__init__.py": {
+      "sha256": "b2a796fa96e30e7fa10862be97e6779a58d31449959904a0021f549f4e688587",
+      "bytes": 280
+    },
+    "dependencies.json": {
+      "sha256": "7b62cd393697be049a8824cd4f263d678541357c455302342720323e1a457c4c",
+      "bytes": 31560
+    },
+    "dependency-install.log": {
+      "sha256": "146ec79e023f36fcb34768f3a806d82890b476e2e288be5b9911352787edb93e",
+      "bytes": 1170
+    },
+    "junit.xml": {
+      "sha256": "ae2478876a8fc22062179f7245bc673f7cc9594b607c4189485af9616fa37528",
+      "bytes": 5603
+    },
+    "manifest.json": {
+      "sha256": "523450bb607c90541cb6a2d602f66d516d59edee29f54e2510f753bc3a8f6ac9",
+      "bytes": 3785
+    },
+    "plugin.yaml": {
+      "sha256": "0e4df91eb9f97a0fc4cf487cad307be9e75dd7ecae6b9385c359d61587628ab1",
+      "bytes": 378
+    },
+    "pyproject.toml": {
+      "sha256": "3a20e45fa55a6f0a904cf9c7e613f1920773fd71a4ea3439a9b8b7437bfb145c",
+      "bytes": 1186
+    },
+    "pytest.log": {
+      "sha256": "ea17d92dcda06e104a075c26e33d34c52e4054d32cc5bf9a788b5d738cf9b3b0",
+      "bytes": 99
+    },
+    "receipt.json": {
+      "sha256": "13dd3bc5a4b9e42451c617dac5aa751da8419b9a5e6f5ec2b86d3cd1665fcfaf",
+      "bytes": 1555
+    },
+    "supergoal_runtime/__init__.py": {
+      "sha256": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+      "bytes": 147
+    },
+    "supergoal_runtime/command.py": {
+      "sha256": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+      "bytes": 5543
+    },
+    "supergoal_runtime/compat/__init__.py": {
+      "sha256": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+      "bytes": 43
+    },
+    "supergoal_runtime/compat/hermes_goal.py": {
+      "sha256": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+      "bytes": 608
+    },
+    "supergoal_runtime/compat/legacy_gates.py": {
+      "sha256": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+      "bytes": 1165
+    },
+    "supergoal_runtime/config.py": {
+      "sha256": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+      "bytes": 1319
+    },
+    "supergoal_runtime/controller.py": {
+      "sha256": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+      "bytes": 23133
+    },
+    "supergoal_runtime/domain.py": {
+      "sha256": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+      "bytes": 38478
+    },
+    "supergoal_runtime/evaluators.py": {
+      "sha256": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+      "bytes": 5653
+    },
+    "supergoal_runtime/evidence.py": {
+      "sha256": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+      "bytes": 10001
+    },
+    "supergoal_runtime/gates.py": {
+      "sha256": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+      "bytes": 12766
+    },
+    "supergoal_runtime/migration.py": {
+      "sha256": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+      "bytes": 13389
+    },
+    "supergoal_runtime/plugin.py": {
+      "sha256": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+      "bytes": 15330
+    },
+    "supergoal_runtime/policy.py": {
+      "sha256": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+      "bytes": 14097
+    },
+    "supergoal_runtime/projection.py": {
+      "sha256": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+      "bytes": 13703
+    },
+    "supergoal_runtime/prompts.py": {
+      "sha256": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+      "bytes": 7173
+    },
+    "supergoal_runtime/rendering.py": {
+      "sha256": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+      "bytes": 2383
+    },
+    "supergoal_runtime/runtime.py": {
+      "sha256": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+      "bytes": 28996
+    },
+    "supergoal_runtime/store.py": {
+      "sha256": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+      "bytes": 47606
+    },
+    "supergoal_runtime/v2/__init__.py": {
+      "sha256": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+      "bytes": 216
+    },
+    "supergoal_runtime/v2/acceptance.py": {
+      "sha256": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+      "bytes": 9871
+    },
+    "supergoal_runtime/v2/kernel.py": {
+      "sha256": "23d0127190b58fdba3c20b6d3915ef4a844e62fb2de47dce1b6bf5ac8d16d791",
+      "bytes": 15514
+    },
+    "supergoal_runtime/v2/plugin.py": {
+      "sha256": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+      "bytes": 10205
+    },
+    "supergoal_runtime/v2/verification.py": {
+      "sha256": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+      "bytes": 2527
+    },
+    "supergoal_runtime/v2/workflow.py": {
+      "sha256": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e",
+      "bytes": 13130
+    },
+    "tests/conftest.py": {
+      "sha256": "aefe4e651ae908c933634f30dead3d9670239798caeb3307e366ed0d8ec03581",
+      "bytes": 642
+    },
+    "tests/integration/test_v2_host_abi.py": {
+      "sha256": "4f602936cf0a587b37c2374d55213fc2da587f2f7d91f179c5fece066df135dc",
+      "bytes": 5212
+    },
+    "tests/unit/test_v2_acceptance_workflow.py": {
+      "sha256": "151381ef4e8891177f088a5b787952fe473e369f62b0fb9c1c5c2bd28a02b336",
+      "bytes": 7457
+    },
+    "tests/unit/test_v2_kernel.py": {
+      "sha256": "b2ff426c658ed7d82b0af8269efee1588a7fcee373ab177318398a95d74e2225",
+      "bytes": 7906
+    },
+    "tests/unit/test_v2_sqlite_compatibility.py": {
+      "sha256": "08f6909a6ce552f0535ffbce3608ba54b5ad75fff467118baf958f7c4456b311",
+      "bytes": 967
+    },
+    "verify_plugin_candidate.py": {
+      "sha256": "7dd9cd591656ab6ee6a4eb4109906dd2bd1f2071149ab24c1f7558dbc6c5be51",
+      "bytes": 3707
+    },
+    "post-run-audit.json": {
+      "sha256": "42d9d41964b9427cec77147e444f585e893f6772dff0e70bc042a26211b49b55",
+      "bytes": 747
+    }
+  }
+}

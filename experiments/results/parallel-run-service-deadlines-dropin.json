@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-10-05T16:54:58.414125+00:00",
+  "cloud_stop_unchanged": "2026-10-06T14:24:06Z",
+  "services": [
+    {
+      "unit": "supergoal-public-parallel24-v1-run",
+      "state": "RuntimeMaxUSec=1d\nMainPID=251535\nActiveState=active\nDropInPaths=/run/systemd/system/supergoal-public-parallel24-v1-run.service.d/research-deadline.conf\n"
+    },
+    {
+      "unit": "supergoal-oneday-transfer01-run",
+      "state": "RuntimeMaxUSec=1d\nMainPID=224305\nActiveState=active\nDropInPaths=/run/systemd/system/supergoal-oneday-transfer01-run.service.d/research-deadline.conf\n"
+    },
+    {
+      "unit": "supergoal-oneday-final-report",
+      "state": "RuntimeMaxUSec=1d\nMainPID=240237\nActiveState=active\nDropInPaths=/run/systemd/system/supergoal-oneday-final-report.service.d/research-deadline.conf\n"
+    }
+  ]
+}

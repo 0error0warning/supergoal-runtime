@@ -1,0 +1,61 @@
+{
+  "status": "failed",
+  "model_calls": 0,
+  "base_image": "alpine@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8",
+  "capture": {
+    "container_id": "89e197ce8b671c88b96f5f6eb2d2adf56722b62c98b587a1920d3043fb29c378",
+    "image_tag": "sg-retention-probe:compose03",
+    "state_before": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1018355,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-05T19:03:40.999186486Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "owns_pause": true,
+    "detached_compose_labels": [
+      "com.docker.compose.config-hash",
+      "com.docker.compose.container-number",
+      "com.docker.compose.depends_on",
+      "com.docker.compose.image",
+      "com.docker.compose.oneoff",
+      "com.docker.compose.project",
+      "com.docker.compose.project.config_files",
+      "com.docker.compose.project.working_dir",
+      "com.docker.compose.service",
+      "com.docker.compose.version"
+    ],
+    "started_monotonic": 16747.833282114,
+    "status": "captured",
+    "image_id": "Flag --pause has been deprecated, and enabled by default. Use --no-pause to disable pausing during commit.\nsha256:e270774cc2ce8ef43c868a4b1531b7efd5f4bb6eb168fc4a9fa9277a5151ffb0",
+    "state_after": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 1018355,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-05T19:03:40.999186486Z",
+      "FinishedAt": "0001-01-01T00:00:00Z"
+    },
+    "state_restored": true,
+    "finished_monotonic": 16748.198504906
+  },
+  "source_sha256": {
+    "snapshot_lifecycle.py": "9188389d5410332abaee2e7e5b674bd83802218627a59b41a328cabc5eeda8d6",
+    "probe_compose_checkpoint.py": "9c1444b5dc3ab86d2c915da198fb9561bf9c4e04974d7e71b0219d2cd22f1290",
+    "probe_snapshot_lifecycle.py": "593e5e3de816a1e2463510296bbea4bf512110b90586864a15846bb4681aa5b3",
+    "artifact_store.py": "b2d433bbaf9ebc753a9d27b4b32842612c831b6af2f49d2438c1051df9a70a33"
+  },
+  "cleanup_output": "",
+  "error": "RuntimeError: Docker image exit 1: Error response from daemon: page not found\n"
+}

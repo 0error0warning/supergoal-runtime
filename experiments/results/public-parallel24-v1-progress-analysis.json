@@ -1,0 +1,183 @@
+{
+  "experiment": "public-parallel24-v1",
+  "collected_at": "2026-10-05T17:03:46.315769+00:00",
+  "host": "supergoal-gcp",
+  "planned_tasks": 24,
+  "planned_arms": 5,
+  "planned_trials": 120,
+  "observed_trials": 5,
+  "valid_trials": 5,
+  "raw_trial_count_including_oracles_and_prior_candidates": 5,
+  "paired_native_full": {
+    "native_1_sg_1": 1
+  },
+  "apparatus_or_unresolved": [],
+  "paired_native_full_end_to_end": {
+    "native_1_sg_1": 1
+  },
+  "paired_statistics_official": {
+    "paired_tasks": 1,
+    "sg_only_success": 0,
+    "native_only_success": 0,
+    "success_rate_difference": 0.0,
+    "mcnemar_exact_two_sided_p": 1.0,
+    "task_bootstrap_percentile_95": [
+      0.0,
+      0.0
+    ],
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261006,
+    "bootstrap_degenerate": true,
+    "scope": "Conditional on available paired, deliberately selected task IDs. Not a population-generalization guarantee; resampling calls no model."
+  },
+  "paired_statistics_end_to_end": {
+    "paired_tasks": 1,
+    "sg_only_success": 0,
+    "native_only_success": 0,
+    "success_rate_difference": 0.0,
+    "mcnemar_exact_two_sided_p": 1.0,
+    "task_bootstrap_percentile_95": [
+      0.0,
+      0.0
+    ],
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261006,
+    "bootstrap_degenerate": true,
+    "scope": "Conditional on available paired, deliberately selected task IDs. Not a population-generalization guarantee; resampling calls no model."
+  },
+  "end_to_end_by_arm": {
+    "native": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    },
+    "sg_v2": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    },
+    "repeat_goal": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    },
+    "sg_no_context": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    },
+    "sg_no_review": {
+      "observed_evaluable_trials": 1,
+      "successes": 1,
+      "controller_failures": 0
+    }
+  },
+  "rows": [
+    {
+      "task_id": "bn-fit-modify",
+      "upstream_task_name": "terminal-bench/bn-fit-modify",
+      "arm": "native",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 10,
+      "status": "agent_stopped",
+      "input_tokens": 60339,
+      "output_tokens": 2884,
+      "cache_tokens": 47481,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "episode_seconds": 112.50707410299947,
+      "last_online_verdict": null,
+      "control_id": "8756feb38c934b49a3b8782c002fd268",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "upstream_task_name": "terminal-bench/bn-fit-modify",
+      "arm": "sg_v2",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 17,
+      "status": "succeeded",
+      "input_tokens": 136786,
+      "output_tokens": 6503,
+      "cache_tokens": 98224,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "episode_seconds": 149.81686715199976,
+      "last_online_verdict": "pass",
+      "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "upstream_task_name": "terminal-bench/bn-fit-modify",
+      "arm": "repeat_goal",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 20,
+      "status": "repeat_round_limit",
+      "input_tokens": 147208,
+      "output_tokens": 4072,
+      "cache_tokens": 74895,
+      "executor_episodes": 6,
+      "review_episodes": 0,
+      "episode_seconds": 151.2820032699983,
+      "last_online_verdict": null,
+      "control_id": "4cc232836c5945baae3581d2b90d256f",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "upstream_task_name": "terminal-bench/bn-fit-modify",
+      "arm": "sg_no_context",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 18,
+      "status": "succeeded",
+      "input_tokens": 110444,
+      "output_tokens": 4150,
+      "cache_tokens": 86982,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "episode_seconds": 170.56010801999946,
+      "last_online_verdict": "pass",
+      "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "upstream_task_name": "terminal-bench/bn-fit-modify",
+      "arm": "sg_no_review",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "requests": 8,
+      "status": "unverified_done",
+      "input_tokens": 40747,
+      "output_tokens": 1789,
+      "cache_tokens": 30068,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "episode_seconds": 81.27629982299914,
+      "last_online_verdict": "unverified",
+      "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+      "false_online_acceptance": false,
+      "artifact_snapshot_available": true
+    }
+  ],
+  "bundle_file": "public-parallel24-v1-progress-bundle.json"
+}

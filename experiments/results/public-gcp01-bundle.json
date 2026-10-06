@@ -1,0 +1,1662 @@
+{
+  "schema": 1,
+  "collected_at": "2026-10-05T15:24:20.827383+00:00",
+  "host": "supergoal-gcp",
+  "raw_scores_unchanged": true,
+  "trials": [
+    {
+      "job_name": "tb-oracle-public-gcp01-01-configure-git-webserver",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU/result.json",
+      "result": {
+        "id": "01507178-d5c0-4928-a30c-c5742b5a865b",
+        "task_name": "terminal-bench/configure-git-webserver",
+        "trial_name": "configure-git-webserver__3FQtwXU",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/configure-git-webserver"
+        },
+        "source": null,
+        "task_checksum": "e65f54853b52d76b5472dff961754b0ba78f1dd06b4a08ceb9c96614f52260ce",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/configure-git-webserver",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "configure-git-webserver__3FQtwXU",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/configure-git-webserver",
+              "agent_timeout_sec": 900.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "6bb7daec-9a15-4310-a10b-fdbbb8569e63",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:15:12.722750Z",
+        "finished_at": "2026-10-05T15:16:02.010705Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:15:12.792420Z",
+          "finished_at": "2026-10-05T15:15:16.297045Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:15:16.297089Z",
+          "finished_at": "2026-10-05T15:15:16.374321Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:15:16.374429Z",
+          "finished_at": "2026-10-05T15:15:42.137975Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:15:42.408322Z",
+          "finished_at": "2026-10-05T15:15:51.235554Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "downloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 6 packages in 11ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 1 item\n\n../tests/test_outputs.py .                                               [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_hello_html_exists\n============================== 1 passed in 5.26s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-oracle-public-gcp01-02-fix-code-vulnerability",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-02-fix-code-vulnerability/fix-code-vulnerability__nWaVtTS/result.json",
+      "result": {
+        "id": "0af0f900-1131-4321-8230-065b88897041",
+        "task_name": "terminal-bench/fix-code-vulnerability",
+        "trial_name": "fix-code-vulnerability__nWaVtTS",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-02-fix-code-vulnerability/fix-code-vulnerability__nWaVtTS",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/fix-code-vulnerability"
+        },
+        "source": null,
+        "task_checksum": "352f6f6321f82b6437fe2ddd664fa359f1263c0a85289c4fb5c81777c44faa79",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/fix-code-vulnerability",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "fix-code-vulnerability__nWaVtTS",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-02-fix-code-vulnerability",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/fix-code-vulnerability",
+              "agent_timeout_sec": 900.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "967faf4e-9b2e-404a-97a7-8d13f2cc8f73",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:16:08.330255Z",
+        "finished_at": "2026-10-05T15:16:23.268169Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:16:08.353973Z",
+          "finished_at": "2026-10-05T15:16:09.294945Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:16:09.294991Z",
+          "finished_at": "2026-10-05T15:16:09.387610Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:16:09.387711Z",
+          "finished_at": "2026-10-05T15:16:09.608292Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:16:09.884678Z",
+          "finished_at": "2026-10-05T15:16:12.648610Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Collecting pytest==8.4.1\n  Downloading pytest-8.4.1-py3-none-any.whl.metadata (7.7 kB)\nCollecting pytest-json-ctrf==0.3.5\n  Downloading pytest_json_ctrf-0.3.5-py3-none-any.whl.metadata (3.3 kB)\nRequirement already satisfied: iniconfig>=1 in /usr/local/lib/python3.11/site-packages (from pytest==8.4.1) (2.3.0)\nRequirement already satisfied: packaging>=20 in /usr/local/lib/python3.11/site-packages (from pytest==8.4.1) (25.0)\nRequirement already satisfied: pluggy<2,>=1.5 in /usr/local/lib/python3.11/site-packages (from pytest==8.4.1) (1.6.0)\nRequirement already satisfied: pygments>=2.7.2 in /usr/local/lib/python3.11/site-packages (from pytest==8.4.1) (2.19.2)\nDownloading pytest-8.4.1-py3-none-any.whl (365 kB)\nDownloading pytest_json_ctrf-0.3.5-py3-none-any.whl (6.8 kB)\nInstalling collected packages: pytest, pytest-json-ctrf\n  Attempting uninstall: pytest\n    Found existing installation: pytest 8.4.2\n    Uninstalling pytest-8.4.2:\n      Successfully uninstalled pytest-8.4.2\nSuccessfully installed pytest-8.4.1 pytest-json-ctrf-0.3.5\nWARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable.It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.\n\n[notice] A new release of pip is available: 24.2 -> 26.2.1\n[notice] To update, run: pip install --upgrade pip\n============================= test session starts ==============================\nplatform linux -- Python 3.11.14, pytest-8.4.1, pluggy-1.6.0\nrootdir: /app\nconfigfile: pyproject.toml\ntestpaths: test\nplugins: json-ctrf-0.3.5, cov-7.0.0, anyio-4.11.0\ncollected 367 items\n\ntest/test_app.py .                                                       [  0%]\ntest/test_auth.py .                                                      [  0%]\ntest/test_config.py ...........                                          [  3%]\ntest/test_contextlocals.py ..                                            [  4%]\ntest/test_environ.py ................................................... [ 17%]\n........................                                                 [ 24%]\ntest/test_exc.py .....                                                   [ 25%]\ntest/test_fileupload.py .........                                        [ 28%]\ntest/test_formsdict.py ..                                                [ 28%]\ntest/test_html_helper.py .                                               [ 29%]\ntest/test_importhook.py .....                                            [ 30%]\ntest/test_jinja2.py ..........                                           [ 33%]\ntest/test_mdict.py ....                                                  [ 34%]\ntest/test_mount.py ............                                          [ 37%]\ntest/test_multipart.py .......................                           [ 43%]\ntest/test_oorouting.py .                                                 [ 44%]\ntest/test_outputfilter.py ........................                       [ 50%]\ntest/test_plugins.py ....................                                [ 56%]\ntest/test_resources.py ........                                          [ 58%]\ntest/test_route.py ........                                              [ 60%]\ntest/test_router.py ..................................                   [ 69%]\ntest/test_securecookies.py ....                                          [ 70%]\ntest/test_sendfile.py ................                                   [ 75%]\ntest/test_stpl.py ................................................       [ 88%]\ntest/test_wsgi.py ...........................................            [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED test/test_app.py::TestApplicationObject::test_setattr\nPASSED test/test_auth.py::TestBasicAuth::test__header\nPASSED test/test_config.py::TestConfDict::test_gc_overlays\nPASSED test/test_config.py::TestConfDict::test_isadict\nPASSED test/test_config.py::TestConfDict::test_load_dict\nPASSED test/test_config.py::TestConfDict::test_load_module\nPASSED test/test_config.py::TestConfDict::test_meta\nPASSED test/test_config.py::TestConfDict::test_namespaces\nPASSED test/test_config.py::TestConfDict::test_overlay\nPASSED test/test_config.py::TestConfDict::test_string_save_keys\nPASSED test/test_config.py::TestConfDict::test_update\nPASSED test/test_config.py::TestConfDict::test_write\nPASSED test/test_config.py::TestINIConfigLoader::test_load_config\nPASSED test/test_contextlocals.py::TestThreadLocals::test_request\nPASSED test/test_contextlocals.py::TestThreadLocals::test_response\nPASSED test/test_environ.py::TestRequest::test_app_property\nPASSED test/test_environ.py::TestRequest::test_auth\nPASSED test/test_environ.py::TestRequest::test_bigbody\nPASSED test/test_environ.py::TestRequest::test_body\nPASSED test/test_environ.py::TestRequest::test_body_noclose\nPASSED test/test_environ.py::TestRequest::test_bodypost\nPASSED test/test_environ.py::TestRequest::test_chunked\nPASSED test/test_environ.py::TestRequest::test_chunked_illegal_size\nPASSED test/test_environ.py::TestRequest::test_chunked_meta_fields\nPASSED test/test_environ.py::TestRequest::test_chunked_not_chunked_at_all\nPASSED test/test_environ.py::TestRequest::test_chunked_not_terminated\nPASSED test/test_environ.py::TestRequest::test_chunked_wrong_size\nPASSED test/test_environ.py::TestRequest::test_cookie_dict\nPASSED test/test_environ.py::TestRequest::test_dict_access\nPASSED test/test_environ.py::TestRequest::test_get\nPASSED test/test_environ.py::TestRequest::test_getpostleak\nPASSED test/test_environ.py::TestRequest::test_header_access\nPASSED test/test_environ.py::TestRequest::test_header_access_special\nPASSED test/test_environ.py::TestRequest::test_isajax\nPASSED test/test_environ.py::TestRequest::test_json_empty\nPASSED test/test_environ.py::TestRequest::test_json_forged_header_issue616\nPASSED test/test_environ.py::TestRequest::test_json_header_empty_body\nPASSED test/test_environ.py::TestRequest::test_json_noheader\nPASSED test/test_environ.py::TestRequest::test_json_tobig\nPASSED test/test_environ.py::TestRequest::test_json_valid\nPASSED test/test_environ.py::TestRequest::test_method\nPASSED test/test_environ.py::TestRequest::test_multipart\nPASSED test/test_environ.py::TestRequest::test_params\nPASSED test/test_environ.py::TestRequest::test_path\nPASSED test/test_environ.py::TestRequest::test_pathshift\nPASSED test/test_environ.py::TestRequest::test_post\nPASSED test/test_environ.py::TestRequest::test_readonly_environ\nPASSED test/test_environ.py::TestRequest::test_remote_addr\nPASSED test/test_environ.py::TestRequest::test_remote_route\nPASSED test/test_environ.py::TestRequest::test_route_property\nPASSED test/test_environ.py::TestRequest::test_script_name\nPASSED test/test_environ.py::TestRequest::test_tobigbody\nPASSED test/test_environ.py::TestRequest::test_url\nPASSED test/test_environ.py::TestRequest::test_url_for_property\nPASSED test/test_environ.py::TestRequest::test_user_defined_attributes\nPASSED test/test_environ.py::TestResponse::test_append_header\nPASSED test/test_environ.py::TestResponse::test_charset\nPASSED test/test_environ.py::TestResponse::test_clone_cookie\nPASSED test/test_environ.py::TestResponse::test_constructor_body\nPASSED test/test_environ.py::TestResponse::test_constructor_headerlist\nPASSED test/test_environ.py::TestResponse::test_constructor_status\nPASSED test/test_environ.py::TestResponse::test_content_type\nPASSED test/test_environ.py::TestResponse::test_delete_cookie\nPASSED test/test_environ.py::TestResponse::test_delete_header\nPASSED test/test_environ.py::TestResponse::test_expires_header\nPASSED test/test_environ.py::TestResponse::test_non_string_header\nPASSED test/test_environ.py::TestResponse::test_prevent_control_characters_in_headers\nPASSED test/test_environ.py::TestResponse::test_set_cookie\nPASSED test/test_environ.py::TestResponse::test_set_cookie_expires\nPASSED test/test_environ.py::TestResponse::test_set_cookie_httponly\nPASSED test/test_environ.py::TestResponse::test_set_cookie_maxage\nPASSED test/test_environ.py::TestResponse::test_set_cookie_name_long_string\nPASSED test/test_environ.py::TestResponse::test_set_cookie_samesite\nPASSED test/test_environ.py::TestResponse::test_set_cookie_secure\nPASSED test/test_environ.py::TestResponse::test_set_cookie_value_long_string\nPASSED test/test_environ.py::TestResponse::test_set_header\nPASSED test/test_environ.py::TestResponse::test_set_status\nPASSED test/test_environ.py::TestResponse::test_wsgi_header_values\nPASSED test/test_environ.py::TestRedirect::test_absolute_path\nPASSED test/test_environ.py::TestRedirect::test_host_http_1_0\nPASSED test/test_environ.py::TestRedirect::test_host_http_1_1\nPASSED test/test_environ.py::TestRedirect::test_host_http_proxy\nPASSED test/test_environ.py::TestRedirect::test_redirect_preserve_cookies\nPASSED test/test_environ.py::TestRedirect::test_relative_path\nPASSED test/test_environ.py::TestRedirect::test_sheme\nPASSED test/test_environ.py::TestRedirect::test_specialchars\nPASSED test/test_environ.py::TestWSGIHeaderDict::test_dict\nPASSED test/test_environ.py::TestWSGIHeaderDict::test_empty\nPASSED test/test_environ.py::TestWSGIHeaderDict::test_native\nPASSED test/test_environ.py::TestWSGIHeaderDict::test_unicode\nPASSED test/test_exc.py::TestAppException::test_memory_error\nPASSED test/test_exc.py::TestAppException::test_no_exc\nPASSED test/test_exc.py::TestAppException::test_noncatched_error\nPASSED test/test_exc.py::TestAppException::test_other_error\nPASSED test/test_exc.py::TestAppException::test_system_Exit\nPASSED test/test_fileupload.py::TestFileUpload::test_content_type\nPASSED test/test_fileupload.py::TestFileUpload::test_filename\nPASSED test/test_fileupload.py::TestFileUpload::test_name\nPASSED test/test_fileupload.py::TestFileUpload::test_preserve_case_issue_582\nPASSED test/test_fileupload.py::TestFileUpload::test_raw_filename\nPASSED test/test_fileupload.py::TestFileUpload::test_save_buffer\nPASSED test/test_fileupload.py::TestFileUpload::test_save_dir\nPASSED test/test_fileupload.py::TestFileUpload::test_save_file\nPASSED test/test_fileupload.py::TestFileUpload::test_save_overwrite_lock\nPASSED test/test_formsdict.py::TestFormsDict::test_attr_access\nPASSED test/test_formsdict.py::TestFormsDict::test_attr_missing\nPASSED test/test_html_helper.py::TestHttpUtils::test_accept_header\nPASSED test/test_importhook.py::TestImportHooks::test_data_import\nPASSED test/test_importhook.py::TestImportHooks::test_direkt_import\nPASSED test/test_importhook.py::TestImportHooks::test_ext_isfile\nPASSED test/test_importhook.py::TestImportHooks::test_from_import\nPASSED test/test_importhook.py::TestImportHooks::test_import_fail\nPASSED test/test_jinja2.py::TestJinja2Template::test_custom_filters\nPASSED test/test_jinja2.py::TestJinja2Template::test_custom_tests\nPASSED test/test_jinja2.py::TestJinja2Template::test_error\nPASSED test/test_jinja2.py::TestJinja2Template::test_file\nPASSED test/test_jinja2.py::TestJinja2Template::test_inherit\nPASSED test/test_jinja2.py::TestJinja2Template::test_name\nPASSED test/test_jinja2.py::TestJinja2Template::test_notfound\nPASSED test/test_jinja2.py::TestJinja2Template::test_string\nPASSED test/test_jinja2.py::TestJinja2Template::test_template_shortcut\nPASSED test/test_jinja2.py::TestJinja2Template::test_view_decorator\nPASSED test/test_mdict.py::TestMultiDict::test_headergetbug\nPASSED test/test_mdict.py::TestMultiDict::test_isadict\nPASSED test/test_mdict.py::TestMultiDict::test_isheader\nPASSED test/test_mdict.py::TestMultiDict::test_ismulti\nPASSED test/test_mount.py::TestAppMounting::test_mount\nPASSED test/test_mount.py::TestAppMounting::test_mount_cookie\nPASSED test/test_mount.py::TestAppMounting::test_mount_get_url\nPASSED test/test_mount.py::TestAppMounting::test_mount_json_bug\nPASSED test/test_mount.py::TestAppMounting::test_mount_meta\nPASSED test/test_mount.py::TestAppMounting::test_mount_no_plugins\nPASSED test/test_mount.py::TestAppMounting::test_mount_order_bug581\nPASSED test/test_mount.py::TestAppMounting::test_mount_unicode_path_bug602\nPASSED test/test_mount.py::TestAppMounting::test_mount_wsgi\nPASSED test/test_mount.py::TestAppMounting::test_mount_wsgi_ctype_bug\nPASSED test/test_mount.py::TestAppMounting::test_no_slash_prefix\nPASSED test/test_mount.py::TestAppMerging::test_merge\nPASSED test/test_multipart.py::TestHeaderParser::test_options_parser\nPASSED test/test_multipart.py::TestMultipartParser::test_big_file\nPASSED test/test_multipart.py::TestMultipartParser::test_file_seek\nPASSED test/test_multipart.py::TestMultipartParser::test_fuzzy_lineiter\nPASSED test/test_multipart.py::TestMultipartParser::test_iterlines\nPASSED test/test_multipart.py::TestMultipartParser::test_iterlines_limit\nPASSED test/test_multipart.py::TestMultipartParser::test_multiline_header\nPASSED test/test_multipart.py::TestMultipartParser::test_unicode_value\nPASSED test/test_multipart.py::TestBrokenMultipart::test_big_boundary\nPASSED test/test_multipart.py::TestBrokenMultipart::test_content_length_to_small\nPASSED test/test_multipart.py::TestBrokenMultipart::test_disk_limit\nPASSED test/test_multipart.py::TestBrokenMultipart::test_invalid_header\nPASSED test/test_multipart.py::TestBrokenMultipart::test_mem_limit\nPASSED test/test_multipart.py::TestBrokenMultipart::test_missing_boundary\nPASSED test/test_multipart.py::TestBrokenMultipart::test_missing_content_type\nPASSED test/test_multipart.py::TestBrokenMultipart::test_no_disposition_header\nPASSED test/test_multipart.py::TestBrokenMultipart::test_no_newline_after_content\nPASSED test/test_multipart.py::TestBrokenMultipart::test_no_newline_after_middle_content\nPASSED test/test_multipart.py::TestBrokenMultipart::test_no_start_boundary\nPASSED test/test_multipart.py::TestBrokenMultipart::test_no_terminator\nPASSED test/test_multipart.py::TestBrokenMultipart::test_preamble_before_start_boundary\nPASSED test/test_multipart.py::TestBrokenMultipart::test_unsupported_content_type\nPASSED test/test_multipart.py::TestWerkzeugExamples::test_werkzeug_examples\nPASSED test/test_oorouting.py::TestRoutes::test_route1\nPASSED test/test_outputfilter.py::TestOutputFilter::test_bytearray\nPASSED test/test_outputfilter.py::TestOutputFilter::test_bytes\nPASSED test/test_outputfilter.py::TestOutputFilter::test_cookie\nPASSED test/test_outputfilter.py::TestOutputFilter::test_empty_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_emptylist\nPASSED test/test_outputfilter.py::TestOutputFilter::test_error\nPASSED test/test_outputfilter.py::TestOutputFilter::test_error_in_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_fatal_error\nPASSED test/test_outputfilter.py::TestOutputFilter::test_fatal_error_in_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_file\nPASSED test/test_outputfilter.py::TestOutputFilter::test_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_httperror_in_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_httpresponse_in_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_illegal\nPASSED test/test_outputfilter.py::TestOutputFilter::test_invalid_generator_callback\nPASSED test/test_outputfilter.py::TestOutputFilter::test_iterator_with_close\nPASSED test/test_outputfilter.py::TestOutputFilter::test_json\nPASSED test/test_outputfilter.py::TestOutputFilter::test_json_HTTPError\nPASSED test/test_outputfilter.py::TestOutputFilter::test_json_HTTPResponse\nPASSED test/test_outputfilter.py::TestOutputFilter::test_json_serialization_error\nPASSED test/test_outputfilter.py::TestOutputFilter::test_none\nPASSED test/test_outputfilter.py::TestOutputFilter::test_tuple\nPASSED test/test_outputfilter.py::TestOutputFilter::test_unicode\nPASSED test/test_outputfilter.py::TestOutputFilter::test_unicode_generator_callback\nPASSED test/test_plugins.py::TestPluginManagement::test_install_decorator\nPASSED test/test_plugins.py::TestPluginManagement::test_install_non_plugin\nPASSED test/test_plugins.py::TestPluginManagement::test_install_plugin\nPASSED test/test_plugins.py::TestPluginManagement::test_json_plugin_catches_httpresponse\nPASSED test/test_plugins.py::TestPluginManagement::test_plugin_oder\nPASSED test/test_plugins.py::TestPluginManagement::test_route_plugin\nPASSED test/test_plugins.py::TestPluginManagement::test_skip_all\nPASSED test/test_plugins.py::TestPluginManagement::test_skip_by_class\nPASSED test/test_plugins.py::TestPluginManagement::test_skip_by_instance\nPASSED test/test_plugins.py::TestPluginManagement::test_skip_by_name\nPASSED test/test_plugins.py::TestPluginManagement::test_skip_nonlist\nPASSED test/test_plugins.py::TestPluginManagement::test_uninstall_all\nPASSED test/test_plugins.py::TestPluginManagement::test_uninstall_by_instance\nPASSED test/test_plugins.py::TestPluginManagement::test_uninstall_by_name\nPASSED test/test_plugins.py::TestPluginManagement::test_uninstall_by_type\nPASSED test/test_plugins.py::TestPluginAPI::test_apply\nPASSED test/test_plugins.py::TestPluginAPI::test_callable\nPASSED test/test_plugins.py::TestPluginAPI::test_close\nPASSED test/test_plugins.py::TestPluginAPI::test_instance_method_wrapper\nPASSED test/test_plugins.py::TestPluginAPI::test_setup\nPASSED test/test_resources.py::TestResourceManager::test_get\nPASSED test/test_resources.py::TestResourceManager::test_open\nPASSED test/test_resources.py::TestResourceManager::test_path_absolutize\nPASSED test/test_resources.py::TestResourceManager::test_path_create\nPASSED test/test_resources.py::TestResourceManager::test_path_normalize\nPASSED test/test_resources.py::TestResourceManager::test_path_order\nPASSED test/test_resources.py::TestResourceManager::test_path_unique\nPASSED test/test_resources.py::TestResourceManager::test_root_path\nPASSED test/test_route.py::TestReFlatten::test_re_flatten\nPASSED test/test_route.py::TestRoute::test_callback_inspection\nPASSED test/test_route.py::TestRoute::test_callback_inspection_multiple_args\nPASSED test/test_route.py::TestRoute::test_callback_inspection_newsig\nPASSED test/test_route.py::TestRoute::test_unwrap_closure\nPASSED test/test_route.py::TestRoute::test_unwrap_closure_callable\nPASSED test/test_route.py::TestRoute::test_unwrap_method\nPASSED test/test_route.py::TestRoute::test_unwrap_wrapped\nPASSED test/test_router.py::TestRouter::testBasic\nPASSED test/test_router.py::TestRouter::testBuild\nPASSED test/test_router.py::TestRouter::testBuildAnon\nPASSED test/test_router.py::TestRouter::testBuildFilter\nPASSED test/test_router.py::TestRouter::testErrorInPattern\nPASSED test/test_router.py::TestRouter::testFloatFilter\nPASSED test/test_router.py::TestRouter::testIntFilter\nPASSED test/test_router.py::TestRouter::testNewSyntax\nPASSED test/test_router.py::TestRouter::testParentheses\nPASSED test/test_router.py::TestRouter::testPathFilter\nPASSED test/test_router.py::TestRouter::testUnicode\nPASSED test/test_router.py::TestRouter::testValueErrorInFilter\nPASSED test/test_router.py::TestRouter::testWildcardNames\nPASSED test/test_router.py::TestRouter::test_any_static_before_dynamic\nPASSED test/test_router.py::TestRouter::test_dynamic_any_if_method_exists\nPASSED test/test_router.py::TestRouter::test_dynamic_before_static_any\nPASSED test/test_router.py::TestRouter::test_lots_of_routes\nPASSED test/test_router.py::TestRouterInCGIMode::testBasic\nPASSED test/test_router.py::TestRouterInCGIMode::testBuild\nPASSED test/test_router.py::TestRouterInCGIMode::testBuildAnon\nPASSED test/test_router.py::TestRouterInCGIMode::testBuildFilter\nPASSED test/test_router.py::TestRouterInCGIMode::testErrorInPattern\nPASSED test/test_router.py::TestRouterInCGIMode::testFloatFilter\nPASSED test/test_router.py::TestRouterInCGIMode::testIntFilter\nPASSED test/test_router.py::TestRouterInCGIMode::testNewSyntax\nPASSED test/test_router.py::TestRouterInCGIMode::testParentheses\nPASSED test/test_router.py::TestRouterInCGIMode::testPathFilter\nPASSED test/test_router.py::TestRouterInCGIMode::testUnicode\nPASSED test/test_router.py::TestRouterInCGIMode::testValueErrorInFilter\nPASSED test/test_router.py::TestRouterInCGIMode::testWildcardNames\nPASSED test/test_router.py::TestRouterInCGIMode::test_any_static_before_dynamic\nPASSED test/test_router.py::TestRouterInCGIMode::test_dynamic_any_if_method_exists\nPASSED test/test_router.py::TestRouterInCGIMode::test_dynamic_before_static_any\nPASSED test/test_router.py::TestRouterInCGIMode::test_lots_of_routes\nPASSED test/test_securecookies.py::TestSignedCookies::testValid\nPASSED test/test_securecookies.py::TestSignedCookies::testWrongKey\nPASSED test/test_securecookies.py::TestSignedCookiesWithPickle::testValid\nPASSED test/test_securecookies.py::TestSignedCookiesWithPickle::testWrongKey\nPASSED test/test_sendfile.py::TestDateParser::test_asctime\nPASSED test/test_sendfile.py::TestDateParser::test_bad\nPASSED test/test_sendfile.py::TestDateParser::test_rfc1123\nPASSED test/test_sendfile.py::TestDateParser::test_rfc850\nPASSED test/test_sendfile.py::TestSendFile::test_custom_headers\nPASSED test/test_sendfile.py::TestSendFile::test_download\nPASSED test/test_sendfile.py::TestSendFile::test_etag\nPASSED test/test_sendfile.py::TestSendFile::test_file_not_readable\nPASSED test/test_sendfile.py::TestSendFile::test_ims\nPASSED test/test_sendfile.py::TestSendFile::test_ims_empty\nPASSED test/test_sendfile.py::TestSendFile::test_invalid\nPASSED test/test_sendfile.py::TestSendFile::test_mime\nPASSED test/test_sendfile.py::TestSendFile::test_mime_gzip\nPASSED test/test_sendfile.py::TestSendFile::test_range\nPASSED test/test_sendfile.py::TestSendFile::test_range_parser\nPASSED test/test_sendfile.py::TestSendFile::test_valid\nPASSED test/test_stpl.py::TestSimpleTemplate::test_blocks\nPASSED test/test_stpl.py::TestSimpleTemplate::test_bug_block_keywords_eat_prefixed_code\nPASSED test/test_stpl.py::TestSimpleTemplate::test_bug_no_whitespace_before_stmt\nPASSED test/test_stpl.py::TestSimpleTemplate::test_commentbug\nPASSED test/test_stpl.py::TestSimpleTemplate::test_commentonly\nPASSED test/test_stpl.py::TestSimpleTemplate::test_data\nPASSED test/test_stpl.py::TestSimpleTemplate::test_dedentbug\nPASSED test/test_stpl.py::TestSimpleTemplate::test_defnied\nPASSED test/test_stpl.py::TestSimpleTemplate::test_elsebug\nPASSED test/test_stpl.py::TestSimpleTemplate::test_error\nPASSED test/test_stpl.py::TestSimpleTemplate::test_escape\nPASSED test/test_stpl.py::TestSimpleTemplate::test_escaped_codelines\nPASSED test/test_stpl.py::TestSimpleTemplate::test_file\nPASSED test/test_stpl.py::TestSimpleTemplate::test_get\nPASSED test/test_stpl.py::TestSimpleTemplate::test_global_config\nPASSED test/test_stpl.py::TestSimpleTemplate::test_htmlutils_quote\nPASSED test/test_stpl.py::TestSimpleTemplate::test_import\nPASSED test/test_stpl.py::TestSimpleTemplate::test_include\nPASSED test/test_stpl.py::TestSimpleTemplate::test_multiline\nPASSED test/test_stpl.py::TestSimpleTemplate::test_name\nPASSED test/test_stpl.py::TestSimpleTemplate::test_newline_in_parameterlist\nPASSED test/test_stpl.py::TestSimpleTemplate::test_nobreak\nPASSED test/test_stpl.py::TestSimpleTemplate::test_noescape\nPASSED test/test_stpl.py::TestSimpleTemplate::test_noescape_setting\nPASSED test/test_stpl.py::TestSimpleTemplate::test_nonobreak\nPASSED test/test_stpl.py::TestSimpleTemplate::test_notfound\nPASSED test/test_stpl.py::TestSimpleTemplate::test_onelineblocks\nPASSED test/test_stpl.py::TestSimpleTemplate::test_onelinebugs\nPASSED test/test_stpl.py::TestSimpleTemplate::test_rebase\nPASSED test/test_stpl.py::TestSimpleTemplate::test_self_as_variable_name\nPASSED test/test_stpl.py::TestSimpleTemplate::test_setdefault\nPASSED test/test_stpl.py::TestSimpleTemplate::test_string\nPASSED test/test_stpl.py::TestSimpleTemplate::test_template_shortcut\nPASSED test/test_stpl.py::TestSimpleTemplate::test_unicode\nPASSED test/test_stpl.py::TestSimpleTemplate::test_unicode_code\nPASSED test/test_stpl.py::TestSimpleTemplate::test_view_decorator\nPASSED test/test_stpl.py::TestSimpleTemplate::test_view_decorator_issue_407\nPASSED test/test_stpl.py::TestSimpleTemplate::test_winbreaks\nPASSED test/test_stpl.py::TestSimpleTemplate::test_winbreaks_end_bug\nPASSED test/test_stpl.py::TestSTPLDir::test_end_keyword_on_same_line\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_block\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_comprehensions_in_code_line\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_eob_after_end\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_eob_in_single_line_code\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_find_eob_in_comments\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_ignore_eob_in_string\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_indention\nPASSED test/test_stpl.py::TestSTPLDir::test_multiline_strings_in_code_line\nPASSED test/test_wsgi.py::TestWsgi::test_303\nPASSED test/test_wsgi.py::TestWsgi::test_401\nPASSED test/test_wsgi.py::TestWsgi::test_500\nPASSED test/test_wsgi.py::TestWsgi::test_500_unicode\nPASSED test/test_wsgi.py::TestWsgi::test_anymethod\nPASSED test/test_wsgi.py::TestWsgi::test_cookie\nPASSED test/test_wsgi.py::TestWsgi::test_generator_callback\nPASSED test/test_wsgi.py::TestWsgi::test_get\nPASSED test/test_wsgi.py::TestWsgi::test_headget\nPASSED test/test_wsgi.py::TestWsgi::test_post\nPASSED test/test_wsgi.py::TestWsgi::test_request_attrs\nPASSED test/test_wsgi.py::TestWsgi::test_utf8_404\nPASSED test/test_wsgi.py::TestWsgi::test_utf8_header\nPASSED test/test_wsgi.py::TestWsgi::test_utf8_url\nPASSED test/test_wsgi.py::TestErrorHandling::test_error_routing\nPASSED test/test_wsgi.py::TestCloseable::test_direct\nPASSED test/test_wsgi.py::TestRouteDecorator::test_after_request_hooks_may_rise_response_exception\nPASSED test/test_wsgi.py::TestRouteDecorator::test_after_request_hooks_run_after_exception\nPASSED test/test_wsgi.py::TestRouteDecorator::test_after_request_hooks_run_after_exception_in_before_hook\nPASSED test/test_wsgi.py::TestRouteDecorator::test_after_request_sees_HTTPError_response\nPASSED test/test_wsgi.py::TestRouteDecorator::test_after_response_hook_can_set_headers\nPASSED test/test_wsgi.py::TestRouteDecorator::test_apply\nPASSED test/test_wsgi.py::TestRouteDecorator::test_apply_list\nPASSED test/test_wsgi.py::TestRouteDecorator::test_callback\nPASSED test/test_wsgi.py::TestRouteDecorator::test_decorators\nPASSED test/test_wsgi.py::TestRouteDecorator::test_hooks\nPASSED test/test_wsgi.py::TestRouteDecorator::test_method\nPASSED test/test_wsgi.py::TestRouteDecorator::test_method_list\nPASSED test/test_wsgi.py::TestRouteDecorator::test_name\nPASSED test/test_wsgi.py::TestRouteDecorator::test_no_params_at_all\nPASSED test/test_wsgi.py::TestRouteDecorator::test_no_path\nPASSED test/test_wsgi.py::TestRouteDecorator::test_path_list\nPASSED test/test_wsgi.py::TestRouteDecorator::test_single_path\nPASSED test/test_wsgi.py::TestRouteDecorator::test_template\nPASSED test/test_wsgi.py::TestRouteDecorator::test_template_opts\nPASSED test/test_wsgi.py::TestDecorators::test_autoroute\nPASSED test/test_wsgi.py::TestDecorators::test_routebuild\nPASSED test/test_wsgi.py::TestDecorators::test_truncate_body\nPASSED test/test_wsgi.py::TestDecorators::test_view\nPASSED test/test_wsgi.py::TestDecorators::test_view_error\nPASSED test/test_wsgi.py::TestAppShortcuts::testWithStatement\nPASSED test/test_wsgi.py::TestAppShortcuts::test_module_shortcuts\nPASSED test/test_wsgi.py::TestAppShortcuts::test_module_shortcuts_with_different_name\n============================= 367 passed in 0.72s ==============================\n============================= test session starts ==============================\nplatform linux -- Python 3.11.14, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5, cov-7.0.0, anyio-4.11.0\ncollected 6 items\n\n../tests/test_outputs.py ......                                          [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_report_file_exists_example\nPASSED ../tests/test_outputs.py::test_vul_file\nPASSED ../tests/test_outputs.py::test_cwe_id\nPASSED ../tests/test_outputs.py::test_hkey_basic_cases\nPASSED ../tests/test_outputs.py::test_hkey_error_cases\nPASSED ../tests/test_outputs.py::test_hkey_real_world_examples\n============================== 6 passed in 0.03s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-oracle-public-gcp01-03-sparql-university",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-03-sparql-university/sparql-university__KT2DvDz/result.json",
+      "result": {
+        "id": "ab12a68c-1333-43ab-b5f1-469cd77b04c9",
+        "task_name": "terminal-bench/sparql-university",
+        "trial_name": "sparql-university__KT2DvDz",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-03-sparql-university/sparql-university__KT2DvDz",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/sparql-university"
+        },
+        "source": null,
+        "task_checksum": "3aa530fbb63fdddef815ec5485ec1c3096e2cc91395684d3178446a794887236",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/sparql-university",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "sparql-university__KT2DvDz",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-03-sparql-university",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/sparql-university",
+              "agent_timeout_sec": 900.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "af4420e2-b670-44af-8bc1-b1bc58dd1803",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:16:27.020873Z",
+        "finished_at": "2026-10-05T15:16:52.509558Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:16:27.045258Z",
+          "finished_at": "2026-10-05T15:16:27.968728Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:16:27.968775Z",
+          "finished_at": "2026-10-05T15:16:28.050090Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:16:28.050200Z",
+          "finished_at": "2026-10-05T15:16:28.252223Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:16:28.523555Z",
+          "finished_at": "2026-10-05T15:16:41.886642Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]\nGet:3 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nGet:4 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:5 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:6 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:8 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]\nGet:12 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2162 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2131 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1690 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nGet:18 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:19 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nFetched 33.2 MB in 3s (11.6 MB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  ca-certificates krb5-locales libbrotli1 libcurl4t64 libgssapi-krb5-2\n  libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-common libldap2\n  libnghttp2-14 libpsl5t64 librtmp1 libsasl2-2 libsasl2-modules\n  libsasl2-modules-db libssh-4 libssl3t64 openssl publicsuffix\nSuggested packages:\n  krb5-doc krb5-user libsasl2-modules-gssapi-mit\n  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp\n  libsasl2-modules-sql\nThe following NEW packages will be installed:\n  ca-certificates curl krb5-locales libbrotli1 libcurl4t64 libgssapi-krb5-2\n  libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libldap-common libldap2\n  libnghttp2-14 libpsl5t64 librtmp1 libsasl2-2 libsasl2-modules\n  libsasl2-modules-db libssh-4 openssl publicsuffix\nThe following packages will be upgraded:\n  libssl3t64\n1 upgraded, 21 newly installed, 0 to remove and 44 not upgraded.\nNeed to get 5504 kB of archives.\nAfter this operation, 9176 kB of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssl3t64 amd64 3.0.13-0ubuntu3.16 [1945 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 openssl amd64 3.0.13-0ubuntu3.16 [1004 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 ca-certificates all 20260601~24.04.1 [139 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 krb5-locales all 1.20.1-6ubuntu2.10 [15.3 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5support0 amd64 1.20.1-6ubuntu2.10 [34.9 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libk5crypto3 amd64 1.20.1-6ubuntu2.10 [81.9 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libkeyutils1 amd64 1.6.3-3build1 [9490 B]\nGet:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5-3 amd64 1.20.1-6ubuntu2.10 [348 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgssapi-krb5-2 amd64 1.20.1-6ubuntu2.10 [143 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnghttp2-14 amd64 1.59.0-1ubuntu0.4 [74.6 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble/main amd64 libpsl5t64 amd64 0.21.2-1.1build1 [57.1 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble/main amd64 publicsuffix all 20231001.0357-0.1 [129 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble/main amd64 libbrotli1 amd64 1.1.0-2build2 [331 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules-db amd64 2.1.28+dfsg1-5ubuntu3.1 [20.4 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-2 amd64 2.1.28+dfsg1-5ubuntu3.1 [53.2 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap2 amd64 2.6.10+dfsg-0ubuntu0.24.04.1 [198 kB]\nGet:17 http://archive.ubuntu.com/ubuntu noble/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build7 [56.3 kB]\nGet:18 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssh-4 amd64 0.10.6-2ubuntu0.5 [191 kB]\nGet:19 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\nGet:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:21 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap-common all 2.6.10+dfsg-0ubuntu0.24.04.1 [32.9 kB]\nGet:22 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules amd64 2.1.28+dfsg1-5ubuntu3.1 [69.9 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 5504 kB in 2s (3215 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 4381 files and directories currently installed.)\nPreparing to unpack .../libssl3t64_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking libssl3t64:amd64 (3.0.13-0ubuntu3.16) over (3.0.13-0ubuntu3.6) ...\nSetting up libssl3t64:amd64 (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package openssl.\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 4381 files and directories currently installed.)\nPreparing to unpack .../00-openssl_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking openssl (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package ca-certificates.\nPreparing to unpack .../01-ca-certificates_20260601~24.04.1_all.deb ...\nUnpacking ca-certificates (20260601~24.04.1) ...\nSelecting previously unselected package krb5-locales.\nPreparing to unpack .../02-krb5-locales_1.20.1-6ubuntu2.10_all.deb ...\nUnpacking krb5-locales (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libkrb5support0:amd64.\nPreparing to unpack .../03-libkrb5support0_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libkrb5support0:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libk5crypto3:amd64.\nPreparing to unpack .../04-libk5crypto3_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libk5crypto3:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libkeyutils1:amd64.\nPreparing to unpack .../05-libkeyutils1_1.6.3-3build1_amd64.deb ...\nUnpacking libkeyutils1:amd64 (1.6.3-3build1) ...\nSelecting previously unselected package libkrb5-3:amd64.\nPreparing to unpack .../06-libkrb5-3_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libkrb5-3:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libgssapi-krb5-2:amd64.\nPreparing to unpack .../07-libgssapi-krb5-2_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libnghttp2-14:amd64.\nPreparing to unpack .../08-libnghttp2-14_1.59.0-1ubuntu0.4_amd64.deb ...\nUnpacking libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSelecting previously unselected package libpsl5t64:amd64.\nPreparing to unpack .../09-libpsl5t64_0.21.2-1.1build1_amd64.deb ...\nUnpacking libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSelecting previously unselected package publicsuffix.\nPreparing to unpack .../10-publicsuffix_20231001.0357-0.1_all.deb ...\nUnpacking publicsuffix (20231001.0357-0.1) ...\nSelecting previously unselected package libbrotli1:amd64.\nPreparing to unpack .../11-libbrotli1_1.1.0-2build2_amd64.deb ...\nUnpacking libbrotli1:amd64 (1.1.0-2build2) ...\nSelecting previously unselected package libsasl2-modules-db:amd64.\nPreparing to unpack .../12-libsasl2-modules-db_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSelecting previously unselected package libsasl2-2:amd64.\nPreparing to unpack .../13-libsasl2-2_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSelecting previously unselected package libldap2:amd64.\nPreparing to unpack .../14-libldap2_2.6.10+dfsg-0ubuntu0.24.04.1_amd64.deb ...\nUnpacking libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSelecting previously unselected package librtmp1:amd64.\nPreparing to unpack .../15-librtmp1_2.4+20151223.gitfa8646d.1-2build7_amd64.deb ...\nUnpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSelecting previously unselected package libssh-4:amd64.\nPreparing to unpack .../16-libssh-4_0.10.6-2ubuntu0.5_amd64.deb ...\nUnpacking libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSelecting previously unselected package libcurl4t64:amd64.\nPreparing to unpack .../17-libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSelecting previously unselected package curl.\nPreparing to unpack .../18-curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) ...\nSelecting previously unselected package libldap-common.\nPreparing to unpack .../19-libldap-common_2.6.10+dfsg-0ubuntu0.24.04.1_all.deb ...\nUnpacking libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSelecting previously unselected package libsasl2-modules:amd64.\nPreparing to unpack .../20-libsasl2-modules_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libkeyutils1:amd64 (1.6.3-3build1) ...\nSetting up libbrotli1:amd64 (1.1.0-2build2) ...\nSetting up libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSetting up libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSetting up krb5-locales (1.20.1-6ubuntu2.10) ...\nSetting up libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSetting up libkrb5support0:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSetting up libk5crypto3:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libkrb5-3:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up openssl (3.0.13-0ubuntu3.16) ...\nSetting up publicsuffix (20231001.0357-0.1) ...\nSetting up libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSetting up ca-certificates (20260601~24.04.1) ...\ndebconf: unable to initialize frontend: Dialog\ndebconf: (TERM is not set, so the dialog frontend is not usable.)\ndebconf: falling back to frontend: Readline\ndebconf: unable to initialize frontend: Readline\ndebconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.38.2 /usr/local/share/perl/5.38.2 /usr/lib/x86_64-linux-gnu/perl5/5.38 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.38 /usr/share/perl/5.38 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)\ndebconf: falling back to frontend: Teletype\nUpdating certificates in /etc/ssl/certs...\n121 added, 0 removed; done.\nSetting up libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\nProcessing triggers for ca-certificates (20260601~24.04.1) ...\nUpdating certificates in /etc/ssl/certs...\n0 added, 0 removed; done.\nRunning hooks in /etc/ca-certificates/update.d...\ndone.\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 8 packages in 14ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 3 items\n\n../tests/test_outputs.py ...                                             [100%]\n\n=============================== warnings summary ===============================\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:173: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    IRIREF.setParseAction(lambda x: rdflib.URIRef(x[0]))\n\ntest_outputs.py: 206 warnings\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parserutils.py:133: PyparsingDeprecationWarning: 'setName' deprecated - use 'set_name'\n    self.setName(name)\n\ntest_outputs.py: 206 warnings\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parserutils.py:134: PyparsingDeprecationWarning: 'addParseAction' deprecated - use 'add_parse_action'\n    self.addParseAction(self.postParse2)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:212: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    PNAME_NS = Optional(Param(\"prefix\", PN_PREFIX)) + Suppress(\":\").leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:245: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    PNAME_LN = PNAME_NS + Param(\"localname\", PN_LOCAL.leaveWhitespace())\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:252: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    BLANK_NODE_LABEL.setParseAction(lambda x: rdflib.BNode(x[0][2:]))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:273: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    INTEGER.setParseAction(lambda x: rdflib.Literal(x[0], datatype=rdflib.XSD.integer))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:281: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    DECIMAL.setParseAction(lambda x: rdflib.Literal(x[0], datatype=rdflib.XSD.decimal))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:286: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    DOUBLE.setParseAction(lambda x: rdflib.Literal(x[0], datatype=rdflib.XSD.double))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:290: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    INTEGER_POSITIVE = Suppress(\"+\") + INTEGER.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:291: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    INTEGER_POSITIVE.setParseAction(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:296: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    DECIMAL_POSITIVE = Suppress(\"+\") + DECIMAL.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:299: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    DOUBLE_POSITIVE = Suppress(\"+\") + DOUBLE.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:302: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    INTEGER_NEGATIVE = Suppress(\"-\") + INTEGER.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:303: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    INTEGER_NEGATIVE.setParseAction(lambda x: neg(x[0]))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:306: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    DECIMAL_NEGATIVE = Suppress(\"-\") + DECIMAL.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:307: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    DECIMAL_NEGATIVE.setParseAction(lambda x: neg(x[0]))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:310: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    DOUBLE_NEGATIVE = Suppress(\"-\") + DOUBLE.copy().leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:311: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    DOUBLE_NEGATIVE.setParseAction(lambda x: neg(x[0]))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:321: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    STRING_LITERAL_LONG1.setParseAction(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:329: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    STRING_LITERAL_LONG2.setParseAction(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:338: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    STRING_LITERAL1.setParseAction(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:347: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    STRING_LITERAL2.setParseAction(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:353: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    NIL.setParseAction(lambda x: rdflib.RDF.nil)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:360: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    ANON.setParseAction(lambda x: rdflib.BNode())\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:364: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    A.setParseAction(lambda x: rdflib.RDF.type)\n\ntest_outputs.py: 126 warnings\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parserutils.py:244: PyparsingDeprecationWarning: 'setName' deprecated - use 'set_name'\n    self.setName(name)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:380: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    Var.setParseAction(lambda x: rdflib.term.Variable(x[0]))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:397: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    Param(\"lang\", LANGTAG.leaveWhitespace())\n\ntest_outputs.py::test_sparql_runs_without_error\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:398: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    | Literal(\"^^\").leaveWhitespace() + Param(\"datatype\", iri).leaveWhitespace()\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:417: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    BooleanLiteral = Keyword(\"true\").setParseAction(lambda: rdflib.Literal(True)) | Keyword(\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:419: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    ).setParseAction(lambda: rdflib.Literal(False))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:505: PyparsingDeprecationWarning: 'leaveWhitespace' deprecated - use 'leave_whitespace'\n    Param(\"part\", PathPrimary) + Optional(Param(\"mod\", PathMod.leaveWhitespace())),\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:545: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    Collection.setParseAction(expandCollection)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:549: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    CollectionPath.setParseAction(expandCollection)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:576: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    BlankNodePropertyList.setParseAction(expandBNodeTriples)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:582: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    BlankNodePropertyListPath.setParseAction(expandBNodeTriples)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:592: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    TriplesSameSubject.setParseAction(expandTriples)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:632: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'\n    TriplesSameSubjectPath.setParseAction(expandTriples)\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:657: PyparsingDeprecationWarning: 'delimitedList' deprecated - use 'DelimitedList'\n    ExpressionList = NIL | Group(Suppress(\"(\") + delimitedList(Expression) + Suppress(\")\"))\n\ntest_outputs.py::test_sparql_runs_without_error\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:1018: PyparsingDeprecationWarning: 'delimitedList' deprecated - use 'DelimitedList'\n    + delimitedList(ParamList(\"expr\", Expression))\n\ntest_outputs.py::test_sparql_runs_without_error\ntest_outputs.py::test_sparql_query_results\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/rdflib/plugins/sparql/parser.py:1553: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'\n    return Query.parseString(q, parseAll=True)\n\ntest_outputs.py::test_sparql_runs_without_error\ntest_outputs.py::test_sparql_query_results\n  /root/.cache/uv/archive-v0/Qo-_-z_WYrLViB9vYs0JB/lib/python3.13/site-packages/pyparsing/util.py:466: PyparsingDeprecationWarning: 'parseAll' argument is deprecated, use 'parse_all'\n    return fn(self, *args, **kwargs)\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_sparql_file_exists\nPASSED ../tests/test_outputs.py::test_sparql_runs_without_error\nPASSED ../tests/test_outputs.py::test_sparql_query_results\n======================= 3 passed, 581 warnings in 0.55s ========================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-oracle-public-gcp01-04-write-compressor",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP/result.json",
+      "result": {
+        "id": "20c670ce-d5ff-42e1-9f9c-e1ba14e27bc0",
+        "task_name": "terminal-bench/write-compressor",
+        "trial_name": "write-compressor__SX4MQzP",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/write-compressor"
+        },
+        "source": null,
+        "task_checksum": "7aa3946dadb964150bc0e579ab3108a57e30d107d2167d59c986279b205b02b6",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/write-compressor",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "write-compressor__SX4MQzP",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/write-compressor",
+              "agent_timeout_sec": 900.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "35ee7a8a-dfa0-4132-8094-ab65849f5161",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:16:56.262809Z",
+        "finished_at": "2026-10-05T15:18:12.571187Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:16:56.286422Z",
+          "finished_at": "2026-10-05T15:16:57.196155Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:16:57.196202Z",
+          "finished_at": "2026-10-05T15:16:57.273443Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:16:57.273552Z",
+          "finished_at": "2026-10-05T15:17:50.154871Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:17:50.426696Z",
+          "finished_at": "2026-10-05T15:18:01.253658Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]\nHit:2 http://archive.ubuntu.com/ubuntu noble InRelease\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]\nGet:4 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1943 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2131 kB]\nGet:7 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1542 kB]\nGet:8 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [50.0 kB]\nGet:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1318 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2162 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [56.2 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1690 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [671 B]\nFetched 11.4 MB in 2s (5812 kB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  ca-certificates krb5-locales libcurl4t64 libgssapi-krb5-2 libk5crypto3\n  libkeyutils1 libkrb5-3 libkrb5support0 libldap-common libldap2 libnghttp2-14\n  libpsl5t64 librtmp1 libsasl2-2 libsasl2-modules libsasl2-modules-db libssh-4\n  libssl3t64 openssl publicsuffix\nSuggested packages:\n  krb5-doc krb5-user libsasl2-modules-gssapi-mit\n  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp\n  libsasl2-modules-sql\nThe following NEW packages will be installed:\n  ca-certificates curl krb5-locales libcurl4t64 libgssapi-krb5-2 libk5crypto3\n  libkeyutils1 libkrb5-3 libkrb5support0 libldap-common libldap2 libnghttp2-14\n  libpsl5t64 librtmp1 libsasl2-2 libsasl2-modules libsasl2-modules-db libssh-4\n  openssl publicsuffix\nThe following packages will be upgraded:\n  libssl3t64\n1 upgraded, 20 newly installed, 0 to remove and 87 not upgraded.\nNeed to get 5173 kB of archives.\nAfter this operation, 8313 kB of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssl3t64 amd64 3.0.13-0ubuntu3.16 [1945 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 openssl amd64 3.0.13-0ubuntu3.16 [1004 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 ca-certificates all 20260601~24.04.1 [139 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 krb5-locales all 1.20.1-6ubuntu2.10 [15.3 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5support0 amd64 1.20.1-6ubuntu2.10 [34.9 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libk5crypto3 amd64 1.20.1-6ubuntu2.10 [81.9 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/main amd64 libkeyutils1 amd64 1.6.3-3build1 [9490 B]\nGet:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libkrb5-3 amd64 1.20.1-6ubuntu2.10 [348 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libgssapi-krb5-2 amd64 1.20.1-6ubuntu2.10 [143 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnghttp2-14 amd64 1.59.0-1ubuntu0.4 [74.6 kB]\nGet:11 http://archive.ubuntu.com/ubuntu noble/main amd64 libpsl5t64 amd64 0.21.2-1.1build1 [57.1 kB]\nGet:12 http://archive.ubuntu.com/ubuntu noble/main amd64 publicsuffix all 20231001.0357-0.1 [129 kB]\nGet:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules-db amd64 2.1.28+dfsg1-5ubuntu3.1 [20.4 kB]\nGet:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-2 amd64 2.1.28+dfsg1-5ubuntu3.1 [53.2 kB]\nGet:15 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap2 amd64 2.6.10+dfsg-0ubuntu0.24.04.1 [198 kB]\nGet:16 http://archive.ubuntu.com/ubuntu noble/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build7 [56.3 kB]\nGet:17 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssh-4 amd64 0.10.6-2ubuntu0.5 [191 kB]\nGet:18 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\nGet:19 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\nGet:20 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libldap-common all 2.6.10+dfsg-0ubuntu0.24.04.1 [32.9 kB]\nGet:21 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsasl2-modules amd64 2.1.28+dfsg1-5ubuntu3.1 [69.9 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 5173 kB in 0s (10.6 MB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 10034 files and directories currently installed.)\nPreparing to unpack .../libssl3t64_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking libssl3t64:amd64 (3.0.13-0ubuntu3.16) over (3.0.13-0ubuntu3.6) ...\nSetting up libssl3t64:amd64 (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package openssl.\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 10034 files and directories currently installed.)\nPreparing to unpack .../00-openssl_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking openssl (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package ca-certificates.\nPreparing to unpack .../01-ca-certificates_20260601~24.04.1_all.deb ...\nUnpacking ca-certificates (20260601~24.04.1) ...\nSelecting previously unselected package krb5-locales.\nPreparing to unpack .../02-krb5-locales_1.20.1-6ubuntu2.10_all.deb ...\nUnpacking krb5-locales (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libkrb5support0:amd64.\nPreparing to unpack .../03-libkrb5support0_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libkrb5support0:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libk5crypto3:amd64.\nPreparing to unpack .../04-libk5crypto3_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libk5crypto3:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libkeyutils1:amd64.\nPreparing to unpack .../05-libkeyutils1_1.6.3-3build1_amd64.deb ...\nUnpacking libkeyutils1:amd64 (1.6.3-3build1) ...\nSelecting previously unselected package libkrb5-3:amd64.\nPreparing to unpack .../06-libkrb5-3_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libkrb5-3:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libgssapi-krb5-2:amd64.\nPreparing to unpack .../07-libgssapi-krb5-2_1.20.1-6ubuntu2.10_amd64.deb ...\nUnpacking libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.10) ...\nSelecting previously unselected package libnghttp2-14:amd64.\nPreparing to unpack .../08-libnghttp2-14_1.59.0-1ubuntu0.4_amd64.deb ...\nUnpacking libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSelecting previously unselected package libpsl5t64:amd64.\nPreparing to unpack .../09-libpsl5t64_0.21.2-1.1build1_amd64.deb ...\nUnpacking libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSelecting previously unselected package publicsuffix.\nPreparing to unpack .../10-publicsuffix_20231001.0357-0.1_all.deb ...\nUnpacking publicsuffix (20231001.0357-0.1) ...\nSelecting previously unselected package libsasl2-modules-db:amd64.\nPreparing to unpack .../11-libsasl2-modules-db_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSelecting previously unselected package libsasl2-2:amd64.\nPreparing to unpack .../12-libsasl2-2_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSelecting previously unselected package libldap2:amd64.\nPreparing to unpack .../13-libldap2_2.6.10+dfsg-0ubuntu0.24.04.1_amd64.deb ...\nUnpacking libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSelecting previously unselected package librtmp1:amd64.\nPreparing to unpack .../14-librtmp1_2.4+20151223.gitfa8646d.1-2build7_amd64.deb ...\nUnpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSelecting previously unselected package libssh-4:amd64.\nPreparing to unpack .../15-libssh-4_0.10.6-2ubuntu0.5_amd64.deb ...\nUnpacking libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSelecting previously unselected package libcurl4t64:amd64.\nPreparing to unpack .../16-libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSelecting previously unselected package curl.\nPreparing to unpack .../17-curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) ...\nSelecting previously unselected package libldap-common.\nPreparing to unpack .../18-libldap-common_2.6.10+dfsg-0ubuntu0.24.04.1_all.deb ...\nUnpacking libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSelecting previously unselected package libsasl2-modules:amd64.\nPreparing to unpack .../19-libsasl2-modules_2.1.28+dfsg1-5ubuntu3.1_amd64.deb ...\nUnpacking libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libkeyutils1:amd64 (1.6.3-3build1) ...\nSetting up libsasl2-modules:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSetting up libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSetting up krb5-locales (1.20.1-6ubuntu2.10) ...\nSetting up libldap-common (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSetting up libkrb5support0:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libsasl2-modules-db:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSetting up libk5crypto3:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libsasl2-2:amd64 (2.1.28+dfsg1-5ubuntu3.1) ...\nSetting up libkrb5-3:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up openssl (3.0.13-0ubuntu3.16) ...\nSetting up publicsuffix (20231001.0357-0.1) ...\nSetting up libldap2:amd64 (2.6.10+dfsg-0ubuntu0.24.04.1) ...\nSetting up ca-certificates (20260601~24.04.1) ...\ndebconf: unable to initialize frontend: Dialog\ndebconf: (TERM is not set, so the dialog frontend is not usable.)\ndebconf: falling back to frontend: Readline\ndebconf: unable to initialize frontend: Readline\ndebconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.38.2 /usr/local/share/perl/5.38.2 /usr/lib/x86_64-linux-gnu/perl5/5.38 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.38 /usr/share/perl/5.38 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)\ndebconf: falling back to frontend: Teletype\nUpdating certificates in /etc/ssl/certs...\n121 added, 0 removed; done.\nSetting up libgssapi-krb5-2:amd64 (1.20.1-6ubuntu2.10) ...\nSetting up libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\nProcessing triggers for ca-certificates (20260601~24.04.1) ...\nUpdating certificates in /etc/ssl/certs...\n0 added, 0 removed; done.\nRunning hooks in /etc/ca-certificates/update.d...\ndone.\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 6 packages in 11ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 3 items\n\n../tests/test_outputs.py ...                                             [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_compressed_file_exists\nPASSED ../tests/test_outputs.py::test_decompression_produces_original\nPASSED ../tests/test_outputs.py::test_compression_size\n============================== 3 passed in 0.18s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-oracle-public-gcp01-05-dna-assembly",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft/result.json",
+      "result": {
+        "id": "f43ac2f9-209e-4108-a7ae-33f1d5fed809",
+        "task_name": "terminal-bench/dna-assembly",
+        "trial_name": "dna-assembly__AgHK7ft",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/dna-assembly"
+        },
+        "source": null,
+        "task_checksum": "3087a6d15922343fcde2166be12274296557c0b9c230af3363dfb70668b463a2",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/dna-assembly",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "dna-assembly__AgHK7ft",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/dna-assembly",
+              "agent_timeout_sec": 1800.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "7c64ce7f-d4ac-4542-9cbe-267a0d7bddf1",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:18:16.331730Z",
+        "finished_at": "2026-10-05T15:18:59.186476Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:18:16.355320Z",
+          "finished_at": "2026-10-05T15:18:17.278334Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:18:17.278379Z",
+          "finished_at": "2026-10-05T15:18:17.352718Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:18:17.352837Z",
+          "finished_at": "2026-10-05T15:18:38.353301Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:18:38.617274Z",
+          "finished_at": "2026-10-05T15:18:47.719815Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Hit:1 http://security.ubuntu.com/ubuntu noble-security InRelease\nHit:2 http://archive.ubuntu.com/ubuntu noble InRelease\nHit:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease\nHit:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nprimer3 is already the newest version (2.6.1-4).\nThe following additional packages will be installed:\n  ca-certificates libcurl4t64 libnghttp2-14 libpsl5t64 librtmp1 libssh-4\n  libssl3t64 openssl publicsuffix\nThe following NEW packages will be installed:\n  ca-certificates curl libcurl4t64 libnghttp2-14 libpsl5t64 librtmp1 libssh-4\n  openssl publicsuffix\nThe following packages will be upgraded:\n  libssl3t64\n1 upgraded, 9 newly installed, 0 to remove and 44 not upgraded.\nNeed to get 4167 kB of archives.\nAfter this operation, 5108 kB of additional disk space will be used.\nGet:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssl3t64 amd64 3.0.13-0ubuntu3.16 [1945 kB]\nGet:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 openssl amd64 3.0.13-0ubuntu3.16 [1004 kB]\nGet:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 ca-certificates all 20260601~24.04.1 [139 kB]\nGet:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libnghttp2-14 amd64 1.59.0-1ubuntu0.4 [74.6 kB]\nGet:5 http://archive.ubuntu.com/ubuntu noble/main amd64 libpsl5t64 amd64 0.21.2-1.1build1 [57.1 kB]\nGet:6 http://archive.ubuntu.com/ubuntu noble/main amd64 publicsuffix all 20231001.0357-0.1 [129 kB]\nGet:7 http://archive.ubuntu.com/ubuntu noble/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2build7 [56.3 kB]\nGet:8 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libssh-4 amd64 0.10.6-2ubuntu0.5 [191 kB]\nGet:9 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libcurl4t64 amd64 8.5.0-2ubuntu10.15 [343 kB]\nGet:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 curl amd64 8.5.0-2ubuntu10.15 [227 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 4167 kB in 1s (3541 kB/s)\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 7125 files and directories currently installed.)\nPreparing to unpack .../libssl3t64_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking libssl3t64:amd64 (3.0.13-0ubuntu3.16) over (3.0.13-0ubuntu3.6) ...\nSetting up libssl3t64:amd64 (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package openssl.\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 7125 files and directories currently installed.)\nPreparing to unpack .../0-openssl_3.0.13-0ubuntu3.16_amd64.deb ...\nUnpacking openssl (3.0.13-0ubuntu3.16) ...\nSelecting previously unselected package ca-certificates.\nPreparing to unpack .../1-ca-certificates_20260601~24.04.1_all.deb ...\nUnpacking ca-certificates (20260601~24.04.1) ...\nSelecting previously unselected package libnghttp2-14:amd64.\nPreparing to unpack .../2-libnghttp2-14_1.59.0-1ubuntu0.4_amd64.deb ...\nUnpacking libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSelecting previously unselected package libpsl5t64:amd64.\nPreparing to unpack .../3-libpsl5t64_0.21.2-1.1build1_amd64.deb ...\nUnpacking libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSelecting previously unselected package publicsuffix.\nPreparing to unpack .../4-publicsuffix_20231001.0357-0.1_all.deb ...\nUnpacking publicsuffix (20231001.0357-0.1) ...\nSelecting previously unselected package librtmp1:amd64.\nPreparing to unpack .../5-librtmp1_2.4+20151223.gitfa8646d.1-2build7_amd64.deb ...\nUnpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSelecting previously unselected package libssh-4:amd64.\nPreparing to unpack .../6-libssh-4_0.10.6-2ubuntu0.5_amd64.deb ...\nUnpacking libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSelecting previously unselected package libcurl4t64:amd64.\nPreparing to unpack .../7-libcurl4t64_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSelecting previously unselected package curl.\nPreparing to unpack .../8-curl_8.5.0-2ubuntu10.15_amd64.deb ...\nUnpacking curl (8.5.0-2ubuntu10.15) ...\nSetting up libpsl5t64:amd64 (0.21.2-1.1build1) ...\nSetting up libnghttp2-14:amd64 (1.59.0-1ubuntu0.4) ...\nSetting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2build7) ...\nSetting up libssh-4:amd64 (0.10.6-2ubuntu0.5) ...\nSetting up openssl (3.0.13-0ubuntu3.16) ...\nSetting up publicsuffix (20231001.0357-0.1) ...\nSetting up libcurl4t64:amd64 (8.5.0-2ubuntu10.15) ...\nSetting up ca-certificates (20260601~24.04.1) ...\ndebconf: unable to initialize frontend: Dialog\ndebconf: (TERM is not set, so the dialog frontend is not usable.)\ndebconf: falling back to frontend: Readline\ndebconf: unable to initialize frontend: Readline\ndebconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.38.2 /usr/local/share/perl/5.38.2 /usr/lib/x86_64-linux-gnu/perl5/5.38 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.38 /usr/share/perl/5.38 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)\ndebconf: falling back to frontend: Teletype\nUpdating certificates in /etc/ssl/certs...\n121 added, 0 removed; done.\nSetting up curl (8.5.0-2ubuntu10.15) ...\nProcessing triggers for libc-bin (2.39-0ubuntu8.6) ...\nProcessing triggers for ca-certificates (20260601~24.04.1) ...\nUpdating certificates in /etc/ssl/certs...\n0 added, 0 removed; done.\nRunning hooks in /etc/ca-certificates/update.d...\ndone.\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 6 packages in 11ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 1 item\n\n../tests/test_outputs.py .                                               [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_primers\n============================== 1 passed in 0.07s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-oracle-public-gcp01-06-llm-inference-batching-scheduler",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-06-llm-inference-batching-scheduler/llm-inference-batching-scheduler__LtpQoui/result.json",
+      "result": {
+        "id": "0349ca93-aa29-4b5c-990a-a16f0d176f55",
+        "task_name": "terminal-bench/llm-inference-batching-scheduler",
+        "trial_name": "llm-inference-batching-scheduler__LtpQoui",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-06-llm-inference-batching-scheduler/llm-inference-batching-scheduler__LtpQoui",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/llm-inference-batching-scheduler"
+        },
+        "source": null,
+        "task_checksum": "2635be7269a496a4edefb77c595bc3acf8782ee84b3dab2056dfb25ac9e317a1",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/llm-inference-batching-scheduler",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "llm-inference-batching-scheduler__LtpQoui",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-06-llm-inference-batching-scheduler",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "task_dir": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/llm-inference-batching-scheduler",
+              "agent_timeout_sec": 1800.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "ba59b861-1394-424f-9413-dc690768f532",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "oracle",
+          "version": "official-oracle-with-apt-https-2",
+          "model_info": null
+        },
+        "agent_result": {
+          "n_input_tokens": null,
+          "n_cache_tokens": null,
+          "n_output_tokens": null,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": null
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:19:02.868135Z",
+        "finished_at": "2026-10-05T15:19:26.491895Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:19:02.891784Z",
+          "finished_at": "2026-10-05T15:19:03.814724Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:19:03.814776Z",
+          "finished_at": "2026-10-05T15:19:03.893181Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:19:03.893328Z",
+          "finished_at": "2026-10-05T15:19:06.889854Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:19:07.158348Z",
+          "finished_at": "2026-10-05T15:19:15.671762Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "Get:1 https://deb.debian.org/debian bookworm InRelease [151 kB]\nGet:2 https://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]\nGet:3 https://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]\nGet:4 https://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]\nGet:5 https://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]\nGet:6 https://deb.debian.org/debian-security bookworm-security/main amd64 Packages [349 kB]\nFetched 9387 kB in 1s (7548 kB/s)\nReading package lists...\nReading package lists...\nBuilding dependency tree...\nReading state information...\nThe following additional packages will be installed:\n  krb5-locales libbrotli1 libcurl4 libgssapi-krb5-2 libk5crypto3 libkeyutils1\n  libkrb5-3 libkrb5support0 libldap-2.5-0 libldap-common libnghttp2-14 libpsl5\n  librtmp1 libsasl2-2 libsasl2-modules libsasl2-modules-db libssh2-1\n  publicsuffix\nSuggested packages:\n  krb5-doc krb5-user libsasl2-modules-gssapi-mit\n  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp\n  libsasl2-modules-sql\nThe following NEW packages will be installed:\n  curl krb5-locales libbrotli1 libcurl4 libgssapi-krb5-2 libk5crypto3\n  libkeyutils1 libkrb5-3 libkrb5support0 libldap-2.5-0 libldap-common\n  libnghttp2-14 libpsl5 librtmp1 libsasl2-2 libsasl2-modules\n  libsasl2-modules-db libssh2-1 publicsuffix\n0 upgraded, 19 newly installed, 0 to remove and 32 not upgraded.\nNeed to get 2489 kB of archives.\nAfter this operation, 6809 kB of additional disk space will be used.\nGet:1 https://deb.debian.org/debian bookworm/main amd64 krb5-locales all 1.20.1-2+deb12u5 [63.5 kB]\nGet:2 https://deb.debian.org/debian bookworm/main amd64 libbrotli1 amd64 1.0.9-2+b6 [275 kB]\nGet:3 https://deb.debian.org/debian bookworm/main amd64 libkrb5support0 amd64 1.20.1-2+deb12u5 [33.2 kB]\nGet:4 https://deb.debian.org/debian bookworm/main amd64 libk5crypto3 amd64 1.20.1-2+deb12u5 [79.7 kB]\nGet:5 https://deb.debian.org/debian bookworm/main amd64 libkeyutils1 amd64 1.6.3-2 [8808 B]\nGet:6 https://deb.debian.org/debian bookworm/main amd64 libkrb5-3 amd64 1.20.1-2+deb12u5 [332 kB]\nGet:7 https://deb.debian.org/debian bookworm/main amd64 libgssapi-krb5-2 amd64 1.20.1-2+deb12u5 [135 kB]\nGet:8 https://deb.debian.org/debian bookworm/main amd64 libsasl2-modules-db amd64 2.1.28+dfsg-10 [20.3 kB]\nGet:9 https://deb.debian.org/debian bookworm/main amd64 libsasl2-2 amd64 2.1.28+dfsg-10 [59.7 kB]\nGet:10 https://deb.debian.org/debian bookworm/main amd64 libldap-2.5-0 amd64 2.5.13+dfsg-5 [183 kB]\nGet:11 https://deb.debian.org/debian bookworm/main amd64 libnghttp2-14 amd64 1.52.0-1+deb12u3 [72.4 kB]\nGet:12 https://deb.debian.org/debian bookworm/main amd64 libpsl5 amd64 0.21.2-1 [58.7 kB]\nGet:13 https://deb.debian.org/debian bookworm/main amd64 librtmp1 amd64 2.4+20151223.gitfa8646d.1-2+b2 [60.8 kB]\nGet:14 https://deb.debian.org/debian-security bookworm-security/main amd64 libssh2-1 amd64 1.10.0-3+deb12u1 [176 kB]\nGet:15 https://deb.debian.org/debian bookworm/main amd64 libcurl4 amd64 7.88.1-10+deb12u15 [392 kB]\nGet:16 https://deb.debian.org/debian bookworm/main amd64 curl amd64 7.88.1-10+deb12u15 [316 kB]\nGet:17 https://deb.debian.org/debian bookworm/main amd64 libldap-common all 2.5.13+dfsg-5 [29.3 kB]\nGet:18 https://deb.debian.org/debian bookworm/main amd64 libsasl2-modules amd64 2.1.28+dfsg-10 [66.6 kB]\nGet:19 https://deb.debian.org/debian bookworm/main amd64 publicsuffix all 20230209.2326-1 [126 kB]\ndebconf: delaying package configuration, since apt-utils is not installed\nFetched 2489 kB in 0s (14.3 MB/s)\nSelecting previously unselected package krb5-locales.\n(Reading database ... \n(Reading database ... 5%\n(Reading database ... 10%\n(Reading database ... 15%\n(Reading database ... 20%\n(Reading database ... 25%\n(Reading database ... 30%\n(Reading database ... 35%\n(Reading database ... 40%\n(Reading database ... 45%\n(Reading database ... 50%\n(Reading database ... 55%\n(Reading database ... 60%\n(Reading database ... 65%\n(Reading database ... 70%\n(Reading database ... 75%\n(Reading database ... 80%\n(Reading database ... 85%\n(Reading database ... 90%\n(Reading database ... 95%\n(Reading database ... 100%\n(Reading database ... 6632 files and directories currently installed.)\nPreparing to unpack .../00-krb5-locales_1.20.1-2+deb12u5_all.deb ...\nUnpacking krb5-locales (1.20.1-2+deb12u5) ...\nSelecting previously unselected package libbrotli1:amd64.\nPreparing to unpack .../01-libbrotli1_1.0.9-2+b6_amd64.deb ...\nUnpacking libbrotli1:amd64 (1.0.9-2+b6) ...\nSelecting previously unselected package libkrb5support0:amd64.\nPreparing to unpack .../02-libkrb5support0_1.20.1-2+deb12u5_amd64.deb ...\nUnpacking libkrb5support0:amd64 (1.20.1-2+deb12u5) ...\nSelecting previously unselected package libk5crypto3:amd64.\nPreparing to unpack .../03-libk5crypto3_1.20.1-2+deb12u5_amd64.deb ...\nUnpacking libk5crypto3:amd64 (1.20.1-2+deb12u5) ...\nSelecting previously unselected package libkeyutils1:amd64.\nPreparing to unpack .../04-libkeyutils1_1.6.3-2_amd64.deb ...\nUnpacking libkeyutils1:amd64 (1.6.3-2) ...\nSelecting previously unselected package libkrb5-3:amd64.\nPreparing to unpack .../05-libkrb5-3_1.20.1-2+deb12u5_amd64.deb ...\nUnpacking libkrb5-3:amd64 (1.20.1-2+deb12u5) ...\nSelecting previously unselected package libgssapi-krb5-2:amd64.\nPreparing to unpack .../06-libgssapi-krb5-2_1.20.1-2+deb12u5_amd64.deb ...\nUnpacking libgssapi-krb5-2:amd64 (1.20.1-2+deb12u5) ...\nSelecting previously unselected package libsasl2-modules-db:amd64.\nPreparing to unpack .../07-libsasl2-modules-db_2.1.28+dfsg-10_amd64.deb ...\nUnpacking libsasl2-modules-db:amd64 (2.1.28+dfsg-10) ...\nSelecting previously unselected package libsasl2-2:amd64.\nPreparing to unpack .../08-libsasl2-2_2.1.28+dfsg-10_amd64.deb ...\nUnpacking libsasl2-2:amd64 (2.1.28+dfsg-10) ...\nSelecting previously unselected package libldap-2.5-0:amd64.\nPreparing to unpack .../09-libldap-2.5-0_2.5.13+dfsg-5_amd64.deb ...\nUnpacking libldap-2.5-0:amd64 (2.5.13+dfsg-5) ...\nSelecting previously unselected package libnghttp2-14:amd64.\nPreparing to unpack .../10-libnghttp2-14_1.52.0-1+deb12u3_amd64.deb ...\nUnpacking libnghttp2-14:amd64 (1.52.0-1+deb12u3) ...\nSelecting previously unselected package libpsl5:amd64.\nPreparing to unpack .../11-libpsl5_0.21.2-1_amd64.deb ...\nUnpacking libpsl5:amd64 (0.21.2-1) ...\nSelecting previously unselected package librtmp1:amd64.\nPreparing to unpack .../12-librtmp1_2.4+20151223.gitfa8646d.1-2+b2_amd64.deb ...\nUnpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2+b2) ...\nSelecting previously unselected package libssh2-1:amd64.\nPreparing to unpack .../13-libssh2-1_1.10.0-3+deb12u1_amd64.deb ...\nUnpacking libssh2-1:amd64 (1.10.0-3+deb12u1) ...\nSelecting previously unselected package libcurl4:amd64.\nPreparing to unpack .../14-libcurl4_7.88.1-10+deb12u15_amd64.deb ...\nUnpacking libcurl4:amd64 (7.88.1-10+deb12u15) ...\nSelecting previously unselected package curl.\nPreparing to unpack .../15-curl_7.88.1-10+deb12u15_amd64.deb ...\nUnpacking curl (7.88.1-10+deb12u15) ...\nSelecting previously unselected package libldap-common.\nPreparing to unpack .../16-libldap-common_2.5.13+dfsg-5_all.deb ...\nUnpacking libldap-common (2.5.13+dfsg-5) ...\nSelecting previously unselected package libsasl2-modules:amd64.\nPreparing to unpack .../17-libsasl2-modules_2.1.28+dfsg-10_amd64.deb ...\nUnpacking libsasl2-modules:amd64 (2.1.28+dfsg-10) ...\nSelecting previously unselected package publicsuffix.\nPreparing to unpack .../18-publicsuffix_20230209.2326-1_all.deb ...\nUnpacking publicsuffix (20230209.2326-1) ...\nSetting up libkeyutils1:amd64 (1.6.3-2) ...\nSetting up libpsl5:amd64 (0.21.2-1) ...\nSetting up libbrotli1:amd64 (1.0.9-2+b6) ...\nSetting up libsasl2-modules:amd64 (2.1.28+dfsg-10) ...\nSetting up libnghttp2-14:amd64 (1.52.0-1+deb12u3) ...\nSetting up krb5-locales (1.20.1-2+deb12u5) ...\nSetting up libldap-common (2.5.13+dfsg-5) ...\nSetting up libkrb5support0:amd64 (1.20.1-2+deb12u5) ...\nSetting up libsasl2-modules-db:amd64 (2.1.28+dfsg-10) ...\nSetting up librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2+b2) ...\nSetting up libk5crypto3:amd64 (1.20.1-2+deb12u5) ...\nSetting up libsasl2-2:amd64 (2.1.28+dfsg-10) ...\nSetting up libssh2-1:amd64 (1.10.0-3+deb12u1) ...\nSetting up libkrb5-3:amd64 (1.20.1-2+deb12u5) ...\nSetting up publicsuffix (20230209.2326-1) ...\nSetting up libldap-2.5-0:amd64 (2.5.13+dfsg-5) ...\nSetting up libgssapi-krb5-2:amd64 (1.20.1-2+deb12u5) ...\nSetting up libcurl4:amd64 (7.88.1-10+deb12u15) ...\nSetting up curl (7.88.1-10+deb12u15) ...\nProcessing triggers for libc-bin (2.36-9+deb12u10) ...\ndownloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 6 packages in 11ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.7, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 6 items\n\n../tests/test_outputs.py ......                                          [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_output_files_exist\nPASSED ../tests/test_outputs.py::test_input_data_integrity\nPASSED ../tests/test_outputs.py::test_generate_and_schema\nPASSED ../tests/test_outputs.py::test_solution_shape_feasibility_and_batch_consistency\nPASSED ../tests/test_outputs.py::test_solution_coverage_no_duplicates\nPASSED ../tests/test_outputs.py::test_performance_thresholds\n============================== 6 passed in 0.14s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    },
+    {
+      "job_name": "tb-public-gcp01-01-configure-git-webserver-native",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native/configure-git-webserver__zcZ43z2/result.json",
+      "result": {
+        "id": "6fa7fe87-b8ef-4281-95ee-8da2bb45cbfb",
+        "task_name": "terminal-bench/configure-git-webserver",
+        "trial_name": "configure-git-webserver__zcZ43z2",
+        "trial_uri": "file:///var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native/configure-git-webserver__zcZ43z2",
+        "task_id": {
+          "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/configure-git-webserver"
+        },
+        "source": null,
+        "task_checksum": "e65f54853b52d76b5472dff961754b0ba78f1dd06b4a08ceb9c96614f52260ce",
+        "config": {
+          "task": {
+            "path": "/var/lib/supergoal-lab/upstream/terminal-bench-2-1/tasks/configure-git-webserver",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+          },
+          "trial_name": "configure-git-webserver__zcZ43z2",
+          "trials_dir": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native",
+          "install_only": false,
+          "timeout_multiplier": 1.0,
+          "agent_timeout_multiplier": null,
+          "verifier_timeout_multiplier": null,
+          "agent_setup_timeout_multiplier": null,
+          "environment_build_timeout_multiplier": null,
+          "agent": {
+            "name": null,
+            "import_path": "harbor_agent:HermesSupergoalStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+              "arm": "native",
+              "max_requests": 96,
+              "max_episodes": 6,
+              "budget_seconds": 900.0
+            },
+            "mcp_servers": []
+          },
+          "user_agent": null,
+          "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": false,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {
+              "keep_containers": true
+            },
+            "extra_allowed_hosts": []
+          },
+          "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+          },
+          "artifacts": [],
+          "extra_instruction_paths": [],
+          "extra_instructions": [],
+          "job_id": "8206a157-78a4-47bc-830e-64baa5da127b",
+          "source_trial": null
+        },
+        "agent_info": {
+          "name": "hermes-supergoal-study",
+          "version": "public-dev04",
+          "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+          }
+        },
+        "agent_result": {
+          "n_input_tokens": 65726,
+          "n_cache_tokens": 37504,
+          "n_output_tokens": 1761,
+          "cost_usd": null,
+          "model_usage": null,
+          "rollout_details": null,
+          "metadata": {
+            "study_arm": "native",
+            "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+            "study_status": "agent_stopped",
+            "physical_requests": 13,
+            "adapter": "public-dev04"
+          }
+        },
+        "verifier_result": {
+          "rewards": {
+            "reward": 1.0
+          }
+        },
+        "verifier_environment_mode": "shared",
+        "exception_info": null,
+        "started_at": "2026-10-05T15:20:36.417490Z",
+        "finished_at": "2026-10-05T15:22:05.718781Z",
+        "environment_setup": {
+          "started_at": "2026-10-05T15:20:36.436179Z",
+          "finished_at": "2026-10-05T15:20:37.343660Z"
+        },
+        "agent_setup": {
+          "started_at": "2026-10-05T15:20:37.343711Z",
+          "finished_at": "2026-10-05T15:20:37.512684Z"
+        },
+        "agent_execution": {
+          "started_at": "2026-10-05T15:20:37.512794Z",
+          "finished_at": "2026-10-05T15:21:43.956003Z"
+        },
+        "verifier": {
+          "started_at": "2026-10-05T15:21:44.235675Z",
+          "finished_at": "2026-10-05T15:21:53.302783Z"
+        },
+        "step_results": null
+      },
+      "classification": "graded",
+      "verifier_logs": {
+        "test-stdout.txt": "downloading uv 0.9.5 x86_64-unknown-linux-gnu\nno checksums to verify\ninstalling to /root/.local/bin\n  uv\n  uvx\neverything's installed!\n\nTo add $HOME/.local/bin to your PATH, either restart your shell or run:\n\n    source $HOME/.local/bin/env (sh, bash, zsh)\n    source $HOME/.local/bin/env.fish (fish)\nDownloading cpython-3.13.9-linux-x86_64-gnu (download) (32.0MiB)\n Downloading cpython-3.13.9-linux-x86_64-gnu (download)\nDownloading pygments (1.2MiB)\n Downloading pygments\nInstalled 6 packages in 10ms\n============================= test session starts ==============================\nplatform linux -- Python 3.13.9, pytest-8.4.1, pluggy-1.6.0\nrootdir: /tests\nplugins: json-ctrf-0.3.5\ncollected 1 item\n\n../tests/test_outputs.py .                                               [100%]\n\n==================================== PASSES ====================================\n=========================== short test summary info ============================\nPASSED ../tests/test_outputs.py::test_hello_html_exists\n============================== 1 passed in 5.02s ===============================\n",
+        "reward.txt": "1\n"
+      }
+    }
+  ],
+  "setup": {
+    "environment-public-gcp01.json": {
+      "schema": 1,
+      "experiment": "public-gcp01",
+      "host": "supergoal-gcp",
+      "kernel": "7.0.0-1011-gcp",
+      "platform": "Linux-7.0.0-1011-gcp-x86_64-with-glibc2.39",
+      "harbor_version": "0.24.0",
+      "hermes_version": "0.21.3",
+      "hermes_host_python": "3.13.5",
+      "tasks": [
+        {
+          "task_id": "configure-git-webserver",
+          "image_tag": "alexgshaw/configure-git-webserver:20251031",
+          "image_id": "sha256:ec4bd4a5223850005caf80b223cbd98adb8999dbc5326786169d7998db53b65f",
+          "repo_digests": [
+            "alexgshaw/configure-git-webserver@sha256:9e48389b917fd4650dda1f64406bd7198bbf20dc1c6b0e5c4d81a3c16369f88c"
+          ],
+          "image_size_bytes": 143238589,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "d1db8dfb8883e39adf902eced862bfd7bf8240f2fc7eb6364a74d77b09b899b5",
+            "environment/Dockerfile": "8c87039a43581841b7ef11d80c4ff1a5c5f43011877e167403063d55435aaa19",
+            "instruction.md": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+            "solution/solve.sh": "921ff9c1dabdbd130e1a6616c24b236b7ba9a1517b3dff4c33fe8c8a129e2e7a",
+            "task.toml": "ebb40d72f689512cbd90d865d88ef966b6665ab215544f9247b898b7fa94751b",
+            "tests/test.sh": "afafc3ffdaf911f7a93003c0746f217188099c174e5d3eb7dada17133df15895",
+            "tests/test_outputs.py": "526aee3dfe952cc4c7574361012712e389d6fba7222c005fc3e939fc53346b37",
+            "tests/verify.sh": "49a02f5267a892824e023ce05eb1ac6132a44854cc47f20feba312c4a3d05568"
+          }
+        },
+        {
+          "task_id": "fix-code-vulnerability",
+          "image_tag": "alexgshaw/fix-code-vulnerability:20251031",
+          "image_id": "sha256:fe9be33bb13823b31284102c8b366e3fc83f5e84cedbba42d2540081c2d9899a",
+          "repo_digests": [
+            "alexgshaw/fix-code-vulnerability@sha256:cac325252991f823713b2d0441502972901dd782bd67f66c03d9b1e410dac5c0"
+          ],
+          "image_size_bytes": 460167777,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "87f28dbad183c3a634887696d328ca68a8a0858f132bc48cb7341c22267d38f7",
+            "environment/Dockerfile": "0917470986224df4daf4854a71302ae81c73ba5dd6e25be1232d29b758a5b3ab",
+            "instruction.md": "89b1abdf0af19399f720233b5cdf6b2e8e0ff7b6e3fe3e2a3af0d4d298a8641a",
+            "solution/solve.sh": "7a0131b369d83ae8546ecc3f9b4e23d38240f1bd1f0941e4430fa85b5182ee03",
+            "task.toml": "9aa2bd14ce9408289d199d0608bc3fa65b8b5e23374c9641020de62197dbf1e2",
+            "tests/test.sh": "f1611da693cb4cfc5e8482698c6a1858a5c67220ae9db89b50aed66584e9b17f",
+            "tests/test_outputs.py": "c006a5de95b69bd78055aa26cc055734dbd50718ede25d331f767bfee4ef7f26"
+          }
+        },
+        {
+          "task_id": "sparql-university",
+          "image_tag": "alexgshaw/sparql-university:20251031",
+          "image_id": "sha256:4b477a009da63f0cff40da8caa52e09a382bf4a0ce011cd371c09650e665ba9c",
+          "repo_digests": [
+            "alexgshaw/sparql-university@sha256:92fa4304e51167f9fb4466144eba33ef9272a7df0ac1cab9fc3986bccd1ab708"
+          ],
+          "image_size_bytes": 78133337,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "947086de0f27f93c2d8700dcba8c3bfc96b289fc62dec6f956d86388dc908d05",
+            "environment/Dockerfile": "dd0abcd64e90ab16141169bcbf88a8e5f52732f207cb37765d351cc7a48916a9",
+            "environment/university_graph.ttl": "0b0b1f2c0ee7ea7ddc9382f94ff8181996ffa7be60a1651111c1f57b49e09a85",
+            "instruction.md": "22eeab47d3b27b06df2627b3c21cfbd579ed7dcc85ebcb7c4b3a241c3c35f449",
+            "solution/solve.sh": "d17995a8f29c6d656c749271fd28e10d31afee6aa75f40ad28fea1c907f2a791",
+            "task.toml": "47a6f6dd9ce0fc7631ef607e900fcd039b2d064ea90545645b49c678cddc9585",
+            "tests/test.sh": "45902b57bd0f1dd6959216bc9943ab27bb349edc7ff557035a1ecc8732e4cc6b",
+            "tests/test_outputs.py": "ecf15840fc14f1eeff2f3b6317d7f0febc8fa81f688d24e3054205ba13207b39",
+            "tests/university_graph_test.ttl": "368ce01d32513ee04dfe592784b0c976086e514c1eab9b3165a016ca7b0192cb"
+          }
+        },
+        {
+          "task_id": "write-compressor",
+          "image_tag": "alexgshaw/write-compressor:20251031",
+          "image_id": "sha256:795a10ee52aa610a840b6587c5a1d2194175faa76c58879c8846a115b601902a",
+          "repo_digests": [
+            "alexgshaw/write-compressor@sha256:3618e1f8a997b437c09cd3dbaac736705809c05f6f12f584b65722175970ebe1"
+          ],
+          "image_size_bytes": 777076255,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "603015a28500a28f0838fea2c43a5168613746bfd07737920f4bae40b5a326f7",
+            "environment/Dockerfile": "9a583d29d46818f6ff2be7c6a0879d03343106e5376fd5a48eb5926b402bb93b",
+            "environment/data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+            "environment/decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+            "environment/main.rs": "fa53d6572fca95903e30d2d953f1e428bb8b63513ff218ebee9bc60a425ab389",
+            "instruction.md": "c4fc3e73e44deeac95f1cd4a34a2d87e853b22ceec2b2824767f5f087b470bb2",
+            "solution/solve.sh": "01550b7de7ab1320b1898eae055226bb7c73bee259c75102d2240c974a730409",
+            "task.toml": "6066a509066433c97c417fea68c4e3e73996f698dcdcbabe07718835eea355a6",
+            "tests/original-data.txt": "0fc483d0fb31128dfa41ed11adca56c88688888189826ef9daeafd7559b4fa4e",
+            "tests/original-decomp.c": "7f8d9ef66943f912a217aa48f4ef5efc967b44c2b21d0f56df029b5ab413f62a",
+            "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+            "tests/test_outputs.py": "809f486053e3ffbce852111dee1f63d80ab31297bd33172389e50278bed384e2"
+          }
+        },
+        {
+          "task_id": "dna-assembly",
+          "image_tag": "alexgshaw/dna-assembly:20251031",
+          "image_id": "sha256:940e10327e89b8034aa335c48e8e643414809f5ee2ffd2d2854688b996c822ee",
+          "repo_digests": [
+            "alexgshaw/dna-assembly@sha256:d1adf6835f1dd91205ba70e452c699d0aea601010038e5617f370716efb50569"
+          ],
+          "image_size_bytes": 78130568,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "e7855c23d9822f688eec4dd89ca0f1caf91c6a69e1c8f3c9eb544b4ab2a94821",
+            "environment/Dockerfile": "26e9e43a98f0b1d132bb638f44b7dc882b0d0ca32d56fa33048adeee00ab600d",
+            "environment/sequences.fasta": "ebdc361b5fba28eb0a2c7a8a8a444ccb12cc842c8cbc6df5a2c24254f130736f",
+            "instruction.md": "88998c98beabdd966ab46c04ede822bbc74796696aa1bf87c567a9131210533c",
+            "solution/solve.sh": "c976cb118c8ef1befd846ba05fd5cadb1b1f529bc76b9f2ea9cb3049e6e11a47",
+            "task.toml": "7b571544b64d9be1c91526837e5d805c2181afe0e6fd57a7f0676bba36c868d7",
+            "tests/test.sh": "271c8317c98539e3b49233d017fe51fb0e5fba8114e76830fe698565499b2b1d",
+            "tests/test_outputs.py": "5c2d0fd2e5f6303263e9750f67acda7db491ef04841832b4fc62bcfb61b08924"
+          }
+        },
+        {
+          "task_id": "llm-inference-batching-scheduler",
+          "image_tag": "alexgshaw/llm-inference-batching-scheduler:20251031",
+          "image_id": "sha256:0aff6db1f586c1b1e14999750d1cdf8fb94f11bc69c700fcad9b43a7c2ef5686",
+          "repo_digests": [
+            "alexgshaw/llm-inference-batching-scheduler@sha256:19e79aa49be4e55dccca1dde966515ebe6852314b6010bcb9230afb48b996774"
+          ],
+          "image_size_bytes": 120443537,
+          "files_sha256": {
+            ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+            "README.md": "ecc9dd635357c184742cf72fc1e452a8946e207b183fc9a7eebbcf07133b911f",
+            "environment/Dockerfile": "10a6193904ee0022ac098504182989893b196dfc74e626a3ca48534a8eacde48",
+            "environment/task_file/input_data/requests_bucket_1.jsonl": "8b3cf1e2b06074162038064dd2c114abe308acd32cec7d365ee63ee81978f7de",
+            "environment/task_file/input_data/requests_bucket_2.jsonl": "e15e2d4c4d55f875c42a6042610d6282f6c0657c39d3e0d0f087268252525cb5",
+            "environment/task_file/scripts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "environment/task_file/scripts/baseline_packer.py": "547d230d5e6d93197803480cb81cab0ec6ac63fcfa0a24b246f549523f216c4e",
+            "environment/task_file/scripts/cost_model.py": "0cf417fd5ff0112defcd46970d37a290c0763c5a9092e91cb3ebb86c3f20e6ce",
+            "instruction.md": "0817374767533fbf51bb93345ee1bba266263c216c6cc55c096e71b4a1d37dfc",
+            "solution/solve.sh": "cb9efb586d76a893c3027e62029e286eb6c7583dc92dbf1840a3adc236a926d7",
+            "task.toml": "52aaac942f917e6a91ff658e0272195bd1cd842d41d71e302414c52603cc588b",
+            "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "tests/cost_model_for_tests.py": "d3e810a99d40327fb8317f6512d879c52c6aeebdf5dcdc0c5e117c7df61c9ab9",
+            "tests/test.sh": "005f980332355e2fe143d4ff4aac11828adf070594bbe7055399c238f06953ca",
+            "tests/test_outputs.py": "80b06b7c4ba0db28832b767d48be74bb462d7f5df5798d9cb58c4f1160d96ffa"
+          }
+        }
+      ],
+      "model_trials_started": 0,
+      "registration_sha256": "e622f2ade86e9cae593ebd20cec395e1e0dcde1301d3fcde42d364b940736037",
+      "runtime_receipt_sha256": "8d6a4c303c6e784a488c8401f3471cfcce182c5466fffc00413b7ca38f85b284",
+      "docker_version": {
+        "Client": {
+          "Platform": {
+            "Name": "Docker Engine - Community"
+          },
+          "Version": "29.8.2",
+          "ApiVersion": "1.56",
+          "DefaultAPIVersion": "1.56",
+          "GitCommit": "7fc2dff",
+          "GoVersion": "go1.26.8",
+          "Os": "linux",
+          "Arch": "amd64",
+          "BuildTime": "Wed Sep 30 19:32:28 2026",
+          "Context": "default"
+        },
+        "Server": {
+          "Platform": {
+            "Name": "Docker Engine - Community"
+          },
+          "Version": "29.8.2",
+          "ApiVersion": "1.56",
+          "MinAPIVersion": "1.40",
+          "Os": "linux",
+          "Arch": "amd64",
+          "Components": [
+            {
+              "Name": "Engine",
+              "Version": "29.8.2",
+              "Details": {
+                "ApiVersion": "1.56",
+                "Arch": "amd64",
+                "BuildTime": "Wed Sep 30 19:32:28 2026",
+                "Experimental": "false",
+                "GitCommit": "8af9fe3",
+                "GoVersion": "go1.26.8",
+                "KernelVersion": "7.0.0-1011-gcp",
+                "MinAPIVersion": "1.40",
+                "Module": "github.com/moby/moby/v2",
+                "ModuleVersion": "v2.0.0+unknown",
+                "Os": "linux"
+              }
+            },
+            {
+              "Name": "containerd",
+              "Version": "v2.3.6",
+              "Details": {
+                "GitCommit": "ee2735368117d2eb259779949d5e75cdafec9761"
+              }
+            },
+            {
+              "Name": "runc",
+              "Version": "1.5.1",
+              "Details": {
+                "GitCommit": "v1.5.1-0-g8f2685a4"
+              }
+            },
+            {
+              "Name": "docker-init",
+              "Version": "0.19.0",
+              "Details": {
+                "GitCommit": "de40ad0"
+              }
+            }
+          ],
+          "GitCommit": "8af9fe3",
+          "GoVersion": "go1.26.8",
+          "KernelVersion": "7.0.0-1011-gcp",
+          "BuildTime": "2026-09-30T19:32:28.000000000+00:00"
+        }
+      },
+      "compose_version": "5.6.0",
+      "frozen_at": "2026-10-05T15:15:10.593398+00:00"
+    },
+    "public-gcp01-rows-00-30.json": {
+      "started_at": "2026-10-05T15:20:35.549888+00:00",
+      "pid": 27555,
+      "candidate": "/var/lib/supergoal-lab/candidates/public-gcp01",
+      "registration_sha256": "e622f2ade86e9cae593ebd20cec395e1e0dcde1301d3fcde42d364b940736037",
+      "environment_lock_sha256": "6cac483eec5c0a0c0dbfc2d2d7ea8d3d913138a2e984ba8f861f461d33e6f6ed",
+      "runner_sha256": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+      "status": "running",
+      "rows": [
+        {
+          "index": 0,
+          "task_id": "configure-git-webserver",
+          "arm": "native",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native",
+          "started_at": "2026-10-05T15:20:36.417490Z",
+          "admission_available_memory_bytes": 66047676416,
+          "admission_free_disk_bytes": 207749083136,
+          "status": "graded",
+          "harbor_pid": 27702,
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-01-configure-git-webserver-native/configure-git-webserver__zcZ43z2/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": {
+            "study_arm": "native",
+            "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+            "study_status": "agent_stopped",
+            "physical_requests": 13,
+            "adapter": "public-dev04"
+          },
+          "n_input_tokens": 65726,
+          "n_output_tokens": 1761,
+          "n_cache_tokens": 37504,
+          "finished_at": "2026-10-05T15:22:15.658600+00:00",
+          "exit_code": 0
+        },
+        {
+          "index": 1,
+          "task_id": "configure-git-webserver",
+          "arm": "sg_v2",
+          "job": "/var/lib/supergoal-lab/jobs/tb-public-gcp01-02-configure-git-webserver-sg_v2",
+          "started_at": "2026-10-05T15:22:15.766441+00:00",
+          "admission_available_memory_bytes": 66026848256,
+          "admission_free_disk_bytes": 207039000576,
+          "status": "running",
+          "harbor_pid": 32269
+        }
+      ],
+      "heartbeat_at": "2026-10-05T15:24:15.771513+00:00"
+    },
+    "tb-oracle-public-gcp01-receipt.json": {
+      "started_at": "2026-10-05T15:15:11.173106+00:00",
+      "model_calls": 0,
+      "status": "complete",
+      "rows": [
+        {
+          "task_id": "configure-git-webserver",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:15:12.722750Z",
+          "finished_at": "2026-10-05T15:16:02.010705Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "fix-code-vulnerability",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-02-fix-code-vulnerability/fix-code-vulnerability__nWaVtTS/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:08.330255Z",
+          "finished_at": "2026-10-05T15:16:23.268169Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "sparql-university",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-03-sparql-university/sparql-university__KT2DvDz/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:27.020873Z",
+          "finished_at": "2026-10-05T15:16:52.509558Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "write-compressor",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:16:56.262809Z",
+          "finished_at": "2026-10-05T15:18:12.571187Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "dna-assembly",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:18:16.331730Z",
+          "finished_at": "2026-10-05T15:18:59.186476Z",
+          "exit_code": 0
+        },
+        {
+          "task_id": "llm-inference-batching-scheduler",
+          "status": "graded",
+          "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-06-llm-inference-batching-scheduler/llm-inference-batching-scheduler__LtpQoui/result.json",
+          "raw_rewards": {
+            "reward": 1.0
+          },
+          "tests_completed_marker": true,
+          "dependency_failure_marker": false,
+          "exception_type": null,
+          "agent_metadata": null,
+          "n_input_tokens": null,
+          "n_output_tokens": null,
+          "n_cache_tokens": null,
+          "started_at": "2026-10-05T15:19:02.868135Z",
+          "finished_at": "2026-10-05T15:19:26.491895Z",
+          "exit_code": 0
+        }
+      ],
+      "finished_at": "2026-10-05T15:19:29.487884+00:00"
+    }
+  },
+  "model_runs": {
+    "9ebdd9dbe72141cb997fa1339e714d59": {
+      "report": {
+        "arm": "native",
+        "status": "agent_stopped",
+        "hermes_version": "0.21.3",
+        "host_python": "3.13",
+        "adapter_version": "public-dev04",
+        "max_requests": 96,
+        "budget_seconds": 900.0,
+        "original_instruction_sha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+        "control_id": "9ebdd9dbe72141cb997fa1339e714d59",
+        "official_verifier_visible": false,
+        "last_executor_claim": "Done, and verified end-to-end. Setup:\n\n- **User `user`** created; `sshd` running for `user@server` logins — add your key to `/home/user/.ssh/authorized_keys`.\n- **Bare repo** at `/git/server` (owned by `user`), so `git clone user@server:/git/server` works.\n- **Post-receive hook** at `/git/server/hooks/post-receive` runs `GIT_WORK_TREE=/var/www/html git checkout -f master`, deploying each push to the webroot.\n- **Webserver**: `python3 -m http.server 8080 --directory /var/www/html` running in the background.\n\nVerified: cloned via SSH, committed `hello.html`, pushed to master, and `curl http://localhost:8080/hello.html` returned `hello world`.\n\nNote: hook deploys only the `master` branch, matching your push command.",
+        "artifact_image_id": "sha256:2ca37aafebd88f2eb2a1c1f997cf62505effb13a99b08c00991c2368b5de042f",
+        "artifact_image_tag": "sg-artifact:9ebdd9dbe72141cb997fa1339e714d59",
+        "artifact_snapshot_excludes_mounted_logs": true,
+        "rounds": [
+          {
+            "role": "executor",
+            "pid": 28166,
+            "exit_code": 0,
+            "seconds": 62.817092592000336,
+            "model_calls": 13,
+            "result_relative_path": "01-executor/result.json"
+          }
+        ],
+        "requests": [
+          {
+            "index": 1,
+            "started": 1791213642.194332,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3618,
+              "output_tokens": 185,
+              "total_tokens": 3803,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_d23e7186-1d3",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.691122531890869
+          },
+          {
+            "index": 2,
+            "started": 1791213646.0238113,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 3759,
+              "output_tokens": 88,
+              "total_tokens": 3847,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_9fd0b0da-adf",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.675671339035034
+          },
+          {
+            "index": 3,
+            "started": 1791213648.780143,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4085,
+              "output_tokens": 89,
+              "total_tokens": 4174,
+              "input_tokens_details": {
+                "cached_tokens": 3712
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_4e80ea24-7f6",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.6511049270629883
+          },
+          {
+            "index": 4,
+            "started": 1791213670.826259,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4298,
+              "output_tokens": 139,
+              "total_tokens": 4437,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_c8794b48-153",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.000309467315674
+          },
+          {
+            "index": 5,
+            "started": 1791213673.9447346,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4587,
+              "output_tokens": 101,
+              "total_tokens": 4688,
+              "input_tokens_details": {
+                "cached_tokens": 4288
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_2585f8c4-c3f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.8294110298156738
+          },
+          {
+            "index": 6,
+            "started": 1791213675.9901485,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 4783,
+              "output_tokens": 201,
+              "total_tokens": 4984,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_1de56a66-25f",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.4296000003814697
+          },
+          {
+            "index": 7,
+            "started": 1791213678.5047798,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5089,
+              "output_tokens": 122,
+              "total_tokens": 5211,
+              "input_tokens_details": {
+                "cached_tokens": 4864
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_2f605875-159",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.218944787979126
+          },
+          {
+            "index": 8,
+            "started": 1791213680.7331195,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5307,
+              "output_tokens": 120,
+              "total_tokens": 5427,
+              "input_tokens_details": {
+                "cached_tokens": 5056
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_fc835b3c-9ba",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.1988093852996826
+          },
+          {
+            "index": 9,
+            "started": 1791213685.222511,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5668,
+              "output_tokens": 71,
+              "total_tokens": 5739,
+              "input_tokens_details": {
+                "cached_tokens": 3584
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_8aaafc4e-9ce",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.9193780422210693
+          },
+          {
+            "index": 10,
+            "started": 1791213687.2625751,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 5787,
+              "output_tokens": 236,
+              "total_tokens": 6023,
+              "input_tokens_details": {
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_63b25164-fae",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 4.264587879180908
+          },
+          {
+            "index": 11,
+            "started": 1791213691.9408205,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6058,
+              "output_tokens": 135,
+              "total_tokens": 6193,
+              "input_tokens_details": {
+                "cached_tokens": 5248
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_431ef7c7-5b9",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 3.452141046524048
+          },
+          {
+            "index": 12,
+            "started": 1791213695.785821,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6275,
+              "output_tokens": 71,
+              "total_tokens": 6346,
+              "input_tokens_details": {
+                "cached_tokens": 6144
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_0b889f11-b40",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 1.5819993019104004
+          },
+          {
+            "index": 13,
+            "started": 1791213697.4486046,
+            "request_model": "devin/swe-2",
+            "stream": true,
+            "usage": {
+              "input_tokens": 6412,
+              "output_tokens": 203,
+              "total_tokens": 6615,
+              "input_tokens_details": {
+                "cached_tokens": 4608
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "response_model": "devin/swe-2",
+            "response_id": "interaction_4a0ae0ce-f13",
+            "status": "completed",
+            "http_status": 200,
+            "seconds": 2.231881856918335
+          }
+        ],
+        "proxy_rejections": [
+          {
+            "time": 1791213641.1072602,
+            "path": "/api/show",
+            "model": "None"
+          },
+          {
+            "time": 1791213641.1701689,
+            "path": "/api/show",
+            "model": "None"
+          }
+        ],
+        "used_requests": 13,
+        "kernel_status": null
+      },
+      "environment": {
+        "container_id": "554949cefc4302fd1928a75322c6bed1d85ef38a3026b985ac53aafbdf2bfd17",
+        "image_id": "sha256:ec4bd4a5223850005caf80b223cbd98adb8999dbc5326786169d7998db53b65f",
+        "nano_cpus": 1000000000,
+        "memory_limit_bytes": 2147483648,
+        "mount_destinations": [
+          "/logs/agent",
+          "/logs/artifacts",
+          "/logs/verifier"
+        ],
+        "working_dir": "/app",
+        "execution_user": "root"
+      },
+      "environment_bootstrap": [],
+      "trajectory_receipts": [
+        {
+          "path": "/var/lib/supergoal-lab/control/9ebdd9dbe72141cb997fa1339e714d59/01-executor/result.json",
+          "sha256": "b595dcbfb680b7197f2156e5b3703d3ed5c89f87b8fe5802b0659c62af5e0185",
+          "bytes": 23762,
+          "tool_result_counts": {
+            "terminal": 12,
+            "write_file": 1
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "captured_at": "2026-10-05T20:31:18.130723+00:00",
+  "files": {
+    "setup/mechanism01-final-observation-2033.json": {
+      "sha256": "9301b02a05ab3395f7b3fae4afa4d0bc28a7044b0f9d7b04f0547e9955f9fd4c",
+      "bytes": 1126130
+    },
+    "setup/public-parallel24-v1-observation-2033.json": {
+      "sha256": "e075ad58226df566ef43e6d7ad7a29d229f33f1dde48ba121122ad36b459281f",
+      "bytes": 2334686
+    },
+    "setup/scb-transfer01-observation-2033.json": {
+      "sha256": "40e9e4278ce41d8f9ec4d60424bce19c0416152c54bc2eaa4b100e28bcb82924",
+      "bytes": 427007
+    },
+    "setup/mechanism01-receipt.json": {
+      "sha256": "ff0123bd9c3920a4af0f64e5d94edf40889c9397833b930bf9fb5d39ffe506de",
+      "bytes": 28752
+    },
+    "setup/scb-transfer01-receipt.json": {
+      "sha256": "137e237fb9922164812c361bdc8d70e9404f89a68fbc442934315568a9b0474c",
+      "bytes": 29977
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "059da5f05baf21617936dee47bb303d2455961d735125d6cf475d94e472074fa",
+      "bytes": 90730
+    },
+    "setup/snapshot-handoff-audit01.json": {
+      "sha256": "5a06e560741177b962333c09aaf09283046f28d88a8dc657dc763e537893a801",
+      "bytes": 7055
+    },
+    "setup/snapshot-handoff-audit02.json": {
+      "sha256": "b01372674bb59c973b298deeb1db99de175317d723d85799b3f42a257a788287",
+      "bytes": 8717
+    },
+    "setup/controller-restart01.json": {
+      "sha256": "0307c22df9e98e922058e882dfd8b8a792552a7cecd6aa20d1bd25248fe6f651",
+      "bytes": 867
+    },
+    "setup/registration-controller-restart01.json": {
+      "sha256": "0a27bf205f66866306bfe90ae170cc3d6976ee10f707b1d1745624ad08bba4e0",
+      "bytes": 12331
+    },
+    "control/9edbd110ab554b3d8b68ff6e12e12dbb/01-executor/result.json": {
+      "sha256": "18a8d7571aa1a3e218b5aeadeed5f33250c90b2d8e69b1ff2c9e637415537644",
+      "bytes": 1603
+    },
+    "control/9edbd110ab554b3d8b68ff6e12e12dbb/01-executor/worker.log": {
+      "sha256": "c5fa5050aade93c5c0ec678a73d823813f7dd812e94db0630994b894998a5a5c",
+      "bytes": 1271
+    },
+    "control/9edbd110ab554b3d8b68ff6e12e12dbb/request-journal.json": {
+      "sha256": "f89798994caa6ff2453a268f2c3d8b016cbe2e4007c468f42e90d939db5c30c7",
+      "bytes": 676
+    },
+    "control/9edbd110ab554b3d8b68ff6e12e12dbb/phase-1-finished.json": {
+      "sha256": "bfcf4198fb6daed47da80b5472ae2170c1043efc6762520ac9b5b949ea54973e",
+      "bytes": 529
+    }
+  }
+}

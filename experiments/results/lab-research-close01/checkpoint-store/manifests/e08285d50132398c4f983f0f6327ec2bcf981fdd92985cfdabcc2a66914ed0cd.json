@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "kind": "docker_save_cas",
+  "image_id": "sha256:e08285d50132398c4f983f0f6327ec2bcf981fdd92985cfdabcc2a66914ed0cd",
+  "original_tags": [
+    "sg-artifact:d7e372f9283b4eb5b515d4ed9b3f7fba"
+  ],
+  "created_at_epoch": 1791237176.8576367,
+  "members": [
+    {
+      "path": "blobs/sha256/043ebca2b2dfbb18e6c334940cfd3eb25641f51a37184377bc01b5f920180fbd",
+      "sha256": "043ebca2b2dfbb18e6c334940cfd3eb25641f51a37184377bc01b5f920180fbd",
+      "size": 7680,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/073ec47a8c22dcaa4d6e5758799ccefe2f9bde943685830b1bf6fd2395f5eabc",
+      "sha256": "073ec47a8c22dcaa4d6e5758799ccefe2f9bde943685830b1bf6fd2395f5eabc",
+      "size": 80634368,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/205ad38a9a15197cda853dc27be97936a2b1448a6fc8ea0538a4d94c80ff51e0",
+      "sha256": "205ad38a9a15197cda853dc27be97936a2b1448a6fc8ea0538a4d94c80ff51e0",
+      "size": 386,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/267f88671667d2c13e20b38b3356e84ef2506b7adddf4a30bc22544217ad2724",
+      "sha256": "267f88671667d2c13e20b38b3356e84ef2506b7adddf4a30bc22544217ad2724",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/4502c7c3549625660d9c27f34b8b8927d29eeefe0d817d4ab3324624fe2a785f",
+      "sha256": "4502c7c3549625660d9c27f34b8b8927d29eeefe0d817d4ab3324624fe2a785f",
+      "size": 858,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/7111e663e985bd1978a61bf9e503a46f1b5f7f990f19794351d6a7d993e4bec5",
+      "sha256": "7111e663e985bd1978a61bf9e503a46f1b5f7f990f19794351d6a7d993e4bec5",
+      "size": 2598,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/bd10af066c551b092822040376adcd0a0559ce0d53c17451edbb3ed632697e96",
+      "sha256": "bd10af066c551b092822040376adcd0a0559ce0d53c17451edbb3ed632697e96",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/e08285d50132398c4f983f0f6327ec2bcf981fdd92985cfdabcc2a66914ed0cd",
+      "sha256": "e08285d50132398c4f983f0f6327ec2bcf981fdd92985cfdabcc2a66914ed0cd",
+      "size": 3948,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/e54d39dd357723fa47bd55e1fcadadd4e4882e84f0c323ad63413edd1a650020",
+      "sha256": "e54d39dd357723fa47bd55e1fcadadd4e4882e84f0c323ad63413edd1a650020",
+      "size": 1536,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/fa7046c71bca802406f6d7fc0408000a2ced98baf27f16d00cccbd03f26bdd34",
+      "sha256": "fa7046c71bca802406f6d7fc0408000a2ced98baf27f16d00cccbd03f26bdd34",
+      "size": 1001551872,
+      "mode": 438
+    },
+    {
+      "path": "index.json",
+      "sha256": "cb618c7b92c3a06332086db62a9fd611ac592d778161f1406aaac7be83f8aadc",
+      "size": 419,
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "1abed26dbe73f29874caba327a516accc9c4c4525cdc04e709da0a9b19307321",
+      "size": 1407,
+      "mode": 420
+    },
+    {
+      "path": "oci-layout",
+      "sha256": "0cdedc0869d60bb59e3dde736f996025e70318180587e049cfa22f80d67aa8e5",
+      "size": 31,
+      "mode": 420
+    },
+    {
+      "path": "repositories",
+      "sha256": "1ce6d843acb6ff4a1f0257882558eb7992d6f9f57c4798de551521f467231ec1",
+      "size": 120,
+      "mode": 420
+    }
+  ],
+  "process_state_included": false,
+  "mounted_volumes_included": false
+}

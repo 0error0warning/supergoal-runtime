@@ -1,0 +1,17 @@
+{
+  "audited_at_utc": "2026-10-05T08:01:09.304473+00:00",
+  "candidate": "public-dev04",
+  "returned_trials_verified": 5,
+  "physical_requests_verified": 45,
+  "checks": [
+    "frozen source archive hashes",
+    "official grader actually ran",
+    "request and response model devin/swe-2, HTTP 200",
+    "shared 96-request cap",
+    "CPU 1, memory 2 GiB",
+    "pre-verifier artifact snapshot recorded"
+  ],
+  "local_receipt_tests": "8 passed",
+  "public_benchmark_ruff": "passed",
+  "full_study_complete": false
+}

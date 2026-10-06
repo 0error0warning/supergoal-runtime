@@ -1,0 +1,7 @@
+{
+  "captured_at": "2026-10-06T00:41:16.764839+00:00",
+  "unit": "MainPID=2291146\nActiveState=active\nInvocationID=ae80c87f6e204e55902a087ea579f824\n",
+  "pid_alive": true,
+  "operator_sha256": "e59a01bb7a8558f7b0448034ae35f03e7eb54dea865bc36f7cca1c59f9d035e5",
+  "scope": "Three official reference suffix runs, no SWE2 calls or formal model-study launch"
+}

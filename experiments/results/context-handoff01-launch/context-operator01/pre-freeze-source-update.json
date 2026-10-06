@@ -1,0 +1,5 @@
+{
+  "scope": "Before freeze or formal launch, add explicit reference outcome and POSIX boundary-test gates",
+  "previous_sha256": "c71b2bffec4c36cdb25e0a45cfa947ea985f678cb26513a16848d35d203faafc",
+  "current_sha256": "435ebfe9d520c1c9f422d4be54897e49fa8a00d64bb799557fd13c9fe608c439"
+}

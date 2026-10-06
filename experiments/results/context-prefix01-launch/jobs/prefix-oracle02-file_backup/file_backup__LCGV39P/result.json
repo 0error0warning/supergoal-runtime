@@ -1,0 +1,214 @@
+{
+    "id": "7e0100c3-00aa-4fe8-97eb-47566bda7cdb",
+    "task_name": "gabeorlanski/file_backup",
+    "trial_name": "file_backup__LCGV39P",
+    "trial_uri": "file:///var/lib/supergoal-lab/jobs/prefix-oracle02-file_backup/file_backup__LCGV39P",
+    "task_id": {
+        "path": "/var/lib/supergoal-lab/tasks/context-prefix01/file_backup"
+    },
+    "source": null,
+    "task_checksum": "a6c52381853b57ac367b01f4921b62ab6364c9d7194d4ad526501442172ff72d",
+    "config": {
+        "task": {
+            "path": "/var/lib/supergoal-lab/tasks/context-prefix01/file_backup",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "file_backup__LCGV39P",
+        "trials_dir": "/var/lib/supergoal-lab/jobs/prefix-oracle02-file_backup",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "prefix_agent:PrefixOracleAgent",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "prefix_path": "/var/lib/supergoal-lab/prefix-inputs01/file_backup/prefix.json",
+                "prefix_sha256": "513fc0a0d20c0edccd0a9b316fa95f26a108bfd3393cd95a36e1c11490e645ff",
+                "task_dir": "/var/lib/supergoal-lab/tasks/context-prefix01/file_backup",
+                "agent_timeout_sec": 1800
+            },
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "b67d5b65-aadc-4fd3-bcd6-afab8529a6e2",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "oracle",
+        "version": "1.0.0",
+        "model_info": null
+    },
+    "agent_result": null,
+    "verifier_result": {
+        "rewards": {
+            "verbosity_increased": 0.0,
+            "step_has_prior": 1.0,
+            "strict_pass_rate": 1.0,
+            "erosion_increased": 0.6666666666666666,
+            "erosion": 0.6205486253877864,
+            "isolated_pass_rate": 1.0,
+            "verbosity": 0.23136915676877887,
+            "core_pass_rate": 1.0
+        }
+    },
+    "verifier_environment_mode": null,
+    "exception_info": null,
+    "started_at": "2026-10-06T00:50:31.348964Z",
+    "finished_at": "2026-10-06T00:51:33.621852Z",
+    "environment_setup": {
+        "started_at": "2026-10-06T00:50:31.386830Z",
+        "finished_at": "2026-10-06T00:50:32.450852Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-10-06T00:50:32.450913Z",
+        "finished_at": "2026-10-06T00:50:32.975122Z"
+    },
+    "agent_execution": null,
+    "verifier": null,
+    "step_results": [
+        {
+            "step_name": "checkpoint_2",
+            "agent_result": {
+                "n_input_tokens": null,
+                "n_cache_tokens": null,
+                "n_output_tokens": null,
+                "cost_usd": null,
+                "model_usage": null,
+                "rollout_details": null,
+                "metadata": null
+            },
+            "verifier_result": {
+                "rewards": {
+                    "core_pass_rate": 1.0,
+                    "erosion": 0.591408304216619,
+                    "erosion_increased": 0.0,
+                    "isolated_pass_rate": 1.0,
+                    "step_has_prior": 1.0,
+                    "strict_pass_rate": 1.0,
+                    "verbosity": 0.25,
+                    "verbosity_increased": 0.0
+                }
+            },
+            "exception_info": null,
+            "agent_execution": {
+                "started_at": "2026-10-06T00:50:33.065700Z",
+                "finished_at": "2026-10-06T00:50:38.775909Z"
+            },
+            "verifier": {
+                "started_at": "2026-10-06T00:50:39.990037Z",
+                "finished_at": "2026-10-06T00:50:48.851874Z"
+            }
+        },
+        {
+            "step_name": "checkpoint_3",
+            "agent_result": {
+                "n_input_tokens": null,
+                "n_cache_tokens": null,
+                "n_output_tokens": null,
+                "cost_usd": null,
+                "model_usage": null,
+                "rollout_details": null,
+                "metadata": null
+            },
+            "verifier_result": {
+                "rewards": {
+                    "core_pass_rate": 1.0,
+                    "erosion": 0.6184161308455481,
+                    "erosion_increased": 1.0,
+                    "isolated_pass_rate": 1.0,
+                    "step_has_prior": 1.0,
+                    "strict_pass_rate": 1.0,
+                    "verbosity": 0.23220704529115743,
+                    "verbosity_increased": 0.0
+                }
+            },
+            "exception_info": null,
+            "agent_execution": {
+                "started_at": "2026-10-06T00:50:49.126161Z",
+                "finished_at": "2026-10-06T00:50:54.054339Z"
+            },
+            "verifier": {
+                "started_at": "2026-10-06T00:50:54.640337Z",
+                "finished_at": "2026-10-06T00:51:04.527431Z"
+            }
+        },
+        {
+            "step_name": "checkpoint_4",
+            "agent_result": {
+                "n_input_tokens": null,
+                "n_cache_tokens": null,
+                "n_output_tokens": null,
+                "cost_usd": null,
+                "model_usage": null,
+                "rollout_details": null,
+                "metadata": null
+            },
+            "verifier_result": {
+                "rewards": {
+                    "core_pass_rate": 1.0,
+                    "erosion": 0.651821441101192,
+                    "erosion_increased": 1.0,
+                    "isolated_pass_rate": 1.0,
+                    "step_has_prior": 1.0,
+                    "strict_pass_rate": 1.0,
+                    "verbosity": 0.2119004250151791,
+                    "verbosity_increased": 0.0
+                }
+            },
+            "exception_info": null,
+            "agent_execution": {
+                "started_at": "2026-10-06T00:51:04.776984Z",
+                "finished_at": "2026-10-06T00:51:09.485800Z"
+            },
+            "verifier": {
+                "started_at": "2026-10-06T00:51:10.047747Z",
+                "finished_at": "2026-10-06T00:51:23.026316Z"
+            }
+        }
+    ]
+}

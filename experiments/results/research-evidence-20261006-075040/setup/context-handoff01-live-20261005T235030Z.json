@@ -1,0 +1,61 @@
+{
+  "captured_at": "2026-10-05T23:50:30.375533+00:00",
+  "unit": "MainPID=1931087\nResult=success\nActiveState=active\nSubState=running\nInvocationID=1b2d67f71002474a93e288df8417b333\n",
+  "parent_alive": true,
+  "direct_children": [
+    {
+      "pid": 1961692,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3283123"
+    },
+    {
+      "pid": 1961693,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3283123"
+    },
+    {
+      "pid": 2087454,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3332895"
+    },
+    {
+      "pid": 2089926,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3334896"
+    },
+    {
+      "pid": 2120091,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3361515"
+    },
+    {
+      "pid": 2145804,
+      "state": "S",
+      "parent_pid": 1931087,
+      "start_ticks": "3389622"
+    }
+  ],
+  "free_gib": 74.94634628295898,
+  "load": "3.58 4.06 3.38 3/500 2152409",
+  "cohort_row_fields": [
+    "index",
+    "task_id",
+    "arm",
+    "status",
+    "started_epoch",
+    "job",
+    "harbor_pid",
+    "reservation",
+    "exit_code",
+    "finished_epoch",
+    "result_path",
+    "raw_rewards",
+    "exception",
+    "steps"
+  ]
+}

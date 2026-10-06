@@ -1,0 +1,162 @@
+{
+  "captured_at": "2026-10-05T23:49:46.883414+00:00",
+  "reason": "Physical requests without complete usage receipts make full token totals unknown; observed subtotals remain separate. No new model calls, reruns, score changes, or original record replacement. Prior immutable capsules retained.",
+  "validation": "36 targeted analysis/collection/policy tests passed; outcome statistics and physical requests checked equal before/after.",
+  "files": {
+    "analyze_public.py": {
+      "source": "experiments/public_benchmarks/analyze_public.py",
+      "sha256": "42f1c34d641537a6da815fcbe467ba8f9a67f8892a674a205cb90b94536b2f73",
+      "bytes": 25444
+    },
+    "test_public_benchmark_receipts.py": {
+      "source": "tests/unit/test_public_benchmark_receipts.py",
+      "sha256": "f0e3042d00d3a888724eac4d280148f44b9d7a0182efbc7dbea3a4034694aa95",
+      "bytes": 9617
+    },
+    "public-parallel24-v1/analysis-before.json": {
+      "source": "experiments/results/public-parallel24-v1-analysis.json",
+      "sha256": "33e89d2db95e158b8cebc35442b27d76137d6a4e2902fc509de6cfc7f4a97efe",
+      "bytes": 186893
+    },
+    "public-parallel24-v1/analysis-after.json": {
+      "source": "experiments/results/public-parallel24-v1-analysis.json",
+      "sha256": "6afaf0f63e6da83516a7d5b784cd649ee7df340469fbc9630daff1d9d8b36af7",
+      "bytes": 206117
+    },
+    "public-parallel24-v1/report-after.md": {
+      "source": "docs/public-parallel24-v1-progress.md",
+      "sha256": "4bc9f6a82c8243a27519c13d04ff1eb93fd2ad1e0a350dd750f4d1a1bf1a626c",
+      "bytes": 15335
+    },
+    "mechanism01/analysis-before.json": {
+      "source": "experiments/results/mechanism01-analysis.json",
+      "sha256": "b799b130a6b15d0ce25420176e4347fee5a4ae5f54d88f70e6f4c473502a5296",
+      "bytes": 65594
+    },
+    "mechanism01/analysis-after.json": {
+      "source": "experiments/results/mechanism01-analysis.json",
+      "sha256": "bfa146c6e1e67b6dcd6be400a497e1fdffa90fc0041e546c297f9facb2df594e",
+      "bytes": 70882
+    },
+    "mechanism01/report-after.md": {
+      "source": "docs/mechanism01-progress.md",
+      "sha256": "bd75d8ebbb0770b1fd8b8f6b56af3f2cddb5d329f3e33d36d9b99a5276802b83",
+      "bytes": 23065
+    },
+    "harness-transfer01/analysis-before.json": {
+      "source": "experiments/results/harness-transfer01-analysis.json",
+      "sha256": "8fac826dbc9c0edec9cf07bcab2ecf67fa6a54fa615b4f793d2d461a9ad77a0e",
+      "bytes": 29285
+    },
+    "harness-transfer01/analysis-after.json": {
+      "source": "experiments/results/harness-transfer01-analysis.json",
+      "sha256": "f3b0f282743fcc8b93b83ea1431d25414e56f162d6affb5a87c4eda62ec66b82",
+      "bytes": 31601
+    },
+    "harness-transfer01/report-after.md": {
+      "source": "docs/harness-transfer01-progress.md",
+      "sha256": "1f5c9512b73c4e19ed5a490db6938fe6ae9073d5aaea293e17f9c8bfd9083049",
+      "bytes": 12258
+    }
+  },
+  "changes": [
+    {
+      "experiment": "public-parallel24-v1",
+      "bundle": {
+        "path": "experiments/results/public-parallel24-v1-audited-bundle.json",
+        "sha256": "5cbf086a0d6df7a926d360b3dc96d0d0bbb381806a316299912a3ed2d706a458"
+      },
+      "registration": {
+        "path": "experiments/public_benchmarks/registration-public-parallel24-v1.json",
+        "sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2"
+      },
+      "unknown_token_totals": [
+        {
+          "task_id": "sqlite-db-truncate",
+          "arm": "sg_no_review",
+          "requests": 3,
+          "unmeasured": 3,
+          "observed_input_tokens": 0,
+          "observed_output_tokens": 0
+        }
+      ],
+      "outcomes_and_requests_unchanged": true
+    },
+    {
+      "experiment": "mechanism01",
+      "bundle": {
+        "path": "experiments/results/mechanism01-audited-bundle.json",
+        "sha256": "60d036fa5ca77acf40c0f9088df19ddea5ef8c238b828591e605661f5df4a9ca"
+      },
+      "registration": {
+        "path": "experiments/public_benchmarks/registration-mechanism01.json",
+        "sha256": "2ddbe8eef4f7f9e24c1af8f8c0acecd232e058e8cb2815f48700e1bf28f95aaa"
+      },
+      "unknown_token_totals": [
+        {
+          "task_id": "write-compressor",
+          "arm": "sg_fresh",
+          "requests": 29,
+          "unmeasured": 1,
+          "observed_input_tokens": 443414,
+          "observed_output_tokens": 40031
+        },
+        {
+          "task_id": "write-compressor",
+          "arm": "native",
+          "requests": 19,
+          "unmeasured": 1,
+          "observed_input_tokens": 208887,
+          "observed_output_tokens": 37212
+        },
+        {
+          "task_id": "write-compressor",
+          "arm": "mini_swe",
+          "requests": 22,
+          "unmeasured": 1,
+          "observed_input_tokens": 225760,
+          "observed_output_tokens": 24300
+        },
+        {
+          "task_id": "dna-assembly",
+          "arm": "mini_swe",
+          "requests": 34,
+          "unmeasured": 1,
+          "observed_input_tokens": 537040,
+          "observed_output_tokens": 83213
+        }
+      ],
+      "outcomes_and_requests_unchanged": true
+    },
+    {
+      "experiment": "harness-transfer01",
+      "bundle": {
+        "path": "experiments/results/harness-transfer01-audited-bundle.json",
+        "sha256": "073afbf5132dedd4223e772387e0cdb5286688faeccf0927d7501689de4ff379"
+      },
+      "registration": {
+        "path": "experiments/public_benchmarks/registration-harness-transfer01.json",
+        "sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732"
+      },
+      "unknown_token_totals": [
+        {
+          "task_id": "gcode-to-text",
+          "arm": "longhorizon",
+          "requests": 85,
+          "unmeasured": 1,
+          "observed_input_tokens": 2762769,
+          "observed_output_tokens": 45628
+        },
+        {
+          "task_id": "gcode-to-text",
+          "arm": "sg_v2",
+          "requests": 74,
+          "unmeasured": 1,
+          "observed_input_tokens": 1625808,
+          "observed_output_tokens": 24403
+        }
+      ],
+      "outcomes_and_requests_unchanged": true
+    }
+  ]
+}

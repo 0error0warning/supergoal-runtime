@@ -1,0 +1,736 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T18:06:31.444715+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:16:22.518798Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-001-configure-git-webserver-native",
+      "harbor_pid": 741444,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-001-configure-git-webserver-native/configure-git-webserver__Gxjr26r/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "ca9e26ba3c0141a4ab7fc73cfa78d4e5",
+        "study_status": "agent_stopped",
+        "physical_requests": 12,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 145353,
+      "n_output_tokens": 2272,
+      "n_cache_tokens": 74816,
+      "finished_at": "2026-10-05T18:18:06.606026+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "dna-assembly",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:16:22.513929Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-002-dna-assembly-sg_v2",
+      "harbor_pid": 741445,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-002-dna-assembly-sg_v2/dna-assembly__Y9CYd25/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "b240fe1594204cdab4be1c7656a5988f",
+        "study_status": "succeeded",
+        "physical_requests": 31,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 273975,
+      "n_output_tokens": 23573,
+      "n_cache_tokens": 237092,
+      "finished_at": "2026-10-05T18:26:11.658894+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "write-compressor",
+      "arm": "sg_fresh",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T18:18:12.339216Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-003-write-compressor-sg_fresh",
+      "harbor_pid": 751294,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-003-write-compressor-sg_fresh/write-compressor__SeLMYYc/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "sg_fresh",
+        "control_id": "ee53cc5916184cea9c4578807bbd746e",
+        "study_status": "adapter_error",
+        "physical_requests": 29,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 443414,
+      "n_output_tokens": 40031,
+      "n_cache_tokens": 410234,
+      "finished_at": "2026-10-05T18:33:47.211462+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "extract-elf",
+      "arm": "sg_retry_unknown",
+      "status": "graded",
+      "started_at": "2026-10-05T18:26:17.405663Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-004-extract-elf-sg_retry_unknown",
+      "harbor_pid": 779557,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-004-extract-elf-sg_retry_unknown/extract-elf__LCUCu3M/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_retry_unknown",
+        "control_id": "8ecc806dff4345b99e0a4ffaa014d76a",
+        "study_status": "succeeded",
+        "physical_requests": 14,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 88904,
+      "n_output_tokens": 4728,
+      "n_cache_tokens": 47785,
+      "finished_at": "2026-10-05T18:28:16.882974+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "configure-git-webserver",
+      "arm": "mini_swe",
+      "status": "graded",
+      "started_at": "2026-10-05T18:28:22.697156Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-005-configure-git-webserver-mini_swe",
+      "harbor_pid": 791723,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-005-configure-git-webserver-mini_swe/configure-git-webserver__Q6JE3Vk/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "8693be23affd4bcc833e49390fd0ba5d",
+        "study_status": "agent_stopped",
+        "physical_requests": 15,
+        "adapter": "mini-swe-agent-2.4.6-04d809c-transport01"
+      },
+      "n_input_tokens": 81262,
+      "n_output_tokens": 11163,
+      "n_cache_tokens": 72332,
+      "finished_at": "2026-10-05T18:33:37.206689+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "dna-assembly",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:33:43.042578Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-006-dna-assembly-sg_no_context",
+      "harbor_pid": 829667,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-006-dna-assembly-sg_no_context/dna-assembly__Xs5pb87/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "7a176c2d6fe94e288ecf55938e60f1bd",
+        "study_status": "succeeded",
+        "physical_requests": 31,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 355487,
+      "n_output_tokens": 15784,
+      "n_cache_tokens": 266732,
+      "finished_at": "2026-10-05T18:40:04.595108+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 6,
+      "task_id": "write-compressor",
+      "arm": "sg_fresh_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:33:53.044927Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-007-write-compressor-sg_fresh_no_context",
+      "harbor_pid": 830795,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-007-write-compressor-sg_fresh_no_context/write-compressor__LcFuBqX/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh_no_context",
+        "control_id": "d8968f1720274e2b9a9d2f6c62c07583",
+        "study_status": "succeeded",
+        "physical_requests": 11,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 61105,
+      "n_output_tokens": 30882,
+      "n_cache_tokens": 14776,
+      "finished_at": "2026-10-05T18:39:49.589523+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 7,
+      "task_id": "extract-elf",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:39:55.610409Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-008-extract-elf-native",
+      "harbor_pid": 866192,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-008-extract-elf-native/extract-elf__N4fvZvh/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "009f6c9b0df64514a3dec723f96ba196",
+        "study_status": "agent_stopped",
+        "physical_requests": 11,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 139285,
+      "n_output_tokens": 4403,
+      "n_cache_tokens": 125056,
+      "finished_at": "2026-10-05T18:41:35.030502+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 8,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:40:10.538773Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-009-configure-git-webserver-sg_v2",
+      "harbor_pid": 868232,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-009-configure-git-webserver-sg_v2/configure-git-webserver__ftr2fCu/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "b94b840844834b71a97c835167e9b6f0",
+        "study_status": "succeeded",
+        "physical_requests": 26,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 215023,
+      "n_output_tokens": 5522,
+      "n_cache_tokens": 180901,
+      "finished_at": "2026-10-05T18:45:25.937348+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 9,
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh",
+      "status": "graded",
+      "started_at": "2026-10-05T18:41:41.038573Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-010-dna-assembly-sg_fresh",
+      "harbor_pid": 876571,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-010-dna-assembly-sg_fresh/dna-assembly__AHuuaLi/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh",
+        "control_id": "82f0db8f002f46dbb3fb9332b99279bb",
+        "study_status": "verification_unavailable",
+        "physical_requests": 66,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 1250273,
+      "n_output_tokens": 67414,
+      "n_cache_tokens": 1066880,
+      "finished_at": "2026-10-05T18:53:39.218723+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 10,
+      "task_id": "write-compressor",
+      "arm": "sg_retry_unknown",
+      "status": "graded",
+      "started_at": "2026-10-05T18:45:31.801393Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-011-write-compressor-sg_retry_unknown",
+      "harbor_pid": 895728,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-011-write-compressor-sg_retry_unknown/write-compressor__GPMX5or/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_retry_unknown",
+        "control_id": "1451569afdec4fef906899f1f705945f",
+        "study_status": "succeeded",
+        "physical_requests": 25,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 286262,
+      "n_output_tokens": 29235,
+      "n_cache_tokens": 237369,
+      "finished_at": "2026-10-05T18:56:55.369037+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 11,
+      "task_id": "extract-elf",
+      "arm": "mini_swe",
+      "status": "graded",
+      "started_at": "2026-10-05T18:53:45.182274Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-012-extract-elf-mini_swe",
+      "harbor_pid": 957777,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-012-extract-elf-mini_swe/extract-elf__BzaVwFE/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "85787cc6ad3f40b880e97120aa0cd8bc",
+        "study_status": "agent_stopped",
+        "physical_requests": 15,
+        "adapter": "mini-swe-agent-2.4.6-04d809c-transport01"
+      },
+      "n_input_tokens": 114862,
+      "n_output_tokens": 20046,
+      "n_cache_tokens": 101473,
+      "finished_at": "2026-10-05T19:01:57.087752+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 12,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:57:01.166205Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-013-configure-git-webserver-sg_no_context",
+      "harbor_pid": 971051,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-013-configure-git-webserver-sg_no_context/configure-git-webserver__4p57oXt/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "ff58f11e62214452ad421e662c6ecf9d",
+        "study_status": "succeeded",
+        "physical_requests": 41,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 255635,
+      "n_output_tokens": 7234,
+      "n_cache_tokens": 213049,
+      "finished_at": "2026-10-05T19:04:18.201710+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 13,
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T19:02:03.137424Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-014-dna-assembly-sg_fresh_no_context",
+      "harbor_pid": 1009231,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-014-dna-assembly-sg_fresh_no_context/dna-assembly__6vUbpAY/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh_no_context",
+        "control_id": "d92794e0009c444da8d24f13222965bf",
+        "study_status": "succeeded",
+        "physical_requests": 32,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 615527,
+      "n_output_tokens": 36026,
+      "n_cache_tokens": 560966,
+      "finished_at": "2026-10-05T19:16:07.243828+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 14,
+      "task_id": "write-compressor",
+      "arm": "native",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T19:04:24.394929Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-015-write-compressor-native",
+      "harbor_pid": 1026164,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-015-write-compressor-native/write-compressor__pffcLKP/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "d4e0769023c142109437ab2061bf9a3e",
+        "study_status": "adapter_error",
+        "physical_requests": 19,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 208887,
+      "n_output_tokens": 37212,
+      "n_cache_tokens": 187854,
+      "finished_at": "2026-10-05T19:20:13.855011+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 15,
+      "task_id": "extract-elf",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T19:16:13.230545Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-016-extract-elf-sg_v2",
+      "harbor_pid": 1108101,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-016-extract-elf-sg_v2/extract-elf__rgtuczP/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "4bd5c746fb4c43b7b6aa257b0a8a470b",
+        "study_status": "succeeded",
+        "physical_requests": 11,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 69276,
+      "n_output_tokens": 5006,
+      "n_cache_tokens": 37640,
+      "finished_at": "2026-10-05T19:19:38.762220+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 16,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh",
+      "status": "graded",
+      "started_at": "2026-10-05T19:19:44.568412Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-017-configure-git-webserver-sg_fresh",
+      "harbor_pid": 1131179,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-017-configure-git-webserver-sg_fresh/configure-git-webserver__z8eGGBQ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh",
+        "control_id": "e4792d20364b4977a1b16f437cf67aee",
+        "study_status": "succeeded",
+        "physical_requests": 24,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 134329,
+      "n_output_tokens": 4038,
+      "n_cache_tokens": 36416,
+      "finished_at": "2026-10-05T19:22:24.213091+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 17,
+      "task_id": "dna-assembly",
+      "arm": "sg_retry_unknown",
+      "status": "graded",
+      "started_at": "2026-10-05T19:20:19.610761Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-018-dna-assembly-sg_retry_unknown",
+      "harbor_pid": 1136026,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-018-dna-assembly-sg_retry_unknown/dna-assembly__mWoQd38/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_retry_unknown",
+        "control_id": "7af764383b624374a52a4fdfa2f240a4",
+        "study_status": "succeeded",
+        "physical_requests": 63,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 811655,
+      "n_output_tokens": 49975,
+      "n_cache_tokens": 729655,
+      "finished_at": "2026-10-05T19:39:58.879202+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 18,
+      "task_id": "write-compressor",
+      "arm": "mini_swe",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T19:22:30.373379Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-019-write-compressor-mini_swe",
+      "harbor_pid": 1147813,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-019-write-compressor-mini_swe/write-compressor__ntmJ9tX/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "dae5356e9af44476814f79a6e795d4d3",
+        "study_status": "adapter_error",
+        "physical_requests": 22,
+        "adapter": "mini-swe-agent-2.4.6-04d809c-transport01"
+      },
+      "n_input_tokens": 225760,
+      "n_output_tokens": 24300,
+      "n_cache_tokens": 200865,
+      "finished_at": "2026-10-05T19:38:23.426700+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 19,
+      "task_id": "extract-elf",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T19:38:29.321176Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-020-extract-elf-sg_no_context",
+      "harbor_pid": 1198683,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-020-extract-elf-sg_no_context/extract-elf__9ZdwrnA/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "4d499e5c2aa443d98e0844eb90a5c289",
+        "study_status": "succeeded",
+        "physical_requests": 10,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 54066,
+      "n_output_tokens": 2811,
+      "n_cache_tokens": 32797,
+      "finished_at": "2026-10-05T19:40:54.112804+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 20,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T19:40:04.790720Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-021-configure-git-webserver-sg_fresh_no_context",
+      "harbor_pid": 1208223,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-021-configure-git-webserver-sg_fresh_no_context/configure-git-webserver__UMVMcfC/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh_no_context",
+        "control_id": "dce3b0092f2e4fc98ba81ee9c562de2f",
+        "study_status": "succeeded",
+        "physical_requests": 16,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 151422,
+      "n_output_tokens": 3361,
+      "n_cache_tokens": 123103,
+      "finished_at": "2026-10-05T19:43:14.674776+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 21,
+      "task_id": "dna-assembly",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T19:41:00.040719Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-022-dna-assembly-native",
+      "harbor_pid": 1211968,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-022-dna-assembly-native/dna-assembly__oGvPqmA/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "b45a46ddc7064cc39273fd974f5c4958",
+        "study_status": "agent_stopped",
+        "physical_requests": 44,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 790927,
+      "n_output_tokens": 32130,
+      "n_cache_tokens": 640192,
+      "finished_at": "2026-10-05T19:49:12.023102+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 22,
+      "task_id": "write-compressor",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T19:43:20.736084Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-023-write-compressor-sg_v2",
+      "harbor_pid": 1220442,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-023-write-compressor-sg_v2/write-compressor__i8MViD2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "0570af3ea90d46c29e79e6efb0428dbb",
+        "study_status": "succeeded",
+        "physical_requests": 37,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 658479,
+      "n_output_tokens": 23197,
+      "n_cache_tokens": 612325,
+      "finished_at": "2026-10-05T19:53:43.714876+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 23,
+      "task_id": "extract-elf",
+      "arm": "sg_fresh",
+      "status": "graded",
+      "started_at": "2026-10-05T19:49:17.839156Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-024-extract-elf-sg_fresh",
+      "harbor_pid": 1251447,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-024-extract-elf-sg_fresh/extract-elf__RNRPWuf/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_fresh",
+        "control_id": "d66318b7d8234a1d86d2d16cd803ad30",
+        "study_status": "succeeded",
+        "physical_requests": 14,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 86269,
+      "n_output_tokens": 4068,
+      "n_cache_tokens": 66610,
+      "finished_at": "2026-10-05T19:51:37.824319+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 24,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_retry_unknown",
+      "status": "graded",
+      "started_at": "2026-10-05T19:51:43.605624Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-025-configure-git-webserver-sg_retry_unknown",
+      "harbor_pid": 1267235,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-mechanism01-025-configure-git-webserver-sg_retry_unknown/configure-git-webserver__K9KCQVy/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_retry_unknown",
+        "control_id": "8b81b3c80ca2432f820341900ee42fb7",
+        "study_status": "succeeded",
+        "physical_requests": 41,
+        "adapter": "mechanism-dev06"
+      },
+      "n_input_tokens": 280138,
+      "n_output_tokens": 9168,
+      "n_cache_tokens": 176565,
+      "finished_at": "2026-10-05T19:58:55.799840+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 25,
+      "task_id": "dna-assembly",
+      "arm": "mini_swe",
+      "status": "running",
+      "started_at": "2026-10-05T19:53:48.750487+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-026-dna-assembly-mini_swe",
+      "harbor_pid": 1282249
+    },
+    {
+      "index": 26,
+      "task_id": "write-compressor",
+      "arm": "sg_no_context",
+      "status": "running",
+      "started_at": "2026-10-05T19:59:00.903527+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-mechanism01-027-write-compressor-sg_no_context",
+      "harbor_pid": 1304781
+    },
+    {
+      "index": 27,
+      "task_id": "extract-elf",
+      "arm": "sg_fresh_no_context",
+      "status": "pending"
+    }
+  ],
+  "registration_sha256": "2ddbe8eef4f7f9e24c1af8f8c0acecd232e058e8cb2815f48700e1bf28f95aaa",
+  "cpu_limit": 2,
+  "memory_limit_mb": 12288,
+  "automatic_retries": 0,
+  "heartbeat_at": "2026-10-05T20:01:01.835684+00:00",
+  "capacity_opened_at": "2026-10-05T18:16:21.491525+00:00"
+}

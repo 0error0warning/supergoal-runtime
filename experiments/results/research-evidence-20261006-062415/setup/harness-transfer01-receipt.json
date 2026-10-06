@@ -1,0 +1,352 @@
+{
+  "status": "complete_with_itemized_outcomes",
+  "started_at": "2026-10-05T21:18:53.344863+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T21:18:54.462751Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-001-adaptive-rejection-sampler-native",
+      "harbor_pid": 1576536,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-001-adaptive-rejection-sampler-native/adaptive-rejection-sampler__Pr8eWWc/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "be7213a8b08b48ca9dcc12e2ea1ac8c7",
+        "study_status": "agent_stopped",
+        "physical_requests": 26,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 294482,
+      "n_output_tokens": 10774,
+      "n_cache_tokens": 272851,
+      "finished_at": "2026-10-05T21:28:30.710490+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "polyglot-rust-c",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T21:18:54.544794Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-002-polyglot-rust-c-sg_v2",
+      "harbor_pid": 1576570,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-002-polyglot-rust-c-sg_v2/polyglot-rust-c__M8pjRjj/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "2d97f43e11244fbe93444baf0f99c3a3",
+        "study_status": "succeeded",
+        "physical_requests": 17,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 91566,
+      "n_output_tokens": 14301,
+      "n_cache_tokens": 45828,
+      "finished_at": "2026-10-05T21:24:04.894142+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "gcode-to-text",
+      "arm": "mini_swe",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T21:24:10.878455Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-003-gcode-to-text-mini_swe",
+      "harbor_pid": 1608620,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-003-gcode-to-text-mini_swe/gcode-to-text__wvNFxih/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "53ca319cd2c342a28b7aed1a1a503585",
+        "study_status": "adapter_error",
+        "physical_requests": 57,
+        "adapter": "mini-swe-agent-2.4.6-checkpoint08"
+      },
+      "n_input_tokens": 1948298,
+      "n_output_tokens": 27318,
+      "n_cache_tokens": 1875399,
+      "finished_at": "2026-10-05T21:40:27.128808+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T21:28:36.717935Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-004-adaptive-rejection-sampler-sg_v2",
+      "harbor_pid": 1627110,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-004-adaptive-rejection-sampler-sg_v2/adaptive-rejection-sampler__tcSSwz8/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "c34d93a8d1d94cf7a82499e5b1104003",
+        "study_status": "succeeded",
+        "physical_requests": 24,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 237185,
+      "n_output_tokens": 9680,
+      "n_cache_tokens": 103062,
+      "finished_at": "2026-10-05T21:43:18.348591+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "polyglot-rust-c",
+      "arm": "mini_swe",
+      "status": "graded",
+      "started_at": "2026-10-05T21:40:33.555425Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-005-polyglot-rust-c-mini_swe",
+      "harbor_pid": 1661174,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-005-polyglot-rust-c-mini_swe/polyglot-rust-c__dwE8t84/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "b300b86a9fc1411aa9352443b3050d14",
+        "study_status": "agent_stopped",
+        "physical_requests": 10,
+        "adapter": "mini-swe-agent-2.4.6-checkpoint08"
+      },
+      "n_input_tokens": 26926,
+      "n_output_tokens": 10705,
+      "n_cache_tokens": 22603,
+      "finished_at": "2026-10-05T21:44:23.927577+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "gcode-to-text",
+      "arm": "longhorizon",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T21:43:24.473547Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-006-gcode-to-text-longhorizon",
+      "harbor_pid": 1667794,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-006-gcode-to-text-longhorizon/gcode-to-text__ptVznaQ/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "longhorizon",
+        "control_id": "cbdc59a226f0473eb8b0a3ec222c36d7",
+        "study_status": "adapter_error",
+        "adapter": "longhorizon-0.1.7-hermes-dev02",
+        "physical_requests": 85,
+        "upstream_commit": "a1dd930614972b92361c1b9cd6aac441a6db5a65"
+      },
+      "n_input_tokens": 2762769,
+      "n_output_tokens": 45628,
+      "n_cache_tokens": 2576978,
+      "finished_at": "2026-10-05T21:59:11.253905+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 6,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "mini_swe",
+      "status": "graded",
+      "started_at": "2026-10-05T21:44:29.975531Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-007-adaptive-rejection-sampler-mini_swe",
+      "harbor_pid": 1674291,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-007-adaptive-rejection-sampler-mini_swe/adaptive-rejection-sampler__Zst53F3/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "mini_swe",
+        "control_id": "d7e372f9283b4eb5b515d4ed9b3f7fba",
+        "study_status": "agent_stopped",
+        "physical_requests": 58,
+        "adapter": "mini-swe-agent-2.4.6-checkpoint08"
+      },
+      "n_input_tokens": 1419875,
+      "n_output_tokens": 27722,
+      "n_cache_tokens": 1295060,
+      "finished_at": "2026-10-05T21:52:45.724766+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 7,
+      "task_id": "polyglot-rust-c",
+      "arm": "longhorizon",
+      "status": "graded",
+      "started_at": "2026-10-05T21:52:51.720629Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-008-polyglot-rust-c-longhorizon",
+      "harbor_pid": 1710947,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-008-polyglot-rust-c-longhorizon/polyglot-rust-c__HPZqGy2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "longhorizon",
+        "control_id": "55a044fb0c994e08887a73a559667399",
+        "study_status": "succeeded",
+        "adapter": "longhorizon-0.1.7-hermes-dev02",
+        "physical_requests": 25,
+        "upstream_commit": "a1dd930614972b92361c1b9cd6aac441a6db5a65"
+      },
+      "n_input_tokens": 227200,
+      "n_output_tokens": 30174,
+      "n_cache_tokens": 154195,
+      "finished_at": "2026-10-05T21:59:16.342073+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 8,
+      "task_id": "gcode-to-text",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T21:59:17.283119Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-009-gcode-to-text-native",
+      "harbor_pid": 1735295,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-009-gcode-to-text-native/gcode-to-text__havAnhC/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "b96deda8334144c3b6f15eace64da269",
+        "study_status": "agent_stopped",
+        "physical_requests": 42,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 996181,
+      "n_output_tokens": 19571,
+      "n_cache_tokens": 942216,
+      "finished_at": "2026-10-05T22:08:32.605511+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 9,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "longhorizon",
+      "status": "graded",
+      "started_at": "2026-10-05T21:59:22.351476Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-010-adaptive-rejection-sampler-longhorizon",
+      "harbor_pid": 1735967,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-010-adaptive-rejection-sampler-longhorizon/adaptive-rejection-sampler__aGbhfsg/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "longhorizon",
+        "control_id": "60dd6a8c51134776b69ed151f8098704",
+        "study_status": "succeeded",
+        "adapter": "longhorizon-0.1.7-hermes-dev02",
+        "physical_requests": 27,
+        "upstream_commit": "a1dd930614972b92361c1b9cd6aac441a6db5a65"
+      },
+      "n_input_tokens": 346640,
+      "n_output_tokens": 16822,
+      "n_cache_tokens": 246978,
+      "finished_at": "2026-10-05T22:06:47.411030+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 10,
+      "task_id": "polyglot-rust-c",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T22:06:53.291092Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-011-polyglot-rust-c-native",
+      "harbor_pid": 1761881,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-011-polyglot-rust-c-native/polyglot-rust-c__LbNTvkx/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "dee692447a10457d92fdd9ed1ff2570e",
+        "study_status": "agent_stopped",
+        "physical_requests": 6,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 26814,
+      "n_output_tokens": 6267,
+      "n_cache_tokens": 17910,
+      "finished_at": "2026-10-05T22:09:47.926813+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 11,
+      "task_id": "gcode-to-text",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T22:08:38.499548Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-012-gcode-to-text-sg_v2",
+      "harbor_pid": 1768031,
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-012-gcode-to-text-sg_v2/gcode-to-text__gYaNYYh/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "f15a983c3236499089d7c5d87825d6a2",
+        "study_status": "succeeded",
+        "physical_requests": 74,
+        "adapter": "checkpoint-dev08"
+      },
+      "n_input_tokens": 1625808,
+      "n_output_tokens": 24403,
+      "n_cache_tokens": 1506096,
+      "finished_at": "2026-10-05T22:23:08.653272+00:00",
+      "exit_code": 0
+    }
+  ],
+  "registration_sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+  "cpu_limit": 2,
+  "memory_limit_mb": 12288,
+  "automatic_retries": 0,
+  "capacity_opened_at": "2026-10-05T21:18:53.345208+00:00",
+  "heartbeat_at": "2026-10-05T22:23:08.653292+00:00",
+  "finished_at": "2026-10-05T22:23:08.653717+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "captured_at": "2026-10-05T19:33:08.017841+00:00",
+  "sha256": {
+    "setup/mechanism01-audit-observation-1933.json": "291c2fd3e51a96c72ec32db34a77bec2d53ff5353c545e22a94ea3b2762b2533",
+    "setup/public-parallel24-v1-audit-observation-1933.json": "d029db55110e0124877570add48737099e9e640c65a8b4bb1eef72b6cb2dd147",
+    "setup/snapshot-handoff-audit01.json": "5a06e560741177b962333c09aaf09283046f28d88a8dc657dc763e537893a801",
+    "setup/scb-multistep-smoke01.json": "57f9f6bbed333f33297105e6db63588d1c01abbe17f2f71c7a405ebbfa2cd372",
+    "setup/scb-multistep-smoke02.json": "85d5bfe5b76fd028bfbb095ccf1de6f2f7c2416388284ec866cec7f528187bf5",
+    "setup/scb-dev02-source.json": "f77d3adb2dfe7bd9b9d00f9c1cdd42fede26dc073f5348e4f5d7da8cc9b9cc28"
+  }
+}

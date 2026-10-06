@@ -1,0 +1,230 @@
+{
+  "status": "complete_with_itemized_outcomes",
+  "rows": [
+    {
+      "case_id": "dna_incorrect",
+      "task_id": "dna-assembly",
+      "condition": "claim_visible",
+      "control_id": "f2d4fbeeaabc4e5fb0b8f41ec6762aad",
+      "official_reward": 0,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "primers.fasta satisfies every stated requirement, verified by in-silico PCR/BsaI digest/ligation and oligotm with the mandated flags.",
+        "evidence": [
+          "File primers.fasta exists, 16 lines, no blank lines, headers all in >TEMPLATENAME_DIR format (input/egfp/flag/snap × fwd/rev) — 4 primer pairs, the minimum for 4 fragments",
+          "Each primer is aggtctca + 4-nt overhang + annealing region; BsaI site GGTCTC oriented so it is excised (type IIS, cuts downstream of site, spacer 'a') — satisfies NEB BsaI-HF v2 recognition requirement",
+          "All 8 annealing regions found uniquely in their templates (e.g. input_fwd at pos 690, input_rev wrapping origin so backbone PCR excludes the replaced region); lengths 16–43 nt, all within 15–45",
+          "oligotm -tp 1 -sc 1 -mv 50 -dv 2 -n 0.8 -d 500: Tms 63.30–65.08 °C (all within 58–72); pair deltas 0.10–1.20 °C (all ≤5)",
+          "In-silico assembly: overhang complementarity confirmed at all 4 junctions (atga, caaa, ttca, ttaa); assembled circular product = 3591 bp and is a rotation of the provided 'output' sequence exactly (found as substring of output+output)",
+          "Assembled product contains zero GGTCTC or GAGACC sites — no internal BsaI sites would interfere"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 7,
+        "snapshot_image_id": "sha256:464289efdab9884ecf8b087252cbb78a51f27dec3a5fa1af4d2f3edc5918a293"
+      },
+      "requests": 6,
+      "false_acceptance": true,
+      "false_rejection": false
+    },
+    {
+      "case_id": "dna_incorrect",
+      "task_id": "dna-assembly",
+      "condition": "claim_masked",
+      "control_id": "7321d0efa0e34eb2852c497d89fc8e51",
+      "official_reward": 0,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "All four primer pairs verified: correct headers, BsaI sites with fusion overhangs, annealing regions match templates, oligotm Tms all 63.3–67.7°C (within 58–72, pairs ≤5°C apart), simulated Golden Gate assembly reproduces output plasmid exactly, 4 pairs is minimal for 4 fragments, no internal BsaI sites, no blank lines.",
+        "evidence": [
+          "primers.fasta has exactly 8 entries >input_fwd/rev, egfp_fwd/rev, flag_fwd/rev, snap_fwd/rev; no blank lines",
+          "In silico PCR+BsaI digest+ligation: assembled circular product is a rotation-exact match to output sequence (order input-egfp-flag-snap; overhangs ttaa/atga/caaa/ttca)",
+          "oligotm -tp 1 -sc 1 -mv 50 -dv 2 -n 0.8 -d 500 on annealing regions: input 65.17/64.98, egfp 67.72/67.00, flag 63.30/67.72, snap 64.48/65.85 — all in 58-72 range, max pair delta 4.42",
+          "No ggtctc/gagacc sites inside templates or amplicon cores; each primer carries one BsaI site in tail orientation that excises after cutting"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 11,
+        "snapshot_image_id": "sha256:fcbaff9adaae16324dc4067124b3f277eb69836eeecb4d38ca27b5230cdba90a"
+      },
+      "requests": 11,
+      "false_acceptance": true,
+      "false_rejection": false
+    },
+    {
+      "case_id": "dna_correct",
+      "task_id": "dna-assembly",
+      "condition": "claim_masked",
+      "control_id": "d3938a18c27a43c4afe6e034696eca65",
+      "official_reward": 1,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "All requirements verified: primers.fasta exists with 4 primer pairs (minimum needed for 4 fragments), valid headers, BsaI sites (GGTCTC) with 4-nt overhangs whose junctions are complementary (verified by assembly simulation producing the exact output plasmid as a circular rotation), annealing lengths 15–32 nt, oligotm Tms 58.05–61.81 °C all within 58–72, and pair Tm differences ≤5 °C. No blank lines.",
+        "evidence": [
+          "primers.fasta contains >input_fwd/rev, >egfp_fwd/rev, >flag_fwd/rev, >snap_fwd/rev — one pair per template, minimum for 4-fragment one-pot Golden Gate",
+          "Each primer has 5' tail aaggtctca + 4-nt overhang; junction check confirmed each rev overhang is reverse-complement of next fwd overhang",
+          "Independent assembly simulation (verify.pl logic) produced MATCH: assembled circle = output plasmid at rotation 1552",
+          "oligotm -tp 1 -sc 1 -mv 50 -dv 2 -n 0.8 -d 500 on annealing portions: all Tms 58.05–61.81 °C; per-pair deltas ≤ ~2.2 °C",
+          "Annealing lengths: 15,18,16,19,17,32,20,15 nt — all within 15–45",
+          "grep -c '^$' primers.fasta = 0; filename and header format conform"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 6,
+        "snapshot_image_id": "sha256:604194603eb5328e3b761fa8d9011eed4f90731ca4737eccc84473154260fc0d"
+      },
+      "requests": 6,
+      "false_acceptance": false,
+      "false_rejection": false
+    },
+    {
+      "case_id": "dna_correct",
+      "task_id": "dna-assembly",
+      "condition": "claim_visible",
+      "control_id": "20c8c1d0d0244f5caea091c5d0097129",
+      "official_reward": 1,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "Independent simulation (executor's verify.pl re-run by me, parsing primers.fasta and sequences.fasta) reconstructs the output plasmid exactly as a circular rotation; all primer constraints confirmed with real oligotm output.",
+        "evidence": [
+          "Assembly: simulated PCR+BsaI digestion+ligation of 4 fragments yields circular sequence equal to output plasmid ('MATCH: assembled circle = output, rotation 1552')",
+          "4 primer pairs — minimum possible for 4 input fragments (input, egfp, flag, snap); headers match >TEMPLATENAME_DIR format; primers.fasta has no blank lines",
+          "Each primer = 'aa' clamp + GGTCTC (BsaI-HF v2 site) + 1 spacer + 4-nt overhang + anneal region; all 8 anneal regions verified present in their named templates (fwd: substring; rev: reverse complement)",
+          "Anneal lengths 15–32 nt (within 15–45)",
+          "oligotm -tp 1 -sc 1 -mv 50 -dv 2 -n 0.8 -d 500 on exact anneal regions: 58.05–61.81 °C, all within 58–72; pair ΔTm ≤2.2 °C (input 0.06, egfp 1.24, flag 0.25, snap 2.19)",
+          "Junction overhangs cata/aagg/caga/aatg unique, non-palindromic; rev overhang of each fragment reverse-complements next fragment's fwd overhang (verified programmatically)"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 4,
+        "snapshot_image_id": "sha256:681a300489df7e68b082bbfd7a1e00c658143ee57ad4a23a6c41e75fb063f693"
+      },
+      "requests": 5,
+      "false_acceptance": false,
+      "false_rejection": false
+    },
+    {
+      "case_id": "elf_incorrect",
+      "task_id": "extract-elf",
+      "condition": "claim_visible",
+      "status": "artifact_unavailable",
+      "expected_image_id": "sha256:69d23b3c3a33e7a9bed23f7ac8b9980a45377396b8eec506366360e3d91bd680"
+    },
+    {
+      "case_id": "elf_incorrect",
+      "task_id": "extract-elf",
+      "condition": "claim_masked",
+      "status": "artifact_unavailable",
+      "expected_image_id": "sha256:69d23b3c3a33e7a9bed23f7ac8b9980a45377396b8eec506366360e3d91bd680"
+    },
+    {
+      "case_id": "compressor_correct",
+      "task_id": "write-compressor",
+      "condition": "claim_masked",
+      "control_id": "16860366a27c4c8cac6f2773169ed712",
+      "official_reward": 1,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "data.comp exists, is under the size limit, and decompresses to exactly data.txt.",
+        "evidence": [
+          "data.comp is 2282 bytes (<= 2500)",
+          "cat data.comp | ./decomp | cmp - data.txt reports identical output (MATCH)"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 2,
+        "snapshot_image_id": "sha256:341c14f9400f7536beea03fd7547254f1477fd58b2a38e9963043da639d66542"
+      },
+      "requests": 3,
+      "false_acceptance": false,
+      "false_rejection": false
+    },
+    {
+      "case_id": "compressor_correct",
+      "task_id": "write-compressor",
+      "condition": "claim_visible",
+      "control_id": "2ef123827eb94de59e2984da129a4fba",
+      "official_reward": 1,
+      "live_state_required": false,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "data.comp exists at 2282 bytes (≤2500) and piping it through /app/decomp produces output byte-identical to data.txt (4868 bytes), independently verified with cmp.",
+        "evidence": [
+          "data.comp size: stat shows 2282 bytes, under the 2500-byte limit",
+          "Round-trip: ran `cat data.comp | ./decomp > /tmp/o.txt; cmp data.txt /tmp/o.txt` → MATCH, output 4868 bytes = data.txt size",
+          "Plausibility: /app/comp.c contains a matching LZ77/arithmetic encoder (base-255 bignum) consistent with decomp.c's decoder structure; comp binary and comp.pl also present"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 4,
+        "snapshot_image_id": "sha256:5e61eb303500f677d5a4afaec353620d134ccdf18d397b29ae43788e72577274"
+      },
+      "requests": 4,
+      "false_acceptance": false,
+      "false_rejection": false
+    },
+    {
+      "case_id": "service_correct",
+      "task_id": "configure-git-webserver",
+      "condition": "claim_visible",
+      "control_id": "9ef78d3e8d72488693c5913c8974ef3f",
+      "official_reward": 1,
+      "live_state_required": true,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "fail",
+        "reason": "The filesystem contains a plausible Git/nginx setup and evidence of a prior push, but the required services are not running and the requested clone and HTTP endpoints currently refuse connections. PID 1 is only `sleep infinity`, so there is no observed mechanism keeping sshd or nginx running in this snapshot.",
+        "evidence": [
+          "Bare repository exists at `/git/server`: `git --git-dir=/git/server rev-parse --is-bare-repository` returned `true`, with `master` refs and commits including `add hello.html`.",
+          "`/git/server/hooks/post-receive` exists and contains `GIT_WORK_TREE=/srv/www git checkout -f master`.",
+          "`/srv/www/hello.html` exists and contains `hello world`; nginx is configured via `/etc/nginx/sites-enabled/default` to listen on 8080 with root `/srv/www`.",
+          "`curl http://localhost:8080/hello.html` failed: `Couldn't connect to server` on port 8080.",
+          "`git ls-remote ssh://user@localhost/git/server` failed because SSH port 22 refused the connection.",
+          "Process/listener checks found no running `sshd` or `nginx` processes and no listeners on ports 22 or 8080.",
+          "`nginx -t` reported the configuration syntax is OK, but could not create `/run/nginx.pid` in the read-only snapshot.",
+          "`sshd -T` shows port 22, public-key authentication enabled, password authentication enabled, and standard authorized-keys paths; host keys and the `user` account exist."
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 11,
+        "snapshot_image_id": "sha256:ac1ad48f2fb87b6bad8b326d699ad56796b02aacb88d22f06427568cad5b2ff6"
+      },
+      "requests": 5,
+      "false_acceptance": false,
+      "false_rejection": true
+    },
+    {
+      "case_id": "service_correct",
+      "task_id": "configure-git-webserver",
+      "condition": "claim_masked",
+      "control_id": "518652dd9f244fe78928c227b96a5908",
+      "official_reward": 1,
+      "live_state_required": true,
+      "status": "reviewed",
+      "verdict": {
+        "verdict": "pass",
+        "reason": "All components of the git-server-to-webserver pipeline are concretely in place and were exercised: a bare repo exists at /git/server owned by 'user' with a commit history (commits 'add hello.html' and 't'), an executable post-receive hook checks out master to /srv/www, /srv/www contains hello.html with content 'hello world', and nginx is configured to listen on port 8080 serving /srv/www. Services not currently running (nginx, sshd) — nginx can't start on this read-only snapshot and the user stated they would handle login/SSH themselves; the static configuration is complete and correct.",
+        "evidence": [
+          "Bare repo at /git/server with bare=true config, HEAD -> refs/heads/master, owned by uid 1001 'user' matching clone path /git/server",
+          "Push was actually exercised: git log shows commits 'add hello.html' (0f44bef) and 't' (924fdd3); refs/heads/master exists; /srv/www/hello.html contains 'hello world' and t.html exists",
+          "post-receive hook is executable (-rwxrwxrwx) and contains 'GIT_WORK_TREE=/srv/www git checkout -f master'",
+          "nginx sites-available/default has 'listen 8080 default_server;' and 'root /srv/www;'",
+          "hello.html in web root contains exactly 'hello world' (12 bytes)"
+        ],
+        "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+        "tool_observation_count": 7,
+        "snapshot_image_id": "sha256:09f1e37ca258fa9c9bde7c8c9a631ea7523fb0056efd1946a3d93f18de8f9054"
+      },
+      "requests": 6,
+      "false_acceptance": false,
+      "false_rejection": false
+    }
+  ],
+  "registration_sha256": "48d24ef74f34bc9bfecc935b7f732ff21577523d3b23c3d93fa95518ebc1ada3",
+  "cases": 5,
+  "distinct_tasks": 4
+}

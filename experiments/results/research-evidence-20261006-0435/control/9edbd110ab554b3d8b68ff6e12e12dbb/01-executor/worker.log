@@ -1,0 +1,21 @@
+⚠️  API call failed (attempt 1/3): InternalServerError [HTTP 502]
+   🔌 Provider: custom:devin  Model: devin/swe-2
+   🌐 Endpoint: http://127.0.0.1:36609/v1
+   📝 Error: HTTP 502 — Error response
+   ⏱️  Elapsed: 1.23s  Context: 2 msgs, ~1,348 tokens
+⏳ Retrying in 2.2s (attempt 1/3)...
+⚠️  API call failed (attempt 2/3): InternalServerError [HTTP 502]
+   🔌 Provider: custom:devin  Model: devin/swe-2
+   🌐 Endpoint: http://127.0.0.1:36609/v1
+   📝 Error: HTTP 502 — Error response
+   ⏱️  Elapsed: 4.09s  Context: 2 msgs, ~1,348 tokens
+⏳ Retrying in 4.3s (attempt 2/3)...
+⚠️  API call failed (attempt 3/3): InternalServerError [HTTP 502]
+   🔌 Provider: custom:devin  Model: devin/swe-2
+   🌐 Endpoint: http://127.0.0.1:36609/v1
+   📝 Error: HTTP 502 — Error response
+   ⏱️  Elapsed: 9.15s  Context: 2 msgs, ~1,348 tokens
+❌ API failed after 3 retries — HTTP 502 — Error response
+   💀 Final error: HTTP 502 — Error response
+🧾 Request debug dump written to: /var/lib/supergoal-lab/control/9edbd110ab554b3d8b68ff6e12e12dbb/01-executor/hermes-home/sessions/request_dump_sg-public-9edbd110ab554b3d8b68ff6e12e12dbb-0_20261005_202439_410226.json
+{"completed": false, "api_calls": 1, "seconds": 9.86822520500209}

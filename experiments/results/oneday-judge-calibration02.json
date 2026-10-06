@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "ids": [
+    "taskif_47"
+  ],
+  "supersedes_for_gate_only": "oneday-judge-calibration01.json",
+  "reason": "Original positive example taskif_2 had no reference answer. Fix aggregation by calling upstream calculate_question_score directly; preserve all original responses.",
+  "kind": "adapted_SWE2_judge_development_calibration",
+  "rows": [
+    {
+      "question_id": "taskif_47",
+      "submission": "empty",
+      "status": "adapted_judge_graded",
+      "score": 0,
+      "max_score": 7,
+      "percentage": 0.0,
+      "criteria": 14,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "question_id": "taskif_47",
+      "submission": "reference",
+      "status": "adapted_judge_graded",
+      "score": 7,
+      "max_score": 7,
+      "percentage": 100.0,
+      "criteria": 14,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    }
+  ]
+}

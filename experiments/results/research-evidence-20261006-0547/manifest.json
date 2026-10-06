@@ -1,0 +1,34 @@
+{
+  "captured_at": "2026-10-05T21:41:50.355615+00:00",
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/scb-regression-final.json": {
+      "sha256": "cc32ed1e551165e359bad71458267fd965ada3d1ca3d5ce15373cec68752af13",
+      "bytes": 258183
+    },
+    "setup/file-tool-probe01.json": {
+      "sha256": "93ddef352b8b508ec7293e508fbff08e1431f670da7bf1dd67841066f194ca5b",
+      "bytes": 3758
+    },
+    "setup/file-tool-probe02.json": {
+      "sha256": "8069332a33113b3dbaecbc4e1889d5d9c69b761c0b14d673487d2450842c96de",
+      "bytes": 339
+    },
+    "file-tool-operator01/file_tool_probe.py": {
+      "sha256": "0ac8c5cad695173ec9d91fc4985c2b4ed1acecefe977352583ffdcf1c8bf0c59",
+      "bytes": 4046
+    },
+    "file-tool-operator02/file_tool_probe.py": {
+      "sha256": "b6a8839c134904fe71d81911bcfb11a289dd88666f2829a796470e60639af951",
+      "bytes": 4989
+    },
+    "setup/harness-transfer01-receipt.json": {
+      "sha256": "918fbbe93b2a7285238a71a497d26d77824af31d980ff0147684a9b77896c1a7",
+      "bytes": 4910
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "450e11868b3c34f3cad696656e90db9c1fd574bd5d8e2ac046eb1f4b65d28975",
+      "bytes": 107777
+    }
+  }
+}

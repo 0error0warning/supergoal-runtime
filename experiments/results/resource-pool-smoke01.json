@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "real_processes": 8,
+  "simultaneous_admitted": 2,
+  "allocated_cpus": 6,
+  "released_cleanly": true,
+  "model_calls": 0
+}

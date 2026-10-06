@@ -1,0 +1,1406 @@
+{
+  "experiment": "context-handoff01",
+  "collected_at": "2026-10-06T00:16:50.120166+00:00",
+  "cohort_status": "complete_with_itemized_outcomes",
+  "statistical_units": 3,
+  "scope": "Previously observed development problems; dependent checkpoints; descriptive contrasts only.",
+  "interaction_direction": "(carry_ledger - carry_current) - (fresh_ledger - fresh_current)",
+  "missing_outcomes_imputed": false,
+  "new_model_calls": 0,
+  "rows": [
+    {
+      "task_id": "file_backup",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.6139237029081296,
+      "available_checkpoint_mean": 0.6139237029081296,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 81,
+      "observed_input_tokens": 2371737,
+      "observed_output_tokens": 33229,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.65625,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.62,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6176470588235294,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5617977528089888,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 15,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 32,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 64,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "carry_current",
+      "status": "returned",
+      "complete_strict_mean": 0.9240222834613319,
+      "available_checkpoint_mean": 0.9240222834613319,
+      "scored_checkpoints": 5,
+      "expected_checkpoints": 5,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 98,
+      "observed_input_tokens": 3112646,
+      "observed_output_tokens": 44242,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 1.0,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9516129032258065,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9534883720930233,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8620689655172413,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8529411764705882,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 12,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 24,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 52,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 80,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.558946712461777,
+      "available_checkpoint_mean": 0.558946712461777,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 109,
+      "observed_input_tokens": 2383200,
+      "observed_output_tokens": 55428,
+      "incomplete_usage_records": 1,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6060606060606061,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 1
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5609756097560976,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.5098039215686274,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "carry_current",
+      "status": "returned",
+      "complete_strict_mean": 0.6539980584930601,
+      "available_checkpoint_mean": 0.6539980584930601,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 71,
+      "observed_input_tokens": 1467489,
+      "observed_output_tokens": 27758,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.65625,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.68,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6617647058823529,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6179775280898876,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 19,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 30,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 50,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.9589276502695654,
+      "available_checkpoint_mean": 0.9589276502695654,
+      "scored_checkpoints": 5,
+      "expected_checkpoints": 5,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 114,
+      "observed_input_tokens": 2701360,
+      "observed_output_tokens": 63687,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 1.0,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.967741935483871,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9767441860465116,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9310344827586207,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9191176470588235,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.7521412112516846,
+      "available_checkpoint_mean": 0.7521412112516846,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 138,
+      "observed_input_tokens": 3525134,
+      "observed_output_tokens": 64028,
+      "incomplete_usage_records": 2,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8484848484848485,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 2,
+          "review_episodes": 2,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 2
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.7804878048780488,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6274509803921569,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.6632925066093853,
+      "available_checkpoint_mean": 0.6632925066093853,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 69,
+      "observed_input_tokens": 1074659,
+      "observed_output_tokens": 25306,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.65625,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.68,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6764705882352942,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6404494382022472,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.9167947666429793,
+      "available_checkpoint_mean": 0.9167947666429793,
+      "scored_checkpoints": 5,
+      "expected_checkpoints": 5,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 104,
+      "observed_input_tokens": 2377433,
+      "observed_output_tokens": 59272,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 1.0,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.967741935483871,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9651162790697675,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8275862068965517,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8235294117647058,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.6320884599220323,
+      "available_checkpoint_mean": 0.6320884599220323,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 103,
+      "observed_input_tokens": 3244204,
+      "observed_output_tokens": 47797,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.42424242424242425,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.7073170731707317,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.7647058823529411,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 74,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 111,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "returned",
+      "complete_strict_mean": 0.6007462409120952,
+      "available_checkpoint_mean": 0.6007462409120952,
+      "scored_checkpoints": 4,
+      "expected_checkpoints": 4,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 68,
+      "observed_input_tokens": 881604,
+      "observed_output_tokens": 24480,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.65625,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.62,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.6323529411764706,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.4943820224719101,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": true,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    },
+    {
+      "task_id": "database_migration",
+      "arm": "carry_ledger",
+      "status": "returned",
+      "complete_strict_mean": 0.9233897597117332,
+      "available_checkpoint_mean": 0.9233897597117332,
+      "scored_checkpoints": 5,
+      "expected_checkpoints": 5,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 76,
+      "observed_input_tokens": 2658449,
+      "observed_output_tokens": 43518,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 1.0,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9354838709677419,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.9418604651162791,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_4",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.8793103448275862,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_5",
+          "online_verdict": "disputed",
+          "strict_pass_rate": 0.8602941176470589,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "contract_disputed",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 15,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 24,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 4,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 45,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 5,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 61,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": true,
+          "prior_requirement_omission_exercised": false
+        }
+      ]
+    },
+    {
+      "task_id": "dag_execution",
+      "arm": "carry_current",
+      "status": "returned",
+      "complete_strict_mean": 0.4775154703418692,
+      "available_checkpoint_mean": 0.4775154703418692,
+      "scored_checkpoints": 3,
+      "expected_checkpoints": 3,
+      "all_checkpoints_strictly_passed": false,
+      "requests": 114,
+      "observed_input_tokens": 4209931,
+      "observed_output_tokens": 53719,
+      "incomplete_usage_records": 0,
+      "execution_or_grading_exceptions": 0,
+      "checkpoint_diagnostics": [
+        {
+          "checkpoint": "checkpoint_1",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.45454545454545453,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_2",
+          "online_verdict": "unknown",
+          "strict_pass_rate": 0.4878048780487805,
+          "online_pass_with_strict_shortfall": false,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "verification_unavailable",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        },
+        {
+          "checkpoint": "checkpoint_3",
+          "online_verdict": "pass",
+          "strict_pass_rate": 0.49019607843137253,
+          "online_pass_with_strict_shortfall": true,
+          "executor_episodes": 1,
+          "review_episodes": 1,
+          "controller_status": "succeeded",
+          "upstream_http_errors": {},
+          "transport_error_calls": 0
+        }
+      ],
+      "activations": [
+        {
+          "checkpoint": 1,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": null,
+          "incoming_history_messages": 0,
+          "history_carry_exercised": false,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": false
+        },
+        {
+          "checkpoint": 2,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 122,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        },
+        {
+          "checkpoint": 3,
+          "actual_payload_present": true,
+          "actual_payload_matches_declared_policy": true,
+          "carried_history_matches_previous_output": true,
+          "incoming_history_messages": 162,
+          "history_carry_exercised": true,
+          "fresh_reset_exercised_after_available_history": false,
+          "requirement_replay_exercised": false,
+          "prior_requirement_omission_exercised": true
+        }
+      ]
+    }
+  ],
+  "contrasts": [
+    {
+      "control": "carry_ledger",
+      "treatment": "fresh_ledger",
+      "direction": "treatment minus control",
+      "pairs": [
+        {
+          "task_id": "file_backup",
+          "strict_mean_difference": 0.04936880370125574,
+          "request_difference": -12
+        },
+        {
+          "task_id": "database_migration",
+          "strict_mean_difference": 0.035537890557832186,
+          "request_difference": 38
+        },
+        {
+          "task_id": "dag_execution",
+          "strict_mean_difference": -0.07314174746025537,
+          "request_difference": 6
+        }
+      ]
+    },
+    {
+      "control": "carry_current",
+      "treatment": "fresh_current",
+      "direction": "treatment minus control",
+      "pairs": [
+        {
+          "task_id": "file_backup",
+          "strict_mean_difference": -0.05325181758096498,
+          "request_difference": -3
+        },
+        {
+          "task_id": "database_migration",
+          "strict_mean_difference": -0.007227516818352542,
+          "request_difference": 6
+        },
+        {
+          "task_id": "dag_execution",
+          "strict_mean_difference": 0.27462574090981545,
+          "request_difference": 24
+        }
+      ]
+    },
+    {
+      "control": "carry_ledger",
+      "treatment": "carry_current",
+      "direction": "treatment minus control",
+      "pairs": [
+        {
+          "task_id": "file_backup",
+          "strict_mean_difference": 0.040074355584930554,
+          "request_difference": -10
+        },
+        {
+          "task_id": "database_migration",
+          "strict_mean_difference": 0.0006325237495986569,
+          "request_difference": 22
+        },
+        {
+          "task_id": "dag_execution",
+          "strict_mean_difference": -0.15457298958016313,
+          "request_difference": 11
+        }
+      ]
+    },
+    {
+      "control": "fresh_ledger",
+      "treatment": "fresh_current",
+      "direction": "treatment minus control",
+      "pairs": [
+        {
+          "task_id": "file_backup",
+          "strict_mean_difference": -0.06254626569729016,
+          "request_difference": -1
+        },
+        {
+          "task_id": "database_migration",
+          "strict_mean_difference": -0.04213288362658607,
+          "request_difference": -10
+        },
+        {
+          "task_id": "dag_execution",
+          "strict_mean_difference": 0.1931944987899077,
+          "request_difference": 29
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "task_id": "file_backup",
+      "difference_in_differences": -0.10262062128222071
+    },
+    {
+      "task_id": "database_migration",
+      "difference_in_differences": -0.04276540737618473
+    },
+    {
+      "task_id": "dag_execution",
+      "difference_in_differences": 0.3477674883700708
+    }
+  ],
+  "audit_errors": [],
+  "source_sha256": {
+    "experiments\\results\\research-evidence-20261006-081902\\setup\\context-handoff01-final-observation01.json": "3edfb94e4b5835dd4bbfd6c5f7292a4852b9c71895e7f16c05471c389bf180ef",
+    "experiments\\public_benchmarks\\registration-context-handoff01.json": "10490152b62bcf5821710c8a394f0380230a1a685f858c2b68c42158a8f056e8",
+    "experiments\\public_benchmarks\\analyze_context.py": "ea44eb9239f9ed0d4b243fc47226b6d4045c0ce1613616b9886e9efc33c30e16"
+  }
+}

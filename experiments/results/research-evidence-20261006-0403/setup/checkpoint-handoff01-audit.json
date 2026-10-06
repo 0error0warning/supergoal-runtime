@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-10-05T19:44:47.098495+00:00",
+  "scope": "Registered live snapshot-timeout handoff regression; task success is a separate outcome.",
+  "original_results_unchanged": true,
+  "receipt_sha256": "e086238f8fad03ea06301ddafe2ff53d812d8a5a7a484e6ce404629a882602f0",
+  "result_sha256": "24dd9d4809c8b41d36e5ca4a6b8004f54d153b434e2fb7f7628f7ae7789f969a",
+  "capture_timeout_activated": true,
+  "prior_pause_state_restored": true,
+  "official_tests_completed": true,
+  "official_raw_reward": {
+    "reward": 0.0
+  },
+  "solver_exception": "AgentTimeoutError",
+  "verifier": {
+    "started_at": "2026-10-05T19:38:40.286098Z",
+    "finished_at": "2026-10-05T19:38:49.780072Z"
+  },
+  "requests": 31,
+  "handoff_regression_passed": true
+}

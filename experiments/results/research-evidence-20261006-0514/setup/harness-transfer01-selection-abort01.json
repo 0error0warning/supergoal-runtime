@@ -1,0 +1,19 @@
+{
+  "status": "pre_selection_overlap_rejected",
+  "checked_at": "2026-10-05T21:11:48.027658+00:00",
+  "model_calls": 0,
+  "oracle_trials": 0,
+  "original_task_ids": [
+    "adaptive-rejection-sampler",
+    "cancel-async-tasks",
+    "db-wal-recovery"
+  ],
+  "overlapping_prior_task_ids": [
+    "cancel-async-tasks",
+    "db-wal-recovery"
+  ],
+  "overlap_registration": "registration-public-dev04.json",
+  "original_operator_sha256": "f256dba4cca61306cd0f753c0a5edd1b7ee63f34da2bf40d6d484960972be607",
+  "unit_state": "MainPID=0\nResult=exit-code\nActiveState=failed\nSubState=failed\n",
+  "journal": "Oct 05 21:03:59 supergoal-lab-20261005 systemd[1]: Started supergoal-harness-transfer01-prepare.service - /var/lib/supergoal-lab/harbor-venv/bin/python /var/lib/supergoal-lab/harness-transfer-operator01/prepare_harness_transfer.py.\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]: Traceback (most recent call last):\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]:   File \"/var/lib/supergoal-lab/harness-transfer-operator01/prepare_harness_transfer.py\", line 128, in <module>\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]:     main()\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]:     ~~~~^^\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]:   File \"/var/lib/supergoal-lab/harness-transfer-operator01/prepare_harness_transfer.py\", line 52, in main\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]:     raise ValueError('Selection overlaps a previous registered or observed task')\nOct 05 21:03:59 supergoal-lab-20261005 python[1521069]: ValueError: Selection overlaps a previous registered or observed task\nOct 05 21:03:59 supergoal-lab-20261005 systemd[1]: supergoal-harness-transfer01-prepare.service: Main process exited, code=exited, status=1/FAILURE\nOct 05 21:03:59 supergoal-lab-20261005 systemd[1]: supergoal-harness-transfer01-prepare.service: Failed with result 'exit-code'.\n"
+}

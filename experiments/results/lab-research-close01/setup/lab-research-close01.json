@@ -1,0 +1,18 @@
+{
+  "status": "research_jobs_finished_ready_for_instance_stop",
+  "at": "2026-10-06T01:27:56.165046+00:00",
+  "active_experiment_services_before_retention_stop": [
+    "supergoal-checkpoint-retention01.service",
+    "supergoal-docker.service"
+  ],
+  "retention_unit_after_stop": "MainPID=0\nResult=success\nActiveState=inactive\n",
+  "retention_statuses": {
+    "durable": 237,
+    "capture_failed": 1
+  },
+  "retention_receipt_note": "Capture loop deliberately stopped after all planned trials and in-flight captures finished. Its last running snapshot is preserved; this separate receipt records the observed stop.",
+  "running_containers_before_instance_stop": "",
+  "datasets_and_disks_preserved": true,
+  "model_calls": 0,
+  "absolute_original_stop_unchanged": "2026-10-06T14:24:06+00:00"
+}

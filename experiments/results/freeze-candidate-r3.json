@@ -1,0 +1,48 @@
+{
+  "format": 1,
+  "model": "devin/swe-2",
+  "arms": [
+    "hermes",
+    "native_goal",
+    "sg_v1",
+    "sg_v2",
+    "sg_v2_no_context",
+    "sg_v2_no_verification"
+  ],
+  "limits": {
+    "executor_calls": 48,
+    "all_physical_calls": 60,
+    "outer_turns": 6,
+    "wall_seconds": 1200,
+    "executor_output_tokens": 3000
+  },
+  "source_sha256": {
+    "experiments/check_worker.py": "3026b0d471a9fea5d0be61756faaed70ecbae4f4a51073da7b3b0b0412005823",
+    "experiments/freeze.py": "7dac87313c9494be284e4845283ba8bb7658b5be9d088d61370aa06391f6335c",
+    "experiments/grade_code.py": "5cb52be1cfccf898717f3ad31a7124946636687a363496c435968b15a5af1c4e",
+    "experiments/host_probe.py": "703c220ce9479a79344525dad7bffe673019c373ff4bcc893faa0199a8473480",
+    "experiments/model_proxy.py": "af75b2bfeff41b156863a838f48c1f75057c98aaaab5a6b1008ce7971051e89d",
+    "experiments/preflight.py": "79522e108e181c2b74fe84b907a446c142f1ac2fe662ea443fd69b8f88972b1a",
+    "experiments/soak.py": "947f70b1f4cefd3683e5c1806d06b9fcceca34d88fb3e8be1623277f948162e0",
+    "experiments/study_hooks.py": "de59f14ab9ca66476f40ebe2138f3d1fb62a6faea670362075e43ac3f14475ee",
+    "experiments/summarize.py": "743bea711fc290c4884c32d8e761914f11b8f3bc2c40d08899947d6627f4994b",
+    "experiments/supervisor.py": "d37389fa9bff35c8e9c96b04068857399e76750795a3bdd39a688373aa496795",
+    "experiments/tasks.py": "12b4dd6890a78f129309c77f38aedbd8071762a75c49d883ce72edccd2455ab9",
+    "experiments/worker.py": "1815264cc69eb4b229d836fe4403a2fcccb49d32f1dbe1b1028bf313aa3ad1d6",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "supergoal_runtime/v2/kernel.py": "0a80de06c283d2eb95ea4d2aa1b7e3c5b8de8af6eebb2531bbcec57ee60707cf",
+    "supergoal_runtime/v2/verification.py": "9dea77ccafecd57c7e4141e55848f49361826afac443c547015daa4d02eca7d0",
+    "experiments/protocol-v1.md": "01fd11a6933f5dcd32f2581e93d34f5292abaf8f3815ddcf8087a36cbf4fb5ba"
+  },
+  "reserved_tasks": {
+    "code-7201": "9f593ed4a5026ab431d20716545d8ffe1107675b99d11364cc7f8315dab58678",
+    "data-7201": "10c45f88a1b694ce1715f923a4033a675e8a3f1bfad8046da8846a4a42cb9c29",
+    "synthesis-7201": "d7adbb9e9a998ea85fb16f799f07e65aed5d35b34778170f868b97fff1f2a076",
+    "code-7202": "0be772a3b30082a61711085818d84eb5b08d8ecbc753bc811ed2c93e9fdae51e",
+    "data-7202": "9b7882b567f2468f518d4cd742c71aaa7d45aa1f2dc89faf4a706bba275b8fad",
+    "synthesis-7202": "88de0de359f269b5d46c90e03346591ec48d97ef3980e750bf3181daf6bab5c7",
+    "code-7203": "cbef89fd0603c7d5f7b2e88138e58bd1810b50d364787cbdc138a00dd48e3283",
+    "data-7203": "8764f9148931e257b825074a00bf5c25dfb4800c31d6ff93d2b8fd1c19852fbf",
+    "synthesis-7203": "2e45e3aec8d00a2bfd2db09de00c75d36747127a894a804b1ae4a67dc9a3f5e9"
+  }
+}

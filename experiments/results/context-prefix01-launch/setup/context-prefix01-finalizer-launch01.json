@@ -1,0 +1,25 @@
+{
+  "command": [
+    "systemd-run",
+    "--unit=supergoal-prefix-finalizer01",
+    "--property=RuntimeMaxSec=48109",
+    "--property=PrivateNetwork=yes",
+    "--property=CPUQuota=100%",
+    "--property=MemoryMax=2G",
+    "--setenv=PYTHONPATH=/var/lib/supergoal-lab/analysis-prefix01:/var/lib/supergoal-lab/analysis-prefix01/experiments/public_benchmarks",
+    "/var/lib/supergoal-lab/harbor-venv/bin/python",
+    "/var/lib/supergoal-lab/analysis-prefix01/finalize_prefix_study.py",
+    "--controller-invocation",
+    "1b5d59b1dd5a457e9536f69a6d5887c8"
+  ],
+  "unit": {
+    "MainPID": "2355739",
+    "ActiveState": "active",
+    "InvocationID": "1835172da3504bd1b08787378ace3840"
+  },
+  "at": "2026-10-06T01:01:16.172162+00:00",
+  "network_namespaces": {
+    "host": "net:[4026531833]",
+    "observer": "net:[4026532852]"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "status": "running",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "file_backup",
+      "arm": "fresh_ledger",
+      "status": "running",
+      "started_epoch": 1791248298.8489738,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-01-file_backup-fresh_ledger",
+      "harbor_pid": 2326343,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "database_migration",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791248298.8523536,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-02-database_migration-fresh_current",
+      "harbor_pid": 2326344,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 2,
+      "task_id": "dag_execution",
+      "arm": "fresh_ledger",
+      "status": "running",
+      "started_epoch": 1791248298.8553538,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-03-dag_execution-fresh_ledger",
+      "harbor_pid": 2326345,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 3,
+      "task_id": "file_backup",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791248298.858059,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-04-file_backup-fresh_current",
+      "harbor_pid": 2326346,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 4,
+      "task_id": "database_migration",
+      "arm": "fresh_ledger",
+      "status": "running",
+      "started_epoch": 1791248298.8627987,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-05-database_migration-fresh_ledger",
+      "harbor_pid": 2326347,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 5,
+      "task_id": "dag_execution",
+      "arm": "fresh_current",
+      "status": "running",
+      "started_epoch": 1791248298.8660653,
+      "job": "/var/lib/supergoal-lab/jobs/context-prefix01-06-dag_execution-fresh_current",
+      "harbor_pid": 2326348,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "registration_sha256": "82063d4449cbd833f5c04c51a8f9a1a3684d509d92ef6430c427b7038fa4b490",
+  "admission_status": "admitting",
+  "heartbeat_epoch": 1791248539.6310284
+}

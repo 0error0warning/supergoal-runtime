@@ -1,0 +1,60 @@
+{
+  "kind": "supplementary_postrun_soak_audit",
+  "run_id": "soak-v2-r3-20261005",
+  "registered_score_unchanged": true,
+  "original_registered_pass": true,
+  "fresh_script_reproduction_pass": true,
+  "execution": {
+    "returncode": 0
+  },
+  "execution_seconds": 0.2865877151489258,
+  "kernel": {
+    "goal": [
+      "succeeded",
+      3
+    ],
+    "pending_work": 0,
+    "receipts": 3
+  },
+  "observed_wait_intervals": [
+    {
+      "after_phase": 0,
+      "from": 1791133975.5305986,
+      "to": 1791137526.7800994,
+      "seconds": 3551.2495007514954,
+      "model_requests": 0
+    },
+    {
+      "after_phase": 1,
+      "from": 1791137643.4933062,
+      "to": 1791141131.8150315,
+      "seconds": 3488.3217253684998,
+      "model_requests": 0
+    }
+  ],
+  "inputs": [
+    {
+      "name": "CLOSED",
+      "mtime": 1791141131.8210318,
+      "sha256": "13446412ce3d7a241aa4fc8c20ac50125be7584da786cadb3d346a21040a9728"
+    },
+    {
+      "name": "batch-0.json",
+      "mtime": 1791133926.7164624,
+      "sha256": "88431c98808c95f140c11763ee5347149981a2c418c50afc13cc947e928c61fd"
+    },
+    {
+      "name": "batch-1.json",
+      "mtime": 1791137526.7800994,
+      "sha256": "c2ea857d6645e192cdc356a35e14fe79aaf767e823d40677ef3a8d61b42de2f1"
+    },
+    {
+      "name": "batch-2.json",
+      "mtime": 1791141131.8150315,
+      "sha256": "0d1e4b5afe05b2cbecdf50626aefdf9a79e5c2f20069867439ad446535c51987"
+    }
+  ],
+  "script_sha256": "0b3e1ccd93bb86915e16941bc6102836e4a3ceea6d323bd0d0e1fc0c1914851e",
+  "source_sha256": "56da34e75b2e231afa8bc3484b8379dd74b66d1cf8df84870a9ab34f4265346e",
+  "interpretation": "Final-script reproduction and current terminal state corroboration. Does not revise the registered score or prove arbitrary crash recovery."
+}

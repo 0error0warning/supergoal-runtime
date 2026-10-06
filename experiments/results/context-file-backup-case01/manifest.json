@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-10-06T00:12:33.997737+00:00",
+  "scope": "Read-only public requirements and final checkpoint logs for the already completed file_backup four-condition development case. No model calls, no regrading.",
+  "files": {
+    "tasks/context-handoff01/file_backup/steps/checkpoint_1/instruction.md": {
+      "sha256": "a406a31c2f763ea6d6242454638b9e8dbcea17e6788fb04f50f9c86f70ea19c1",
+      "bytes": 8537
+    },
+    "tasks/context-handoff01/file_backup/steps/checkpoint_2/instruction.md": {
+      "sha256": "0079ed6ef7406decc7ae9baae882c9ceba0d76b342f3808ae6200fde959269d7",
+      "bytes": 8259
+    },
+    "tasks/context-handoff01/file_backup/steps/checkpoint_3/instruction.md": {
+      "sha256": "f867b12623994a296b210cf057d715acd8e83df0993db32203f548588d5631fd",
+      "bytes": 5623
+    },
+    "tasks/context-handoff01/file_backup/steps/checkpoint_4/instruction.md": {
+      "sha256": "70ba27770396328ab56daa1d171e7d15c8f119fd05aa18bdf538481129d0a395",
+      "bytes": 6299
+    },
+    "jobs/context-handoff01-01-file_backup-carry_ledger/file_backup__oF8PCjC/steps/checkpoint_4/verifier/test-stdout.txt": {
+      "sha256": "fdb3553c3003a93ef74855218bcc2233c56d471956e4b209a3da841bda48feaf",
+      "bytes": 144069
+    },
+    "jobs/context-handoff01-04-file_backup-carry_current/file_backup__2kGwxpr/steps/checkpoint_4/verifier/test-stdout.txt": {
+      "sha256": "8cb42549f281fae99d85f585e3c6ef47c61a01288a49ec8567487fcb0ba11d51",
+      "bytes": 125471
+    },
+    "jobs/context-handoff01-07-file_backup-fresh_ledger/file_backup__3uxHpKi/steps/checkpoint_4/verifier/test-stdout.txt": {
+      "sha256": "5430eff2311968c1602457b006935ea5684896736ebb05d6a49ca432afe8ab46",
+      "bytes": 119042
+    },
+    "jobs/context-handoff01-10-file_backup-fresh_current/file_backup__2k78S9L/steps/checkpoint_4/verifier/test-stdout.txt": {
+      "sha256": "ac6a906822d3c56967f941e8fc713f538f0b8d5c36dbe6a5838513438c41b1eb",
+      "bytes": 163025
+    }
+  }
+}

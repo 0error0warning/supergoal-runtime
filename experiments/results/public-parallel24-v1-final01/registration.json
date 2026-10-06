@@ -1,0 +1,999 @@
+{
+  "schema": 2,
+  "experiment": "public-parallel24-v1",
+  "registered_at_utc": "2026-10-05T16:24:45.876331+00:00",
+  "kind": "fixed_distinct_public_tasks_unseen_in_local_tuning",
+  "host": "supergoal-gcp",
+  "frozen_adapter_version": "public-dev05",
+  "official_source_commit": "7131e4375048a0e408a8fb404b5f499d726b695b",
+  "selection_sha256": "ce1e8e18497a6f9f3ef3868164a79dd4297aaa215e6b7dc44db66a0d5281e051",
+  "max_upstream_requests_per_trial": 192,
+  "max_output_tokens_per_request": 6000,
+  "max_outer_episodes": 6,
+  "repeats_per_task_arm": 1,
+  "concurrency": {
+    "max_active_trials": 6,
+    "shared_cpu_pool": 6,
+    "shared_memory_mb": 49152,
+    "review_resources_reserved": true
+  },
+  "arms": [
+    "native",
+    "sg_v2",
+    "repeat_goal",
+    "sg_no_context",
+    "sg_no_review"
+  ],
+  "tasks": [
+    {
+      "task_id": "bn-fit-modify",
+      "metadata_path": "tasks/bn-fit-modify/task.toml",
+      "metadata_git_blob_sha": "ada43e57aceb5c69b01a088c6bfcd09de89419a8",
+      "category": "scientific-computing",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/bn-fit-modify:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "metadata_path": "tasks/circuit-fibsqrt/task.toml",
+      "metadata_git_blob_sha": "95a1c5f3b85731a32e1548cd84c8073bcfdccd4e",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/circuit-fibsqrt:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "compile-compcert",
+      "metadata_path": "tasks/compile-compcert/task.toml",
+      "metadata_git_blob_sha": "5d4c51ca3b20075a90bb1a4c42df86f856de7cdc",
+      "category": "system-administration",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 2,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/compile-compcert:20260403",
+      "agent_timeout_sec": 2400.0,
+      "verifier_timeout_sec": 2400.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "metadata_path": "tasks/constraints-scheduling/task.toml",
+      "metadata_git_blob_sha": "011d08785dce80160af6520f94e6558e7473946e",
+      "category": "personal-assistant",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/constraints-scheduling:20251031",
+      "agent_timeout_sec": 1200.0,
+      "verifier_timeout_sec": 1200.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "metadata_path": "tasks/custom-memory-heap-crash/task.toml",
+      "metadata_git_blob_sha": "340c070a35b11e710ef4c38d1849ecb045d89902",
+      "category": "debugging",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/custom-memory-heap-crash:20251031",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "extract-elf",
+      "metadata_path": "tasks/extract-elf/task.toml",
+      "metadata_git_blob_sha": "e96fdeff8886bb786f40601407737535039ee94a",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/extract-elf:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "metadata_path": "tasks/feal-linear-cryptanalysis/task.toml",
+      "metadata_git_blob_sha": "5341ca4ab0ca6b99ea21d434b1408bfcd8fe0205",
+      "category": "mathematics",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/feal-linear-cryptanalysis:20251031",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "financial-document-processor",
+      "metadata_path": "tasks/financial-document-processor/task.toml",
+      "metadata_git_blob_sha": "5e7eb5e7aecd9e9443c0bd1c92ab2290eff61de3",
+      "category": "data-processing",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/financial-document-processor:20251031",
+      "agent_timeout_sec": 1200.0,
+      "verifier_timeout_sec": 1200.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "metadata_path": "tasks/git-leak-recovery/task.toml",
+      "metadata_git_blob_sha": "139ada99713d838f4d507a5f7e6be4a47cc93183",
+      "category": "software-engineering",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/git-leak-recovery:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "metadata_path": "tasks/install-windows-3.11/task.toml",
+      "metadata_git_blob_sha": "30a8d61114012ea721fd90e967ae71e8ff75e2d8",
+      "category": "system-administration",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 2,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/install-windows-3.11:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "metadata_path": "tasks/large-scale-text-editing/task.toml",
+      "metadata_git_blob_sha": "ffdb5d6ec9d9ab1adba7f05bc27d5097a673f494",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/large-scale-text-editing:20251031",
+      "agent_timeout_sec": 1200.0,
+      "verifier_timeout_sec": 1200.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "metadata_path": "tasks/mcmc-sampling-stan/task.toml",
+      "metadata_git_blob_sha": "300745b34bca3fb144e3f8949055b58995c7eded",
+      "category": "data-science",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 4,
+        "memory_mb": 8192,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/mcmc-sampling-stan:20251031",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": false,
+      "exclusion_reasons": [
+        "exceeds:cpus:4>2",
+        "exceeds:memory_mb:8192>4096"
+      ]
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "metadata_path": "tasks/model-extraction-relu-logits/task.toml",
+      "metadata_git_blob_sha": "bcbd2f4297a3cba78e46b5da3eabba45bc985b0a",
+      "category": "mathematics",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/model-extraction-relu-logits:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "metadata_path": "tasks/modernize-scientific-stack/task.toml",
+      "metadata_git_blob_sha": "c3e68ab65fccbc99c092c28d6f4fa8a7596c6137",
+      "category": "scientific-computing",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/modernize-scientific-stack:20251031",
+      "agent_timeout_sec": 600.0,
+      "verifier_timeout_sec": 600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "metadata_path": "tasks/nginx-request-logging/task.toml",
+      "metadata_git_blob_sha": "33909b5793c35b625a04f7137445391601180123",
+      "category": "system-administration",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/nginx-request-logging:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "password-recovery",
+      "metadata_path": "tasks/password-recovery/task.toml",
+      "metadata_git_blob_sha": "9216e2e906b5e80840bcc35bbc77ebe8adbe4dc8",
+      "category": "security",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/password-recovery:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "metadata_path": "tasks/portfolio-optimization/task.toml",
+      "metadata_git_blob_sha": "7a46c444dbd0ecf7271116aced3f027a031d1b17",
+      "category": "optimization",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/portfolio-optimization:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "protein-assembly",
+      "metadata_path": "tasks/protein-assembly/task.toml",
+      "metadata_git_blob_sha": "685b11a61baebe662bf9196b538d21815ae90ed9",
+      "category": "scientific-computing",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/protein-assembly:20260403",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "metadata_path": "tasks/pytorch-model-recovery/task.toml",
+      "metadata_git_blob_sha": "35ac7e16a255e73ff33c09ebb7e3cc8245594f4e",
+      "category": "model-training",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/pytorch-model-recovery:20260430",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "query-optimize",
+      "metadata_path": "tasks/query-optimize/task.toml",
+      "metadata_git_blob_sha": "88fe3b4ada048489160d6a164aba3b88de5cf111",
+      "category": "data-science",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/query-optimize:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "metadata_path": "tasks/sqlite-db-truncate/task.toml",
+      "metadata_git_blob_sha": "2f3eefeec1295cdfd59b31114f0e525d54a40511",
+      "category": "debugging",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/sqlite-db-truncate:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "metadata_path": "tasks/torch-tensor-parallelism/task.toml",
+      "metadata_git_blob_sha": "0b0bb16c26a129b3f89bb676c92cc622c25358f6",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 8192,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/torch-tensor-parallelism:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": false,
+      "exclusion_reasons": [
+        "exceeds:memory_mb:8192>4096"
+      ]
+    },
+    {
+      "task_id": "train-fasttext",
+      "metadata_path": "tasks/train-fasttext/task.toml",
+      "metadata_git_blob_sha": "751e5046fca5b0b0b897bc864fce76187bed0ad5",
+      "category": "model-training",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 4096,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/train-fasttext:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "video-processing",
+      "metadata_path": "tasks/video-processing/task.toml",
+      "metadata_git_blob_sha": "fad7d1d35b3c51c1ecb985ace96bd50c9c0d98e3",
+      "category": "video-processing",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/video-processing:20251031",
+      "agent_timeout_sec": 3600.0,
+      "verifier_timeout_sec": 3600.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    }
+  ],
+  "planned_order": [
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "native"
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "native"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "native"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "native"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "native"
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "native"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "native"
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "native"
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "native"
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "native"
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "native"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "native"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "native"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "native"
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "native"
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "native"
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "native"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "native"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "native"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "native"
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "native"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "native"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "native"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "native"
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "repeat_goal"
+    }
+  ],
+  "source_sha256": {
+    "experiments/model_proxy.py": "47298abf6bc13fdc812394a6b67e5e37f5a2c74a68347e036a8d0421bdabf2de",
+    "experiments/public_benchmarks/environment_bootstrap.py": "89953fe011bb95bde8facb8b8b7f6dd763f8c0b1b14afd512a61790c8fc84da4",
+    "experiments/public_benchmarks/harbor_agent.py": "220206f9ce047d5f01cf15035352cfa7b05af82245c5e94448019c337f32ca46",
+    "experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/kernel.py": "f11e60626d36b6f9ff164280b6ce3b395326f99320f6c6866b7159892fc26353",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e"
+  },
+  "start_gate": "public-dev05 local tests and real development worker/stream fault checks; official reference passes per task; unresolved official environments retained as unavailable",
+  "automatic_trial_retries": 0,
+  "stop_admission_at_utc": "2026-10-06T14:14:06+00:00",
+  "cloud_stop_at_utc": "2026-10-06T14:24:06+00:00",
+  "primary_endpoint": "Official task success paired by task ID: native vs sg_v2; retain controller failures in end-to-end endpoint. No best-of-n. Unstarted and apparatus-unavailable rows separately reported.",
+  "secondary_endpoints": [
+    "sg_v2 vs repeat_goal",
+    "sg_v2 vs sg_no_context",
+    "sg_v2 vs sg_no_review",
+    "false online acceptance",
+    "physical requests and wall-time per success"
+  ],
+  "statistical_plan": "Task ID is the unit. Exact paired McNemar on discordant native/full outcomes; report all discordant counts and task bootstrap interval for success-rate difference. Secondary ablations exploratory, no uncorrected multiple-comparison significance claims.",
+  "shared_host_exposure": "public-gcp01, model capacity probes, model-free reference checks and development faults may overlap; record timestamps. Never merge baseline cohorts as if homogeneous.",
+  "limitations": [
+    "SWE2 online review is experimental, not an authoritative grader.",
+    "Official public IDs are unseen by this project tuning; pretrained-model contamination is not excluded.",
+    "SDK worker recovery is tested separately; complete controller/VM restart is not yet established."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T08:08:10.524279+00:00",
+  "task_id": "db-wal-recovery",
+  "control_id": "17bb90b1ebf84df5a34cbe30a7704963",
+  "original_image_wal_bytes": 16512,
+  "original_image_wal_sha256": "68753bdce26196a53194260d001544cc6bb8f9f38e2f2f6826d09798e31e6e26",
+  "first_executor_terminal_commands": [
+    "ls -la /app; file /app/* 2>/dev/null | head -20",
+    "cd /app && sqlite3 main.db \"PRAGMA integrity_check; SELECT * FROM sqlite_master;\" ; xxd main.db-wal | head -40",
+    "cd /app && ls -la; sqlite3 main.db \"SELECT COUNT(*) FROM items\"",
+    "find / -name \"*wal*\" -o -name \"main.db*\" 2>/dev/null | grep -v proc | head; sqlite3 /app/main.db \"SELECT * FROM items\"",
+    "find / -name \"*.db-wal\" -o -name \"*wal*\" -newer /etc/hostname 2>/dev/null | grep -v -E \"proc|sys|usr/share|usr/bin|Kwalify|/wall$\"; ls -la /tmp /root 2>/dev/null | head -30; find / -name \"main.db*\" -not -path \"/app/*\" 2>/dev/null",
+    "find / -xdev -type f \\( -name \"*wal*\" -o -name \"*.db*\" -o -name \"*.sqlite*\" \\) 2>/dev/null | grep -v -E \"Kwalify|/wall$|usr/share|usr/bin|python3\"; grep -rIl \"items\" / --include=\"*\" -xdev 2>/dev/null | grep -v -E \"proc|sys|usr|etc|lib|main.db\" | head"
+  ],
+  "method": "copy from stopped, never-started container of the frozen original image; no model requests and no modification to the active task",
+  "current_trial_modified": false
+}

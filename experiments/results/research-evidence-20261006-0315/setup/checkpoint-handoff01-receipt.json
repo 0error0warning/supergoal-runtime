@@ -1,0 +1,8 @@
+{
+  "status": "running",
+  "model_calls_before_admission": 0,
+  "registration_sha256": "7ffe28f726aff472d42a0bd228a49214983dba7726ab1f2c724ff7ea374cfcd5",
+  "original_failed_trials_unchanged": true,
+  "started_epoch": 1791226668.3048623,
+  "job": "/var/lib/supergoal-lab/jobs/tb-checkpoint-handoff01-001-compile-compcert-native"
+}

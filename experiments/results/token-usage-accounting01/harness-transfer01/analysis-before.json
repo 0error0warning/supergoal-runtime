@@ -1,0 +1,877 @@
+{
+  "experiment": "harness-transfer01",
+  "collected_at": "2026-10-05T22:24:14.970791+00:00",
+  "host": "supergoal-gcp",
+  "planned_tasks": 3,
+  "planned_arms": 4,
+  "planned_trials": 12,
+  "observed_trials": 12,
+  "valid_trials": 10,
+  "raw_trial_count_including_oracles_and_prior_candidates": 15,
+  "paired_native_full": {
+    "native_0_sg_1": 2,
+    "native_1_sg_1": 1
+  },
+  "apparatus_or_unresolved": [
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "mini_swe",
+      "classification": "trial_exception",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": false,
+      "end_to_end_reward": 0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": true,
+      "exception_type": "AgentTimeoutError",
+      "requests": 57,
+      "status": "adapter_error",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 1948298,
+      "output_tokens": 27318,
+      "cache_tokens": 1875399,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 900.0048864009987,
+      "last_online_verdict": null,
+      "control_id": "53ca319cd2c342a28b7aed1a1a503585",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": false,
+      "artifact_snapshot_available": null,
+      "artifact_retention_receipt": "unobserved"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "longhorizon",
+      "classification": "trial_exception",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": false,
+      "end_to_end_reward": 0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": true,
+      "exception_type": "AgentTimeoutError",
+      "requests": 85,
+      "status": "adapter_error",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 2762769,
+      "output_tokens": 45628,
+      "cache_tokens": 2576978,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "manager": 2,
+        "executor": 1,
+        "review": 1
+      },
+      "upstream_role_episode_counts": {
+        "manager": 2,
+        "cli_executor": 1,
+        "cli_auditor": 1
+      },
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 896.025046879,
+      "last_online_verdict": null,
+      "control_id": "cbdc59a226f0473eb8b0a3ec222c36d7",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    }
+  ],
+  "paired_native_full_end_to_end": {
+    "native_0_sg_1": 2,
+    "native_1_sg_1": 1
+  },
+  "paired_statistics_official": {
+    "paired_tasks": 3,
+    "sg_only_success": 2,
+    "native_only_success": 0,
+    "success_rate_difference": 0.6666666666666666,
+    "mcnemar_exact_two_sided_p": 0.5,
+    "task_bootstrap_percentile_95": [
+      0.0,
+      1.0
+    ],
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261006,
+    "bootstrap_degenerate": false,
+    "scope": "Conditional on available paired, deliberately selected task IDs. Not a population-generalization guarantee; resampling calls no model."
+  },
+  "paired_statistics_end_to_end": {
+    "paired_tasks": 3,
+    "sg_only_success": 2,
+    "native_only_success": 0,
+    "success_rate_difference": 0.6666666666666666,
+    "mcnemar_exact_two_sided_p": 0.5,
+    "task_bootstrap_percentile_95": [
+      0.0,
+      1.0
+    ],
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261006,
+    "bootstrap_degenerate": false,
+    "scope": "Conditional on available paired, deliberately selected task IDs. Not a population-generalization guarantee; resampling calls no model."
+  },
+  "descriptive_pairs_to_sg": [
+    {
+      "other_arm": "native",
+      "sg_arm": "sg_v2",
+      "paired_tasks": 3,
+      "task_ids": [
+        "adaptive-rejection-sampler",
+        "gcode-to-text",
+        "polyglot-rust-c"
+      ],
+      "sg_only_success": 2,
+      "other_only_success": 0,
+      "mean_reward_difference_sg_minus_other": 0.6666666666666666,
+      "paired_usage": {
+        "requests": {
+          "paired_tasks": 3,
+          "other_total": 74,
+          "sg_total": 115
+        },
+        "input_tokens": {
+          "paired_tasks": 3,
+          "other_total": 1317477,
+          "sg_total": 1954559
+        },
+        "output_tokens": {
+          "paired_tasks": 3,
+          "other_total": 36612,
+          "sg_total": 48384
+        }
+      },
+      "interpretation": "Supplementary descriptive comparison on available paired tasks; no unpaired scores or usage, no multiplicity-adjusted inference."
+    },
+    {
+      "other_arm": "mini_swe",
+      "sg_arm": "sg_v2",
+      "paired_tasks": 3,
+      "task_ids": [
+        "adaptive-rejection-sampler",
+        "gcode-to-text",
+        "polyglot-rust-c"
+      ],
+      "sg_only_success": 1,
+      "other_only_success": 0,
+      "mean_reward_difference_sg_minus_other": 0.3333333333333333,
+      "paired_usage": {
+        "requests": {
+          "paired_tasks": 3,
+          "other_total": 125,
+          "sg_total": 115
+        },
+        "input_tokens": {
+          "paired_tasks": 3,
+          "other_total": 3395099,
+          "sg_total": 1954559
+        },
+        "output_tokens": {
+          "paired_tasks": 3,
+          "other_total": 65745,
+          "sg_total": 48384
+        }
+      },
+      "interpretation": "Supplementary descriptive comparison on available paired tasks; no unpaired scores or usage, no multiplicity-adjusted inference."
+    },
+    {
+      "other_arm": "longhorizon",
+      "sg_arm": "sg_v2",
+      "paired_tasks": 3,
+      "task_ids": [
+        "adaptive-rejection-sampler",
+        "gcode-to-text",
+        "polyglot-rust-c"
+      ],
+      "sg_only_success": 1,
+      "other_only_success": 0,
+      "mean_reward_difference_sg_minus_other": 0.3333333333333333,
+      "paired_usage": {
+        "requests": {
+          "paired_tasks": 3,
+          "other_total": 137,
+          "sg_total": 115
+        },
+        "input_tokens": {
+          "paired_tasks": 3,
+          "other_total": 3336609,
+          "sg_total": 1954559
+        },
+        "output_tokens": {
+          "paired_tasks": 3,
+          "other_total": 92624,
+          "sg_total": 48384
+        }
+      },
+      "interpretation": "Supplementary descriptive comparison on available paired tasks; no unpaired scores or usage, no multiplicity-adjusted inference."
+    }
+  ],
+  "end_to_end_by_arm": {
+    "native": {
+      "observed_evaluable_trials": 3,
+      "successes": 1,
+      "controller_failures": 0,
+      "execution_deadlines": 0
+    },
+    "sg_v2": {
+      "observed_evaluable_trials": 3,
+      "successes": 3,
+      "controller_failures": 0,
+      "execution_deadlines": 0
+    },
+    "mini_swe": {
+      "observed_evaluable_trials": 3,
+      "successes": 2,
+      "controller_failures": 0,
+      "execution_deadlines": 1
+    },
+    "longhorizon": {
+      "observed_evaluable_trials": 3,
+      "successes": 2,
+      "controller_failures": 0,
+      "execution_deadlines": 1
+    }
+  },
+  "mechanism_contrasts": [
+    {
+      "control": "native",
+      "treatment": "sg_v2",
+      "hypothesis": "whole_framework",
+      "paired_tasks": 3,
+      "pairs": [
+        {
+          "task_id": "adaptive-rejection-sampler",
+          "reward_difference": 1.0,
+          "request_difference": -2,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "gcode-to-text",
+          "reward_difference": 1.0,
+          "request_difference": 32,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "polyglot-rust-c",
+          "reward_difference": 0.0,
+          "request_difference": 11,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        }
+      ],
+      "mean_reward_difference": 0.6666666666666666,
+      "interpretation": "Exploratory, deliberately selected task units; activation subsets are descriptive and post-treatment."
+    },
+    {
+      "control": "mini_swe",
+      "treatment": "sg_v2",
+      "hypothesis": "external_harness",
+      "paired_tasks": 3,
+      "pairs": [
+        {
+          "task_id": "adaptive-rejection-sampler",
+          "reward_difference": 0.0,
+          "request_difference": -34,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "gcode-to-text",
+          "reward_difference": 1.0,
+          "request_difference": 17,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "polyglot-rust-c",
+          "reward_difference": 0.0,
+          "request_difference": 7,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        }
+      ],
+      "mean_reward_difference": 0.3333333333333333,
+      "interpretation": "Exploratory, deliberately selected task units; activation subsets are descriptive and post-treatment."
+    },
+    {
+      "control": "longhorizon",
+      "treatment": "sg_v2",
+      "hypothesis": "external_harness",
+      "paired_tasks": 3,
+      "pairs": [
+        {
+          "task_id": "adaptive-rejection-sampler",
+          "reward_difference": 0.0,
+          "request_difference": -3,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "gcode-to-text",
+          "reward_difference": 1.0,
+          "request_difference": -11,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        },
+        {
+          "task_id": "polyglot-rust-c",
+          "reward_difference": 0.0,
+          "request_difference": -8,
+          "second_episode_observed": false,
+          "control_second_episode_observed": false,
+          "treatment_second_episode_observed": false,
+          "treatment_history_reset_exercised": false,
+          "treatment_bounded_reaudit_exercised": false,
+          "unknown_audit_observed": false
+        }
+      ],
+      "mean_reward_difference": 0.3333333333333333,
+      "interpretation": "Exploratory, deliberately selected task units; activation subsets are descriptive and post-treatment."
+    }
+  ],
+  "mechanism_activation_by_arm": {
+    "native": {
+      "observed_trials": 3,
+      "second_executor_episode": 0,
+      "history_reset_exercised": 0,
+      "bounded_reaudit_exercised": 0,
+      "false_online_acceptances": 0
+    },
+    "sg_v2": {
+      "observed_trials": 3,
+      "second_executor_episode": 0,
+      "history_reset_exercised": 0,
+      "bounded_reaudit_exercised": 0,
+      "false_online_acceptances": 0
+    },
+    "mini_swe": {
+      "observed_trials": 3,
+      "second_executor_episode": 0,
+      "history_reset_exercised": 0,
+      "bounded_reaudit_exercised": 0,
+      "false_online_acceptances": 0
+    },
+    "longhorizon": {
+      "observed_trials": 3,
+      "second_executor_episode": 0,
+      "history_reset_exercised": 0,
+      "bounded_reaudit_exercised": 0,
+      "false_online_acceptances": 0
+    }
+  },
+  "rows": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "upstream_task_name": "terminal-bench/adaptive-rejection-sampler",
+      "arm": "native",
+      "classification": "graded",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 0.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 26,
+      "status": "agent_stopped",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 294482,
+      "output_tokens": 10774,
+      "cache_tokens": 272851,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 459.539348995997,
+      "last_online_verdict": null,
+      "control_id": "be7213a8b08b48ca9dcc12e2ea1ac8c7",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": false,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "upstream_task_name": "terminal-bench/polyglot-rust-c",
+      "arm": "sg_v2",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 17,
+      "status": "succeeded",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 91566,
+      "output_tokens": 14301,
+      "cache_tokens": 45828,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "executor": 1,
+        "review": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [
+        "pass"
+      ],
+      "episode_seconds": 262.9889125010013,
+      "last_online_verdict": "pass",
+      "control_id": "2d97f43e11244fbe93444baf0f99c3a3",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "mini_swe",
+      "classification": "trial_exception",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": false,
+      "end_to_end_reward": 0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": true,
+      "exception_type": "AgentTimeoutError",
+      "requests": 57,
+      "status": "adapter_error",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 1948298,
+      "output_tokens": 27318,
+      "cache_tokens": 1875399,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 900.0048864009987,
+      "last_online_verdict": null,
+      "control_id": "53ca319cd2c342a28b7aed1a1a503585",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": false,
+      "artifact_snapshot_available": null,
+      "artifact_retention_receipt": "unobserved"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "upstream_task_name": "terminal-bench/adaptive-rejection-sampler",
+      "arm": "sg_v2",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 24,
+      "status": "succeeded",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 237185,
+      "output_tokens": 9680,
+      "cache_tokens": 103062,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "executor": 1,
+        "review": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [
+        "pass"
+      ],
+      "episode_seconds": 770.7430365680011,
+      "last_online_verdict": "pass",
+      "control_id": "c34d93a8d1d94cf7a82499e5b1104003",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": false,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "upstream_task_name": "terminal-bench/polyglot-rust-c",
+      "arm": "mini_swe",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 10,
+      "status": "agent_stopped",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 26926,
+      "output_tokens": 10705,
+      "cache_tokens": 22603,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 172.04078088200185,
+      "last_online_verdict": null,
+      "control_id": "b300b86a9fc1411aa9352443b3050d14",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "longhorizon",
+      "classification": "trial_exception",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": false,
+      "end_to_end_reward": 0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": true,
+      "exception_type": "AgentTimeoutError",
+      "requests": 85,
+      "status": "adapter_error",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 2762769,
+      "output_tokens": 45628,
+      "cache_tokens": 2576978,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "manager": 2,
+        "executor": 1,
+        "review": 1
+      },
+      "upstream_role_episode_counts": {
+        "manager": 2,
+        "cli_executor": 1,
+        "cli_auditor": 1
+      },
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 896.025046879,
+      "last_online_verdict": null,
+      "control_id": "cbdc59a226f0473eb8b0a3ec222c36d7",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "upstream_task_name": "terminal-bench/adaptive-rejection-sampler",
+      "arm": "mini_swe",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 58,
+      "status": "agent_stopped",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 1419875,
+      "output_tokens": 27722,
+      "cache_tokens": 1295060,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 454.2484092980012,
+      "last_online_verdict": null,
+      "control_id": "d7e372f9283b4eb5b515d4ed9b3f7fba",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "upstream_task_name": "terminal-bench/polyglot-rust-c",
+      "arm": "longhorizon",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 25,
+      "status": "succeeded",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 227200,
+      "output_tokens": 30174,
+      "cache_tokens": 154195,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "manager": 2,
+        "executor": 1,
+        "review": 1,
+        "final_response": 1
+      },
+      "upstream_role_episode_counts": {
+        "manager": 2,
+        "cli_executor": 1,
+        "cli_auditor": 1,
+        "final_response": 1
+      },
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 339.3179302069984,
+      "last_online_verdict": "pass",
+      "control_id": "55a044fb0c994e08887a73a559667399",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "native",
+      "classification": "graded",
+      "official_raw_reward": 0.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 0.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 42,
+      "status": "agent_stopped",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 996181,
+      "output_tokens": 19571,
+      "cache_tokens": 942216,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 528.4331068850006,
+      "last_online_verdict": null,
+      "control_id": "b96deda8334144c3b6f15eace64da269",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "upstream_task_name": "terminal-bench/adaptive-rejection-sampler",
+      "arm": "longhorizon",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 27,
+      "status": "succeeded",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 346640,
+      "output_tokens": 16822,
+      "cache_tokens": 246978,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "manager": 2,
+        "executor": 1,
+        "review": 1,
+        "final_response": 1
+      },
+      "upstream_role_episode_counts": {
+        "manager": 2,
+        "cli_executor": 1,
+        "cli_auditor": 1,
+        "final_response": 1
+      },
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 392.53056498899605,
+      "last_online_verdict": "pass",
+      "control_id": "60dd6a8c51134776b69ed151f8098704",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "upstream_task_name": "terminal-bench/polyglot-rust-c",
+      "arm": "native",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 6,
+      "status": "agent_stopped",
+      "upstream_http_errors": {},
+      "transport_error_calls": 0,
+      "input_tokens": 26814,
+      "output_tokens": 6267,
+      "cache_tokens": 17910,
+      "executor_episodes": 1,
+      "review_episodes": 0,
+      "role_episode_counts": {
+        "executor": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [],
+      "episode_seconds": 132.0604761939976,
+      "last_online_verdict": null,
+      "control_id": "dee692447a10457d92fdd9ed1ff2570e",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "upstream_task_name": "terminal-bench/gcode-to-text",
+      "arm": "sg_v2",
+      "classification": "graded",
+      "official_raw_reward": 1.0,
+      "valid_for_comparison": true,
+      "end_to_end_reward": 1.0,
+      "harness_failure": false,
+      "adjudication": null,
+      "execution_limit_reached": false,
+      "exception_type": null,
+      "requests": 74,
+      "status": "succeeded",
+      "upstream_http_errors": {},
+      "transport_error_calls": 1,
+      "input_tokens": 1625808,
+      "output_tokens": 24403,
+      "cache_tokens": 1506096,
+      "executor_episodes": 1,
+      "review_episodes": 1,
+      "role_episode_counts": {
+        "executor": 1,
+        "review": 1
+      },
+      "upstream_role_episode_counts": {},
+      "history_reset_exercised": false,
+      "bounded_reaudit_exercised": false,
+      "review_verdicts": [
+        "pass"
+      ],
+      "episode_seconds": 836.4242305269981,
+      "last_online_verdict": "pass",
+      "control_id": "f15a983c3236499089d7c5d87825d6a2",
+      "false_online_acceptance": false,
+      "artifact_snapshot_recorded": true,
+      "artifact_snapshot_available": true,
+      "artifact_retention_receipt": "durable"
+    }
+  ],
+  "bundle_file": "harness-transfer01-audited-bundle.json"
+}

@@ -1,0 +1,169 @@
+{
+  "schema": 1,
+  "kind": "docker_save_cas",
+  "image_id": "sha256:c0e2b68a5ff1e2678fe43533bd32f556dc001f491cf17072fd117a4a1e1c3024",
+  "original_tags": [
+    "sg-artifact:f621954c628c471cb387bc54fe747414"
+  ],
+  "created_at_epoch": 1791237846.3571794,
+  "members": [
+    {
+      "path": "blobs/sha256/017c8400b647e014fa8f6e90501a0741f5b8a3e9b4f268868e8cc7941f59a8ec",
+      "sha256": "017c8400b647e014fa8f6e90501a0741f5b8a3e9b4f268868e8cc7941f59a8ec",
+      "size": 37760512,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/097b2e6d819c7a4f9d0d9db00e9a3c289dcd59b7aca88cb4a12970a5976dcf55",
+      "sha256": "097b2e6d819c7a4f9d0d9db00e9a3c289dcd59b7aca88cb4a12970a5976dcf55",
+      "size": 1536,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/13a6c40644bcb33b207a933269f34260d627b5d137cf642c91cb4e39a7ca7f63",
+      "sha256": "13a6c40644bcb33b207a933269f34260d627b5d137cf642c91cb4e39a7ca7f63",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/219028194d1a2883e86fbb3b069bef7c396d69b2b4c5ed51cbdaccf8b8f096de",
+      "sha256": "219028194d1a2883e86fbb3b069bef7c396d69b2b4c5ed51cbdaccf8b8f096de",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/22d3f65e25057bd6c1db483f0a8ee18e947e979ddf1e9f90266ad845ab1019cb",
+      "sha256": "22d3f65e25057bd6c1db483f0a8ee18e947e979ddf1e9f90266ad845ab1019cb",
+      "size": 817631744,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/31ca3dc6c8baa2fb69ad253a8f4444e14ca2ca3e6211ee56bf3ab4090f46df73",
+      "sha256": "31ca3dc6c8baa2fb69ad253a8f4444e14ca2ca3e6211ee56bf3ab4090f46df73",
+      "size": 386,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/336bdcd17bab2cc91255e90da057fd75971032e88bacd4882890f5028a8b4c94",
+      "sha256": "336bdcd17bab2cc91255e90da057fd75971032e88bacd4882890f5028a8b4c94",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/375499f24561bc2fe9b58fbdbb30579327ded30ec86f0f2832750a19c97f1d9c",
+      "sha256": "375499f24561bc2fe9b58fbdbb30579327ded30ec86f0f2832750a19c97f1d9c",
+      "size": 208896,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/3e67b16cbc272eee0b5eb458d02b33b1cce205a598260d24880a79fa847fdd74",
+      "sha256": "3e67b16cbc272eee0b5eb458d02b33b1cce205a598260d24880a79fa847fdd74",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/41f1141d2bdf0005d790889f98072938fe73fb4445b7c198c5b63cc5212b544b",
+      "sha256": "41f1141d2bdf0005d790889f98072938fe73fb4445b7c198c5b63cc5212b544b",
+      "size": 1774,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/6143ee9e3de07e6ca35edaf392cf93dea566a5bcd0d3696607ae6c324193d099",
+      "sha256": "6143ee9e3de07e6ca35edaf392cf93dea566a5bcd0d3696607ae6c324193d099",
+      "size": 77895680,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/6e5865e9497b85758f4d2c8003d3da32048931b26ad774523b873f21f34fd654",
+      "sha256": "6e5865e9497b85758f4d2c8003d3da32048931b26ad774523b873f21f34fd654",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/707f05f9c84b69f54cf66e9ea2fc9a4e703fe023e727f517e590e97907bf36a8",
+      "sha256": "707f05f9c84b69f54cf66e9ea2fc9a4e703fe023e727f517e590e97907bf36a8",
+      "size": 9570304,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/7645aa081a28af8c1df3fdcd3f220f7548d066219f570fb52ba63dd643aaea6d",
+      "sha256": "7645aa081a28af8c1df3fdcd3f220f7548d066219f570fb52ba63dd643aaea6d",
+      "size": 5103104,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/7ee20433ac93391e8d93cf192a4b5552f84308a7c4ca4b53dcf8a79ba9aa3738",
+      "sha256": "7ee20433ac93391e8d93cf192a4b5552f84308a7c4ca4b53dcf8a79ba9aa3738",
+      "size": 5120,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/bb0030df7e49b95b43b9e2283e999bc490e6aa4e3032ef875905fa1326506f91",
+      "sha256": "bb0030df7e49b95b43b9e2283e999bc490e6aa4e3032ef875905fa1326506f91",
+      "size": 5035008,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/bf0e4cf7f85745983d7b103c7de56a27635428f8f76b6483123092572f59c703",
+      "sha256": "bf0e4cf7f85745983d7b103c7de56a27635428f8f76b6483123092572f59c703",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/c0e2b68a5ff1e2678fe43533bd32f556dc001f491cf17072fd117a4a1e1c3024",
+      "sha256": "c0e2b68a5ff1e2678fe43533bd32f556dc001f491cf17072fd117a4a1e1c3024",
+      "size": 9661,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/ceb711ad9a25a8f31d7a7db75048e519181965cc804fda0eaa472b2909047d21",
+      "sha256": "ceb711ad9a25a8f31d7a7db75048e519181965cc804fda0eaa472b2909047d21",
+      "size": 805888,
+      "mode": 438
+    },
+    {
+      "path": "blobs/sha256/e4656c2e414961d31798588c3850c4abc42542a3737aeb33fa03418c60fd13a0",
+      "sha256": "e4656c2e414961d31798588c3850c4abc42542a3737aeb33fa03418c60fd13a0",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/f3f916b02bae6ad2342e2c76e2e1e9d5ce5b088648f007393e85728aa30740ec",
+      "sha256": "f3f916b02bae6ad2342e2c76e2e1e9d5ce5b088648f007393e85728aa30740ec",
+      "size": 3319,
+      "mode": 420
+    },
+    {
+      "path": "blobs/sha256/f83e44b64a55bdf3197d3f0b228c6c53657009d830307aea1fb2cb8988f95b42",
+      "sha256": "f83e44b64a55bdf3197d3f0b228c6c53657009d830307aea1fb2cb8988f95b42",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "index.json",
+      "sha256": "3f46298275d5e2f45b7b24be66c2d3d959939f635b5d1ae296dc5b804a9262e5",
+      "size": 420,
+      "mode": 420
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "46bffaf9e0ea8864e1c9635acef4970053b01cd403443c899a57ce91bb3c9dd5",
+      "size": 3247,
+      "mode": 420
+    },
+    {
+      "path": "oci-layout",
+      "sha256": "0cdedc0869d60bb59e3dde736f996025e70318180587e049cfa22f80d67aa8e5",
+      "size": 31,
+      "mode": 420
+    },
+    {
+      "path": "repositories",
+      "sha256": "90c51f48fa908df65470b93c8e7f2ce401ff95ea1fd9a4eab240448b553b3cee",
+      "size": 120,
+      "mode": 420
+    }
+  ],
+  "process_state_included": false,
+  "mounted_volumes_included": false
+}

@@ -1,0 +1,74 @@
+{
+  "status": "complete_with_itemized_outcomes",
+  "model_calls": 0,
+  "rows": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "status": "graded",
+      "pid": 1543642,
+      "started_at": "2026-10-05T21:11:49.035174Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler/adaptive-rejection-sampler__4fcbfvk/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:12:50.297918+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:65b25be2c34967a7db2332794da5a1f6d8235e1792a1d747aff46b5bff77b9d7"
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "status": "graded",
+      "pid": 1551302,
+      "started_at": "2026-10-05T21:12:51.169941Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c/polyglot-rust-c__qRdsYjw/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:13:39.684550+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:42e1c101034156ab6a0cbefc63ee654ab7fccb668e1580a090abba89244f6a93"
+    },
+    {
+      "task_id": "gcode-to-text",
+      "status": "graded",
+      "pid": 1556708,
+      "started_at": "2026-10-05T21:13:40.563917Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-03-gcode-to-text",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-harness-transfer01-03-gcode-to-text/gcode-to-text__S6UnyH6/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T21:15:56.232782+00:00",
+      "exit_code": 0,
+      "reference_passed": true,
+      "image_id": "sha256:174ac52b2c4ae7e2bad19ae1f5e61ee91b1344c8ab1bf57bed5333c15249a402"
+    }
+  ],
+  "selected_at": "2026-10-05T21:11:48.140822+00:00",
+  "finished_at": "2026-10-05T21:15:56.251712+00:00"
+}

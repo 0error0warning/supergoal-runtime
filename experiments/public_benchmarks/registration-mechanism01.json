@@ -1,0 +1,506 @@
+{
+  "schema": 1,
+  "experiment": "mechanism01",
+  "kind": "exploratory_outcome_informed_development_factorial",
+  "registered_at_utc": "2026-10-05T18:05:39.404994+00:00",
+  "official_source_commit": "7131e4375048a0e408a8fb404b5f499d726b695b",
+  "arms": [
+    "native",
+    "mini_swe",
+    "sg_v2",
+    "sg_no_context",
+    "sg_fresh",
+    "sg_fresh_no_context",
+    "sg_retry_unknown"
+  ],
+  "tasks": [
+    {
+      "task_id": "configure-git-webserver",
+      "metadata_path": "tasks/configure-git-webserver/task.toml",
+      "metadata_git_blob_sha": "f2e7ecdee53ae81d5afa928333908e3e7945f386",
+      "category": "system-administration",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/configure-git-webserver:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "dna-assembly",
+      "metadata_path": "tasks/dna-assembly/task.toml",
+      "metadata_git_blob_sha": "b09ebdc64a4a6b6b35a69a2bc64c786dff597428",
+      "category": "scientific-computing",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/dna-assembly:20251031",
+      "agent_timeout_sec": 1800.0,
+      "verifier_timeout_sec": 1800.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "write-compressor",
+      "metadata_path": "tasks/write-compressor/task.toml",
+      "metadata_git_blob_sha": "ef8bc825dced411ecc37c987bfa3774d08bcc060",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/write-compressor:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "extract-elf",
+      "metadata_path": "tasks/extract-elf/task.toml",
+      "metadata_git_blob_sha": "e96fdeff8886bb786f40601407737535039ee94a",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/extract-elf:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    }
+  ],
+  "planned_order": [
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "native"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "sg_fresh"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_retry_unknown"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "sg_fresh_no_context"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "native"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "sg_retry_unknown"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "sg_fresh_no_context"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "native"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "sg_retry_unknown"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_fresh_no_context"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "native"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_fresh"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_retry_unknown"
+    },
+    {
+      "task_id": "dna-assembly",
+      "arm": "mini_swe"
+    },
+    {
+      "task_id": "write-compressor",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_fresh_no_context"
+    }
+  ],
+  "max_upstream_requests_per_trial": 192,
+  "max_output_tokens_per_request": 6000,
+  "max_outer_episodes": 6,
+  "repeats_per_task_arm": 1,
+  "concurrency": {
+    "new_cohort_cpu_peak": 2,
+    "new_cohort_workers": 2,
+    "new_cohort_memory_mb": 12288,
+    "other_frozen_pool_cpus": 6,
+    "start_after": "public-gcp01 completed",
+    "executor_paused_during_sg_audit": true
+  },
+  "stop_admission_at_utc": "2026-10-06T14:14:06+00:00",
+  "cloud_stop_at_utc": "2026-10-06T14:24:06+00:00",
+  "mini_integration_gate": "mini-transport-smoke02.json",
+  "pause_integration_gate": "mechanism-pause-smoke01.json",
+  "method_document": "mechanism-study-2026-10-06.md",
+  "executor_description": "Hermes 0.21.3 / mini-SWE-agent 2.4.6（上游原版循环，SWE2/容器适配），统一 devin/swe-2",
+  "candidate_changes_constant_across_sg_conditions": [
+    "SQLite safe journal selection",
+    "pause actor throughout review; phase-exclusive CPU reservation"
+  ],
+  "mini_upstream_commit": "04d809ceab9df28f9adaed044884180159172930",
+  "mini_source_sha256": {
+    "src/minisweagent/__main__.py": "148c803a2c3ef9cdc5436836e3414e33515d2f4964fcfc52a62c6ed2943b585a",
+    "src/minisweagent/__init__.py": "0a708308b1b62cc020b60799c3d54f665845f795b3f0c4fdac787c96a38d12c7",
+    "src/minisweagent/exceptions.py": "0590393c56bee873c79a691dcb4f15cb39c85f1658598b84bfb295bfde56921d",
+    "src/minisweagent/py.typed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/agents/__init__.py": "f95a9f4d1dcc08a05ba6263c5da562b3a7e9e3ae07734f2b9f0d83153c8d0cab",
+    "src/minisweagent/agents/interactive.py": "d68236832ce2a8c65340fdfd4cdb6df2a24818691112f83bc229197203521cce",
+    "src/minisweagent/agents/README.md": "9a446af17787fd7fd8f8f6c963edd4fed50865ed2a39f4acf6632239be7c6fd9",
+    "src/minisweagent/agents/default.py": "e8ef8aa365942d739c2ec5cb0879f60f377d2dc2de8ec670aaedf3bafb45a4c2",
+    "src/minisweagent/environments/singularity.py": "5d75c3977c4ebe728778f25bc231f5876d857c837c30fd42845a64b48e10ac68",
+    "src/minisweagent/environments/__init__.py": "7a02c4576d3e95ca21f243919e5bc5b94d183df35b24d778c0b35b776c3a426b",
+    "src/minisweagent/environments/local.py": "01dd33ae6be897458611911cc0eee1389092ea9fc6788c7eb24773e7c6342b1c",
+    "src/minisweagent/environments/docker.py": "21d389122b008e7b743d1e640207fda0b08d9010cf6323ddd02f0742b33b96a6",
+    "src/minisweagent/environments/README.md": "6e6a15ff869f9835d3d607ffcac854920585675215039b196eb17f08df5f0481",
+    "src/minisweagent/models/portkey_model.py": "d5e2bb009791e0d00745d95cb142d090531f28bda6e3782b8ba94d2ac1b2f528",
+    "src/minisweagent/models/litellm_model.py": "6df4483bcdc9620b2f9d7f8bb1027a7fb9729b739976cbcf1a9d18fb58c48227",
+    "src/minisweagent/models/test_models.py": "44330685739f47e554b90fa73ccf019bc2e2b80e4c287c025f63ea4f5263b23e",
+    "src/minisweagent/models/openrouter_response_model.py": "19284d9f6ba6ec95b60cc0e91f06be3ff6e1976e204633f533076db0c1e499dd",
+    "src/minisweagent/models/__init__.py": "eb141eae346d51af407b4faf868ad7e869fa4fff275415381fa8ef845616f351",
+    "src/minisweagent/models/openrouter_textbased_model.py": "61944531db221e4d668b245d1ccfec022110906fd732397a49f9d3b01e510573",
+    "src/minisweagent/models/litellm_response_model.py": "968de298d508b0de58f52548472e47135efff3891ddda157a9740e7571a6e8c8",
+    "src/minisweagent/models/openrouter_model.py": "6f217e91d04da906ea8e8a156f710e19ddbcf5ab6397b329a2abb66a95a80313",
+    "src/minisweagent/models/litellm_textbased_model.py": "395bc9bc4a06c18577e73b21c5465f9d22a6d0cc45b006f3d7c9fdaae399e732",
+    "src/minisweagent/models/portkey_response_model.py": "b491e7dd2db134667e2733be944b0b2edfcd928b02edb53db9ee1c4922e64b89",
+    "src/minisweagent/models/requesty_model.py": "b8b52e125b0cc75ec144b40e3ca4d996f469aca5acedaa3ed41446dede171063",
+    "src/minisweagent/models/README.md": "971ef8cbf7e283e081ba01766a0c9e71c7832db8c45b28ed3743597dee591347",
+    "src/minisweagent/utils/log.py": "aee0cc34a32b542f4d3ef09e1f03b7418cf98ec54d506401d9d4401003c05a9f",
+    "src/minisweagent/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/utils/serialize.py": "3035b27cfeffdf91117c72bc8131340bd9c5f67a3010baeb4ecd6b0c7406f462",
+    "src/minisweagent/run/mini.py": "ae9c82013afbc8e0320dc1e55600eed9d9ee6dec5acbc59763ff984a0594f9a9",
+    "src/minisweagent/run/__init__.py": "588a18807565ee2645d989dcadf57722db6ea46e8fe4aa20ae82872840a46b70",
+    "src/minisweagent/run/hello_world.py": "e1d2b259e5716167e3066ce406d91e51d67b432dd49d47342e1306d25f5cf2f6",
+    "src/minisweagent/run/README.md": "f2cda2f2abb04839f629e9fb65a25d86cb7882c40e447c6925ee0f68d272aa84",
+    "src/minisweagent/config/__init__.py": "ec19d21c65d1d720e80847e85a4d2752b6f5be30b1bfc9f0f1f97d342f20ba94",
+    "src/minisweagent/config/default.yaml": "112aa58328f478a41cc2630702a4b89ef459e912870e05065157ed221f56701f",
+    "src/minisweagent/config/mini_textbased.yaml": "a8c19b95fba2af792b22b4fa58b7ce70357b721a877fd713852abedb650216cf",
+    "src/minisweagent/config/inspector.tcss": "00c13651164c3042e780bed1675cf0ef6371bea92a7c388319c9205d54966e05",
+    "src/minisweagent/config/mini.yaml": "b539a8965f5bf41dd0f32daafa5d2db22581923d13812fa378fd09569b9d6b0c",
+    "src/minisweagent/config/README.md": "1430bac6ef75c27cbf838a6ce4130cba74e58826518194df9dc53492b3f1ac7a",
+    "src/minisweagent/agents/utils/prompt_user.py": "4fc4ca772db13067ebad7fdce8b3ec0ab229e1b3e764f3abd4412522b73cab3e",
+    "src/minisweagent/agents/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/environments/extra/swerex_docker.py": "2f200454247aaf299d851d6db02869fee88e1254c0b4f1e79f2c2a899b659fd8",
+    "src/minisweagent/environments/extra/swerex_modal.py": "34155d79bb72648eaf765116d03255e697fc9546164f69d842bc5e759878a3de",
+    "src/minisweagent/environments/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/environments/extra/contree.py": "88ddea919f18c2e0ea85dd8a3b2483836098afd668b6bdd7fe518675bcfb6ff7",
+    "src/minisweagent/environments/extra/bubblewrap.py": "9aceddac6efdce92926f0de8b13f974c66c58544bc87facba7d61878df4a44c0",
+    "src/minisweagent/models/extra/roulette.py": "74aa8c1b4389097031944382b7461457875902eb98c8aa761060a07d8fb2e09f",
+    "src/minisweagent/models/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/models/utils/actions_text.py": "e5997bba3ae3d541ff418317cc8dd9e9e17657de806679ef38ab1ad74e294047",
+    "src/minisweagent/models/utils/actions_toolcall.py": "47b666412e4f838508b50009cf34c7f63fe15e9e40affc257a17c0829896526f",
+    "src/minisweagent/models/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/models/utils/retry.py": "fb9dd9d9ca0253a2b2ac86907fea4c34fe75c55af6d443781e1ab02229a1ac18",
+    "src/minisweagent/models/utils/actions_toolcall_response.py": "36244c4383dde6059742eb1f99fe96b2a91f214f558ece463f81baef96018bcf",
+    "src/minisweagent/models/utils/anthropic_utils.py": "1355c546d7d217502f4aeb5ba87513f55720f8d4d2c1247b8fc5d793078d170e",
+    "src/minisweagent/models/utils/cache_control.py": "edbb8952195d1d9dbef45ed7cad910a50b1cdec08175de74dbffc9414f3da5ba",
+    "src/minisweagent/models/utils/openai_multimodal.py": "c498ec2e97c0bf45c212a10de9f5d1b2d24d4de46a05fd0eaea975c1abe3f81f",
+    "src/minisweagent/models/utils/content_string.py": "17ea19b28a2298abaeb51d70f2dcc94e62098a758ecb2dcb98f27f546cd87fc3",
+    "src/minisweagent/run/utilities/__init__.py": "4fb745f3835e4282a02703d444dcb7178082af189c8beec0c068b257466c0e5a",
+    "src/minisweagent/run/utilities/config.py": "c9a6955ca3f6de180ddc4bc5a54d7c7d49e96d996c9b80e2d146630230aaf954",
+    "src/minisweagent/run/utilities/mini_extra.py": "52ac1ef811c1fb23a0ee0e3cf0a093c99ca8cbe2c31345e18c8762451508da59",
+    "src/minisweagent/run/utilities/inspector.py": "5a9deb60c7462ade44c6b364af0aca4fd4b9b394f117247592c70dde7b706a1a",
+    "src/minisweagent/run/benchmarks/__init__.py": "c7b08a7fc761427203f3bacfdffd4a7ee0d19e62c8d869cdab71744962ef90ac",
+    "src/minisweagent/run/benchmarks/swebench.py": "4bc6cfc0a388ba14b8c9cd7278f15efaef654f7f79b3b252208f8fdb11a0fc99",
+    "src/minisweagent/run/benchmarks/programbench.py": "25c67a662a665781d60193a2cb441f13ec5a25d6530a4fd087b4e6f68b9be374",
+    "src/minisweagent/run/benchmarks/swebench_single.py": "52bac3804b388aee49dc8b29c03c16a92a2d2fce321fa55622ff3bd993936296",
+    "src/minisweagent/run/extra/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/run/benchmarks/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/minisweagent/run/benchmarks/utils/common.py": "618776d688f11018827ea8eb48ab20839d2d0ec182b4bd844a08af48937df398",
+    "src/minisweagent/run/benchmarks/utils/batch_progress.py": "b1928297576b6d9f4f75b38397e29a0d93851e9c66ebf267a03ce4d2051a5287",
+    "src/minisweagent/config/benchmarks/swebench.yaml": "9a9c86ac10428b86b932c972b15fefc2f7b6e92230bac5ebdc47e83232a8315e",
+    "src/minisweagent/config/benchmarks/__init__.py": "7b53280250e7ff073d1e75cda2771fd4ff81e0343e8917fa9fb43fb718d91912",
+    "src/minisweagent/config/benchmarks/swebench_backticks.yaml": "fdc45d1310b045814a0bca7fa4c9e0ed42d86142b5b5f6139d204fd4a0546677",
+    "src/minisweagent/config/benchmarks/programbench.yaml": "8792ec3f630393c238645b6229e7f2a0e4448050169ea35d1454b0b5f5cb2f63",
+    "src/minisweagent/config/benchmarks/swebench_xml.yaml": "4c4beda6df79a73615350ac67a10a0bdb00385a5d7f7b3a9799a79cb1406b749",
+    "src/minisweagent/config/benchmarks/swebench_modal.yaml": "02b7d798cbb4c654e5211841e0b73fd288c3ac70838ca120bbca3522bd392d59"
+  },
+  "mini_dependency_lock": "annotated-types==0.8.0\ncertifi==2026.7.22\ncharset-normalizer==3.5.2\nidna==3.20\nJinja2==3.1.6\nmarkdown-it-py==4.2.0\nMarkupSafe==3.0.4\nmdurl==0.1.2\nplatformdirs==4.12.3\npydantic==2.13.5\npydantic_core==2.46.5\nPygments==2.21.0\npython-dotenv==1.2.4\nPyYAML==6.0.3\nrequests==2.34.2\nrich==15.0.0\ntenacity==9.1.4\ntyping-inspection==0.4.4\ntyping_extensions==4.16.0\nurllib3==2.8.0\n",
+  "oracles": [
+    {
+      "task_id": "configure-git-webserver",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-01-configure-git-webserver/configure-git-webserver__3FQtwXU/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:15:12.722750Z",
+      "finished_at": "2026-10-05T15:16:02.010705Z",
+      "exit_code": 0
+    },
+    {
+      "task_id": "write-compressor",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-04-write-compressor/write-compressor__SX4MQzP/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:16:56.262809Z",
+      "finished_at": "2026-10-05T15:18:12.571187Z",
+      "exit_code": 0
+    },
+    {
+      "task_id": "dna-assembly",
+      "status": "graded",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-public-gcp01-05-dna-assembly/dna-assembly__AgHK7ft/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "started_at": "2026-10-05T15:18:16.331730Z",
+      "finished_at": "2026-10-05T15:18:59.186476Z",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "extract-elf",
+      "status": "graded",
+      "started_at": "2026-10-05T16:15:24.872148Z",
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-oracle-parallel24-06-extract-elf/extract-elf__BdsZoYq/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": null,
+      "n_input_tokens": null,
+      "n_output_tokens": null,
+      "n_cache_tokens": null,
+      "finished_at": "2026-10-05T16:15:50.236138+00:00",
+      "exit_code": 0,
+      "oracle_passed": true
+    }
+  ],
+  "source_sha256": {
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/kernel.py": "23d0127190b58fdba3c20b6d3915ef4a844e62fb2de47dce1b6bf5ac8d16d791",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "experiments/check_worker.py": "3026b0d471a9fea5d0be61756faaed70ecbae4f4a51073da7b3b0b0412005823",
+    "experiments/freeze.py": "cad60abc7079bf91e16df9f1c7d5f6027b2a93c58b327e54de8eb35f50900daf",
+    "experiments/grade_code.py": "5cb52be1cfccf898717f3ad31a7124946636687a363496c435968b15a5af1c4e",
+    "experiments/host_probe.py": "703c220ce9479a79344525dad7bffe673019c373ff4bcc893faa0199a8473480",
+    "experiments/model_proxy.py": "47298abf6bc13fdc812394a6b67e5e37f5a2c74a68347e036a8d0421bdabf2de",
+    "experiments/preflight.py": "79522e108e181c2b74fe84b907a446c142f1ac2fe662ea443fd69b8f88972b1a",
+    "experiments/soak.py": "947f70b1f4cefd3683e5c1806d06b9fcceca34d88fb3e8be1623277f948162e0",
+    "experiments/study_hooks.py": "de59f14ab9ca66476f40ebe2138f3d1fb62a6faea670362075e43ac3f14475ee",
+    "experiments/summarize.py": "743bea711fc290c4884c32d8e761914f11b8f3bc2c40d08899947d6627f4994b",
+    "experiments/supervisor.py": "d37389fa9bff35c8e9c96b04068857399e76750795a3bdd39a688373aa496795",
+    "experiments/tasks.py": "12b4dd6890a78f129309c77f38aedbd8071762a75c49d883ce72edccd2455ab9",
+    "experiments/worker.py": "1815264cc69eb4b229d836fe4403a2fcccb49d32f1dbe1b1028bf313aa3ad1d6",
+    "experiments/analysis/context_reset.py": "d36c4fe233709df9179f9b4d58b577874ba3b4f833e961af7168ce3fe7ac96f4",
+    "experiments/analysis/context_reset02.py": "7c872d0a2e4707014d9df90a63bda708e5b9394fe149fee7428b0b9e58933e3c",
+    "experiments/analysis/context_results.py": "0a5a7e241fc322f3edf5d8447c554767a14f433a56821927a7782120615007bc",
+    "experiments/analysis/fault_replay.py": "967dfdb0f900873ace3864f62f1e6d3870711617f7655403ca68577e952e5663",
+    "experiments/analysis/plot_results.py": "370d068751a9f6e7f6f76b7500e2a202994d92a28c4f4479f597bc9e896d3a0b",
+    "experiments/analysis/process_crash.py": "c024942813ef5c2b6302b88a807029be6e090ebb14af9b9d5247b45f5864528d",
+    "experiments/analysis/registered_results.py": "ca1110ad0e650f1649c95b289a95dfab181ab3577993220ecf1e7cb151f22bc8",
+    "experiments/analysis/soak_audit.py": "56da34e75b2e231afa8bc3484b8379dd74b66d1cf8df84870a9ab34f4265346e",
+    "experiments/analysis/test_registered_results.py": "36ec982a7b1cc4223213ea719da291af41ca5409836906ac16be357966450bcb",
+    "experiments/host-support/launch.py": "754b0ac14080761b2885f173a9e024338b52065993312bf7e89e50c8c16d13ee",
+    "experiments/host-support/registered_matrix.py": "900288e0405f1f38d0d810b5ee56d4b4b68b4bb74929a084fff9ef7b8999b153",
+    "experiments/infrastructure/gcp_hermes_smoke.py": "810a238717af776254dbb7854060ff197d16dfdad8bb11f85ecefdd23b67cafa",
+    "experiments/infrastructure/gcp_preflight.py": "779d9e947af9188870713f0bed91d0cf65cecd4aeaf817fb146c4fc436996662",
+    "experiments/infrastructure/gcp_prepare_cohort.py": "493619fcda96cf255d6d22a804275a4f246ab57c8651d6964c3301005968152e",
+    "experiments/infrastructure/gcp_runtime.py": "b80f600655a1efc9c9c8f703b58264bc2e469fb45840a901d579540053139379",
+    "experiments/infrastructure/gcp_run_cohort.py": "7a70cddd5ba72efb7be1ec00d9e142dca6dbdca9be5350891b27e7b9c15082b4",
+    "experiments/infrastructure/gcp_v2_abi_smoke.py": "816b280dbd0ff23a6ffcd4110863011265624967de30d82b47f400a67acd4325",
+    "experiments/infrastructure/host_profile.py": "70f6c05cdbdb0f8254c84ab3fab63d870b1d4e828b7ec7076127845b3694737a",
+    "experiments/infrastructure/mini_smoke.py": "f1424dcf8f7563e2e8580385bd31addbc874bbb68b56d6cb8c6c457cd628ef3a",
+    "experiments/infrastructure/model_capacity_probe.py": "99a68e7fd74f28892fe9eb6996116be194e4f31e431270a41d5955ca48fa364f",
+    "experiments/infrastructure/oneday_judge_calibration.py": "536a82100f486af6aa3260c65c1c9fa20dad7535162ec3f1940c7f19982187c1",
+    "experiments/infrastructure/oneday_memory_audit.py": "9068fc89569cc1dac31c66a3defc6389d8090d662d9715d601b0c2cce5330d65",
+    "experiments/infrastructure/oneday_vision_probe.py": "0570c6095abd6e519524bf8857368b6d80895631e2db2dd98f17056d2effa1ef",
+    "experiments/infrastructure/prepare_oneday.py": "db3aa37adda5d5a3ec08fa3eed0172fe0bf0f0f2b1f532a78a399752a9f4e6a8",
+    "experiments/infrastructure/prepare_parallel24.py": "19b8594c86f9e90c24b3d3e391d2f83cf0c54820d61a7cbca963718f4bd49bd0",
+    "experiments/infrastructure/run_worker_faults.py": "e80d83019f7c99427e10affb99ea93d0f250bdb7900da964aefa4d14ee84e4de",
+    "experiments/public_benchmarks/analyze_public.py": "177a86e400c4246981977086800e89594cdffe07cec5da608db474db857da0f7",
+    "experiments/public_benchmarks/await_registered_resume.py": "920c058a5b93dfb2ce0a72427a2f6a3d98c0f69ebad0360b9a9844a74d3d74c9",
+    "experiments/public_benchmarks/collect_public.py": "5f93e29fb58f1d20de953b552c26bf14d8e9e7b59d1c0e03758e99908be47bd2",
+    "experiments/public_benchmarks/environment_bootstrap.py": "89953fe011bb95bde8facb8b8b7f6dd763f8c0b1b14afd512a61790c8fc84da4",
+    "experiments/public_benchmarks/finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "experiments/public_benchmarks/finish_oneday.py": "cd559ca9fef519cc7de3ca50e6d94e44d0e7cce315cb4d8fb852123a63351347",
+    "experiments/public_benchmarks/harbor_agent.py": "3f79ce8ffe29424eff145f25b0637aafd41bc8cca278facce4597b9221a2e768",
+    "experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "experiments/public_benchmarks/mechanism_agent.py": "e756c1988e6b53dcaa1c12b6aa872bcee46b9a6467e457316c1968f01e47b0e1",
+    "experiments/public_benchmarks/mini_agent.py": "424ed10a7e05c1c429e23394e67b85530d4a3a0d6cf397c855027766b4f56376",
+    "experiments/public_benchmarks/mini_episode.py": "492b6567508e4c1834d16671981ee7fb6834238eb512a0731b3ff9d7a193f8e9",
+    "experiments/public_benchmarks/oneday_judge.py": "fbcd134411b0b0090fe8f7dd17b883852526231dab25e85c3242b16a1757b114",
+    "experiments/public_benchmarks/oneday_operator.py": "97d53cbe293f71142aabebf23bf6c4558c0c0dcbad964ecfae19128124614480",
+    "experiments/public_benchmarks/oracle_preflight.py": "a587dfe2e4e1bcac885849f2bf6d03758b1aca5b250fbd362fc15e29dfa9973a",
+    "experiments/public_benchmarks/preflight.py": "40fd14bb0de6abc74ffa3718f9803fece5520fc05ccce337a02d8a1e7b8e7c27",
+    "experiments/public_benchmarks/regrade_snapshot.py": "9d9eda4f61bbb1f82fec64b7ba2c86660a23e80a84b0fe43d876b71fdf8805de",
+    "experiments/public_benchmarks/resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "experiments/public_benchmarks/run_mechanism.py": "58c48f20542b66c8cb67f4b941998ba18ebbaf3ac66f717e2978a82ae4fc665a",
+    "experiments/public_benchmarks/run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+    "experiments/public_benchmarks/run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+    "experiments/public_benchmarks/swe2_request.py": "aba0e2d697529c0e580762f1c95883ebd1c57ad15c327d198a9968d3008a8750",
+    "experiments/public_benchmarks/task_resources.py": "a11c3088563e4e638b6df49fba55acf14ad095f67e72b56831b3d5f3a5d18239"
+  },
+  "contrasts": [
+    {
+      "control": "native",
+      "treatment": "mini_swe",
+      "hypothesis": "external_harness"
+    },
+    {
+      "control": "native",
+      "treatment": "sg_v2",
+      "hypothesis": "overall_policy"
+    },
+    {
+      "control": "sg_v2",
+      "treatment": "sg_fresh",
+      "hypothesis": "history_with_state"
+    },
+    {
+      "control": "sg_no_context",
+      "treatment": "sg_fresh_no_context",
+      "hypothesis": "history_without_state"
+    },
+    {
+      "control": "sg_no_context",
+      "treatment": "sg_v2",
+      "hypothesis": "state_with_history"
+    },
+    {
+      "control": "sg_fresh_no_context",
+      "treatment": "sg_fresh",
+      "hypothesis": "state_without_history"
+    },
+    {
+      "control": "sg_v2",
+      "treatment": "sg_retry_unknown",
+      "hypothesis": "bounded_unknown_reaudit"
+    }
+  ],
+  "decision_rule": "Descriptive development effects only; no promotion without fresh frozen task IDs; preserve all failures and realized cost; unknown re-audit is not cost-neutral."
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "systemd-run",
+    "--unit=supergoal-prefix-oracle02",
+    "--property=RuntimeMaxSec=7200",
+    "--property=CPUQuota=300%",
+    "--property=MemoryMax=14G",
+    "--property=Nice=5",
+    "--setenv=PYTHONPATH=/var/lib/supergoal-lab/candidates/prefix-dev02:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments/public_benchmarks:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments/infrastructure",
+    "/var/lib/supergoal-lab/harbor-venv/bin/python",
+    "/var/lib/supergoal-lab/prefix-operator02/run_prefix_oracle.py"
+  ],
+  "state": "MainPID=2298194\nActiveState=active\nInvocationID=77bd091c44024716b3e70547b2e72eb0\n",
+  "at": "2026-10-06T00:50:30.273516+00:00"
+}

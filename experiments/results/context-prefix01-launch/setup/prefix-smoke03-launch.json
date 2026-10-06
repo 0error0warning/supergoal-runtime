@@ -1,0 +1,15 @@
+{
+  "command": [
+    "systemd-run",
+    "--unit=supergoal-prefix-smoke03",
+    "--property=RuntimeMaxSec=1500",
+    "--property=CPUQuota=100%",
+    "--property=MemoryMax=6G",
+    "--setenv=PYTHONPATH=/var/lib/supergoal-lab/candidates/prefix-dev02:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments/public_benchmarks:/var/lib/supergoal-lab/candidates/prefix-dev02/experiments/infrastructure",
+    "/var/lib/supergoal-lab/harbor-venv/bin/python",
+    "/var/lib/supergoal-lab/prefix-operator04/run_prefix_smoke.py"
+  ],
+  "state": "MainPID=2315278\nActiveState=active\nInvocationID=bd83a029c86a4110b604e9a8c23c195e\n",
+  "at": "2026-10-06T00:53:43.584485+00:00",
+  "prior_attempt": "prefix-smoke02 failed before agent_setup/model; artificial seed image retained python entrypoint. Restore base startup config; all prior attempts retained"
+}

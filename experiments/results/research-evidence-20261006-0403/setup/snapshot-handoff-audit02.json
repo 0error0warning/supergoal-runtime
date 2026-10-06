@@ -1,0 +1,58 @@
+{
+  "recorded_at": "2026-10-05T19:58:43.203987+00:00",
+  "raw_results_unchanged": true,
+  "adjudications": {
+    "5ec7ab26d471496c9cf575731c3e6e24": {
+      "kind": "harness_snapshot_handoff_failure",
+      "task_id": "compile-compcert",
+      "arm": "sg_no_context",
+      "solver_deadline": true,
+      "official_raw_reward": null,
+      "container_id": "080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c",
+      "artifact_snapshot_error": "TimeoutError: ",
+      "matching_daemon_logs": [
+        "2026-10-05T19:02:15+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:15.476563571Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=aa804786d0ef41d5 traceID=1a830a5aff7dd7e230ae8b5ef15a9f29",
+        "2026-10-05T19:02:15+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:15.575212669Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=42d71eb2101061a6 traceID=4c566856a8dd23a6d2ddee99333b359e",
+        "2026-10-05T19:02:15+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:15.674138182Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=5f955fca7c34ba50 traceID=a17ef7147158f1e98376c46fe9a7221c",
+        "2026-10-05T19:02:15+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:15.860416074Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=d257a34aa1813222 traceID=4032c4e8265fd7d5fd5f845e61d5c18d",
+        "2026-10-05T19:02:15+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:15.935347953Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=9fb8f5db98ba3278 traceID=ef93fe54a35611eb7af4edbc0cef8c35",
+        "2026-10-05T19:02:16+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:16.008283004Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=7303edf8b339362d traceID=5a916fb495c52f2d43040067b674b5c4",
+        "2026-10-05T19:02:16+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:16.093755481Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=9eb791e5ef72824f traceID=89f78907c454e23e95a811e39a4665ed",
+        "2026-10-05T19:02:16+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:02:16.186885580Z\" level=error msg=\"Error setting up exec command in container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c: Container 080fdd870b6c910a08ac8d93489396d08406428003a6bce32f7eb61a8c4a685c is paused, unpause the container before exec\" spanID=d05f36dbcfebd50b traceID=6ea18f36ba92e7be0826e1045c5c7fb9"
+      ],
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-012-compile-compcert-sg_no_context/compile-compcert__u3AdCYU/result.json",
+      "result_sha256": "f5616ff20c5784c61fbd2b1c8c357a0a9cb6f283f2c5a2a25c798ca58182fc03",
+      "report_sha256": "7acd12b5e7d16898898a549062df535c4703f25ec0da6b640dfa4c826ca8caf8",
+      "verifier": {
+        "started_at": "2026-10-05T19:02:15.679441Z",
+        "finished_at": "2026-10-05T19:02:15.941186Z"
+      }
+    },
+    "2a55a26bb9614fc2bcf9dfbac90805f4": {
+      "kind": "harness_snapshot_handoff_failure",
+      "task_id": "compile-compcert",
+      "arm": "sg_v2",
+      "solver_deadline": true,
+      "official_raw_reward": null,
+      "container_id": "1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39",
+      "artifact_snapshot_error": "TimeoutError: ",
+      "matching_daemon_logs": [
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.429943554Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=829d030c2ff16f30 traceID=464b58df49980def26ec874d05b642d3",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.499883501Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=e279e6b791708eee traceID=69e45fcb5ca2c7694acb3124817cae49",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.561512284Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=a667a3469dacf72d traceID=4530872561cfb521b5374bad785f383b",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.724194069Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=c3f8cdae79d3c489 traceID=73a8b14ce0afe294fe247f2bd630f0fa",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.791574463Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=c0b91fdcc2b1ea91 traceID=c5839fa2141bf60de68904ae4ba847af",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.848269162Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=eef356aaa1b9ca1a traceID=3e3dd8d42f274640519978944aca8446",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.901966887Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=e9e0ce0ca3939b39 traceID=6f3681a3a796d0a30e882a1c796b2f92",
+        "2026-10-05T19:43:55+00:00 supergoal-lab-20261005 dockerd[5882]: time=\"2026-10-05T19:43:55.951213498Z\" level=error msg=\"Error setting up exec command in container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39: Container 1b9f5bf9c4ceaecfe4fa866f9e10a7878728ba951456991de845844c43101c39 is paused, unpause the container before exec\" spanID=fcad27bd0426262b traceID=892355e2729a7d7e0fb5dcb3684c4328"
+      ],
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-015-compile-compcert-sg_v2/compile-compcert__iSW3ENC/result.json",
+      "result_sha256": "6962179a1668d505aebd477cade6e45b57e8c17b0bf669d0db2216fb40b60da7",
+      "report_sha256": "33e698ca506623255f9f11f9e63a0eebf34395cf27db82c5dee70bd55d8081c1",
+      "verifier": {
+        "started_at": "2026-10-05T19:43:55.593502Z",
+        "finished_at": "2026-10-05T19:43:55.796205Z"
+      }
+    }
+  }
+}

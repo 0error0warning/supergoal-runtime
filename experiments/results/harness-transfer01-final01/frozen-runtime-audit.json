@@ -1,0 +1,236 @@
+{
+  "captured_at": "2026-10-05T22:27:02.944164+00:00",
+  "status": "passed",
+  "scope": "Frozen source/environment identity, assigned-cell uniqueness, recorded budgets and snapshot handoff; not semantic task validity",
+  "registration_sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+  "registered_sources_verified": 98,
+  "environment_lock_sha256": "d3c3551a47c41a8ad1fc6bbfb650bbe9001a883a46b053b5cf165a0def1642cb",
+  "upstream_commits": {
+    "mini-swe-agent": "04d809ceab9df28f9adaed044884180159172930",
+    "longhorizon-harness": "a1dd930614972b92361c1b9cd6aac441a6db5a65",
+    "terminal-bench-2-1": "7131e4375048a0e408a8fb404b5f499d726b695b"
+  },
+  "new_model_calls": 0,
+  "unit_state": "MainPID=0\nResult=success\nActiveState=inactive\n",
+  "rows": [
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "native",
+      "control_id": "be7213a8b08b48ca9dcc12e2ea1ac8c7",
+      "report_sha256": "b58e0b944bd32590a5f2c863a169b8423c39edd900a5b28802b0ed96055e15d7",
+      "used_requests": 26,
+      "request_models": {
+        "devin/swe-2": 26
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "sg_v2",
+      "control_id": "2d97f43e11244fbe93444baf0f99c3a3",
+      "report_sha256": "79717aedef920cc19df4e85eaee5051877f9929ba99bad1b1800790292dc7375",
+      "used_requests": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "snapshot_statuses": [
+        "captured",
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "mini_swe",
+      "control_id": "53ca319cd2c342a28b7aed1a1a503585",
+      "report_sha256": "8d12cba5fa8fa0b76b14747b29b775320b6decafb3bbe8b6cc1b3d08c6ee849a",
+      "used_requests": 57,
+      "request_models": {
+        "devin/swe-2": 57
+      },
+      "snapshot_statuses": [
+        "capture_failed"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "sg_v2",
+      "control_id": "c34d93a8d1d94cf7a82499e5b1104003",
+      "report_sha256": "a33e780308d0427a2d574defe2306dcf48dc1d709e08406f3da98f4d693dde05",
+      "used_requests": 24,
+      "request_models": {
+        "devin/swe-2": 24
+      },
+      "snapshot_statuses": [
+        "captured",
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "mini_swe",
+      "control_id": "b300b86a9fc1411aa9352443b3050d14",
+      "report_sha256": "700925c06a35acf2bf7a0ea79bd98d682a70276e6b1de48046b12b615e9d8992",
+      "used_requests": 10,
+      "request_models": {
+        "devin/swe-2": 10
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "longhorizon",
+      "control_id": "cbdc59a226f0473eb8b0a3ec222c36d7",
+      "report_sha256": "75df9bbec7c79278db339a3c3c22412e4d79a0db730fafe67b2b13d81082b4e1",
+      "used_requests": 85,
+      "request_models": {
+        "devin/swe-2": 85
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "mini_swe",
+      "control_id": "d7e372f9283b4eb5b515d4ed9b3f7fba",
+      "report_sha256": "6047b79137a7b6315fafe342b5f7de2462ec641be8d70ad11de748391159dcc0",
+      "used_requests": 58,
+      "request_models": {
+        "devin/swe-2": 58
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "longhorizon",
+      "control_id": "55a044fb0c994e08887a73a559667399",
+      "report_sha256": "23ce5b9b2505fc3b1e03c9a0dda0bac88f631407cc8665cd7d77d70070551128",
+      "used_requests": 25,
+      "request_models": {
+        "devin/swe-2": 25
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "native",
+      "control_id": "b96deda8334144c3b6f15eace64da269",
+      "report_sha256": "afadbab59b1c4b371185eaee385cc44cb5977d689ee7f708f433489882985fe0",
+      "used_requests": 42,
+      "request_models": {
+        "devin/swe-2": 42
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "longhorizon",
+      "control_id": "60dd6a8c51134776b69ed151f8098704",
+      "report_sha256": "425c77081fc21c1c815afb0cd014bd98f3bdb8c111dcbe30f6d072286b15f751",
+      "used_requests": 27,
+      "request_models": {
+        "devin/swe-2": 27
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "polyglot-rust-c",
+      "arm": "native",
+      "control_id": "dee692447a10457d92fdd9ed1ff2570e",
+      "report_sha256": "524ce9528d8c215f205db36bf570a8e795bd00fa260ad35b93280fd20a171302",
+      "used_requests": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "snapshot_statuses": [
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "gcode-to-text",
+      "arm": "sg_v2",
+      "control_id": "f15a983c3236499089d7c5d87825d6a2",
+      "report_sha256": "f57c7ec4f3c61f7f4860d99f222dd47f57e9709289a37a324a42506fad67192c",
+      "used_requests": 74,
+      "request_models": {
+        "devin/swe-2": 74
+      },
+      "snapshot_statuses": [
+        "captured",
+        "captured"
+      ],
+      "snapshot_state_restored": true,
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "kind": "functional_and_host_integration_tests",
+  "captured_at": 1791180621.438233,
+  "model_requests": 0,
+  "production_deployed": false,
+  "public_benchmark_runs": 0,
+  "server_host": "hermes",
+  "hermes_release": "hermes-v0.21.3-251bedc-mt2",
+  "server_tests": {
+    "passed": 131,
+    "failed": 0,
+    "seconds": 17.64,
+    "log_sha256": "6d2a8048e9af2699abfe79b115fa083a760cf2fbf6f1749d2a470d65baacba0a"
+  },
+  "local_targeted_tests": {
+    "passed": 24,
+    "note": "Before final streaming artifact hash change; final candidate covered by server full suite"
+  },
+  "analysis_guard_tests": {
+    "passed": 3
+  },
+  "lint": "configured E4/E7/E9/F gate passed",
+  "test_apparatus_errors": [
+    {
+      "reason": "temporary transfer bundle omitted experiments/tasks.py",
+      "outcome": "collection error; fixed bundle and reran"
+    },
+    {
+      "reason": "temporary transfer bundle omitted root __init__.py",
+      "outcome": "127 passed, 4 directory-loading failures; fixed bundle and reran all 131"
+    }
+  ],
+  "candidate_archive_sha256": "92f17cd6ab421c967154fe5a2f2c85575be5eb2acda8fed4e7c273b77a5646f0",
+  "source_sha256": {
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/kernel.py": "5e873ee9818ddc35533eda2ef24f517db9d5af3deba5437130140eb742a4cf3b",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e"
+  },
+  "pending": [
+    "independent Linux experiment server",
+    "public benchmark environment and oracle preflight",
+    "frozen official task IDs and fair budget registration",
+    "real Hermes/SWE2 public benchmark runs"
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "schema": 1,
+  "experiment": "public-dev01",
+  "kind": "exploratory_adapter_development",
+  "registered_at_utc": "2026-10-05T06:58:54.098904+00:00",
+  "official_source_commit": "7131e4375048a0e408a8fb404b5f499d726b695b",
+  "max_upstream_requests_per_trial": 96,
+  "max_output_tokens_per_request": 6000,
+  "max_outer_episodes": 6,
+  "concurrency": 1,
+  "repeats_per_task_arm": 1,
+  "arms": [
+    "native",
+    "sg_v2",
+    "repeat_goal",
+    "sg_no_context",
+    "sg_no_review"
+  ],
+  "tasks": [
+    {
+      "task_id": "cancel-async-tasks",
+      "metadata_path": "tasks/cancel-async-tasks/task.toml",
+      "metadata_git_blob_sha": "f4bf156fa7e89ff391f233233f12180a816524f4",
+      "category": "software-engineering",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/cancel-async-tasks:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "metadata_path": "tasks/db-wal-recovery/task.toml",
+      "metadata_git_blob_sha": "bdbadbffa6793c6f78ca0d5867e81432411c3a23",
+      "category": "file-operations",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/db-wal-recovery:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "raman-fitting",
+      "metadata_path": "tasks/raman-fitting/task.toml",
+      "metadata_git_blob_sha": "7d1eae870d830c928602be56b5ab258ae06a8660",
+      "category": "scientific-computing",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/raman-fitting:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "metadata_path": "tasks/schemelike-metacircular-eval/task.toml",
+      "metadata_git_blob_sha": "2e22ee096fc6e4d7fa53935ccc546d290643df4f",
+      "category": "software-engineering",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/schemelike-metacircular-eval:20251031",
+      "agent_timeout_sec": 2400.0,
+      "verifier_timeout_sec": 2400.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "metadata_path": "tasks/configure-git-webserver/task.toml",
+      "metadata_git_blob_sha": "f2e7ecdee53ae81d5afa928333908e3e7945f386",
+      "category": "system-administration",
+      "difficulty": "hard",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/configure-git-webserver:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "metadata_path": "tasks/multi-source-data-merger/task.toml",
+      "metadata_git_blob_sha": "734afa323ded79684ccf5bcee48025e916fcc1b9",
+      "category": "data-processing",
+      "difficulty": "medium",
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 2048,
+        "storage_mb": 10240,
+        "gpus": 0
+      },
+      "docker_image_tag": "alexgshaw/multi-source-data-merger:20251031",
+      "agent_timeout_sec": 900.0,
+      "verifier_timeout_sec": 900.0,
+      "matches_declared_resource_limits": true,
+      "exclusion_reasons": []
+    }
+  ],
+  "source_sha256": {
+    "experiments/model_proxy.py": "af75b2bfeff41b156863a838f48c1f75057c98aaaab5a6b1008ce7971051e89d",
+    "experiments/public_benchmarks/harbor_agent.py": "9634f8bdbf840f7a4c4aebebfc26a8c8b9f6ac9ec9c5998f6023f75ad4f5cf37",
+    "experiments/public_benchmarks/hermes_bridge.py": "623337697cc6731641b52ae6a80b030e777cd9c211e9857c0b40e5203f969010",
+    "experiments/public_benchmarks/hermes_episode.py": "8d3cc2fdbf115b16b11e6497eedab6827e18b668bf2f52297956bdcf1d3400d7",
+    "experiments/public_benchmarks/preflight.py": "40fd14bb0de6abc74ffa3718f9803fece5520fc05ccce337a02d8a1e7b8e7c27",
+    "experiments/public_benchmarks/task_resources.py": "a11c3088563e4e638b6df49fba55acf14ad095f67e72b56831b3d5f3a5d18239",
+    "supergoal_runtime/command.py": "3e8ef38322cdcfd0eb5df33fe21528e6324a98528e2cc72751e0f0904e0f6d37",
+    "supergoal_runtime/config.py": "8b7b021677ff13294beb631e71d60837f9a1fcfb059061e4accc08fe1e2930d1",
+    "supergoal_runtime/controller.py": "04ae455039d338b162098e5cdca5ff61ed5c878d25d6aaf7d580de5e4b130fa9",
+    "supergoal_runtime/domain.py": "836e3793b981457fe591cba8d788abd8837c121b205c5823fefc48a15b71f3bd",
+    "supergoal_runtime/evaluators.py": "4d9a7f893b9db7ebad7f4d7af71e371f33418f200ae4a7e1a174b303debba04d",
+    "supergoal_runtime/evidence.py": "0c6ee9b15724970cbd4b2f373680012e0e3f0b028950a14acba158b3babc325c",
+    "supergoal_runtime/gates.py": "f83d013b4b08a2dcbff51d44a05a9cd3dcde8f7232f65bfa793f3b875a06192b",
+    "supergoal_runtime/migration.py": "90d76210babfa23c8bb19421820a09eb4deda83b760131986521b41c929003e4",
+    "supergoal_runtime/plugin.py": "0c5bbfef972972c45cc483808cb574ffe23f0dfe931a9376ee38b5c5fc504e6f",
+    "supergoal_runtime/policy.py": "cbf6ef38b353b148a1a9658fc2192dc396979070c4675f288ab5d589c446f893",
+    "supergoal_runtime/projection.py": "dc2856fd16a7b7ddc1efffa76321ed22d1f68c9ce87d4ee236d4717544a4c0f4",
+    "supergoal_runtime/prompts.py": "cdb75977497ec80e0316ca96752aa999b033d53633cb5c85d040db6b42de60d6",
+    "supergoal_runtime/rendering.py": "a5df91c3d7ae8a9e1a7a19c0f4a4e9667eb0038e8eac29a88e696534d74ad921",
+    "supergoal_runtime/runtime.py": "a69fca5cd281903ee414abdcf641e6a376b8c5c8b7c64576c34f88d3978ac9d7",
+    "supergoal_runtime/store.py": "711d79bd1ec0f808f5bde432f0b827e69bdd3eb80cc2e3284953496cffc60cca",
+    "supergoal_runtime/__init__.py": "8ac506c0ad49d154b6dfa247920cd2a519407d5af5c824ac839b9db88a35389e",
+    "supergoal_runtime/compat/hermes_goal.py": "6cf6e49896da4bc232793d8983c35e6ebaec20a57140e53c93cb9cf33491c287",
+    "supergoal_runtime/compat/legacy_gates.py": "0195c7040fcededa786e61287ae2d464b0c51f8f2cc6cb019e31af68facfb934",
+    "supergoal_runtime/compat/__init__.py": "5032b7b12a3342def3a2f41bd0af0c4d16af073700c674e60fff4249b570803a",
+    "supergoal_runtime/v2/acceptance.py": "a7279b9bed48942ec781d9f0b59202fc746c5cfb47823c957b1c89e8d5f3bb72",
+    "supergoal_runtime/v2/kernel.py": "5e873ee9818ddc35533eda2ef24f517db9d5af3deba5437130140eb742a4cf3b",
+    "supergoal_runtime/v2/plugin.py": "975e29dbae69ccfaaa77fb065e045d1fcbed983940ebeb3fe64d0eb72d02c724",
+    "supergoal_runtime/v2/verification.py": "d9a34ab79b0753178d02aec99bae92aebfa563a182f9066d5e763e6fcb907a5f",
+    "supergoal_runtime/v2/workflow.py": "2be9b09d1514a689bb55538668b0c079ea1dd4d4f97776129d0816385bcf228e",
+    "supergoal_runtime/v2/__init__.py": "0b0866e76dc1aeb9b197f3a7ea9c1b5ab4bba40aa1dbbefef2f903ef46e94cfd"
+  },
+  "planned_order": [
+    {
+      "task_id": "cancel-async-tasks",
+      "arm": "native"
+    },
+    {
+      "task_id": "cancel-async-tasks",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "cancel-async-tasks",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "cancel-async-tasks",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "cancel-async-tasks",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "db-wal-recovery",
+      "arm": "native"
+    },
+    {
+      "task_id": "raman-fitting",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "raman-fitting",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "raman-fitting",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "raman-fitting",
+      "arm": "native"
+    },
+    {
+      "task_id": "raman-fitting",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "arm": "native"
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "schemelike-metacircular-eval",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_review"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "native"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "configure-git-webserver",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "arm": "native"
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "arm": "sg_v2"
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "arm": "repeat_goal"
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "arm": "sg_no_context"
+    },
+    {
+      "task_id": "multi-source-data-merger",
+      "arm": "sg_no_review"
+    }
+  ],
+  "start_gate": "model/bridge smoke and official oracle preflight; retain and investigate apparatus failures",
+  "online_review_status": "experimental, not globally calibrated"
+}

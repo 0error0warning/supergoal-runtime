@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "tests": [
+    {
+      "test": "test_real_host_executor_dispute_cannot_self_approve",
+      "status": "passed"
+    },
+    {
+      "test": "test_real_host_start_continue_finish_and_restart_recovery",
+      "status": "passed"
+    }
+  ],
+  "host_version": "Hermes 0.21.3 production source snapshot",
+  "model_calls": 0,
+  "mode": "standalone execution of test functions; not a pytest invocation",
+  "test_source_sha256": "4f602936cf0a587b37c2374d55213fc2da587f2f7d91f179c5fece066df135dc",
+  "isolated_hermes_home": true
+}

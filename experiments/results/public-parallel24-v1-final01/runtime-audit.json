@@ -1,0 +1,1936 @@
+{
+  "status": "passed",
+  "captured_at": "2026-10-05T23:35:47.040768+00:00",
+  "scope": "Frozen identity, unique assigned cells, request accounting and recorded limit; does not certify semantic acceptance or repair observed failures.",
+  "experiment": "public-parallel24-v1",
+  "registration_sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+  "registered_sources_verified": 30,
+  "official_task_trees_verified": 24,
+  "official_source_commit": "7131e4375048a0e408a8fb404b5f499d726b695b",
+  "environment_lock_sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+  "receipt_sha256": "2bdef10ea6724368c562989d87bdc23452a309f8aafa5f4dd17f5f3816a56045",
+  "audit_source_sha256": "9ca32e9f8a69b11ea015f437e2b739573156c064f3bd6640a2556e8fb9eb19c2",
+  "unit_state": "MainPID=0\nResult=success\nLoadState=not-found\nActiveState=inactive\n",
+  "row_status_counts": {
+    "graded": 104,
+    "trial_exception": 6,
+    "environment_unavailable": 10
+  },
+  "unique_model_controllers": 110,
+  "new_model_calls": 0,
+  "new_trials_or_retries": 0,
+  "rows": [
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "8756feb38c934b49a3b8782c002fd268",
+      "result_sha256": "ab2a553933a6170567ea9a62f130248445748f97801f165b325378f69d3b4457",
+      "report_sha256": "1f3daf8aa10f7784b8e7875e4c42d3e221d4440a4b3b49e2d343814c151c6a8a",
+      "used_requests": 10,
+      "recorded_request_entries": 10,
+      "request_models": {
+        "devin/swe-2": 10
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+      "result_sha256": "2f6d901308f1c04e2a06e010d137e09c21bd43f2db94ad200ae4e7e01cd06bc3",
+      "report_sha256": "ff2c6b930173d81759c5212ee02aef1d8d8690dc4f70d8b0e58176a4d3036fe8",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "4cc232836c5945baae3581d2b90d256f",
+      "result_sha256": "3721e5538e1f613f38367611521faa275a9fe4d96d74d2553b6e646597bcd397",
+      "report_sha256": "88a9b34cbb0fd513e9eaf648329cdc62f93e17f5e066a02f624c9879a9f62f3a",
+      "used_requests": 20,
+      "recorded_request_entries": 20,
+      "request_models": {
+        "devin/swe-2": 20
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+      "result_sha256": "48b0d63ff32bc8f090911fb8b23bd3710a85a815c5fcae4ad5778c1db5d6d039",
+      "report_sha256": "614b9fc1c6150b86d368013da0dc74f41d98a41134a951668dd9482eeba9f941",
+      "used_requests": 18,
+      "recorded_request_entries": 18,
+      "request_models": {
+        "devin/swe-2": 18
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+      "result_sha256": "40fde1ec3649a02e6f608838e91993430251e1afb3a1e5b6c679aae3080c2add",
+      "report_sha256": "baa70fe517eecc4e05b4688f72f51d892fbc5ea6dca44efb7959bd45cbfcb26a",
+      "used_requests": 8,
+      "recorded_request_entries": 8,
+      "request_models": {
+        "devin/swe-2": 8
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "b1707ae744cb4aa1970fe2c53edbc639",
+      "result_sha256": "cc10c1c6d42e6d1f183585145f6583c54ca5a9c0e5eb0e1e7ddab9c5e7aadad9",
+      "report_sha256": "e0c74a2cd3ffae4424be81a4629c76994ade6cd85007877c4d7228c62c0b863e",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "eb13917258ac47579ce5db2df9200058",
+      "result_sha256": "141d216350264268cdd56e356a1b6e6dfb41e5476ffe6d4566d6e787fb2244a3",
+      "report_sha256": "a3b24ac559582f5fa4ad98d4095b0fc9ec7c4dbfd57ed196ea9cd6ca9579f56c",
+      "used_requests": 35,
+      "recorded_request_entries": 35,
+      "request_models": {
+        "devin/swe-2": 35
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "d72de3a91d854c81b5f85d4492ba9f3c",
+      "result_sha256": "9bf44d11dd93ea0bedda5eef4e8899fa84f82bf7cc83356af51b72166564b7e4",
+      "report_sha256": "b0ee3dd5fef05c0270a32155beaddec16c53d73f4ecf301365c49b5c43ae8756",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "4a9188c7d9834791bdd86e4152a579ab",
+      "result_sha256": "a539277c38a0dfca760c6c8b8e3429c80b2877404085763a7be9e29095a47076",
+      "report_sha256": "ce7a910af6f71b6ff6302b76887dd05fb2244fc63882e4fd5784251d683d3b14",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "0d8b3e90bb1f4e1da81274a51b10c9cb",
+      "result_sha256": "a8cc4155963e00ebb71791308d8f864da619edc0f2b1a2ac5cd7844083d4ae64",
+      "report_sha256": "026d13f75831c4080f0bb12248c64c6adcbe9804eeea76f21c72324b9c1c625c",
+      "used_requests": 78,
+      "recorded_request_entries": 78,
+      "request_models": {
+        "devin/swe-2": 78
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "279de15b5e6e40f487bbcbefe2803112",
+      "result_sha256": "958805412b9512feb8edca13a68bc872350853bb238085f3b97b771eb220f00d",
+      "report_sha256": "726be2705a19603dd89c876fdb578bf27eb078e8cd8a32bdc0b7a737ef36f134",
+      "used_requests": 53,
+      "recorded_request_entries": 53,
+      "request_models": {
+        "devin/swe-2": 53
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_no_context",
+      "status": "trial_exception",
+      "control_id": "5ec7ab26d471496c9cf575731c3e6e24",
+      "result_sha256": "f5616ff20c5784c61fbd2b1c8c357a0a9cb6f283f2c5a2a25c798ca58182fc03",
+      "report_sha256": "7acd12b5e7d16898898a549062df535c4703f25ec0da6b640dfa4c826ca8caf8",
+      "used_requests": 26,
+      "recorded_request_entries": 26,
+      "request_models": {
+        "devin/swe-2": 26
+      },
+      "official_raw_rewards": null,
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_no_review",
+      "status": "trial_exception",
+      "control_id": "e1627923e6244a5b9948cb5099cc5e96",
+      "result_sha256": "c95161bac67237b928a2b045d718cf80bc6abc0ff0f542d049961e070f4ffe84",
+      "report_sha256": "82e7157116a428b5f2d67a13206fbb007a97be0442403726ec657e17168318a4",
+      "used_requests": 53,
+      "recorded_request_entries": 53,
+      "request_models": {
+        "devin/swe-2": 53
+      },
+      "official_raw_rewards": null,
+      "exception_type": "RewardFileNotFoundError"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "native",
+      "status": "trial_exception",
+      "control_id": "9ab4d291034d4d9f820bb7dc47737d0b",
+      "result_sha256": "48f3c019e8acf7ce3817e6435874ad702fe4d914d11deae42e3f76720cef63e8",
+      "report_sha256": "cce6adfb0beb372938701348c44f58521ea84a8a7420e7f9f06fc3665e0c94bd",
+      "used_requests": 28,
+      "recorded_request_entries": 28,
+      "request_models": {
+        "devin/swe-2": 28
+      },
+      "official_raw_rewards": null,
+      "exception_type": "RewardFileNotFoundError"
+    },
+    {
+      "task_id": "compile-compcert",
+      "arm": "sg_v2",
+      "status": "trial_exception",
+      "control_id": "2a55a26bb9614fc2bcf9dfbac90805f4",
+      "result_sha256": "6962179a1668d505aebd477cade6e45b57e8c17b0bf669d0db2216fb40b60da7",
+      "report_sha256": "33e698ca506623255f9f11f9e63a0eebf34395cf27db82c5dee70bd55d8081c1",
+      "used_requests": 66,
+      "recorded_request_entries": 66,
+      "request_models": {
+        "devin/swe-2": 66
+      },
+      "official_raw_rewards": null,
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "84d544d2caa4405e83e0a9eb85f74542",
+      "result_sha256": "210a8b1183df97e0babf45af588566c74041a5352548f2eb7404b95953f1eb83",
+      "report_sha256": "b5ecbf33a332013a5a74a26ac518c57e21d6fae74666964bce3d5e82e6c772fa",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "96fc9398ef934650820f8cb180b9f4f4",
+      "result_sha256": "410dbaf1f46d51bcc8ff0bb00ae8d15a877f0aefcd455a8e734812375fe1c9ae",
+      "report_sha256": "1563ea33ee153dc7bab030b08a90d09a5240ed45d0cfcd74cff60bb0ed899423",
+      "used_requests": 3,
+      "recorded_request_entries": 3,
+      "request_models": {
+        "devin/swe-2": 3
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "663198c838194909b7f72363b88d459b",
+      "result_sha256": "aba276ce59d71407f4bfd465381ec31182838615b990036f4890f79b3d7742ad",
+      "report_sha256": "77da6cd380168a8691cb76ec60bf46341e48fc48fdf6db384827ccc55dfcd9d4",
+      "used_requests": 3,
+      "recorded_request_entries": 3,
+      "request_models": {
+        "devin/swe-2": 3
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "7584852b0f7a4b2e9b2287c7c416514d",
+      "result_sha256": "36de2400ac83e5e9bd308a0b3e36543e72dc1ffc7556553f9914ab7c7952a5c4",
+      "report_sha256": "21a2f43d6c2ac6d6a06650ac805deab5b515c4edfa6389e5b04d2d420aa880ed",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "a5ff7c13ecfb4090b524b2cebc450060",
+      "result_sha256": "6623975171eeda064c9b3432c8834b494c6888cdc02743e102a519b23e6185f8",
+      "report_sha256": "f3571d471d9263e6b6a96b5cb4da43988138002033fda300dc4fc4a194a6d405",
+      "used_requests": 10,
+      "recorded_request_entries": 10,
+      "request_models": {
+        "devin/swe-2": 10
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "58483b24492b45d2a178db76bfb92c82",
+      "result_sha256": "b257ca3f451e32633cba0b491001d18021c57ed2169bf7d8ee38f8362edefb39",
+      "report_sha256": "411ff160b37cce35d1975411d86c06353d256e4f92ba69ef38b4514372b1f74b",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "448014492f7e4ea6b44e38f6f705a570",
+      "result_sha256": "2d0d68c43d62c2aa4b5030e9a7efb35ccdb865d5410bbac0341f13b4e4cb85d2",
+      "report_sha256": "2f985ad37b7ac3cdf7933fbed23248e1718317b3f8618cbc4495b73311b54fa0",
+      "used_requests": 31,
+      "recorded_request_entries": 31,
+      "request_models": {
+        "devin/swe-2": 31
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "3dd5827e526b405f80983129ca80075a",
+      "result_sha256": "a2380e479678370e538d331a9e0042601ec68bff8e507241ecf92952bce8dc8d",
+      "report_sha256": "697eb4e20a5a0c9d29401829aefff8954de62745166769c101fd50f4e576fc19",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "18c04ad66bf84bb8828c5b710652fe9c",
+      "result_sha256": "4e0a5c9f4e553972272e2f434db64c60b9a0726799911d88cf99077928541929",
+      "report_sha256": "fb1c09de6429e1459be7f95715f84a053b890a0b4684427c892a2bbdfede60d6",
+      "used_requests": 21,
+      "recorded_request_entries": 21,
+      "request_models": {
+        "devin/swe-2": 21
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "760769a0fa784686987e8be47a83fe08",
+      "result_sha256": "2616a0779d3b44fc4102f54c65819cb04061f6c718e729a5da69c5aa37b92170",
+      "report_sha256": "ca209217f4ea7aa197cb9f2d645c67db8b8fdb193cc5852781e50d92095b8da4",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "7e9e979ef31946f9ac1cf3600392b9f2",
+      "result_sha256": "141863db86127e1b1d77f5c991481b54b4c9ad3693c40e936252dad457023d7f",
+      "report_sha256": "a4ab322b01afd6ef7525c207fc63dc91949a25f661a73ef0b1582293a2bf6cd7",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "3702338f68594a67b54dd528fa1f8567",
+      "result_sha256": "aed24827bf5b24e5eda0dbdfb71fb56f86591868daa891f7a92778ae3cab2393",
+      "report_sha256": "31b9cbead11acd8a7de39228e20a3348b630a93f6933775af3c2a2f8e0047cc7",
+      "used_requests": 16,
+      "recorded_request_entries": 16,
+      "request_models": {
+        "devin/swe-2": 16
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "44a04af024fc4999ad88540b7cc55600",
+      "result_sha256": "7f22d60c10d74fe210265345e3e102a9f617d7c138e4c6323d17fe9e3dba2147",
+      "report_sha256": "444fc251c20655a5d06c4fc67e918763104e81ddabfd485f46871bb6c36232ef",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "6873ee5cf6e9471692cd953d284426a7",
+      "result_sha256": "a2007f99953eb61365aacd5712eadd81074dc32591c22a7b6c238e1602dfed1a",
+      "report_sha256": "252f11c3c84fcaaa70c24396fc4325c2382e71d94ee0b44befe04a92787c8162",
+      "used_requests": 9,
+      "recorded_request_entries": 9,
+      "request_models": {
+        "devin/swe-2": 9
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "extract-elf",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "353318ac06cc48ed909e88907d7e7ffc",
+      "result_sha256": "8ecff779c3ee2f91942ebd62decb861628a85274de5ebd62b7aee3f5c8060904",
+      "report_sha256": "9ea79ba96bb2f0578f37b3916a636209aabf79f1237aa399177b6ecc480a5653",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "9a20685c35284322bbf5818a3647c864",
+      "result_sha256": "bc1963b05d40bad1ae0ee64e1ffb0cb6a1ee74de6035bd2488787889860434ed",
+      "report_sha256": "1f10d7da9da3b33eed3c679bc16ac563a9c25e8e47c2799c76c338afbca507b4",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "2fc1d159458d4b48b5da4c6fd0dc4764",
+      "result_sha256": "9c49c1a3df78d5f41d0757c10faa7db8404f121961394b068ae3d272bc483b39",
+      "report_sha256": "b2fbb6992fc888e77b7597911a4af66235e5f1fc809ca8fa22e3eb9a7ac7abae",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "a99a1f881bb840fe82465808eac55492",
+      "result_sha256": "e5bd72b5a6cda5fec2ed4589f6e69bf535a247c0d171782f9eda57013e0b522e",
+      "report_sha256": "2b4bad46be6e5b7686ec2240a4a8e3b8412e6389736b67d3bbb1afa432b9e9aa",
+      "used_requests": 16,
+      "recorded_request_entries": 16,
+      "request_models": {
+        "devin/swe-2": 16
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "7fafd4ea047f4ac792533570004f60fe",
+      "result_sha256": "28f6e12f5497987ce19fc2a5cdf1765479fbd36a54ec073b782e2c305bd7770b",
+      "report_sha256": "2661d7210d74b8916dd0acf2a7ea8ff8fc3379ebac225d7c5ea3a7f02163408c",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "6f0a18e6b6b8410a96cbff1e7544c1d6",
+      "result_sha256": "07e27a4d7045529bae11613bcf4897f2d6c8c80a671ea398c685153335900ec3",
+      "report_sha256": "d663f8bb9666c78898d7cad67f92710b78aaaf9d0f22240697200fd9441a9791",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "66aa9ee2741145d8b9995782f815704c",
+      "result_sha256": "2b822b86f9c7d1758e274b7cba600713c480477d66b2d32bb4304a1c66d03c01",
+      "report_sha256": "e643cc0eb1513e375346e22e0ea1f0adbce3dafc6c0b11c11895671c43e51320",
+      "used_requests": 22,
+      "recorded_request_entries": 22,
+      "request_models": {
+        "devin/swe-2": 22
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "780e02b7fc40496db14d5bf15c3d338a",
+      "result_sha256": "1c6da0a157ee2c7325c91c2035cea31b13cbb7529abc949a8e9b45345939f1b4",
+      "report_sha256": "d7951531b0a148dcc5c57d8078a16bf8e5bcf153b55971b2b49f6781cf2de933",
+      "used_requests": 26,
+      "recorded_request_entries": 26,
+      "request_models": {
+        "devin/swe-2": 26
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "51678b01e0cb4ffca8dab5c7522b10eb",
+      "result_sha256": "fa64ebba396e29660c4fff902b7ceeb012f1d2e3fbc79edc5a961d8b4a70e0c7",
+      "report_sha256": "3bd3b965ccc4b91d298b9e8c4b19e7188491b35dc19122a5f0df097dfb155149",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "864d31e461404e36bf4e4a31be0e7351",
+      "result_sha256": "9f11a55d68d2b384d30839a7d5967bd127743037d66d8773cec61d4b1282f714",
+      "report_sha256": "4b4f953e73e217069fbff6489e6bffe8f1b05745eb69696df1510d2629949474",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "financial-document-processor",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "ed79eee3350541b5bc54a2af9a8f4b4b",
+      "result_sha256": "d35852de6fb6a25babaa63e69fb23a90759fe05bb97083448da741dee46f8b73",
+      "report_sha256": "fb2af448d9302a8764cba1a1bdd0ff5cd9b92ac5ab17c85057491a2d8df0bb58",
+      "used_requests": 21,
+      "recorded_request_entries": 21,
+      "request_models": {
+        "devin/swe-2": 21
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "3b52e642abbb4147b01a91e4ecfb2e1f",
+      "result_sha256": "7416ed62e1f672f888e76ee6f317aca871154775207a2049b5b7005749944cec",
+      "report_sha256": "280211ccfefa6f0703c13b521d14b1844555b19a0146cabb1f76c8f05b06a774",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "ea520428d556449caabce773da7c23a0",
+      "result_sha256": "d8b382ea3abff310fbe0a7d304325a279b5f0777e8712dfcf4820a52f9545962",
+      "report_sha256": "529f546287320a75ac1bbd336c2ad14e6420412462d35dbb6885d97178f9eb71",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "0a6e513300e848a48b75c83d917eea5b",
+      "result_sha256": "d7a339e7abdb3ec6f71a5474a3d5f001f68a2156aa646db8a653f5a651c89f78",
+      "report_sha256": "403ddfcb3b357fdce5d2dafb50f5f93cf86b3f0baf397ab07228a3e60bb04420",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "ba1254a8f4604200bbf5d406cb574244",
+      "result_sha256": "58e92f85ac76783d3f32b594ea43c8ebb85c313244f59ce1d0df0c6d5d338742",
+      "report_sha256": "c9e48d9b91fab10a0e2fc305872a81c82a62e99e418908d0d54022630292b8a6",
+      "used_requests": 8,
+      "recorded_request_entries": 8,
+      "request_models": {
+        "devin/swe-2": 8
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "b044a4c976224b83bc185d25fc1cfb24",
+      "result_sha256": "b56b94c2b80dca740336358eaa6f1f0bfade901179d1444d32d6dadd472f1efa",
+      "report_sha256": "85fbfb6170a1690f97b6e488bff559cd041d378c37a0994fe31c6acc987d52e3",
+      "used_requests": 16,
+      "recorded_request_entries": 16,
+      "request_models": {
+        "devin/swe-2": 16
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "48c08871366d4d4280fa65ec545d0439",
+      "result_sha256": "e057a92e5ab954f30b55b381cb4fd309ab005beb4d046ecc66bdb7f19403b1a6",
+      "report_sha256": "f9992e1ffeb11df26adbaf0bc35a23e5a170b3309e2ca83623bdd3e7e3a7ec38",
+      "used_requests": 69,
+      "recorded_request_entries": 69,
+      "request_models": {
+        "devin/swe-2": 69
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "1f03b791e4de4250be1b3f0fb223e0b7",
+      "result_sha256": "fd7224755ecf847d740891e54f54476b2275eecd131bdc9b30d6aa207a29000a",
+      "report_sha256": "b11aa55209683f332cf896bfe2bfa46622481a49ea907848ca15389894db90e6",
+      "used_requests": 35,
+      "recorded_request_entries": 35,
+      "request_models": {
+        "devin/swe-2": 35
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "bf84724effea4f14a1239c5c7a2f4464",
+      "result_sha256": "9b5392d9c93ea2496c8afd3a6288f9b30187092272defbecdc1f4788e3f0a64b",
+      "report_sha256": "4b08a74d94b500bcdc7be4056e601a7049101af090933861b6beccb02716121c",
+      "used_requests": 112,
+      "recorded_request_entries": 112,
+      "request_models": {
+        "devin/swe-2": 112
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "11eac191dfad451ca42cac9f32c9ecfd",
+      "result_sha256": "bc5ef4d9b8bd77f2ebb2ae03bab04617b5a8ad2a3343ec86a1ce7813625f60ec",
+      "report_sha256": "ad78b3f58db4a6d945086b66382bdff554eec1f36d33e1d544bd321af7cbcdaf",
+      "used_requests": 72,
+      "recorded_request_entries": 72,
+      "request_models": {
+        "devin/swe-2": 72
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "e8b42319541d40e795d511d55a2226f4",
+      "result_sha256": "d219986c7f5fcd022250cfb3f4470b2310bb9454fcddab08716c0aa65f2a0fb3",
+      "report_sha256": "5ba4f2e1d198f1ed4edfb84d6badfa2ef7bc0c2e8b95594d0354b0000756435c",
+      "used_requests": 95,
+      "recorded_request_entries": 95,
+      "request_models": {
+        "devin/swe-2": 95
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "493de93a4c3a4b838fbd99af70c4d8e4",
+      "result_sha256": "ec8a6d6d6dcf2cccdf55c0f3508a4fcf7844b4cb3a1805b1a6ce3d26a29c78cb",
+      "report_sha256": "47016579ed5ec705bbc5f6313264f692712c1c3daf727c591ad3421b46804b40",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_v2",
+      "status": "trial_exception",
+      "control_id": "6d90abd47cac4b1bb2bd44ed4d03107e",
+      "result_sha256": "7a28bec9a68d7c637bad6f00cfab4c9072d4bd683ca1398f5c50c345d1bca0b6",
+      "report_sha256": "1198619266f21277f0efe989f070ea3e072f8fe4ecb74112277bbefc3b25d896",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "8a227b9424b443669c6696b4cc62764c",
+      "result_sha256": "45e46403b0f21fcbf57ce35c3376ec89f372418763abfc5807e4fb3e00881555",
+      "report_sha256": "6d3620cdb330ef4ed129b1b1d715eae7d8d0d6446a3da967a09dacf20605cdb4",
+      "used_requests": 18,
+      "recorded_request_entries": 18,
+      "request_models": {
+        "devin/swe-2": 18
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "be9658b9cdea4348bd0aa97f90cffac4",
+      "result_sha256": "f8fbc43cc0e0cb0a199ff5a88a57fcaa5e7edcdbe05b50ec3d059f80c7bee47c",
+      "report_sha256": "0114729bb8f73b779e2417994313f346e1a383877a498308132aa32428a74c46",
+      "used_requests": 24,
+      "recorded_request_entries": 24,
+      "request_models": {
+        "devin/swe-2": 24
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "bc0395f4f6c64e9a83f811c32a8d4d97",
+      "result_sha256": "5886068e40a02421097383d56dc7c4691b7ff3ab77b2fa398aaaa5d91262f7b2",
+      "report_sha256": "1e8f1a7d128c488cddf69233a48882b59c781db37b776a17560870a5261fa5e1",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "e39759bd19954401b15bcc39f96974ff",
+      "result_sha256": "aee4ae8da7537a1ef91f2ac4ef83712e31ce77b43df5fe0a4abafad4a54b5e27",
+      "report_sha256": "10697ca04ceb975b7183371b94ec28225ff0ff01b1d8c66d43ae41f63de8bf80",
+      "used_requests": 33,
+      "recorded_request_entries": 33,
+      "request_models": {
+        "devin/swe-2": 33
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "7f0d60d04e05490aa54d12cf2c118daf",
+      "result_sha256": "0a915b9d87f812083c9d7cee8b246b92562f47b146ee6352c0083a78817863fb",
+      "report_sha256": "50571eebb673acd1b04c72b0ebbb03e2d6445d3c4f566f54be49ccff397736c5",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "334d1a26894b49c2ac134ad1f7cc0ab2",
+      "result_sha256": "9a87c9cc37e4d7ea20eb308d593914d084f85eb9fee90e615e7982a32ed1a70a",
+      "report_sha256": "3ba73db527a7201132d802fe0a718c94a0ff16acba367902f991d35a8bda2457",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "8d7798293cfe4e368e92adbd63ffeb4d",
+      "result_sha256": "663b7144bc58f5b39c0fd1302fe4a445b41ce252cfdf19a45b853124f4e17cfb",
+      "report_sha256": "769e585cc7595a49da5d2af26a607d208b1fddc5197d0628f259ca52a0e4db61",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "723e8d3bf526493c85402f6022bd1de0",
+      "result_sha256": "ceab90838a16899d94bd68ce4928e114a06c74156b0877e1142cf2f3e0693566",
+      "report_sha256": "4ca2d333259071b4e5d334ecfc776e26cf13a2d662a58a24a11630e491831ad4",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "90a5c48867074a34afab229450f077a5",
+      "result_sha256": "b4e7402152e4abcbda6868d59c2632d87a21c97ecc56597a333957ea62ad127d",
+      "report_sha256": "8e11a4414a800b0cb617856369c4510e70875c01325259695e42f5e912cfa291",
+      "used_requests": 8,
+      "recorded_request_entries": 8,
+      "request_models": {
+        "devin/swe-2": 8
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "80a46718465041739639ddb8361fdf49",
+      "result_sha256": "ad1a46da823c46ad6adf4336de4262a60b0b3d4162a3f553d491b58efc5e7445",
+      "report_sha256": "03e305600d1c152fc6f18f591240001c0c33d231fc26873c8ed13934abf1ac39",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "e3b43b7653a041e78d24d252eaabc85d",
+      "result_sha256": "2ed6e8ee274604f65d71566cfed9446e859e0511f63839f8e2f375adc86ff9a7",
+      "report_sha256": "429d975df3af9dea0aa8d461b4c0c7f9bd69e653643a91999eeab25d471ab9ce",
+      "used_requests": 4,
+      "recorded_request_entries": 4,
+      "request_models": {
+        "devin/swe-2": 4
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "4a72799eaeba45e4aa8a44a0ba45dae5",
+      "result_sha256": "75f246e54f88bc22fadbd41b22d849d2f335e976878c8cdf10b5c28ac3056bf9",
+      "report_sha256": "1b10d93bd5e31a4e5b1467b5b3ec6cc74c499fb507958f087207b4eaff89c959",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "959c78cdcb574087a58cc2723e6dc71d",
+      "result_sha256": "08132ca4755616dac6711d8460e2e9e70b9345b90e13fa85c80bbc4b6767bc33",
+      "report_sha256": "002e5c92cd61f0ccad36b374f891f811c846a7caa0341c460c31d71cf8781f59",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "c95dc6ee6a0e44519abcf3958da4724d",
+      "result_sha256": "80e61491bd181dbf3e0048b535d803f0009bbb1009f3856eab4911a083a2b5bd",
+      "report_sha256": "d10a1c6dc25d005a0e99f6e2da697b3e51dc6b86441bbe59cbfb7a3ec69d40b9",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "003de5572c734767b401696324b6c6bf",
+      "result_sha256": "7b0556ae0381cdd98d675c97e343def3f3c25e5ce9e4ae0bd8fd8ef0d0f28e80",
+      "report_sha256": "ab052255235e61da7b19acd1dd0ecf875e9fbddda0a4297023ce324ebf5f558c",
+      "used_requests": 9,
+      "recorded_request_entries": 9,
+      "request_models": {
+        "devin/swe-2": 9
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "c4bc27e0053d403c848b58822b819155",
+      "result_sha256": "baf711933a5427118d267d0275e35085f93670659781a6a8336608779d5b2a97",
+      "report_sha256": "443a6d329d6cebf9232b603dd0a22690606062953fa330480f168fb2d4da7f84",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "d15f242594b0467ea2e2b0aba79682aa",
+      "result_sha256": "948ae61a0895c8a5667a588c478020a247c665cc79d159680100a6f67d4596ec",
+      "report_sha256": "c7ac8b1652fdb7d702c7bca38ad696389442de4c91aa71a909afdfa8fa3e0bf0",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "233c40dcf0cf4c62a2eb998f75f54344",
+      "result_sha256": "965a6886ace20f184f581690a49a27e781888b385045751c643e923944776d13",
+      "report_sha256": "0b688ca0ef38ee4695b2202318962356ce756b396afd1926dee7af2378c741b8",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "0268675a6c544204829a17110669f427",
+      "result_sha256": "d6d8c304728ab941c47fc39834cfa6ee112c46f34986ef60974ec088f0a43ad6",
+      "report_sha256": "7230b909ebcbfaf6b515fe3e3d40616a7986f367d7d3b2bf3a04c45614f51dea",
+      "used_requests": 20,
+      "recorded_request_entries": 20,
+      "request_models": {
+        "devin/swe-2": 20
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "7c7c013771014b2a9713cd599df4482b",
+      "result_sha256": "da867201cb3b2753229f98fd4da9b210aa4e8c3a29fbc1628061f4b11e671fa9",
+      "report_sha256": "d4153935d1e6432bb75a5e6aa79e84a6628c230d1e62445f476057fc888379a2",
+      "used_requests": 29,
+      "recorded_request_entries": 29,
+      "request_models": {
+        "devin/swe-2": 29
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "14b76b5dc9c044688eaa9fbda8133341",
+      "result_sha256": "7bf5cb8071865015a15065b140619b53cdb44e18abce1447e3b753e35997e6dd",
+      "report_sha256": "63d6813a36d2e0a4dc3afb1dfd20d3ff90d6c739a66d0394c32ea98d8aa5a735",
+      "used_requests": 23,
+      "recorded_request_entries": 23,
+      "request_models": {
+        "devin/swe-2": 23
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "8c7f27261cac4399b3020bc33a37081e",
+      "result_sha256": "4fbed8b05c032764982404fc7ff1630bdc5469f0f696375974c820ac7b472ec2",
+      "report_sha256": "a1e4e0784f3fd18e5dd1f5d5fd5de9100088fec64599bfd6039a6c07a65c4a95",
+      "used_requests": 56,
+      "recorded_request_entries": 56,
+      "request_models": {
+        "devin/swe-2": 56
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "password-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "8b36f22871094842b3dc8b44aec9469f",
+      "result_sha256": "c8034d022ddeb95bd1e8c97404c2b1e4d4de0657b97ab52f52ca2b967ce677ea",
+      "report_sha256": "de2887704d76d2a9f8c8d8785792b19544d203d12b92c5e18556c086968f3116",
+      "used_requests": 14,
+      "recorded_request_entries": 14,
+      "request_models": {
+        "devin/swe-2": 14
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "cbfb4f26deea4b38accf9c5d9a29f7f9",
+      "result_sha256": "1ba4f052f6fce9d10a07cae9a89bb8dbe739cb878cfbc5f5ef5872e93d7f1edc",
+      "report_sha256": "3fc8730f9606cf15517bfd7c94b7de34b7c964c0ad124bd4f3b505ebc042f2ed",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "9360085dc4524a8c8f8a2aa2aea96373",
+      "result_sha256": "79c7ebe39e02a52ae49cf407a30d01380827fb6e075815cf55d32d7b282ab56f",
+      "report_sha256": "08f196f50a47068944de6c1f4e2ee235681378dedd71159e0f858cc59bf13487",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "1ea762c38edf4c599882f824f55c6856",
+      "result_sha256": "715b9b0a93ebad07456dc107b2c4d0ce492ae9f3fc2b524bd7fbdab00841564e",
+      "report_sha256": "5324efa0991631e95d7c28ddc28da625a51905b5bcb324806fd5a7fa6c98f645",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "fa55fdfeced840b4ace16d8e471aa552",
+      "result_sha256": "adc8b21deda588b059aa285aa7d9708b1ae670c75e5d9225e0736e0b39d94c0d",
+      "report_sha256": "c8715e0771bfcc6dd38d73ec820757234a382d4bb1298b545a320823f20362fb",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "b807f4ba00014fdd8241c52f085c6294",
+      "result_sha256": "5105a57f8701a2f7137f75905f9d8e77c250c0a8fbd24db2ce753e9c38c22fdb",
+      "report_sha256": "1c58f678306d4fe73d162c4d4c392a805973890bd1b037e3ffb4249b458f3cd5",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "protein-assembly",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "c1a6e1533aad43eab6ce3ee23993cd3a",
+      "result_sha256": "ed2f102804bffb3bbc5fa434f8600084019293c815a9243a6b160607ee7b0810",
+      "report_sha256": "9a0a8489d2d8b9282d664bac192a11964350d08035928d398d2667c53e379350",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "ef25dd866f4d4f83a83f6617d9d36e08",
+      "result_sha256": "3657621b62159d9dbd3884c735d618bc9b867e4d3f98d99030e0d92aa53ddba2",
+      "report_sha256": "8d020f68ec409f248f7c2a427b135694dd70e4cd111d4209c11423886906253e",
+      "used_requests": 5,
+      "recorded_request_entries": 5,
+      "request_models": {
+        "devin/swe-2": 5
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "81ae1c87ee644529a55208d6613d2b6b",
+      "result_sha256": "2698d3731f9567198d7634413756067ea956c9ba95dff78ec86ef38244e8683d",
+      "report_sha256": "b699c6ff07a25b3b4c91a97ec791d2486380d71afbe3b706d6858493741e7464",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "f621954c628c471cb387bc54fe747414",
+      "result_sha256": "5bca53b78c8bf6dbf7ea92295bfac8540d04d84dc35cd3c630b617fe717a0b05",
+      "report_sha256": "e5488df296fe4dfa1908f6a4490f9b6909735101450e2494de079065a54bddb3",
+      "used_requests": 12,
+      "recorded_request_entries": 12,
+      "request_models": {
+        "devin/swe-2": 12
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "d99ea463d3c74b479983f56ed524b874",
+      "result_sha256": "c2ec4c205ce8c46bb0e3d8c6accfbd22008456cacdcee466b1b6c24ea1b11654",
+      "report_sha256": "82870cbfaee13961aa2a283cf2c412b21da9321e1179628e05aa6c4e8e756921",
+      "used_requests": 17,
+      "recorded_request_entries": 17,
+      "request_models": {
+        "devin/swe-2": 17
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "a250f788c1654603b0f64a757debe9d8",
+      "result_sha256": "3c8ef42ccc2696e0285ca2fd624a8ed640ef76d83b0261a4617b4de3f70c6d5d",
+      "report_sha256": "0c84d99db3a09e71d333e4542339f6152f07144caa618539dbe43839c1bd2a09",
+      "used_requests": 7,
+      "recorded_request_entries": 7,
+      "request_models": {
+        "devin/swe-2": 7
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "d8b76bda77ae42f5a742207251ff5f81",
+      "result_sha256": "86da4b7f0147e1225a7ff398ea118c1102e43680715060185e6172c0bbb47802",
+      "report_sha256": "db8c99c2faeb32cb51e7905e13ab657aeccab4fd023b6e88b8dc51e7953e91a9",
+      "used_requests": 6,
+      "recorded_request_entries": 6,
+      "request_models": {
+        "devin/swe-2": 6
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "039b139b27d14fbdb181391c2bf5a86f",
+      "result_sha256": "77f27f97a942bac0cbfc07af002932b3f5b4e16960d15603a73da6d9b6aa4f37",
+      "report_sha256": "7332fcabca67b2cb5f9ef1d810a6bc53bab55e7fb78f7701bc1025acedbd74be",
+      "used_requests": 24,
+      "recorded_request_entries": 24,
+      "request_models": {
+        "devin/swe-2": 24
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "bdb603931ece43529a3810e7f6a8ad92",
+      "result_sha256": "e943c537be35140e64644123e8d56e268989e623b1d5821133799b9c1ad2c9a7",
+      "report_sha256": "00910e8f37a2c861bf462464ae912382fe60a720cdd3da5eb510238edd2c7474",
+      "used_requests": 18,
+      "recorded_request_entries": 18,
+      "request_models": {
+        "devin/swe-2": 18
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "query-optimize",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "cb41f18b349348b7920fe9cdba755abd",
+      "result_sha256": "394cc62803f96f2551423276a126beb0fa875ec7a2e2a591c582c4ab3c8f3d6e",
+      "report_sha256": "a2fcee52e2b4cbc96c31fcf39ecc9f799e2c3053735d30e9ec80ba3db0931bf6",
+      "used_requests": 21,
+      "recorded_request_entries": 21,
+      "request_models": {
+        "devin/swe-2": 21
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "b119e3ebbad54ab8a39d0166bcb3dfba",
+      "result_sha256": "84ba8d2f678c9cdb1ddf862b643b8d040589782b0640a5d137d9d0f8bcf53c39",
+      "report_sha256": "8dda06afbc17fd1b50f923d5a2b8118811437335a7e6f5c72b9a8e408bb9709f",
+      "used_requests": 4,
+      "recorded_request_entries": 4,
+      "request_models": {
+        "devin/swe-2": 4
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "336c573c5baf464bb165ae96246db37b",
+      "result_sha256": "55a2b946fc7a4c9e7d92486f019d40a13cd3bec450aa1f24efdc7081d93ae864",
+      "report_sha256": "ef032d3a1624c705ffec7597eb49297e258f860f58d5c9bfa46e45d3340d7d30",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "3d076ba15cf54bf69c99d2d113b204ed",
+      "result_sha256": "45126257f83798e4e08ac03b5940afda60d3a9883d66d7c1b1bd7435c7eb1fc9",
+      "report_sha256": "1d64b1f57175f5060791311b3b070aab6a9ba56aeccd695e6b775fa3c96dff8d",
+      "used_requests": 15,
+      "recorded_request_entries": 15,
+      "request_models": {
+        "devin/swe-2": 15
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "2e626cd93a7e4437b76cb41735b85806",
+      "result_sha256": "75cb973247d399a49bca503646bcbc53db369aa3aa106df995dd7fef0dabfbc0",
+      "report_sha256": "f5eda075fc95800fbfe36cf7738587d730227512b259174bd92b15f465e57104",
+      "used_requests": 8,
+      "recorded_request_entries": 8,
+      "request_models": {
+        "devin/swe-2": 8
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "dcd2b10ad0db40d485906b056afb2fcb",
+      "result_sha256": "9ac54c1c625e7f24cf8ce66a7619848419408f6bca505b2f4a76f1b21f20957a",
+      "report_sha256": "b99be8790a60c5e99a286d14ecd887afbb02d02266364150cc9feddc64ede831",
+      "used_requests": 3,
+      "recorded_request_entries": 3,
+      "request_models": {
+        "devin/swe-2": 3
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "a7a1c2dbb10942cc8c05a7f94b39bd7e",
+      "result_sha256": "1e5cfdbb39406b5f1dbad530ecb0d66d04f4a27fe486a944d0473c6cb0be6b43",
+      "report_sha256": "df7b7ced9b72ff3d5a389e5a7937518b6b12ecb1d237b47d34d712fff5768a73",
+      "used_requests": 11,
+      "recorded_request_entries": 11,
+      "request_models": {
+        "devin/swe-2": 11
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "a82dd75ab79f4ff081da43af86b5c5ab",
+      "result_sha256": "57a8d59a8e648f9edee5c39e1054fba152283228a7d76a38fa75f7eda2b40c48",
+      "report_sha256": "00eebc8f4495262a7f3645ad8263ecd1536bf81c0d2ad1bb217ee28bc292056a",
+      "used_requests": 16,
+      "recorded_request_entries": 16,
+      "request_models": {
+        "devin/swe-2": 16
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "f94c6fcb3409461c8a20a5ae2a8a062a",
+      "result_sha256": "0e5b50fba2d6ed6137993e522932d1cff3ddbafa9e118e6d28def7bf8141d5fb",
+      "report_sha256": "f6c77ddc850c5537e0b8c7b1ba848344e77692a2af5e4de20aaea971d1e2aab8",
+      "used_requests": 23,
+      "recorded_request_entries": 23,
+      "request_models": {
+        "devin/swe-2": 23
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "de9a69f4bfc045cf82a3d0a76a048620",
+      "result_sha256": "010c5cbec77b9f08883384271b250df0bf3a04f2fc0b2d281d6aa0abcfacdcef",
+      "report_sha256": "670e2f3d58d2d39321eec48e7e8971aeab594ea416eb0fbb2bebe106e492942c",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "18af0569af7f49698af63befa27bf94c",
+      "result_sha256": "cc59c7d97224abf12b16f72eff431c802aa11d5afab440cbcf62cb6447a9ffb3",
+      "report_sha256": "515aabbd6ad884de41706bcade5ce082a48366b25882a594ca5052e9d8c720a9",
+      "used_requests": 8,
+      "recorded_request_entries": 8,
+      "request_models": {
+        "devin/swe-2": 8
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "f9d8e490468e40b997461f3eddd41f14",
+      "result_sha256": "fc34b8233054f1bfdf53bb0abbaf1d5afc950146eec5d9af8f470abcd98e0dec",
+      "report_sha256": "3ab2fa5e1e201dfb4a29bb09c9076ca79c148a4eecb302d395f47847c088b491",
+      "used_requests": 41,
+      "recorded_request_entries": 41,
+      "request_models": {
+        "devin/swe-2": 41
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_no_context",
+      "status": "trial_exception",
+      "control_id": "bf1a3e2dcdf14a64b4a390411b489981",
+      "result_sha256": "55257277c892147e4771a28acc1dee4d8ffccf871ad3e926f760063589a34ee1",
+      "report_sha256": "15d297df2abe237d008d185405af52fd6062646b1dcc9c7e525db3bbd66b5530",
+      "used_requests": 42,
+      "recorded_request_entries": 42,
+      "request_models": {
+        "devin/swe-2": 42
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": "AgentTimeoutError"
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "ec6f9142a79645bd9b684696cb879919",
+      "result_sha256": "1e26b68e188e2978b3788078a6a40ad68ccdc33db0e01d1199d6ca944a5be978",
+      "report_sha256": "06350709194331d57971d4a2667b3de03b72b5a6d45de9770f4ff4add82fdf60",
+      "used_requests": 22,
+      "recorded_request_entries": 22,
+      "request_models": {
+        "devin/swe-2": 22
+      },
+      "official_raw_rewards": {
+        "reward": 1.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "36793236a4004cebb3b046e3c907d854",
+      "result_sha256": "40d4e5bf3aea456f9be1c3a739aecbd4c583cc5584f4ae6e2dca82cbbefdb750",
+      "report_sha256": "2999cdf9557597a024e674e808fe9b966e3d4b233a948f34224f4b027bd41f10",
+      "used_requests": 16,
+      "recorded_request_entries": 16,
+      "request_models": {
+        "devin/swe-2": 16
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "train-fasttext",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "5a59a43e99304912b61c2f3e82ccbc84",
+      "result_sha256": "499f602cc35a4f627b5929fe8ac994e12f0d9356dee8e447ef4cfdf07f66922f",
+      "report_sha256": "4e65507e79c72efd9fcfdcb72ce4de54771091f4ec4f7970026f89083428febe",
+      "used_requests": 31,
+      "recorded_request_entries": 31,
+      "request_models": {
+        "devin/swe-2": 31
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "control_id": "fc4adcd7de5b46abaed2be8d5bee743e",
+      "result_sha256": "c67a21f6bc93d9112e1e59e28a90f959b4c7d1f10d7af7f879148eddb99ab3dd",
+      "report_sha256": "fdc3c893473afb21a89c5ce0f0e620fc5cfb998fa49dd858f64c2d8e29e69da5",
+      "used_requests": 22,
+      "recorded_request_entries": 22,
+      "request_models": {
+        "devin/swe-2": 22
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "control_id": "ba943f00a5e741019b3f3770b2928891",
+      "result_sha256": "a896a4d1962bb031b7116a5cfc992ee9e9a4498a4248ca78d442e4d505f38a41",
+      "report_sha256": "909b3e4d910c20000656700ae27cdd434f681008e94c08df0bff5c8631bd91bf",
+      "used_requests": 57,
+      "recorded_request_entries": 57,
+      "request_models": {
+        "devin/swe-2": 57
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "native",
+      "status": "graded",
+      "control_id": "3527245209b14da8b476d3334e1ec70e",
+      "result_sha256": "c388843d7cac971b178152f3466bdac05c448d63c7f0a4aed359c058a7d24603",
+      "report_sha256": "e100c631f460684124dd8186927f4e09b43929e49380d3028fec0097873b2418",
+      "used_requests": 13,
+      "recorded_request_entries": 13,
+      "request_models": {
+        "devin/swe-2": 13
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "sg_v2",
+      "status": "graded",
+      "control_id": "28a9717bceb34299ac909988a9278fa6",
+      "result_sha256": "62fb4a5f88d724291040ab6a85ce2434d0ac56b140b1dcc92815a7c1d8d9181a",
+      "report_sha256": "b780a621b85a4e2798263e510dfc72d3c4ea820ff43948b955064fed99781fad",
+      "used_requests": 41,
+      "recorded_request_entries": 41,
+      "request_models": {
+        "devin/swe-2": 41
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    },
+    {
+      "task_id": "video-processing",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "control_id": "4d36a56ce23644d1ad5377f593a807b5",
+      "result_sha256": "a78cc1465b4d122e1135a741b4ab90f020dbe3d20007987fc8b5477aaac31320",
+      "report_sha256": "4971b312db492a28b1fd441b7b5cbef5608119c4a4762ade3371f13b74341dc6",
+      "used_requests": 74,
+      "recorded_request_entries": 74,
+      "request_models": {
+        "devin/swe-2": 74
+      },
+      "official_raw_rewards": {
+        "reward": 0.0
+      },
+      "exception_type": null
+    }
+  ]
+}

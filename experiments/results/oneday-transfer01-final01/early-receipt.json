@@ -1,0 +1,204 @@
+{
+  "status": "running",
+  "started_at": 1791218318.138397,
+  "registration_sha256": "ed6d17dc1485a7b9e8a9c576305ec12e3f3d078b0ce4724f63c0d2dea7a218ea",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "taskif_83",
+      "arm": "native",
+      "status": "finished",
+      "control_id": "43b9e9a2bf4944cd89c7c405d48f6f08",
+      "container_id": "dcae97da0c36f5ee482ac24e512c427bf1779b6784b718e1d388782d52a0e953",
+      "started_at": 1791218319.089342,
+      "study_status": "agent_stopped",
+      "requests": 9,
+      "artifacts": 3,
+      "final_judge": {
+        "status": "adapted_judge_graded",
+        "score": 7,
+        "max_score": 11,
+        "percentage": 63.64,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "finished_at": 1791218470.6089532
+    },
+    {
+      "index": 1,
+      "task_id": "taskif_83",
+      "arm": "sg_v2",
+      "status": "finished",
+      "control_id": "222c8a98e44341debf7c06af05bee12e",
+      "container_id": "e951bf56cca4ca1a0c30a8b8a8f2909fe3f3c0f12d47de05bc8c94a5ab1a1449",
+      "started_at": 1791218478.8370347,
+      "study_status": "succeeded",
+      "requests": 16,
+      "artifacts": 3,
+      "final_judge": {
+        "status": "adapted_judge_graded",
+        "score": 10,
+        "max_score": 11,
+        "percentage": 90.91,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "finished_at": 1791218855.084911
+    },
+    {
+      "index": 2,
+      "task_id": "taskif_83",
+      "arm": "repeat_goal",
+      "status": "finished",
+      "control_id": "7a7ab17913104cba8b7c3b80c51db0c0",
+      "container_id": "b05fc20b31b7647e307bd38d2ea2ac6944701a82dd5579d2adfaa55644b87880",
+      "started_at": 1791218864.0617201,
+      "study_status": "repeat_round_limit",
+      "requests": 20,
+      "artifacts": 3,
+      "final_judge": {
+        "status": "adapted_judge_graded",
+        "score": 8,
+        "max_score": 11,
+        "percentage": 72.73,
+        "criteria": 16,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "finished_at": 1791219196.455814
+    },
+    {
+      "index": 3,
+      "task_id": "taskif_112",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 4,
+      "task_id": "taskif_112",
+      "arm": "repeat_goal",
+      "status": "finished",
+      "control_id": "fb484606bbd94a13bce6f70812f2d6e1",
+      "container_id": "3726a2f4abe35f320b7c1c5c50ffef8f8779e219bb65614f98c13e95242d1fc9",
+      "started_at": 1791219291.8955467,
+      "study_status": "repeat_round_limit",
+      "requests": 18,
+      "artifacts": 4,
+      "final_judge": {
+        "status": "adapted_judge_graded",
+        "score": 9,
+        "max_score": 9,
+        "percentage": 100.0,
+        "criteria": 17,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "finished_at": 1791219677.0615425
+    },
+    {
+      "index": 5,
+      "task_id": "taskif_112",
+      "arm": "native",
+      "status": "finished",
+      "control_id": "b91b80721d4c445db23d365820003b30",
+      "container_id": "345fe8ead9ed9bd488295e64a29902f18e18b308089c1d902e742a4c324c8ad9",
+      "started_at": 1791219407.7800052,
+      "study_status": "agent_stopped",
+      "requests": 7,
+      "artifacts": 5,
+      "final_judge": {
+        "status": "adapted_judge_graded",
+        "score": 9,
+        "max_score": 9,
+        "percentage": 100.0,
+        "criteria": 17,
+        "judge_model": "devin/swe-2",
+        "official_gemini_score_reproduced": false,
+        "judge_saw_arm": false
+      },
+      "finished_at": 1791219574.3500874
+    },
+    {
+      "index": 6,
+      "task_id": "taskif_57",
+      "arm": "repeat_goal",
+      "status": "running",
+      "control_id": "d7319fa038b24f95bba6360bf6efc9d0",
+      "container_id": "ce1ba87359f173f38ac9595ea4cb771963d10226fed495a159556f47973535a2",
+      "started_at": 1791219668.8983638
+    },
+    {
+      "index": 7,
+      "task_id": "taskif_57",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "taskif_57",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "taskif_94",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "taskif_94",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "taskif_94",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 12,
+      "task_id": "taskif_13",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 13,
+      "task_id": "taskif_13",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 14,
+      "task_id": "taskif_13",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 15,
+      "task_id": "taskif_155",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 16,
+      "task_id": "taskif_155",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 17,
+      "task_id": "taskif_155",
+      "arm": "sg_v2",
+      "status": "pending"
+    }
+  ],
+  "heartbeat_at": 1791219824.3866882
+}

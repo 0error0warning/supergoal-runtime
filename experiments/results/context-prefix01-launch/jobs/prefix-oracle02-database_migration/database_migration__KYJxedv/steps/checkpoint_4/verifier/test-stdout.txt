@@ -1,0 +1,543 @@
+============================================================================================================= test session starts ==============================================================================================================
+platform linux -- Python 3.12.15, pytest-9.0.3, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.4.1, json-report-1.5.0, metadata-3.1.1, timeout-2.4.0
+timeout: 60.0s
+timeout method: signal
+timeout func_only: False
+collected 117 items
+
+../tests/test_checkpoint_1.py ........s..............................                                                                                                                                                                    [ 33%]
+../tests/test_checkpoint_2.py .......................                                                                                                                                                                                    [ 52%]
+../tests/test_checkpoint_3.py .........................                                                                                                                                                                                  [ 74%]
+../tests/test_checkpoint_4.py ..............................                                                                                                                                                                             [100%]
+
+=============================================================================================================== warnings summary ===============================================================================================================
+../tests/test_checkpoint_1.py:130
+  /tests/test_checkpoint_1.py:130: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:290
+  /tests/test_checkpoint_1.py:290: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:329
+  /tests/test_checkpoint_1.py:329: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:376
+  /tests/test_checkpoint_1.py:376: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:430
+  /tests/test_checkpoint_1.py:430: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:483
+  /tests/test_checkpoint_1.py:483: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:533
+  /tests/test_checkpoint_1.py:533: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:585
+  /tests/test_checkpoint_1.py:585: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:638
+  /tests/test_checkpoint_1.py:638: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:701
+  /tests/test_checkpoint_1.py:701: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:764
+  /tests/test_checkpoint_1.py:764: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:808
+  /tests/test_checkpoint_1.py:808: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:896
+  /tests/test_checkpoint_1.py:896: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:943
+  /tests/test_checkpoint_1.py:943: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1033
+  /tests/test_checkpoint_1.py:1033: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1084
+  /tests/test_checkpoint_1.py:1084: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1115
+  /tests/test_checkpoint_1.py:1115: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1150
+  /tests/test_checkpoint_1.py:1150: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1182
+  /tests/test_checkpoint_1.py:1182: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1212
+  /tests/test_checkpoint_1.py:1212: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1247
+  /tests/test_checkpoint_1.py:1247: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1261
+  /tests/test_checkpoint_1.py:1261: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1276
+  /tests/test_checkpoint_1.py:1276: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1293
+  /tests/test_checkpoint_1.py:1293: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1322
+  /tests/test_checkpoint_1.py:1322: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1355
+  /tests/test_checkpoint_1.py:1355: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1384
+  /tests/test_checkpoint_1.py:1384: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1412
+  /tests/test_checkpoint_1.py:1412: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1442
+  /tests/test_checkpoint_1.py:1442: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1477
+  /tests/test_checkpoint_1.py:1477: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1513
+  /tests/test_checkpoint_1.py:1513: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1561
+  /tests/test_checkpoint_1.py:1561: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1596
+  /tests/test_checkpoint_1.py:1596: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1630
+  /tests/test_checkpoint_1.py:1630: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1664
+  /tests/test_checkpoint_1.py:1664: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:177
+  /tests/test_checkpoint_2.py:177: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:239
+  /tests/test_checkpoint_2.py:239: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:285
+  /tests/test_checkpoint_2.py:285: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:339
+  /tests/test_checkpoint_2.py:339: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:387
+  /tests/test_checkpoint_2.py:387: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:440
+  /tests/test_checkpoint_2.py:440: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:494
+  /tests/test_checkpoint_2.py:494: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:544
+  /tests/test_checkpoint_2.py:544: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:596
+  /tests/test_checkpoint_2.py:596: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:651
+  /tests/test_checkpoint_2.py:651: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:704
+  /tests/test_checkpoint_2.py:704: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:739
+  /tests/test_checkpoint_2.py:739: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:790
+  /tests/test_checkpoint_2.py:790: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:819
+  /tests/test_checkpoint_2.py:819: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:853
+  /tests/test_checkpoint_2.py:853: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_2.py:900
+  /tests/test_checkpoint_2.py:900: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:939
+  /tests/test_checkpoint_2.py:939: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:975
+  /tests/test_checkpoint_2.py:975: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:1010
+  /tests/test_checkpoint_2.py:1010: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_2.py:1046
+  /tests/test_checkpoint_2.py:1046: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:152
+  /tests/test_checkpoint_3.py:152: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:223
+  /tests/test_checkpoint_3.py:223: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:280
+  /tests/test_checkpoint_3.py:280: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:343
+  /tests/test_checkpoint_3.py:343: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:421
+  /tests/test_checkpoint_3.py:421: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:509
+  /tests/test_checkpoint_3.py:509: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:568
+  /tests/test_checkpoint_3.py:568: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:616
+  /tests/test_checkpoint_3.py:616: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:654
+  /tests/test_checkpoint_3.py:654: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:725
+  /tests/test_checkpoint_3.py:725: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:760
+  /tests/test_checkpoint_3.py:760: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:797
+  /tests/test_checkpoint_3.py:797: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_3.py:841
+  /tests/test_checkpoint_3.py:841: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:891
+  /tests/test_checkpoint_3.py:891: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:926
+  /tests/test_checkpoint_3.py:926: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:962
+  /tests/test_checkpoint_3.py:962: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:996
+  /tests/test_checkpoint_3.py:996: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:1034
+  /tests/test_checkpoint_3.py:1034: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:1086
+  /tests/test_checkpoint_3.py:1086: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:1144
+  /tests/test_checkpoint_3.py:1144: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:1165
+  /tests/test_checkpoint_3.py:1165: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_3.py:1215
+  /tests/test_checkpoint_3.py:1215: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:143
+  /tests/test_checkpoint_4.py:143: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:166
+  /tests/test_checkpoint_4.py:166: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:184
+  /tests/test_checkpoint_4.py:184: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:206
+  /tests/test_checkpoint_4.py:206: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:224
+  /tests/test_checkpoint_4.py:224: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:250
+  /tests/test_checkpoint_4.py:250: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:268
+  /tests/test_checkpoint_4.py:268: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:326
+  /tests/test_checkpoint_4.py:326: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:353
+  /tests/test_checkpoint_4.py:353: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:371
+  /tests/test_checkpoint_4.py:371: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:387
+  /tests/test_checkpoint_4.py:387: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:459
+  /tests/test_checkpoint_4.py:459: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:551
+  /tests/test_checkpoint_4.py:551: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:611
+  /tests/test_checkpoint_4.py:611: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:672
+  /tests/test_checkpoint_4.py:672: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:733
+  /tests/test_checkpoint_4.py:733: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:808
+  /tests/test_checkpoint_4.py:808: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:889
+  /tests/test_checkpoint_4.py:889: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_4.py:951
+  /tests/test_checkpoint_4.py:951: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:964
+  /tests/test_checkpoint_4.py:964: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:977
+  /tests/test_checkpoint_4.py:977: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:989
+  /tests/test_checkpoint_4.py:989: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:1001
+  /tests/test_checkpoint_4.py:1001: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_4.py:1058
+  /tests/test_checkpoint_4.py:1058: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================================================================================================== PASSES ====================================================================================================================
+----------------------------------------------------------------------------------------------------------------- JSON report ------------------------------------------------------------------------------------------------------------------
+report saved to: /tmp/pytest-report.json
+=========================================================================================================== short test summary info ============================================================================================================
+PASSED ../tests/test_checkpoint_1.py::test_create_table
+PASSED ../tests/test_checkpoint_1.py::test_add_column
+PASSED ../tests/test_checkpoint_1.py::test_multiple_operations
+PASSED ../tests/test_checkpoint_1.py::test_skip_already_applied
+PASSED ../tests/test_checkpoint_1.py::test_drop_single_column
+PASSED ../tests/test_checkpoint_1.py::test_drop_column_preserve_data
+PASSED ../tests/test_checkpoint_1.py::test_multiple_drop_columns
+PASSED ../tests/test_checkpoint_1.py::test_drop_column_preserves_existing_data
+PASSED ../tests/test_checkpoint_1.py::test_auto_increment_primary_key
+PASSED ../tests/test_checkpoint_1.py::test_unique_and_not_null_constraints
+PASSED ../tests/test_checkpoint_1.py::test_default_values_various_types
+PASSED ../tests/test_checkpoint_1.py::test_add_column_with_default_to_populated_table
+PASSED ../tests/test_checkpoint_1.py::test_complex_data_preservation
+PASSED ../tests/test_checkpoint_1.py::test_add_not_null_with_default
+PASSED ../tests/test_checkpoint_1.py::test_create_multiple_tables
+PASSED ../tests/test_checkpoint_1.py::test_reserved_word_identifiers_are_quoted
+PASSED ../tests/test_checkpoint_1.py::test_mixed_operations_all_types
+PASSED ../tests/test_checkpoint_1.py::test_non_sequential_versions
+PASSED ../tests/test_checkpoint_1.py::test_create_table_multiple_primary_keys_rejected
+PASSED ../tests/test_checkpoint_1.py::test_auto_increment_requires_integer_primary_key
+PASSED ../tests/test_checkpoint_1.py::test_add_column_rejects_invalid_identifier
+PASSED ../tests/test_checkpoint_1.py::test_drop_column_missing_table
+PASSED ../tests/test_checkpoint_1.py::test_table_exists
+PASSED ../tests/test_checkpoint_1.py::test_missing_migration_file
+PASSED ../tests/test_checkpoint_1.py::test_invalid_json
+PASSED ../tests/test_checkpoint_1.py::test_invalid_schema_missing_operations
+PASSED ../tests/test_checkpoint_1.py::test_table_missing_for_add_column
+PASSED ../tests/test_checkpoint_1.py::test_column_already_exists
+PASSED ../tests/test_checkpoint_1.py::test_column_missing_for_drop
+PASSED ../tests/test_checkpoint_1.py::test_drop_only_column
+PASSED ../tests/test_checkpoint_1.py::test_drop_primary_key_column
+PASSED ../tests/test_checkpoint_1.py::test_invalid_identifier_rejected
+PASSED ../tests/test_checkpoint_1.py::test_invalid_column_type_rejected
+PASSED ../tests/test_checkpoint_1.py::test_unique_constraint_prevents_duplicates
+PASSED ../tests/test_checkpoint_1.py::test_version_zero_rejected
+PASSED ../tests/test_checkpoint_1.py::test_version_negative_rejected
+PASSED ../tests/test_checkpoint_1.py::test_version_string_rejected
+PASSED ../tests/test_checkpoint_1.py::test_drop_column_removes_unique_index_on_dropped_column
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_data
+PASSED ../tests/test_checkpoint_2.py::test_backfill_data
+PASSED ../tests/test_checkpoint_2.py::test_transform_data
+PASSED ../tests/test_checkpoint_2.py::test_complete_column_migration
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_data_overwrites_existing_values
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_data_default_value_for_null
+PASSED ../tests/test_checkpoint_2.py::test_backfill_data_without_where_updates_all
+PASSED ../tests/test_checkpoint_2.py::test_transformations_applied_in_order
+PASSED ../tests/test_checkpoint_2.py::test_transform_then_backfill_uses_transformed_values
+PASSED ../tests/test_checkpoint_2.py::test_backfill_where_filters_rows
+PASSED ../tests/test_checkpoint_2.py::test_backfill_value_expression
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_data_null_without_default
+PASSED ../tests/test_checkpoint_2.py::test_column_not_exists
+PASSED ../tests/test_checkpoint_2.py::test_invalid_expression
+PASSED ../tests/test_checkpoint_2.py::test_migration_rolls_back_on_failure
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_missing_from_column
+PASSED ../tests/test_checkpoint_2.py::test_migrate_column_missing_to_column
+PASSED ../tests/test_checkpoint_2.py::test_backfill_with_numeric_constant
+PASSED ../tests/test_checkpoint_2.py::test_transform_target_column_not_exists
+PASSED ../tests/test_checkpoint_2.py::test_backfill_table_not_exists
+PASSED ../tests/test_checkpoint_2.py::test_migrate_table_not_exists
+PASSED ../tests/test_checkpoint_2.py::test_backfill_invalid_where_clause
+PASSED ../tests/test_checkpoint_2.py::test_transform_table_not_exists
+PASSED ../tests/test_checkpoint_3.py::test_add_foreign_key
+PASSED ../tests/test_checkpoint_3.py::test_create_index
+PASSED ../tests/test_checkpoint_3.py::test_add_check_constraint
+PASSED ../tests/test_checkpoint_3.py::test_complex_migration
+PASSED ../tests/test_checkpoint_3.py::test_create_unique_index
+PASSED ../tests/test_checkpoint_3.py::test_drop_index
+PASSED ../tests/test_checkpoint_3.py::test_drop_foreign_key
+PASSED ../tests/test_checkpoint_3.py::test_drop_check_constraint
+PASSED ../tests/test_checkpoint_3.py::test_foreign_key_on_delete_set_null
+PASSED ../tests/test_checkpoint_3.py::test_add_foreign_key_on_empty_table_enforces_future_writes
+PASSED ../tests/test_checkpoint_3.py::test_invalid_foreign_key_action
+PASSED ../tests/test_checkpoint_3.py::test_duplicate_index_name_other_table
+PASSED ../tests/test_checkpoint_3.py::test_drop_foreign_key_missing
+PASSED ../tests/test_checkpoint_3.py::test_drop_check_constraint_missing
+PASSED ../tests/test_checkpoint_3.py::test_foreign_key_with_restrict
+PASSED ../tests/test_checkpoint_3.py::test_foreign_key_violation_existing_data
+PASSED ../tests/test_checkpoint_3.py::test_invalid_foreign_key_reference_table
+PASSED ../tests/test_checkpoint_3.py::test_invalid_foreign_key_reference_column
+PASSED ../tests/test_checkpoint_3.py::test_foreign_key_referencing_column_missing
+PASSED ../tests/test_checkpoint_3.py::test_foreign_key_column_count_mismatch
+PASSED ../tests/test_checkpoint_3.py::test_circular_foreign_key_dependencies
+PASSED ../tests/test_checkpoint_3.py::test_duplicate_index_name
+PASSED ../tests/test_checkpoint_3.py::test_drop_index_missing
+PASSED ../tests/test_checkpoint_3.py::test_check_constraint_violation_on_add
+PASSED ../tests/test_checkpoint_3.py::test_transactional_rollback_on_failure
+PASSED ../tests/test_checkpoint_4.py::test_simple_rollback
+PASSED ../tests/test_checkpoint_4.py::test_rollback_multiple
+PASSED ../tests/test_checkpoint_4.py::test_rollback_to_version
+PASSED ../tests/test_checkpoint_4.py::test_explicit_rollback
+PASSED ../tests/test_checkpoint_4.py::test_rollback_data_migration
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_column
+PASSED ../tests/test_checkpoint_4.py::test_rollback_create_index
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_index
+PASSED ../tests/test_checkpoint_4.py::test_rollback_add_check_constraint
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_check_constraint
+PASSED ../tests/test_checkpoint_4.py::test_rollback_add_foreign_key
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_foreign_key
+PASSED ../tests/test_checkpoint_4.py::test_migrations_store_operations
+PASSED ../tests/test_checkpoint_4.py::test_rollback_multiple_ops_one_migration
+PASSED ../tests/test_checkpoint_4.py::test_rollback_only_one_migration
+PASSED ../tests/test_checkpoint_4.py::test_non_sequential_versions
+PASSED ../tests/test_checkpoint_4.py::test_rollback_add_column_drops_column_and_loses_data
+PASSED ../tests/test_checkpoint_4.py::test_explicit_rollback_operations_override_automatic_rollback
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_column_restores_default_and_not_null
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_column_restores_unique_constraint
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_index_restores_unique_definition
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_foreign_key_restores_actions
+PASSED ../tests/test_checkpoint_4.py::test_rollback_drop_check_constraint_restores_expression
+PASSED ../tests/test_checkpoint_4.py::test_rollback_removes_migration_records
+PASSED ../tests/test_checkpoint_4.py::test_no_migrations
+PASSED ../tests/test_checkpoint_4.py::test_version_not_found
+PASSED ../tests/test_checkpoint_4.py::test_transform_data_no_rollback_ops
+PASSED ../tests/test_checkpoint_4.py::test_backfill_data_no_rollback_ops
+PASSED ../tests/test_checkpoint_4.py::test_rollback_transactional_on_failure
+PASSED ../tests/test_checkpoint_4.py::test_rollback_fails_with_dependent_index
+SKIPPED [1] ../tests/test_checkpoint_1.py:436: Applies only to checkpoints 1-2
+================================================================================================ 116 passed, 1 skipped, 101 warnings in 10.49s =================================================================================================
+[shim:pytest-json-report] checkpoint_4: core=1.000 (6/6) isolated=1.000 (30/30) strict=1.000 (116/116) verbosity=0.604 erosion=0.756 has_prior=1 v_up=1 e_up=1

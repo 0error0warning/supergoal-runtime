@@ -1,0 +1,253 @@
+{
+  "status": "passed",
+  "rows": [
+    {
+      "arm": "native",
+      "status": "passed",
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-multistep-smoke02-native/scb-multistep-smoke02__usvLzBU/result.json",
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 14951,
+            "n_cache_tokens": 7485,
+            "n_output_tokens": 281,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "3d71a22be8d040d39e385a1fb654a928",
+              "study_status": "agent_stopped",
+              "physical_requests": 4,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d04922393bd34508b99a4c8d232b5f64",
+              "checkpoint": 1,
+              "problem_requests_total": 4,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:33:17.055442Z",
+            "finished_at": "2026-10-05T19:33:46.800893Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:33:47.680892Z",
+            "finished_at": "2026-10-05T19:33:49.421228Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 19427,
+            "n_cache_tokens": 11649,
+            "n_output_tokens": 491,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "native",
+              "control_id": "233eec8e9b7146b48f23540ab5acdc78",
+              "study_status": "agent_stopped",
+              "physical_requests": 5,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "d04922393bd34508b99a4c8d232b5f64",
+              "checkpoint": 2,
+              "problem_requests_total": 9,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:33:50.434842Z",
+            "finished_at": "2026-10-05T19:34:30.808883Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:34:31.112682Z",
+            "finished_at": "2026-10-05T19:34:31.598820Z"
+          }
+        }
+      ],
+      "exception": null
+    },
+    {
+      "arm": "sg_v2",
+      "status": "passed",
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-multistep-smoke02-sg_v2/scb-multistep-smoke02__nw2FUJx/result.json",
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 18988,
+            "n_cache_tokens": 3741,
+            "n_output_tokens": 438,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "1e68f142b0d347b09d06fe5f7d6e0a74",
+              "study_status": "succeeded",
+              "physical_requests": 5,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "6d6038d25cee47aaae7cbda8bfce76b9",
+              "checkpoint": 1,
+              "problem_requests_total": 5,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:34:56.637479Z",
+            "finished_at": "2026-10-05T19:35:34.108605Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:35:34.431813Z",
+            "finished_at": "2026-10-05T19:35:34.821084Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 31809,
+            "n_cache_tokens": 15854,
+            "n_output_tokens": 805,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "sg_v2",
+              "control_id": "332a2bd9290c4785a5558d61c9d0c521",
+              "study_status": "succeeded",
+              "physical_requests": 8,
+              "adapter": "checkpoint-dev08",
+              "problem_id": "6d6038d25cee47aaae7cbda8bfce76b9",
+              "checkpoint": 2,
+              "problem_requests_total": 13,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:35:35.084948Z",
+            "finished_at": "2026-10-05T19:36:18.595746Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:36:18.840570Z",
+            "finished_at": "2026-10-05T19:36:19.219304Z"
+          }
+        }
+      ],
+      "exception": null
+    },
+    {
+      "arm": "mini_swe",
+      "status": "passed",
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-multistep-smoke02-mini_swe/scb-multistep-smoke02__5kYpfgt/result.json",
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": 1985,
+            "n_cache_tokens": 892,
+            "n_output_tokens": 313,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "c5501133a5e547c097842116cea9e064",
+              "study_status": "agent_stopped",
+              "physical_requests": 2,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "dba3b55a060843c09ee50db5ced0e4e3",
+              "checkpoint": 1,
+              "problem_requests_total": 2,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:36:38.624669Z",
+            "finished_at": "2026-10-05T19:36:48.108421Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:36:48.398602Z",
+            "finished_at": "2026-10-05T19:36:48.773986Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": 4932,
+            "n_cache_tokens": 960,
+            "n_output_tokens": 595,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": {
+              "study_arm": "mini_swe",
+              "control_id": "7766c06a85274b0abd3190f9d7b65a01",
+              "study_status": "agent_stopped",
+              "physical_requests": 4,
+              "adapter": "mini-swe-agent-2.4.6-checkpoint08",
+              "problem_id": "dba3b55a060843c09ee50db5ced0e4e3",
+              "checkpoint": 2,
+              "problem_requests_total": 6,
+              "multistep_adapter": "scb-transfer01-checkpoint08",
+              "previous_hidden_verifier_absent": true
+            }
+          },
+          "verifier_result": {
+            "rewards": {
+              "reward": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:36:49.030519Z",
+            "finished_at": "2026-10-05T19:36:59.117790Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:36:59.355210Z",
+            "finished_at": "2026-10-05T19:36:59.725403Z"
+          }
+        }
+      ],
+      "exception": null
+    }
+  ],
+  "base_image": "sha256:f0d6e67fe473a244c4e7c3d980df8651e5e05f823a3a4b662490a5bb2188c9c2",
+  "scope": "Integration probe only, excluded from benchmark capability sample"
+}

@@ -1,0 +1,54 @@
+{
+  "status": "requires_audit",
+  "ids": [
+    "taskif_2",
+    "taskif_66"
+  ],
+  "kind": "adapted_SWE2_judge_development_calibration",
+  "rows": [
+    {
+      "question_id": "taskif_2",
+      "submission": "empty",
+      "status": "adapted_judge_graded",
+      "score": 0,
+      "max_score": 3,
+      "criteria": 5,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "question_id": "taskif_2",
+      "submission": "reference",
+      "status": "adapted_judge_graded",
+      "score": -1,
+      "max_score": 3,
+      "criteria": 5,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "question_id": "taskif_66",
+      "submission": "empty",
+      "status": "adapted_judge_graded",
+      "score": 0,
+      "max_score": 2,
+      "criteria": 6,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    },
+    {
+      "question_id": "taskif_66",
+      "submission": "reference",
+      "status": "adapted_judge_graded",
+      "score": 4,
+      "max_score": 2,
+      "criteria": 6,
+      "judge_model": "devin/swe-2",
+      "official_gemini_score_reproduced": false,
+      "judge_saw_arm": false
+    }
+  ]
+}

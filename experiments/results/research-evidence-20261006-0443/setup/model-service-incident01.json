@@ -1,0 +1,111 @@
+{
+  "recorded_at": "2026-10-05T20:35:48.556154+00:00",
+  "window_start": "2026-10-05T20:20:00+00:00",
+  "window_end": "2026-10-05T20:30:00+00:00",
+  "selection": "all request journals containing HTTP 503 in this fixed incident window",
+  "raw_results_unchanged": true,
+  "scope": "Upstream HTTP status observed by the request proxy; does not identify which remote service layer originated the error. SDK displays 502 wrapper. Failures remain charged; benchmark trials are not retried.",
+  "affected_controls": [
+    {
+      "control_id": "dcd2b10ad0db40d485906b056afb2fcb",
+      "journal_sha256_at_audit": "35ec5c207b9668ea1fbd7af3ea0c8e5a0ba93fc252336747647501f25bcd8809",
+      "failures": [
+        {
+          "index": 1,
+          "started": 1791231843.6597624,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6541762351989746
+        },
+        {
+          "index": 2,
+          "started": 1791231847.1268098,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6524462699890137
+        },
+        {
+          "index": 3,
+          "started": 1791231852.9909143,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6529245376586914
+        }
+      ]
+    },
+    {
+      "control_id": "db6ce251d0b643e58fe96a480c7a83e0",
+      "journal_sha256_at_audit": "34df3e3ad4e0532005afccf03946df5e8bfd2dd47af3cc5d0608ad718900ba66",
+      "failures": [
+        {
+          "index": 1,
+          "started": 1791231844.7768273,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.7536227703094482
+        },
+        {
+          "index": 2,
+          "started": 1791231848.1413584,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6486868858337402
+        },
+        {
+          "index": 3,
+          "started": 1791231854.6034594,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6650242805480957
+        }
+      ]
+    },
+    {
+      "control_id": "9edbd110ab554b3d8b68ff6e12e12dbb",
+      "journal_sha256_at_audit": "f89798994caa6ff2453a268f2c3d8b016cbe2e4007c468f42e90d939db5c30c7",
+      "failures": [
+        {
+          "index": 1,
+          "started": 1791231870.8290403,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6531515121459961
+        },
+        {
+          "index": 2,
+          "started": 1791231873.6943421,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6480097770690918
+        },
+        {
+          "index": 3,
+          "started": 1791231878.7546518,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6511116027832031
+        }
+      ]
+    },
+    {
+      "control_id": "a10191103a3c4842baad031754720bba",
+      "journal_sha256_at_audit": "dd03bddc1e9d59f97083a83b539638111dd43851870c83c8486ae4ce88a0d275",
+      "failures": [
+        {
+          "index": 4,
+          "started": 1791231823.1773107,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6519222259521484
+        },
+        {
+          "index": 5,
+          "started": 1791231829.4431431,
+          "http_status": 503,
+          "error": "HTTPError",
+          "seconds": 0.6495845317840576
+        }
+      ]
+    }
+  ]
+}

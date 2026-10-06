@@ -1,0 +1,17 @@
+{
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/episode-boundaries01.json": {
+      "sha256": "5af075442c3f5fc3591bae253621e5148eb9a8639605cce30e9e1a92da38e193",
+      "bytes": 394328
+    },
+    "analysis-boundaries01/episode_boundaries.py": {
+      "sha256": "d00f3f99ed0710f00d665bcc6f8a6b3f8e1c8b7c5856bdfa8cc42546353a7efa",
+      "bytes": 5273
+    },
+    "analysis-boundaries01/inputs.json": {
+      "sha256": "e7b980cc7b8658a5190a58a9d55383b6c7d45b8b165ebd1fe14fb18a5d51d2ef",
+      "bytes": 54822
+    }
+  }
+}

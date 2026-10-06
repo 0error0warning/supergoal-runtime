@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "captured_at": "2026-10-05T22:48:27.592597+00:00",
+  "host": "supergoal-gcp",
+  "command": [
+    "/var/lib/supergoal-lab/hermes-venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml=/var/lib/supergoal-lab/plugin-v2-checks02/junit.xml",
+    "tests/unit/test_v2_kernel.py",
+    "tests/unit/test_v2_acceptance_workflow.py",
+    "tests/unit/test_v2_sqlite_compatibility.py",
+    "tests/integration/test_v2_host_abi.py"
+  ],
+  "exit_code": 0,
+  "counts": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "real_host_abi_cases": 2,
+  "hermes_import_path": "/var/lib/supergoal-lab/private/runtime/hermes-v0.21.3-251bedc-mt2/hermes_cli/plugins.py",
+  "hermes_source": "/var/lib/supergoal-lab/private/runtime/hermes-v0.21.3-251bedc-mt2",
+  "python": "3.13.5 (main, Jul 23 2025, 00:37:22) [Clang 20.1.4 ]",
+  "pytest": "9.1.1",
+  "pytest_asyncio": "1.4.0",
+  "sqlite": "3.49.1",
+  "kernel_journal_mode": "DELETE",
+  "source_manifest_sha256": "523450bb607c90541cb6a2d602f66d516d59edee29f54e2510f753bc3a8f6ac9",
+  "operator_sha256": "7dd9cd591656ab6ee6a4eb4109906dd2bd1f2071149ab24c1f7558dbc6c5be51",
+  "log_sha256": "ea17d92dcda06e104a075c26e33d34c52e4054d32cc5bf9a788b5d738cf9b3b0",
+  "junit_sha256": "ae2478876a8fc22062179f7245bc673f7cc9594b607c4189485af9616fa37528",
+  "private_network": true,
+  "model_calls": 0,
+  "production_deployed": false,
+  "scope": "Current kernel, acceptance/workflow and real registry ABI; no model-task or production Gateway run."
+}

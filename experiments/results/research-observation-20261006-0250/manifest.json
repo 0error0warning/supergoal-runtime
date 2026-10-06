@@ -1,0 +1,41 @@
+{
+  "captured_at": "2026-10-05T18:47:20.766196+00:00",
+  "files": {
+    "setup/snapshot-handoff-audit01.json": {
+      "sha256": "5a06e560741177b962333c09aaf09283046f28d88a8dc657dc763e537893a801",
+      "bytes": 7055
+    },
+    "setup/snapshot-lifecycle-probe01.json": {
+      "sha256": "82700e47e9fb87d57df127143293463bc8ffd6d5f2f43222910fae38e522cf42",
+      "bytes": 502
+    },
+    "setup/oneday-memory-audit01.json": {
+      "sha256": "910a2f4d916e4153dd2cb3752a106b46549b968b47d975d6c8224f4a53c7e079",
+      "bytes": 1718
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "7028fe8dd2d9c2478f93d74b5e1b662af1e332ac2f7aeae6ed4a8f1ba61cbc09",
+      "bytes": 3763
+    },
+    "analysis-operator02/public-gcp01-bundle.json": {
+      "sha256": "1cc0b348e182253acb0028c3362cd847d16c5549a0e1016eede4df01fec0387b",
+      "bytes": 1441468
+    },
+    "analysis-operator02/public-parallel24-v1-bundle.json": {
+      "sha256": "f0eb29d2a4337f7db3d6ff64677399abed54331f4c8c9d2bd71eaa9f5de34701",
+      "bytes": 1418480
+    },
+    "analysis-operator02/mechanism01-bundle.json": {
+      "sha256": "14915c33d24319fbdb4f2bb1442f378d1c21a91932d44de8e45dc4b130ed1a8b",
+      "bytes": 338165
+    },
+    "setup/mechanism01-receipt.json": {
+      "sha256": "85827642465225472ba422a31469b88a5465d61498fd2a3b157035d135a2d3cd",
+      "bytes": 12105
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "7fd65ff5706bd658e96052c79eea3b6e523eced1985707739394eccc11ad00a2",
+      "bytes": 61149
+    }
+  }
+}

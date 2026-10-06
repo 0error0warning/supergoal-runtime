@@ -1,0 +1,48 @@
+{
+  "captured_at": 1791138085.4954998,
+  "stage": "during registered runs; supplemental environment record, not a new preregistration",
+  "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.39",
+  "supervisor_python": "3.12.3",
+  "worker_python": "3.11.16",
+  "hermes_release_directory": "hermes-v0.21.3-251bedc-mt2",
+  "hermes_git_commit": null,
+  "hermes_source_hashes": {
+    "run_agent.py": "dc125031d13e2a341eec473bcfcafce16c7356505dcbc560bec562b1ecaddc04",
+    "agent/conversation_loop.py": "2086d4d084a7cba728a5862f2f27d172860908af967e2b83a43d22fe757548c2",
+    "agent/turn_facade_lease.py": "ee332da6d22fb526e59764550598ff8750c668372e8dc95103cd4e0aaca33f16",
+    "hermes_cli/goals.py": "0410062025f6a2175adc202c69730266499a2d161a43be9d91bc4af91f02822b"
+  },
+  "laboratory_helper_hashes": {
+    "launch.py": "754b0ac14080761b2885f173a9e024338b52065993312bf7e89e50c8c16d13ee",
+    "registered_matrix.py": "900288e0405f1f38d0d810b5ee56d4b4b68b4bb74929a084fff9ef7b8999b153"
+  },
+  "units": {
+    "supergoal-holdout01": {
+      "RuntimeMaxUSec": "4h",
+      "CPUQuotaPerSecUSec": "650ms",
+      "MemoryMax": "996147200",
+      "TasksMax": "160",
+      "ActiveState": "active"
+    },
+    "supergoal-context-reset01": {
+      "RuntimeMaxUSec": "3h",
+      "CPUQuotaPerSecUSec": "650ms",
+      "MemoryMax": "996147200",
+      "TasksMax": "160",
+      "ActiveState": "active"
+    },
+    "supergoal-soak-v2-r3-20261005": {
+      "RuntimeMaxUSec": "3h",
+      "CPUQuotaPerSecUSec": "650ms",
+      "MemoryMax": "996147200",
+      "TasksMax": "160",
+      "ActiveState": "active"
+    }
+  },
+  "model_requested": "devin/swe-2",
+  "model_identity_limit": "Provider alias, not immutable weights",
+  "production_services": {
+    "hermes-gateway": "active",
+    "hermes-dashboard": "active"
+  }
+}

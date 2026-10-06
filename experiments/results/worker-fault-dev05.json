@@ -1,0 +1,94 @@
+{
+  "status": "complete",
+  "scope": "SDK worker death and proxy stream disconnection; NOT whole-controller reboot",
+  "model": "devin/swe-2",
+  "rows": [
+    {
+      "arm": "sg_v2",
+      "fault": null,
+      "control_id": "640bf2b9e0214539983970a934586c0f",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "succeeded",
+      "requests": 10,
+      "recoveries": 0,
+      "fault_triggered": false
+    },
+    {
+      "arm": "native",
+      "fault": "worker_kill",
+      "control_id": "0225dcbc63e24abb90ffd0ae36c37d76",
+      "status": "finished",
+      "error": "RuntimeError: Docker exec failed: Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/local/lib/python3.11/pathlib.py\", line 1058, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.11/pathlib.py\", line 1044, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/totals.json'\n",
+      "artifact_passed": false,
+      "study_status": "worker_interrupted",
+      "requests": 3,
+      "recoveries": 0,
+      "fault_triggered": true
+    },
+    {
+      "arm": "repeat_goal",
+      "fault": "worker_kill",
+      "control_id": "e30a55af4f4047879e5fcceac4b8c684",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "repeat_round_limit",
+      "requests": 11,
+      "recoveries": 1,
+      "fault_triggered": true
+    },
+    {
+      "arm": "sg_v2",
+      "fault": "worker_kill",
+      "control_id": "b8452488f8d8408c813d5d80e0d57236",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "succeeded",
+      "requests": 11,
+      "recoveries": 1,
+      "fault_triggered": true
+    },
+    {
+      "arm": "native",
+      "fault": "stream_disconnect",
+      "control_id": "3c4614ea9ebe404f91ff9a12ae9d4554",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "agent_stopped",
+      "requests": 6,
+      "recoveries": 0,
+      "fault_triggered": true
+    },
+    {
+      "arm": "repeat_goal",
+      "fault": "stream_disconnect",
+      "control_id": "52e46678f4df46bd827621f9b88cc714",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "repeat_round_limit",
+      "requests": 11,
+      "recoveries": 0,
+      "fault_triggered": true
+    },
+    {
+      "arm": "sg_v2",
+      "fault": "stream_disconnect",
+      "control_id": "822b8f5d54b447c6ad021cb7005a9836",
+      "status": "finished",
+      "deterministic_artifact_check": "artifact_check_passed",
+      "artifact_passed": true,
+      "study_status": "succeeded",
+      "requests": 9,
+      "recoveries": 0,
+      "fault_triggered": true
+    }
+  ],
+  "fault_request_ordinal": 3,
+  "synthetic_development_task": true,
+  "public_evaluation_tasks_used": false
+}

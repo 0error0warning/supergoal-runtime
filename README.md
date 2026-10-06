@@ -2,9 +2,38 @@
 
 [![CI](https://github.com/0error0warning/supergoal-runtime/actions/workflows/ci.yml/badge.svg)](https://github.com/0error0warning/supergoal-runtime/actions/workflows/ci.yml)
 
-Standalone Hermes plugin for long-running, evidence-first autonomous missions.
+Standalone Hermes plugin for durable continuation of user-defined tasks.
 
-> **Status: migration complete, production validated.** Phases 0–7 are complete: Supergoal product logic has moved out of Hermes Core, legacy state migration and two-stage production cutover have passed, and the old overlay/patch delivery path is archived. Current plugin release: **1.1.1**.
+> **Development snapshot, 2026-10-06.** This branch builds on the deployed 1.1.1
+> source. It contains task-defined acceptance and an opt-in v2 engine. These
+> changes have not been deployed; publishing this branch does not upgrade a
+> production Hermes installation.
+
+The runtime preserves task state, pending work and budgets, and records the
+evidence used to continue, pause or finish. Domain workflows come from the user
+and task contract. v1 remains the default; the experimental v2 plugin adds
+versioned acceptance checks, calibration, disputes and durable dispatch.
+
+## Research status
+
+All registered October 4–6 studies are complete and archived. The largest
+public comparison has 22 evaluable paired tasks: full SG passed 15/22, native
+Hermes 13/22 and repeated-goal 17/22. Full SG used 504 physical requests versus
+323 for native Hermes. This sample does not establish a stable quality benefit.
+
+In the common-prefix multi-stage study, all 18 online passes still had strict
+test failures. The operational repairs have concrete regression evidence, while
+reliable semantic acceptance and day-long autonomy remain unproven. The research
+model reviewer and the opt-in plugin's configured checkers are separate paths.
+
+The temporary GCP instance is stopped with its persistent disks retained.
+Production Hermes continues on its existing deployment.
+
+- [Research index: conclusions, studies, code and evidence](docs/research-index.md)
+- [Final findings and limitations](docs/research-findings-2026-10-06.md)
+- [Task-defined acceptance and compatibility](docs/generic-acceptance.md)
+- [Opt-in v2 operator guide](docs/v2-plugin-and-acceptance.md)
+- [Research tools and reproduction scope](experiments/README.md)
 
 ## Architecture
 
@@ -19,7 +48,7 @@ Hermes generic plugin ABI
        supergoal-runtime plugin
   ├─ RuntimeManager + deterministic gates
   ├─ policy guard + evidence ledger
-  ├─ judge / strategic critic adapters
+  ├─ completion judge / advisory critic adapters
   └─ ${HERMES_HOME}/supergoal/state.db
 ```
 
@@ -49,8 +78,10 @@ Plain `/supergoal <text>` does **not** start a mission. Start is explicit to pre
   cache to keep ordinary non-Supergoal turns cheap.
 - Profile-scoped SQLite at `${HERMES_HOME}/supergoal/state.db`.
 - WAL, foreign keys, explicit transactions, schema migrations, and idempotent tool-event writes.
-- Deterministic acceptance gates, strategy gates, action taxonomy, and inertia guard.
-- Tool-backed evidence only; assistant prose cannot satisfy execution/research gates.
+- Acceptance comes from the user's goal, added criteria, and explicit task contract.
+- Task keywords never select a built-in domain workflow. External sources and artifacts are optional unless requested.
+- Explicit evidence requirements use actual tool/human records; assistant and critic claims cannot grant proof.
+- Critic suggestions cannot rewrite the task contract or success definition.
 - `pre_tool_call` enforces the mission permission contract in supervised mode.
 - `post_tool_call` records redacted, session-scoped evidence and fails open for tool execution.
 - Host hardline safety and explicit approval requirements always remain authoritative.
@@ -60,7 +91,7 @@ Plain `/supergoal <text>` does **not** start a mission. Start is explicit to pre
 
 ## Hermes compatibility
 
-The plugin requires Hermes **0.20.5 or newer** and its public generic plugin ABI:
+The plugin requires a Hermes host exposing the following generic capabilities. A version number alone does not establish compatibility; the audited Tencent host is a customized v0.21.3:
 
 - context-aware commands and native follow-up enqueue;
 - post-turn `TurnDirective` controllers;
@@ -76,7 +107,7 @@ binding before continuation is evaluated. Missing lineage or a transient host
 read failure never breaks the Hermes response; transient failures are not
 cached, so the next completed turn can retry immediately.
 
-No Supergoal-specific product branch remains in Hermes Core. The only direct host imports are the generic `TurnDirective` type and a narrow ordinary `/goal` conflict adapter.
+The plugin does not require Supergoal-specific product branches in Hermes Core. The audited production host carries generic turn-control extensions that the official versions checked in the audit do not expose. Direct host imports are the generic `TurnDirective` type and a narrow ordinary `/goal` conflict adapter.
 
 ## Install
 

@@ -1,0 +1,12 @@
+{
+  "uid": 993,
+  "hidden_paths_absent": true,
+  "inputs_read_only": true,
+  "capabilities_empty": true,
+  "runtime_files": [
+    "check_worker.py",
+    "grade_code.py",
+    "study_hooks.py",
+    "worker.py"
+  ]
+}

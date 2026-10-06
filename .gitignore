@@ -6,3 +6,6 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+.venv/
+.ruff_cache/
+.mypy_cache/

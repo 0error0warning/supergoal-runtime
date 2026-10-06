@@ -1,0 +1,541 @@
+{
+  "experiment": "parallel24",
+  "tasks": [
+    {
+      "task_id": "bn-fit-modify",
+      "image_tag": "alexgshaw/bn-fit-modify:20251031",
+      "image_id": "sha256:e22baa862c29eb5076f82ba45527df74ce0b393a03ee6c08697279b852acd354",
+      "repo_digests": [
+        "alexgshaw/bn-fit-modify@sha256:5aeb11ca6e802b83816c9a31f055ac9d028309a853509400c2e3139ac2d8380d"
+      ],
+      "image_size_bytes": 651157517,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "647d14a74c316f554dbd6eb70dd5da79b347eb8395fb5e92bf5ad8319faf7919",
+        "environment/Dockerfile": "8b0b1056e9c66c01a14a3d79332cc425498f2926b6deda13d200591ee5e5e6cc",
+        "instruction.md": "5f5207ce23c375270c26719fb66d89843bc88cf1d40671ed87c6b7bab4d394e5",
+        "solution/solve.sh": "813eb810cf041466468703ef14fdb06ada533b9accddf774eecc7a7191d5cb79",
+        "task.toml": "6493f7162da424a4fd95da721bd3fd1ce7e5dd26e792132cb9c46db536b67090",
+        "tests/test.sh": "ea2adeb779621e9625d1f80a17f9d19b6ecec017b8ad8974b668a4a0fbdeb4c3",
+        "tests/test_outputs.py": "364069f893e336a021c907dd0ac11ff4c9e7ca7b4fa7ab506c360166960e455b"
+      }
+    },
+    {
+      "task_id": "circuit-fibsqrt",
+      "image_tag": "alexgshaw/circuit-fibsqrt:20251031",
+      "image_id": "sha256:133688d2a04ad9fd39267badd3d61ac22c91c09162d682e44d4396b3445123ab",
+      "repo_digests": [
+        "alexgshaw/circuit-fibsqrt@sha256:29783439f529eaed2145592f15af7a2281161528860392a382c825489030ae3a"
+      ],
+      "image_size_bytes": 392035795,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "201f7c889dd6f73dd83ca078e347272b33720fa622f8c757ea6d5770453f4cbd",
+        "environment/Dockerfile": "780c23986778f3e5f842567868af30b1135ed095ca9449e1c90b7f0e0483d3d4",
+        "environment/gates.txt": "032786f94f16605767c62bb61ce4dbba7ab7d3f1046712c975f01c9a04b6ad29",
+        "environment/tests/sim.c": "700645ac6156cdc88ec1e210f7c7d8d9969bb42aec969c410597e8efca796173",
+        "environment/tests/test_outputs.py": "6117b8edb7d567b30e32b16a9244bec4c131ec01e9065d52f6f53f87e36f0438",
+        "instruction.md": "a7f500266a878d04ac9de39fba76220cfad216d8f6b8063bba93bebb3d4ab9ea",
+        "solution/solve.sh": "a4ffab4183815a0eb7646abc1de1fc67695014c060d7ff16e8bca9ec94385d0b",
+        "task.toml": "9f5aa1f7ebbbcec90fd109121e9bd509af3cfff6b4cec701bd91947988f40972",
+        "tests/sim.c": "700645ac6156cdc88ec1e210f7c7d8d9969bb42aec969c410597e8efca796173",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "6117b8edb7d567b30e32b16a9244bec4c131ec01e9065d52f6f53f87e36f0438"
+      }
+    },
+    {
+      "task_id": "compile-compcert",
+      "image_tag": "alexgshaw/compile-compcert:20260403",
+      "image_id": "sha256:773582f15daca73360cd02f77d61626cd90ca0ff5b13c474500c41234c7d59f5",
+      "repo_digests": [
+        "alexgshaw/compile-compcert@sha256:f60236a4fe55bbb3c573210fe0fcd91551f4ee97c417453cd4985be074b35411"
+      ],
+      "image_size_bytes": 78138229,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "779a395069649abbc3f69b12f01e83b34fbbea22e31a4b8edd24ddbaeda8e86d",
+        "environment/Dockerfile": "eaad41fb0cbf3534b1b0d2bf73a581634e26fb974fe32a8c34781129e378b6cc",
+        "instruction.md": "d6efce07c47484fcd13c7918f68bd4af6314392de43751c4cad1e62530c2ad06",
+        "solution/solve.sh": "d0836b9f5d1728ab03a42756beee6f04de99103c4b5bd4e0f32b62e56ebbb18a",
+        "task.toml": "1d9618d7178cfa15918a293da126b867f3a7db160e604d4fec369949884dac39",
+        "tests/negative_probe.c": "c62d75fac93adf043086c99deef9badf534d436fb40b96e9fbf11a2a97c5bbf6",
+        "tests/positive_probe.c": "64db5167769099bc3f9ed65478a137b0919981970183618049619dea3ef9f6ad",
+        "tests/test.sh": "dfb119d322a96c724d96a77633dfbcbf99867b934aa4e1b4406089f33d23d41a",
+        "tests/test_outputs.py": "f4cf5200a8011eef5bd74aa776f3f68bc13a053345de581a3b30ccad073e2e96"
+      }
+    },
+    {
+      "task_id": "constraints-scheduling",
+      "image_tag": "alexgshaw/constraints-scheduling:20251031",
+      "image_id": "sha256:65694556a87deb6f2c0f643841d4d4ff3fabd1e794999978694d891ccb24e703",
+      "repo_digests": [
+        "alexgshaw/constraints-scheduling@sha256:567ce5a189f8d11ac461790876e934cc7af38391baf89a78f95f4dafc1fec3b0"
+      ],
+      "image_size_bytes": 138255102,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "d54a690970149e1216bd4fc066b45069c7948c13e3b1ef2a213a74342805f209",
+        "environment/Dockerfile": "7d9aba072a4a907229728b9739c8cf821fc2c98450babd64452682caf3759c84",
+        "environment/inputs/alice_calendar.ics": "5a5d45804bffd339c2479d49e76fe817b38244d14d389afe1de583443808ecbc",
+        "environment/inputs/bob_calendar.ics": "c97e85dbcdd756758f8a80f4db5fd5c1dcacee79298e4d2262f46de5ff680b50",
+        "environment/inputs/carol_calendar.ics": "32a0f8687637df0a12b8e5c56d49c4192bc3e790856943632d70f237c7c1363b",
+        "instruction.md": "342def78177f9bc41bea4d11af679bc385a9dda2ac8a1e425be384a5b7f937b6",
+        "solution/solve.sh": "802d81ec064fad3050bbade95a2f847ac24e0b7f80fa69b0bcee0347dc92fe77",
+        "task.toml": "7b9842de16d74e8faf8c7c0aa03b0b81145941cb12dd322d81ae23fc48607250",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "1422b345ba3aacdfc4184e962811b6379988435896c50d8cf62903e70990c5d1"
+      }
+    },
+    {
+      "task_id": "custom-memory-heap-crash",
+      "image_tag": "alexgshaw/custom-memory-heap-crash:20251031",
+      "image_id": "sha256:7d4d46573a68e9463df7b9dd12cc791d94a310e6a5fa6ab318c368e258de3162",
+      "repo_digests": [
+        "alexgshaw/custom-memory-heap-crash@sha256:1895d7d6240d5fb2ec774d6bfdd1057d170f8d199c15c582e4585d3c63802557"
+      ],
+      "image_size_bytes": 4233672623,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "a06ed23a2c467aa36d0d4a88e5c020b1076cc25b8d483517239658e9c596dde9",
+        "environment/Dockerfile": "6ee81e5a4fa2540443d7f27d577ba840728fc6aab9f301ab7919103673c78080",
+        "environment/patches/locale_classes.tcc.patch": "16951f4a4df6bf253886ac75f5a39fdbc328e415194493f63cb7589a364aa817",
+        "environment/patches/locale_init.cc.patch": "e97f133ceebd86f8881f972e0e45b0ec0a13a9bfa428d8032008707683d54292",
+        "environment/program/main.cpp": "b94538c76887cc2b2ab739b5ac4731cddd0faa8f4a9892a6265c062bbbeede14",
+        "environment/program/user.cpp": "92b203786fed1bf0b3aa1675c9cd2d82b2651170675064da8ffee73b98ef14f9",
+        "environment/program/user.h": "f43d155995a56c22b9cd1417daef7c3b5a976cdc662a98eef0feb438ae1eee77",
+        "instruction.md": "53c68ae14a3c3af9a97c40bfd9bdc30a5d98b37eaa2f69f763475745f70f108d",
+        "solution/solve.sh": "b0b1d10bea1cd5be14a82b35d522df616df1e67028f90d2a6bef90aaa98511a1",
+        "task.toml": "ed474be1983e212913aa8866ebb66216acbe36aef2339ac375d232aa46617481",
+        "tests/test.sh": "70a2b55f0c5757f6b123a216dfd202be4a646680bced28dddcd31fd8959a058f",
+        "tests/test_outputs.py": "4e1cb33f777fa7fb5e1536f9bea9eace6deccd515c67d4f87570adbe692914ba"
+      }
+    },
+    {
+      "task_id": "extract-elf",
+      "image_tag": "alexgshaw/extract-elf:20251031",
+      "image_id": "sha256:ce2d818d338482f97d2dc224b884271798ccd801e922ef08606a64103e08489f",
+      "repo_digests": [
+        "alexgshaw/extract-elf@sha256:6932e4cb318464307eacd497ef8dc617eaf551b6a90231f815ec0b911895cfed"
+      ],
+      "image_size_bytes": 998373805,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "fded9e044b44e8ac84d083f5d915e6f6e4bccfc008537edc1fd2c6cd63feacbc",
+        "environment/Dockerfile": "1c5c0a227bee1f5e2933710f3c9d89848a4dc9353c2516a549196fb18b842606",
+        "environment/task-deps/hi.c": "9f6343607512e0439ba459adc5cbf209691332afd93f39360b0b261afd6cb0f2",
+        "instruction.md": "f1dd8c8fd9f01101d2ecb65665bdedc33adc868abd853b3adf556f6aa4982073",
+        "solution/solve.sh": "c72b1715a26c4eefe4c53934243a1d67f7560b3c126f82d2c98c92870f69df40",
+        "task.toml": "14e2c28fd7cc1c9c7b64ab0db5565899fed538e38c55074824647cacc3f7a172",
+        "tests/test.sh": "84ee50194effb4c72b9cbd0306cccaf0f855f3634227cd8359928722a53bbdaf",
+        "tests/test_outputs.py": "825569115217f1cea7b0f3c7547d60d21e6ea36f587d82cc9dfdd5dd98c04570"
+      }
+    },
+    {
+      "task_id": "feal-linear-cryptanalysis",
+      "image_tag": "alexgshaw/feal-linear-cryptanalysis:20251031",
+      "image_id": "sha256:4adae8befa34922a8cac7344ad89aef223bb7758956070a12641e64fdfdd45d8",
+      "repo_digests": [
+        "alexgshaw/feal-linear-cryptanalysis@sha256:ea78749a8422c6228d26c8753f45906a6a2df089906764b7e3c3e27e8f718ee7"
+      ],
+      "image_size_bytes": 395026610,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "a038645f908b4e011e9c5526b73aaa826057287a4cf3237b205f4e38f6d3dc33",
+        "environment/Dockerfile": "ef521cded1b5e0e9a11a6aa9c758e4474f2160e641fb9a177a20cdc728bfff1d",
+        "environment/task-deps/decrypt.c": "4c6864e0d3a76626f1a7af1383e6826a85bdd1e7e373215741ece4f50a94ebd2",
+        "environment/task-deps/feal.c": "bbd38d19f976b27e5a5aff23e21ba5f0164335397928ca05220379552dea08da",
+        "environment/task-deps/gen.py": "3a71f0b5d9095440bea31bced5ea4fc8dd4cff0ae4226ea0400a3bfa7c452c63",
+        "instruction.md": "a2f1669d4067af6c7b8ac05ff7d5849ca5df68397c94701645c4b9a3b6f71b03",
+        "solution/solve.sh": "be50ae01a3ea850a6dc4bc99dc130d0b7ad37963c85544a02b03a4f5da29cb77",
+        "task.toml": "a39ec2c427af534c96c719dc87f70eb536956b487ce909d04b6365160e7c9fc4",
+        "tests/test.sh": "9431cbc2bad2b690001e096218ecd3f7f2f241b415062a2ea1ec7083d2e7c9e1",
+        "tests/test_outputs.py": "f59ebc7218a648582483cee02556c3bc1235e186301376bc3be066ed106ed9f9"
+      }
+    },
+    {
+      "task_id": "financial-document-processor",
+      "image_tag": "alexgshaw/financial-document-processor:20251031",
+      "image_id": "sha256:d53ef35af0ce9ed2f68741a7175355c731bf170dbf35971166a906b61e4c647c",
+      "repo_digests": [
+        "alexgshaw/financial-document-processor@sha256:ef6c9cfaaf14cdd200163008a188d5baa9f626f3bfb8d3e7d6f30c08518e6251"
+      ],
+      "image_size_bytes": 128083778,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "32438e7780d235dd609f4740e36512c4cd2f34ef26842ea52c5bbde46fcf5e86",
+        "environment/Dockerfile": "2ea485aead008998d7a551e8c80b6bd354a74cbffc310a1f4b88d0b7c53d23ff",
+        "environment/documents/1t2tala7.jpg": "d5fc89cdc92240baa7fc6506237e3841af88880a6f57fa6e3f60b925e605fd22",
+        "environment/documents/41ibljh7.pdf": "bc95a144939b7f21abd832019625a3f2c182a7abe8d57f9bd25e7c6f5d6b3ba5",
+        "environment/documents/53lc58dr.jpg": "2c8607b9c75907077e23f45ce7bc75335a4a46e9f9aab5ee0d901b86b63e7a8e",
+        "environment/documents/5lxo6qji.pdf": "0b3873d45510867d3063637d01f8e9255c4be96586b1f6b06682a208877d441c",
+        "environment/documents/8mdd4v30.jpg": "56238d4d934c433c24e53d0674f0530e11024f284e8ffcb3bb0bcc0d58850740",
+        "environment/documents/9t84azyt.pdf": "d46a7397df8e7903ddef31b76c1633c4989f09b8c301e0cf87dab00cd08a4663",
+        "environment/documents/c11ertj5.pdf": "570adcb1be1800cca727420b543e9c68bb7607ebaddf80524c7380560e549434",
+        "environment/documents/dbdw2pcn.pdf": "ad8f14ad77a98d0926a68d17e5ce822c2f9d3a355ccf4a6b1ded5327c31cbb87",
+        "environment/documents/g0fn9xuy.jpg": "807a6b0b942eb2ce406db3c57a833bba539e165017c81e2b1a0a98104d213677",
+        "environment/documents/hv3a3zmf.jpg": "c212aa5440b23e4b5e97af3c271685769b1050edd73a1ee461acce2c5998eb3c",
+        "environment/documents/jxepq85j.jpg": "a51b4a78c278c1b755e674511729d8514681b94094a4130c457ed71c533a0083",
+        "environment/documents/pbhsahxt.jpg": "badb1930a086c35b1484463098cbfb7823beb21abae71a9fe95bf90807fa9e41",
+        "environment/documents/sg65kxvf.jpg": "53d8335a156bd0b18bd1808693cc805c39e013d9768fd7eb7497f22e18b1c5cb",
+        "environment/documents/ujv6oh9s.jpg": "ad3359faf1126b33fc587098ed3f5b722734eeb4364794eea66e10112014f25a",
+        "environment/documents/wnnhj7xv.pdf": "5ee01b997176b9124302899471651ce4d4b160f292caf79f2250e2e8324e3480",
+        "environment/documents/xaji0y6d.jpg": "e0b8a2c7078efe82d7657f5023f01ff5498d59cca54a74ef2b6983bc979a1c54",
+        "environment/documents/zbikcidk.jpg": "862f7d313f1233f3e44a89610a4015d861dc771ad2ba8028ad56e2d4fd37ac71",
+        "environment/randomize_filenames.py": "09828ee53e8f2165a9888c5de84e40fcb057bb889d93bfc90d9aeca8c4e23be4",
+        "instruction.md": "b21cf2af1891922732327bf586d14b250d36d96de7867479c15bd1c58ef0db58",
+        "solution/solve.sh": "8d7ca9ab25d9334c045b72e1045131a4b0ea5f5e4e99bff52be9d5da910f7dcb",
+        "task.toml": "163ee252895c05d36ca37137dba4d6c24b46be28d56ce84ef8bb35bb5b894bda",
+        "tests/test.sh": "48abbda713ace5cee00dd28c7398959f28280062350eb88206a6697a28c72790",
+        "tests/test_outputs.py": "978f506ad5c1bfaf28f9bc774dfe4347d33d046ca009b8496eb513956b7f5a9a"
+      }
+    },
+    {
+      "task_id": "git-leak-recovery",
+      "image_tag": "alexgshaw/git-leak-recovery:20251031",
+      "image_id": "sha256:ac4c027aef4e069789e75e13a1b03b9cecb5f42faef5c828cac183d25ba08fe2",
+      "repo_digests": [
+        "alexgshaw/git-leak-recovery@sha256:62160e522a4238b8bcd522411ea97b5b200f811e5899d34947e66809bef7e586"
+      ],
+      "image_size_bytes": 217451781,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "8914c63fc4edd7dd3636f3c6572840908d957cca50cfb8a8849e55e1041b2cfc",
+        "environment/Dockerfile": "006bf5d2e3502a059f9a87bc855a7f85d6c40c67bf8a523dd3f1e9c6f64cc112",
+        "environment/challenge-setup.sh": "a0a19652fc595b0bd06b6970e1d6a455bd4c50991c2ffdcc37fe5b66452b23e2",
+        "instruction.md": "54ac693fd26a4c003f610d62c4b2671f1d1d04ac5b1286f780605e385a9a5861",
+        "solution/solve.sh": "791a7eb23019ee7c93307b35cc77ea334469c4d3688e1171fe1e5ba6fd9a14dd",
+        "task.toml": "d7f23fda4a6ba3fff902d2a475db8ff74feb5d328980696a77068c02c57d3044",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "dc7b01c1b9dbb0c123def54b146dc1dd399a600edee5970d043a5db5eac4c775"
+      }
+    },
+    {
+      "task_id": "install-windows-3.11",
+      "image_tag": "alexgshaw/install-windows-3.11:20251031",
+      "image_id": "sha256:c476efafe0214c2c6263fcbc0b2ed0b67be0b19c053bd7c81865cc4786f79e5f",
+      "repo_digests": [
+        "alexgshaw/install-windows-3.11@sha256:c6695097316ef8810abce0545e347e65354aef9d51d4f7f662c3242e742f6a3e"
+      ],
+      "image_size_bytes": 1546518201,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "4e1cf2e366053462ad289fabd9807ab81a2741c178e9e65c383cf3735fabefa7",
+        "environment/Dockerfile": "91aa5335320f7c7721835eb6838bb878fd22cd6a6af50ced1efbc2696dea8dbf",
+        "environment/etc/nginx/nginx.conf": "4feedc03c1686f47ce5c38f040d80cf897252632992d55add9ccc3fc70141b1a",
+        "environment/etc/pipewire/client.conf": "572ac2493489eb686e4e1b901775a945df85c84b5b0de1950b9829e389a66c82",
+        "environment/etc/pulse/client.conf": "877d174652a7e8e90c029216de74bea9ba9d8c3545074091847268835d7e6143",
+        "environment/etc/pulse/daemon.conf": "b82fccfb6ed1182b188ddc170c08e6ff09975888d3d2484e726980aae560585a",
+        "environment/etc/pulse/default.pa": "793345aa3fcbad6a3ec6b727abf884ad6480242530af92762787f88ae62e2b5d",
+        "environment/etc/supervisor/supervisord.conf": "4cc4539ca8fb8e7967f7c5e8b561485079b6710cd9bfec1bac9a0e8f1b5e7dd7",
+        "environment/isos/.gitignore": "240a3e0d37d2e86b614063f5347eb02d4f99ca6c254de6b82871ff8d95532a7d",
+        "environment/webaudio.js": "64fc61d7aff9c7a75dcabade403fb8e033f289c0c9a97dde83f6c95d521d33fb",
+        "instruction.md": "6757fff2157378201478ef17ff3da4d4992aa586fa577dd518c63b98bb1945c5",
+        "solution/solve.sh": "68a9221b9a29331b66fd34fccd71db71d2b5a720e917f2ef95f4a8a542a71ee4",
+        "task.toml": "0485184bd16cc74883396115d93520bd25b36d23d61e248da88c0dceeab2eeac",
+        "tests/qemu-control.sh": "42c251cd17147e31ed46939248ecbaa95f153cdb86c38e4f1bf0e991156c82bf",
+        "tests/test.sh": "8c7a299c5ed8338d8d4f8a65db62d56c21496e62fe66e90719e417fd99c9423a",
+        "tests/test_outputs.py": "3db01d3e273a589651f63a5275978b238f6182317276513c5f6a8596375799cb"
+      }
+    },
+    {
+      "task_id": "large-scale-text-editing",
+      "image_tag": "alexgshaw/large-scale-text-editing:20251031",
+      "image_id": "sha256:4ca0b429596fd62b9fab0a787e276ee7ee3faf2761b56473232327218c462c56",
+      "repo_digests": [
+        "alexgshaw/large-scale-text-editing@sha256:719adca3f1388220546ce6a155eee56eff3c4fe318183100320606a210f6b59c"
+      ],
+      "image_size_bytes": 251687067,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "6eff0990be57c2c2e9a1739152a188e3da911c6b7687ed595b08f3898fbde900",
+        "environment/Dockerfile": "609759efe5a6bca4c0f4d0011dd1dda814896ca6873ead803af68d92b92d8aa2",
+        "environment/gen_large_csv.py": "167daab578dc75ba1385c40492037f11708b06ea4cda836cd05f12017ae54654",
+        "environment/tests/gen_large_csv.py": "167daab578dc75ba1385c40492037f11708b06ea4cda836cd05f12017ae54654",
+        "environment/tests/test_outputs.py": "f5e69f4fedeefa23197745888a5847161529f454e6b5c32a4057363d9ae4cd43",
+        "instruction.md": "2746a16369b28b2e368ca168bc85222811cbe570f3b315f1b1c432afad07ddc8",
+        "solution/solve.sh": "a4fb27c7fa4cd4da26f7fbccbaaca24c290dc41ab9dbbb6e1dc916e72743c55d",
+        "task.toml": "5c9488e80c1186f72efb8193e6be13c74eadf334b3846db2e794d24513a88f5f",
+        "tests/gen_large_csv.py": "167daab578dc75ba1385c40492037f11708b06ea4cda836cd05f12017ae54654",
+        "tests/test.sh": "e5edb6fcd43d7e638ffcf64522c11185a8355afb5daf6ad805cdfedd47e9ceb3",
+        "tests/test_outputs.py": "f5e69f4fedeefa23197745888a5847161529f454e6b5c32a4057363d9ae4cd43"
+      }
+    },
+    {
+      "task_id": "mcmc-sampling-stan",
+      "image_tag": "alexgshaw/mcmc-sampling-stan:20251031",
+      "image_id": "sha256:c7ba1f1f9d2df36db0338e4d1e429692aaf653ef6faa13dc4694a7c457593d6e",
+      "repo_digests": [
+        "alexgshaw/mcmc-sampling-stan@sha256:073fc36a3347b4f6b43bd6e98339542c41ed531c771af8bee40ba10f00cfabaf"
+      ],
+      "image_size_bytes": 585361375,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "7ceb422dcce4f2dff58587c4011a43b1a268c0982022c0c0b1687b75eb124acd",
+        "environment/Dockerfile": "f91f9c77f711229a9757a1fc2b48bd547163c342295e6ca222e86cfd6b4bb385",
+        "environment/task-deps/data.csv": "418728ee9bc32e14ba3d39ab5151031b5d88393dcd8c4a4e7f7a2e6a14c14b22",
+        "instruction.md": "5554ddc6d7b069e965eda4936cd02fce45ed54f51cf38045e6c51aeb39bed943",
+        "solution/solve.sh": "1d24eeab0b65b0c6a81d300e4aa88c158ad36db2eeb0b684ffe458f01c436d87",
+        "task.toml": "c1c0351670499e15b3818f7394894e2789f74fc2a61ea76eccab826c1a951a94",
+        "tests/test.sh": "349d2c34617a2959783847c9ad072396c0b119122258ca40cedf0be1db2c9a3e",
+        "tests/test_outputs.py": "07e877edc933e3a98fda4a192eefb90addb41632c950773e83ecf5e97e839680"
+      }
+    },
+    {
+      "task_id": "model-extraction-relu-logits",
+      "image_tag": "alexgshaw/model-extraction-relu-logits:20251031",
+      "image_id": "sha256:cc17ca081e08612a89a3d185fc4af6735ee2a08eaeb9478f8b2474392c4feac8",
+      "repo_digests": [
+        "alexgshaw/model-extraction-relu-logits@sha256:52fe1f089f38650f0dc22d7531ee6e01ebd526de1b349aaa2ecb331dca9fabce"
+      ],
+      "image_size_bytes": 211592745,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "9465accba6c57e5de9a196eed776a16eeb0852a8afc18fc3f8979e2de71b0c7b",
+        "environment/Dockerfile": "598b1f80d3b7194e97cbf02c8d245de30e303909e0cbe6465125d1d3179fddb5",
+        "environment/forward.py": "af1a23efd8e4390d16a29777c28116b2f8623ae3f7b628fe14db9f94dac26f5b",
+        "instruction.md": "c9e179dd099065a34c362a865b0eb9fab5f7d96be582cf117e7519580c036ebe",
+        "solution/solve.sh": "4cea5094f074ff21453d4423aa1b415a104ed90caa55a4acbb4f09941a3994ea",
+        "task.toml": "eb64dfaf8ae88868911ae28855cdc4f767de464001e2704919015b595be6dc29",
+        "tests/test.sh": "3b2d8f5e0353c2bab3515d6387468a863a4f9f241ee131c73f545f3fdf9e2d52",
+        "tests/test_outputs.py": "e5189c7eb9942ede55e1b48a80388590b80a486b75497613f257b3373ad9b2c9"
+      }
+    },
+    {
+      "task_id": "modernize-scientific-stack",
+      "image_tag": "alexgshaw/modernize-scientific-stack:20251031",
+      "image_id": "sha256:725e815168e64c91e9b45a71f3c989d3672b510647b98e7392c0bf9e7dc203c6",
+      "repo_digests": [
+        "alexgshaw/modernize-scientific-stack@sha256:64e69cee13bf6b0b9016e735b51891bce996a60f1e2d1a005bf12c949e221d71"
+      ],
+      "image_size_bytes": 1022837026,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "0a95c878d5737dedd3302b08894dae3dfc322bdbcedf3606e8fa5f2d04789772",
+        "environment/Dockerfile": "cde5acd6f59b6680c32d8faa6a753a806ef69bfc1d9b60e7dd6a4ef63503f0e4",
+        "environment/climate_analyzer/analyze_climate.py": "112e26265c2b7a579403c9690f5d58cbc1bf59468bfcb7496e4fdbec9a565dd0",
+        "environment/climate_analyzer/config.ini": "6ae640937b468eea85f75a4c2e4583a0f474f71d3fd323672a2e665ec37bb8c9",
+        "environment/climate_analyzer/requirements_old.txt": "64dbcdcfaef03141a6ad0da4551c841cb75b2fc38e500eee205137d69e0ea759",
+        "environment/climate_analyzer/sample_data/climate_data.csv": "97c2b98ec5506c1d31580ab95ae24588c1badb85a07a69b52500cb5b662e3e0a",
+        "environment/pyproject.toml": "61af7819ffd0080a50f642018b889092b52006995429f3c19cd394b8af86f755",
+        "instruction.md": "666b8ac370ae81b0e3780a36e722c91b0f986fccbdc6ed36ab3bd17e6943da0f",
+        "solution/solve.sh": "8f92baa6d2f2318e3059f094faa9ba0c94f939239b3f93ab2803a20f8e84fcd7",
+        "task.toml": "a3029f3d4caaa1f08bd1b45488247bf8cb586bf1ce69717acf1114d20f51eb48",
+        "tests/test.sh": "e868c85466ebf4815e2e4efbd252bf50ad979bceb14325a9377b1bbf852f0281",
+        "tests/test_outputs.py": "0c24195ff46527764c7f8ceda9c608a189ab4a01619282942fcd27a2ea02a977"
+      }
+    },
+    {
+      "task_id": "nginx-request-logging",
+      "image_tag": "alexgshaw/nginx-request-logging:20251031",
+      "image_id": "sha256:41217bae6667f04a767dc1b2c5c12b034dfc51a18226202003313aaf86832055",
+      "repo_digests": [
+        "alexgshaw/nginx-request-logging@sha256:693e64431a0dbf45952e8b91a298d54fd60247e501c6623fb8fa3ebc07fc3d3d"
+      ],
+      "image_size_bytes": 158785504,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "d79997586d1c14ed8dbfea050e3580b25500e04c8345acfd3f294152433c795a",
+        "environment/Dockerfile": "43003466d89ab83484a3fa618e35b58cdb74a002b1e8716ef30f12b3ac8302d8",
+        "instruction.md": "26a7ac98aced6107f147206790ada77bbf8ed3c25fb360cf323d5fc6889edf99",
+        "solution/solve.sh": "2454bbbf7c201a9a778165f286373ba2cb991a0eb1d026a8005d57ae71250dd9",
+        "task.toml": "b7a78d00be13656f75069197100b7b8c4fd268decf6f78929c853b3222a2729d",
+        "tests/test.sh": "27761195f53cbfe5941fe39b573631f6c926869e64b7c43220377e1e116528e7",
+        "tests/test_outputs.py": "045cc716c14efde3b0dcff5fc7c85ec5d18bfc6ce66f8b40a418fa2a3a4acda0"
+      }
+    },
+    {
+      "task_id": "password-recovery",
+      "image_tag": "alexgshaw/password-recovery:20251031",
+      "image_id": "sha256:9a77f7a2317527330ca8403b1826a283c8ca7d39fd064022cd9285e6e8cd2d7c",
+      "repo_digests": [
+        "alexgshaw/password-recovery@sha256:15fcd84bf3b06270ee148211cc6da6599b13ec2f41ac1d0894cf75c2225872ee"
+      ],
+      "image_size_bytes": 190422777,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "122bf15ef4a6ede562f21453f9f1c452fc10a3048bac7d46a013adbac6a13add",
+        "environment/Dockerfile": "6fabcb9e1fcb7155bf8cfe106c17f2dfa3344103e97960dab580c2444b6c9fe0",
+        "environment/setup.sh": "9fdde5d9cd74ae0d633bdd59e7249cc6d7385d27a98b1e2dbbeb11b05a6f2af8",
+        "instruction.md": "bc4f501148805bbccdb94a5c5b745f1ce9564f04ef0fe36bc37c3ca20b7810a5",
+        "solution/solve.sh": "c5f9fc70b6bae40befdd0088dde1a3bc6e909852c9fbb36a617c627b7b8d804f",
+        "task.toml": "cfd0362d201b957796f9bf1c02cc75646250cb2bd107ec88c768bfcfd091b24b",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "2dc14fc180734b6fbb0ee00f27c4f866071247b57a2217f579465ff8ed3bfc9e"
+      }
+    },
+    {
+      "task_id": "portfolio-optimization",
+      "image_tag": "alexgshaw/portfolio-optimization:20251031",
+      "image_id": "sha256:b0ef263fdd85ca609faafead645c86c8a03f534178b3368e3eedc0a273b3fed9",
+      "repo_digests": [
+        "alexgshaw/portfolio-optimization@sha256:93461db3cec697c31585941a3b9387c1398495aa1ff0aee2ac752c7230b50ef8"
+      ],
+      "image_size_bytes": 579678690,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "c68dbd80837bc72dc6e66eb945cecc4c187f6a7154ae4f331f17c0c7255e4d4b",
+        "environment/Dockerfile": "3d0210dedc3a9c0a7956369ba7025fbf6cd4e1bf9eb556bd3a8cbd06092904e6",
+        "environment/benchmark.py": "64b6e7a40f79ed90a550bc15249ebc09babda14efe04a85a3cf54acd7fb4819f",
+        "environment/cvxopt_benchmark.py": "c49315473bef2ebaa7829ccec849b31d964f0a5a00492a515952d1db5ffebdbd",
+        "environment/portfolio_baseline.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+        "environment/portfolio_optimized.c": "42bd3baf5bdf3c8a8052a0d59ed0e2af72b64adbdb4d6fdf85bbaded36c3da41",
+        "environment/portfolio_optimized.py": "e289125b4113921152117280a49a0294430bd1dca76f1515c7d79942cb41f5e5",
+        "environment/setup.py": "4712ead66edc6684c45880954e83d8b9a915bdaf0b60ebb0ee895a5b740a4c09",
+        "instruction.md": "ffaadcbf9f576b5d5e087d2a06a4b525dd52c6b84d43eb9d85107f0a9aebcb5d",
+        "solution/solve.sh": "c9291da2bf6d504896b1259bf3d896c7ca29d71630975c49493805f758d138cc",
+        "task.toml": "4918687e4e261a9852e39e5a554156733c071c17dc89c5f544f15f2ef744ce0a",
+        "tests/portfolio_baseline_protected.py": "ff86bf940cb78cfc212c6788a04e81ab0a33ce995591608d114004b96b17d174",
+        "tests/test.sh": "25d5d5008edeab93d730b44f723687d2b08978f9f53750f62af8aeb1ecae90c6",
+        "tests/test_outputs.py": "800fc762b0a107b197d17cc2c094858490f02f09f47af4e3ee84253594f97fa7"
+      }
+    },
+    {
+      "task_id": "protein-assembly",
+      "image_tag": "alexgshaw/protein-assembly:20260403",
+      "image_id": "sha256:2a47b0bd852b71effd01caaded10f3897b25712c8b87b0921a5f67079338ac5f",
+      "repo_digests": [
+        "alexgshaw/protein-assembly@sha256:602c467ae6b661a73441b960d9fa7130f068f4c6041d37ef8632611733d83f4a"
+      ],
+      "image_size_bytes": 120506894,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "9e407b843058b4c69fcc7e27f1549f5a2667b5c2d353a8d041a596e1aaaa4783",
+        "environment/Dockerfile": "fad40752bc9fd32d60b946f076a03207fe9924cd71d7285ebd96a5e343808054",
+        "environment/antibody.fasta": "e0e13645b299470cb007f1daf13050010bf15cb7c22ff6042189ea1ca7a1c333",
+        "environment/pdb_ids.txt": "ea338c4e1a776a338d7d302e80ceaee6379c1c85a031448851c07b0f764358c2",
+        "environment/plasmid.gb": "c9e31ad0ebb4d14b3820e46678c336d1f77af6ab1da36c53b5e9a9f10676cd74",
+        "instruction.md": "1bb2af1d85e9a823a8ae7273a87df8a3f67e2c93b06cddf34f0051a8b003f7c5",
+        "solution/solve.sh": "0a6622bc3d0342f95cdd838eb61a965a896c5f2cdb9b98e0410465b50fa15502",
+        "task.toml": "9b91f32925035fba7b5a1db16c7d4ed650a117af145d3d3f8e514cb4b1e970ab",
+        "tests/test.sh": "9ede46648fc67c9ce61975503de3e0fcff0b0fb110adc0f9e1d240a608c267b5",
+        "tests/test_outputs.py": "44a05a2482aa7a8e70de95478de6560b6188e630336fca9d02b62dc69a096582"
+      }
+    },
+    {
+      "task_id": "pytorch-model-recovery",
+      "image_tag": "alexgshaw/pytorch-model-recovery:20260430",
+      "image_id": "sha256:038b41ad0d7a8bc956173db3e27d7460dae907d859b844b4df1afd7826cdb114",
+      "repo_digests": [
+        "alexgshaw/pytorch-model-recovery@sha256:7c2bb52851cef25bdc3939e473496d25fbf11fd0cb7ab58bcf3cefcb751cdc0e"
+      ],
+      "image_size_bytes": 928879304,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "e080308a05703b40edd16f53aea41a0e6b9874750ecee35bb432029d0d44bf53",
+        "environment/Dockerfile": "8a6b7edbb9e7c241e447f15a71e13e5d043b25169be2fd9802b84f5be3d56eb6",
+        "environment/dataset.pt": "6db65e4ec1c0760209c2dd997ef582e4a1519ab38e0312339999c460a696960d",
+        "environment/weights.pt": "71471e71c5a311a897362dd5b77413e7ca2ca59abd00a110bdc2cd3f8584d080",
+        "instruction.md": "2bef07dc28be3ab2c35ae389584034c2e4dde92c2c31b3eb6bd829628c8c3f4a",
+        "solution/solve.sh": "175a7802777b43e0fa4f629d71f7c68fb40706813c342aaddc72108d89bd5b2c",
+        "task.toml": "851a51204f53482a31f47cdf8833128cf421113b0331011286940fc857c37dfd",
+        "tests/test.sh": "6005f3a75ccfe00d7bed1005264b4a84a1f8e30cd780f8a97b3a804be7cc7a8e",
+        "tests/test_outputs.py": "5d4d57c43e6913bf3d0081da764ad36d1b7275e3bb114a05abda529afe563905",
+        "tests/weights_gtruth.pt": "71471e71c5a311a897362dd5b77413e7ca2ca59abd00a110bdc2cd3f8584d080"
+      }
+    },
+    {
+      "task_id": "query-optimize",
+      "image_tag": "alexgshaw/query-optimize:20251031",
+      "image_id": "sha256:5654e241057913a0f1a234583c62e12ed7bfab560d9c3f0dc5da985d9f3514eb",
+      "repo_digests": [
+        "alexgshaw/query-optimize@sha256:28de7da87004eab5b29bd5eaf1823579bc5b73ccea4b80349a5623185770da14"
+      ],
+      "image_size_bytes": 248393891,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "a82c53e333a0ac0b0b410b5e26cb8e7305dece31db84d340248ffb13d5a45160",
+        "environment/Dockerfile": "064818771f200e0517d22068f87229a7a95d0a82b0778c84ca7203bf1926a0b8",
+        "environment/task-deps/my-sql-query.sql": "43382792f0f438625d643e34abe144febd5669518f4ab1ab550a15c6d9314a21",
+        "instruction.md": "473e12d320d2732f679fb631c2a4dab4a01deea6775686718ae0c417b8a39447",
+        "solution/solve.sh": "0d95f3cedb287ff9d47c796cbaf812c300d1222c10fa80c49e8acb0e81eb6978",
+        "task.toml": "6e88f2a86df699594bcb1bf81df4ed694505f79c9420f671335b02524bbe3868",
+        "tests/golden.sql": "4da1885d56b3ffa7b7b22b422996d018795611f6963499d551582881b74b84fd",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "2068ae80c57af8d52a7ae510f0666732c057806e556b480970f36f14bae683f6"
+      }
+    },
+    {
+      "task_id": "sqlite-db-truncate",
+      "image_tag": "alexgshaw/sqlite-db-truncate:20251031",
+      "image_id": "sha256:33e71d5cd2768815d8c822af32020cd12ff3b0c35f4609dbd65523d8ee98d358",
+      "repo_digests": [
+        "alexgshaw/sqlite-db-truncate@sha256:aabac93c93bd1f310e6a6fb893911d7735026ed18491c72133c9196a09092ca4"
+      ],
+      "image_size_bytes": 120335974,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "73864a0c6f3b1b56cdc6ba55dc93132936fbf79d0ea11b853efdde4620f746cd",
+        "environment/Dockerfile": "49ac9305c360f117c10c940b5d036a76fb4a29a0f4302e7d75e573c352db0aea",
+        "environment/trunc.db": "a7f00ee232fe621629dc014eb2619ac793131843ede1fd892f3b8b7e17332a5b",
+        "instruction.md": "465c135cd80be49023ea3ecf8f1d840c679b3a960efe425d510894e417b9d802",
+        "solution/solve.sh": "6aa341ba5e614aa5ef991cdd2d398da1c5833b80123795d7da87ea41da431a04",
+        "task.toml": "56061acd75d9933aa554aeb249b85d7d081227fca1b71a3da7e3dc97a675723e",
+        "tests/test.sh": "4770437ea96c3cc84684b4f99d55fb148fcac09f9ea1e8ef49de487716e6c334",
+        "tests/test_outputs.py": "8f5bc11018687d8c5894ebf1b4ec6fad004828e5ce442d3cc04d925ef53ef881"
+      }
+    },
+    {
+      "task_id": "torch-tensor-parallelism",
+      "image_tag": "alexgshaw/torch-tensor-parallelism:20251031",
+      "image_id": "sha256:fea44fb62b9c5cf7bb98548d09f2d5f3cb564773e9ea2688bcd184390c247dcf",
+      "repo_digests": [
+        "alexgshaw/torch-tensor-parallelism@sha256:c50ac169e11465f41b49749fe87e4487f24d31a0c39c0906cd3242cc5499c690"
+      ],
+      "image_size_bytes": 78122856,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "4c1b3c3be30548f1f94c6f5503b1bc74b006af7f192dc4cd026f411df1a54604",
+        "environment/Dockerfile": "5f264ff0bf62a49aee3c6398447de5108df141e7a2ad35c6de8ef39fa62049c6",
+        "instruction.md": "13bde2ab165d72a311e2bf066d5d6c3c8761bf9d3dd39d1b23eda23bc546b910",
+        "solution/solve.sh": "d083b7cbf9dbb6cc2ff38c8f2acc150f0059c04aea42d6c2183aeaecc5a19385",
+        "task.toml": "72fd2a5500d1fe8795dcae76cccb1a29fb25894881a7475f2fa519c87d425a8d",
+        "tests/test.sh": "a7e6c9408b2401e4e7448371f7ddc72f3284caccfb56277d3cd4e98051868cdf",
+        "tests/test_outputs.py": "4ae4285e15fba1fcf13d7b7c0638ac8c2e2b0797c937abab1fb6b136fd508290"
+      }
+    },
+    {
+      "task_id": "train-fasttext",
+      "image_tag": "alexgshaw/train-fasttext:20251031",
+      "image_id": "sha256:ea991ff9add049c6956d2501b6f38fc612948cb30edaf8f6d61f63f90808272e",
+      "repo_digests": [
+        "alexgshaw/train-fasttext@sha256:3c77da9617e7fa577de04aef73fb1ac3114be32d7ffef72609c83929d842b157"
+      ],
+      "image_size_bytes": 836419522,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "aa0cf1639861ad35b9def59aa32fcec36463e795435161a68d576595769131e4",
+        "environment/Dockerfile": "330e419b0c5cc46cbf749a9f4110cfc92dc55ddfabde36ffa39b0a9c49bb82e5",
+        "environment/reformat_data.py": "aeecff97fbee11c1fea50e3123bcf678a05326be0fa517545e6863a4c704b12f",
+        "instruction.md": "b701c31f4c5eb6f7e9a6b74d62a52eb696dcae9548a8252c78c0fa850714f998",
+        "solution/solve.sh": "431b8fce223717cde4b934aeb565823acdeb2f9fba8be662ea2dd3fe716e3779",
+        "task.toml": "994fda7c3081bbdd9f6d05d6279ef64faefa94c214d1e08fbcea656540e4fe91",
+        "tests/private_test.tar.gz": "8397bce0c447bca9b73ea66a0f258143701817c4b850fd905166c30a61d2d0e4",
+        "tests/test.sh": "22c8b907ea8e19ffda8c10f4433e0e6ef9a74db0f0f4c61ed59c4035645147df",
+        "tests/test_outputs.py": "c5c6b10b89b5224dd1979e1b5c0f538ebd49b465a7aa3af4459c19df7c0fb4b0"
+      }
+    },
+    {
+      "task_id": "video-processing",
+      "image_tag": "alexgshaw/video-processing:20251031",
+      "image_id": "sha256:48c2f3683967aff593e02b1ef5b138ae5e4db7980bccd403ea550694b6fa8e43",
+      "repo_digests": [
+        "alexgshaw/video-processing@sha256:a2c0f39e3ab04e67ac6e49cad9167bb0d987babe32511768c01aa0c6905a875f"
+      ],
+      "image_size_bytes": 715770905,
+      "files_sha256": {
+        ".gitignore": "9a8dd8d9b6c3adb8e9e56328df27deef859a3e98fffc9b8133c8b22207c25953",
+        "README.md": "52207c57073009fd3aa72668b1f2e8b2527b653a0af1b7374b1bbcb161bcf1c0",
+        "environment/Dockerfile": "d251d457e6bfb182afd6e2aaf209ada81339fb4415d3913c9db171a8995393f8",
+        "environment/example_video.mp4": "69ac53c9b4302225e3bdf5b94970e29dade7d800ba07109c2691604b2cac69ad",
+        "instruction.md": "15936f5e61823ae4794994d6e1b7e4e776b40968ea382405b868c501dfe032db",
+        "solution/solve.sh": "6db47fdd921f40b338685c1144bcf763f259304ad35fea5a9c69b04eef30bb89",
+        "task.toml": "be4fb42fccc5faa4862789cedd2c560eaa5758a2971989649a6dafeaeccc17aa",
+        "tests/test.sh": "836bc8f77561680c6bf5b3f76905da87e8a2315e2885d36c3f9ee9a29fb99ef9",
+        "tests/test_outputs.py": "09b32dd6eb55db1ca024f63b4bb7ddc8b81dbd6003408892c175c0b3ffd17d30",
+        "tests/test_video.mp4": "46b237abcaff81c7d3817f2943da1b913f4ab0106d62afb4be73f67259f09c7a"
+      }
+    }
+  ],
+  "selection_sha256": "ce1e8e18497a6f9f3ef3868164a79dd4297aaa215e6b7dc44db66a0d5281e051",
+  "frozen_at": "2026-10-05T16:12:39.020146+00:00"
+}

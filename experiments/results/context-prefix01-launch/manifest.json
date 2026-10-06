@@ -1,0 +1,440 @@
+{
+  "captured_at": "2026-10-06T01:02:22.644909+00:00",
+  "files": [
+    {
+      "path": "analysis-prefix01/audit_completed_context.py",
+      "sha256": "3cf3255956050e8e66f612d84924747c3042d9120f5a7b47e3348e3c20af9c6c",
+      "bytes": 9989
+    },
+    {
+      "path": "analysis-prefix01/audit_completed_prefix.py",
+      "sha256": "07018e8854edb0b68d27119768aef0adfee9ce9f215a23d5c58c19b6fbb58fa1",
+      "bytes": 7755
+    },
+    {
+      "path": "analysis-prefix01/experiments/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_context.py",
+      "sha256": "d1abe911790ad3fdbf019ac123c8c79fea8960b2945d6985ac9d2e2bbb688a42",
+      "bytes": 15623
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_context_details.py",
+      "sha256": "39cd6f63c40f63572200eb35492ad8914b3a79d64c78b0b849228102ba0addc3",
+      "bytes": 9982
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/analyze_prefix.py",
+      "sha256": "0750ef0e7ec6a64ddb6bca84bd9fbd69a2458a2d3f981f414f04707c0835138a",
+      "bytes": 8949
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/audit_multistep_regressions.py",
+      "sha256": "6ed967627292d35f7b8814b4c53cfb8e7942ef37de72fad233ae7488ee1a9925",
+      "bytes": 6985
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/collect_multistep.py",
+      "sha256": "df5f29340d4feb77ef60b6eb79a86c5d6697baf7f2d1f22ca6f117904a1e7b55",
+      "bytes": 8877
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/context_policy.py",
+      "sha256": "ab5c2fdc0ac20d103e17ae88cbcc255dd1687059c3ac27f2d8cb11297892bcdc",
+      "bytes": 1981
+    },
+    {
+      "path": "analysis-prefix01/experiments/public_benchmarks/prefix_inputs.py",
+      "sha256": "cf8b0380b990fe0f4ed3048b7265dd9e2057d0e2417d5df2612db152437fd5aa",
+      "bytes": 3051
+    },
+    {
+      "path": "analysis-prefix01/finalize_prefix_study.py",
+      "sha256": "ea538778c430c9511a401f63a04f6a64eb7b966937b06f67cc58a972f151a95d",
+      "bytes": 4971
+    },
+    {
+      "path": "jobs/prefix-oracle02-dag_execution/dag_execution__8FyGzri/result.json",
+      "sha256": "60dfb7b98c68c7bce1f8389b34a56f22f26ff6f662c0281bb2645666f125ab59",
+      "bytes": 6492
+    },
+    {
+      "path": "jobs/prefix-oracle02-dag_execution/dag_execution__8FyGzri/steps/checkpoint_2/verifier/test-stdout.txt",
+      "sha256": "eb0b94fbd5044bc9bdf38fff53332a0f7861f4d83df2e5fea3b03cc77d4def84",
+      "bytes": 12205
+    },
+    {
+      "path": "jobs/prefix-oracle02-dag_execution/dag_execution__8FyGzri/steps/checkpoint_3/verifier/test-stdout.txt",
+      "sha256": "a5bb126d9df9f99f59738939307a6be39f45c803ec6c0e4310a080cd26f77663",
+      "bytes": 15163
+    },
+    {
+      "path": "jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/result.json",
+      "sha256": "59d51a088266e056ad15c5dc6812c68549e351058e23ebe20abca95f1caa9871",
+      "bytes": 8964
+    },
+    {
+      "path": "jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/steps/checkpoint_2/verifier/test-stdout.txt",
+      "sha256": "2d6dfa6b901cf6147e9eab05c8f95f1feaa9e008a50a213d07c43b3794ea7e06",
+      "bytes": 23151
+    },
+    {
+      "path": "jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/steps/checkpoint_3/verifier/test-stdout.txt",
+      "sha256": "8d5dd99c29676ba428ea3bd3098c08e96e995533623591bab3092adbd80589d5",
+      "bytes": 31498
+    },
+    {
+      "path": "jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/steps/checkpoint_4/verifier/test-stdout.txt",
+      "sha256": "9478947609f905f6959800340adf9e750cea8498b1abfcda4786afd50aedc388",
+      "bytes": 41117
+    },
+    {
+      "path": "jobs/prefix-oracle02-database_migration/database_migration__KYJxedv/steps/checkpoint_5/verifier/test-stdout.txt",
+      "sha256": "c337b6b845855ae8b57c405aa0b9a5425bb79acfb4a0f7eb87419f5b3da8fa8b",
+      "bytes": 47705
+    },
+    {
+      "path": "jobs/prefix-oracle02-file_backup/file_backup__LCGV39P/result.json",
+      "sha256": "a7d3d2dcf96f8320c2436e254d650c5f435372832cd0d45990764e25d9c495c9",
+      "bytes": 7681
+    },
+    {
+      "path": "jobs/prefix-oracle02-file_backup/file_backup__LCGV39P/steps/checkpoint_2/verifier/test-stdout.txt",
+      "sha256": "a217e1cdf1a3a1175404d4b9ed8e1f8cab0d84759ba2ddf1d65fcacc4b536061",
+      "bytes": 8106
+    },
+    {
+      "path": "jobs/prefix-oracle02-file_backup/file_backup__LCGV39P/steps/checkpoint_3/verifier/test-stdout.txt",
+      "sha256": "2a832d810c2ad7ac666f7e66cd9e9113c82b98c5243545976a206bf8debcb648",
+      "bytes": 11138
+    },
+    {
+      "path": "jobs/prefix-oracle02-file_backup/file_backup__LCGV39P/steps/checkpoint_4/verifier/test-stdout.txt",
+      "sha256": "dcbd3041dffc5bee44c383a11c09d84c1d7b6dd85c13a570d4ccf6d2bc452a3c",
+      "bytes": 14481
+    },
+    {
+      "path": "jobs/prefix-smoke02-fresh_ledger/prefix-smoke02-task__RefA8rF/result.json",
+      "sha256": "b8bd11eba40b79e2f6359ce8b6ec052646e9e350267474a35263e04555ed748c",
+      "bytes": 9554
+    },
+    {
+      "path": "jobs/prefix-smoke04-fresh_current/prefix-smoke04-task__pGgoYtu/result.json",
+      "sha256": "c3f7db08448d2859ef58aa62ae2a1d5ad9eb62019e4544cbd3e4180d12ee9e00",
+      "bytes": 5307
+    },
+    {
+      "path": "jobs/prefix-smoke04-fresh_current/prefix-smoke04-task__pGgoYtu/steps/checkpoint_2/verifier/test-stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "jobs/prefix-smoke04-fresh_ledger/prefix-smoke04-task__xx9gM9o/result.json",
+      "sha256": "b715dafa233bf71da07ff89ecd694958ca074253cbbbb5b2f196f5b23b9a0aab",
+      "bytes": 5304
+    },
+    {
+      "path": "jobs/prefix-smoke04-fresh_ledger/prefix-smoke04-task__xx9gM9o/steps/checkpoint_2/verifier/test-stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "prefix-inputs01/dag_execution/grader-history.json",
+      "sha256": "72ed49420c6fc12061b043ba468b66b5be0083930867b32adc2d8cab3ddee1d6",
+      "bytes": 259
+    },
+    {
+      "path": "prefix-inputs01/dag_execution/prefix-instruction.md",
+      "sha256": "ee7d40120c75c7a21abf435e487af8502ffebda5edc0c4595d316fd2924819ee",
+      "bytes": 8112
+    },
+    {
+      "path": "prefix-inputs01/dag_execution/prefix-test-stdout.txt",
+      "sha256": "bbc5e530b292ce7ad4a2ddf2b22d1f5674a81e15a63a7ceedc3f6b4870006952",
+      "bytes": 29261
+    },
+    {
+      "path": "prefix-inputs01/dag_execution/prefix.json",
+      "sha256": "ea9f9e3e99b30fcb73d09adcf68685197bf4d6ba7a9cc485e17d58a6f652d5ee",
+      "bytes": 1099
+    },
+    {
+      "path": "prefix-inputs01/database_migration/grader-history.json",
+      "sha256": "18c9fac7d3ce015c0f717032cdd17030fd897fd6ba0fdb01ad6d2b6b9bc9a7b0",
+      "bytes": 259
+    },
+    {
+      "path": "prefix-inputs01/database_migration/prefix-instruction.md",
+      "sha256": "9b0ad9d700780172737979600d581da10dc7239f9ce21c7cda1892fa01422689",
+      "bytes": 9501
+    },
+    {
+      "path": "prefix-inputs01/database_migration/prefix-test-stdout.txt",
+      "sha256": "117bfa611734c2ee3ebf2d34a6fb4cc771ac366856679e0d73779ffcda90646b",
+      "bytes": 15347
+    },
+    {
+      "path": "prefix-inputs01/database_migration/prefix.json",
+      "sha256": "cb38d54074ee22d174563361b5da75a033ca3b95e5863d2e70eee1b631b5c97d",
+      "bytes": 1115
+    },
+    {
+      "path": "prefix-inputs01/file_backup/grader-history.json",
+      "sha256": "104c572e766ec3473cc887f276cd3c1e07dc3eca65a2eb18acca228a42788c9d",
+      "bytes": 259
+    },
+    {
+      "path": "prefix-inputs01/file_backup/prefix-instruction.md",
+      "sha256": "a406a31c2f763ea6d6242454638b9e8dbcea17e6788fb04f50f9c86f70ea19c1",
+      "bytes": 8537
+    },
+    {
+      "path": "prefix-inputs01/file_backup/prefix-test-stdout.txt",
+      "sha256": "195d18ba3122091ea7807223dbc8d0629603ada565de49c7e82c5363430e20c6",
+      "bytes": 42543
+    },
+    {
+      "path": "prefix-inputs01/file_backup/prefix.json",
+      "sha256": "513fc0a0d20c0edccd0a9b316fa95f26a108bfd3393cd95a36e1c11490e645ff",
+      "bytes": 1094
+    },
+    {
+      "path": "prefix-operator01/prepare_prefix_study.py",
+      "sha256": "b9120ba3a7798fa44a5b9776962ffa2527e93c97fc16ca435c44876ce45ebe06",
+      "bytes": 7680
+    },
+    {
+      "path": "prefix-operator01/run_prefix_oracle.py",
+      "sha256": "e59a01bb7a8558f7b0448034ae35f03e7eb54dea865bc36f7cca1c59f9d035e5",
+      "bytes": 4886
+    },
+    {
+      "path": "prefix-operator02/run_prefix_oracle.py",
+      "sha256": "6796ee6818ec7566eebeee6cc3e5eac5c4d3e676663f1f4e0d09ea4af2f06012",
+      "bytes": 5137
+    },
+    {
+      "path": "prefix-operator02/run_prefix_smoke.py",
+      "sha256": "966b71b2fb014ff1ea8bbf8c7db0181212df16ea101beff7c1fe55bb15ff7be0",
+      "bytes": 9416
+    },
+    {
+      "path": "prefix-operator03/run_prefix_smoke.py",
+      "sha256": "8ed6e768f1ffefd2ff5ba530e81886bc724800fd16c7b1a34f1b3f1bf5d14255",
+      "bytes": 9633
+    },
+    {
+      "path": "prefix-operator04/run_prefix_smoke.py",
+      "sha256": "df140bb4fa46ab2442c9c7f13508dbb0199486162563e805d50f89d529167765",
+      "bytes": 10246
+    },
+    {
+      "path": "prefix-operator05/run_prefix_smoke.py",
+      "sha256": "7215fdabadbf7f2eeed3271b4b665cbe8fb323e9e88732552671812212fd9a99",
+      "bytes": 10364
+    },
+    {
+      "path": "prefix-operator06/freeze_prefix_study.py",
+      "sha256": "ba75fc22583d3547c12af0abbc3f276844a5f64d471b44aa2869513ab0f4f8ff",
+      "bytes": 6970
+    },
+    {
+      "path": "prefix-operator06/run_prefix_study.py",
+      "sha256": "97eafc86d1fbec517e3f67d724656d6ce8289add7e9cb1b6386053b3abffefed",
+      "bytes": 6299
+    },
+    {
+      "path": "setup/context-prefix01-finalizer-launch01.json",
+      "sha256": "d32d2b0bbbb3d9c5e8d2b1eb34b3e733f6b11e32536301c88d5d7935a8f4b558",
+      "bytes": 826
+    },
+    {
+      "path": "setup/context-prefix01-finalizer01.json",
+      "sha256": "5c29f1258b8f305d97848f0d976c84a7fce54e1024da2df25e9997b3966b4d60",
+      "bytes": 1783
+    },
+    {
+      "path": "setup/context-prefix01-inputs.json",
+      "sha256": "902aa6819f21e325d91c1d96720af7ae52555492cf4720d6ac69e3adfbb8fb7f",
+      "bytes": 56706
+    },
+    {
+      "path": "setup/context-prefix01-launch.json",
+      "sha256": "5f462ab477523eee24484f3e0d10fceddb7e0bc096c31f90705ae5c5a8d0b574",
+      "bytes": 850
+    },
+    {
+      "path": "setup/context-prefix01-receipt.json",
+      "sha256": "2eca9a21c33ad71ab9cc4cc418a6f1693cc84f4677778c440632d0b6e64a0085",
+      "bytes": 2413
+    },
+    {
+      "path": "setup/context-prefix01-source.tar.gz",
+      "sha256": "23ae6e824d0d7059db33174316dd1283c2a789fc09d748044b17af591f8c59ca",
+      "bytes": 219949
+    },
+    {
+      "path": "setup/context-prefix01-started-host01.json",
+      "sha256": "99e26cf52e0706ebfb6ce92491523fee41797363acb739deb9fb0251a7890b9c",
+      "bytes": 381
+    },
+    {
+      "path": "setup/prefix-dev01-source.json",
+      "sha256": "c968d3e1e4afd2785276aa00db017763f80a9e512dcafe18ca3966a973cde412",
+      "bytes": 12398
+    },
+    {
+      "path": "setup/prefix-dev02-source.json",
+      "sha256": "e1ea127a10398a716d6e46188159cc88b9b73a45b0d4f2f274ae69fe476f0aa4",
+      "bytes": 12782
+    },
+    {
+      "path": "setup/prefix-oracle01-dag_execution.json",
+      "sha256": "4882e42a27e679e46720e006aba317468d805c313d7d84a76ff47469fa4c3119",
+      "bytes": 588
+    },
+    {
+      "path": "setup/prefix-oracle01-dag_execution.log",
+      "sha256": "38c043bea9720643d6d5d4c76a43ddffb7d13dace8fd0b4fcf984a1e1af44038",
+      "bytes": 23829
+    },
+    {
+      "path": "setup/prefix-oracle01-database_migration.json",
+      "sha256": "e2f61785d584e2af8ae99d66b69f8f67f5897a6a12f8224e2a55de70706ce30d",
+      "bytes": 603
+    },
+    {
+      "path": "setup/prefix-oracle01-database_migration.log",
+      "sha256": "38c043bea9720643d6d5d4c76a43ddffb7d13dace8fd0b4fcf984a1e1af44038",
+      "bytes": 23829
+    },
+    {
+      "path": "setup/prefix-oracle01-file_backup.json",
+      "sha256": "0ca02e41a7e22c611eb98fb7fc6db619e7671a2b04a60a2527bad69a6128c157",
+      "bytes": 582
+    },
+    {
+      "path": "setup/prefix-oracle01-file_backup.log",
+      "sha256": "38c043bea9720643d6d5d4c76a43ddffb7d13dace8fd0b4fcf984a1e1af44038",
+      "bytes": 23829
+    },
+    {
+      "path": "setup/prefix-oracle01-launch.json",
+      "sha256": "48b12e7ba6c57b046555e27cc6e6f29535d756a4ec23290da517444994a492ab",
+      "bytes": 358
+    },
+    {
+      "path": "setup/prefix-oracle01.json",
+      "sha256": "8a2b415884221110fc4c4f4782ae9651a1da7b5927d4e06928ba2fb3a985518d",
+      "bytes": 13639
+    },
+    {
+      "path": "setup/prefix-oracle02-dag_execution.json",
+      "sha256": "a2be2c746e552896a16c09b637abecd2089bfb255f4026460384fa787cd959d3",
+      "bytes": 706
+    },
+    {
+      "path": "setup/prefix-oracle02-dag_execution.log",
+      "sha256": "c27cf9f1999a1ee616ef20eddce85aca6705f1528cbe2ff16579bf5f874bb326",
+      "bytes": 2035
+    },
+    {
+      "path": "setup/prefix-oracle02-database_migration.json",
+      "sha256": "f4d096a2c65b6f360f74ddaba0215ec0915e47df67a1be3b8dad3ff37b80dbb0",
+      "bytes": 726
+    },
+    {
+      "path": "setup/prefix-oracle02-database_migration.log",
+      "sha256": "7653d0f291b8c23537548a96e7fb461479f09a15287ef18d0b3f81a08f706a0b",
+      "bytes": 2030
+    },
+    {
+      "path": "setup/prefix-oracle02-file_backup.json",
+      "sha256": "110a6d31b5684da917b64452dfc03d097fafc69681c1a43f24f79bbcca308cf1",
+      "bytes": 698
+    },
+    {
+      "path": "setup/prefix-oracle02-file_backup.log",
+      "sha256": "7a8d94e4ecec9e5f3b4db201f075224c133435e80ebd7ae0f5441ad8d468cb7e",
+      "bytes": 2033
+    },
+    {
+      "path": "setup/prefix-oracle02-launch.json",
+      "sha256": "215f95150d624da6850aac07e5c5551d3a5506604eee7c9bfe70bad1f80deb38",
+      "bytes": 755
+    },
+    {
+      "path": "setup/prefix-oracle02.json",
+      "sha256": "4554d936851958ad34da620cc14c8e1de8b690637e0c66cf56e1c2eda5b30b40",
+      "bytes": 25275
+    },
+    {
+      "path": "setup/prefix-reference-setup-67cd3442783a4b8f9542dcc9fb7dc42a.json",
+      "sha256": "5de6f01c2e94d03dab3ce50534997403fd2f1ef2050c51c83de690dec4ad1b4c",
+      "bytes": 734
+    },
+    {
+      "path": "setup/prefix-reference-setup-afda89406fac4e32882477acdd46a792.json",
+      "sha256": "f9e48c71ab9065404cb52bba40e1ea7e9dedfbb4c326ae40d4ab6c09bc149a6d",
+      "bytes": 735
+    },
+    {
+      "path": "setup/prefix-reference-setup-c3c64b19b3e54a14b1fbc33c6f070ab6.json",
+      "sha256": "1153797253a0626ebbfdeebe0521eca3d80f4a4a0947dd9ee01e2d416558c8db",
+      "bytes": 734
+    },
+    {
+      "path": "setup/prefix-smoke01-launch.json",
+      "sha256": "91ec182f77ccfd5e9c4d947a94e13f2e0a9ad6e0eadd39b0d29710806be4ada2",
+      "bytes": 752
+    },
+    {
+      "path": "setup/prefix-smoke01.json",
+      "sha256": "74600d161bae22b7d3d8baca93118c33d940dfe185d8030b806dd4af63b9cdab",
+      "bytes": 13890
+    },
+    {
+      "path": "setup/prefix-smoke02-launch.json",
+      "sha256": "78967a161cf70fc3f4bdee686a11f72af2e424e15109bee16d70f382107f0481",
+      "bytes": 961
+    },
+    {
+      "path": "setup/prefix-smoke02.json",
+      "sha256": "3d82dc34cf599f61df55732d15ca88a3b15bf7c9819269fe3328ab687bc39dc3",
+      "bytes": 12963
+    },
+    {
+      "path": "setup/prefix-smoke03-launch.json",
+      "sha256": "8c980347b1761ff485eb185aedb76efcef43a23927e2ff91d277b68033d8b573",
+      "bytes": 904
+    },
+    {
+      "path": "setup/prefix-smoke03.json",
+      "sha256": "83f94e359652a2c8781bc61348420fbd4301e79a7515567d71cc3f811bc55a92",
+      "bytes": 12523
+    },
+    {
+      "path": "setup/prefix-smoke04-launch.json",
+      "sha256": "ea21a0dd06f379754cbc7d9d60bfbc24d1b41d64dc8c77a1092c198a4e6117b9",
+      "bytes": 911
+    },
+    {
+      "path": "setup/prefix-smoke04.json",
+      "sha256": "0e14d7a80a0a3d0b9748f427605938145e63b3e07f8bb15a8a0eca149add93ed",
+      "bytes": 16999
+    },
+    {
+      "path": "setup/registration-context-prefix01.json",
+      "sha256": "82063d4449cbd833f5c04c51a8f9a1a3684d509d92ef6430c427b7038fa4b490",
+      "bytes": 71890
+    }
+  ]
+}

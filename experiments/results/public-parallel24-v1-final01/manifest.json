@@ -1,0 +1,36 @@
+{
+  "captured_at": "2026-10-05T23:39:16.879176+00:00",
+  "scope": "Complete 110-model-cell dataset, ten excluded environment cells, preserved adjudications, analysis and immutable source; no new model calls.",
+  "files": {
+    "bundle.json": {
+      "source": "experiments/results/public-parallel24-v1-audited-bundle.json",
+      "sha256": "5cbf086a0d6df7a926d360b3dc96d0d0bbb381806a316299912a3ed2d706a458",
+      "bytes": 4039212
+    },
+    "analysis.json": {
+      "source": "experiments/results/public-parallel24-v1-analysis.json",
+      "sha256": "33e89d2db95e158b8cebc35442b27d76137d6a4e2902fc509de6cfc7f4a97efe",
+      "bytes": 186893
+    },
+    "analyze_public.py": {
+      "source": "experiments/public_benchmarks/analyze_public.py",
+      "sha256": "4910049ded6fdf00828335fa149fb4998a1340f9d48d3ed895e1c9e403a1cee2",
+      "bytes": 24349
+    },
+    "registration.json": {
+      "source": "experiments/public_benchmarks/registration-public-parallel24-v1.json",
+      "sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+      "bytes": 30646
+    },
+    "report.md": {
+      "source": "docs/public-parallel24-v1-progress.md",
+      "sha256": "ea5727b87a1e509c11842b2ff852271f5e0a1cf5faf93bc2efbb63adfbddd36f",
+      "bytes": 15077
+    },
+    "runtime-audit.json": {
+      "source": "experiments/results/research-evidence-20261006-073645/setup/public-parallel24-v1-final-audit01.json",
+      "sha256": "d76c1927cbd17c76fed8014e961ca2226dc0b78d12dc6fc06bfdcbfbcb55c350",
+      "bytes": 64093
+    }
+  }
+}

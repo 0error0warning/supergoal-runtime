@@ -1,0 +1,53 @@
+{
+  "audited_at_utc": "2026-10-05T08:14:17.206611+00:00",
+  "candidate": "public-dev04",
+  "trials": [
+    {
+      "task": "terminal-bench/cancel-async-tasks",
+      "arm": "native",
+      "requests": 3,
+      "reward": 0.0
+    },
+    {
+      "task": "terminal-bench/cancel-async-tasks",
+      "arm": "sg_v2",
+      "requests": 11,
+      "reward": 1.0
+    },
+    {
+      "task": "terminal-bench/cancel-async-tasks",
+      "arm": "repeat_goal",
+      "requests": 18,
+      "reward": 0.0
+    },
+    {
+      "task": "terminal-bench/cancel-async-tasks",
+      "arm": "sg_no_context",
+      "requests": 9,
+      "reward": 1.0
+    },
+    {
+      "task": "terminal-bench/cancel-async-tasks",
+      "arm": "sg_no_review",
+      "requests": 4,
+      "reward": 0.0
+    },
+    {
+      "task": "terminal-bench/db-wal-recovery",
+      "arm": "sg_v2",
+      "requests": 83,
+      "reward": 0.0
+    },
+    {
+      "task": "terminal-bench/db-wal-recovery",
+      "arm": "repeat_goal",
+      "requests": 17,
+      "reward": 1.0
+    }
+  ],
+  "total_requests": 145,
+  "shared_request_caps_and_model_identity_verified": true,
+  "artifact_snapshots_recorded": true,
+  "all_official_grades_valid": true,
+  "full_study_complete": false
+}

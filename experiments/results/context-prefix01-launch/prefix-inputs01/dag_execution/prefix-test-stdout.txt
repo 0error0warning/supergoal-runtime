@@ -1,0 +1,393 @@
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 10 packages in 19ms
+============================================================================================================= test session starts ==============================================================================================================
+platform linux -- Python 3.12.15, pytest-9.0.3, pluggy-1.6.0
+rootdir: /tests
+plugins: json-ctrf-0.4.1, json-report-1.5.0, metadata-3.1.1, timeout-2.4.0
+timeout: 60.0s
+timeout method: signal
+timeout func_only: False
+collected 33 items
+
+../tests/test_checkpoint_1.py .FF.FFFFFFF.F.FFF................                                                                                                                                                                          [100%]
+
+=================================================================================================================== FAILURES ===================================================================================================================
+_________________________________________________________________________________________________________________ test_arrays __________________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_arrays(entrypoint_argv):
+        """Core: Array parameters and len() function."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, ARRAYS_PIPELINE, ARRAYS_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unexpected $
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpjg8pyxqy/pipeline.pipe', '--workspace',...ath `.venv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unexpected $\n').returncode
+
+/tests/test_checkpoint_1.py:358: AssertionError
+_______________________________________________________________________________________________________________ test_bool_params _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_bool_params(entrypoint_argv):
+        """Core: Boolean parameters with TRUE/FALSE literals."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, BOOL_PARAMS_PIPELINE, BOOL_PARAMS_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpp4u4l6h1/pipeline.pipe', '--workspace',...h the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead\n').returncode
+
+/tests/test_checkpoint_1.py:415: AssertionError
+________________________________________________________________________________________________________________ test_branch_if ________________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_branch_if(entrypoint_argv):
+        """Core: If conditional branching - true branch taken."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, BRANCH_IF_PIPELINE, BRANCH_IF_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:elif/else without if
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmp1h50avf6/pipeline.pipe', '--workspace',...nv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:elif/else without if\n').returncode
+
+/tests/test_checkpoint_1.py:557: AssertionError
+_______________________________________________________________________________________________________________ test_branch_elif _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_branch_elif(entrypoint_argv):
+        """Core: Elif branch - first fails, elif succeeds."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, BRANCH_ELIF_PIPELINE, BRANCH_ELIF_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:elif/else without if
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmp3pw715qd/pipeline.pipe', '--workspace',...nv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:elif/else without if\n').returncode
+
+/tests/test_checkpoint_1.py:632: AssertionError
+_______________________________________________________________________________________________________________ test_branch_else _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_branch_else(entrypoint_argv):
+        """Core: Else branch - if and elif both fail."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, BRANCH_ELSE_PIPELINE, BRANCH_ELSE_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:elif/else without if
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpy2eghuu5/pipeline.pipe', '--workspace',...nv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:elif/else without if\n').returncode
+
+/tests/test_checkpoint_1.py:708: AssertionError
+_____________________________________________________________________________________________________________ test_array_indexing ______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_array_indexing(entrypoint_argv):
+        """Core: Array subscript access with [i] notation."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, ARRAY_INDEXING_PIPELINE, ARRAY_INDEXING_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unmatched paren
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpqzgfr9z4/pipeline.pipe', '--workspace',... `.venv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unmatched paren\n').returncode
+
+/tests/test_checkpoint_1.py:766: AssertionError
+______________________________________________________________________________________________________________ test_for_requires _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_for_requires(entrypoint_argv):
+        """Core: For loop in requires clause."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, FOR_REQUIRES_PIPELINE, FOR_REQUIRES_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unmatched paren
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmparmahcjp/pipeline.pipe', '--workspace',... `.venv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unmatched paren\n').returncode
+
+/tests/test_checkpoint_1.py:818: AssertionError
+_____________________________________________________________________________________________________________ test_while_requires ______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_while_requires(entrypoint_argv):
+        """Core: While loop with break/continue in requires."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, WHILE_REQUIRES_PIPELINE, WHILE_REQUIRES_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unmatched paren
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmprsj_j8rc/pipeline.pipe', '--workspace',... `.venv` and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unmatched paren\n').returncode
+
+/tests/test_checkpoint_1.py:874: AssertionError
+______________________________________________________________________________________________________________ test_working_dirs _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    def test_working_dirs(entrypoint_argv):
+        """Core: Working directory isolation for nested task calls."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, WORKING_DIRS_PIPELINE, WORKING_DIRS_CONFIG
+        )
+    
+        assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+    
+        jobs = parse_jsonl(output.get("jobs.jsonl", ""))
+    
+        # Check output paths
+        outputs = {j.get("task"): j.get("output") for j in jobs if j.get("output")}
+        assert outputs.get("B") == "B"
+        assert outputs.get("C") == "C"
+    
+        # A called from B context should have output "B/A"
+        a_jobs = [j for j in jobs if j.get("task") == "A"]
+        a_outputs = {j.get("output") for j in a_jobs}
+>       assert "B/A" in a_outputs
+E       AssertionError: assert 'B/A' in {'A'}
+
+/tests/test_checkpoint_1.py:949: AssertionError
+_____________________________________________________________________________________________________________ test_arithmetic_ops ______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    @pytest.mark.functionality
+    def test_arithmetic_ops(entrypoint_argv):
+        """Functionality: Integer arithmetic operations in requires."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, ARITHMETIC_OPS_PIPELINE, ARITHMETIC_OPS_CONFIG
+        )
+    
+        assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+    
+        jobs = parse_jsonl(output.get("jobs.jsonl", ""))
+    
+        # Check Calculate calls have correct params
+        calc_jobs = [j for j in jobs if j.get("task") == "Calculate"]
+        assert len(calc_jobs) == 3
+    
+        params_set = {(j["params"]["x"], j["params"]["y"]) for j in calc_jobs}
+        # a=10, b=2: sum=12, diff=8, prod=20, div=5, mod=0
+        assert (12, 8) in params_set  # Calculate(sum, diff)
+        assert (20, 5) in params_set  # Calculate(x=prod, y=div)
+>       assert (0, 2) in params_set  # Calculate(mod, 2)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert (0, 2) in {(12, 8), (20, 5), (102, 2)}
+
+/tests/test_checkpoint_1.py:1050: AssertionError
+______________________________________________________________________________________________________________ test_float_params _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    @pytest.mark.functionality
+    def test_float_params(entrypoint_argv):
+        """Functionality: Float parameters and Python integration."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, FLOAT_PARAMS_PIPELINE, FLOAT_PARAMS_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpqdeueh62/pipeline.pipe', '--workspace',...h the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead\n').returncode
+
+/tests/test_checkpoint_1.py:1152: AssertionError
+______________________________________________________________________________________________________________ test_nested_loops _______________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    @pytest.mark.functionality
+    def test_nested_loops(entrypoint_argv):
+        """Functionality: Nested loops with break statements."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, NESTED_LOOPS_PIPELINE, NESTED_LOOPS_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unexpected character '|'
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmp7enha7w_/pipeline.pipe', '--workspace',...and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unexpected character '|'\n").returncode
+
+/tests/test_checkpoint_1.py:1211: AssertionError
+____________________________________________________________________________________________________________ test_stderr_validation ____________________________________________________________________________________________________________
+
+entrypoint_argv = ['uv', 'run', '--project', '/app', 'launch.py']
+
+    @pytest.mark.functionality
+    def test_stderr_validation(entrypoint_argv):
+        """Functionality: stderr contains() and equals() validation."""
+        result, working, output = run_pipeline(
+            entrypoint_argv, STDERR_VALIDATION_PIPELINE, STDERR_VALIDATION_CONFIG
+        )
+    
+>       assert result.returncode == 0, f"Expected exit 0: {result.stderr}"
+E       AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to target the active environment instead
+E         SYNTAX_ERROR:unexpected character '&'
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['uv', 'run', '--project', '/app', 'launch.py', '/tmp/tmpl8vwrrig/pipeline.pipe', '--workspace',...and will be ignored; use `--active` to target the active environment instead\nSYNTAX_ERROR:unexpected character '&'\n").returncode
+
+/tests/test_checkpoint_1.py:1271: AssertionError
+=============================================================================================================== warnings summary ===============================================================================================================
+../tests/test_checkpoint_1.py:1031
+  /tests/test_checkpoint_1.py:1031: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1094
+  /tests/test_checkpoint_1.py:1094: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1145
+  /tests/test_checkpoint_1.py:1145: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1204
+  /tests/test_checkpoint_1.py:1204: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1264
+  /tests/test_checkpoint_1.py:1264: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1320
+  /tests/test_checkpoint_1.py:1320: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1385
+  /tests/test_checkpoint_1.py:1385: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1418
+  /tests/test_checkpoint_1.py:1418: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1462
+  /tests/test_checkpoint_1.py:1462: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1491
+  /tests/test_checkpoint_1.py:1491: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1520
+  /tests/test_checkpoint_1.py:1520: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1562
+  /tests/test_checkpoint_1.py:1562: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1577
+  /tests/test_checkpoint_1.py:1577: PytestUnknownMarkWarning: Unknown pytest.mark.error - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.error
+
+../tests/test_checkpoint_1.py:1598
+  /tests/test_checkpoint_1.py:1598: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1632
+  /tests/test_checkpoint_1.py:1632: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1659
+  /tests/test_checkpoint_1.py:1659: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1693
+  /tests/test_checkpoint_1.py:1693: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1730
+  /tests/test_checkpoint_1.py:1730: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1756
+  /tests/test_checkpoint_1.py:1756: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1776
+  /tests/test_checkpoint_1.py:1776: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+../tests/test_checkpoint_1.py:1794
+  /tests/test_checkpoint_1.py:1794: PytestUnknownMarkWarning: Unknown pytest.mark.functionality - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.functionality
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================================================================================================== PASSES ====================================================================================================================
+----------------------------------------------------------------------------------------------------------------- JSON report ------------------------------------------------------------------------------------------------------------------
+report saved to: /tmp/pytest-report.json
+=========================================================================================================== short test summary info ============================================================================================================
+PASSED ../tests/test_checkpoint_1.py::test_basic
+PASSED ../tests/test_checkpoint_1.py::test_string_concat
+PASSED ../tests/test_checkpoint_1.py::test_existing_dir
+PASSED ../tests/test_checkpoint_1.py::test_exists_function
+PASSED ../tests/test_checkpoint_1.py::test_string_params
+PASSED ../tests/test_checkpoint_1.py::test_timeout
+PASSED ../tests/test_checkpoint_1.py::test_circular_dependency
+PASSED ../tests/test_checkpoint_1.py::test_default_param_order
+PASSED ../tests/test_checkpoint_1.py::test_missing_required_arg
+PASSED ../tests/test_checkpoint_1.py::test_multiline_success_no_return
+PASSED ../tests/test_checkpoint_1.py::test_no_main
+PASSED ../tests/test_checkpoint_1.py::test_recursive_call
+PASSED ../tests/test_checkpoint_1.py::test_edge_entry_call_with_params
+PASSED ../tests/test_checkpoint_1.py::test_edge_clean_cwd_default_false
+PASSED ../tests/test_checkpoint_1.py::test_edge_env_default_type_cast_bool
+PASSED ../tests/test_checkpoint_1.py::test_edge_requires_failure_stops
+PASSED ../tests/test_checkpoint_1.py::test_edge_type_mismatch_invalid_pipe
+PASSED ../tests/test_checkpoint_1.py::test_edge_undefined_task_invalid_pipe
+PASSED ../tests/test_checkpoint_1.py::test_edge_bad_toml_syntax
+PASSED ../tests/test_checkpoint_1.py::test_edge_empty_success_block
+FAILED ../tests/test_checkpoint_1.py::test_arrays - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to tar...
+FAILED ../tests/test_checkpoint_1.py::test_bool_params - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` t...
+FAILED ../tests/test_checkpoint_1.py::test_branch_if - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` to ...
+FAILED ../tests/test_checkpoint_1.py::test_branch_elif - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` t...
+FAILED ../tests/test_checkpoint_1.py::test_branch_else - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` t...
+FAILED ../tests/test_checkpoint_1.py::test_array_indexing - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active...
+FAILED ../tests/test_checkpoint_1.py::test_for_requires - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` ...
+FAILED ../tests/test_checkpoint_1.py::test_while_requires - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active...
+FAILED ../tests/test_checkpoint_1.py::test_working_dirs - AssertionError: assert 'B/A' in {'A'}
+FAILED ../tests/test_checkpoint_1.py::test_arithmetic_ops - assert (0, 2) in {(12, 8), (20, 5), (102, 2)}
+FAILED ../tests/test_checkpoint_1.py::test_float_params - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` ...
+FAILED ../tests/test_checkpoint_1.py::test_nested_loops - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--active` ...
+FAILED ../tests/test_checkpoint_1.py::test_stderr_validation - AssertionError: Expected exit 0: warning: `VIRTUAL_ENV=/tmp/uv-cache/builds-v0/.tmps6XqJN` does not match the project environment path `.venv` and will be ignored; use `--act...
+================================================================================================== 13 failed, 20 passed, 21 warnings in 7.10s ==================================================================================================
+[shim:pytest-json-report] checkpoint_1: core=0.250 (3/12) isolated=0.606 (20/33) strict=0.606 (20/33) verbosity=0.286 erosion=0.754 has_prior=0 v_up=0 e_up=0

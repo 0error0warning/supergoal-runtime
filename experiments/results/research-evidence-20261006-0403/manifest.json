@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-10-05T20:01:04.602083+00:00",
+  "sha256": {
+    "setup/checkpoint-handoff01-receipt.json": "e086238f8fad03ea06301ddafe2ff53d812d8a5a7a484e6ce404629a882602f0",
+    "setup/checkpoint-handoff01-audit.json": "3b97289be2ef9dd7c28a7736f25178abb53802b53be1a94935ea68ae368d3b77",
+    "setup/snapshot-handoff-audit02.json": "b01372674bb59c973b298deeb1db99de175317d723d85799b3f42a257a788287",
+    "setup/scb-transfer01-validity-audit01.json": "80b2cdd7bd67ab459e70252a7da11f570f704aa676fe0b9238c19d6658b683a5",
+    "setup/scb-transfer01-observation-1953.json": "b4686279b21c4ed5174f18e5b46d87f794de6f6b6613c07c6a8c2abde28b2233",
+    "setup/scb-transfer01-receipt.json": "d2a8cc8c624d0be54d06a5e850a59e0fb300a086c5934949326b2cb1b0e52b05",
+    "setup/registration-controller-restart01.json": "0a27bf205f66866306bfe90ae170cc3d6976ee10f707b1d1745624ad08bba4e0",
+    "setup/controller-restart01.json": "c6fd9d399c72bc8c80cf7aab8f01d6dea990e06ad7dc74bdd86c29d8abd310ea",
+    "setup/mechanism01-receipt.json": "2e0afe33044680b5ddccb422f6c6b2c5a89def27666c2b2392067a4435130da7",
+    "setup/public-parallel24-v1-rows-000-120.json": "28a7b96980797aae83a8595e29fd0cd0ac161ea22157db877cb04d0223cf4a70",
+    "setup/scb-transfer01-source.tar.gz": "3b22ccdca0f8997f30dd4b56fda04d8cfb72a9a8adc243a2a647d89b79c40b7f"
+  },
+  "archive_local_path": "experiments/baselines/sg-scb-transfer01.tar.gz"
+}

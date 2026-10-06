@@ -1,0 +1,5 @@
+{
+  "at": "2026-10-06T01:02:22.644909+00:00",
+  "units": "MainPID=2326341\nResult=success\nId=supergoal-context-prefix01.service\nActiveState=active\nInvocationID=1b5d59b1dd5a457e9536f69a6d5887c8\n\nMainPID=2355739\nResult=success\nId=supergoal-prefix-finalizer01.service\nActiveState=active\nInvocationID=1835172da3504bd1b08787378ace3840\n",
+  "free_disk_gib": 59.54375076293945
+}

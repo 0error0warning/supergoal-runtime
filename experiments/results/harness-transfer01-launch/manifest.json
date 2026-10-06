@@ -1,0 +1,54 @@
+{
+  "captured_at": "2026-10-05T21:19:31.428495+00:00",
+  "unit_state": "MainPID=1576462\nResult=success\nActiveState=active\nSubState=running\n",
+  "files": {
+    "setup/registration-harness-transfer01.json": {
+      "sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+      "bytes": 22993
+    },
+    "setup/harness-transfer01-preparation.json": {
+      "sha256": "59c44d93dc64f13b6e53ef15c8cbfb4e9f8f6218661167afc28d59e3417cf5bc",
+      "bytes": 2822
+    },
+    "setup/harness-transfer01-freeze.json": {
+      "sha256": "56d1cd9ce04f7f40f58aa832dbedb5f692c3ab8dccc6f08a9169bd99fc0d989f",
+      "bytes": 471
+    },
+    "setup/harness-transfer01-receipt.json": {
+      "sha256": "87f360665c62f124c6afc69ad9185601423ba58cebef18941cc05c160e0af165",
+      "bytes": 2186
+    },
+    "setup/sg-harness-transfer01.tar.gz": {
+      "sha256": "52ea030323371960b6720d05a7e363c25a68173e6da90de850fa782e088547c8",
+      "bytes": 202768
+    },
+    "candidates/harness-transfer01/experiments/public_benchmarks/environment-harness-transfer01.json": {
+      "sha256": "d3c3551a47c41a8ad1fc6bbfb650bbe9001a883a46b053b5cf165a0def1642cb",
+      "bytes": 3247
+    },
+    "jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler/adaptive-rejection-sampler__4fcbfvk/result.json": {
+      "sha256": "56f4b6a3bbf76603f3fdb07a91c1951bbe78bebbb473c60159a600bf85838673",
+      "bytes": 4181
+    },
+    "jobs/tb-oracle-harness-transfer01-01-adaptive-rejection-sampler/adaptive-rejection-sampler__4fcbfvk/verifier/test-stdout.txt": {
+      "sha256": "4c0e51e2aca7bcf242c6612ee3d261526107c43d09929db7e47d4f6d7fe4ab8e",
+      "bytes": 3305
+    },
+    "jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c/polyglot-rust-c__qRdsYjw/result.json": {
+      "sha256": "d80824c12e5aadd1d4b62428c27eb3f49ccc689b0e0eeb382b0ffbd1703632f1",
+      "bytes": 4082
+    },
+    "jobs/tb-oracle-harness-transfer01-02-polyglot-rust-c/polyglot-rust-c__qRdsYjw/verifier/test-stdout.txt": {
+      "sha256": "0dc0c21cacd2ff11580774a46a03c7045b7776d5b9a42d9f850e593adedb54ef",
+      "bytes": 14514
+    },
+    "jobs/tb-oracle-harness-transfer01-03-gcode-to-text/gcode-to-text__S6UnyH6/result.json": {
+      "sha256": "e134129d7bd87cbc261d68c7bac7645f24b0db057677d445f34bcb0e0d36fe41",
+      "bytes": 4064
+    },
+    "jobs/tb-oracle-harness-transfer01-03-gcode-to-text/gcode-to-text__S6UnyH6/verifier/test-stdout.txt": {
+      "sha256": "bf770a0dc332b7a9d3a3f711f5d099192152ef5035d7332a2d343ffc96257421",
+      "bytes": 2546
+    }
+  }
+}

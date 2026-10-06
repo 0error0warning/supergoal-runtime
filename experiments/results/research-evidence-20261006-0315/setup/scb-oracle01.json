@@ -1,0 +1,468 @@
+{
+  "status": "complete",
+  "model_calls": 0,
+  "source_lock_sha256": "143e210bb2b60d8e541c6ba4a9bb0e8a69cd94b3972f0f7c0f41eb02ff35d264",
+  "operator_sha256": "da164d3b63d7cd88a9373458e6a2467935985208875359ccc1429c36ae818354",
+  "scope": "Official reference environment checks, not model success",
+  "rows": [
+    {
+      "task": "file_backup",
+      "status": "reference_passed",
+      "checkpoints": 4,
+      "exit_code": 0,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-oracle01-file_backup/file_backup__sSNmHe9/result.json",
+      "raw_rewards": {
+        "strict_pass_rate": 1.0,
+        "core_pass_rate": 1.0,
+        "verbosity": 0.24534504939476595,
+        "erosion_increased": 0.5,
+        "step_has_prior": 0.75,
+        "isolated_pass_rate": 1.0,
+        "verbosity_increased": 0.0,
+        "erosion": 0.6140734630392025
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.5946479759934509,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.2872727272727273,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T18:56:58.327130Z",
+            "finished_at": "2026-10-05T18:57:04.439882Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T18:57:05.229431Z",
+            "finished_at": "2026-10-05T18:57:12.926383Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.591408304216619,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.25,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T18:57:13.230120Z",
+            "finished_at": "2026-10-05T18:57:18.137865Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T18:57:18.755884Z",
+            "finished_at": "2026-10-05T18:57:27.198752Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6184161308455481,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.23220704529115743,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T18:57:27.473991Z",
+            "finished_at": "2026-10-05T18:57:34.199404Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T18:57:37.550197Z",
+            "finished_at": "2026-10-05T18:57:50.220766Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.651821441101192,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.2119004250151791,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T18:57:50.969928Z",
+            "finished_at": "2026-10-05T18:57:57.363306Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T18:57:58.194510Z",
+            "finished_at": "2026-10-05T18:58:13.238900Z"
+          }
+        }
+      ],
+      "finished_epoch": 1791226714.2107117
+    },
+    {
+      "task": "database_migration",
+      "status": "reference_passed",
+      "checkpoints": 5,
+      "exit_code": 0,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-oracle01-database_migration/database_migration__R8pzaEU/result.json",
+      "raw_rewards": {
+        "core_pass_rate": 1.0,
+        "step_has_prior": 0.8,
+        "verbosity_increased": 0.6,
+        "isolated_pass_rate": 1.0,
+        "strict_pass_rate": 1.0,
+        "erosion": 0.6439318893261443,
+        "verbosity": 0.4981657788324356,
+        "erosion_increased": 0.6
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.5395795892310181,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.35962145110410093,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:00:31.414382Z",
+            "finished_at": "2026-10-05T19:00:35.798889Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:00:36.482576Z",
+            "finished_at": "2026-10-05T19:00:53.247049Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.47387222357030184,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.46547884187082406,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:00:53.603096Z",
+            "finished_at": "2026-10-05T19:00:57.995697Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:00:58.655326Z",
+            "finished_at": "2026-10-05T19:01:12.406148Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.6577435370710117,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.4223856209150327,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:01:12.701898Z",
+            "finished_at": "2026-10-05T19:01:16.588009Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:01:17.345747Z",
+            "finished_at": "2026-10-05T19:01:31.701919Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_4",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7563055236944606,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.6044776119402985,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:01:32.320307Z",
+            "finished_at": "2026-10-05T19:01:38.902737Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:01:41.084626Z",
+            "finished_at": "2026-10-05T19:02:15.801751Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_5",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.7921585730639292,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.6388653683319221,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:02:16.294218Z",
+            "finished_at": "2026-10-05T19:02:20.936139Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:02:21.682035Z",
+            "finished_at": "2026-10-05T19:03:41.579472Z"
+          }
+        }
+      ],
+      "finished_epoch": 1791227039.422783
+    },
+    {
+      "task": "dag_execution",
+      "status": "reference_passed",
+      "checkpoints": 3,
+      "exit_code": 0,
+      "result_path": "/var/lib/supergoal-lab/jobs/scb-oracle01-dag_execution/dag_execution__C5FNAtE/result.json",
+      "raw_rewards": {
+        "verbosity": 0.3010479550376042,
+        "verbosity_increased": 0.3333333333333333,
+        "erosion_increased": 0.6666666666666666,
+        "core_pass_rate": 1.0,
+        "isolated_pass_rate": 1.0,
+        "step_has_prior": 0.6666666666666666,
+        "erosion": 0.4312527910073462,
+        "strict_pass_rate": 1.0
+      },
+      "exception": null,
+      "steps": [
+        {
+          "step_name": "checkpoint_1",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.3801141274034019,
+              "erosion_increased": 0.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 0.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.3131232548863183,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:04:09.474410Z",
+            "finished_at": "2026-10-05T19:04:14.761322Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:04:16.385667Z",
+            "finished_at": "2026-10-05T19:04:27.898268Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_2",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.44356736753208903,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.28810126582278484,
+              "verbosity_increased": 0.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:04:29.155062Z",
+            "finished_at": "2026-10-05T19:04:36.557749Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:04:38.283050Z",
+            "finished_at": "2026-10-05T19:04:52.161023Z"
+          }
+        },
+        {
+          "step_name": "checkpoint_3",
+          "agent_result": {
+            "n_input_tokens": null,
+            "n_cache_tokens": null,
+            "n_output_tokens": null,
+            "cost_usd": null,
+            "model_usage": null,
+            "rollout_details": null,
+            "metadata": null
+          },
+          "verifier_result": {
+            "rewards": {
+              "core_pass_rate": 1.0,
+              "erosion": 0.4700768780865477,
+              "erosion_increased": 1.0,
+              "isolated_pass_rate": 1.0,
+              "step_has_prior": 1.0,
+              "strict_pass_rate": 1.0,
+              "verbosity": 0.3019193444037093,
+              "verbosity_increased": 1.0
+            }
+          },
+          "exception_info": null,
+          "agent_execution": {
+            "started_at": "2026-10-05T19:04:53.041321Z",
+            "finished_at": "2026-10-05T19:04:59.061437Z"
+          },
+          "verifier": {
+            "started_at": "2026-10-05T19:05:00.528636Z",
+            "finished_at": "2026-10-05T19:05:26.431424Z"
+          }
+        }
+      ],
+      "finished_epoch": 1791227152.2910259
+    }
+  ]
+}

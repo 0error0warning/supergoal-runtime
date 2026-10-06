@@ -1,0 +1,6 @@
+{
+  "status": "waiting_resources",
+  "rows": [],
+  "base_image": "sha256:f0d6e67fe473a244c4e7c3d980df8651e5e05f823a3a4b662490a5bb2188c9c2",
+  "scope": "Integration probe only, excluded from benchmark capability sample"
+}

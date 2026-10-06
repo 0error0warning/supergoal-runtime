@@ -1,0 +1,298 @@
+{
+  "run_id": "soak-v2-20261005",
+  "started": 1791132580.4309742,
+  "phase": 3,
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791132589.9276261,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 3592,
+        "output_tokens": 74,
+        "total_tokens": 3666,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_359f1f9b-d7c",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 2.3684115409851074
+    },
+    {
+      "index": 2,
+      "started": 1791132592.5530102,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 3907,
+        "output_tokens": 89,
+        "total_tokens": 3996,
+        "input_tokens_details": {
+          "cached_tokens": 3584
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_e2dfcdea-4a1",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 1.125441551208496
+    },
+    {
+      "index": 3,
+      "started": 1791132593.710848,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 4317,
+        "output_tokens": 285,
+        "total_tokens": 4602,
+        "input_tokens_details": {
+          "cached_tokens": 3904
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b2ead760-b96",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 4.793877601623535
+    },
+    {
+      "index": 4,
+      "started": 1791132598.6665614,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 4684,
+        "output_tokens": 59,
+        "total_tokens": 4743,
+        "input_tokens_details": {
+          "cached_tokens": 4288
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ce965702-2f3",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 1.1644692420959473
+    },
+    {
+      "index": 5,
+      "started": 1791132599.9655182,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 4826,
+        "output_tokens": 141,
+        "total_tokens": 4967,
+        "input_tokens_details": {
+          "cached_tokens": 4672
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_888d1828-f31",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 2.2201054096221924
+    },
+    {
+      "index": 1,
+      "started": 1791136218.931928,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 5395,
+        "output_tokens": 67,
+        "total_tokens": 5462,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_fc0903f1-156",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 2.983177423477173
+    },
+    {
+      "index": 2,
+      "started": 1791136222.4290652,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 5661,
+        "output_tokens": 56,
+        "total_tokens": 5717,
+        "input_tokens_details": {
+          "cached_tokens": 5394
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_23b56464-da2",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 2.313136100769043
+    },
+    {
+      "index": 3,
+      "started": 1791136224.7601657,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 5849,
+        "output_tokens": 136,
+        "total_tokens": 5985,
+        "input_tokens_details": {
+          "cached_tokens": 5660
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_de5f8e16-050",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 5.163210153579712
+    },
+    {
+      "index": 1,
+      "started": 1791139821.7278805,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 6380,
+        "output_tokens": 80,
+        "total_tokens": 6460,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_db94e547-44f",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 1.6607449054718018
+    },
+    {
+      "index": 2,
+      "started": 1791139824.4975374,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 6795,
+        "output_tokens": 98,
+        "total_tokens": 6893,
+        "input_tokens_details": {
+          "cached_tokens": 6400
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d5256545-1e4",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 1.7995893955230713
+    },
+    {
+      "index": 3,
+      "started": 1791139826.4392135,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "usage": {
+        "input_tokens": 6916,
+        "output_tokens": 186,
+        "total_tokens": 7102,
+        "input_tokens_details": {
+          "cached_tokens": 6784
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_858f91bb-15a",
+      "status": "completed",
+      "http_status": 200,
+      "seconds": 1.9777636528015137
+    }
+  ],
+  "episodes": [
+    {
+      "phase": 0,
+      "boundary_time": 1791132604.4733121,
+      "status": "waiting",
+      "worker_instance": 1791132602373998024,
+      "worker_pid_in_namespace": 2,
+      "seconds": 15.133029902994167,
+      "api_calls": 5,
+      "independent_pass": true
+    },
+    {
+      "phase": 1,
+      "boundary_time": 1791136231.2901876,
+      "status": "waiting",
+      "worker_instance": 1791136230066438933,
+      "worker_pid_in_namespace": 2,
+      "seconds": 13.337632710987236,
+      "api_calls": 3,
+      "independent_pass": true
+    },
+    {
+      "phase": 2,
+      "boundary_time": 1791139830.445465,
+      "status": "succeeded",
+      "worker_instance": 1791139828532256975,
+      "worker_pid_in_namespace": 2,
+      "seconds": 9.09415922302287,
+      "api_calls": 3,
+      "independent_pass": true
+    }
+  ],
+  "executor_calls": 11,
+  "supervisor_instances": [
+    {
+      "pid": 2935180,
+      "started": 1791132580.4309845
+    },
+    {
+      "pid": 2935653,
+      "started": 1791132609.8442051
+    }
+  ],
+  "restart_injected": true,
+  "status": "succeeded",
+  "elapsed_seconds": 7250.020880699158,
+  "active_episode_seconds": 37.564821837004274,
+  "non_episode_seconds": 7212.456058862153,
+  "passed": true
+}

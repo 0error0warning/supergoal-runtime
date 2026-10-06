@@ -1,0 +1,331 @@
+{
+  "status": "complete",
+  "samples": [
+    {
+      "utc_epoch": 1791223359.3123884,
+      "cpu_percent": 49.05284147557328,
+      "available_memory_mb": 58155.3515625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "7.71 7.64 5.79 4/443 677403",
+      "cpu_pressure": "some avg10=16.14 avg60=36.41 avg300=49.52 total=1186907563\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223364.3131545,
+      "cpu_percent": 59.965122072745395,
+      "available_memory_mb": 58232.3671875,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "7.41 7.58 5.79 6/441 677650",
+      "cpu_pressure": "some avg10=12.07 avg60=33.72 avg300=48.68 total=1187098113\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223369.314024,
+      "cpu_percent": 53.47620234238724,
+      "available_memory_mb": 58712.01171875,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "7.06 7.51 5.77 6/473 678366",
+      "cpu_pressure": "some avg10=8.57 avg60=31.65 avg300=48.03 total=1187189274\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223374.3149228,
+      "cpu_percent": 56.35235732009926,
+      "available_memory_mb": 59037.36328125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.81 7.45 5.76 6/482 678928",
+      "cpu_pressure": "some avg10=6.03 avg60=28.90 avg300=47.11 total=1187361423\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223379.315698,
+      "cpu_percent": 58.79870935716058,
+      "available_memory_mb": 59381.2265625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.67 7.41 5.76 3/469 679420",
+      "cpu_pressure": "some avg10=4.52 avg60=27.13 avg300=46.49 total=1187464716\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223384.3165507,
+      "cpu_percent": 39.0644438915153,
+      "available_memory_mb": 59262.24609375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.37 7.33 5.74 4/485 680401",
+      "cpu_pressure": "some avg10=2.93 avg60=24.65 avg300=45.56 total=1187523732\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223389.4038641,
+      "cpu_percent": 44.7845249755142,
+      "available_memory_mb": 59667.33203125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.50 7.35 5.75 4/477 683708",
+      "cpu_pressure": "some avg10=1.96 avg60=23.06 avg300=44.94 total=1187600771\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223394.4777222,
+      "cpu_percent": 63.33911320287342,
+      "available_memory_mb": 59624.88671875,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.38 7.31 5.75 6/435 689433",
+      "cpu_pressure": "some avg10=2.12 avg60=21.09 avg300=44.07 total=1187729503\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223399.4784856,
+      "cpu_percent": 48.00791883197228,
+      "available_memory_mb": 59799.203125,
+      "pool_reserved_cpus": 5,
+      "pool_jobs": 3,
+      "loadavg": "6.19 7.25 5.74 4/406 691069",
+      "cpu_pressure": "some avg10=2.05 avg60=19.86 avg300=43.49 total=1187837965\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223404.4792182,
+      "cpu_percent": 36.796429456979915,
+      "available_memory_mb": 59740.8828125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.18 7.23 5.74 6/424 692354",
+      "cpu_pressure": "some avg10=1.91 avg60=18.14 avg300=42.64 total=1187948948\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223409.4800186,
+      "cpu_percent": 46.44795263936852,
+      "available_memory_mb": 60117.171875,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.00 7.18 5.73 2/426 694507",
+      "cpu_pressure": "some avg10=1.79 avg60=17.06 avg300=42.08 total=1188048587\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223414.480834,
+      "cpu_percent": 72.01789264413519,
+      "available_memory_mb": 58625.90234375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.56 7.27 5.77 9/453 695155",
+      "cpu_pressure": "some avg10=2.09 avg60=15.67 avg300=41.27 total=1188235495\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223419.481789,
+      "cpu_percent": 81.94271481942715,
+      "available_memory_mb": 58813.515625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.60 7.27 5.78 7/449 696228",
+      "cpu_pressure": "some avg10=2.50 avg60=14.88 avg300=40.75 total=1188400698\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223424.4827607,
+      "cpu_percent": 78.08764940239044,
+      "available_memory_mb": 58159.90625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.55 7.25 5.78 8/465 696777",
+      "cpu_pressure": "some avg10=2.27 avg60=13.66 avg300=39.96 total=1188521084\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223429.4866395,
+      "cpu_percent": 88.66416978776529,
+      "available_memory_mb": 57048.90234375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.58 7.24 5.78 8/470 697214",
+      "cpu_pressure": "some avg10=7.96 avg60=13.98 avg300=39.67 total=1189651284\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223434.4876099,
+      "cpu_percent": 80.63389069129025,
+      "available_memory_mb": 57141.5390625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.46 7.21 5.78 7/465 697631",
+      "cpu_pressure": "some avg10=17.87 avg60=15.50 avg300=39.47 total=1191167819\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223439.4886339,
+      "cpu_percent": 70.46812749003983,
+      "available_memory_mb": 57714.70703125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.34 7.17 5.78 6/448 698101",
+      "cpu_pressure": "some avg10=21.87 avg60=16.43 avg300=39.35 total=1192670046\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223444.4896326,
+      "cpu_percent": 65.05483549351945,
+      "available_memory_mb": 57084.72265625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.47 7.18 5.79 5/451 698481",
+      "cpu_pressure": "some avg10=21.48 avg60=16.95 avg300=38.99 total=1193746670\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223449.4905148,
+      "cpu_percent": 68.735976065819,
+      "available_memory_mb": 56793.49609375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.36 7.15 5.78 13/494 699032",
+      "cpu_pressure": "some avg10=21.74 avg60=17.36 avg300=38.78 total=1194969908\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223454.4914188,
+      "cpu_percent": 70.89143426294821,
+      "available_memory_mb": 56820.890625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.25 7.11 5.78 5/450 699447",
+      "cpu_pressure": "some avg10=22.35 avg60=17.97 avg300=38.48 total=1196160374\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223459.492338,
+      "cpu_percent": 65.36257164216298,
+      "available_memory_mb": 57221.90234375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "6.07 7.06 5.77 5/451 699921",
+      "cpu_pressure": "some avg10=23.22 avg60=18.42 avg300=38.29 total=1197542445\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223464.4933,
+      "cpu_percent": 78.38580709645177,
+      "available_memory_mb": 56984.67578125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.98 7.02 5.77 6/452 701403",
+      "cpu_pressure": "some avg10=26.92 avg60=19.65 avg300=38.15 total=1199125051\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223469.4941652,
+      "cpu_percent": 75.64006959980114,
+      "available_memory_mb": 57363.4453125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.90 6.99 5.76 7/459 702431",
+      "cpu_pressure": "some avg10=28.09 avg60=20.32 avg300=38.04 total=1200679529\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223474.4950888,
+      "cpu_percent": 60.815514669318745,
+      "available_memory_mb": 57348.578125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.75 6.94 5.75 5/439 702999",
+      "cpu_pressure": "some avg10=29.89 avg60=21.43 avg300=37.91 total=1202280181\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223479.4961061,
+      "cpu_percent": 60.22360248447205,
+      "available_memory_mb": 57381.40234375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.61 6.89 5.74 5/438 703335",
+      "cpu_pressure": "some avg10=30.17 avg60=22.02 avg300=37.81 total=1203773988\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223484.4970207,
+      "cpu_percent": 50.29865604778497,
+      "available_memory_mb": 56972.59765625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.72 6.89 5.75 4/420 703651",
+      "cpu_pressure": "some avg10=22.10 avg60=21.23 avg300=37.33 total=1204312622\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223489.49797,
+      "cpu_percent": 43.93939393939394,
+      "available_memory_mb": 55789.37109375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.50 6.83 5.73 4/440 704006",
+      "cpu_pressure": "some avg10=15.15 avg60=19.93 avg300=36.83 total=1204472834\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223494.4989176,
+      "cpu_percent": 58.31673306772908,
+      "available_memory_mb": 55663.70703125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.30 6.77 5.72 5/435 704269",
+      "cpu_pressure": "some avg10=19.88 avg60=20.39 avg300=36.58 total=1205958154\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223499.5000186,
+      "cpu_percent": 61.896465903434546,
+      "available_memory_mb": 55605.69140625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.20 6.72 5.71 4/439 704659",
+      "cpu_pressure": "some avg10=22.60 avg60=20.86 avg300=36.46 total=1207270794\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223504.5011094,
+      "cpu_percent": 45.35954217467032,
+      "available_memory_mb": 55935.515625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "5.02 6.66 5.69 4/420 704918",
+      "cpu_pressure": "some avg10=17.23 avg60=20.02 avg300=35.97 total=1207772909\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223509.502294,
+      "cpu_percent": 39.78601642199552,
+      "available_memory_mb": 56005.703125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.86 6.60 5.68 3/419 705222",
+      "cpu_pressure": "some avg10=11.88 avg60=18.80 avg300=35.49 total=1207821679\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223514.5035498,
+      "cpu_percent": 45.73547589616811,
+      "available_memory_mb": 55675.21484375,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.71 6.54 5.66 10/449 705477",
+      "cpu_pressure": "some avg10=6.70 avg60=17.04 avg300=34.77 total=1207875859\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223519.5045345,
+      "cpu_percent": 68.47691927919033,
+      "available_memory_mb": 55805.08203125,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.97 6.56 5.68 7/425 705913",
+      "cpu_pressure": "some avg10=5.81 avg60=16.20 avg300=34.35 total=1208101577\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223524.5054832,
+      "cpu_percent": 57.030093734583126,
+      "available_memory_mb": 55411.1640625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.98 6.53 5.67 4/428 706306",
+      "cpu_pressure": "some avg10=4.36 avg60=14.92 avg300=33.71 total=1208237964\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223529.5063007,
+      "cpu_percent": 55.57478368355995,
+      "available_memory_mb": 55468.41796875,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.90 6.49 5.66 5/428 706513",
+      "cpu_pressure": "some avg10=3.58 avg60=14.08 avg300=33.27 total=1208355018\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    },
+    {
+      "utc_epoch": 1791223534.5073,
+      "cpu_percent": 68.37865055387714,
+      "available_memory_mb": 55651.65625,
+      "pool_reserved_cpus": 6,
+      "pool_jobs": 4,
+      "loadavg": "4.91 6.47 5.66 7/436 706799",
+      "cpu_pressure": "some avg10=3.68 avg60=13.10 avg300=32.67 total=1208612753\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0"
+    }
+  ],
+  "mean_cpu_percent": 60.21673895605883,
+  "min_available_memory_mb": 55411.1640625
+}

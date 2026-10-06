@@ -1,0 +1,45 @@
+{
+  "audited_at_utc": "2026-10-05T08:40:10.997416+00:00",
+  "candidate": "public-dev04",
+  "control_id": "042f6bab52e44238a8abeb8ddc15c48d",
+  "task_id": "raman-fitting",
+  "arm": "sg_no_context",
+  "bundle_collected_at": "2026-10-05T08:39:31.976918+00:00",
+  "bundle_sha256": "9ce12998f63829f33de370042c42bbd3a63f80cf2db0d99cc7475ee7ec756e85",
+  "online_status": "succeeded",
+  "last_acceptance": {
+    "verdict": "pass",
+    "reason": "results.json exists with required keys and values; independent Lorentzian refit of graphene.dat reproduces the reported parameters almost exactly (G: x0≈19198.46, γ≈386.59, A≈72805, c≈13419; 2D: x0≈33292.63, γ≈871.22, A≈2059, c≈19192), consistent with the actual peak locations in the data.",
+    "evidence": [
+      "results.json contains G and 2D objects each with x0, gamma, amplitude, offset as numbers",
+      "graphene.dat parsed (comma-decimal, tab-separated, x from ~1648 to ~47183); local maxima near x≈19140 (G) and x≈33245 (2D)",
+      "Independent curve_fit of c+A·γ²/((x−x0)²+γ²) over stated windows yields parameters matching results.json to <0.01%"
+    ],
+    "scope": "SWE2 review of public instruction and read-only task snapshot; not official final score",
+    "tool_observation_count": 2,
+    "snapshot_image_id": "sha256:3b8fd63b0f007989c359a7dc56785055e403f59c28b53e6dc5a6664c69c5e7a7"
+  },
+  "official_reward": 0,
+  "official_test_summary": "2 failed, 1 passed in 0.08s",
+  "classification": "online_acceptance_conflicts_with_official_grader",
+  "review_trace_receipt": {
+    "path": "/var/lib/supergoal-lab/control/042f6bab52e44238a8abeb8ddc15c48d/02-review/result.json",
+    "sha256": "f9acf229b420899dc849b67a7d8323d95a99db19d86f928e7b3fdd16a5a184fb",
+    "bytes": 11363,
+    "tool_result_counts": {
+      "terminal": 2
+    }
+  },
+  "public_instruction_sha256": "1fa59a89d88daf6a4b2d422955f53779b461880b527f40d79c71b16e0ee52433",
+  "reference_solution_sha256": "cc803d3c254063f82ab1da5b59f276951d50d1f307657606027a45dc035a53ee",
+  "observations": [
+    "The reviewer read the data and results, then independently repeated a fit of the raw first-column coordinate.",
+    "The official reference solution transforms the first column with 1e7 / x before fitting selected intervals.",
+    "The public instruction does not explicitly specify horizontal-axis units or the transformation.",
+    "Numerical reproducibility under a shared interpretation did not establish agreement with the official acceptance criteria."
+  ],
+  "interpretation_limit": "A false acceptance relative to the official grader, with ambiguity in the public task specification retained as an audit finding.",
+  "audit_model_requests": 0,
+  "trial_modified": false,
+  "original_score_unchanged": true
+}

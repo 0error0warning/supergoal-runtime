@@ -1,0 +1,90 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T21:18:53.344863+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "native",
+      "status": "running",
+      "started_at": "2026-10-05T21:18:53.427879+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-001-adaptive-rejection-sampler-native",
+      "harbor_pid": 1576536
+    },
+    {
+      "index": 1,
+      "task_id": "polyglot-rust-c",
+      "arm": "sg_v2",
+      "status": "running",
+      "started_at": "2026-10-05T21:18:53.507890+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-harness-transfer01-002-polyglot-rust-c-sg_v2",
+      "harbor_pid": 1576570
+    },
+    {
+      "index": 2,
+      "task_id": "gcode-to-text",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 3,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 4,
+      "task_id": "polyglot-rust-c",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 5,
+      "task_id": "gcode-to-text",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 6,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "mini_swe",
+      "status": "pending"
+    },
+    {
+      "index": 7,
+      "task_id": "polyglot-rust-c",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 8,
+      "task_id": "gcode-to-text",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 9,
+      "task_id": "adaptive-rejection-sampler",
+      "arm": "longhorizon",
+      "status": "pending"
+    },
+    {
+      "index": 10,
+      "task_id": "polyglot-rust-c",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 11,
+      "task_id": "gcode-to-text",
+      "arm": "sg_v2",
+      "status": "pending"
+    }
+  ],
+  "registration_sha256": "337544388072961f7d4f561a2df9e979752bd9dd0412293f1a5ec197fcd79732",
+  "cpu_limit": 2,
+  "memory_limit_mb": 12288,
+  "automatic_retries": 0,
+  "capacity_opened_at": "2026-10-05T21:18:53.345208+00:00",
+  "heartbeat_at": "2026-10-05T21:19:28.512705+00:00"
+}

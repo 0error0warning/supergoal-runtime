@@ -1,0 +1,2700 @@
+{
+  "status": "running",
+  "started_at": "2026-10-05T16:52:11.553308+00:00",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "bn-fit-modify",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T16:52:12.331896Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native",
+      "harbor_pid": 251832,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-001-bn-fit-modify-native/bn-fit-modify__Gate7VV/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "8756feb38c934b49a3b8782c002fd268",
+        "study_status": "agent_stopped",
+        "physical_requests": 10,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 60339,
+      "n_output_tokens": 2884,
+      "n_cache_tokens": 47481,
+      "finished_at": "2026-10-05T16:54:49.557584+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 1,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T16:55:31.576850Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2",
+      "harbor_pid": 263087,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-002-bn-fit-modify-sg_v2/bn-fit-modify__thtmyL2/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "63a599c071944fd6b4cbddb6fbf783c6",
+        "study_status": "succeeded",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 136786,
+      "n_output_tokens": 6503,
+      "n_cache_tokens": 98224,
+      "finished_at": "2026-10-05T16:59:04.365716+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 2,
+      "task_id": "bn-fit-modify",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T16:53:24.870966Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal",
+      "harbor_pid": 255655,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-003-bn-fit-modify-repeat_goal/bn-fit-modify__9okgreZ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "4cc232836c5945baae3581d2b90d256f",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 20,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 147208,
+      "n_output_tokens": 4072,
+      "n_cache_tokens": 74895,
+      "finished_at": "2026-10-05T16:56:44.080530+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 3,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T16:55:31.576642Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context",
+      "harbor_pid": 263100,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-004-bn-fit-modify-sg_no_context/bn-fit-modify__cWPux9a/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "88068cc8a4db44e09d9048c8c76dc5f7",
+        "study_status": "succeeded",
+        "physical_requests": 18,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 110444,
+      "n_output_tokens": 4150,
+      "n_cache_tokens": 86982,
+      "finished_at": "2026-10-05T16:59:14.749868+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 4,
+      "task_id": "bn-fit-modify",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T16:59:10.160598Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review",
+      "harbor_pid": 275271,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-005-bn-fit-modify-sg_no_review/bn-fit-modify__GGDQwCg/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "791e160a4b6e4a8fa7d524f660060d76",
+        "study_status": "unverified_done",
+        "physical_requests": 8,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 40747,
+      "n_output_tokens": 1789,
+      "n_cache_tokens": 30068,
+      "finished_at": "2026-10-05T17:01:08.299631+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 5,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T16:59:20.561811Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-006-circuit-fibsqrt-sg_v2",
+      "harbor_pid": 276361,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-006-circuit-fibsqrt-sg_v2/circuit-fibsqrt__hJaLaR3/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "b1707ae744cb4aa1970fe2c53edbc639",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 117587,
+      "n_output_tokens": 24802,
+      "n_cache_tokens": 80976,
+      "finished_at": "2026-10-05T17:05:41.313450+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 6,
+      "task_id": "circuit-fibsqrt",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T16:59:10.180719Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-007-circuit-fibsqrt-repeat_goal",
+      "harbor_pid": 275284,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-007-circuit-fibsqrt-repeat_goal/circuit-fibsqrt__4eVb8jE/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "eb13917258ac47579ce5db2df9200058",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 35,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 674220,
+      "n_output_tokens": 23268,
+      "n_cache_tokens": 525571,
+      "finished_at": "2026-10-05T17:10:24.986905+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 7,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T17:09:44.329501Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-008-circuit-fibsqrt-sg_no_context",
+      "harbor_pid": 307480,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-008-circuit-fibsqrt-sg_no_context/circuit-fibsqrt__aPpgh4q/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "d72de3a91d854c81b5f85d4492ba9f3c",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 131718,
+      "n_output_tokens": 10237,
+      "n_cache_tokens": 104231,
+      "finished_at": "2026-10-05T17:18:50.316854+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 8,
+      "task_id": "circuit-fibsqrt",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T16:59:41.285146Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-009-circuit-fibsqrt-sg_no_review",
+      "harbor_pid": 277787,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-009-circuit-fibsqrt-sg_no_review/circuit-fibsqrt__RToKnpU/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "4a9188c7d9834791bdd86e4152a579ab",
+        "study_status": "unverified_done",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 47427,
+      "n_output_tokens": 15635,
+      "n_cache_tokens": 32932,
+      "finished_at": "2026-10-05T17:11:01.117742+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 9,
+      "task_id": "circuit-fibsqrt",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T17:01:24.370017Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-010-circuit-fibsqrt-native",
+      "harbor_pid": 283342,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-010-circuit-fibsqrt-native/circuit-fibsqrt__senZncU/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "0d8b3e90bb1f4e1da81274a51b10c9cb",
+        "study_status": "agent_stopped",
+        "physical_requests": 78,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 1979854,
+      "n_output_tokens": 148586,
+      "n_cache_tokens": 1890531,
+      "finished_at": "2026-10-05T17:48:57.813913+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 10,
+      "task_id": "compile-compcert",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:18:56.147190Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-011-compile-compcert-repeat_goal",
+      "harbor_pid": 324912,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-011-compile-compcert-repeat_goal/compile-compcert__DJ7JZPW/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "279de15b5e6e40f487bbcbefe2803112",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 53,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 588375,
+      "n_output_tokens": 6787,
+      "n_cache_tokens": 458960,
+      "finished_at": "2026-10-05T17:45:20.187437+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 11,
+      "task_id": "compile-compcert",
+      "arm": "sg_no_context",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T18:26:10.289939Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-012-compile-compcert-sg_no_context",
+      "harbor_pid": 778926,
+      "reservation": {
+        "cpus": 3,
+        "memory_mb": 8192
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-012-compile-compcert-sg_no_context/compile-compcert__u3AdCYU/result.json",
+      "raw_rewards": null,
+      "tests_completed_marker": false,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "5ec7ab26d471496c9cf575731c3e6e24",
+        "study_status": "adapter_error",
+        "physical_requests": 26,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 170917,
+      "n_output_tokens": 3425,
+      "n_cache_tokens": 149822,
+      "finished_at": "2026-10-05T19:02:35.951780+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 12,
+      "task_id": "compile-compcert",
+      "arm": "sg_no_review",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T17:39:47.516678Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-013-compile-compcert-sg_no_review",
+      "harbor_pid": 506481,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-013-compile-compcert-sg_no_review/compile-compcert__p3jckKU/result.json",
+      "raw_rewards": null,
+      "tests_completed_marker": false,
+      "dependency_failure_marker": false,
+      "exception_type": "RewardFileNotFoundError",
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "e1627923e6244a5b9948cb5099cc5e96",
+        "study_status": "unverified_done",
+        "physical_requests": 53,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 534367,
+      "n_output_tokens": 6237,
+      "n_cache_tokens": 513137,
+      "finished_at": "2026-10-05T18:06:14.235469+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 13,
+      "task_id": "compile-compcert",
+      "arm": "native",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T17:48:27.560888Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-014-compile-compcert-native",
+      "harbor_pid": 563144,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-014-compile-compcert-native/compile-compcert__8RXuVR8/result.json",
+      "raw_rewards": null,
+      "tests_completed_marker": false,
+      "dependency_failure_marker": false,
+      "exception_type": "RewardFileNotFoundError",
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "9ab4d291034d4d9f820bb7dc47737d0b",
+        "study_status": "agent_stopped",
+        "physical_requests": 28,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 196586,
+      "n_output_tokens": 4019,
+      "n_cache_tokens": 157206,
+      "finished_at": "2026-10-05T18:17:25.950057+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 14,
+      "task_id": "compile-compcert",
+      "arm": "sg_v2",
+      "status": "trial_exception",
+      "started_at": "2026-10-05T19:02:42.207259Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-015-compile-compcert-sg_v2",
+      "harbor_pid": 1013175,
+      "reservation": {
+        "cpus": 3,
+        "memory_mb": 8192
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-015-compile-compcert-sg_v2/compile-compcert__iSW3ENC/result.json",
+      "raw_rewards": null,
+      "tests_completed_marker": false,
+      "dependency_failure_marker": false,
+      "exception_type": "AgentTimeoutError",
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "2a55a26bb9614fc2bcf9dfbac90805f4",
+        "study_status": "adapter_error",
+        "physical_requests": 66,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 581350,
+      "n_output_tokens": 11183,
+      "n_cache_tokens": 373431,
+      "finished_at": "2026-10-05T19:44:26.709842+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 15,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:20:15.638978Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-016-constraints-scheduling-sg_no_context",
+      "harbor_pid": 759576,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-016-constraints-scheduling-sg_no_context/constraints-scheduling__uwXgy8V/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "84d544d2caa4405e83e0a9eb85f74542",
+        "study_status": "succeeded",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 28316,
+      "n_output_tokens": 2691,
+      "n_cache_tokens": 6159,
+      "finished_at": "2026-10-05T18:21:42.076792+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 16,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T17:05:21.260208Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-017-constraints-scheduling-sg_no_review",
+      "harbor_pid": 290684,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-017-constraints-scheduling-sg_no_review/constraints-scheduling__JwCZR3Z/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "96fc9398ef934650820f8cb180b9f4f4",
+        "study_status": "unverified_done",
+        "physical_requests": 3,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 15823,
+      "n_output_tokens": 1462,
+      "n_cache_tokens": 5661,
+      "finished_at": "2026-10-05T17:06:32.846880+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 17,
+      "task_id": "constraints-scheduling",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T17:09:18.466261Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-018-constraints-scheduling-native",
+      "harbor_pid": 305564,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-018-constraints-scheduling-native/constraints-scheduling__eoDGDyD/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "663198c838194909b7f72363b88d459b",
+        "study_status": "agent_stopped",
+        "physical_requests": 3,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 16756,
+      "n_output_tokens": 1465,
+      "n_cache_tokens": 9344,
+      "finished_at": "2026-10-05T17:10:09.517328+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 18,
+      "task_id": "constraints-scheduling",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:24:57.275866Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-019-constraints-scheduling-sg_v2",
+      "harbor_pid": 772907,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-019-constraints-scheduling-sg_v2/constraints-scheduling__zUefydN/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "7584852b0f7a4b2e9b2287c7c416514d",
+        "study_status": "succeeded",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 27744,
+      "n_output_tokens": 2849,
+      "n_cache_tokens": 3200,
+      "finished_at": "2026-10-05T18:26:04.521544+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 19,
+      "task_id": "constraints-scheduling",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:11:06.934974Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-020-constraints-scheduling-repeat_goal",
+      "harbor_pid": 310539,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-020-constraints-scheduling-repeat_goal/constraints-scheduling__EtfCDfd/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "a5ff7c13ecfb4090b524b2cebc450060",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 10,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 82431,
+      "n_output_tokens": 3009,
+      "n_cache_tokens": 23422,
+      "finished_at": "2026-10-05T17:13:04.801069+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 20,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T17:13:10.596371Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-021-custom-memory-heap-crash-sg_no_review",
+      "harbor_pid": 313745,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-021-custom-memory-heap-crash-sg_no_review/custom-memory-heap-crash__Dkb8D6s/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "58483b24492b45d2a178db76bfb92c82",
+        "study_status": "unverified_done",
+        "physical_requests": 7,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 46267,
+      "n_output_tokens": 3616,
+      "n_cache_tokens": 35841,
+      "finished_at": "2026-10-05T17:15:44.772947+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 21,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T17:15:50.568339Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-022-custom-memory-heap-crash-native",
+      "harbor_pid": 320019,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-022-custom-memory-heap-crash-native/custom-memory-heap-crash__tKJLfLt/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "448014492f7e4ea6b44e38f6f705a570",
+        "study_status": "agent_stopped",
+        "physical_requests": 31,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 490175,
+      "n_output_tokens": 10158,
+      "n_cache_tokens": 456983,
+      "finished_at": "2026-10-05T17:23:50.413280+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 22,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:29:55.447074Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-023-custom-memory-heap-crash-sg_v2",
+      "harbor_pid": 801223,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-023-custom-memory-heap-crash-sg_v2/custom-memory-heap-crash__JkgWrgX/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "3dd5827e526b405f80983129ca80075a",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 99922,
+      "n_output_tokens": 3921,
+      "n_cache_tokens": 50051,
+      "finished_at": "2026-10-05T18:32:18.659077+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 23,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:23:56.329632Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-024-custom-memory-heap-crash-repeat_goal",
+      "harbor_pid": 362204,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-024-custom-memory-heap-crash-repeat_goal/custom-memory-heap-crash__XqiBKJs/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "18c04ad66bf84bb8828c5b710652fe9c",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 21,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 214401,
+      "n_output_tokens": 6991,
+      "n_cache_tokens": 136544,
+      "finished_at": "2026-10-05T17:29:11.542219+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 24,
+      "task_id": "custom-memory-heap-crash",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:32:24.572288Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-025-custom-memory-heap-crash-sg_no_context",
+      "harbor_pid": 813409,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-025-custom-memory-heap-crash-sg_no_context/custom-memory-heap-crash__3EkHzpR/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "760769a0fa784686987e8be47a83fe08",
+        "study_status": "verification_unavailable",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 103690,
+      "n_output_tokens": 4996,
+      "n_cache_tokens": 59264,
+      "finished_at": "2026-10-05T18:34:26.755211+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 25,
+      "task_id": "extract-elf",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T17:29:17.617266Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-026-extract-elf-native",
+      "harbor_pid": 425813,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-026-extract-elf-native/extract-elf__KJWDfYk/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "7e9e979ef31946f9ac1cf3600392b9f2",
+        "study_status": "agent_stopped",
+        "physical_requests": 7,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 43820,
+      "n_output_tokens": 1595,
+      "n_cache_tokens": 32455,
+      "finished_at": "2026-10-05T17:30:44.590094+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 26,
+      "task_id": "extract-elf",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:34:32.539302Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-027-extract-elf-sg_v2",
+      "harbor_pid": 835970,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-027-extract-elf-sg_v2/extract-elf__jt3ADRa/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "3702338f68594a67b54dd528fa1f8567",
+        "study_status": "succeeded",
+        "physical_requests": 16,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 98293,
+      "n_output_tokens": 3755,
+      "n_cache_tokens": 75964,
+      "finished_at": "2026-10-05T18:38:14.401167+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 27,
+      "task_id": "extract-elf",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:29:27.923971Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-028-extract-elf-repeat_goal",
+      "harbor_pid": 427281,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-028-extract-elf-repeat_goal/extract-elf__XrNST9X/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "44a04af024fc4999ad88540b7cc55600",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 148076,
+      "n_output_tokens": 4262,
+      "n_cache_tokens": 62741,
+      "finished_at": "2026-10-05T17:32:27.632672+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 28,
+      "task_id": "extract-elf",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:38:20.554873Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-029-extract-elf-sg_no_context",
+      "harbor_pid": 847245,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-029-extract-elf-sg_no_context/extract-elf__hxQi2rq/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "6873ee5cf6e9471692cd953d284426a7",
+        "study_status": "succeeded",
+        "physical_requests": 9,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 52091,
+      "n_output_tokens": 2582,
+      "n_cache_tokens": 30395,
+      "finished_at": "2026-10-05T18:40:26.635108+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 29,
+      "task_id": "extract-elf",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T17:32:33.426983Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-030-extract-elf-sg_no_review",
+      "harbor_pid": 448880,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-030-extract-elf-sg_no_review/extract-elf__wsoGHyC/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "353318ac06cc48ed909e88907d7e7ffc",
+        "study_status": "unverified_done",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 34961,
+      "n_output_tokens": 2428,
+      "n_cache_tokens": 23408,
+      "finished_at": "2026-10-05T17:34:13.250702+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 30,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T18:40:32.626531Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-031-feal-linear-cryptanalysis-sg_v2",
+      "harbor_pid": 870001,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-031-feal-linear-cryptanalysis-sg_v2/feal-linear-cryptanalysis__s2xWCaT/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "9a20685c35284322bbf5818a3647c864",
+        "study_status": "succeeded",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 124345,
+      "n_output_tokens": 10382,
+      "n_cache_tokens": 95603,
+      "finished_at": "2026-10-05T18:45:28.732869+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 31,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:34:19.078250Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-032-feal-linear-cryptanalysis-repeat_goal",
+      "harbor_pid": 469908,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-032-feal-linear-cryptanalysis-repeat_goal/feal-linear-cryptanalysis__J3CbWf9/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "2fc1d159458d4b48b5da4c6fd0dc4764",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 181079,
+      "n_output_tokens": 4466,
+      "n_cache_tokens": 75203,
+      "finished_at": "2026-10-05T17:37:18.045735+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 32,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:45:34.882471Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-033-feal-linear-cryptanalysis-sg_no_context",
+      "harbor_pid": 896052,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-033-feal-linear-cryptanalysis-sg_no_context/feal-linear-cryptanalysis__AGwWWno/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "a99a1f881bb840fe82465808eac55492",
+        "study_status": "succeeded",
+        "physical_requests": 16,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 136809,
+      "n_output_tokens": 11666,
+      "n_cache_tokens": 108071,
+      "finished_at": "2026-10-05T18:50:31.357120+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 33,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T17:35:46.342390Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-034-feal-linear-cryptanalysis-sg_no_review",
+      "harbor_pid": 478974,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-034-feal-linear-cryptanalysis-sg_no_review/feal-linear-cryptanalysis__J4gyWPH/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "7fafd4ea047f4ac792533570004f60fe",
+        "study_status": "unverified_done",
+        "physical_requests": 13,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 101132,
+      "n_output_tokens": 5848,
+      "n_cache_tokens": 87494,
+      "finished_at": "2026-10-05T17:39:41.730046+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 34,
+      "task_id": "feal-linear-cryptanalysis",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T17:53:45.184166Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-035-feal-linear-cryptanalysis-native",
+      "harbor_pid": 605857,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-035-feal-linear-cryptanalysis-native/feal-linear-cryptanalysis__x82iTsD/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "6f0a18e6b6b8410a96cbff1e7544c1d6",
+        "study_status": "agent_stopped",
+        "physical_requests": 12,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 105265,
+      "n_output_tokens": 7468,
+      "n_cache_tokens": 89819,
+      "finished_at": "2026-10-05T17:57:29.950207+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 35,
+      "task_id": "financial-document-processor",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T17:54:34.161456Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-036-financial-document-processor-repeat_goal",
+      "harbor_pid": 612279,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-036-financial-document-processor-repeat_goal/financial-document-processor__Veuky9z/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "66aa9ee2741145d8b9995782f815704c",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 22,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 257867,
+      "n_output_tokens": 4059,
+      "n_cache_tokens": 118413,
+      "finished_at": "2026-10-05T17:59:01.652660+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 36,
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T18:50:37.773511Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-037-financial-document-processor-sg_no_context",
+      "harbor_pid": 931137,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 8192
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-037-financial-document-processor-sg_no_context/financial-document-processor__cwRpKwY/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "780e02b7fc40496db14d5bf15c3d338a",
+        "study_status": "succeeded",
+        "physical_requests": 26,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 208174,
+      "n_output_tokens": 5425,
+      "n_cache_tokens": 99116,
+      "finished_at": "2026-10-05T18:57:43.738022+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 37,
+      "task_id": "financial-document-processor",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T17:59:07.631083Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-038-financial-document-processor-sg_no_review",
+      "harbor_pid": 659509,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-038-financial-document-processor-sg_no_review/financial-document-processor__SSTt8Mr/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "51678b01e0cb4ffca8dab5c7522b10eb",
+        "study_status": "unverified_done",
+        "physical_requests": 13,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 94448,
+      "n_output_tokens": 2893,
+      "n_cache_tokens": 78051,
+      "finished_at": "2026-10-05T18:03:17.628925+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 38,
+      "task_id": "financial-document-processor",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:02:23.848069Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-039-financial-document-processor-native",
+      "harbor_pid": 675777,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-039-financial-document-processor-native/financial-document-processor__cvVTy3b/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "864d31e461404e36bf4e4a31be0e7351",
+        "study_status": "agent_stopped",
+        "physical_requests": 12,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 89597,
+      "n_output_tokens": 2141,
+      "n_cache_tokens": 74260,
+      "finished_at": "2026-10-05T18:06:19.707012+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 39,
+      "task_id": "financial-document-processor",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T19:39:07.368885Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-040-financial-document-processor-sg_v2",
+      "harbor_pid": 1201211,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 8192
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-040-financial-document-processor-sg_v2/financial-document-processor__L2AyHmC/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "ed79eee3350541b5bc54a2af9a8f4b4b",
+        "study_status": "succeeded",
+        "physical_requests": 21,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 151013,
+      "n_output_tokens": 4051,
+      "n_cache_tokens": 122289,
+      "finished_at": "2026-10-05T19:45:27.674379+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 40,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_context",
+      "status": "graded",
+      "started_at": "2026-10-05T19:45:33.538914Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-041-git-leak-recovery-sg_no_context",
+      "harbor_pid": 1229064,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-041-git-leak-recovery-sg_no_context/git-leak-recovery__ubcvEzu/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_context",
+        "control_id": "3b52e642abbb4147b01a91e4ecfb2e1f",
+        "study_status": "succeeded",
+        "physical_requests": 11,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 48413,
+      "n_output_tokens": 1633,
+      "n_cache_tokens": 30989,
+      "finished_at": "2026-10-05T19:47:18.500215+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 41,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T18:06:25.900789Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-042-git-leak-recovery-sg_no_review",
+      "harbor_pid": 711034,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-042-git-leak-recovery-sg_no_review/git-leak-recovery__C9Td4GV/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "ea520428d556449caabce773da7c23a0",
+        "study_status": "unverified_done",
+        "physical_requests": 7,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 33765,
+      "n_output_tokens": 969,
+      "n_cache_tokens": 24342,
+      "finished_at": "2026-10-05T18:07:45.624552+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 42,
+      "task_id": "git-leak-recovery",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:07:51.452728Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-043-git-leak-recovery-native",
+      "harbor_pid": 718438,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-043-git-leak-recovery-native/git-leak-recovery__fgJaWcH/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "0a6e513300e848a48b75c83d917eea5b",
+        "study_status": "agent_stopped",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 27430,
+      "n_output_tokens": 819,
+      "n_cache_tokens": 18414,
+      "finished_at": "2026-10-05T18:09:02.427738+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 43,
+      "task_id": "git-leak-recovery",
+      "arm": "sg_v2",
+      "status": "graded",
+      "started_at": "2026-10-05T19:47:24.548161Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-044-git-leak-recovery-sg_v2",
+      "harbor_pid": 1238223,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-044-git-leak-recovery-sg_v2/git-leak-recovery__KVUPage/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_v2",
+        "control_id": "ba1254a8f4604200bbf5d406cb574244",
+        "study_status": "succeeded",
+        "physical_requests": 8,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 34189,
+      "n_output_tokens": 1315,
+      "n_cache_tokens": 17070,
+      "finished_at": "2026-10-05T19:48:53.384068+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 44,
+      "task_id": "git-leak-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T18:09:08.220712Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-045-git-leak-recovery-repeat_goal",
+      "harbor_pid": 725739,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-045-git-leak-recovery-repeat_goal/git-leak-recovery__rQB5bPg/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "b044a4c976224b83bc185d25fc1cfb24",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 16,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 97316,
+      "n_output_tokens": 2196,
+      "n_cache_tokens": 53157,
+      "finished_at": "2026-10-05T18:11:16.476341+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 45,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T19:48:59.365969Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-046-install-windows-3.11-sg_no_review",
+      "harbor_pid": 1249338,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-046-install-windows-3.11-sg_no_review/install-windows-3.11__2V4ECTk/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "48c08871366d4d4280fa65ec545d0439",
+        "study_status": "unverified_done",
+        "physical_requests": 69,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 984750,
+      "n_output_tokens": 14176,
+      "n_cache_tokens": 955211,
+      "finished_at": "2026-10-05T20:02:07.275582+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 46,
+      "task_id": "install-windows-3.11",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T20:02:13.108806Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-047-install-windows-3.11-native",
+      "harbor_pid": 1317243,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-047-install-windows-3.11-native/install-windows-3.11__AeeS7wN/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "1f03b791e4de4250be1b3f0fb223e0b7",
+        "study_status": "agent_stopped",
+        "physical_requests": 35,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 332862,
+      "n_output_tokens": 7299,
+      "n_cache_tokens": 159040,
+      "finished_at": "2026-10-05T20:08:03.163810+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 47,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 48,
+      "task_id": "install-windows-3.11",
+      "arm": "repeat_goal",
+      "status": "running",
+      "started_at": "2026-10-05T20:24:45.334205+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-049-install-windows-3.11-repeat_goal",
+      "harbor_pid": 1379938,
+      "reservation": {
+        "cpus": 2,
+        "memory_mb": 4096
+      }
+    },
+    {
+      "index": 49,
+      "task_id": "install-windows-3.11",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 50,
+      "task_id": "large-scale-text-editing",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:11:22.318566Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-051-large-scale-text-editing-native",
+      "harbor_pid": 731197,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-051-large-scale-text-editing-native/large-scale-text-editing__6Ktr5i6/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "493de93a4c3a4b838fbd99af70c4d8e4",
+        "study_status": "agent_stopped",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 21484,
+      "n_output_tokens": 1084,
+      "n_cache_tokens": 14208,
+      "finished_at": "2026-10-05T18:14:11.410560+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 51,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 52,
+      "task_id": "large-scale-text-editing",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T18:13:20.737214Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-053-large-scale-text-editing-repeat_goal",
+      "harbor_pid": 733722,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-053-large-scale-text-editing-repeat_goal/large-scale-text-editing__DXQmVLE/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "8a227b9424b443669c6696b4cc62764c",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 18,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 114862,
+      "n_output_tokens": 3016,
+      "n_cache_tokens": 51770,
+      "finished_at": "2026-10-05T18:17:25.952157+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 53,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 54,
+      "task_id": "large-scale-text-editing",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T18:14:17.243491Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-055-large-scale-text-editing-sg_no_review",
+      "harbor_pid": 735686,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-055-large-scale-text-editing-sg_no_review/large-scale-text-editing__Dy5CRJt/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "bc0395f4f6c64e9a83f811c32a8d4d97",
+        "study_status": "unverified_done",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 27672,
+      "n_output_tokens": 1229,
+      "n_cache_tokens": 17280,
+      "finished_at": "2026-10-05T18:16:19.635983+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 55,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 56,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 57,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 58,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 59,
+      "task_id": "mcmc-sampling-stan",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 60,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T18:17:31.776200Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-061-model-extraction-relu-logits-repeat_goal",
+      "harbor_pid": 749053,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-061-model-extraction-relu-logits-repeat_goal/model-extraction-relu-logits__hT3iMmj/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "e39759bd19954401b15bcc39f96974ff",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 33,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 778489,
+      "n_output_tokens": 13915,
+      "n_cache_tokens": 558081,
+      "finished_at": "2026-10-05T18:24:36.144949+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 61,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 62,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T18:24:41.939923Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-063-model-extraction-relu-logits-sg_no_review",
+      "harbor_pid": 771795,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-063-model-extraction-relu-logits-sg_no_review/model-extraction-relu-logits__fmcQ2yq/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "334d1a26894b49c2ac134ad1f7cc0ab2",
+        "study_status": "unverified_done",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 28629,
+      "n_output_tokens": 3977,
+      "n_cache_tokens": 0,
+      "finished_at": "2026-10-05T18:26:04.519185+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 63,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:26:30.809604Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-064-model-extraction-relu-logits-native",
+      "harbor_pid": 781045,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-064-model-extraction-relu-logits-native/model-extraction-relu-logits__3GjWpMS/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "8d7798293cfe4e368e92adbd63ffeb4d",
+        "study_status": "agent_stopped",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 27871,
+      "n_output_tokens": 3665,
+      "n_cache_tokens": 16825,
+      "finished_at": "2026-10-05T18:28:42.835691+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 64,
+      "task_id": "model-extraction-relu-logits",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 65,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 66,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T18:28:48.840076Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-067-modernize-scientific-stack-sg_no_review",
+      "harbor_pid": 796970,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-067-modernize-scientific-stack-sg_no_review/modernize-scientific-stack__z8oeWLe/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "80a46718465041739639ddb8361fdf49",
+        "study_status": "unverified_done",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 37039,
+      "n_output_tokens": 1209,
+      "n_cache_tokens": 25931,
+      "finished_at": "2026-10-05T18:29:54.757083+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 67,
+      "task_id": "modernize-scientific-stack",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:47:49.044426Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-068-modernize-scientific-stack-native",
+      "harbor_pid": 914411,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-068-modernize-scientific-stack-native/modernize-scientific-stack__4PZ2TCY/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "e3b43b7653a041e78d24d252eaabc85d",
+        "study_status": "agent_stopped",
+        "physical_requests": 4,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 22467,
+      "n_output_tokens": 891,
+      "n_cache_tokens": 12093,
+      "finished_at": "2026-10-05T18:49:06.932823+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 68,
+      "task_id": "modernize-scientific-stack",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 69,
+      "task_id": "modernize-scientific-stack",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T18:49:12.852514Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-070-modernize-scientific-stack-repeat_goal",
+      "harbor_pid": 923132,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-070-modernize-scientific-stack-repeat_goal/modernize-scientific-stack__wuoVnQc/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "959c78cdcb574087a58cc2723e6dc71d",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 12,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 89603,
+      "n_output_tokens": 2087,
+      "n_cache_tokens": 32380,
+      "finished_at": "2026-10-05T18:51:44.953852+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 70,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T18:51:51.048011Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-071-nginx-request-logging-sg_no_review",
+      "harbor_pid": 937393,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-071-nginx-request-logging-sg_no_review/nginx-request-logging__3VA55YZ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "c95dc6ee6a0e44519abcf3958da4724d",
+        "study_status": "unverified_done",
+        "physical_requests": 7,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 32528,
+      "n_output_tokens": 1199,
+      "n_cache_tokens": 25954,
+      "finished_at": "2026-10-05T18:54:16.324975+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 71,
+      "task_id": "nginx-request-logging",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T18:54:23.605547Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-072-nginx-request-logging-native",
+      "harbor_pid": 960302,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-072-nginx-request-logging-native/nginx-request-logging__jjFxcbt/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "003de5572c734767b401696324b6c6bf",
+        "study_status": "agent_stopped",
+        "physical_requests": 9,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 50954,
+      "n_output_tokens": 1715,
+      "n_cache_tokens": 16960,
+      "finished_at": "2026-10-05T18:56:13.279546+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 72,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 73,
+      "task_id": "nginx-request-logging",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T19:05:53.504333Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-074-nginx-request-logging-repeat_goal",
+      "harbor_pid": 1038707,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-074-nginx-request-logging-repeat_goal/nginx-request-logging__8Zrjfqu/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "d15f242594b0467ea2e2b0aba79682aa",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 169025,
+      "n_output_tokens": 3141,
+      "n_cache_tokens": 99843,
+      "finished_at": "2026-10-05T19:10:05.091278+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 74,
+      "task_id": "nginx-request-logging",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 75,
+      "task_id": "password-recovery",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T19:10:11.854077Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-076-password-recovery-native",
+      "harbor_pid": 1066372,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-076-password-recovery-native/password-recovery__m8QXWnB/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "0268675a6c544204829a17110669f427",
+        "study_status": "agent_stopped",
+        "physical_requests": 20,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 657447,
+      "n_output_tokens": 5492,
+      "n_cache_tokens": 515008,
+      "finished_at": "2026-10-05T19:12:34.277542+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 76,
+      "task_id": "password-recovery",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 77,
+      "task_id": "password-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T19:12:41.130398Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-078-password-recovery-repeat_goal",
+      "harbor_pid": 1082988,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-078-password-recovery-repeat_goal/password-recovery__gU7dUvq/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "14b76b5dc9c044688eaa9fbda8133341",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 23,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 249010,
+      "n_output_tokens": 5697,
+      "n_cache_tokens": 159224,
+      "finished_at": "2026-10-05T19:17:07.938034+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 78,
+      "task_id": "password-recovery",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 79,
+      "task_id": "password-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T19:19:10.217705Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-080-password-recovery-sg_no_review",
+      "harbor_pid": 1128905,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-080-password-recovery-sg_no_review/password-recovery__QHj59D6/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "8b36f22871094842b3dc8b44aec9469f",
+        "study_status": "unverified_done",
+        "physical_requests": 14,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 96573,
+      "n_output_tokens": 3681,
+      "n_cache_tokens": 76106,
+      "finished_at": "2026-10-05T19:21:34.807942+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 80,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 81,
+      "task_id": "portfolio-optimization",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T19:21:40.623998Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-082-portfolio-optimization-repeat_goal",
+      "harbor_pid": 1144553,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-082-portfolio-optimization-repeat_goal/portfolio-optimization__3X9JhmM/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "9360085dc4524a8c8f8a2aa2aea96373",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 170472,
+      "n_output_tokens": 3348,
+      "n_cache_tokens": 87274,
+      "finished_at": "2026-10-05T19:33:04.737703+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 82,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 83,
+      "task_id": "portfolio-optimization",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T19:37:19.312790Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-084-portfolio-optimization-sg_no_review",
+      "harbor_pid": 1192874,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-084-portfolio-optimization-sg_no_review/portfolio-optimization__XHddaBy/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "fa55fdfeced840b4ace16d8e471aa552",
+        "study_status": "unverified_done",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 43750,
+      "n_output_tokens": 2295,
+      "n_cache_tokens": 30162,
+      "finished_at": "2026-10-05T19:41:42.955139+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 84,
+      "task_id": "portfolio-optimization",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T19:44:36.551807Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-085-portfolio-optimization-native",
+      "harbor_pid": 1225211,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 4096
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-085-portfolio-optimization-native/portfolio-optimization__ZPY378S/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "b807f4ba00014fdd8241c52f085c6294",
+        "study_status": "agent_stopped",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 36678,
+      "n_output_tokens": 1713,
+      "n_cache_tokens": 9088,
+      "finished_at": "2026-10-05T19:49:00.588841+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 85,
+      "task_id": "protein-assembly",
+      "arm": "repeat_goal",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 86,
+      "task_id": "protein-assembly",
+      "arm": "sg_no_context",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 87,
+      "task_id": "protein-assembly",
+      "arm": "sg_no_review",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 88,
+      "task_id": "protein-assembly",
+      "arm": "native",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 89,
+      "task_id": "protein-assembly",
+      "arm": "sg_v2",
+      "status": "environment_unavailable"
+    },
+    {
+      "index": 90,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 91,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T19:49:06.630144Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-092-pytorch-model-recovery-sg_no_review",
+      "harbor_pid": 1250031,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-092-pytorch-model-recovery-sg_no_review/pytorch-model-recovery__kcE4d9D/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "ef25dd866f4d4f83a83f6617d9d36e08",
+        "study_status": "unverified_done",
+        "physical_requests": 5,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 31194,
+      "n_output_tokens": 1816,
+      "n_cache_tokens": 22656,
+      "finished_at": "2026-10-05T19:51:17.893546+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 92,
+      "task_id": "pytorch-model-recovery",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T19:51:18.762839Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-093-pytorch-model-recovery-native",
+      "harbor_pid": 1265381,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-093-pytorch-model-recovery-native/pytorch-model-recovery__fbWhUmn/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "81ae1c87ee644529a55208d6613d2b6b",
+        "study_status": "agent_stopped",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 33109,
+      "n_output_tokens": 1686,
+      "n_cache_tokens": 22717,
+      "finished_at": "2026-10-05T19:53:58.375334+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 93,
+      "task_id": "pytorch-model-recovery",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 94,
+      "task_id": "pytorch-model-recovery",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T19:54:04.610586Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-095-pytorch-model-recovery-repeat_goal",
+      "harbor_pid": 1284498,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-095-pytorch-model-recovery-repeat_goal/pytorch-model-recovery__FRdAnsk/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "d99ea463d3c74b479983f56ed524b874",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 17,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 144094,
+      "n_output_tokens": 4800,
+      "n_cache_tokens": 56651,
+      "finished_at": "2026-10-05T19:58:53.053742+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 95,
+      "task_id": "query-optimize",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T19:58:59.029584Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-096-query-optimize-sg_no_review",
+      "harbor_pid": 1304580,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-096-query-optimize-sg_no_review/query-optimize__pC7Xa5w/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "a250f788c1654603b0f64a757debe9d8",
+        "study_status": "unverified_done",
+        "physical_requests": 7,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 40671,
+      "n_output_tokens": 1715,
+      "n_cache_tokens": 30179,
+      "finished_at": "2026-10-05T20:19:26.654716+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 96,
+      "task_id": "query-optimize",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T20:06:27.007252Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-097-query-optimize-native",
+      "harbor_pid": 1334818,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-097-query-optimize-native/query-optimize__fmCbJjU/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "d8b76bda77ae42f5a742207251ff5f81",
+        "study_status": "agent_stopped",
+        "physical_requests": 6,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 29054,
+      "n_output_tokens": 1662,
+      "n_cache_tokens": 3200,
+      "finished_at": "2026-10-05T20:24:29.738638+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 97,
+      "task_id": "query-optimize",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 98,
+      "task_id": "query-optimize",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T20:07:32.477157Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-099-query-optimize-repeat_goal",
+      "harbor_pid": 1339815,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-099-query-optimize-repeat_goal/query-optimize__mT6S9ym/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "bdb603931ece43529a3810e7f6a8ad92",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 18,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 142061,
+      "n_output_tokens": 5630,
+      "n_cache_tokens": 60824,
+      "finished_at": "2026-10-05T20:24:40.297800+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 99,
+      "task_id": "query-optimize",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 100,
+      "task_id": "sqlite-db-truncate",
+      "arm": "native",
+      "status": "graded",
+      "started_at": "2026-10-05T20:19:32.905399Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-101-sqlite-db-truncate-native",
+      "harbor_pid": 1362657,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-101-sqlite-db-truncate-native/sqlite-db-truncate__QfsDQEQ/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "native",
+        "control_id": "b119e3ebbad54ab8a39d0166bcb3dfba",
+        "study_status": "agent_stopped",
+        "physical_requests": 4,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 17421,
+      "n_output_tokens": 2386,
+      "n_cache_tokens": 8406,
+      "finished_at": "2026-10-05T20:21:09.856293+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 101,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 102,
+      "task_id": "sqlite-db-truncate",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T20:21:15.801035Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-103-sqlite-db-truncate-repeat_goal",
+      "harbor_pid": 1367080,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-103-sqlite-db-truncate-repeat_goal/sqlite-db-truncate__cJkZNoo/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "3d076ba15cf54bf69c99d2d113b204ed",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 15,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 95694,
+      "n_output_tokens": 2993,
+      "n_cache_tokens": 40388,
+      "finished_at": "2026-10-05T20:23:49.155661+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 103,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 104,
+      "task_id": "sqlite-db-truncate",
+      "arm": "sg_no_review",
+      "status": "graded",
+      "started_at": "2026-10-05T20:23:55.434173Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-105-sqlite-db-truncate-sg_no_review",
+      "harbor_pid": 1372272,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 2048
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-105-sqlite-db-truncate-sg_no_review/sqlite-db-truncate__4dtU8K4/result.json",
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "sg_no_review",
+        "control_id": "dcd2b10ad0db40d485906b056afb2fcb",
+        "study_status": "worker_incomplete",
+        "physical_requests": 3,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 0,
+      "n_output_tokens": 0,
+      "n_cache_tokens": 0,
+      "finished_at": "2026-10-05T20:25:12.453786+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 105,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 106,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "repeat_goal",
+      "status": "graded",
+      "started_at": "2026-10-05T20:24:36.102590Z",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-107-torch-tensor-parallelism-repeat_goal",
+      "harbor_pid": 1379061,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 8192
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-107-torch-tensor-parallelism-repeat_goal/torch-tensor-parallelism__xmHvB92/result.json",
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "tests_completed_marker": true,
+      "dependency_failure_marker": false,
+      "exception_type": null,
+      "agent_metadata": {
+        "study_arm": "repeat_goal",
+        "control_id": "a82dd75ab79f4ff081da43af86b5c5ab",
+        "study_status": "repeat_round_limit",
+        "physical_requests": 16,
+        "adapter": "public-dev05"
+      },
+      "n_input_tokens": 127811,
+      "n_output_tokens": 5732,
+      "n_cache_tokens": 65967,
+      "finished_at": "2026-10-05T20:30:31.511590+00:00",
+      "exit_code": 0
+    },
+    {
+      "index": 107,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 108,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "sg_no_review",
+      "status": "running",
+      "started_at": "2026-10-05T20:30:36.571861+00:00",
+      "job": "/var/lib/supergoal-lab/jobs/tb-public-parallel24-v1-109-torch-tensor-parallelism-sg_no_review",
+      "harbor_pid": 1392441,
+      "reservation": {
+        "cpus": 1,
+        "memory_mb": 8192
+      }
+    },
+    {
+      "index": 109,
+      "task_id": "torch-tensor-parallelism",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 110,
+      "task_id": "train-fasttext",
+      "arm": "repeat_goal",
+      "status": "pending"
+    },
+    {
+      "index": 111,
+      "task_id": "train-fasttext",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 112,
+      "task_id": "train-fasttext",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 113,
+      "task_id": "train-fasttext",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 114,
+      "task_id": "train-fasttext",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 115,
+      "task_id": "video-processing",
+      "arm": "sg_no_context",
+      "status": "pending"
+    },
+    {
+      "index": 116,
+      "task_id": "video-processing",
+      "arm": "sg_no_review",
+      "status": "pending"
+    },
+    {
+      "index": 117,
+      "task_id": "video-processing",
+      "arm": "native",
+      "status": "pending"
+    },
+    {
+      "index": 118,
+      "task_id": "video-processing",
+      "arm": "sg_v2",
+      "status": "pending"
+    },
+    {
+      "index": 119,
+      "task_id": "video-processing",
+      "arm": "repeat_goal",
+      "status": "pending"
+    }
+  ],
+  "automatic_trial_retries": 0,
+  "registration_sha256": "6f00ae44b23bac5d674076105cda79774e1843efa842758cc2eac7245c2338a2",
+  "operator_sha256": {
+    "run_parallel.py": "102fb96e8ef8200f0c7c1b3a65fe2b0123a45fdad11606b415b8fb91493827d7",
+    "analyze_public.py": "e95068f9ad5e9d10258f05d17554728d7935967b8dd2259173787cf35476f210",
+    "finalize_registered.py": "fbdfdce15dd4286ec1eb39f31782d3f136a7b9dbbeb2f579d5a97ba52a312989",
+    "resource_pool.py": "28297c3b64aaa41f889d789026f4ff7b96d15701200049b9fb0a2bc9a4b43a52",
+    "run_registered.py": "e31ade902b5cfc663454b5899084d44978db7685775c58966f7f7b1cba496e98",
+    "collect_public.py": "5f93e29fb58f1d20de953b552c26bf14d8e9e7b59d1c0e03758e99908be47bd2"
+  },
+  "shared_pool": {
+    "cpus": 6,
+    "memory_mb": 49152,
+    "max_workers": 6
+  },
+  "environment_lock_sha256": "bc7a313c0be0d0aebb9320827fff045705c3a4235d335087b8a368baf8536576",
+  "dispatch_policy": "Per-task reference gate; reserve all four oracle CPUs until preflight finishes",
+  "heartbeat_at": "2026-10-05T20:31:16.864854+00:00"
+}

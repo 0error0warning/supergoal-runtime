@@ -1,0 +1,26 @@
+{
+  "captured_at": "2026-10-05T22:24:15.401219+00:00",
+  "host": "supergoal-gcp",
+  "files": {
+    "setup/public-parallel24-v1-observation-222414.json": {
+      "sha256": "781ba7d278715cce65722cc9d2852a0fa5e0876b82d0b37f579a6243371fb857",
+      "bytes": 3606085
+    },
+    "setup/harness-transfer01-observation-222414.json": {
+      "sha256": "97fe4086d6965f665a183be5d3e675ae7b001cea533731de27e700532bb04b77",
+      "bytes": 737368
+    },
+    "setup/harness-transfer01-receipt.json": {
+      "sha256": "7d082f49da026fb2277939b2f40de25b1b07e6db7b2556acac7aab71fcca2cd9",
+      "bytes": 13012
+    },
+    "setup/public-parallel24-v1-rows-000-120.json": {
+      "sha256": "1aabe1c790f9ea65788c10756e6bd6646e3cfe859272bafbe7b23bf26ccef0c7",
+      "bytes": 118590
+    },
+    "setup/checkpoint-retention01.json": {
+      "sha256": "b46c7d534670a6d271fcb1e16ff09b99bc8c8facc89a9d5f4ec1b548e103d1d3",
+      "bytes": 76404
+    }
+  }
+}
