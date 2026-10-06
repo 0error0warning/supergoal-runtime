@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "supergoal-runtime"
+version = "1.1.1"
+description = "Long-running mission controller plugin for Hermes Agent"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+authors = [{name = "0error0warning"}]
+dependencies = ["PyYAML>=6.0"]
+
+[project.entry-points."hermes_agent.plugins"]
+supergoal-runtime = "supergoal_runtime.plugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["supergoal_runtime"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+# Keep the repository's established core checks explicit. New Ruff releases
+# expand their defaults; research source should not need unrelated rewrites
+# just to reproduce the same lint gate. Additional rules require a scoped update.
+select = ["E4", "E7", "E9", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+# These research entry points select a pinned source bundle before importing it.
+"experiments/analysis/context_reset*.py" = ["E402"]
+"experiments/analysis/fault_replay.py" = ["E402"]
+"experiments/analysis/process_crash.py" = ["E402"]
+"experiments/analysis/soak_audit.py" = ["E402"]

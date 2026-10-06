@@ -1,0 +1,139 @@
+[
+  {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "Report section 2 covers PAYG dependency-ratio arithmetic, the three-way adjustment choice (contribution rate / replacement rate / retirement age), career-average linking, and longevity adjustment, each tied to corpus doc IDs (D0119, D0135, D0004, D0129, D0113).",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "a projected funding gap can be closed in only three ways: raise the contribution rate (30% → 39%), cut the replacement rate (60% → 46.2%), or raise the retirement age (63 → 66.3) (D0004",
+            "supports": "Report explains general reform principles with cited corpus sources",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "477dfff55f8ce66db119062c1f322e0212e2a4fcff1441ff54f4ee06559953a9"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "Section 3 explains solvency mechanisms: replacement-rate compression via the divisor formula, contribution/payout duration gains from later retirement (Austrian €107M/€122M per-cohort savings, verified verbatim in D0005.txt), and T_divisor as potential sustainability factor.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "a one year increase in the ERA resulted in a reduction of net government expenditures of 107 million euros for men and of 122 million euros for women",
+            "supports": "Cited fiscal-savings figure exists verbatim in corpus source D0005",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "6129e282aa7b555a6428a3bc1e6b75119ce653478828a11a31daf0aff098baad"
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "verdict": "pass",
+        "reason": "Section 4 covers labor supply (+9.75pp/+11pp employment in Austria), GDP growth (+0.2pp/yr France, verified in D0004.txt), Gini inequality effects, regressive incidence, and unemployment spillovers — all attributed to specific corpus IDs.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "a GDP growth surplus—of the order of 0.2 percentage points per year—if the adjustment of the pension system were made only through an increase in the legal retirement age",
+            "supports": "Reported French macro consequence is verbatim from corpus D0004",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "ede1d8421dd5e047173ee282de1590c79950ce2cdea4411356f67d4943c1672e"
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "verdict": "pass",
+        "reason": "Report accurately reflects the actual PDF formula — pdftotext confirms divisor 140 and 0.04 deferral bonus — and the calculator claim is accurate: 7.html contains 'const divisor = 140' and 'Does not include deferral bonuses.' Cohort schedule 60→65 also verified in PDF text.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "Tdivisor : Actuarial divisor (fixed at 140 for 2026).",
+            "supports": "Formula parameters quoted in report match the actual PDF",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "ad481d65b75ea4b837a1c98f3c33049a088059bbb943efb03c420552eb322fba"
+          },
+          {
+            "quote": "const divisor = 140;",
+            "supports": "Calculator implementation claim is accurate",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "2dfc3245e001aef31ddc1229e52a09bd40c68a45441fff256c7df7dd8081137b"
+          }
+        ]
+      },
+      {
+        "id": "R5",
+        "verdict": "pass",
+        "reason": "/app/report.md exists (79 lines, 12,256 bytes) with a Sources table mapping 14 doc IDs to uses; all spot-checked IDs (D0004, D0005, D0113, D0119, D0152, etc.) resolve in index.json to matching URLs.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "-rw-rw-rw- 1 root root 12256 Oct  6 12:26 report.md",
+            "supports": "Report file exists at required path",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "20bdeafa8f5b42cdfb3928e070f4220ac5e9f72fcdb4e8520ecd498d0bc5f4f8"
+          },
+          {
+            "quote": "D0113 https://www.sciencedirect.com/science/article/abs/pii/S0014292125000388",
+            "supports": "Cited doc IDs resolve to real index.json URLs",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "5f5dd4862803905a500af60f59e593ea04927b679dab304e737e1d658f4a5e6d"
+          }
+        ]
+      },
+      {
+        "id": "R6",
+        "verdict": "pass",
+        "reason": "Section 5 lists five numbered limitations including no Ostonia actuarial data in corpus, calculator omitting the deferral bonus, US-centric corpus skew, and unverified divisor adequacy.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "The corpus contains no actuarial valuation of the Ostonia NPF, no demographic projections, and no baseline replacement rates.",
+            "supports": "Material limitations section exists with substantive items",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "1018d5df5cc506b83021c6b3c59e5496561fc058f7ccec3a5304595085b676dc"
+          }
+        ]
+      },
+      {
+        "id": "R7",
+        "verdict": "pass",
+        "reason": "Every cited source ID resolves to a real /app/input/corpus/index.json entry; the report's method note asserts no external retrieval. The observable requirement — that all sources come from the supplied collection — holds; actual network behavior during execution is unobservable in a file snapshot.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "all sources are from the supplied corpus and attached files; no external retrieval was used",
+            "supports": "Report declares corpus-only sourcing, and cited IDs verified against index.json",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "b34fdc9463c00a303e9288ff83589de5490d49dc25299616ef7b0db0eb2c4960"
+          }
+        ]
+      },
+      {
+        "id": "R8",
+        "verdict": "pass",
+        "reason": "Input files retain 11:47 timestamps predating the report's 12:26 mtime; corpus files all timestamped 11:47, consistent with the initial snapshot.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "-rw-r--r-- 1 root root 134184 Oct  6 11:47 tex.pdf",
+            "supports": "Input files untouched (mtime predates report writing)",
+            "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+            "quote_sha256": "f08be3e0d6d9e1f87d197ab4efbbed0e8d26bec211ee186cb0369eb557d8c593"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "72cf3be34b7afbe85ba868c56fc494a22a25e2a68b211dec0e73139455fea81e",
+    "artifact_id": "sha256:7bfe56a9c2194cd7b7d76c04f342f7a5f785734831a087cda0c603dee4f7d44a",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth",
+    "format_repair_attempted": true
+  }
+]

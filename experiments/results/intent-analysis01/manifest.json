@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "experiment": "intent-analysis01",
+  "created_at": "2026-10-06T13:34:37.344686+00:00",
+  "scope": "Derived analyses, analysis source/tests, local verification and service closeout; raw observations are in the three separately frozen input capsules.",
+  "files": [
+    {
+      "path": "active-source-lint.log",
+      "bytes": 20,
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "path": "analysis-source.py",
+      "bytes": 9263,
+      "sha256": "912982074663afa902b0535c931b0bf1821038182c8e8e50ed036ca46a11e44b"
+    },
+    {
+      "path": "analysis-tests.log",
+      "bytes": 100,
+      "sha256": "432bab0b356114b6fb43003fd1bbf8ef93a0527a232c1d28d0fb17a98c1dac36"
+    },
+    {
+      "path": "analysis-tests.py",
+      "bytes": 1684,
+      "sha256": "4f958a68b4bfb93487900c9c9a1cd203892d91d4256b90abe69b8dfd5f3212ed"
+    },
+    {
+      "path": "development01.json",
+      "bytes": 8173,
+      "sha256": "5e1d4d47d4594ec97828a35300f9f25800ef1ed21082955f40df2a99157fc2e6"
+    },
+    {
+      "path": "development02.json",
+      "bytes": 7116,
+      "sha256": "1c5b158a4fb65491899476da8c6a5fc840f2bc7b422ae89dfa11a9546dd1847f"
+    },
+    {
+      "path": "heldout.json",
+      "bytes": 66779,
+      "sha256": "62b262aa710eae8b97033b378f3e2afef478d11a01e30b56c33f8ee91caa485b"
+    },
+    {
+      "path": "reproduction.json",
+      "bytes": 2264,
+      "sha256": "859aa9d1ad8ffb7d59b0b8655add953bbefc943d627fcc25507be2bcfe24e4d0"
+    },
+    {
+      "path": "service-closeout.json",
+      "bytes": 1235,
+      "sha256": "5b61d20b8e8a03abe8327fd284b44ab9a518771ad6892a8aa32392437f50d757"
+    },
+    {
+      "path": "wheel-build.log",
+      "bytes": 125,
+      "sha256": "081ab2ba2f2742b19660a233ebd914998b0136ae39d277bf8da91ce39a4ceca6"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "row_index": 30,
+  "task_id": "dr3-014",
+  "status": "ungraded",
+  "original_inputs_preserved": true,
+  "error": "ValueError: positive coverage lacks an exact report quote"
+}

@@ -82,8 +82,14 @@ mini-SWE-agent and LongHorizon comparisons, and verified controller, checkpoint
 and terminal-session fixes. Frozen model runs retain their original tool
 adapters; later zero-model engineering repairs do not replace their scores.
 
-All registered batches are now complete. Start at the
-[research index](../docs/research-index.md) for final results and code boundaries.
+The earlier batches and October 6 evening continuation are complete. The latter used the
+[intent/evidence transfer protocol](public_benchmarks/INTENT-TRANSFER01.md):
+two development examples followed by six new terminal and two research tasks,
+with four arms. All 32 registered trials are retained in the
+[final report](../docs/intent-transfer01-study.md). Research file delivery is
+separated from model-judged content diagnostics; seven of eight content grades
+remain invalid. The experiment VM and model tunnel are stopped. Start at the
+[research index](../docs/research-index.md) for results and code boundaries.
 Historical launch scripts are records of the experiment environment; running
 them can allocate resources or call models and is not part of local validation.
 

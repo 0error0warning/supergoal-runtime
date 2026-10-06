@@ -1,0 +1,7 @@
+{
+  "row_index": 6,
+  "task_id": "dr3-014",
+  "status": "ungraded",
+  "original_inputs_preserved": true,
+  "error": "ValueError: decisive source judgment lacks a real source quote"
+}

@@ -1,0 +1,402 @@
+{
+  "status": "issues_found",
+  "planned_rows": 32,
+  "observed_rows": 32,
+  "unique_controllers": 32,
+  "cases": [
+    {
+      "index": 0,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "native",
+      "control_id": "696498d6c5114402921b102534808529",
+      "physical_requests": 14,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 1,
+      "task_id": "crack-7z-hash",
+      "arm": "repeat_goal",
+      "control_id": "c2c383b952ce4169a35cbcb34491db78",
+      "physical_requests": 22,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 2,
+      "task_id": "sqlite-with-gcov",
+      "arm": "sg_v2",
+      "control_id": "9d542e38ee4b4aedb153bf8a4981832c",
+      "physical_requests": 17,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 3,
+      "task_id": "fix-git",
+      "arm": "evidence",
+      "control_id": "994b8cea2d0545669531c943f0a4a9d8",
+      "physical_requests": 16,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 4,
+      "task_id": "pytorch-model-cli",
+      "arm": "native",
+      "control_id": "74b211f65b754901b2a0bbcae9cbe4f3",
+      "physical_requests": 17,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 5,
+      "task_id": "largest-eigenval",
+      "arm": "repeat_goal",
+      "control_id": "0c12a7feb86d4ab78faf801940661277",
+      "physical_requests": 38,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 6,
+      "task_id": "dr3-014",
+      "arm": "sg_v2",
+      "control_id": "9fc886b4da664d3ab7980a059ff9cea1",
+      "physical_requests": 21,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 7,
+      "task_id": "dr3-024",
+      "arm": "evidence",
+      "control_id": "4bfafa2dbf9a4f518f2b1be34781a1bf",
+      "physical_requests": 24,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 8,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "repeat_goal",
+      "control_id": "365bf47393634bd699f64347fe078e09",
+      "physical_requests": 22,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 9,
+      "task_id": "crack-7z-hash",
+      "arm": "sg_v2",
+      "control_id": "155ddff00ff940f9864dedfb8e3c0b84",
+      "physical_requests": 32,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 10,
+      "task_id": "sqlite-with-gcov",
+      "arm": "evidence",
+      "control_id": "7b07da14fa79438e8341091d7ea39f49",
+      "physical_requests": 18,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 11,
+      "task_id": "fix-git",
+      "arm": "native",
+      "control_id": "8bccaf155d184224adb72c66acde1141",
+      "physical_requests": 7,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 12,
+      "task_id": "pytorch-model-cli",
+      "arm": "repeat_goal",
+      "control_id": "81b72ea0d163437daa04259195e65b23",
+      "physical_requests": 22,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 13,
+      "task_id": "largest-eigenval",
+      "arm": "sg_v2",
+      "control_id": "bf218810899e40caa727bffc6a55822d",
+      "physical_requests": 16,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 14,
+      "task_id": "dr3-014",
+      "arm": "evidence",
+      "control_id": "3e51a6b16f6646a49c73c901a6300ade",
+      "physical_requests": 16,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 15,
+      "task_id": "dr3-024",
+      "arm": "native",
+      "control_id": "79d285336c8b4c5b911967e60ba91c3f",
+      "physical_requests": 11,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 16,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "sg_v2",
+      "control_id": "7a873af8a29c456a9599c347ec62c61d",
+      "physical_requests": 16,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 17,
+      "task_id": "crack-7z-hash",
+      "arm": "evidence",
+      "control_id": "1598eef1a2dd4bf9b2d7069750ff8cb6",
+      "physical_requests": 34,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 18,
+      "task_id": "sqlite-with-gcov",
+      "arm": "native",
+      "control_id": "a392850ec78442f4ba519483b0b00452",
+      "physical_requests": 13,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 19,
+      "task_id": "fix-git",
+      "arm": "repeat_goal",
+      "control_id": "ba4af96fb9dc4a9683151ea2db1fb76e",
+      "physical_requests": 25,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 20,
+      "task_id": "pytorch-model-cli",
+      "arm": "sg_v2",
+      "control_id": "9f4aac2d638e4417aeeadd977c7d2079",
+      "physical_requests": 22,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 21,
+      "task_id": "largest-eigenval",
+      "arm": "evidence",
+      "control_id": "96193f06daf940b5b80fdfc70e33f691",
+      "physical_requests": 24,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 22,
+      "task_id": "dr3-014",
+      "arm": "native",
+      "control_id": "ef9861e4d64443769793487c069d4fc9",
+      "physical_requests": 7,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 23,
+      "task_id": "dr3-024",
+      "arm": "repeat_goal",
+      "control_id": "bb2d9c7e5d894b71be11c8d5a1a2d95c",
+      "physical_requests": 23,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 24,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "evidence",
+      "control_id": "3aa5c8ac730c4db58b1667137480787d",
+      "physical_requests": 20,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 25,
+      "task_id": "crack-7z-hash",
+      "arm": "native",
+      "control_id": "b45eefd322e242e89db26cc359ec5af4",
+      "physical_requests": 16,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 26,
+      "task_id": "sqlite-with-gcov",
+      "arm": "repeat_goal",
+      "control_id": "71710fbbb4864ed29c1754589746dcc1",
+      "physical_requests": 26,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 27,
+      "task_id": "fix-git",
+      "arm": "sg_v2",
+      "control_id": "81cd511fcd8c41edb465baf045de3267",
+      "physical_requests": 13,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 28,
+      "task_id": "pytorch-model-cli",
+      "arm": "evidence",
+      "control_id": "b3898bc1d74f4363a07167b46191b7e2",
+      "physical_requests": 26,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 29,
+      "task_id": "largest-eigenval",
+      "arm": "native",
+      "control_id": "b9b361412df445e99d2d8940c2b327d2",
+      "physical_requests": 22,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 30,
+      "task_id": "dr3-014",
+      "arm": "repeat_goal",
+      "control_id": "43efcc04c7df45dc84e73ad203c92c1e",
+      "physical_requests": 25,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    },
+    {
+      "index": 31,
+      "task_id": "dr3-024",
+      "arm": "sg_v2",
+      "control_id": "0cb43cdf824d4059b866e235998465d4",
+      "physical_requests": 21,
+      "response_models": [
+        "devin/swe-2"
+      ],
+      "requests_without_complete_usage": 0
+    }
+  ],
+  "registration_sha256": "bca03d4fb6e2280f095e2cb9a56ac1647882e09219616ccb9838e8b9af1c6dd7",
+  "source_files_checked": 167,
+  "task_files_checked": 430,
+  "operator_sha256": "b364ae93a82bec6b19ca56890aa3fad93719250caee884de9085094aab309a67",
+  "model_calls": 0,
+  "raw_rewards_changed": false,
+  "initial_images_by_task": {
+    "merge-diff-arc-agi-task": [
+      "sha256:1994f7ed8975cf2a616e00daa45fc556e842418f8040398053f064cf0bba3c69"
+    ],
+    "crack-7z-hash": [
+      "sha256:cd0a22dc1d928e3075936ac702626ae529a683ac25aed25103ffaf33b72074d5"
+    ],
+    "sqlite-with-gcov": [
+      "sha256:b9726244945382a5d73839440e391c88aceeb52346805eebd8712eb1b6ba8b3a"
+    ],
+    "fix-git": [
+      "sha256:bed9051fa1e09cdadf5fe0c3bbba6c90d23fc74b0d67d6f5d05fb075e8a4acd6"
+    ],
+    "pytorch-model-cli": [
+      "sha256:2d19236650cc866ba441762e3d89edfa452756e0e4833cfdb984257d50b446e7"
+    ],
+    "largest-eigenval": [
+      "sha256:c46388bf47c6faec1324b39da95fd7bb7d1eee9e3a3a61e46f59a34ee1850805"
+    ],
+    "dr3-014": [
+      "sha256:5460aba1c933bd7ef19cfa1054a70e2652401315aa95c6090e7680e8c96b6196",
+      "sha256:74676677943a88a6e119b84149e8e374712820438f8f50017065e42229868db5",
+      "sha256:8bdbc4308616f8d08295f53f5f5c8c4c15f54c011c5c38c1b139d9d1d4cf1394",
+      "sha256:f4d7070827b9df0473c2367312e1b530e7cf739825ab4885a8d0bbe0a344b741"
+    ],
+    "dr3-024": [
+      "sha256:8f247c3aba39ce1914040e982d6afefb38cac2f61419bf308fe705fdd05b6064",
+      "sha256:94b547b9404966eff57aeebe0b29ee865131be17b07033380d1d41568d8ed732",
+      "sha256:c7b79821ff9f90c446eae1520faf9a65b4ca27e8095ea5d22f5537241c76e359",
+      "sha256:c86f721ad6e175050714c4886f1c3d8ae154a084057bf52717d2f5b4ecabcdb5"
+    ]
+  },
+  "errors": [
+    "Initial task image differs between arms"
+  ],
+  "scope": "Source, instruction, row and request identity; not semantic correctness or model-weight provenance"
+}

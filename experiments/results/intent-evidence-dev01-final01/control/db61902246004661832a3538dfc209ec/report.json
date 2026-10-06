@@ -1,0 +1,335 @@
+{
+  "arm": "native",
+  "status": "agent_stopped",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev01",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+  "control_id": "db61902246004661832a3538dfc209ec",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Done and verified end-to-end.\n\n**Setup:**\n- Bare repo at `/git/server` — clone it with `git clone user@server:/git/server` (your SSH login handles auth)\n- `/git/server/hooks/post-receive` deploys on every push:\n  ```sh\n  #!/bin/sh\n  GIT_WORK_TREE=/var/www/html git checkout -f master\n  ```\n- `python3 -m http.server 8080 --directory /var/www/html` serving the webroot\n\n**Verified:** cloned the repo, committed `hello.html` containing \"hello world\", pushed to master — the hook checked it out and `curl http://localhost:8080/hello.html` returns `hello world`.\n\nOne note: the hook checks out `master` specifically, so pushes to that branch deploy. If you later switch to `main`, update the hook accordingly.",
+  "artifact_image_id": "sha256:246e68441144093bb75e0d40d43c4ec47907b2dc4cf6cf6fafefea023b73fd92",
+  "artifact_image_tag": "sg-artifact:db61902246004661832a3538dfc209ec",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "executor",
+      "pid": 9799,
+      "exit_code": 0,
+      "seconds": 80.63642497700005,
+      "model_calls": 10,
+      "result_relative_path": "01-executor/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791286529.6465843,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3617,
+        "output_tokens": 180,
+        "total_tokens": 3797,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_4de5f02b-037",
+      "status": "completed",
+      "seconds": 7.92298150062561
+    },
+    {
+      "index": 2,
+      "started": 1791286537.8892736,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3783,
+        "output_tokens": 70,
+        "total_tokens": 3853,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1ca795b0-fbc",
+      "status": "completed",
+      "seconds": 4.467360258102417
+    },
+    {
+      "index": 3,
+      "started": 1791286542.4892645,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3930,
+        "output_tokens": 84,
+        "total_tokens": 4014,
+        "input_tokens_details": {
+          "cached_tokens": 3782
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0d5d87d2-b51",
+      "status": "completed",
+      "seconds": 4.661998987197876
+    },
+    {
+      "index": 4,
+      "started": 1791286563.1551988,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4143,
+        "output_tokens": 190,
+        "total_tokens": 4333,
+        "input_tokens_details": {
+          "cached_tokens": 3929
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_79ea6952-15f",
+      "status": "completed",
+      "seconds": 6.113097190856934
+    },
+    {
+      "index": 5,
+      "started": 1791286569.454437,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4415,
+        "output_tokens": 115,
+        "total_tokens": 4530,
+        "input_tokens_details": {
+          "cached_tokens": 4142
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cb1428eb-e7a",
+      "status": "completed",
+      "seconds": 4.563035488128662
+    },
+    {
+      "index": 6,
+      "started": 1791286574.3657985,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4611,
+        "output_tokens": 145,
+        "total_tokens": 4756,
+        "input_tokens_details": {
+          "cached_tokens": 4414
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1ab26ae9-bb6",
+      "status": "completed",
+      "seconds": 7.800477504730225
+    },
+    {
+      "index": 7,
+      "started": 1791286582.3583293,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4836,
+        "output_tokens": 99,
+        "total_tokens": 4935,
+        "input_tokens_details": {
+          "cached_tokens": 4610
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_df89b7bb-62e",
+      "status": "completed",
+      "seconds": 2.592952251434326
+    },
+    {
+      "index": 8,
+      "started": 1791286584.9730387,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5040,
+        "output_tokens": 77,
+        "total_tokens": 5117,
+        "input_tokens_details": {
+          "cached_tokens": 4835
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_7317b5ca-aaf",
+      "status": "completed",
+      "seconds": 3.307054042816162
+    },
+    {
+      "index": 9,
+      "started": 1791286590.47556,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5305,
+        "output_tokens": 70,
+        "total_tokens": 5375,
+        "input_tokens_details": {
+          "cached_tokens": 5039
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_7b483052-a34",
+      "status": "completed",
+      "seconds": 2.995438575744629
+    },
+    {
+      "index": 10,
+      "started": 1791286594.698117,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5426,
+        "output_tokens": 197,
+        "total_tokens": 5623,
+        "input_tokens_details": {
+          "cached_tokens": 5304
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_9ca7e329-a56",
+      "status": "completed",
+      "seconds": 5.065938234329224
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791286527.4383566,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791286527.5779192,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 10,
+  "kernel_status": null,
+  "snapshot_lifecycle": [
+    {
+      "container_id": "2a79a79b93b8bedb391972c2b01caed5b94e3ee7ba58430aee639f0ee3c705fd",
+      "image_tag": "sg-artifact:db61902246004661832a3538dfc209ec",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 8799,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T11:35:18.911776582Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 989.721943915,
+      "status": "captured",
+      "image_id": "sha256:246e68441144093bb75e0d40d43c4ec47907b2dc4cf6cf6fafefea023b73fd92",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 8799,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T11:35:18.911776582Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 992.771322587
+    }
+  ],
+  "goal_brief": null,
+  "coverage_audits": [],
+  "policy": null
+}

@@ -1,0 +1,18 @@
+{
+  "container_id": "81ad890567959df5971717c011541b6b8716335a5848f42b7b318d622e799ef4",
+  "image_id": "sha256:56a6995354d3548555dd85549b42d23f46d9622bf4f33438035d2b14857c1b4d",
+  "nano_cpus": 1000000000,
+  "memory_limit_bytes": 2147483648,
+  "mount_destinations": [
+    "/logs/agent",
+    "/logs/artifacts",
+    "/logs/verifier"
+  ],
+  "working_dir": "/app",
+  "execution_user": "root",
+  "binding": {
+    "method": "harbor-0.24-compose-main-service",
+    "mount_namespace": "mnt:[4026532777]",
+    "namespace_match": true
+  }
+}

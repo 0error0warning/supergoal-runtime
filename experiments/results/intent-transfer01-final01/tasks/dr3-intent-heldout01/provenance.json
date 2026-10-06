@@ -1,0 +1,38 @@
+{
+  "dataset": "NJU-LINK/DR3-Eval",
+  "revision": "4305f9129529d4510f485af6c997b69e1e85b88d",
+  "split": "heldout",
+  "tasks": [
+    {
+      "task_id": "dr3-014",
+      "path": "/var/lib/supergoal-lab/tasks/dr3-intent-heldout01/dr3-014",
+      "query_sha256": "7fa48cc75e642a801eaf02564d091903a99d9c1aeafdf2854ba26b280462e232",
+      "source_sha256": {
+        "7.html": "1f2385d1affd45c248d8fceeaf2a5fb55af4cdff72a39ef334adb86eda9680c6",
+        "tex.pdf": "7ebec46985b608ddb9bea3af6ae50674a85e623b9536303061499092cb8738b9"
+      },
+      "original_corpus_sha256": "4bda1bb0c304cdeaac0c83bf48847161b79bf9c180e7c84f74748040d8d3d19d",
+      "corpus_documents": 155,
+      "reference_reward_key": "delivery_present",
+      "solver_seconds": 900,
+      "verifier_seconds": 60
+    },
+    {
+      "task_id": "dr3-024",
+      "path": "/var/lib/supergoal-lab/tasks/dr3-intent-heldout01/dr3-024",
+      "query_sha256": "8e6f00b17e253d11aa765da5cd68e4fc3d06cf3fb2bc38f7bcdd8ce9bdb5af7c",
+      "source_sha256": {
+        "prediction.csv": "d231029b14afdc0f41fff4778459885e17631514f3ff086b1059221a4266d943",
+        "tex.pdf": "9fc036eacd9290c376a53df304faeb9c65022da02fc6156cfeebe76a63d264f6"
+      },
+      "original_corpus_sha256": "eb55529f7eb83945fdb229f8451f07973e454dfc9472698b29c4e63bc1e48707",
+      "corpus_documents": 192,
+      "reference_reward_key": "delivery_present",
+      "solver_seconds": 900,
+      "verifier_seconds": 60
+    }
+  ],
+  "corpus_projection": "doc_id,title,url,page_body only; original task labels and keywords removed",
+  "adaptation": "terminal/file access to fixed 128k corpus and text/PDF inputs; no dense retrieval",
+  "reward_scope": "delivery_present is only an artifact probe, NOT task success or research quality"
+}

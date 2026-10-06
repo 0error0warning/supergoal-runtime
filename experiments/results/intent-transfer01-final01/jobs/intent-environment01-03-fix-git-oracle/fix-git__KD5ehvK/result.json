@@ -1,0 +1,119 @@
+{
+    "id": "0923c520-9ea4-4424-b0cf-3057d0843b78",
+    "task_name": "terminal-bench/fix-git",
+    "trial_name": "fix-git__KD5ehvK",
+    "trial_uri": "file:///var/lib/supergoal-lab/jobs/intent-environment01-03-fix-git-oracle/fix-git__KD5ehvK",
+    "task_id": {
+        "path": "/var/lib/supergoal-lab/tasks/intent-transfer01/fix-git"
+    },
+    "source": null,
+    "task_checksum": "30ce11a7e9c2db09e38a362566f329f36999557e81479ce72d1632768febab0b",
+    "config": {
+        "task": {
+            "path": "/var/lib/supergoal-lab/tasks/intent-transfer01/fix-git",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "fix-git__KD5ehvK",
+        "trials_dir": "/var/lib/supergoal-lab/jobs/intent-environment01-03-fix-git-oracle",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "task_dir": "/var/lib/supergoal-lab/tasks/intent-transfer01/fix-git",
+                "agent_timeout_sec": 900.0
+            },
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "9b05668a-1e63-4e54-95fe-84301e0e1fa5",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "oracle",
+        "version": "official-oracle-with-apt-https-2",
+        "model_info": null
+    },
+    "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 1.0
+        }
+    },
+    "verifier_environment_mode": "shared",
+    "exception_info": null,
+    "started_at": "2026-10-06T11:50:26.293197Z",
+    "finished_at": "2026-10-06T11:50:57.275296Z",
+    "environment_setup": {
+        "started_at": "2026-10-06T11:50:26.336974Z",
+        "finished_at": "2026-10-06T11:50:27.750337Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-10-06T11:50:27.750407Z",
+        "finished_at": "2026-10-06T11:50:27.930556Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-10-06T11:50:27.930852Z",
+        "finished_at": "2026-10-06T11:50:28.552462Z"
+    },
+    "verifier": {
+        "started_at": "2026-10-06T11:50:29.050085Z",
+        "finished_at": "2026-10-06T11:50:45.957348Z"
+    },
+    "step_results": null
+}

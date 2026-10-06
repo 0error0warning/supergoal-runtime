@@ -1,0 +1,11 @@
+[
+  {
+    "verdict": "unknown",
+    "reason": "Coverage not established: evidence quote not found in this audit's tool observations",
+    "coverage_error": true,
+    "retryable": false,
+    "artifact_id": "sha256:daaaf677b9f1eba7b1ece54bac6a5c0d15e955d236a65244c104de98fa9f950b",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth",
+    "format_repair_attempted": true
+  }
+]

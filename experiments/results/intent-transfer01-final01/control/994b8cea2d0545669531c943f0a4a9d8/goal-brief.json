@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "advisory_model_interpretation",
+  "original_request": "I just made some changes to my personal site and checked out master, but now I can't find those changes. Please help me find them and merge them into master.\n",
+  "request_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+  "route": "inspect",
+  "route_reason": "The 'lost' changes were located via git reflog: commit c499730 ('Move to Stanford') was created on a detached HEAD after 'checkout HEAD~1', then the user checked out master, orphaning the commit. The recovery path is a straightforward merge/cherry-pick of a known SHA — no external research needed.",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Locate the changes the user made before checking out master",
+      "source_quote": "now I can't find those changes",
+      "verification": "Reflog shows commit c499730ae050deb27e5d22972ea28daf778060f2 'Move to Stanford' touching _includes/about.md and _layouts/default.html — confirmed present via git show"
+    },
+    {
+      "id": "R2",
+      "requirement": "Get those changes onto master",
+      "source_quote": "merge them into master",
+      "verification": "After merging, 'git log --oneline -3' on master contains c499730 and the diff to _includes/about.md and _layouts/default.html is applied; 'git diff c499730 master' shows no missing changes"
+    }
+  ],
+  "assumptions": [
+    "Merging the whole commit c499730 is desired (not just part of it); validate by showing the user 'git show c499730' before merging",
+    "Creating a named branch at c499730 first (git branch recovered-work c499730) is a safe, reversible default to prevent the commit being GC'd"
+  ],
+  "information_gaps": [
+    "Whether the user wants a merge commit or a fast-forward/cherry-pick onto master — low consequence since the commit's parent is an ancestor of master, so it will fast-forward cleanly"
+  ],
+  "research_questions": [],
+  "next_action": "Run: git branch recovered-work c499730 && git merge c499730 (on a writable checkout). Note: this attempt failed in the current environment because the filesystem is read-only ('cannot lock ref ORIG_HEAD: Read-only file system') — the user must run these commands on their actual machine.",
+  "initial_snapshot_id": "sha256:436efc8a41efd0095d22137de015bd6ba6d669b6de5291c68eb95829cbd084c9"
+}

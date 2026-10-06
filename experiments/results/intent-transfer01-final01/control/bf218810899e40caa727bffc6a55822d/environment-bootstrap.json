@@ -1,0 +1,8 @@
+[
+  {
+    "path": "/etc/apt/sources.list.d/debian.sources",
+    "before_sha256": "8e242d89cd848adf062020a678e5a96d42f372d37f6d01416dfc53f1333b71be",
+    "after_sha256": "87b3b5d588f7c2d4da2b0cfa2830889d3c9655cefa2c94470db340b04e420ebd",
+    "change": "HTTPS transport only; package signatures unchanged"
+  }
+]

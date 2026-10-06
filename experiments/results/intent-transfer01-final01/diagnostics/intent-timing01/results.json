@@ -1,0 +1,514 @@
+{
+  "scope": {
+    "kind": "post_hoc_diagnostic",
+    "task": "largest-eigenval",
+    "repeats_per_arm": 5,
+    "arms": [
+      "native",
+      "repeat_goal",
+      "sg_v2",
+      "evidence"
+    ],
+    "round_order": [
+      [
+        "native",
+        "repeat_goal",
+        "sg_v2",
+        "evidence"
+      ],
+      [
+        "repeat_goal",
+        "sg_v2",
+        "evidence",
+        "native"
+      ],
+      [
+        "sg_v2",
+        "evidence",
+        "native",
+        "repeat_goal"
+      ],
+      [
+        "evidence",
+        "native",
+        "repeat_goal",
+        "sg_v2"
+      ],
+      [
+        "native",
+        "repeat_goal",
+        "sg_v2",
+        "evidence"
+      ]
+    ],
+    "primary_rewards_replaced": false,
+    "model_calls": 0,
+    "reason": "Primary evidence arm passed online but failed two official microsecond timing assertions",
+    "registration_sha256": "bca03d4fb6e2280f095e2cb9a56ac1647882e09219616ccb9838e8b9af1c6dd7",
+    "operator_sha256": "a70b0241915d4983c1ebca26e2ce81786138f85acfe399afff2e41cc9f39ec12",
+    "planned_epoch": 1791290883.6342258,
+    "status": "waiting_primary_study_and_research_diagnostics"
+  },
+  "rows": [
+    {
+      "repetition": 1,
+      "arm": "native",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292281.3055627,
+      "loadavg_before": [
+        0.041015625,
+        0.29541015625,
+        2.24462890625
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:a56e6646ab3f7a2c4d27e9fc25ef78b0a4be48d7e4f4169af7831b1a3210dfd6",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292283.2051768
+    },
+    {
+      "repetition": 1,
+      "arm": "repeat_goal",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292283.2057543,
+      "loadavg_before": [
+        0.1181640625,
+        0.30712890625,
+        2.23779296875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:935874463913206a0f1632a9a2b64b585e27805f38bed00571886f9b51b8f393",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292284.60127
+    },
+    {
+      "repetition": 1,
+      "arm": "sg_v2",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292284.6018379,
+      "loadavg_before": [
+        0.1181640625,
+        0.30712890625,
+        2.23779296875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:53061c8e9e7a10993ffdde5655e2af3f89dc085e03b2ebee171879f87e55772d",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292285.946324
+    },
+    {
+      "repetition": 1,
+      "arm": "evidence",
+      "primary_reward": {
+        "reward": 0.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292285.9468942,
+      "loadavg_before": [
+        0.1181640625,
+        0.30712890625,
+        2.23779296875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292287.7938974
+    },
+    {
+      "repetition": 2,
+      "arm": "repeat_goal",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292287.79443,
+      "loadavg_before": [
+        0.1181640625,
+        0.30712890625,
+        2.23779296875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:935874463913206a0f1632a9a2b64b585e27805f38bed00571886f9b51b8f393",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292289.1889997
+    },
+    {
+      "repetition": 2,
+      "arm": "sg_v2",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292289.1895692,
+      "loadavg_before": [
+        0.18896484375,
+        0.31884765625,
+        2.23095703125
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:53061c8e9e7a10993ffdde5655e2af3f89dc085e03b2ebee171879f87e55772d",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292290.5839744
+    },
+    {
+      "repetition": 2,
+      "arm": "evidence",
+      "primary_reward": {
+        "reward": 0.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292290.5845551,
+      "loadavg_before": [
+        0.18896484375,
+        0.31884765625,
+        2.23095703125
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292292.4339495
+    },
+    {
+      "repetition": 2,
+      "arm": "native",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292292.4345336,
+      "loadavg_before": [
+        0.18896484375,
+        0.31884765625,
+        2.23095703125
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:a56e6646ab3f7a2c4d27e9fc25ef78b0a4be48d7e4f4169af7831b1a3210dfd6",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292294.2360144
+    },
+    {
+      "repetition": 3,
+      "arm": "sg_v2",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292294.236632,
+      "loadavg_before": [
+        0.25439453125,
+        0.33056640625,
+        2.22412109375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:53061c8e9e7a10993ffdde5655e2af3f89dc085e03b2ebee171879f87e55772d",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292295.631877
+    },
+    {
+      "repetition": 3,
+      "arm": "evidence",
+      "primary_reward": {
+        "reward": 0.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292295.6325018,
+      "loadavg_before": [
+        0.25439453125,
+        0.33056640625,
+        2.22412109375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292297.377821
+    },
+    {
+      "repetition": 3,
+      "arm": "native",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292297.3784535,
+      "loadavg_before": [
+        0.25439453125,
+        0.33056640625,
+        2.22412109375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:a56e6646ab3f7a2c4d27e9fc25ef78b0a4be48d7e4f4169af7831b1a3210dfd6",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292299.17639
+    },
+    {
+      "repetition": 3,
+      "arm": "repeat_goal",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292299.1771104,
+      "loadavg_before": [
+        0.314453125,
+        0.341796875,
+        2.21728515625
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:935874463913206a0f1632a9a2b64b585e27805f38bed00571886f9b51b8f393",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292300.5757706
+    },
+    {
+      "repetition": 4,
+      "arm": "evidence",
+      "primary_reward": {
+        "reward": 0.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292300.5764077,
+      "loadavg_before": [
+        0.314453125,
+        0.341796875,
+        2.21728515625
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292302.3253102
+    },
+    {
+      "repetition": 4,
+      "arm": "native",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292302.3260221,
+      "loadavg_before": [
+        0.314453125,
+        0.341796875,
+        2.21728515625
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:a56e6646ab3f7a2c4d27e9fc25ef78b0a4be48d7e4f4169af7831b1a3210dfd6",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292304.173041
+    },
+    {
+      "repetition": 4,
+      "arm": "repeat_goal",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292304.173712,
+      "loadavg_before": [
+        0.36962890625,
+        0.35302734375,
+        2.21044921875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:935874463913206a0f1632a9a2b64b585e27805f38bed00571886f9b51b8f393",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292305.5175087
+    },
+    {
+      "repetition": 4,
+      "arm": "sg_v2",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292305.5182207,
+      "loadavg_before": [
+        0.36962890625,
+        0.35302734375,
+        2.21044921875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:53061c8e9e7a10993ffdde5655e2af3f89dc085e03b2ebee171879f87e55772d",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292306.9129016
+    },
+    {
+      "repetition": 5,
+      "arm": "native",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292306.9135947,
+      "loadavg_before": [
+        0.36962890625,
+        0.35302734375,
+        2.21044921875
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:a56e6646ab3f7a2c4d27e9fc25ef78b0a4be48d7e4f4169af7831b1a3210dfd6",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292308.7091384
+    },
+    {
+      "repetition": 5,
+      "arm": "repeat_goal",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292308.709862,
+      "loadavg_before": [
+        0.50048828125,
+        0.38037109375,
+        2.208984375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:935874463913206a0f1632a9a2b64b585e27805f38bed00571886f9b51b8f393",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292310.0538418
+    },
+    {
+      "repetition": 5,
+      "arm": "sg_v2",
+      "primary_reward": {
+        "reward": 1.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292310.0545003,
+      "loadavg_before": [
+        0.50048828125,
+        0.38037109375,
+        2.208984375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:53061c8e9e7a10993ffdde5655e2af3f89dc085e03b2ebee171879f87e55772d",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292311.4493856
+    },
+    {
+      "repetition": 5,
+      "arm": "evidence",
+      "primary_reward": {
+        "reward": 0.0
+      },
+      "status": "measured",
+      "started_epoch": 1791292311.4501183,
+      "loadavg_before": [
+        0.50048828125,
+        0.38037109375,
+        2.208984375
+      ],
+      "cpu_limit": 1,
+      "memory_mb": 2048,
+      "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "exit_code": 0,
+      "tests": 27,
+      "failures": [],
+      "errors": [],
+      "all_passed": true,
+      "finished_epoch": 1791292313.1451328
+    }
+  ]
+}

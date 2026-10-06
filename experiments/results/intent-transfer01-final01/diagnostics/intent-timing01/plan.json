@@ -1,0 +1,50 @@
+{
+  "kind": "post_hoc_diagnostic",
+  "task": "largest-eigenval",
+  "repeats_per_arm": 5,
+  "arms": [
+    "native",
+    "repeat_goal",
+    "sg_v2",
+    "evidence"
+  ],
+  "round_order": [
+    [
+      "native",
+      "repeat_goal",
+      "sg_v2",
+      "evidence"
+    ],
+    [
+      "repeat_goal",
+      "sg_v2",
+      "evidence",
+      "native"
+    ],
+    [
+      "sg_v2",
+      "evidence",
+      "native",
+      "repeat_goal"
+    ],
+    [
+      "evidence",
+      "native",
+      "repeat_goal",
+      "sg_v2"
+    ],
+    [
+      "native",
+      "repeat_goal",
+      "sg_v2",
+      "evidence"
+    ]
+  ],
+  "primary_rewards_replaced": false,
+  "model_calls": 0,
+  "reason": "Primary evidence arm passed online but failed two official microsecond timing assertions",
+  "registration_sha256": "bca03d4fb6e2280f095e2cb9a56ac1647882e09219616ccb9838e8b9af1c6dd7",
+  "operator_sha256": "a70b0241915d4983c1ebca26e2ce81786138f85acfe399afff2e41cc9f39ec12",
+  "planned_epoch": 1791290883.6342258,
+  "status": "waiting_primary_study_and_research_diagnostics"
+}

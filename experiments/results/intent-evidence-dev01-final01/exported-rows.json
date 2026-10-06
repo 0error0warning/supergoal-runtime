@@ -1,0 +1,368 @@
+[
+  {
+    "row": {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-native",
+      "started_at": "2026-10-06T11:35:17.164051+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:37:11.835333+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-native/configure-git-webserver__d7kCQJj/result.json",
+      "agent_result": {
+        "n_input_tokens": 45106,
+        "n_cache_tokens": 36055,
+        "n_output_tokens": 1227,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "db61902246004661832a3538dfc209ec",
+          "study_status": "agent_stopped",
+          "physical_requests": 10,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    },
+    "trajectories": [
+      {
+        "server_path": "/var/lib/supergoal-lab/control/db61902246004661832a3538dfc209ec/01-executor/result.json",
+        "sha256": "c86e096108db7887dc9ba302a0b338b3650c80420f41b9e323072ba10f68d33d",
+        "bytes": 18952,
+        "tool_result_counts": {
+          "terminal": 8,
+          "write_file": 1
+        },
+        "included": false,
+        "completed": true
+      }
+    ],
+    "artifact": {
+      "image_id": "sha256:246e68441144093bb75e0d40d43c4ec47907b2dc4cf6cf6fafefea023b73fd92",
+      "available_at_export": true,
+      "layers_exported": false
+    }
+  },
+  {
+    "row": {
+      "index": 1,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-01-configure-git-webserver-sg_v2",
+      "started_at": "2026-10-06T11:35:17.165397+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:47:04.778462+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-01-configure-git-webserver-sg_v2/configure-git-webserver__xLAoCGX/result.json",
+      "agent_result": {
+        "n_input_tokens": 635604,
+        "n_cache_tokens": 468725,
+        "n_output_tokens": 16560,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "74e10c89579a49bba535f0bbcc49adc4",
+          "study_status": "succeeded",
+          "physical_requests": 74,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    },
+    "trajectories": [
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/01-executor/result.json",
+        "sha256": "9e0a632b3b8b484d5e84e056642e64b15aa2f493f60a202fcd2f8a495ec8f4d0",
+        "bytes": 43788,
+        "tool_result_counts": {
+          "terminal": 19,
+          "write_file": 1
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/02-review/result.json",
+        "sha256": "72721e38000dacfe93c8920f8548a62decdbd75e2c8a76f5a618ee85285aae79",
+        "bytes": 17244,
+        "tool_result_counts": {
+          "terminal": 4
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/03-executor/result.json",
+        "sha256": "60268f78537a873ab15cb8957fc0eda8d9cb9b9484d455ec09dedc8bb6c601c8",
+        "bytes": 58819,
+        "tool_result_counts": {
+          "terminal": 24,
+          "write_file": 1
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/04-review/result.json",
+        "sha256": "6d8222f8a104351c057616dae4ade2bbf868a827572bfa53c5ad15da619b1323",
+        "bytes": 22742,
+        "tool_result_counts": {
+          "terminal": 4
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/05-executor/result.json",
+        "sha256": "5275195458288bd7497016283ec35d2e50a95071aeaf9b7863e27093f7ed3dd4",
+        "bytes": 72550,
+        "tool_result_counts": {
+          "terminal": 31,
+          "write_file": 2
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/06-review/result.json",
+        "sha256": "663ca24bd5fa53d838127ae952713082d031ba9640eb4e6ca9e54cd079f8d00d",
+        "bytes": 29643,
+        "tool_result_counts": {
+          "terminal": 8
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/07-executor/result.json",
+        "sha256": "50400ddf8f7e5fb1cce79555e0cf337f374318bc26ae1a68afb6caced10cbf0c",
+        "bytes": 82819,
+        "tool_result_counts": {
+          "terminal": 33,
+          "write_file": 2
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/08-review/result.json",
+        "sha256": "d567c4557ead39ebb932ac289fe15a5e856452f18ca20f99778c0c7dcd7b7e66",
+        "bytes": 46281,
+        "tool_result_counts": {
+          "terminal": 10
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/09-executor/result.json",
+        "sha256": "703e8a0b78cfeec107e5270d1db0cd146d6ac86bfbfd881f2e2827c7e3ef55f3",
+        "bytes": 96573,
+        "tool_result_counts": {
+          "terminal": 36,
+          "write_file": 2
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/74e10c89579a49bba535f0bbcc49adc4/10-review/result.json",
+        "sha256": "380677bddf7784bd7f7bd09682b41d1369c545425938b54e0137aed51f3467bd",
+        "bytes": 53726,
+        "tool_result_counts": {
+          "terminal": 13
+        },
+        "included": false,
+        "completed": true
+      }
+    ],
+    "artifact": {
+      "image_id": "sha256:59fa14f6f788eadf170e29032d102d08d2f26f529d0cdf7675e8af6d4b0e85c5",
+      "available_at_export": true,
+      "layers_exported": false
+    }
+  },
+  {
+    "row": {
+      "index": 2,
+      "task_id": "configure-git-webserver",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-02-configure-git-webserver-evidence",
+      "started_at": "2026-10-06T11:35:17.165752+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:48:34.143114+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-02-configure-git-webserver-evidence/configure-git-webserver__3rfYu6L/result.json",
+      "agent_result": {
+        "n_input_tokens": 838988,
+        "n_cache_tokens": 569917,
+        "n_output_tokens": 22316,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "0dd4888bf6b74d0cb1476fae95ca7a3c",
+          "study_status": "budget_exhausted",
+          "physical_requests": 97,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    },
+    "trajectories": [
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/01-interpret/result.json",
+        "sha256": "1cfb8425f4000cf0cda21219729f55a470db8bedcb1fc6c62089b681867c8876",
+        "bytes": 17485,
+        "tool_result_counts": {
+          "terminal": 1
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/02-executor/result.json",
+        "sha256": "25b2360af4437ca98055b4b17d30492b5d459c684a94d13068bb904d27a2b9f9",
+        "bytes": 33359,
+        "tool_result_counts": {
+          "terminal": 9
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/03-review/result.json",
+        "sha256": "8990260ef2158459c3217e872b4e52459f9d3c6af5aebf71656b5bf95ee88c2b",
+        "bytes": 53254,
+        "tool_result_counts": {
+          "terminal": 21
+        },
+        "included": false,
+        "completed": false
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/04-executor/result.json",
+        "sha256": "af5558cd564c456783255e0889e88147fc072068a29423422316251e52e5d4f8",
+        "bytes": 52278,
+        "tool_result_counts": {
+          "terminal": 12
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/05-review/result.json",
+        "sha256": "522eccc86320fc547127d16343fcf7c0bd710537e2c2db2641afcc21d9e78232",
+        "bytes": 31212,
+        "tool_result_counts": {
+          "terminal": 6
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/06-executor/result.json",
+        "sha256": "a2ffec24298ab85c3a1255399eb885c8b6864d8ea2d2dd86eb2150af47ce051e",
+        "bytes": 66739,
+        "tool_result_counts": {
+          "terminal": 14
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/07-review/result.json",
+        "sha256": "077a9a4a694233a72d73ba5ac87b50887855747d7c97616740a4d91d23b5f843",
+        "bytes": 33241,
+        "tool_result_counts": {
+          "terminal": 6
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/08-executor/result.json",
+        "sha256": "d9d3b75a77266113f2f54156e91538a6914f568464ae1cb068b7a32bfef54405",
+        "bytes": 80480,
+        "tool_result_counts": {
+          "terminal": 17
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/09-review/result.json",
+        "sha256": "2bf87c5a743eb6f8efd372268e5da99b73c5589c577386f5d26f2bc016dff4f6",
+        "bytes": 51231,
+        "tool_result_counts": {
+          "terminal": 21
+        },
+        "included": false,
+        "completed": false
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/10-executor/result.json",
+        "sha256": "29bff16582df1af66c2ef4e7a47aeec33e12c0c21b9d9f8a3f4e765c7d1760af",
+        "bytes": 89970,
+        "tool_result_counts": {
+          "terminal": 18
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/11-review/result.json",
+        "sha256": "e4d5691a774a94f436f0a62b3dfaba802ea7d815383b05b8c45cf164c7c3f2ec",
+        "bytes": 24237,
+        "tool_result_counts": {
+          "terminal": 4
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/12-executor/result.json",
+        "sha256": "000a94e8b9865edc96a8a7dcfe4775a4afcd6daa71b62282053a62363a8981ee",
+        "bytes": 104110,
+        "tool_result_counts": {
+          "terminal": 19
+        },
+        "included": false,
+        "completed": true
+      },
+      {
+        "server_path": "/var/lib/supergoal-lab/control/0dd4888bf6b74d0cb1476fae95ca7a3c/13-review/result.json",
+        "sha256": "0dedce8456f4be0a6046dfb66a792dd2b9fad31a4a7b29c4f0b50b5b8d707192",
+        "bytes": 48493,
+        "tool_result_counts": {
+          "terminal": 13
+        },
+        "included": false,
+        "completed": true
+      }
+    ],
+    "artifact": {
+      "image_id": "sha256:9243f6bac54eaacad49bb88aa9795ca7c54b1f114df5c9230cd4721884bffb16",
+      "available_at_export": true,
+      "layers_exported": false
+    }
+  }
+]

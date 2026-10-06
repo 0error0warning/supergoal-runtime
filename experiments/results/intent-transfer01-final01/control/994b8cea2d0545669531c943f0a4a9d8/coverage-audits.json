@@ -1,0 +1,54 @@
+[
+  {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "Reflog confirms commit c499730ae050deb27e5d22972ea28daf778060f2 'Move to Stanford' was created on a detached HEAD (after 'checkout: moving from master to HEAD~1') and orphaned when the user checked out master; it touches _includes/about.md and _layouts/default.html as git show confirms.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "c499730 HEAD@{2}: commit: Move to Stanford",
+            "supports": "the lost commit was located via reflog",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "f0d926ac43a24662ca5654f72b0fdac2a4c1bd3d203e6239f1045e62aa70a18f"
+          },
+          {
+            "quote": "_includes/about.md    |  4 ++--",
+            "supports": "the commit contains the user's changes",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "d959e213d643065f3258dde5e7fbfdaf8bcd01ef1a4d53ad3c7bbe7b76095ea3"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "master now contains merge commit 055dbbb 'Merge commit c499730' with c499730 as a parent; git diff c499730 master shows only a trailing-newline difference in _includes/about.md, and master's working tree contains the intended content 'I am a Postdoctoral Researcher at Stanford CS.'",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "055dbbb Merge commit 'c499730'",
+            "supports": "c499730 is merged into master",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "c86c5d2f2a932618f5aac44f97ba20292107253a7a7cf914210622ba81ad71f7"
+          },
+          {
+            "quote": "_includes/about.md:1:I am a Postdoctoral Researcher at Stanford CS.",
+            "supports": "the recovered change is present on master's working tree",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "8276a5105bef81f0b041189d165a03495b77605a469297ab284e6afe7cf111d4"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+    "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

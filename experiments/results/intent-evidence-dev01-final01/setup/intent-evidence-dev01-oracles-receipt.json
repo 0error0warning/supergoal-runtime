@@ -1,0 +1,34 @@
+{
+  "status": "complete",
+  "started_at": "2026-10-06T11:32:54.807364+00:00",
+  "registration_sha256": "d232d483dfcb63231ffc1d6cde37faa5683b39fb822ef5d0b96349f5d580a5cb",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-oracle",
+      "started_at": "2026-10-06T11:32:54.821056+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:34:02.941321+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-oracle/configure-git-webserver__eWoMjBi/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "finished_at": "2026-10-06T11:34:02.942796+00:00"
+}

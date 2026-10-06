@@ -1,0 +1,108 @@
+[
+  {
+    "verdict": "unknown",
+    "reason": "On the live (writable) system, verify: git push to /git/server as 'user' succeeds, the hook updates /var/www/html, and python3 -m http.server 8080 --directory /var/www/html plus sshd are running; none of these process-level facts are observable in this read-only snapshot.",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "A bare git repo exists at the absolute path /git/server (config shows bare = true, HEAD/objects/refs present, owned by user). Local-path clone as 'user' succeeded ('Cloning into /tmp/t2... done.'), confirming a valid cloneable repo; the SSH transport itself is the user's stated responsibility but sshd is installed at /usr/sbin/sshd.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "\\tbare = true",
+            "supports": "repo at /git/server is a bare git repository",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "eb700caab6502f21fcc55713d0f80d7916ba0886510540936cc6de7c46d91b8e"
+          },
+          {
+            "quote": "Cloning into '/tmp/t2'...\ndone.",
+            "supports": "repo clones successfully over local transport as the 'user' account",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "e2246f45fe8b0399a49f4e4663680e2db6d1d9dc93b4818cff0e5c3cd545f55c"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "unknown",
+        "reason": "Repo structure and ownership (drwxrwxrwx user user on objects/) are consistent with accepting pushes, and history already contains the executor's 'add hello.html' commit, but an actual push could not be exercised: this audit snapshot mounts the filesystem read-only, so the test push failed with a filesystem error, not a configuration error. Whether the push succeeds on the executor's live filesystem cannot be observed here.",
+        "unknown_kind": "environment",
+        "evidence": [
+          {
+            "quote": "touch: cannot touch '/git/server/objects/testfile': Read-only file system",
+            "supports": "push failure is caused by the read-only audit snapshot, not demonstrably by config",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "8cb755d646aef4f5c3c797f91740eeca7c36bb6ee3327caaba13cbf2e34922cd"
+          },
+          {
+            "quote": "04d89f5 add hello.html",
+            "supports": "repo history contains a prior successful pushed commit",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "25fc4da5c6fcb7e1c37e96d2962a54f0fbc0f554ca1bbd8aed2608ea3dd85a3e"
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "verdict": "pass",
+        "reason": "An executable post-receive hook exists containing exactly 'git --work-tree=/var/www/html --git-dir=/git/server checkout -f master', and /var/www/html/hello.html (12 bytes) already contains deployed content matching the pushed commit — automatic deploy on push is wired.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "git --work-tree=/var/www/html --git-dir=/git/server checkout -f master",
+            "supports": "post-receive hook deploys pushed master tree to web root",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "560390473b32f69eba2a2d0963fd010c846fcdcbf344d08b7f209d14abb345ed"
+          },
+          {
+            "quote": "-rwxrwxrwx 1 user user   81 Oct  6 11:51 post-receive",
+            "supports": "hook file is executable",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "f96efe99af97eab94da1e71577693c4903b513ca0a90d0f19e8db374d13438c6"
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "verdict": "unknown",
+        "reason": "/var/www/html/hello.html contains 'hello world' and python3 is installed, but no http.server or sshd process exists in this snapshot and curl to :8080 fails (exit 7). Processes are not captured in a file snapshot, so whether the web server listens on 8080 on the live system cannot be observed here.",
+        "unknown_kind": "environment",
+        "evidence": [
+          {
+            "quote": "curl_exit=7",
+            "supports": "no service listening on port 8080 in this snapshot",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "263e1521c729481b386733bda3d9722ad105f15077c92da5d76349b284479c7d"
+          },
+          {
+            "quote": "hello world",
+            "supports": "deployed file content in /var/www/html matches the committed file",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
+          }
+        ]
+      },
+      {
+        "id": "R5",
+        "verdict": "pass",
+        "reason": "No SSH auth provisioning is present: /home/user/.ssh is empty (drwx------, no authorized_keys), consistent with the claim the test key was removed; only repo, hook, and web root were configured.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "drwx------ 2 user user 4096 Oct  6 11:51 .",
+            "supports": "user .ssh directory exists but contains no installed keys",
+            "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+            "quote_sha256": "8e70d07ed7e0433252dd0acedd0e34647f21a493ae60de7833211b898debe98c"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": false,
+    "request_sha256": "62151b7371bc364277a3c118bba755334c640fb0cefc7a5af106e6e763cf1d97",
+    "artifact_id": "sha256:dd2094d19c5f453e22f84e039e7861cb1a41c6d550ebdcced3fe856b723556e4",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

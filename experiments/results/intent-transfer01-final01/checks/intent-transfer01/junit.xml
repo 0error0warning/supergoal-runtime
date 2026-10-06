@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="2" failures="0" skipped="0" tests="2" time="1.389" timestamp="2026-10-06T12:16:35.563125+00:00" hostname="supergoal-lab-20261005"><testcase classname="" name="tests.unit.test_checkpoint_manifest" time="0.000"><error message="collection failure">ImportError while importing test module '/var/lib/supergoal-lab/checks/intent-transfer01/source02/tests/unit/test_checkpoint_manifest.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_checkpoint_manifest.py:6: in &lt;module&gt;
+    from experiments.infrastructure.artifact_store import DockerCheckpointStore
+E   ModuleNotFoundError: No module named 'experiments.infrastructure'</error></testcase><testcase classname="" name="tests.unit.test_multistep_receipts" time="0.000"><error message="collection failure">ImportError while importing test module '/var/lib/supergoal-lab/checks/intent-transfer01/source02/tests/unit/test_multistep_receipts.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+../../../python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_multistep_receipts.py:2: in &lt;module&gt;
+    from experiments.infrastructure.prepare_multistep_study import adapt_config
+E   ModuleNotFoundError: No module named 'experiments.infrastructure'</error></testcase></testsuite></testsuites>

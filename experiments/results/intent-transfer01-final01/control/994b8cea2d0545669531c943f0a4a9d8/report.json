@@ -1,0 +1,754 @@
+{
+  "arm": "evidence",
+  "status": "succeeded",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+  "control_id": "994b8cea2d0545669531c943f0a4a9d8",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Done. Your lost changes were commit `c499730` \"Move to Stanford\" — made on a detached HEAD after `checkout HEAD~1`, then orphaned when you checked out master. Found it via reflog.\n\nWhat I did:\n- Created branch `recovered-work` at `c499730` so the commit can't be garbage-collected.\n- Merged `c499730` into master → merge commit `055dbbb`.\n- Resolved one conflict in `_includes/about.md`: kept \"I am a Postdoctoral Researcher at Stanford CS.\" (your intended change) over master's old \"sixth PhD candidate\" line. `_layouts/default.html` merged cleanly.\n\nVerified: `git diff c499730 master` now only shows a trailing-whitespace fix; all the Stanford changes are on master. You can delete `recovered-work` once you've confirmed the site looks right.",
+  "last_acceptance": {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "Reflog confirms commit c499730ae050deb27e5d22972ea28daf778060f2 'Move to Stanford' was created on a detached HEAD (after 'checkout: moving from master to HEAD~1') and orphaned when the user checked out master; it touches _includes/about.md and _layouts/default.html as git show confirms.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "c499730 HEAD@{2}: commit: Move to Stanford",
+            "supports": "the lost commit was located via reflog",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "f0d926ac43a24662ca5654f72b0fdac2a4c1bd3d203e6239f1045e62aa70a18f"
+          },
+          {
+            "quote": "_includes/about.md    |  4 ++--",
+            "supports": "the commit contains the user's changes",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "d959e213d643065f3258dde5e7fbfdaf8bcd01ef1a4d53ad3c7bbe7b76095ea3"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "master now contains merge commit 055dbbb 'Merge commit c499730' with c499730 as a parent; git diff c499730 master shows only a trailing-newline difference in _includes/about.md, and master's working tree contains the intended content 'I am a Postdoctoral Researcher at Stanford CS.'",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "055dbbb Merge commit 'c499730'",
+            "supports": "c499730 is merged into master",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "c86c5d2f2a932618f5aac44f97ba20292107253a7a7cf914210622ba81ad71f7"
+          },
+          {
+            "quote": "_includes/about.md:1:I am a Postdoctoral Researcher at Stanford CS.",
+            "supports": "the recovered change is present on master's working tree",
+            "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+            "quote_sha256": "8276a5105bef81f0b041189d165a03495b77605a469297ab284e6afe7cf111d4"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+    "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  "artifact_image_id": "sha256:397d2a52b6966f3460b53807dbbe8d96c0dbd3a3df3e29ec7f0a583da9137bc4",
+  "artifact_image_tag": "sg-artifact:994b8cea2d0545669531c943f0a4a9d8",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "interpret",
+      "pid": 99791,
+      "exit_code": 0,
+      "seconds": 21.980173911000293,
+      "model_calls": 4,
+      "result_relative_path": "01-interpret/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 101205,
+      "exit_code": 0,
+      "seconds": 54.485140540999964,
+      "model_calls": 9,
+      "result_relative_path": "02-executor/result.json"
+    },
+    {
+      "role": "review",
+      "pid": 107774,
+      "exit_code": 0,
+      "seconds": 17.583421050000197,
+      "model_calls": 3,
+      "result_relative_path": "03-review/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791288707.722876,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4140,
+        "output_tokens": 151,
+        "total_tokens": 4291,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d8bde485-4cb",
+      "status": "completed",
+      "seconds": 3.0282790660858154
+    },
+    {
+      "index": 2,
+      "started": 1791288711.361346,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4413,
+        "output_tokens": 137,
+        "total_tokens": 4550,
+        "input_tokens_details": {
+          "cached_tokens": 4096
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cb3babf1-d00",
+      "status": "completed",
+      "seconds": 2.0086586475372314
+    },
+    {
+      "index": 3,
+      "started": 1791288713.6004288,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4673,
+        "output_tokens": 82,
+        "total_tokens": 4755,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0a7f6be3-eb4",
+      "status": "completed",
+      "seconds": 1.7697560787200928
+    },
+    {
+      "index": 4,
+      "started": 1791288715.5012546,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4838,
+        "output_tokens": 637,
+        "total_tokens": 5475,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cd4af87f-df7",
+      "status": "completed",
+      "seconds": 4.909855604171753
+    },
+    {
+      "index": 5,
+      "started": 1791288729.8682091,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4841,
+        "output_tokens": 81,
+        "total_tokens": 4922,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_f4ca5054-ff7",
+      "status": "completed",
+      "seconds": 4.652622222900391
+    },
+    {
+      "index": 6,
+      "started": 1791288735.1996229,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5154,
+        "output_tokens": 71,
+        "total_tokens": 5225,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1ef50bac-421",
+      "status": "completed",
+      "seconds": 3.9095375537872314
+    },
+    {
+      "index": 7,
+      "started": 1791288739.2979887,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5333,
+        "output_tokens": 129,
+        "total_tokens": 5462,
+        "input_tokens_details": {
+          "cached_tokens": 5153
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_19234739-c10",
+      "status": "completed",
+      "seconds": 4.650363445281982
+    },
+    {
+      "index": 8,
+      "started": 1791288744.1783829,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5929,
+        "output_tokens": 72,
+        "total_tokens": 6001,
+        "input_tokens_details": {
+          "cached_tokens": 5332
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_f04ff87c-66c",
+      "status": "completed",
+      "seconds": 3.054407835006714
+    },
+    {
+      "index": 9,
+      "started": 1791288747.4233174,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6528,
+        "output_tokens": 257,
+        "total_tokens": 6785,
+        "input_tokens_details": {
+          "cached_tokens": 5928
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_5a9fdc44-96a",
+      "status": "completed",
+      "seconds": 8.041123628616333
+    },
+    {
+      "index": 10,
+      "started": 1791288755.67577,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6947,
+        "output_tokens": 157,
+        "total_tokens": 7104,
+        "input_tokens_details": {
+          "cached_tokens": 6527
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_38e514c9-35c",
+      "status": "completed",
+      "seconds": 4.857633113861084
+    },
+    {
+      "index": 11,
+      "started": 1791288761.0921974,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7187,
+        "output_tokens": 70,
+        "total_tokens": 7257,
+        "input_tokens_details": {
+          "cached_tokens": 6946
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_09ef35ca-136",
+      "status": "completed",
+      "seconds": 2.6027238368988037
+    },
+    {
+      "index": 12,
+      "started": 1791288763.885611,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7358,
+        "output_tokens": 75,
+        "total_tokens": 7433,
+        "input_tokens_details": {
+          "cached_tokens": 7186
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b5af6bb1-8ee",
+      "status": "completed",
+      "seconds": 5.396958589553833
+    },
+    {
+      "index": 13,
+      "started": 1791288769.8039463,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7553,
+        "output_tokens": 193,
+        "total_tokens": 7746,
+        "input_tokens_details": {
+          "cached_tokens": 7357
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_8e8c0b3d-fe5",
+      "status": "completed",
+      "seconds": 4.839325666427612
+    },
+    {
+      "index": 14,
+      "started": 1791288785.3901553,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4793,
+        "output_tokens": 148,
+        "total_tokens": 4941,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_156334cf-bec",
+      "status": "completed",
+      "seconds": 2.293192148208618
+    },
+    {
+      "index": 15,
+      "started": 1791288788.3682024,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5320,
+        "output_tokens": 82,
+        "total_tokens": 5402,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_4984fd3f-78f",
+      "status": "completed",
+      "seconds": 2.05519437789917
+    },
+    {
+      "index": 16,
+      "started": 1791288790.6150568,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5681,
+        "output_tokens": 335,
+        "total_tokens": 6016,
+        "input_tokens_details": {
+          "cached_tokens": 5376
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0ebd16e3-359",
+      "status": "completed",
+      "seconds": 2.5677573680877686
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791288705.66573,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791288705.780469,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791288727.8517041,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791288727.9691503,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791288783.3099313,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791288783.4294086,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 16,
+  "kernel_status": "succeeded",
+  "snapshot_lifecycle": [
+    {
+      "container_id": "857d373fcbc7a0c2c5d765cf78b7714892cd4ac010ddfe83d7055cdb743550e9",
+      "image_tag": "sg-observe:994b8cea2d0545669531c943f0a4a9d8-1",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3087.634098851,
+      "status": "captured",
+      "image_id": "sha256:436efc8a41efd0095d22137de015bd6ba6d669b6de5291c68eb95829cbd084c9",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3087.757655072
+    },
+    {
+      "container_id": "857d373fcbc7a0c2c5d765cf78b7714892cd4ac010ddfe83d7055cdb743550e9",
+      "image_tag": "sg-observe:994b8cea2d0545669531c943f0a4a9d8-2",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3164.935641881,
+      "status": "captured",
+      "image_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3165.066717965
+    },
+    {
+      "container_id": "857d373fcbc7a0c2c5d765cf78b7714892cd4ac010ddfe83d7055cdb743550e9",
+      "image_tag": "sg-artifact:994b8cea2d0545669531c943f0a4a9d8",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3183.432283599,
+      "status": "captured",
+      "image_id": "sha256:397d2a52b6966f3460b53807dbbe8d96c0dbd3a3df3e29ec7f0a583da9137bc4",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 98313,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:11:37.093737112Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3183.737476362
+    }
+  ],
+  "goal_brief": {
+    "schema": 1,
+    "policy": "evidence-v1",
+    "authority": "advisory_model_interpretation",
+    "original_request": "I just made some changes to my personal site and checked out master, but now I can't find those changes. Please help me find them and merge them into master.\n",
+    "request_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+    "route": "inspect",
+    "route_reason": "The 'lost' changes were located via git reflog: commit c499730 ('Move to Stanford') was created on a detached HEAD after 'checkout HEAD~1', then the user checked out master, orphaning the commit. The recovery path is a straightforward merge/cherry-pick of a known SHA — no external research needed.",
+    "requirements": [
+      {
+        "id": "R1",
+        "requirement": "Locate the changes the user made before checking out master",
+        "source_quote": "now I can't find those changes",
+        "verification": "Reflog shows commit c499730ae050deb27e5d22972ea28daf778060f2 'Move to Stanford' touching _includes/about.md and _layouts/default.html — confirmed present via git show"
+      },
+      {
+        "id": "R2",
+        "requirement": "Get those changes onto master",
+        "source_quote": "merge them into master",
+        "verification": "After merging, 'git log --oneline -3' on master contains c499730 and the diff to _includes/about.md and _layouts/default.html is applied; 'git diff c499730 master' shows no missing changes"
+      }
+    ],
+    "assumptions": [
+      "Merging the whole commit c499730 is desired (not just part of it); validate by showing the user 'git show c499730' before merging",
+      "Creating a named branch at c499730 first (git branch recovered-work c499730) is a safe, reversible default to prevent the commit being GC'd"
+    ],
+    "information_gaps": [
+      "Whether the user wants a merge commit or a fast-forward/cherry-pick onto master — low consequence since the commit's parent is an ancestor of master, so it will fast-forward cleanly"
+    ],
+    "research_questions": [],
+    "next_action": "Run: git branch recovered-work c499730 && git merge c499730 (on a writable checkout). Note: this attempt failed in the current environment because the filesystem is read-only ('cannot lock ref ORIG_HEAD: Read-only file system') — the user must run these commands on their actual machine.",
+    "initial_snapshot_id": "sha256:436efc8a41efd0095d22137de015bd6ba6d669b6de5291c68eb95829cbd084c9"
+  },
+  "coverage_audits": [
+    {
+      "verdict": "pass",
+      "reason": "none",
+      "requirements": [
+        {
+          "id": "R1",
+          "verdict": "pass",
+          "reason": "Reflog confirms commit c499730ae050deb27e5d22972ea28daf778060f2 'Move to Stanford' was created on a detached HEAD (after 'checkout: moving from master to HEAD~1') and orphaned when the user checked out master; it touches _includes/about.md and _layouts/default.html as git show confirms.",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "c499730 HEAD@{2}: commit: Move to Stanford",
+              "supports": "the lost commit was located via reflog",
+              "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+              "quote_sha256": "f0d926ac43a24662ca5654f72b0fdac2a4c1bd3d203e6239f1045e62aa70a18f"
+            },
+            {
+              "quote": "_includes/about.md    |  4 ++--",
+              "supports": "the commit contains the user's changes",
+              "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+              "quote_sha256": "d959e213d643065f3258dde5e7fbfdaf8bcd01ef1a4d53ad3c7bbe7b76095ea3"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "verdict": "pass",
+          "reason": "master now contains merge commit 055dbbb 'Merge commit c499730' with c499730 as a parent; git diff c499730 master shows only a trailing-newline difference in _includes/about.md, and master's working tree contains the intended content 'I am a Postdoctoral Researcher at Stanford CS.'",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "055dbbb Merge commit 'c499730'",
+              "supports": "c499730 is merged into master",
+              "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+              "quote_sha256": "c86c5d2f2a932618f5aac44f97ba20292107253a7a7cf914210622ba81ad71f7"
+            },
+            {
+              "quote": "_includes/about.md:1:I am a Postdoctoral Researcher at Stanford CS.",
+              "supports": "the recovered change is present on master's working tree",
+              "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+              "quote_sha256": "8276a5105bef81f0b041189d165a03495b77605a469297ab284e6afe7cf111d4"
+            }
+          ]
+        }
+      ],
+      "omissions": [],
+      "request_covered": true,
+      "retryable": true,
+      "request_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+      "artifact_id": "sha256:1ae6c492323ad96c25c53131d04fdb2fbdfb9e7ba90432508c2f253667591314",
+      "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+    }
+  ],
+  "interpretation_attempts": [
+    {
+      "attempt": 1,
+      "valid": true
+    }
+  ],
+  "policy": "evidence-v1"
+}

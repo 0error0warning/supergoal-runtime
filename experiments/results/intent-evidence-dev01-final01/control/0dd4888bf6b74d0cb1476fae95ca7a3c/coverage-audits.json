@@ -1,0 +1,36 @@
+[
+  {
+    "verdict": "unknown",
+    "reason": "Auditor SDK did not complete",
+    "artifact_id": "sha256:115a78819860645446a10168b1c97e9434f9cc6936f5e591739966a6ec5ed0b0"
+  },
+  {
+    "verdict": "unknown",
+    "reason": "Coverage not established: one result for every requirement required",
+    "artifact_id": "sha256:b5ded1c48fcd697e34ae8cad5c79b4a4048030d864c8241384e7229385ba09c5",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  {
+    "verdict": "unknown",
+    "reason": "Coverage not established: one result for every requirement required",
+    "artifact_id": "sha256:14e212074abc2e23e623b4601dd5006405650cacce05711bfcc6c0d24b9c0426",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  {
+    "verdict": "unknown",
+    "reason": "Auditor SDK did not complete",
+    "artifact_id": "sha256:0e857b86029899a0d2ff68c2120a1b2d85e6ed5540dfd3a42178ef2d6755efa4"
+  },
+  {
+    "verdict": "unknown",
+    "reason": "Coverage not established: one result for every requirement required",
+    "artifact_id": "sha256:d23ff1eaf34ec6fced2a2921d240c0bcc1b34a64ae3d581abeefebc68c1761ae",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  {
+    "verdict": "unknown",
+    "reason": "Coverage not established: one result for every requirement required",
+    "artifact_id": "sha256:86f4c63672834db973598641f329f16281c3252211fec7095cdab9010f4e8916",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

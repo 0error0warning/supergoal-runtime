@@ -1,0 +1,907 @@
+{
+  "arm": "evidence",
+  "status": "verification_unavailable",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "a7fb06594547247f69abf9d79d4b230cbea392814b70607969f16aa244fe72bc",
+  "control_id": "4bfafa2dbf9a4f518f2b1be34781a1bf",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Report written to `/app/report.md`. All 17 cited doc IDs verified against `index.json`; input files untouched.\n\nWhat's in it:\n\n- **Overview** — adoption is broad (88% org AI use) but mostly pilot-stage; ~$4.4T long-term opportunity per McKinsey; unprecedented infrastructure capex (Stargate up to $500B, Microsoft ~$80B, Nvidia–OpenAI ~$100B) large enough to affect US GDP (D0074, D0191, D0167).\n- **Startup examples** — VoiceRun ($5.5M seed, voice agents), Symbolic.ai (News Corp deal), MergeLabs ($250M seed at $850M valuation), plus the healthcare AI cluster and AI Fund portfolio (D0040, D0069, D0009, D0112).\n- **Health/direction** — bullish usage/funding signals vs. credible bubble warnings (17× dotcom-era investment levels, circular vendor financing, only 39% reporting enterprise EBIT impact) (D0074, D0079, D0167).\n- **Economic/regulatory flags** — fragmented global AI regulation, EU AI Act transparency tiers, bubble-correction risk, IP/licensing litigation, shifting US tech-policy posture (D0148, D0050, D0079, D0186).\n- **Projections read-through** — the 8× revenue ramp, flat 74% gross margin, and declining CAC are plausible narratives but not directly benchmarkable in this corpus; flagged where investors will probe.\n- **Limitations** — tex.pdf is a placeholder template (so scope = general AI industry); no direct AI market-size figure exists in the corpus (adjacent tech-market CAGRs used instead); corpus is a mixed-quality scrape concentrated in ~15 substantive docs.",
+  "last_acceptance": {
+    "verdict": "unknown",
+    "reason": "Coverage not established: evidence quote not found in this audit's tool observations",
+    "coverage_error": true,
+    "retryable": false,
+    "artifact_id": "sha256:6604771e2d0bc4ac9801be3c0f175d6fff07539e68778a3139ae1797345b0fa4",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth",
+    "format_repair_attempted": true
+  },
+  "artifact_image_id": "sha256:52e96b7d376fca6dab19a48ed9236308e6f2d63a44fb6427c68f38fccbd1e7a9",
+  "artifact_image_tag": "sg-artifact:4bfafa2dbf9a4f518f2b1be34781a1bf",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "interpret",
+      "pid": 127187,
+      "exit_code": 0,
+      "seconds": 41.847967866999625,
+      "model_calls": 3,
+      "result_relative_path": "01-interpret/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 128972,
+      "exit_code": 0,
+      "seconds": 153.7843167359997,
+      "model_calls": 14,
+      "result_relative_path": "02-executor/result.json"
+    },
+    {
+      "role": "review",
+      "pid": 143238,
+      "exit_code": 0,
+      "seconds": 58.77534230900028,
+      "model_calls": 6,
+      "result_relative_path": "03-review/result.json"
+    },
+    {
+      "role": "review_format_repair",
+      "pid": 145576,
+      "exit_code": 0,
+      "seconds": 25.765766989999975,
+      "model_calls": 1,
+      "result_relative_path": "04-review_format_repair/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791289098.650605,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4290,
+        "output_tokens": 163,
+        "total_tokens": 4453,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_760ae3e2-a58",
+      "status": "completed",
+      "seconds": 4.210740566253662
+    },
+    {
+      "index": 2,
+      "started": 1791289103.8309648,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 21870,
+        "output_tokens": 72,
+        "total_tokens": 21942,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_729b3d59-489",
+      "status": "completed",
+      "seconds": 5.874362468719482
+    },
+    {
+      "index": 3,
+      "started": 1791289109.9241922,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 23111,
+        "output_tokens": 973,
+        "total_tokens": 24084,
+        "input_tokens_details": {
+          "cached_tokens": 21869
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_43176c3e-a65",
+      "status": "completed",
+      "seconds": 19.97133779525757
+    },
+    {
+      "index": 4,
+      "started": 1791289140.4444232,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5655,
+        "output_tokens": 169,
+        "total_tokens": 5824,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1d906a4a-380",
+      "status": "completed",
+      "seconds": 5.539731740951538
+    },
+    {
+      "index": 5,
+      "started": 1791289146.6354558,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6421,
+        "output_tokens": 196,
+        "total_tokens": 6617,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d944dadc-fc8",
+      "status": "completed",
+      "seconds": 5.664297580718994
+    },
+    {
+      "index": 6,
+      "started": 1791289152.6683066,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7312,
+        "output_tokens": 352,
+        "total_tokens": 7664,
+        "input_tokens_details": {
+          "cached_tokens": 6420
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_6eb425ec-b7e",
+      "status": "completed",
+      "seconds": 6.912274122238159
+    },
+    {
+      "index": 7,
+      "started": 1791289160.5713606,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 8339,
+        "output_tokens": 308,
+        "total_tokens": 8647,
+        "input_tokens_details": {
+          "cached_tokens": 7311
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_6d0db62c-fb1",
+      "status": "completed",
+      "seconds": 5.694844484329224
+    },
+    {
+      "index": 8,
+      "started": 1791289166.7218378,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 16010,
+        "output_tokens": 232,
+        "total_tokens": 16242,
+        "input_tokens_details": {
+          "cached_tokens": 8338
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cf46e3ab-73f",
+      "status": "completed",
+      "seconds": 8.28522777557373
+    },
+    {
+      "index": 9,
+      "started": 1791289175.2242312,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 22720,
+        "output_tokens": 258,
+        "total_tokens": 22978,
+        "input_tokens_details": {
+          "cached_tokens": 16009
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_043dd65b-f1c",
+      "status": "completed",
+      "seconds": 8.431898593902588
+    },
+    {
+      "index": 10,
+      "started": 1791289184.0747006,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 23351,
+        "output_tokens": 174,
+        "total_tokens": 23525,
+        "input_tokens_details": {
+          "cached_tokens": 22719
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0c6c66da-d16",
+      "status": "completed",
+      "seconds": 6.002802848815918
+    },
+    {
+      "index": 11,
+      "started": 1791289190.292521,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 25309,
+        "output_tokens": 122,
+        "total_tokens": 25431,
+        "input_tokens_details": {
+          "cached_tokens": 23350
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c511b47c-e55",
+      "status": "completed",
+      "seconds": 4.448928356170654
+    },
+    {
+      "index": 12,
+      "started": 1791289194.941201,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 25499,
+        "output_tokens": 89,
+        "total_tokens": 25588,
+        "input_tokens_details": {
+          "cached_tokens": 25308
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b8743d2c-b47",
+      "status": "completed",
+      "seconds": 5.907673597335815
+    },
+    {
+      "index": 13,
+      "started": 1791289201.0566375,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 26562,
+        "output_tokens": 319,
+        "total_tokens": 26881,
+        "input_tokens_details": {
+          "cached_tokens": 25498
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d33eb515-45d",
+      "status": "completed",
+      "seconds": 10.50075650215149
+    },
+    {
+      "index": 14,
+      "started": 1791289211.7546508,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 27396,
+        "output_tokens": 95,
+        "total_tokens": 27491,
+        "input_tokens_details": {
+          "cached_tokens": 26561
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_55807cd0-da6",
+      "status": "completed",
+      "seconds": 5.528002500534058
+    },
+    {
+      "index": 15,
+      "started": 1791289217.4774287,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 28442,
+        "output_tokens": 2210,
+        "total_tokens": 30652,
+        "input_tokens_details": {
+          "cached_tokens": 27395
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1c9bfb20-f8d",
+      "status": "completed",
+      "seconds": 48.69871687889099
+    },
+    {
+      "index": 16,
+      "started": 1791289266.7893333,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 30719,
+        "output_tokens": 119,
+        "total_tokens": 30838,
+        "input_tokens_details": {
+          "cached_tokens": 28441
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d6aa5811-7fd",
+      "status": "completed",
+      "seconds": 5.513064622879028
+    },
+    {
+      "index": 17,
+      "started": 1791289272.4994361,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 31085,
+        "output_tokens": 439,
+        "total_tokens": 31524,
+        "input_tokens_details": {
+          "cached_tokens": 30718
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_31a52c2a-89b",
+      "status": "completed",
+      "seconds": 11.942836046218872
+    },
+    {
+      "index": 18,
+      "started": 1791289293.0994337,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5670,
+        "output_tokens": 103,
+        "total_tokens": 5773,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ac3ca7bd-fcd",
+      "status": "completed",
+      "seconds": 3.1433959007263184
+    },
+    {
+      "index": 19,
+      "started": 1791289296.708553,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6150,
+        "output_tokens": 102,
+        "total_tokens": 6252,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_612a138c-d12",
+      "status": "completed",
+      "seconds": 4.7067506313323975
+    },
+    {
+      "index": 20,
+      "started": 1791289301.7794964,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 8940,
+        "output_tokens": 271,
+        "total_tokens": 9211,
+        "input_tokens_details": {
+          "cached_tokens": 6149
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cbd7f21a-16f",
+      "status": "completed",
+      "seconds": 6.760533809661865
+    },
+    {
+      "index": 21,
+      "started": 1791289308.8216069,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9430,
+        "output_tokens": 218,
+        "total_tokens": 9648,
+        "input_tokens_details": {
+          "cached_tokens": 8939
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_80e2d7d4-2cf",
+      "status": "completed",
+      "seconds": 5.158605575561523
+    },
+    {
+      "index": 22,
+      "started": 1791289314.1847198,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9700,
+        "output_tokens": 233,
+        "total_tokens": 9933,
+        "input_tokens_details": {
+          "cached_tokens": 9429
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_f5cf01e4-ba2",
+      "status": "completed",
+      "seconds": 6.74104380607605
+    },
+    {
+      "index": 23,
+      "started": 1791289321.1328003,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 10007,
+        "output_tokens": 1212,
+        "total_tokens": 11219,
+        "input_tokens_details": {
+          "cached_tokens": 9699
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_62da23a0-545",
+      "status": "completed",
+      "seconds": 22.28962254524231
+    },
+    {
+      "index": 24,
+      "started": 1791289353.268365,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 13290,
+        "output_tokens": 1087,
+        "total_tokens": 14377,
+        "input_tokens_details": {
+          "cached_tokens": 2177
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_1f960ef5-0d1",
+      "status": "completed",
+      "seconds": 16.104804039001465
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791289096.5035002,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289096.633946,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289138.256848,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289138.3997161,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289290.9660885,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289291.0845954,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289350.8913689,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289351.0643568,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 24,
+  "kernel_status": "verification_unavailable",
+  "snapshot_lifecycle": [
+    {
+      "container_id": "add2c91de6d3f1626d10aebc0ed53b5daeca14c1197d95a379d4c3bd2160d49e",
+      "image_tag": "sg-observe:4bfafa2dbf9a4f518f2b1be34781a1bf-1",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3476.873973887,
+      "status": "captured",
+      "image_id": "sha256:1c14337adece0c339c89f7d2d15ec0c5310c2ae24b0cbb235fab2de6084920df",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3476.995041238
+    },
+    {
+      "container_id": "add2c91de6d3f1626d10aebc0ed53b5daeca14c1197d95a379d4c3bd2160d49e",
+      "image_tag": "sg-observe:4bfafa2dbf9a4f518f2b1be34781a1bf-2",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3674.506647268,
+      "status": "captured",
+      "image_id": "sha256:6604771e2d0bc4ac9801be3c0f175d6fff07539e68778a3139ae1797345b0fa4",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3674.628761622
+    },
+    {
+      "container_id": "add2c91de6d3f1626d10aebc0ed53b5daeca14c1197d95a379d4c3bd2160d49e",
+      "image_tag": "sg-artifact:4bfafa2dbf9a4f518f2b1be34781a1bf",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3759.87489201,
+      "status": "captured",
+      "image_id": "sha256:52e96b7d376fca6dab19a48ed9236308e6f2d63a44fb6427c68f38fccbd1e7a9",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 126635,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:18:06.520970221Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3760.188058086
+    }
+  ],
+  "goal_brief": {
+    "schema": 1,
+    "policy": "evidence-v1",
+    "authority": "advisory_model_interpretation",
+    "original_request": "I'm preparing for a funding pitch and need to validate the assumptions in my attached financial projections (prediction.csv). Based on my market report outline (tex.pdf), could you gather some intel on the overall AI business environment? I need a simple overview, examples of other startups in the space, and data on the market's general health and direction. Also, please flag any major upcoming economic or regulatory discussions that might impact the industry.\n\nAttached files are in /app/input/user_files. Use /app/input/corpus as the fixed research collection; index.json maps document IDs to titles and URLs. You can search and read these files with terminal/file tools; pdftotext is installed for PDFs. Use this supplied collection for the study, without external web retrieval. Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties. Do not modify the input files.",
+    "request_sha256": "a7fb06594547247f69abf9d79d4b230cbea392814b70607969f16aa244fe72bc",
+    "route": "inspect",
+    "route_reason": "The task is a bounded research-and-write job over a fixed local corpus (~190 docs indexed in index.json) plus two user files; no external web access is permitted, so the work is inspect-and-synthesize rather than open-ended research or a direct edit.",
+    "requirements": [
+      {
+        "id": "R1",
+        "requirement": "Produce an intel report on the overall AI business environment: simple overview, examples of other startups in the space, and data on market health/direction",
+        "source_quote": "could you gather some intel on the overall AI business environment? I need a simple overview, examples of other startups in the space, and data on the market's general health and direction",
+        "verification": "report.md contains sections covering overview, named startup examples, and market health/direction data, each backed by cited corpus doc IDs"
+      },
+      {
+        "id": "R2",
+        "requirement": "Flag major upcoming economic or regulatory discussions that could impact the AI industry",
+        "source_quote": "please flag any major upcoming economic or regulatory discussions that might impact the industry",
+        "verification": "report.md includes a distinct section listing upcoming economic/regulatory items (e.g., gen-AI regulation, AI bubble debate) with corpus citations"
+      },
+      {
+        "id": "R3",
+        "requirement": "Use only the supplied corpus for the study; no external web retrieval",
+        "source_quote": "Use this supplied collection for the study, without external web retrieval",
+        "verification": "all citations in report.md map to doc IDs in /app/input/corpus/index.json; no external URLs as evidence"
+      },
+      {
+        "id": "R4",
+        "requirement": "Write the report to /app/report.md with sources supporting specific claims and stated limitations",
+        "source_quote": "Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties",
+        "verification": "/app/report.md exists, each claim cites a doc ID/source, and a limitations section is present"
+      },
+      {
+        "id": "R5",
+        "requirement": "Do not modify input files",
+        "source_quote": "Do not modify the input files",
+        "verification": "files under /app/input unchanged (checksums identical before/after)"
+      },
+      {
+        "id": "R6",
+        "requirement": "Contextually validate assumptions in prediction.csv against market intel (framing: funding-pitch validation)",
+        "source_quote": "validate the assumptions in my attached financial projections (prediction.csv)",
+        "verification": "report connects market evidence to the projection's assumptions (e.g., ~74% gross margins, revenue growth from $1.85M to $14.9M, declining CAC/rising LTV) noting which are plausible vs. unsupported by the corpus"
+      }
+    ],
+    "assumptions": [
+      "The 'space' is the general AI industry since tex.pdf is a template with [Target Industry] placeholders; validate by confirming the PDF contains only lorem-ipsum/template content (confirmed: it does)",
+      "'Other startups in the space' means AI startups generally; corpus contains TechCrunch items like VoiceRun (D0040) and Symbolic AI (D0069) usable as examples",
+      "Citations can be doc IDs/titles/URLs from index.json rather than formal footnotes; validate by checking index.json fields"
+    ],
+    "information_gaps": [
+      "Target industry and company identity are placeholder text in tex.pdf — consequence: report must stay general-purpose AI market intel rather than vertical-specific; obtain from user if a narrower focus is desired",
+      "Corpus is a mixed-quality web scrape (marketing pages, paywalled items, unrelated docs) — consequence: some claims may only be supportable from a handful of docs (e.g., D0074 McKinsey State of AI, D0079 AI bubble, D0148 gen-AI regulation); limitations must reflect this"
+    ],
+    "research_questions": [
+      "Which corpus docs actually contain substantive market-size/growth/funding data vs. landing-page boilerplate (determined by grepping for market-size, CAGR, funding, regulation keywords)",
+      "Whether the corpus contains enough on regulatory/economic discussions (e.g., D0148 gen-AI regulation, D0079 bubble warnings, UNCTAD items) to support the flag section"
+    ],
+    "next_action": "Run keyword searches across /app/input/corpus/*.txt (e.g., 'market size', 'CAGR', 'funding', 'raised', 'regulation', 'EU AI Act', 'bubble') to shortlist substantive docs, then extract supporting passages from the top ~10-15 docs and draft /app/report.md.",
+    "initial_snapshot_id": "sha256:1c14337adece0c339c89f7d2d15ec0c5310c2ae24b0cbb235fab2de6084920df"
+  },
+  "coverage_audits": [
+    {
+      "verdict": "unknown",
+      "reason": "Coverage not established: evidence quote not found in this audit's tool observations",
+      "coverage_error": true,
+      "retryable": false,
+      "artifact_id": "sha256:6604771e2d0bc4ac9801be3c0f175d6fff07539e68778a3139ae1797345b0fa4",
+      "scope": "Model semantic audit with structurally checked evidence references; not independent task truth",
+      "format_repair_attempted": true
+    }
+  ],
+  "interpretation_attempts": [
+    {
+      "attempt": 1,
+      "valid": true
+    }
+  ],
+  "policy": "evidence-v1"
+}

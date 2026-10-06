@@ -1,0 +1,68 @@
+...........................                                              [100%]
+==================================== PASSES ====================================
+_______________________________ test_speedup[2] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 2x2 (ref): 0.000032 seconds
+Median time for 2x2: 0.000003 seconds
+_______________________________ test_speedup[3] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 3x3 (ref): 0.000035 seconds
+Median time for 3x3: 0.000005 seconds
+_______________________________ test_speedup[4] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 4x4 (ref): 0.000038 seconds
+Median time for 4x4: 0.000008 seconds
+_______________________________ test_speedup[5] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 5x5 (ref): 0.000041 seconds
+Median time for 5x5: 0.000011 seconds
+_______________________________ test_speedup[6] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 6x6 (ref): 0.000046 seconds
+Median time for 6x6: 0.000015 seconds
+_______________________________ test_speedup[7] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 7x7 (ref): 0.000050 seconds
+Median time for 7x7: 0.000019 seconds
+_______________________________ test_speedup[8] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 8x8 (ref): 0.000055 seconds
+Median time for 8x8: 0.000023 seconds
+_______________________________ test_speedup[9] ________________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 9x9 (ref): 0.000063 seconds
+Median time for 9x9: 0.000030 seconds
+_______________________________ test_speedup[10] _______________________________
+----------------------------- Captured stdout call -----------------------------
+Median time for 10x10 (ref): 0.000070 seconds
+Median time for 10x10: 0.000036 seconds
+------------------ generated xml file: /diagnostic/junit.xml -------------------
+=========================== short test summary info ============================
+PASSED ../tests/test_outputs.py::test_eigen_pair[2]
+PASSED ../tests/test_outputs.py::test_eigen_pair[3]
+PASSED ../tests/test_outputs.py::test_eigen_pair[4]
+PASSED ../tests/test_outputs.py::test_eigen_pair[5]
+PASSED ../tests/test_outputs.py::test_eigen_pair[6]
+PASSED ../tests/test_outputs.py::test_eigen_pair[7]
+PASSED ../tests/test_outputs.py::test_eigen_pair[8]
+PASSED ../tests/test_outputs.py::test_eigen_pair[9]
+PASSED ../tests/test_outputs.py::test_eigen_pair[10]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[2]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[3]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[4]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[5]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[6]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[7]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[8]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[9]
+PASSED ../tests/test_outputs.py::test_dominance_eigenvalue[10]
+PASSED ../tests/test_outputs.py::test_speedup[2]
+PASSED ../tests/test_outputs.py::test_speedup[3]
+PASSED ../tests/test_outputs.py::test_speedup[4]
+PASSED ../tests/test_outputs.py::test_speedup[5]
+PASSED ../tests/test_outputs.py::test_speedup[6]
+PASSED ../tests/test_outputs.py::test_speedup[7]
+PASSED ../tests/test_outputs.py::test_speedup[8]
+PASSED ../tests/test_outputs.py::test_speedup[9]
+PASSED ../tests/test_outputs.py::test_speedup[10]
+27 passed in 0.65s

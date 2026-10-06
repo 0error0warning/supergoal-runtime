@@ -1,0 +1,130 @@
+{
+    "id": "f9ce4d11-47d4-495e-8708-707eeed47196",
+    "task_name": "dr3-014",
+    "trial_name": "dr3-014__qHQcLm2",
+    "trial_uri": "file:///var/lib/supergoal-lab/jobs/intent-transfer01-06-dr3-014-sg_v2/dr3-014__qHQcLm2",
+    "task_id": {
+        "path": "/var/lib/supergoal-lab/tasks/dr3-intent-heldout01/dr3-014"
+    },
+    "source": null,
+    "task_checksum": "3de4d88f1095164d8cd2b380e55cd472d6941c6f730c674ef10987863f999a14",
+    "config": {
+        "task": {
+            "path": "/var/lib/supergoal-lab/tasks/dr3-intent-heldout01/dr3-014",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "dr3-014__qHQcLm2",
+        "trials_dir": "/var/lib/supergoal-lab/jobs/intent-transfer01-06-dr3-014-sg_v2",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "evidence_agent:EvidenceStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "arm": "sg_v2",
+                "max_requests": 128,
+                "max_episodes": 6,
+                "budget_seconds": 900
+            },
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "4ada501c-a498-4c33-8571-688243005235",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "hermes-supergoal-study",
+        "version": "intent-evidence-dev02",
+        "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 189593,
+        "n_cache_tokens": 92352,
+        "n_output_tokens": 6535,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+            "study_arm": "sg_v2",
+            "control_id": "9fc886b4da664d3ab7980a059ff9cea1",
+            "study_status": "succeeded",
+            "physical_requests": 21,
+            "adapter": "intent-evidence-dev02"
+        }
+    },
+    "verifier_result": {
+        "rewards": {
+            "delivery_present": 1
+        }
+    },
+    "verifier_environment_mode": "shared",
+    "exception_info": null,
+    "started_at": "2026-10-06T12:15:41.154368Z",
+    "finished_at": "2026-10-06T12:17:55.563124Z",
+    "environment_setup": {
+        "started_at": "2026-10-06T12:15:41.203851Z",
+        "finished_at": "2026-10-06T12:15:43.617334Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-10-06T12:15:43.617416Z",
+        "finished_at": "2026-10-06T12:15:44.420226Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-10-06T12:15:44.420399Z",
+        "finished_at": "2026-10-06T12:17:40.978701Z"
+    },
+    "verifier": {
+        "started_at": "2026-10-06T12:17:41.504732Z",
+        "finished_at": "2026-10-06T12:17:41.968731Z"
+    },
+    "step_results": null
+}

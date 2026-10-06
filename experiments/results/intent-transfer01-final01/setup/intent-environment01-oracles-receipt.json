@@ -1,0 +1,209 @@
+{
+  "status": "complete",
+  "started_at": "2026-10-06T11:49:33.621149+00:00",
+  "registration_sha256": "3e742aa01b647ecbf9799806306f8ea61c6705e707e571aafa18ad65cfa122d3",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-00-merge-diff-arc-agi-task-oracle",
+      "started_at": "2026-10-06T11:49:33.737003+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:50:25.030868+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-00-merge-diff-arc-agi-task-oracle/merge-diff-arc-agi-task__VmJ4sdb/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "crack-7z-hash",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-01-crack-7z-hash-oracle",
+      "started_at": "2026-10-06T11:49:33.736082+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:11:24.616202+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-01-crack-7z-hash-oracle/crack-7z-hash__RZjuK2w/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 2,
+      "task_id": "sqlite-with-gcov",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-02-sqlite-with-gcov-oracle",
+      "started_at": "2026-10-06T11:49:33.786183+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:51:26.655755+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-02-sqlite-with-gcov-oracle/sqlite-with-gcov__tznVA3c/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 3,
+      "task_id": "fix-git",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-03-fix-git-oracle",
+      "started_at": "2026-10-06T11:50:25.067406+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:51:02.872692+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-03-fix-git-oracle/fix-git__KD5ehvK/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 4,
+      "task_id": "pytorch-model-cli",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-04-pytorch-model-cli-oracle",
+      "started_at": "2026-10-06T11:51:02.929698+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:54:45.927120+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-04-pytorch-model-cli-oracle/pytorch-model-cli__eGsq8FJ/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 5,
+      "task_id": "largest-eigenval",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-05-largest-eigenval-oracle",
+      "started_at": "2026-10-06T11:51:26.700050+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:52:03.802914+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-05-largest-eigenval-oracle/largest-eigenval__wR4KaTF/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 6,
+      "task_id": "dr3-014",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-06-dr3-014-oracle",
+      "started_at": "2026-10-06T11:52:03.826311+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:52:26.116149+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-06-dr3-014-oracle/dr3-014__uxyAazb/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 7,
+      "task_id": "dr3-024",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-environment01-07-dr3-024-oracle",
+      "started_at": "2026-10-06T11:52:26.136551+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:52:49.944242+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-environment01-07-dr3-024-oracle/dr3-024__8js2jzY/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "finished_at": "2026-10-06T12:11:24.621618+00:00"
+}

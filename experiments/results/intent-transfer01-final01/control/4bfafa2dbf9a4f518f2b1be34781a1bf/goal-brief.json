@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "advisory_model_interpretation",
+  "original_request": "I'm preparing for a funding pitch and need to validate the assumptions in my attached financial projections (prediction.csv). Based on my market report outline (tex.pdf), could you gather some intel on the overall AI business environment? I need a simple overview, examples of other startups in the space, and data on the market's general health and direction. Also, please flag any major upcoming economic or regulatory discussions that might impact the industry.\n\nAttached files are in /app/input/user_files. Use /app/input/corpus as the fixed research collection; index.json maps document IDs to titles and URLs. You can search and read these files with terminal/file tools; pdftotext is installed for PDFs. Use this supplied collection for the study, without external web retrieval. Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties. Do not modify the input files.",
+  "request_sha256": "a7fb06594547247f69abf9d79d4b230cbea392814b70607969f16aa244fe72bc",
+  "route": "inspect",
+  "route_reason": "The task is a bounded research-and-write job over a fixed local corpus (~190 docs indexed in index.json) plus two user files; no external web access is permitted, so the work is inspect-and-synthesize rather than open-ended research or a direct edit.",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Produce an intel report on the overall AI business environment: simple overview, examples of other startups in the space, and data on market health/direction",
+      "source_quote": "could you gather some intel on the overall AI business environment? I need a simple overview, examples of other startups in the space, and data on the market's general health and direction",
+      "verification": "report.md contains sections covering overview, named startup examples, and market health/direction data, each backed by cited corpus doc IDs"
+    },
+    {
+      "id": "R2",
+      "requirement": "Flag major upcoming economic or regulatory discussions that could impact the AI industry",
+      "source_quote": "please flag any major upcoming economic or regulatory discussions that might impact the industry",
+      "verification": "report.md includes a distinct section listing upcoming economic/regulatory items (e.g., gen-AI regulation, AI bubble debate) with corpus citations"
+    },
+    {
+      "id": "R3",
+      "requirement": "Use only the supplied corpus for the study; no external web retrieval",
+      "source_quote": "Use this supplied collection for the study, without external web retrieval",
+      "verification": "all citations in report.md map to doc IDs in /app/input/corpus/index.json; no external URLs as evidence"
+    },
+    {
+      "id": "R4",
+      "requirement": "Write the report to /app/report.md with sources supporting specific claims and stated limitations",
+      "source_quote": "Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties",
+      "verification": "/app/report.md exists, each claim cites a doc ID/source, and a limitations section is present"
+    },
+    {
+      "id": "R5",
+      "requirement": "Do not modify input files",
+      "source_quote": "Do not modify the input files",
+      "verification": "files under /app/input unchanged (checksums identical before/after)"
+    },
+    {
+      "id": "R6",
+      "requirement": "Contextually validate assumptions in prediction.csv against market intel (framing: funding-pitch validation)",
+      "source_quote": "validate the assumptions in my attached financial projections (prediction.csv)",
+      "verification": "report connects market evidence to the projection's assumptions (e.g., ~74% gross margins, revenue growth from $1.85M to $14.9M, declining CAC/rising LTV) noting which are plausible vs. unsupported by the corpus"
+    }
+  ],
+  "assumptions": [
+    "The 'space' is the general AI industry since tex.pdf is a template with [Target Industry] placeholders; validate by confirming the PDF contains only lorem-ipsum/template content (confirmed: it does)",
+    "'Other startups in the space' means AI startups generally; corpus contains TechCrunch items like VoiceRun (D0040) and Symbolic AI (D0069) usable as examples",
+    "Citations can be doc IDs/titles/URLs from index.json rather than formal footnotes; validate by checking index.json fields"
+  ],
+  "information_gaps": [
+    "Target industry and company identity are placeholder text in tex.pdf — consequence: report must stay general-purpose AI market intel rather than vertical-specific; obtain from user if a narrower focus is desired",
+    "Corpus is a mixed-quality web scrape (marketing pages, paywalled items, unrelated docs) — consequence: some claims may only be supportable from a handful of docs (e.g., D0074 McKinsey State of AI, D0079 AI bubble, D0148 gen-AI regulation); limitations must reflect this"
+  ],
+  "research_questions": [
+    "Which corpus docs actually contain substantive market-size/growth/funding data vs. landing-page boilerplate (determined by grepping for market-size, CAGR, funding, regulation keywords)",
+    "Whether the corpus contains enough on regulatory/economic discussions (e.g., D0148 gen-AI regulation, D0079 bubble warnings, UNCTAD items) to support the flag section"
+  ],
+  "next_action": "Run keyword searches across /app/input/corpus/*.txt (e.g., 'market size', 'CAGR', 'funding', 'raised', 'regulation', 'EU AI Act', 'bubble') to shortlist substantive docs, then extract supporting passages from the top ~10-15 docs and draft /app/report.md.",
+  "initial_snapshot_id": "sha256:1c14337adece0c339c89f7d2d15ec0c5310c2ae24b0cbb235fab2de6084920df"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "uninterpreted_request",
+  "original_request": "You need to create a file called \"/app/solution.txt\" with the word found in \"secret_file.txt\" in the \"secrets.7z\" archive.\n",
+  "request_sha256": "f5f89400c549eefb2c245caa7770356737b7a12098e6879787e846d9cb5eb822",
+  "route": "inspect",
+  "route_reason": "Brief unavailable: nonempty bounded text required",
+  "requirements": [
+    {
+      "id": "original",
+      "requirement": "You need to create a file called \"/app/solution.txt\" with the word found in \"secret_file.txt\" in the \"secrets.7z\" archive.\n",
+      "source_quote": "You need to create a file called \"/app/solution.txt\" with the word found in \"secret_file.txt\" in the \"secrets.7z\" archive.\n",
+      "verification": "Check all original clauses"
+    }
+  ],
+  "assumptions": [],
+  "information_gaps": [],
+  "research_questions": [],
+  "next_action": "Inspect the request and relevant workspace, then act.",
+  "initial_snapshot_id": "sha256:2cc90964f04e7c07ac985a4e6cd229a7501ba5e7b1112402c8fed38cc755bb2f"
+}

@@ -1,0 +1,931 @@
+{
+  "arm": "evidence",
+  "status": "succeeded",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "6fa938389f99648508e5a9772e0d5e95d1102738c68d1ff61bd65469d76c52ab",
+  "control_id": "96193f06daf940b5b80fdfc70e33f691",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Done. `/app/eigen.py` now calls LAPACK `dgeev` directly via scipy's f2py wrapper, skipping `compute_vl` and numpy's `eig` wrapper overhead, then picks the max-|λ| index and rebuilds the eigenvector (handling the real/complex-conjugate-pair storage layout LAPACK uses).\n\nVerification (eval.py, 3 consecutive runs):\n- Correctness asserts (`Ax = λx`, non-zero vector, finite λ) pass at every size in every run.\n- Median times beat the reference at all sizes consistently: roughly 2× faster at 2x2–6x6 and ~1.2× at 8x8–10x10.\n\nNotes:\n- An alternative ctypes binding to bundled OpenBLAS was tried and was ~3× slower (per-call pointer marshaling overhead) — reverted.\n- `scipy` is now a dependency (`pip install scipy`, done).",
+  "last_acceptance": {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "original",
+        "verdict": "pass",
+        "reason": "eigen.py implements find_dominant_eigenvalue_and_eigenvector via LAPACK dgeev with max-|λ| selection and correct complex-pair eigenvector reconstruction; eval.py ran with all asserts passing and median times faster than np.linalg.eig reference at every size (13µs vs 33µs at 2x2 up to 57µs vs 72µs at 10x10); an independent 3000-matrix sweep across sizes 1-10 plus edge cases (identity, diagonal, pure-imaginary eigenvalues, zero matrix) found zero residual or wrong-eigenvalue failures.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "Median time for 10x10: 0.000057 seconds\nMedian time for 10x10 (ref): 0.000072 seconds",
+            "supports": "Implementation consistently beats reference at largest size; same pattern held at all sizes 2-10 with correctness asserts passing",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "de5bedb470c67c8a3d93366c47e9a02294f2537887e71b69e706002e439f4ade"
+          },
+          {
+            "quote": "bad count: 0",
+            "supports": "3000 random matrices plus edge cases all satisfy np.allclose(A@v, lam*v) and match numpy's dominant eigenvalue",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "d86f7deb749d47d07aab916556b8da088cf82ded781459133f2d7cd5af52cc52"
+          },
+          {
+            "quote": "wr, wi, vl, vr, info = _geev(A, compute_vl=0, compute_vr=1,",
+            "supports": "Entrypoint is a Python function in /app/eigen.py calling LAPACK dgeev directly",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "3d5c73e095a9439605af3c5bce4359f1573d2b1ea59b5d03a70856f9f67d2e99"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "6fa938389f99648508e5a9772e0d5e95d1102738c68d1ff61bd65469d76c52ab",
+    "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  "artifact_image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+  "artifact_image_tag": "sg-artifact:96193f06daf940b5b80fdfc70e33f691",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "interpret",
+      "pid": 203690,
+      "exit_code": 0,
+      "seconds": 41.60125526000047,
+      "model_calls": 2,
+      "result_relative_path": "01-interpret/result.json"
+    },
+    {
+      "role": "interpret_repair",
+      "pid": 205234,
+      "exit_code": 0,
+      "seconds": 29.59044792199984,
+      "model_calls": 1,
+      "result_relative_path": "02-interpret_repair/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 206620,
+      "exit_code": 0,
+      "seconds": 94.93822402299975,
+      "model_calls": 18,
+      "result_relative_path": "03-executor/result.json"
+    },
+    {
+      "role": "review",
+      "pid": 212237,
+      "exit_code": 0,
+      "seconds": 24.370961481999984,
+      "model_calls": 3,
+      "result_relative_path": "04-review/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791290083.1451845,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4268,
+        "output_tokens": 93,
+        "total_tokens": 4361,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c9ed3956-6b3",
+      "status": "completed",
+      "seconds": 4.528936147689819
+    },
+    {
+      "index": 2,
+      "started": 1791290088.1372414,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5503,
+        "output_tokens": 1197,
+        "total_tokens": 6700,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_65809759-e75",
+      "status": "completed",
+      "seconds": 27.18985629081726
+    },
+    {
+      "index": 3,
+      "started": 1791290124.9698205,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7500,
+        "output_tokens": 1264,
+        "total_tokens": 8764,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_8eaa9ae5-cef",
+      "status": "completed",
+      "seconds": 20.951563119888306
+    },
+    {
+      "index": 4,
+      "started": 1791290155.8725817,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5114,
+        "output_tokens": 89,
+        "total_tokens": 5203,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_d63da3b9-ed9",
+      "status": "completed",
+      "seconds": 2.2029006481170654
+    },
+    {
+      "index": 5,
+      "started": 1791290158.6233413,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6349,
+        "output_tokens": 192,
+        "total_tokens": 6541,
+        "input_tokens_details": {
+          "cached_tokens": 5056
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b67dad0d-776",
+      "status": "completed",
+      "seconds": 3.3268749713897705
+    },
+    {
+      "index": 6,
+      "started": 1791290162.9711037,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6798,
+        "output_tokens": 218,
+        "total_tokens": 7016,
+        "input_tokens_details": {
+          "cached_tokens": 6336
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_5719a085-d89",
+      "status": "completed",
+      "seconds": 3.099630832672119
+    },
+    {
+      "index": 7,
+      "started": 1791290175.4793005,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6943,
+        "output_tokens": 103,
+        "total_tokens": 7046,
+        "input_tokens_details": {
+          "cached_tokens": 6784
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_61a09a30-ce4",
+      "status": "completed",
+      "seconds": 1.9264476299285889
+    },
+    {
+      "index": 8,
+      "started": 1791290178.4259634,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7296,
+        "output_tokens": 392,
+        "total_tokens": 7688,
+        "input_tokens_details": {
+          "cached_tokens": 6912
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_400182b4-1ad",
+      "status": "completed",
+      "seconds": 3.5801916122436523
+    },
+    {
+      "index": 9,
+      "started": 1791290182.4861372,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7773,
+        "output_tokens": 54,
+        "total_tokens": 7827,
+        "input_tokens_details": {
+          "cached_tokens": 7296
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_226266a1-dc8",
+      "status": "completed",
+      "seconds": 1.6301062107086182
+    },
+    {
+      "index": 10,
+      "started": 1791290185.3289835,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 8032,
+        "output_tokens": 276,
+        "total_tokens": 8308,
+        "input_tokens_details": {
+          "cached_tokens": 7744
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_238d6779-11f",
+      "status": "completed",
+      "seconds": 3.3031153678894043
+    },
+    {
+      "index": 11,
+      "started": 1791290189.2574697,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9066,
+        "output_tokens": 343,
+        "total_tokens": 9409,
+        "input_tokens_details": {
+          "cached_tokens": 8000
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_dc628d0b-8bc",
+      "status": "completed",
+      "seconds": 4.620952844619751
+    },
+    {
+      "index": 12,
+      "started": 1791290194.9155805,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9457,
+        "output_tokens": 138,
+        "total_tokens": 9595,
+        "input_tokens_details": {
+          "cached_tokens": 9024
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_907743dd-d19",
+      "status": "completed",
+      "seconds": 2.4604227542877197
+    },
+    {
+      "index": 13,
+      "started": 1791290197.5775297,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9654,
+        "output_tokens": 243,
+        "total_tokens": 9897,
+        "input_tokens_details": {
+          "cached_tokens": 9408
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c4852530-c13",
+      "status": "completed",
+      "seconds": 2.6858503818511963
+    },
+    {
+      "index": 14,
+      "started": 1791290200.7207053,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 9960,
+        "output_tokens": 395,
+        "total_tokens": 10355,
+        "input_tokens_details": {
+          "cached_tokens": 9728
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_577b4838-b31",
+      "status": "completed",
+      "seconds": 3.9303789138793945
+    },
+    {
+      "index": 15,
+      "started": 1791290205.2948525,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 10560,
+        "output_tokens": 688,
+        "total_tokens": 11248,
+        "input_tokens_details": {
+          "cached_tokens": 10240
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ce551c4d-05f",
+      "status": "completed",
+      "seconds": 5.7838099002838135
+    },
+    {
+      "index": 16,
+      "started": 1791290211.5628126,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 11333,
+        "output_tokens": 54,
+        "total_tokens": 11387,
+        "input_tokens_details": {
+          "cached_tokens": 10560
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_fe58917e-325",
+      "status": "completed",
+      "seconds": 1.5542700290679932
+    },
+    {
+      "index": 17,
+      "started": 1791290213.9267523,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 11592,
+        "output_tokens": 380,
+        "total_tokens": 11972,
+        "input_tokens_details": {
+          "cached_tokens": 11328
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_4f6fe8b9-aaf",
+      "status": "completed",
+      "seconds": 3.4814293384552
+    },
+    {
+      "index": 18,
+      "started": 1791290217.9555917,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 12057,
+        "output_tokens": 122,
+        "total_tokens": 12179,
+        "input_tokens_details": {
+          "cached_tokens": 11584
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_6845b483-e0b",
+      "status": "completed",
+      "seconds": 2.88303804397583
+    },
+    {
+      "index": 19,
+      "started": 1791290222.2495928,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 12320,
+        "output_tokens": 317,
+        "total_tokens": 12637,
+        "input_tokens_details": {
+          "cached_tokens": 12032
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_a3367e7e-095",
+      "status": "completed",
+      "seconds": 5.33022403717041
+    },
+    {
+      "index": 20,
+      "started": 1791290229.1447778,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 12595,
+        "output_tokens": 162,
+        "total_tokens": 12757,
+        "input_tokens_details": {
+          "cached_tokens": 12288
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_40271eaa-8c9",
+      "status": "completed",
+      "seconds": 3.215261697769165
+    },
+    {
+      "index": 21,
+      "started": 1791290235.366207,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 13187,
+        "output_tokens": 235,
+        "total_tokens": 13422,
+        "input_tokens_details": {
+          "cached_tokens": 12544
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ff98d689-c20",
+      "status": "completed",
+      "seconds": 6.756920337677002
+    },
+    {
+      "index": 22,
+      "started": 1791290255.2464406,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4944,
+        "output_tokens": 94,
+        "total_tokens": 5038,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_2f18ddb0-b44",
+      "status": "completed",
+      "seconds": 2.1559059619903564
+    },
+    {
+      "index": 23,
+      "started": 1791290257.8711317,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6372,
+        "output_tokens": 438,
+        "total_tokens": 6810,
+        "input_tokens_details": {
+          "cached_tokens": 4928
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_40417f4a-be5",
+      "status": "completed",
+      "seconds": 6.358844041824341
+    },
+    {
+      "index": 24,
+      "started": 1791290267.3295088,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6982,
+        "output_tokens": 358,
+        "total_tokens": 7340,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_06a5ca8e-f39",
+      "status": "completed",
+      "seconds": 3.9899818897247314
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791290081.017413,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290081.1463346,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290122.8590503,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290122.9882834,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290153.499108,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290153.6793036,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290253.0777955,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791290253.2212029,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 24,
+  "kernel_status": "succeeded",
+  "snapshot_lifecycle": [
+    {
+      "container_id": "eb94920318b8f056cc367d7426502f6a01a6e554e1fdf41af2f362f2345a7533",
+      "image_tag": "sg-observe:96193f06daf940b5b80fdfc70e33f691-1",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 4464.221829814,
+      "status": "captured",
+      "image_id": "sha256:c1d3e81f5243e476a2f4d0e0c73465718d8835ec470641fdf38df0cd0153bff2",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 4464.35321051
+    },
+    {
+      "container_id": "eb94920318b8f056cc367d7426502f6a01a6e554e1fdf41af2f362f2345a7533",
+      "image_tag": "sg-observe:96193f06daf940b5b80fdfc70e33f691-2",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 4631.71469317,
+      "status": "captured",
+      "image_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 4635.473341113
+    },
+    {
+      "container_id": "eb94920318b8f056cc367d7426502f6a01a6e554e1fdf41af2f362f2345a7533",
+      "image_tag": "sg-artifact:96193f06daf940b5b80fdfc70e33f691",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 4661.416558744,
+      "status": "captured",
+      "image_id": "sha256:4a2e711b44f0e8eae9218a66a6c7023803191abbd6e70eec27e8fa3e14b0999e",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 203120,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:34:33.82207469Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 4665.546230922
+    }
+  ],
+  "goal_brief": {
+    "schema": 1,
+    "policy": "evidence-v1",
+    "authority": "uninterpreted_request",
+    "original_request": "Complete the implementation in find_dominant_eigenvalue_and_eigenvector in /app/eigen.py.\n\"Dominant\" means the eigenvalue with the largest magnitude.\nThe input is a 2D square numpy array with real np.float64 entries, up to size 10x10, and it is not necessarily symmetric so the eigen pair may be complex.\nOptimize the function such that it consistently runs faster than the reference numpy solution in /app/eval.py, while satisfying np.allclose(A @ eigenvec, eigenval * eigenvec).\nWe will run multiple tests and take the median time per call.\nYou may install system-wide python packages or even use other languages, but the entrypoint must be a Python function in /app/eigen.py.\n`/app/eval.py` can help you iterate.\n",
+    "request_sha256": "6fa938389f99648508e5a9772e0d5e95d1102738c68d1ff61bd65469d76c52ab",
+    "route": "inspect",
+    "route_reason": "Brief unavailable: Expecting ',' delimiter: line 16 column 20 (char 3661)",
+    "requirements": [
+      {
+        "id": "original",
+        "requirement": "Complete the implementation in find_dominant_eigenvalue_and_eigenvector in /app/eigen.py.\n\"Dominant\" means the eigenvalue with the largest magnitude.\nThe input is a 2D square numpy array with real np.float64 entries, up to size 10x10, and it is not necessarily symmetric so the eigen pair may be complex.\nOptimize the function such that it consistently runs faster than the reference numpy solution in /app/eval.py, while satisfying np.allclose(A @ eigenvec, eigenval * eigenvec).\nWe will run multiple tests and take the median time per call.\nYou may install system-wide python packages or even use other languages, but the entrypoint must be a Python function in /app/eigen.py.\n`/app/eval.py` can help you iterate.\n",
+        "source_quote": "Complete the implementation in find_dominant_eigenvalue_and_eigenvector in /app/eigen.py.\n\"Dominant\" means the eigenvalue with the largest magnitude.\nThe input is a 2D square numpy array with real np.float64 entries, up to size 10x10, and it is not necessarily symmetric so the eigen pair may be complex.\nOptimize the function such that it consistently runs faster than the reference numpy solution in /app/eval.py, while satisfying np.allclose(A @ eigenvec, eigenval * eigenvec).\nWe will run multiple tests and take the median time per call.\nYou may install system-wide python packages or even use other languages, but the entrypoint must be a Python function in /app/eigen.py.\n`/app/eval.py` can help you iterate.\n",
+        "verification": "Check all original clauses"
+      }
+    ],
+    "assumptions": [],
+    "information_gaps": [],
+    "research_questions": [],
+    "next_action": "Inspect the request and relevant workspace, then act.",
+    "initial_snapshot_id": "sha256:c1d3e81f5243e476a2f4d0e0c73465718d8835ec470641fdf38df0cd0153bff2"
+  },
+  "coverage_audits": [
+    {
+      "verdict": "pass",
+      "reason": "none",
+      "requirements": [
+        {
+          "id": "original",
+          "verdict": "pass",
+          "reason": "eigen.py implements find_dominant_eigenvalue_and_eigenvector via LAPACK dgeev with max-|λ| selection and correct complex-pair eigenvector reconstruction; eval.py ran with all asserts passing and median times faster than np.linalg.eig reference at every size (13µs vs 33µs at 2x2 up to 57µs vs 72µs at 10x10); an independent 3000-matrix sweep across sizes 1-10 plus edge cases (identity, diagonal, pure-imaginary eigenvalues, zero matrix) found zero residual or wrong-eigenvalue failures.",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "Median time for 10x10: 0.000057 seconds\nMedian time for 10x10 (ref): 0.000072 seconds",
+              "supports": "Implementation consistently beats reference at largest size; same pattern held at all sizes 2-10 with correctness asserts passing",
+              "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+              "quote_sha256": "de5bedb470c67c8a3d93366c47e9a02294f2537887e71b69e706002e439f4ade"
+            },
+            {
+              "quote": "bad count: 0",
+              "supports": "3000 random matrices plus edge cases all satisfy np.allclose(A@v, lam*v) and match numpy's dominant eigenvalue",
+              "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+              "quote_sha256": "d86f7deb749d47d07aab916556b8da088cf82ded781459133f2d7cd5af52cc52"
+            },
+            {
+              "quote": "wr, wi, vl, vr, info = _geev(A, compute_vl=0, compute_vr=1,",
+              "supports": "Entrypoint is a Python function in /app/eigen.py calling LAPACK dgeev directly",
+              "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+              "quote_sha256": "3d5c73e095a9439605af3c5bce4359f1573d2b1ea59b5d03a70856f9f67d2e99"
+            }
+          ]
+        }
+      ],
+      "omissions": [],
+      "request_covered": true,
+      "retryable": true,
+      "request_sha256": "6fa938389f99648508e5a9772e0d5e95d1102738c68d1ff61bd65469d76c52ab",
+      "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+      "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+    }
+  ],
+  "interpretation_attempts": [
+    {
+      "attempt": 1,
+      "valid": false,
+      "error": "Expecting ',' delimiter: line 15 column 20 (char 3389)"
+    },
+    {
+      "attempt": 2,
+      "valid": false,
+      "error": "Expecting ',' delimiter: line 16 column 20 (char 3661)"
+    }
+  ],
+  "policy": "evidence-v1"
+}

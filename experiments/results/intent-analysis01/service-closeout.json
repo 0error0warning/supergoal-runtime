@@ -1,0 +1,44 @@
+{
+  "schema": 1,
+  "observed_at": "2026-10-06T13:31:50.9487718+00:00",
+  "study": "intent-transfer01",
+  "gcp": {
+    "name": "supergoal-lab-20261005",
+    "status": "TERMINATED",
+    "last_stop_timestamp": "2026-10-06T21:27:21.601+08:00",
+    "machine_type": "n1-highmem-8",
+    "attached_disks": [
+      {
+        "name": "supergoal-lab-20261005",
+        "size_gb": "40",
+        "boot": true,
+        "auto_delete_on_instance_deletion": true
+      },
+      {
+        "name": "supergoal-lab-data-20261005",
+        "size_gb": "200",
+        "boot": false,
+        "auto_delete_on_instance_deletion": false
+      }
+    ]
+  },
+  "tencent_service_status": [
+    "Id=supergoal-gcp-model-tunnel.service",
+    "ActiveState=inactive",
+    "SubState=dead",
+    "",
+    "Id=hermes-gateway.service",
+    "ActiveState=active",
+    "SubState=running",
+    "",
+    "Id=hermes-dashboard.service",
+    "ActiveState=active",
+    "SubState=running"
+  ],
+  "local_iap_tunnel": {
+    "tool_session_id": 62024,
+    "interrupt_sent": true,
+    "observed_exit_code": 1
+  },
+  "source": "Read-only GCP describe and Tencent systemctl show after deliberate lab shutdown; production deployment was not changed."
+}

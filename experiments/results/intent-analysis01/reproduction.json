@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "created_at": "2026-10-06T13:34:37.234719+00:00",
+  "scope": "Descriptive local reanalysis; no model calls, score repairs or trial reruns. Raw evidence capsules were not edited.",
+  "reproductions": [
+    {
+      "analysis": "development01.json",
+      "input_manifest": "../intent-evidence-dev01-final01/manifest.json",
+      "input_manifest_sha256": "2f8aaa64c61f5e5d8e90fea68e2a675ebd9f2b1d2d216c4c686f7798c38d478e",
+      "previous_analysis_sha256": "46cebae5e71eccccac95b3cd98c155c17ae06de5141b17c579910aaeace4a0f9",
+      "analysis_sha256": "5e1d4d47d4594ec97828a35300f9f25800ef1ed21082955f40df2a99157fc2e6",
+      "verification": "Added an empty research_input_integrity field only; all pre-existing analysis values identical."
+    },
+    {
+      "analysis": "development02.json",
+      "input_manifest": "../intent-evidence-dev02-final01/manifest.json",
+      "input_manifest_sha256": "ed1e6d9c9c47394219f16a6d4a590af167c24ef00e78cdc82f9ece85e27f45d5",
+      "previous_analysis_sha256": "07de2de09a1914a0b14e14dc1cb9667884aa0fea13cfcb59e81372e57e43b427",
+      "analysis_sha256": "1c5b158a4fb65491899476da8c6a5fc840f2bc7b422ae89dfa11a9546dd1847f",
+      "verification": "Added an empty research_input_integrity field only; all pre-existing analysis values identical."
+    },
+    {
+      "analysis": "heldout.json",
+      "input_manifest": "../intent-transfer01-final01/manifest.json",
+      "input_manifest_sha256": "906e5630769eb51a8a8984c4fbf42f2ccf29c4a61afd605645c7ad0d13465ff0",
+      "previous_analysis_sha256": "62b262aa710eae8b97033b378f3e2afef478d11a01e30b56c33f8ee91caa485b",
+      "analysis_sha256": "62b262aa710eae8b97033b378f3e2afef478d11a01e30b56c33f8ee91caa485b",
+      "verification": "Exact structured reproduction; no changes."
+    }
+  ],
+  "validation": {
+    "analysis_tests": "3 passed; analysis-tests.log",
+    "active_source_lint": "passed; active-source-lint.log",
+    "compileall": "exit 0 for supergoal_runtime, scripts, tests, active analysis, public_benchmarks and infrastructure",
+    "wheel_build": "passed; wheel-build.log",
+    "frozen_real_hermes_tests": "251 passed, 0 skipped; ../intent-transfer01-final01/checks/intent-transfer01/attempt02/validation.json"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "status": "complete",
+  "started_at": "2026-10-06T11:47:17.262149+00:00",
+  "registration_sha256": "25ee51c88f62b7cc0129a414af9ea2251b8eaf6a4369c7b942c8a1e359b46307",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev02-00-configure-git-webserver-oracle",
+      "started_at": "2026-10-06T11:47:17.332468+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:48:34.321064+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev02-00-configure-git-webserver-oracle/configure-git-webserver__DV4dGRx/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "dr3-015",
+      "arm": "oracle",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev02-01-dr3-015-oracle",
+      "started_at": "2026-10-06T11:47:17.291704+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:47:44.658068+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev02-01-dr3-015-oracle/dr3-015__aEvncRG/result.json",
+      "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "finished_at": "2026-10-06T11:48:34.322861+00:00"
+}

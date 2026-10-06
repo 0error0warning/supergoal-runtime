@@ -1,0 +1,135 @@
+{
+    "id": "d6a5b86f-67b5-4375-8321-7800d0ea3b22",
+    "task_name": "terminal-bench/crack-7z-hash",
+    "trial_name": "crack-7z-hash__5tFBo2o",
+    "trial_uri": "file:///var/lib/supergoal-lab/jobs/intent-transfer01-09-crack-7z-hash-sg_v2/crack-7z-hash__5tFBo2o",
+    "task_id": {
+        "path": "/var/lib/supergoal-lab/tasks/intent-transfer01/crack-7z-hash"
+    },
+    "source": null,
+    "task_checksum": "b7bb6bbcdd77acc93eda893fc2487664d7eb2c37d62725a0282321641ea0eadf",
+    "config": {
+        "task": {
+            "path": "/var/lib/supergoal-lab/tasks/intent-transfer01/crack-7z-hash",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "crack-7z-hash__5tFBo2o",
+        "trials_dir": "/var/lib/supergoal-lab/jobs/intent-transfer01-09-crack-7z-hash-sg_v2",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "evidence_agent:EvidenceStudy",
+            "model_name": "devin/swe-2",
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "arm": "sg_v2",
+                "max_requests": 128,
+                "max_episodes": 6,
+                "budget_seconds": 1800.0
+            },
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "2953dd06-0662-42ff-83f6-3a5a46a9c5ad",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "hermes-supergoal-study",
+        "version": "intent-evidence-dev02",
+        "model_info": {
+            "name": "swe-2",
+            "provider": "devin"
+        }
+    },
+    "agent_result": {
+        "n_input_tokens": 249470,
+        "n_cache_tokens": 233316,
+        "n_output_tokens": 4143,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+            "study_arm": "sg_v2",
+            "control_id": "155ddff00ff940f9864dedfb8e3c0b84",
+            "study_status": "adapter_error",
+            "physical_requests": 32,
+            "adapter": "intent-evidence-dev02"
+        }
+    },
+    "verifier_result": {
+        "rewards": {
+            "reward": 0.0
+        }
+    },
+    "verifier_environment_mode": "shared",
+    "exception_info": {
+        "exception_type": "AgentTimeoutError",
+        "exception_message": "Agent execution timed out after 1800.0 seconds",
+        "exception_traceback": "Traceback (most recent call last):\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/evidence_agent.py\", line 133, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/checkpoint_agent.py\", line 29, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 291, in run\n    result = await self.episode(prompt, proxy, role=\"executor\", container=self.container, history=history)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/evidence_agent.py\", line 97, in episode\n    return await super().episode(prompt, proxy, role=role, container=container,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                                 history=history, max_calls=max_calls)\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 174, in episode\n    await asyncio.wait_for(proc.wait(), 2)\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/subprocess.py\", line 137, in wait\n    return await self._transport._wait()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/base_subprocess.py\", line 253, in _wait\n    return await waiter\n           ^^^^^^^^^^^^\nasyncio.exceptions.CancelledError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 651, in _run_agent_phase\n    await asyncio.wait_for(\n    ...<6 lines>...\n    )\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 506, in wait_for\n    async with timeouts.timeout(timeout):\n               ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/timeouts.py\", line 116, in __aexit__\n    raise TimeoutError from exc_val\nTimeoutError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/single_step.py\", line 76, in _run_agent\n    await self._run_agent_phase(\n    ...<5 lines>...\n    )\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 660, in _run_agent_phase\n    raise AgentTimeoutError(\n        f\"Agent execution timed out after {timeout_sec} seconds\"\n    ) from exc\nharbor.trial.errors.AgentTimeoutError: Agent execution timed out after 1800.0 seconds\n",
+        "occurred_at": "2026-10-06T12:50:31.817999Z"
+    },
+    "started_at": "2026-10-06T12:20:27.542905Z",
+    "finished_at": "2026-10-06T12:53:47.698846Z",
+    "environment_setup": {
+        "started_at": "2026-10-06T12:20:27.573951Z",
+        "finished_at": "2026-10-06T12:20:28.985408Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-10-06T12:20:28.985483Z",
+        "finished_at": "2026-10-06T12:20:29.741127Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-10-06T12:20:29.741348Z",
+        "finished_at": "2026-10-06T12:50:31.807523Z"
+    },
+    "verifier": {
+        "started_at": "2026-10-06T12:50:34.017218Z",
+        "finished_at": "2026-10-06T12:53:36.520076Z"
+    },
+    "step_results": null
+}

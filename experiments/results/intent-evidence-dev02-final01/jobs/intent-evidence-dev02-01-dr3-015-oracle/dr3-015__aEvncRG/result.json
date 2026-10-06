@@ -1,0 +1,119 @@
+{
+    "id": "a6fa3b28-5179-438f-ba42-57af1f286b19",
+    "task_name": "dr3-015",
+    "trial_name": "dr3-015__aEvncRG",
+    "trial_uri": "file:///var/lib/supergoal-lab/jobs/intent-evidence-dev02-01-dr3-015-oracle/dr3-015__aEvncRG",
+    "task_id": {
+        "path": "/var/lib/supergoal-lab/tasks/dr3-intent-development01/dr3-015"
+    },
+    "source": null,
+    "task_checksum": "452c2150b64e2db18ffbd121c0e6aa539b4b9d5494fec43d7ea485237c415185",
+    "config": {
+        "task": {
+            "path": "/var/lib/supergoal-lab/tasks/dr3-intent-development01/dr3-015",
+            "git_url": null,
+            "git_commit_id": null,
+            "name": null,
+            "ref": null,
+            "overwrite": false,
+            "download_dir": null,
+            "source": null
+        },
+        "trial_name": "dr3-015__aEvncRG",
+        "trials_dir": "/var/lib/supergoal-lab/jobs/intent-evidence-dev02-01-dr3-015-oracle",
+        "install_only": false,
+        "timeout_multiplier": 1.0,
+        "agent_timeout_multiplier": null,
+        "verifier_timeout_multiplier": null,
+        "agent_setup_timeout_multiplier": null,
+        "environment_build_timeout_multiplier": null,
+        "agent": {
+            "name": null,
+            "import_path": "oracle_preflight:HttpsOracle",
+            "model_name": null,
+            "n_concurrent": null,
+            "concurrency_group": null,
+            "skills": [],
+            "override_timeout_sec": null,
+            "override_setup_timeout_sec": null,
+            "max_timeout_sec": null,
+            "resume_trajectory": false,
+            "load_trajectory": null,
+            "extra_allowed_hosts": [],
+            "kwargs": {
+                "task_dir": "/var/lib/supergoal-lab/tasks/dr3-intent-development01/dr3-015",
+                "agent_timeout_sec": 900
+            },
+            "mcp_servers": []
+        },
+        "user_agent": null,
+        "environment": {
+            "type": "docker",
+            "import_path": null,
+            "force_build": false,
+            "delete": true,
+            "stream": false,
+            "cpu_enforcement_policy": "auto",
+            "memory_enforcement_policy": "auto",
+            "override_cpus": null,
+            "override_memory_mb": null,
+            "override_storage_mb": null,
+            "override_gpus": null,
+            "override_tpu": null,
+            "mounts": null,
+            "extra_docker_compose": [],
+            "kwargs": {},
+            "extra_allowed_hosts": []
+        },
+        "verifier": {
+            "override_timeout_sec": null,
+            "max_timeout_sec": null,
+            "disable": false
+        },
+        "artifacts": [],
+        "extra_instruction_paths": [],
+        "extra_instructions": [],
+        "job_id": "5af670c1-9cdb-4831-ba34-2ef525e9776b",
+        "source_trial": null
+    },
+    "agent_info": {
+        "name": "oracle",
+        "version": "official-oracle-with-apt-https-2",
+        "model_info": null
+    },
+    "agent_result": {
+        "n_input_tokens": null,
+        "n_cache_tokens": null,
+        "n_output_tokens": null,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": null
+    },
+    "verifier_result": {
+        "rewards": {
+            "delivery_present": 1
+        }
+    },
+    "verifier_environment_mode": "shared",
+    "exception_info": null,
+    "started_at": "2026-10-06T11:47:18.937720Z",
+    "finished_at": "2026-10-06T11:47:39.513214Z",
+    "environment_setup": {
+        "started_at": "2026-10-06T11:47:19.010753Z",
+        "finished_at": "2026-10-06T11:47:23.449360Z"
+    },
+    "agent_setup": {
+        "started_at": "2026-10-06T11:47:23.449444Z",
+        "finished_at": "2026-10-06T11:47:23.599815Z"
+    },
+    "agent_execution": {
+        "started_at": "2026-10-06T11:47:23.600033Z",
+        "finished_at": "2026-10-06T11:47:24.003206Z"
+    },
+    "verifier": {
+        "started_at": "2026-10-06T11:47:24.551843Z",
+        "finished_at": "2026-10-06T11:47:25.001580Z"
+    },
+    "step_results": null
+}

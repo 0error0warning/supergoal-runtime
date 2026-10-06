@@ -1,0 +1,933 @@
+{
+  "arm": "evidence",
+  "status": "succeeded",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+  "control_id": "7b07da14fa79438e8341091d7ea39f49",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Done. All requirements verified:\n\n- **Source**: extracted `/app/vendor/sqlite-fossil-release.tar.gz` (sha256 matched the adjacent `.sha256` file) into `/app/sqlite`; no network fetch of sources.\n- **Build**: out-of-tree build in `/app/sqlite/build` via `../configure CFLAGS='-O0 -g --coverage' LDFLAGS='--coverage' && make sqlite3`, producing SQLite 3.50.4.\n- **gcov instrumentation**: `.gcno` files (`sqlite3-sqlite3.gcno`, `sqlite3-shell.gcno`) present; running the binary produced `.gcda` files, and `gcov` generates `sqlite3.c.gcov` successfully.\n- **PATH**: `/usr/local/bin/sqlite3` → symlink to `/app/sqlite/build/sqlite3`; verified `command -v sqlite3` and `sqlite3 --version` in a clean `env -i` shell, plus a test query (`select 1+1;` → 2).",
+  "last_acceptance": {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "sqlite3 binary exists at /app/sqlite/build/sqlite3, built from the vendored fossil source tree, and reports version 3.50.4",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "3.50.4 2025-07-30 19:33:53 4d8adfb30e03f9cf27f800a2c1ba3c48fb4ca1b08b0f5ed59a4d5ecbf45e20a3 (64-bit)",
+            "supports": "the built binary runs and reports a SQLite version string",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "fd12eaf579f26a71fbb3ccc2c3dfe03d09eb3ce23c91b5ff03959930558aa5e5"
+          },
+          {
+            "quote": "/app/sqlite/build/sqlite3-sqlite3.gcno",
+            "supports": "build artifacts exist under /app/sqlite/build",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "b4dc7e42748e80b87658fd01249ba775c5aabb13b0db8ea0275346631eac5ee5"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "Makefile used --coverage in CFLAGS/LDFLAGS; .gcno and .gcda files (timestamps Oct 6 12:23) exist beside objects, indicating the instrumented binary emitted coverage data",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "CFLAGS = -O0 -g --coverage",
+            "supports": "compilation flags include gcov instrumentation",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "c281e331e228fe19892a8f561a70da010faf9a8cc913712e8072676c96b510f8"
+          },
+          {
+            "quote": "-rw-rw-rw- 1 root root 163528 Oct  6 12:23 sqlite3-sqlite3.gcda",
+            "supports": "runtime coverage data was emitted by the binary",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "4d769375d1de3348f3c082e064eb697893bf129607a13e114817cb9b9300cbb8"
+          },
+          {
+            "quote": "LDFLAGS.configure = --coverage",
+            "supports": "link flags include coverage",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "f501c0179ab77c3d44ea72979b1018ed5ad58b24a013ac26e7231d78719a3d1d"
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "verdict": "pass",
+        "reason": "In a fresh env -i shell, command -v sqlite3 resolves via /usr/local/bin symlink to /app/sqlite/build/sqlite3 and --version runs",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "/usr/local/bin/sqlite3 -> /app/sqlite/build/sqlite3",
+            "supports": "PATH entry symlinks to the instrumented build",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "72c7ea7495deed5fd0e02dfc6c3836c88b4b8ce8447c58259148b79aa4fb809a"
+          },
+          {
+            "quote": "/usr/local/bin/sqlite3",
+            "supports": "command -v sqlite3 output in clean env -i shell",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "1c0792e6cb6ab67a06f409a2b4e9e7e5e8fc045861f6b46f87c2ca5453d3ec63"
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "verdict": "pass",
+        "reason": "Tarball sha256 matches the adjacent .sha256 file (7c02b6cc...); /app/sqlite is the extracted fossil snapshot (manifest, autosetup, src present) so the vendored source was used",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "7c02b6cc04dddc2f90e63d43ab8900cb694ba4665f4e4ac877ec724733125229  /app/vendor/sqlite-fossil-release.tar.gz",
+            "supports": "vendored tarball checksum matches the .sha256 file",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "0304d68cbcec1916f3a583969e03f95e9402593de44ec81a04e465d6f387bebc"
+          },
+          {
+            "quote": "manifest.uuid",
+            "supports": "/app/sqlite contains the fossil snapshot layout, extracted not downloaded",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "b74c70bf78a28472b10dfc642d3d3c99ff0a2eca821d0be6fdd9232147b57bde"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+    "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  },
+  "artifact_image_id": "sha256:9f371a3f127702149d54f0b0f539766502e049e005e1ef4fb871284ada8cdbf5",
+  "artifact_image_tag": "sg-artifact:7b07da14fa79438e8341091d7ea39f49",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "interpret",
+      "pid": 141367,
+      "exit_code": 0,
+      "seconds": 28.736086865999823,
+      "model_calls": 5,
+      "result_relative_path": "01-interpret/result.json"
+    },
+    {
+      "role": "interpret_repair",
+      "pid": 142290,
+      "exit_code": 0,
+      "seconds": 51.07464588899984,
+      "model_calls": 1,
+      "result_relative_path": "02-interpret_repair/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 144062,
+      "exit_code": 0,
+      "seconds": 89.82720996599983,
+      "model_calls": 8,
+      "result_relative_path": "03-executor/result.json"
+    },
+    {
+      "role": "review",
+      "pid": 151149,
+      "exit_code": 0,
+      "seconds": 38.31487543000003,
+      "model_calls": 4,
+      "result_relative_path": "04-review/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791289244.050302,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4153,
+        "output_tokens": 126,
+        "total_tokens": 4279,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_b67b2192-eb4",
+      "status": "completed",
+      "seconds": 2.2824225425720215
+    },
+    {
+      "index": 2,
+      "started": 1791289246.737788,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4477,
+        "output_tokens": 163,
+        "total_tokens": 4640,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_758f1de3-903",
+      "status": "completed",
+      "seconds": 3.5327677726745605
+    },
+    {
+      "index": 3,
+      "started": 1791289250.407083,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4637,
+        "output_tokens": 259,
+        "total_tokens": 4896,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_5538114e-cb2",
+      "status": "completed",
+      "seconds": 4.869127988815308
+    },
+    {
+      "index": 4,
+      "started": 1791289256.2774477,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4866,
+        "output_tokens": 106,
+        "total_tokens": 4972,
+        "input_tokens_details": {
+          "cached_tokens": 4096
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3e19cb99-62f",
+      "status": "completed",
+      "seconds": 2.3136391639709473
+    },
+    {
+      "index": 5,
+      "started": 1791289258.7791,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5064,
+        "output_tokens": 800,
+        "total_tokens": 5864,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_88bf0f58-4f8",
+      "status": "completed",
+      "seconds": 5.964655160903931
+    },
+    {
+      "index": 6,
+      "started": 1791289272.882261,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6496,
+        "output_tokens": 809,
+        "total_tokens": 7305,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_662d026a-41c",
+      "status": "completed",
+      "seconds": 43.02745604515076
+    },
+    {
+      "index": 7,
+      "started": 1791289324.6319792,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5160,
+        "output_tokens": 100,
+        "total_tokens": 5260,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_49e535c1-ed5",
+      "status": "completed",
+      "seconds": 1.877845048904419
+    },
+    {
+      "index": 8,
+      "started": 1791289327.0448322,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5422,
+        "output_tokens": 113,
+        "total_tokens": 5535,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_9fe31cfe-04b",
+      "status": "completed",
+      "seconds": 2.170543909072876
+    },
+    {
+      "index": 9,
+      "started": 1791289354.0436363,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5731,
+        "output_tokens": 153,
+        "total_tokens": 5884,
+        "input_tokens_details": {
+          "cached_tokens": 5376
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c57db794-589",
+      "status": "completed",
+      "seconds": 2.626772880554199
+    },
+    {
+      "index": 10,
+      "started": 1791289357.868293,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5985,
+        "output_tokens": 158,
+        "total_tokens": 6143,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_cfec0936-dfb",
+      "status": "completed",
+      "seconds": 2.950869083404541
+    },
+    {
+      "index": 11,
+      "started": 1791289365.0199661,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6213,
+        "output_tokens": 86,
+        "total_tokens": 6299,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_68e04be3-53c",
+      "status": "completed",
+      "seconds": 2.004241704940796
+    },
+    {
+      "index": 12,
+      "started": 1791289397.4589581,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6616,
+        "output_tokens": 128,
+        "total_tokens": 6744,
+        "input_tokens_details": {
+          "cached_tokens": 3200
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c3e3be7f-91d",
+      "status": "completed",
+      "seconds": 1.8573577404022217
+    },
+    {
+      "index": 13,
+      "started": 1791289399.5169215,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6995,
+        "output_tokens": 131,
+        "total_tokens": 7126,
+        "input_tokens_details": {
+          "cached_tokens": 6656
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_fe91eadf-056",
+      "status": "completed",
+      "seconds": 2.3928792476654053
+    },
+    {
+      "index": 14,
+      "started": 1791289402.714392,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 7212,
+        "output_tokens": 229,
+        "total_tokens": 7441,
+        "input_tokens_details": {
+          "cached_tokens": 6976
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_486a8866-079",
+      "status": "completed",
+      "seconds": 2.757878303527832
+    },
+    {
+      "index": 15,
+      "started": 1791289426.0475593,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5139,
+        "output_tokens": 142,
+        "total_tokens": 5281,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_58fc3f19-7ca",
+      "status": "completed",
+      "seconds": 4.466525316238403
+    },
+    {
+      "index": 16,
+      "started": 1791289431.0225213,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5637,
+        "output_tokens": 175,
+        "total_tokens": 5812,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_52836ede-1ca",
+      "status": "completed",
+      "seconds": 4.778621435165405
+    },
+    {
+      "index": 17,
+      "started": 1791289436.1057823,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6062,
+        "output_tokens": 190,
+        "total_tokens": 6252,
+        "input_tokens_details": {
+          "cached_tokens": 5636
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_fdc03313-8a8",
+      "status": "completed",
+      "seconds": 6.937090635299683
+    },
+    {
+      "index": 18,
+      "started": 1791289443.240516,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6259,
+        "output_tokens": 650,
+        "total_tokens": 6909,
+        "input_tokens_details": {
+          "cached_tokens": 6061
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ff5c0a72-f5f",
+      "status": "completed",
+      "seconds": 12.413761854171753
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791289242.1673062,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289242.2882903,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289270.8393238,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289270.9727874,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289322.458278,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289322.5781586,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289423.9277432,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289424.045929,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 18,
+  "kernel_status": "succeeded",
+  "snapshot_lifecycle": [
+    {
+      "container_id": "64da163dd758f0748ea3360bd0fd283d877aaaea3696dba447f9817ab657b5c1",
+      "image_tag": "sg-observe:7b07da14fa79438e8341091d7ea39f49-1",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3625.614382067,
+      "status": "captured",
+      "image_id": "sha256:2c6cfc56da6241da5ea0c801669fea4dbca21f9a1936051747027e1c17f9f45f",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3625.724364632
+    },
+    {
+      "container_id": "64da163dd758f0748ea3360bd0fd283d877aaaea3696dba447f9817ab657b5c1",
+      "image_tag": "sg-observe:7b07da14fa79438e8341091d7ea39f49-2",
+      "state_before": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": false,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3796.067963777,
+      "status": "captured",
+      "image_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+      "state_after": {
+        "Status": "paused",
+        "Running": true,
+        "Paused": true,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3804.858130746
+    },
+    {
+      "container_id": "64da163dd758f0748ea3360bd0fd283d877aaaea3696dba447f9817ab657b5c1",
+      "image_tag": "sg-artifact:7b07da14fa79438e8341091d7ea39f49",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3847.706561899,
+      "status": "captured",
+      "image_id": "sha256:9f371a3f127702149d54f0b0f539766502e049e005e1ef4fb871284ada8cdbf5",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 140753,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:20:35.285031091Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3857.299962201
+    }
+  ],
+  "goal_brief": {
+    "schema": 1,
+    "policy": "evidence-v1",
+    "authority": "advisory_model_interpretation",
+    "original_request": "Compile SQLite in /app/sqlite with gcov instrumentation and make it available in the PATH.\nThe SQLite source snapshot is pre-vendored at /app/vendor/sqlite-fossil-release.tar.gz; use it instead of fetching sources over the network.\n",
+    "request_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+    "route": "direct",
+    "route_reason": "Source tarball is vendored locally and the host is Ubuntu 24.04 with apt available. The build is a standard sequence: extract, configure/make with coverage flags, symlink into PATH. No technical decision needs external research; the only open fact is whether apt can install the missing toolchain, resolved by attempting it during implementation.",
+    "requirements": [
+      {
+        "id": "R1",
+        "requirement": "Compile the SQLite source into /app/sqlite",
+        "source_quote": "Compile SQLite in /app/sqlite",
+        "verification": "An sqlite3 binary and build artifacts exist under /app/sqlite, produced from the vendored source; executing the binary reports a version string."
+      },
+      {
+        "id": "R2",
+        "requirement": "The build must carry gcov coverage instrumentation",
+        "source_quote": "with gcov instrumentation",
+        "verification": "Compilation used --coverage (-fprofile-arcs -ftest-coverage); .gcno files exist beside the objects and running the binary produces .gcda files."
+      },
+      {
+        "id": "R3",
+        "requirement": "The compiled sqlite3 is invocable by name via PATH",
+        "source_quote": "make it available in the PATH",
+        "verification": "`command -v sqlite3` in a fresh shell resolves to the instrumented build (e.g. via symlink in /usr/local/bin) and `sqlite3 --version` runs."
+      },
+      {
+        "id": "R4",
+        "requirement": "Use the vendored tarball; no fetching sqlite sources over the network",
+        "source_quote": "use it instead of fetching sources over the network",
+        "verification": "/app/sqlite is extracted from /app/vendor/sqlite-fossil-release.tar.gz, optionally verified against the adjacent .sha256 file; no sqlite source download occurs."
+      }
+    ],
+    "assumptions": [
+      "PATH availability is satisfied by a symlink in an existing PATH directory such as /usr/local/bin; validate by listing PATH entries and running sqlite3 in a clean shell.",
+      "Installing build tools (gcc, make, tclsh) via apt is acceptable since the restriction covers only fetching sqlite sources; validate by attempting the apt install, otherwise report the missing-toolchain blocker.",
+      "The fossil snapshot builds via ./configure && make, which needs tclsh to generate the amalgamation; if that path fails, check whether pre-generated amalgamation files exist in the tarball and build those directly."
+    ],
+    "information_gaps": [
+      "Whether apt mirrors are reachable to install gcc/make/tcl; obtain by running apt-get update and the install; if blocked, compilation cannot proceed and the gap must be reported rather than worked around silently.",
+      "Which writable directory is already on PATH for the symlink; obtain via echo $PATH; low consequence since /usr/local/bin is the conventional default."
+    ],
+    "research_questions": [
+      "If ./configure fails on the fossil snapshot, decide whether generating the amalgamation via make targets (needs tclsh) or compiling src/shell.c plus sqlite3.c directly is the correct fallback for this tarball layout."
+    ],
+    "next_action": "Verify the tarball sha256, extract it into /app/sqlite, install build-essential and tcl via apt, run ./configure && make with CFLAGS='-O0 -g --coverage' and LDFLAGS='--coverage', confirm .gcno files appear, symlink the resulting sqlite3 into /usr/local/bin, then verify `sqlite3 --version` and that a test query emits .gcda coverage data.",
+    "initial_snapshot_id": "sha256:2c6cfc56da6241da5ea0c801669fea4dbca21f9a1936051747027e1c17f9f45f"
+  },
+  "coverage_audits": [
+    {
+      "verdict": "pass",
+      "reason": "none",
+      "requirements": [
+        {
+          "id": "R1",
+          "verdict": "pass",
+          "reason": "sqlite3 binary exists at /app/sqlite/build/sqlite3, built from the vendored fossil source tree, and reports version 3.50.4",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "3.50.4 2025-07-30 19:33:53 4d8adfb30e03f9cf27f800a2c1ba3c48fb4ca1b08b0f5ed59a4d5ecbf45e20a3 (64-bit)",
+              "supports": "the built binary runs and reports a SQLite version string",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "fd12eaf579f26a71fbb3ccc2c3dfe03d09eb3ce23c91b5ff03959930558aa5e5"
+            },
+            {
+              "quote": "/app/sqlite/build/sqlite3-sqlite3.gcno",
+              "supports": "build artifacts exist under /app/sqlite/build",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "b4dc7e42748e80b87658fd01249ba775c5aabb13b0db8ea0275346631eac5ee5"
+            }
+          ]
+        },
+        {
+          "id": "R2",
+          "verdict": "pass",
+          "reason": "Makefile used --coverage in CFLAGS/LDFLAGS; .gcno and .gcda files (timestamps Oct 6 12:23) exist beside objects, indicating the instrumented binary emitted coverage data",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "CFLAGS = -O0 -g --coverage",
+              "supports": "compilation flags include gcov instrumentation",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "c281e331e228fe19892a8f561a70da010faf9a8cc913712e8072676c96b510f8"
+            },
+            {
+              "quote": "-rw-rw-rw- 1 root root 163528 Oct  6 12:23 sqlite3-sqlite3.gcda",
+              "supports": "runtime coverage data was emitted by the binary",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "4d769375d1de3348f3c082e064eb697893bf129607a13e114817cb9b9300cbb8"
+            },
+            {
+              "quote": "LDFLAGS.configure = --coverage",
+              "supports": "link flags include coverage",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "f501c0179ab77c3d44ea72979b1018ed5ad58b24a013ac26e7231d78719a3d1d"
+            }
+          ]
+        },
+        {
+          "id": "R3",
+          "verdict": "pass",
+          "reason": "In a fresh env -i shell, command -v sqlite3 resolves via /usr/local/bin symlink to /app/sqlite/build/sqlite3 and --version runs",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "/usr/local/bin/sqlite3 -> /app/sqlite/build/sqlite3",
+              "supports": "PATH entry symlinks to the instrumented build",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "72c7ea7495deed5fd0e02dfc6c3836c88b4b8ce8447c58259148b79aa4fb809a"
+            },
+            {
+              "quote": "/usr/local/bin/sqlite3",
+              "supports": "command -v sqlite3 output in clean env -i shell",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "1c0792e6cb6ab67a06f409a2b4e9e7e5e8fc045861f6b46f87c2ca5453d3ec63"
+            }
+          ]
+        },
+        {
+          "id": "R4",
+          "verdict": "pass",
+          "reason": "Tarball sha256 matches the adjacent .sha256 file (7c02b6cc...); /app/sqlite is the extracted fossil snapshot (manifest, autosetup, src present) so the vendored source was used",
+          "unknown_kind": null,
+          "evidence": [
+            {
+              "quote": "7c02b6cc04dddc2f90e63d43ab8900cb694ba4665f4e4ac877ec724733125229  /app/vendor/sqlite-fossil-release.tar.gz",
+              "supports": "vendored tarball checksum matches the .sha256 file",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "0304d68cbcec1916f3a583969e03f95e9402593de44ec81a04e465d6f387bebc"
+            },
+            {
+              "quote": "manifest.uuid",
+              "supports": "/app/sqlite contains the fossil snapshot layout, extracted not downloaded",
+              "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+              "quote_sha256": "b74c70bf78a28472b10dfc642d3d3c99ff0a2eca821d0be6fdd9232147b57bde"
+            }
+          ]
+        }
+      ],
+      "omissions": [],
+      "request_covered": true,
+      "retryable": true,
+      "request_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+      "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+      "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+    }
+  ],
+  "interpretation_attempts": [
+    {
+      "attempt": 1,
+      "valid": false,
+      "error": "nonempty bounded text required"
+    },
+    {
+      "attempt": 2,
+      "valid": true
+    }
+  ],
+  "policy": "evidence-v1"
+}

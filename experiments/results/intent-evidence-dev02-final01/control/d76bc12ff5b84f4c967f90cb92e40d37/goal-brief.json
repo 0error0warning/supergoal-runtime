@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "advisory_model_interpretation",
+  "original_request": "Based on my city's new waste ordinance and collection schedule (see attached), this four-bin system seems very ambitious. I'm trying to understand the logistics behind it. Could you research how effective these types of urban sorting programs generally are? I'm especially interested in what happens to all the collected organic waste and how cities optimize such complex collection routes. Also, what are the common reasons these programs don't achieve high recycling rates?\n\nAttached files are in /app/input/user_files. Use /app/input/corpus as the fixed research collection; index.json maps document IDs to titles and URLs. You can search and read these files with terminal/file tools; pdftotext is installed for PDFs. Use this supplied collection for the study, without external web retrieval. Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties. Do not modify the input files.",
+  "request_sha256": "505efa901561316b4d47d0d24ee9222fe0e3f1e3df798307acdacc543d4334f3",
+  "route": "research",
+  "route_reason": "The user asks for a researched report on effectiveness of multi-stream urban sorting programs, the fate of collected organics, collection-route optimization, and causes of low recycling rates. A fixed local corpus (~149 docs at /app/input/corpus with index.json mapping IDs to titles/URLs) is provided; external web retrieval is prohibited, so all evidence must come from the corpus plus the two attached files already inspected: tex.pdf (Neo-Veridia four-bin ordinance: BLUE/GREEN/RED/GREY streams, fines) and 8.txt (Zone A schedule: green Mon/Wed/Fri, blue Wed, grey Mon/Fri, red bin first Wednesday monthly).",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Research how effective multi-stream urban sorting programs generally are",
+      "source_quote": "Could you research how effective these types of urban sorting programs generally are?",
+      "verification": "Report contains an effectiveness section with participation/diversion/recycling-rate claims, each tied to a corpus doc ID; e.g., D0025 (NAS chapter: ~73% household access, 59% of those participate; access gaps in multifamily housing), D0146 (survey of US recycling program managers), D0019 (Fairfax recycling audit)."
+    },
+    {
+      "id": "R2",
+      "requirement": "Explain what happens to collected organic waste",
+      "source_quote": "what happens to all the collected organic waste",
+      "verification": "Report describes organics pathways — composting, anaerobic digestion/biogas/RNG, landfill methane — supported by corpus docs such as D0001 (RNG from anaerobic digestion), D0002 (SB 1383 organics law; landfill methane), D0043 (composting facility siting/air impacts), D0045 (municipal composting), D0067/D0097/D0110 (landfill gas capture)."
+    },
+    {
+      "id": "R3",
+      "requirement": "Explain how cities optimize complex multi-stream collection routes",
+      "source_quote": "how cities optimize such complex collection routes",
+      "verification": "Report covers optimization methods with cited results: CVRP modeling and hybrid heuristics (D0013), IoT+TOPSIS multi-criteria routing with ~14% distance reduction (D0125), mixed-integer programming with >30% path-length reduction (D0137), dynamic routing factors — variable volumes, traffic, regulations, fleet limits (D0010, D0111)."
+    },
+    {
+      "id": "R4",
+      "requirement": "Identify common reasons sorting programs fail to achieve high recycling rates",
+      "source_quote": "what are the common reasons these programs don't achieve high recycling rates?",
+      "verification": "Report lists failure factors — access gaps, contamination, confusing/inconsistent labeling, intention-behavior gap, free-riding, market volatility — each cited, e.g., D0025 (access and participation gaps), D0115 (public sorting as social practice; residual bin as default), D0062 (intention-behavior gap in China), D0140 (free-riding), D0146 (manager-identified program problems), D0081 (contamination)."
+    },
+    {
+      "id": "R5",
+      "requirement": "Frame the research around the attached ordinance and schedule",
+      "source_quote": "Based on my city's new waste ordinance and collection schedule (see attached)",
+      "verification": "Report opens by referencing the ordinance's four streams, collection rules (6–8 AM set-out, sorting and time violations, fine schedule) and Zone A pickup pattern; attachment facts are attributed to tex.pdf and 8.txt rather than presented as external evidence."
+    },
+    {
+      "id": "R6",
+      "requirement": "Write the report to /app/report.md with sources supporting specific claims and stated limitations",
+      "source_quote": "with sources supporting specific claims, and state material limitations or unresolved uncertainties",
+      "verification": "/app/report.md exists; each substantive claim carries a doc ID/URL citation; a limitations section notes that several corpus entries are abstracts, stubs, or reference lists only (e.g., D0146, D0062 are largely TOC/references), and that Neo-Veridia's downstream infrastructure is unknown."
+    },
+    {
+      "id": "R7",
+      "requirement": "Use only the supplied collection and do not modify inputs",
+      "source_quote": "Use this supplied collection for the study, without external web retrieval",
+      "verification": "All citations resolve to index.json entries or the two attached files; no external fetches; files under /app/input/ unchanged."
+    }
+  ],
+  "assumptions": [
+    "The 'attached' files are tex.pdf (ordinance) and 8.txt (Zone A schedule) in /app/input/user_files — verified by reading both; 'Neo-Veridia' is fictional, so the report treats the ordinance as context and answers general research questions rather than citing real-world data about that city.",
+    "'Four-bin system' means the ordinance's BLUE/GREEN/RED/GREY streams; effectiveness evidence from comparable municipal programs in the corpus applies.",
+    "Citations as doc ID + title + URL from index.json satisfy 'sources supporting specific claims'."
+  ],
+  "information_gaps": [
+    "Whether Neo-Veridia has downstream organics/MRF/hazardous processing infrastructure — not stated in attachments and not recoverable from corpus (fictional city); consequence: report must describe typical organics pathways and flag the local destination as unknown.",
+    "Corpus depth per doc: several promising entries are abstracts or TOC/reference stubs (e.g., D0146, D0062); consequence: grep each candidate for substantive text before citing, and record thin-source claims as limitations."
+  ],
+  "research_questions": [
+    "Which corpus docs contain substantive quantitative evidence on participation/diversion rates — resolve by grepping D0025, D0019, D0035, D0131, D0146 for figures.",
+    "Which docs best support organics treatment pathways — resolve by checking D0043, D0045, D0085, D0001, D0002, D0028 for composting and anaerobic digestion specifics.",
+    "Which docs give concrete route-optimization results versus marketing content — D0013, D0125, D0137 already yield citable figures; confirm whether D0083, D0111, D0145 add substance."
+  ],
+  "next_action": "Grep candidate corpus docs for citable quantitative and substantive passages per research question, then draft /app/report.md with sections: (1) ordinance/schedule logistics, (2) program effectiveness, (3) organics fate, (4) route optimization, (5) reasons for low recycling rates, (6) limitations; verify every claim maps to a doc ID.",
+  "initial_snapshot_id": "sha256:a48c2a546b18d134e1121a2e0b212b34a3b1ab75b9831cf4c780f2439d5f1735"
+}

@@ -1,6 +1,6 @@
 # v2 插件入口与验收审查
 
-2026-10-05。这是第一轮试验后的新候选实现；历史 r3 代码归档和成绩保持不变。新代码尚未切入生产，也没有新的公开基准成绩。
+2026-10-05 起的候选实现，2026-10-06 补充可选工作策略。历史 r3 代码归档和成绩保持不变；代码尚未切入生产。各研究的源码与成绩见[研究索引](research-index.md)。
 
 ## 选择引擎
 
@@ -70,6 +70,11 @@ plugins:
 from pathlib import Path
 raise SystemExit(0 if Path("result.txt").read_text() == "ready" else 1)
 ```
+
+可选的 `work_policy: "evidence-v1"` 将意图、研究决策和实际观察的工作指导加入每次
+派工；`verification_unknown: "continue"` 允许明确标记 `retryable=true` 的未知结果
+继续工作。两项省略时保留原行为，未知不会因此成为通过。模型生成简报和逐项审查
+目前仅由实验适配器自动执行；完整边界见[意图与证据策略](intent-and-evidence-policy.md)。
 
 `{policy_dir}` 在开始时解析，`{workspace}` 在每次实际检查时解析。检查器以被检查的工作区为 cwd。检查器应以 0 表示接受，非零表示未接受；进程无法启动、超时、代码变化、产物在检查期间变化均不能判为成功。可信脚本及其被导入的本地文件应全部列入 `source_files`；系统依赖的版本须由实验环境另外冻结。
 

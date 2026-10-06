@@ -1,0 +1,102 @@
+{
+  "status": "complete",
+  "started_at": "2026-10-06T11:35:17.127404+00:00",
+  "registration_sha256": "d232d483dfcb63231ffc1d6cde37faa5683b39fb822ef5d0b96349f5d580a5cb",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-native",
+      "started_at": "2026-10-06T11:35:17.164051+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:37:11.835333+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-00-configure-git-webserver-native/configure-git-webserver__d7kCQJj/result.json",
+      "agent_result": {
+        "n_input_tokens": 45106,
+        "n_cache_tokens": 36055,
+        "n_output_tokens": 1227,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "db61902246004661832a3538dfc209ec",
+          "study_status": "agent_stopped",
+          "physical_requests": 10,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-01-configure-git-webserver-sg_v2",
+      "started_at": "2026-10-06T11:35:17.165397+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:47:04.778462+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-01-configure-git-webserver-sg_v2/configure-git-webserver__xLAoCGX/result.json",
+      "agent_result": {
+        "n_input_tokens": 635604,
+        "n_cache_tokens": 468725,
+        "n_output_tokens": 16560,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "74e10c89579a49bba535f0bbcc49adc4",
+          "study_status": "succeeded",
+          "physical_requests": 74,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "task_id": "configure-git-webserver",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-02-configure-git-webserver-evidence",
+      "started_at": "2026-10-06T11:35:17.165752+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T11:48:34.143114+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-evidence-dev01-02-configure-git-webserver-evidence/configure-git-webserver__3rfYu6L/result.json",
+      "agent_result": {
+        "n_input_tokens": 838988,
+        "n_cache_tokens": 569917,
+        "n_output_tokens": 22316,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "0dd4888bf6b74d0cb1476fae95ca7a3c",
+          "study_status": "budget_exhausted",
+          "physical_requests": 97,
+          "adapter": "intent-evidence-dev01"
+        }
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "finished_at": "2026-10-06T11:48:34.149125+00:00"
+}

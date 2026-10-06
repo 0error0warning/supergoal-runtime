@@ -16,7 +16,7 @@ versioned acceptance checks, calibration, disputes and durable dispatch.
 
 ## Research status
 
-All registered October 4–6 studies are complete and archived. The largest
+The earlier October 4–6 studies are complete and archived. The largest
 public comparison has 22 evaluable paired tasks: full SG passed 15/22, native
 Hermes 13/22 and repeated-goal 17/22. Full SG used 504 physical requests versus
 323 for native Hermes. This sample does not establish a stable quality benefit.
@@ -26,14 +26,26 @@ test failures. The operational repairs have concrete regression evidence, while
 reliable semantic acceptance and day-long autonomy remain unproven. The research
 model reviewer and the opt-in plugin's configured checkers are separate paths.
 
-The temporary GCP instance is stopped with its persistent disks retained.
-Production Hermes continues on its existing deployment.
+The additional October 6 intent/evidence study is complete: 32 trials across six
+new terminal tasks and two research tasks. Native Hermes passed 6/6 terminal
+tasks; repeated-goal, original SG and the new policy each passed 5/6. The new
+policy used 138 requests versus native's 89. Its one raw failure involved timing
+tests; all four final artifacts passed five later serial timing runs each. The
+original scores remain unchanged. Seven of eight research content grades failed
+quote validation and remain ungraded. No quality advantage is established.
+
+The GCP instance and experimental model tunnel are stopped, with persistent
+disks retained. Production Hermes continues on its existing deployment. New v2
+guidance is opt-in; the full brief/executor/model-review pipeline is experimental.
 
 - [Research index: conclusions, studies, code and evidence](docs/research-index.md)
-- [Final findings and limitations](docs/research-findings-2026-10-06.md)
+- [Earlier study findings and limitations](docs/research-findings-2026-10-06.md)
 - [Project value and scope reassessment](docs/project-direction-2026-10-06.md)
 - [Task-defined acceptance and compatibility](docs/generic-acceptance.md)
 - [Opt-in v2 operator guide](docs/v2-plugin-and-acceptance.md)
+- [Intent, research decisions and evidence policy](docs/intent-and-evidence-policy.md)
+- [Intent/evidence results, failures and validation](docs/intent-transfer01-study.md)
+- [Frozen intent/evidence transfer protocol](experiments/public_benchmarks/INTENT-TRANSFER01.md)
 - [Research tools and reproduction scope](experiments/README.md)
 
 ## Architecture

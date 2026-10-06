@@ -1,0 +1,9 @@
+{
+  "status": "complete",
+  "started_epoch": 1791290434.876272,
+  "launcher_sha256": "05bafa185f5c8612fb02490e58d61598e52586a701bb00cd102d65e930cbd95f",
+  "grading_source_sha256": "b2dba44ad46104688e446e45f92c252e29cdef89a231e60d12d105fe75e7b021",
+  "grading_started_epoch": 1791291545.5921729,
+  "exit_code": 0,
+  "finished_epoch": 1791292265.5065324
+}

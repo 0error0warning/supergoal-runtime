@@ -1,0 +1,264 @@
+{
+  "arm": "native",
+  "status": "agent_stopped",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "f98174e47ba5ce040f6fad22ef3cbca4dd27b3192868ea5d082077222c3ec4e8",
+  "control_id": "8bccaf155d184224adb72c66acde1141",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Done. What happened:\n\n- You'd checked out `HEAD~1` (detached HEAD), committed \"Move to Stanford\" there (`c499730`), then checked out master — the commit had no branch pointing to it.\n- I merged `c499730` into master. There was one conflict in `_includes/about.md` (old UW PhD text vs. new Stanford postdoc text); I resolved it keeping your new version.\n- Merge committed as `60f451e`; working tree is clean.\n\nYour changes are now on master.",
+  "artifact_image_id": "sha256:3f54a9e17bd5df1250abe7f609188a7569a05e22e1edf055303fb8e4a780c25c",
+  "artifact_image_tag": "sg-artifact:8bccaf155d184224adb72c66acde1141",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "executor",
+      "pid": 148417,
+      "exit_code": 0,
+      "seconds": 24.203366121999807,
+      "model_calls": 7,
+      "result_relative_path": "01-executor/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791289382.1355329,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3539,
+        "output_tokens": 84,
+        "total_tokens": 3623,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_14c07437-a29",
+      "status": "completed",
+      "seconds": 2.106022357940674
+    },
+    {
+      "index": 2,
+      "started": 1791289384.9373217,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3869,
+        "output_tokens": 123,
+        "total_tokens": 3992,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_814aaa0e-a50",
+      "status": "completed",
+      "seconds": 1.9781155586242676
+    },
+    {
+      "index": 3,
+      "started": 1791289387.1437073,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4078,
+        "output_tokens": 59,
+        "total_tokens": 4137,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_092a6189-5e2",
+      "status": "completed",
+      "seconds": 1.5439836978912354
+    },
+    {
+      "index": 4,
+      "started": 1791289388.8895452,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4625,
+        "output_tokens": 143,
+        "total_tokens": 4768,
+        "input_tokens_details": {
+          "cached_tokens": 3520
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_6c5a755b-274",
+      "status": "completed",
+      "seconds": 1.9405324459075928
+    },
+    {
+      "index": 5,
+      "started": 1791289391.0327275,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5036,
+        "output_tokens": 142,
+        "total_tokens": 5178,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_65f73eae-e7a",
+      "status": "completed",
+      "seconds": 2.0964887142181396
+    },
+    {
+      "index": 6,
+      "started": 1791289393.706465,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5276,
+        "output_tokens": 70,
+        "total_tokens": 5346,
+        "input_tokens_details": {
+          "cached_tokens": 4992
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3d9b3464-397",
+      "status": "completed",
+      "seconds": 1.4720466136932373
+    },
+    {
+      "index": 7,
+      "started": 1791289395.4540849,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 5470,
+        "output_tokens": 124,
+        "total_tokens": 5594,
+        "input_tokens_details": {
+          "cached_tokens": 5056
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3673081a-383",
+      "status": "completed",
+      "seconds": 1.7443442344665527
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791289379.9707534,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289380.1100633,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 7,
+  "kernel_status": null,
+  "snapshot_lifecycle": [
+    {
+      "container_id": "963c462498637bea9fe0a3c092b074520eb8edff6b84bceaaaa533885c7e30e5",
+      "image_tag": "sg-artifact:8bccaf155d184224adb72c66acde1141",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 147923,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:22:53.133048817Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 3787.725686876,
+      "status": "captured",
+      "image_id": "sha256:3f54a9e17bd5df1250abe7f609188a7569a05e22e1edf055303fb8e4a780c25c",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 147923,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:22:53.133048817Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 3788.069457015
+    }
+  ],
+  "goal_brief": null,
+  "coverage_audits": [],
+  "interpretation_attempts": [],
+  "policy": null
+}

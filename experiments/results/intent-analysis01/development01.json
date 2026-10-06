@@ -1,0 +1,272 @@
+{
+  "experiment": "intent-evidence-dev01",
+  "cohort_status": "complete",
+  "planned_trials": 3,
+  "observed_trials": 3,
+  "aggregates": [
+    {
+      "kind": "terminal",
+      "arm": "native",
+      "observed_rows": 1,
+      "terminal_successes": 1,
+      "terminal_started": 1,
+      "research_files_delivered": null,
+      "observed_requests": 10,
+      "requests_complete": true,
+      "input_tokens": 45106,
+      "output_tokens": 1227,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 0,
+      "extra_executor_episodes": 0
+    },
+    {
+      "kind": "terminal",
+      "arm": "sg_v2",
+      "observed_rows": 1,
+      "terminal_successes": 1,
+      "terminal_started": 1,
+      "research_files_delivered": null,
+      "observed_requests": 74,
+      "requests_complete": true,
+      "input_tokens": 635604,
+      "output_tokens": 16560,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 0,
+      "extra_executor_episodes": 4
+    },
+    {
+      "kind": "terminal",
+      "arm": "evidence",
+      "observed_rows": 1,
+      "terminal_successes": 1,
+      "terminal_started": 1,
+      "research_files_delivered": null,
+      "observed_requests": 97,
+      "requests_complete": true,
+      "input_tokens": 838988,
+      "output_tokens": 22316,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 1,
+      "extra_executor_episodes": 5
+    },
+    {
+      "kind": "research",
+      "arm": "native",
+      "observed_rows": 0,
+      "terminal_successes": null,
+      "terminal_started": null,
+      "research_files_delivered": 0,
+      "observed_requests": 0,
+      "requests_complete": true,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 0,
+      "extra_executor_episodes": 0
+    },
+    {
+      "kind": "research",
+      "arm": "sg_v2",
+      "observed_rows": 0,
+      "terminal_successes": null,
+      "terminal_started": null,
+      "research_files_delivered": 0,
+      "observed_requests": 0,
+      "requests_complete": true,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 0,
+      "extra_executor_episodes": 0
+    },
+    {
+      "kind": "research",
+      "arm": "evidence",
+      "observed_rows": 0,
+      "terminal_successes": null,
+      "terminal_started": null,
+      "research_files_delivered": 0,
+      "observed_requests": 0,
+      "requests_complete": true,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "false_online_acceptances": 0,
+      "false_online_rejections": 0,
+      "unknown_with_passing_artifact": 0,
+      "extra_executor_episodes": 0
+    }
+  ],
+  "paired_terminal": [
+    {
+      "other_arm": "native",
+      "paired_tasks": 1,
+      "evidence_only_success": 0,
+      "other_only_success": 0,
+      "rows": [
+        {
+          "task_id": "configure-git-webserver",
+          "other_success": 1,
+          "evidence_success": 1,
+          "other_requests": 10,
+          "evidence_requests": 97
+        }
+      ]
+    },
+    {
+      "other_arm": "sg_v2",
+      "paired_tasks": 1,
+      "evidence_only_success": 0,
+      "other_only_success": 0,
+      "rows": [
+        {
+          "task_id": "configure-git-webserver",
+          "other_success": 1,
+          "evidence_success": 1,
+          "other_requests": 74,
+          "evidence_requests": 97
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "configure-git-webserver",
+      "arm": "native",
+      "kind": "terminal",
+      "row_status": "returned",
+      "exception": null,
+      "controller_status": "agent_stopped",
+      "raw_terminal_reward": 1.0,
+      "research_delivery_present": null,
+      "official_terminal_grade_returned": true,
+      "terminal_end_to_end_success": 1,
+      "requests": 10,
+      "observed_input_tokens": 45106,
+      "observed_output_tokens": 1227,
+      "input_tokens": 45106,
+      "output_tokens": 1227,
+      "usage_complete": true,
+      "requests_missing_usage": 0,
+      "calls_by_role": {
+        "executor": 10
+      },
+      "role_counts": {
+        "executor": 1
+      },
+      "executor_episodes": 1,
+      "episode_seconds": 80.63642497700005,
+      "trial_wall_seconds": 114.671282,
+      "transport_error_calls": 0,
+      "online_verdict": null,
+      "false_online_acceptance": false,
+      "false_online_rejection": false,
+      "unknown_with_passing_artifact": false,
+      "brief_route": null,
+      "brief_authority": null,
+      "brief_requirement_count": 0,
+      "interpretation_attempts": [],
+      "audit_format_errors": 0,
+      "audit_unknown_causes": {}
+    },
+    {
+      "index": 1,
+      "task_id": "configure-git-webserver",
+      "arm": "sg_v2",
+      "kind": "terminal",
+      "row_status": "returned",
+      "exception": null,
+      "controller_status": "succeeded",
+      "raw_terminal_reward": 1.0,
+      "research_delivery_present": null,
+      "official_terminal_grade_returned": true,
+      "terminal_end_to_end_success": 1,
+      "requests": 74,
+      "observed_input_tokens": 635604,
+      "observed_output_tokens": 16560,
+      "input_tokens": 635604,
+      "output_tokens": 16560,
+      "usage_complete": true,
+      "requests_missing_usage": 0,
+      "calls_by_role": {
+        "executor": 40,
+        "review": 34
+      },
+      "role_counts": {
+        "executor": 5,
+        "review": 5
+      },
+      "executor_episodes": 5,
+      "episode_seconds": 623.3720212979999,
+      "trial_wall_seconds": 707.613065,
+      "transport_error_calls": 0,
+      "online_verdict": "pass",
+      "false_online_acceptance": false,
+      "false_online_rejection": false,
+      "unknown_with_passing_artifact": false,
+      "brief_route": null,
+      "brief_authority": null,
+      "brief_requirement_count": 0,
+      "interpretation_attempts": [],
+      "audit_format_errors": 0,
+      "audit_unknown_causes": {}
+    },
+    {
+      "index": 2,
+      "task_id": "configure-git-webserver",
+      "arm": "evidence",
+      "kind": "terminal",
+      "row_status": "returned",
+      "exception": null,
+      "controller_status": "budget_exhausted",
+      "raw_terminal_reward": 1.0,
+      "research_delivery_present": null,
+      "official_terminal_grade_returned": true,
+      "terminal_end_to_end_success": 1,
+      "requests": 97,
+      "observed_input_tokens": 838988,
+      "observed_output_tokens": 22316,
+      "input_tokens": 838988,
+      "output_tokens": 22316,
+      "usage_complete": true,
+      "requests_missing_usage": 0,
+      "calls_by_role": {
+        "interpret": 2,
+        "executor": 25,
+        "review": 70
+      },
+      "role_counts": {
+        "interpret": 1,
+        "executor": 6,
+        "review": 6
+      },
+      "executor_episodes": 6,
+      "episode_seconds": 702.4885831370001,
+      "trial_wall_seconds": 796.977362,
+      "transport_error_calls": 0,
+      "online_verdict": "unknown",
+      "false_online_acceptance": false,
+      "false_online_rejection": false,
+      "unknown_with_passing_artifact": true,
+      "brief_route": "inspect",
+      "brief_authority": "uninterpreted_request",
+      "brief_requirement_count": 1,
+      "interpretation_attempts": [],
+      "audit_format_errors": 0,
+      "audit_unknown_causes": {}
+    }
+  ],
+  "research_diagnostics": null,
+  "research_input_integrity": [],
+  "limits": [
+    "One run per task/arm; small task sample, no statistical superiority claim",
+    "Research file delivery is not quality or a terminal reward",
+    "Research diagnostics use the same base model, a request-only rubric, and a non-exhaustive claim sample",
+    "Common ceilings do not imply equal actual compute; missing usage remains unknown"
+  ]
+}

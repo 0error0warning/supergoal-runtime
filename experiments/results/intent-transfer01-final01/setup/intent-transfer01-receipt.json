@@ -1,0 +1,1006 @@
+{
+  "status": "complete",
+  "started_at": "2026-10-06T12:11:34.866033+00:00",
+  "registration_sha256": "bca03d4fb6e2280f095e2cb9a56ac1647882e09219616ccb9838e8b9af1c6dd7",
+  "rows": [
+    {
+      "index": 0,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-00-merge-diff-arc-agi-task-native",
+      "started_at": "2026-10-06T12:11:35.014597+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:14:07.069286+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-00-merge-diff-arc-agi-task-native/merge-diff-arc-agi-task__DHf9bho/result.json",
+      "agent_result": {
+        "n_input_tokens": 208083,
+        "n_cache_tokens": 177916,
+        "n_output_tokens": 1737,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "696498d6c5114402921b102534808529",
+          "study_status": "agent_stopped",
+          "physical_requests": 14,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 1,
+      "task_id": "crack-7z-hash",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-01-crack-7z-hash-repeat_goal",
+      "started_at": "2026-10-06T12:11:35.014041+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:19:26.433288+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-01-crack-7z-hash-repeat_goal/crack-7z-hash__KQ8wCCA/result.json",
+      "agent_result": {
+        "n_input_tokens": 496635,
+        "n_cache_tokens": 302624,
+        "n_output_tokens": 2426,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "c2c383b952ce4169a35cbcb34491db78",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 22,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 2,
+      "task_id": "sqlite-with-gcov",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-02-sqlite-with-gcov-sg_v2",
+      "started_at": "2026-10-06T12:11:35.068074+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:15:39.535355+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-02-sqlite-with-gcov-sg_v2/sqlite-with-gcov__2XyzcUA/result.json",
+      "agent_result": {
+        "n_input_tokens": 81509,
+        "n_cache_tokens": 62586,
+        "n_output_tokens": 2241,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "9d542e38ee4b4aedb153bf8a4981832c",
+          "study_status": "succeeded",
+          "physical_requests": 17,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 3,
+      "task_id": "fix-git",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-03-fix-git-evidence",
+      "started_at": "2026-10-06T12:11:35.019584+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:13:43.785867+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-03-fix-git-evidence/fix-git__wbEMHjM/result.json",
+      "agent_result": {
+        "n_input_tokens": 90688,
+        "n_cache_tokens": 53901,
+        "n_output_tokens": 2677,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "994b8cea2d0545669531c943f0a4a9d8",
+          "study_status": "succeeded",
+          "physical_requests": 16,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 4,
+      "task_id": "pytorch-model-cli",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-04-pytorch-model-cli-native",
+      "started_at": "2026-10-06T12:13:43.832861+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:20:33.126051+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-04-pytorch-model-cli-native/pytorch-model-cli__pU5pan8/result.json",
+      "agent_result": {
+        "n_input_tokens": 110523,
+        "n_cache_tokens": 96644,
+        "n_output_tokens": 4688,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "74b211f65b754901b2a0bbcae9cbe4f3",
+          "study_status": "agent_stopped",
+          "physical_requests": 17,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 5,
+      "task_id": "largest-eigenval",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-05-largest-eigenval-repeat_goal",
+      "started_at": "2026-10-06T12:14:07.122993+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:20:26.143581+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-05-largest-eigenval-repeat_goal/largest-eigenval__Kk5b2ta/result.json",
+      "agent_result": {
+        "n_input_tokens": 458665,
+        "n_cache_tokens": 340876,
+        "n_output_tokens": 8685,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "0c12a7feb86d4ab78faf801940661277",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 38,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 6,
+      "task_id": "dr3-014",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-06-dr3-014-sg_v2",
+      "started_at": "2026-10-06T12:15:39.562377+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:18:01.556127+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-06-dr3-014-sg_v2/dr3-014__qHQcLm2/result.json",
+      "agent_result": {
+        "n_input_tokens": 189593,
+        "n_cache_tokens": 92352,
+        "n_output_tokens": 6535,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "9fc886b4da664d3ab7980a059ff9cea1",
+          "study_status": "succeeded",
+          "physical_requests": 21,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 7,
+      "task_id": "dr3-024",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-07-dr3-024-evidence",
+      "started_at": "2026-10-06T12:18:01.576097+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:23:09.769911+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-07-dr3-024-evidence/dr3-024__Dt4a7qq/result.json",
+      "agent_result": {
+        "n_input_tokens": 397278,
+        "n_cache_tokens": 306330,
+        "n_output_tokens": 9516,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "4bfafa2dbf9a4f518f2b1be34781a1bf",
+          "study_status": "verification_unavailable",
+          "physical_requests": 24,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 8,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-08-merge-diff-arc-agi-task-repeat_goal",
+      "started_at": "2026-10-06T12:19:26.491377+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:22:50.593152+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-08-merge-diff-arc-agi-task-repeat_goal/merge-diff-arc-agi-task__BQodVff/result.json",
+      "agent_result": {
+        "n_input_tokens": 192282,
+        "n_cache_tokens": 85204,
+        "n_output_tokens": 3261,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "365bf47393634bd699f64347fe078e09",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 22,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 9,
+      "task_id": "crack-7z-hash",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-09-crack-7z-hash-sg_v2",
+      "started_at": "2026-10-06T12:20:26.195417+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:53:52.737510+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "exception": {
+        "exception_type": "AgentTimeoutError",
+        "exception_message": "Agent execution timed out after 1800.0 seconds",
+        "exception_traceback": "Traceback (most recent call last):\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/evidence_agent.py\", line 133, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/checkpoint_agent.py\", line 29, in run\n    await super().run(instruction, environment, context)\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 291, in run\n    result = await self.episode(prompt, proxy, role=\"executor\", container=self.container, history=history)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/evidence_agent.py\", line 97, in episode\n    return await super().episode(prompt, proxy, role=role, container=container,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                                 history=history, max_calls=max_calls)\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/candidates/intent-transfer01/experiments/public_benchmarks/harbor_agent.py\", line 174, in episode\n    await asyncio.wait_for(proc.wait(), 2)\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 507, in wait_for\n    return await fut\n           ^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/subprocess.py\", line 137, in wait\n    return await self._transport._wait()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/base_subprocess.py\", line 253, in _wait\n    return await waiter\n           ^^^^^^^^^^^^\nasyncio.exceptions.CancelledError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 651, in _run_agent_phase\n    await asyncio.wait_for(\n    ...<6 lines>...\n    )\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py\", line 506, in wait_for\n    async with timeouts.timeout(timeout):\n               ~~~~~~~~~~~~~~~~^^^^^^^^^\n  File \"/var/lib/supergoal-lab/python/cpython-3.13.5-linux-x86_64-gnu/lib/python3.13/asyncio/timeouts.py\", line 116, in __aexit__\n    raise TimeoutError from exc_val\nTimeoutError\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/single_step.py\", line 76, in _run_agent\n    await self._run_agent_phase(\n    ...<5 lines>...\n    )\n  File \"/var/lib/supergoal-lab/harbor-venv/lib/python3.13/site-packages/harbor/trial/trial.py\", line 660, in _run_agent_phase\n    raise AgentTimeoutError(\n        f\"Agent execution timed out after {timeout_sec} seconds\"\n    ) from exc\nharbor.trial.errors.AgentTimeoutError: Agent execution timed out after 1800.0 seconds\n",
+        "occurred_at": "2026-10-06T12:50:31.817999Z"
+      },
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-09-crack-7z-hash-sg_v2/crack-7z-hash__5tFBo2o/result.json",
+      "agent_result": {
+        "n_input_tokens": 249470,
+        "n_cache_tokens": 233316,
+        "n_output_tokens": 4143,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "155ddff00ff940f9864dedfb8e3c0b84",
+          "study_status": "adapter_error",
+          "physical_requests": 32,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 10,
+      "task_id": "sqlite-with-gcov",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-10-sqlite-with-gcov-evidence",
+      "started_at": "2026-10-06T12:20:33.219453+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:25:05.115781+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-10-sqlite-with-gcov-evidence/sqlite-with-gcov__uaSz4bA/result.json",
+      "agent_result": {
+        "n_input_tokens": 102124,
+        "n_cache_tokens": 38001,
+        "n_output_tokens": 4518,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "7b07da14fa79438e8341091d7ea39f49",
+          "study_status": "succeeded",
+          "physical_requests": 18,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 11,
+      "task_id": "fix-git",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-11-fix-git-native",
+      "started_at": "2026-10-06T12:22:50.648661+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:23:47.129927+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-11-fix-git-native/fix-git__vJyjtGy/result.json",
+      "agent_result": {
+        "n_input_tokens": 31893,
+        "n_cache_tokens": 13568,
+        "n_output_tokens": 745,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "8bccaf155d184224adb72c66acde1141",
+          "study_status": "agent_stopped",
+          "physical_requests": 7,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 12,
+      "task_id": "pytorch-model-cli",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-12-pytorch-model-cli-repeat_goal",
+      "started_at": "2026-10-06T12:23:09.832518+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:29:49.812949+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-12-pytorch-model-cli-repeat_goal/pytorch-model-cli__KHwpBoV/result.json",
+      "agent_result": {
+        "n_input_tokens": 524517,
+        "n_cache_tokens": 348894,
+        "n_output_tokens": 5640,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "81b72ea0d163437daa04259195e65b23",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 22,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 13,
+      "task_id": "largest-eigenval",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-13-largest-eigenval-sg_v2",
+      "started_at": "2026-10-06T12:23:47.175315+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:26:40.113779+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-13-largest-eigenval-sg_v2/largest-eigenval__S8cEKyx/result.json",
+      "agent_result": {
+        "n_input_tokens": 106964,
+        "n_cache_tokens": 83821,
+        "n_output_tokens": 4478,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "bf218810899e40caa727bffc6a55822d",
+          "study_status": "succeeded",
+          "physical_requests": 16,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 14,
+      "task_id": "dr3-014",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-14-dr3-014-evidence",
+      "started_at": "2026-10-06T12:25:05.133089+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:28:03.161998+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-14-dr3-014-evidence/dr3-014__5EFxF3Z/result.json",
+      "agent_result": {
+        "n_input_tokens": 242430,
+        "n_cache_tokens": 163584,
+        "n_output_tokens": 9305,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "3e51a6b16f6646a49c73c901a6300ade",
+          "study_status": "succeeded",
+          "physical_requests": 16,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 15,
+      "task_id": "dr3-024",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-15-dr3-024-native",
+      "started_at": "2026-10-06T12:26:40.133088+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:29:08.936017+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-15-dr3-024-native/dr3-024__6kcwmeU/result.json",
+      "agent_result": {
+        "n_input_tokens": 245160,
+        "n_cache_tokens": 204427,
+        "n_output_tokens": 4135,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "79d285336c8b4c5b911967e60ba91c3f",
+          "study_status": "agent_stopped",
+          "physical_requests": 11,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 16,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-16-merge-diff-arc-agi-task-sg_v2",
+      "started_at": "2026-10-06T12:28:03.214024+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:30:39.811938+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-16-merge-diff-arc-agi-task-sg_v2/merge-diff-arc-agi-task__hXZgPet/result.json",
+      "agent_result": {
+        "n_input_tokens": 101411,
+        "n_cache_tokens": 59330,
+        "n_output_tokens": 2956,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "7a873af8a29c456a9599c347ec62c61d",
+          "study_status": "succeeded",
+          "physical_requests": 16,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 17,
+      "task_id": "crack-7z-hash",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-17-crack-7z-hash-evidence",
+      "started_at": "2026-10-06T12:29:09.053384+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:49:39.375391+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-17-crack-7z-hash-evidence/crack-7z-hash__uPTc9SL/result.json",
+      "agent_result": {
+        "n_input_tokens": 266838,
+        "n_cache_tokens": 224928,
+        "n_output_tokens": 5657,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "1598eef1a2dd4bf9b2d7069750ff8cb6",
+          "study_status": "verification_unavailable",
+          "physical_requests": 34,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 18,
+      "task_id": "sqlite-with-gcov",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-18-sqlite-with-gcov-native",
+      "started_at": "2026-10-06T12:29:49.909054+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:34:06.586270+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-18-sqlite-with-gcov-native/sqlite-with-gcov__Ww9ATPJ/result.json",
+      "agent_result": {
+        "n_input_tokens": 72618,
+        "n_cache_tokens": 61069,
+        "n_output_tokens": 1482,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "a392850ec78442f4ba519483b0b00452",
+          "study_status": "agent_stopped",
+          "physical_requests": 13,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 19,
+      "task_id": "fix-git",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-19-fix-git-repeat_goal",
+      "started_at": "2026-10-06T12:30:39.860045+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:34:31.948130+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-19-fix-git-repeat_goal/fix-git__4Vow83f/result.json",
+      "agent_result": {
+        "n_input_tokens": 199820,
+        "n_cache_tokens": 132188,
+        "n_output_tokens": 4665,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "ba4af96fb9dc4a9683151ea2db1fb76e",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 25,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 20,
+      "task_id": "pytorch-model-cli",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-20-pytorch-model-cli-sg_v2",
+      "started_at": "2026-10-06T12:34:06.653227+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:40:29.681487+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-20-pytorch-model-cli-sg_v2/pytorch-model-cli__vG4G2us/result.json",
+      "agent_result": {
+        "n_input_tokens": 145107,
+        "n_cache_tokens": 122470,
+        "n_output_tokens": 6279,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "9f4aac2d638e4417aeeadd977c7d2079",
+          "study_status": "succeeded",
+          "physical_requests": 22,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 21,
+      "task_id": "largest-eigenval",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-21-largest-eigenval-evidence",
+      "started_at": "2026-10-06T12:34:31.997484+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:38:21.956083+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 0.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-21-largest-eigenval-evidence/largest-eigenval__nEk5knh/result.json",
+      "agent_result": {
+        "n_input_tokens": 205655,
+        "n_cache_tokens": 161792,
+        "n_output_tokens": 7845,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "96193f06daf940b5b80fdfc70e33f691",
+          "study_status": "succeeded",
+          "physical_requests": 24,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 22,
+      "task_id": "dr3-014",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-22-dr3-014-native",
+      "started_at": "2026-10-06T12:38:21.973562+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:40:33.762827+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-22-dr3-014-native/dr3-014__LLDuHT9/result.json",
+      "agent_result": {
+        "n_input_tokens": 138049,
+        "n_cache_tokens": 102381,
+        "n_output_tokens": 3698,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "ef9861e4d64443769793487c069d4fc9",
+          "study_status": "agent_stopped",
+          "physical_requests": 7,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 23,
+      "task_id": "dr3-024",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-23-dr3-024-repeat_goal",
+      "started_at": "2026-10-06T12:40:29.718277+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:45:23.179649+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-23-dr3-024-repeat_goal/dr3-024__LiqCtHj/result.json",
+      "agent_result": {
+        "n_input_tokens": 710946,
+        "n_cache_tokens": 418156,
+        "n_output_tokens": 5683,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "bb2d9c7e5d894b71be11c8d5a1a2d95c",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 23,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 24,
+      "task_id": "merge-diff-arc-agi-task",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-24-merge-diff-arc-agi-task-evidence",
+      "started_at": "2026-10-06T12:40:33.837174+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:45:42.023817+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-24-merge-diff-arc-agi-task-evidence/merge-diff-arc-agi-task__g8SaM3J/result.json",
+      "agent_result": {
+        "n_input_tokens": 169562,
+        "n_cache_tokens": 112471,
+        "n_output_tokens": 8697,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "3aa5c8ac730c4db58b1667137480787d",
+          "study_status": "verification_unavailable",
+          "physical_requests": 20,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 25,
+      "task_id": "crack-7z-hash",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-25-crack-7z-hash-native",
+      "started_at": "2026-10-06T12:45:23.235897+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:57:40.162941+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-25-crack-7z-hash-native/crack-7z-hash__Rpf4Hnw/result.json",
+      "agent_result": {
+        "n_input_tokens": 183363,
+        "n_cache_tokens": 162045,
+        "n_output_tokens": 3752,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "b45eefd322e242e89db26cc359ec5af4",
+          "study_status": "agent_stopped",
+          "physical_requests": 16,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 26,
+      "task_id": "sqlite-with-gcov",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-26-sqlite-with-gcov-repeat_goal",
+      "started_at": "2026-10-06T12:45:42.132173+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:51:51.783342+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-26-sqlite-with-gcov-repeat_goal/sqlite-with-gcov__zpiHM3F/result.json",
+      "agent_result": {
+        "n_input_tokens": 176430,
+        "n_cache_tokens": 123548,
+        "n_output_tokens": 3919,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "71710fbbb4864ed29c1754589746dcc1",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 26,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 27,
+      "task_id": "fix-git",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-27-fix-git-sg_v2",
+      "started_at": "2026-10-06T12:49:39.428208+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:51:03.350636+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-27-fix-git-sg_v2/fix-git__woWTbMi/result.json",
+      "agent_result": {
+        "n_input_tokens": 63728,
+        "n_cache_tokens": 24512,
+        "n_output_tokens": 1763,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "81cd511fcd8c41edb465baf045de3267",
+          "study_status": "succeeded",
+          "physical_requests": 13,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 28,
+      "task_id": "pytorch-model-cli",
+      "arm": "evidence",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-28-pytorch-model-cli-evidence",
+      "started_at": "2026-10-06T12:51:03.402522+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:59:04.261736+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-28-pytorch-model-cli-evidence/pytorch-model-cli__kGH3AEo/result.json",
+      "agent_result": {
+        "n_input_tokens": 331142,
+        "n_cache_tokens": 231669,
+        "n_output_tokens": 9721,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "evidence",
+          "control_id": "b3898bc1d74f4363a07167b46191b7e2",
+          "study_status": "verification_unavailable",
+          "physical_requests": 26,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 29,
+      "task_id": "largest-eigenval",
+      "arm": "native",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-29-largest-eigenval-native",
+      "started_at": "2026-10-06T12:51:51.833639+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:55:02.231411+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "reward": 1.0
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-29-largest-eigenval-native/largest-eigenval__jjNZDAL/result.json",
+      "agent_result": {
+        "n_input_tokens": 182586,
+        "n_cache_tokens": 140864,
+        "n_output_tokens": 7327,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "native",
+          "control_id": "b9b361412df445e99d2d8940c2b327d2",
+          "study_status": "agent_stopped",
+          "physical_requests": 22,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 30,
+      "task_id": "dr3-014",
+      "arm": "repeat_goal",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-30-dr3-014-repeat_goal",
+      "started_at": "2026-10-06T12:53:52.754907+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:58:09.297834+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-30-dr3-014-repeat_goal/dr3-014__yCUuNGX/result.json",
+      "agent_result": {
+        "n_input_tokens": 794347,
+        "n_cache_tokens": 556731,
+        "n_output_tokens": 9562,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "repeat_goal",
+          "control_id": "43efcc04c7df45dc84e73ad203c92c1e",
+          "study_status": "repeat_round_limit",
+          "physical_requests": 25,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    },
+    {
+      "index": 31,
+      "task_id": "dr3-024",
+      "arm": "sg_v2",
+      "status": "returned",
+      "job": "/var/lib/supergoal-lab/jobs/intent-transfer01-31-dr3-024-sg_v2",
+      "started_at": "2026-10-06T12:55:02.250895+00:00",
+      "exit_code": 0,
+      "finished_at": "2026-10-06T12:58:51.635439+00:00",
+      "result_files": 1,
+      "raw_rewards": {
+        "delivery_present": 1
+      },
+      "exception": null,
+      "result_path": "/var/lib/supergoal-lab/jobs/intent-transfer01-31-dr3-024-sg_v2/dr3-024__D2J2KJs/result.json",
+      "agent_result": {
+        "n_input_tokens": 252062,
+        "n_cache_tokens": 206354,
+        "n_output_tokens": 7469,
+        "cost_usd": null,
+        "model_usage": null,
+        "rollout_details": null,
+        "metadata": {
+          "study_arm": "sg_v2",
+          "control_id": "0cb43cdf824d4059b866e235998465d4",
+          "study_status": "succeeded",
+          "physical_requests": 21,
+          "adapter": "intent-evidence-dev02"
+        }
+      }
+    }
+  ],
+  "automatic_retries": 0,
+  "finished_at": "2026-10-06T12:59:04.263696+00:00"
+}

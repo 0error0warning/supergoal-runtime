@@ -1,0 +1,40 @@
+[
+  {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "original",
+        "verdict": "pass",
+        "reason": "eigen.py implements find_dominant_eigenvalue_and_eigenvector via LAPACK dgeev with max-|λ| selection and correct complex-pair eigenvector reconstruction; eval.py ran with all asserts passing and median times faster than np.linalg.eig reference at every size (13µs vs 33µs at 2x2 up to 57µs vs 72µs at 10x10); an independent 3000-matrix sweep across sizes 1-10 plus edge cases (identity, diagonal, pure-imaginary eigenvalues, zero matrix) found zero residual or wrong-eigenvalue failures.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "Median time for 10x10: 0.000057 seconds\nMedian time for 10x10 (ref): 0.000072 seconds",
+            "supports": "Implementation consistently beats reference at largest size; same pattern held at all sizes 2-10 with correctness asserts passing",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "de5bedb470c67c8a3d93366c47e9a02294f2537887e71b69e706002e439f4ade"
+          },
+          {
+            "quote": "bad count: 0",
+            "supports": "3000 random matrices plus edge cases all satisfy np.allclose(A@v, lam*v) and match numpy's dominant eigenvalue",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "d86f7deb749d47d07aab916556b8da088cf82ded781459133f2d7cd5af52cc52"
+          },
+          {
+            "quote": "wr, wi, vl, vr, info = _geev(A, compute_vl=0, compute_vr=1,",
+            "supports": "Entrypoint is a Python function in /app/eigen.py calling LAPACK dgeev directly",
+            "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+            "quote_sha256": "3d5c73e095a9439605af3c5bce4359f1573d2b1ea59b5d03a70856f9f67d2e99"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "6fa938389f99648508e5a9772e0d5e95d1102738c68d1ff61bd65469d76c52ab",
+    "artifact_id": "sha256:7b9556bb905c4d2835abf8ac7cbcf93e31d83ccbdd5798cec6ec36d629f6b768",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

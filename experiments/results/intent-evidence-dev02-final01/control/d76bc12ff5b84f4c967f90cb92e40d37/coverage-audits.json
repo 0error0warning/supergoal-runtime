@@ -1,0 +1,160 @@
+[
+  {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "Section 1 covers access vs participation (~73%/59%, 85% vs 37% multifamily), rate variance with policy design (1% Louisiana to 56% North Kesteven, NJ 85%), contamination, intention-behavior gap. Figures verified: D0025.txt contains '59 percent','73 percent','multifamily households it is 37 percent'; D0145.txt contains '1% in Louisiana','85% within three months when New Jersey'; D0019.txt documents 20.1%→11.4%→7% contamination.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "multifamily households it is 37 percent",
+            "supports": "D0025 supports the 37% multifamily access claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "102259b2649dac4c5511d0d6366a7e03d550c55102d716228bdba615572bf1cd"
+          },
+          {
+            "quote": "85% within three months when New Jersey, U",
+            "supports": "D0145 supports the NJ 85% participation figure cited in the report",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "4755ae624427d82cfb923d6cd1577122b798b0c30ae1f0f9fdab3769d4ed5bd0"
+          },
+          {
+            "quote": "first audit result in August 2022 came back as 20.1 percent",
+            "supports": "D0019 supports the Fairfax contamination claims",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "8ef5c61989f6dcec95f8a5a925f743bc9ca82d988b3bdb351ec1c585267f26f6"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "Section 2 describes composting (D0045), anaerobic digestion→RNG (D0001, with verified Perris fleet claim), infrastructure gap (D0043 '75–100 new large-scale composting facilit', '56% if aerated static piles'), and landfill methane (D0002, D0097, D0110, D0131).",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "75–100 new large-scale composting facilit",
+            "supports": "D0043 supports the SB 1383 infrastructure-gap figure",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "4ae318bd4d1224e98caed2b536ba0b2286a8d480f312d60f64e5f032e9109d3e"
+          },
+          {
+            "quote": "City of Perris, California, biodigester, that produces enough RNG to fuel their fleet of 900 vehicles",
+            "supports": "D0001 supports the RNG/digester claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "7f51e7bfba599ac56643a1069acfec2b13e09a4fd41154900374f089e67c07e5"
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "verdict": "pass",
+        "reason": "Section 3 covers CVRP+hybrid heuristics (D0013), IoT+TOPSIS ~14% distance cut (D0125, verified), MIP >30% path-length reduction (D0137, verified), and operational factors like noise ordinances (D0010, verified).",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "14% by effectively considering multiple criteria and optimizing waste collection routes",
+            "supports": "D0125 supports the ~14% distance-reduction claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "7db1513b6c046c8bce0afca48db19479de372a6302a02355ba8a52dee8a980a8"
+          },
+          {
+            "quote": "30% of the total waste collection path length",
+            "supports": "D0137 supports the >30% MIP claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "f3586732febcd47265f3e9a8cdb792377d473c21dc53efb24a01a94d20f789cd"
+          },
+          {
+            "quote": "noise ordinances limiting the hours in which waste collection occurs",
+            "supports": "D0010 supports the regulatory-constraint discussion",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "111345c96188c7c5647f305fe646c6c5012e75ec2f4f8aee71865c058f7d41f8"
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "verdict": "pass",
+        "reason": "Section 4 lists seven failure causes — access inequity, contamination, confusing rules (D0115 'residual waste bin' as default), intention-behavior gap, free-riding (D0140), market/management problems (D0146), missing downstream infrastructure (D0043) — each cited.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "using a residual waste bin instead of separating the waste is widely accepted",
+            "supports": "D0115 supports the residual-bin-as-default claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "284fdc803c544f1dd727f84747ee7f41f42b452537e21028e2e6054093304786"
+          },
+          {
+            "quote": "free ride",
+            "supports": "D0140 supports the free-riding claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "d66d036b17d417c960f3fd8014e2a48d3ec59f757ab042802d9527425cb6eba6"
+          }
+        ]
+      },
+      {
+        "id": "R5",
+        "verdict": "pass",
+        "reason": "Report opens with a context section accurately summarizing the ordinance (four color-coded streams, 6–8 AM set-out, fine schedule $0/$50/$100 and $1,000–$5,000) and Zone A schedule (green Mon/Wed/Fri, grey Mon/Fri, blue Wed, red first Wednesday monthly) — all verified against tex.pdf and 8.txt.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "Waste must be placed at the designated curb side between 6:00 AM and 8:00 AM",
+            "supports": "tex.pdf supports the set-out window described in the report",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "b6ff06aa6aa39e874c7907b322d2b84e02793caf50e33cb46cf71db0e30c3681"
+          },
+          {
+            "quote": "Hazardous waste is ONLY collected on the FIRST WEDNESDAY of",
+            "supports": "8.txt supports the monthly red-bin schedule claim",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "7886399def5f0452026502e37c3932e1eda1c924d1dab9222719e3389cae021b"
+          }
+        ]
+      },
+      {
+        "id": "R6",
+        "verdict": "pass",
+        "reason": "/app/report.md exists (95 lines); every substantive claim carries a doc ID + title + URL citation; a dedicated Limitations section flags thin sources (D0062: 120 lines TOC-heavy, D0146: 70 lines, D0110: 3 lines — verified thin), the fictional-city infrastructure gap, geographic skew, and contested recycling-rate definitions.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "120 D0062.txt\n   70 D0146.txt\n    3 D0110.txt",
+            "supports": "cited-as-thin sources are indeed short/stub-like in the corpus",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "3cc8514cab73c321a42250baf3e82f2f982927ef12c58d84ce5e3cba4ca786a5"
+          }
+        ]
+      },
+      {
+        "id": "R7",
+        "verdict": "pass",
+        "reason": "All 22 doc IDs cited in the report resolve against index.json (scripted check: 'missing from index: set()'); titles/URLs match index entries; no external URLs appear; input files present with plausible timestamps and no evidence of modification — report only reads them.",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "report cites 22 missing from index: set()",
+            "supports": "every cited doc ID resolves to an index.json entry",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "fc1fd54fb0f80899797cd16a2636cf3efa3b484e6e47f93d5b027d3d15064e71"
+          },
+          {
+            "quote": "-rw-r--r-- 1 root root   1600 Oct  6 11:37 8.txt",
+            "supports": "input files remain present under /app/input/user_files",
+            "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+            "quote_sha256": "63e5a2dd872f562d3b6f1f07c110d1e56a365f4393b2ffef4d0bd062bf2dee29"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "505efa901561316b4d47d0d24ee9222fe0e3f1e3df798307acdacc543d4334f3",
+    "artifact_id": "sha256:9dd91b70204a794b3d0ad2fcee968d03cae990e513449e053afef6ad117591d0",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

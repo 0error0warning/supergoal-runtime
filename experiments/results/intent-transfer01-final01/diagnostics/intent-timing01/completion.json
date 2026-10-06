@@ -1,0 +1,9 @@
+{
+  "status": "complete",
+  "rows": 20,
+  "model_calls": 0,
+  "finished_epoch": 1791292313.1458006,
+  "primary_rewards_replaced": false,
+  "runtime_python": "3.13.5 (main, Jul 23 2025, 00:37:22) [Clang 20.1.4 ]",
+  "operator_sha256": "a70b0241915d4983c1ebca26e2ce81786138f85acfe399afff2e41cc9f39ec12"
+}

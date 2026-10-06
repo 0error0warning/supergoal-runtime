@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "advisory_model_interpretation",
+  "original_request": "Compile SQLite in /app/sqlite with gcov instrumentation and make it available in the PATH.\nThe SQLite source snapshot is pre-vendored at /app/vendor/sqlite-fossil-release.tar.gz; use it instead of fetching sources over the network.\n",
+  "request_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+  "route": "direct",
+  "route_reason": "Source tarball is vendored locally and the host is Ubuntu 24.04 with apt available. The build is a standard sequence: extract, configure/make with coverage flags, symlink into PATH. No technical decision needs external research; the only open fact is whether apt can install the missing toolchain, resolved by attempting it during implementation.",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Compile the SQLite source into /app/sqlite",
+      "source_quote": "Compile SQLite in /app/sqlite",
+      "verification": "An sqlite3 binary and build artifacts exist under /app/sqlite, produced from the vendored source; executing the binary reports a version string."
+    },
+    {
+      "id": "R2",
+      "requirement": "The build must carry gcov coverage instrumentation",
+      "source_quote": "with gcov instrumentation",
+      "verification": "Compilation used --coverage (-fprofile-arcs -ftest-coverage); .gcno files exist beside the objects and running the binary produces .gcda files."
+    },
+    {
+      "id": "R3",
+      "requirement": "The compiled sqlite3 is invocable by name via PATH",
+      "source_quote": "make it available in the PATH",
+      "verification": "`command -v sqlite3` in a fresh shell resolves to the instrumented build (e.g. via symlink in /usr/local/bin) and `sqlite3 --version` runs."
+    },
+    {
+      "id": "R4",
+      "requirement": "Use the vendored tarball; no fetching sqlite sources over the network",
+      "source_quote": "use it instead of fetching sources over the network",
+      "verification": "/app/sqlite is extracted from /app/vendor/sqlite-fossil-release.tar.gz, optionally verified against the adjacent .sha256 file; no sqlite source download occurs."
+    }
+  ],
+  "assumptions": [
+    "PATH availability is satisfied by a symlink in an existing PATH directory such as /usr/local/bin; validate by listing PATH entries and running sqlite3 in a clean shell.",
+    "Installing build tools (gcc, make, tclsh) via apt is acceptable since the restriction covers only fetching sqlite sources; validate by attempting the apt install, otherwise report the missing-toolchain blocker.",
+    "The fossil snapshot builds via ./configure && make, which needs tclsh to generate the amalgamation; if that path fails, check whether pre-generated amalgamation files exist in the tarball and build those directly."
+  ],
+  "information_gaps": [
+    "Whether apt mirrors are reachable to install gcc/make/tcl; obtain by running apt-get update and the install; if blocked, compilation cannot proceed and the gap must be reported rather than worked around silently.",
+    "Which writable directory is already on PATH for the symlink; obtain via echo $PATH; low consequence since /usr/local/bin is the conventional default."
+  ],
+  "research_questions": [
+    "If ./configure fails on the fossil snapshot, decide whether generating the amalgamation via make targets (needs tclsh) or compiling src/shell.c plus sqlite3.c directly is the correct fallback for this tarball layout."
+  ],
+  "next_action": "Verify the tarball sha256, extract it into /app/sqlite, install build-essential and tcl via apt, run ./configure && make with CFLAGS='-O0 -g --coverage' and LDFLAGS='--coverage', confirm .gcno files appear, symlink the resulting sqlite3 into /usr/local/bin, then verify `sqlite3 --version` and that a test query emits .gcda coverage data.",
+  "initial_snapshot_id": "sha256:2c6cfc56da6241da5ea0c801669fea4dbca21f9a1936051747027e1c17f9f45f"
+}

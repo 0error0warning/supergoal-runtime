@@ -1,6 +1,12 @@
 # 研究归档索引：2026-10-06
 
-本轮登记的研究已经结束。能力结果、失败记录和工程修复一并归档；本次提交不代表生产部署。实验 GCP 实例已于北京时间 2026-10-06 09:31:15 停止，两块持久磁盘保留。
+此前登记的研究已经结束。能力结果、失败记录和工程修复一并归档；归档提交不代表生产部署。实验 GCP 实例曾于北京时间 2026-10-06 09:31:15 停止，两块持久磁盘保留。
+
+同日用户要求继续改进后，GCP 重新启动并完成了冻结的 `intent-transfer01` 四组对照，
+共 32 次登记试验。实例已于北京时间 21:27:21 再次停止，磁盘保留，实验模型隧道关闭。
+新策略与入口边界见[意图与证据策略](intent-and-evidence-policy.md)，方法见[预先冻结的方案](../experiments/public_benchmarks/INTENT-TRANSFER01.md)。
+本轮[完整结果](intent-transfer01-study.md)单列，不混入下方已经结束的历史研究；
+原生终端通过 6/6，其他三组各 5/6，新策略没有建立质量优势。
 
 先读[最终研究结论](research-findings-2026-10-06.md)。不同研究采用不同任务、验收与统计单位；不要跨基准汇成一个成功率，也不要把阶段数当作独立任务数。
 
@@ -27,6 +33,7 @@
 | SlopCodeBench | 3 个问题 × 3 组，36 个相关阶段 | [逐阶段结果](scb-transfer01-progress.md) |
 | context-handoff01 | 同 3 个开发问题 × 4 组，48 个相关阶段 | [2×2 对照](context-handoff01-progress.md)、[用量与回归](context-handoff01-details.md) |
 | context-prefix01 | 同 3 个问题、相同起点 × 2 组，18 个后续阶段 | [配对结果](context-prefix01-progress.md)、[最终归档](../experiments/results/context-prefix01-final01/manifest.json) |
+| intent-transfer01 | 6 个新终端任务 + 2 个固定资料集研究任务，各 4 组；研究交付与质量分开 | [完整结果与限制](intent-transfer01-study.md)、[原始归档](../experiments/results/intent-transfer01-final01/manifest.json)、[衍生分析](../experiments/results/intent-analysis01/manifest.json) |
 
 原始失败、超时、缺失回执和更早的观测都保留在 [results 来源说明](../experiments/results/README.md)指向的清单中。文件名含 `progress` 不代表对应批次还在运行；以上入口已包含最终结果。
 
@@ -43,7 +50,7 @@
 
 快照存档覆盖镜像与文件系统，不覆盖任意进程内存、挂载卷或整机恢复。当前仓库保存收据和源码归档；远端的 Docker 内容存档没有复制进 Git。
 
-## 本次整理与本地复核
+## 较早的归档整理与复核
 
 本次只整理入口、修正过期状态描述、保留研究字节和增加归档校验；没有重新调用模型、重评产物或切换生产。历史宿主验证仍按其原有源码版本解释。
 
@@ -65,3 +72,18 @@
 提交 `45e4544` 的 [GitHub CI](https://github.com/0error0warning/supergoal-runtime/actions/runs/37430966315) 在 Linux / Python 3.11 与 3.13 上均得到 **216 passed、1 skipped、2 deselected**，含上述 3 项分析器回归；两组 Ruff、730 个归档引用校验、编译与 wheel 构建全部通过。真实宿主 ABI 因未安装 Hermes 而跳过，两个 profile 用例按原 CI 配置排除。
 
 同次 CI 的 `latest-hermes-main-compatibility` **失败**：旧通用接口补丁 `8efcb2a68` 在当前上游 Hermes 的命令、插件、压缩及网关文件发生 cherry-pick 冲突，尚未执行插件测试。这条失败记录保留，未改成允许失败或静默跳过。当前提交不能声称兼容最新原生 Hermes；更新宿主接口补丁属于独立的兼容性工作。
+
+## 新增意图与证据策略的复核
+
+冻结候选在隔离 GCP 的固定真实 Hermes 环境中得到 **251 passed、0 skipped**，
+108 个运行时、适配器和测试文件与冻结散列一致。新策略之外的分析代码另做本地回归。
+初次测试准备失败、最终验证、全部原始成绩、无效研究评分，以及事后的串行时序诊断
+均保留在本轮归档。具体范围见[验证说明](intent-transfer01-study.md#验证范围)。
+
+原始归档不含私有 Hermes 源码、凭据或研究附件全文。关机状态与可重算的衍生结果
+见[分析清单](../experiments/results/intent-analysis01/manifest.json)。这轮实验和代码改动
+没有部署到生产 Hermes，也没有改变此前批次的分数。
+
+新增归档后的本地完整性检查为 **41 份清单、1,618 个文件引用、1,584 个唯一文件**，
+全部匹配；三个分析输出均可由原始收据重算。最新活动代码的 Ruff、编译与 wheel 构建通过，
+新增分析器回归 **3 项通过**。

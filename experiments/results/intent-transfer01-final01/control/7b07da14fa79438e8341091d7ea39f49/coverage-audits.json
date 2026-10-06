@@ -1,0 +1,100 @@
+[
+  {
+    "verdict": "pass",
+    "reason": "none",
+    "requirements": [
+      {
+        "id": "R1",
+        "verdict": "pass",
+        "reason": "sqlite3 binary exists at /app/sqlite/build/sqlite3, built from the vendored fossil source tree, and reports version 3.50.4",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "3.50.4 2025-07-30 19:33:53 4d8adfb30e03f9cf27f800a2c1ba3c48fb4ca1b08b0f5ed59a4d5ecbf45e20a3 (64-bit)",
+            "supports": "the built binary runs and reports a SQLite version string",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "fd12eaf579f26a71fbb3ccc2c3dfe03d09eb3ce23c91b5ff03959930558aa5e5"
+          },
+          {
+            "quote": "/app/sqlite/build/sqlite3-sqlite3.gcno",
+            "supports": "build artifacts exist under /app/sqlite/build",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "b4dc7e42748e80b87658fd01249ba775c5aabb13b0db8ea0275346631eac5ee5"
+          }
+        ]
+      },
+      {
+        "id": "R2",
+        "verdict": "pass",
+        "reason": "Makefile used --coverage in CFLAGS/LDFLAGS; .gcno and .gcda files (timestamps Oct 6 12:23) exist beside objects, indicating the instrumented binary emitted coverage data",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "CFLAGS = -O0 -g --coverage",
+            "supports": "compilation flags include gcov instrumentation",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "c281e331e228fe19892a8f561a70da010faf9a8cc913712e8072676c96b510f8"
+          },
+          {
+            "quote": "-rw-rw-rw- 1 root root 163528 Oct  6 12:23 sqlite3-sqlite3.gcda",
+            "supports": "runtime coverage data was emitted by the binary",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "4d769375d1de3348f3c082e064eb697893bf129607a13e114817cb9b9300cbb8"
+          },
+          {
+            "quote": "LDFLAGS.configure = --coverage",
+            "supports": "link flags include coverage",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "f501c0179ab77c3d44ea72979b1018ed5ad58b24a013ac26e7231d78719a3d1d"
+          }
+        ]
+      },
+      {
+        "id": "R3",
+        "verdict": "pass",
+        "reason": "In a fresh env -i shell, command -v sqlite3 resolves via /usr/local/bin symlink to /app/sqlite/build/sqlite3 and --version runs",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "/usr/local/bin/sqlite3 -> /app/sqlite/build/sqlite3",
+            "supports": "PATH entry symlinks to the instrumented build",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "72c7ea7495deed5fd0e02dfc6c3836c88b4b8ce8447c58259148b79aa4fb809a"
+          },
+          {
+            "quote": "/usr/local/bin/sqlite3",
+            "supports": "command -v sqlite3 output in clean env -i shell",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "1c0792e6cb6ab67a06f409a2b4e9e7e5e8fc045861f6b46f87c2ca5453d3ec63"
+          }
+        ]
+      },
+      {
+        "id": "R4",
+        "verdict": "pass",
+        "reason": "Tarball sha256 matches the adjacent .sha256 file (7c02b6cc...); /app/sqlite is the extracted fossil snapshot (manifest, autosetup, src present) so the vendored source was used",
+        "unknown_kind": null,
+        "evidence": [
+          {
+            "quote": "7c02b6cc04dddc2f90e63d43ab8900cb694ba4665f4e4ac877ec724733125229  /app/vendor/sqlite-fossil-release.tar.gz",
+            "supports": "vendored tarball checksum matches the .sha256 file",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "0304d68cbcec1916f3a583969e03f95e9402593de44ec81a04e465d6f387bebc"
+          },
+          {
+            "quote": "manifest.uuid",
+            "supports": "/app/sqlite contains the fossil snapshot layout, extracted not downloaded",
+            "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+            "quote_sha256": "b74c70bf78a28472b10dfc642d3d3c99ff0a2eca821d0be6fdd9232147b57bde"
+          }
+        ]
+      }
+    ],
+    "omissions": [],
+    "request_covered": true,
+    "retryable": true,
+    "request_sha256": "b6ba9acf62292bc2a0bab40d4805b3abceededbb0ccd4477a1ce9ccc42c14dd9",
+    "artifact_id": "sha256:3785bf6cc86feea35cee4b5a4dc4e497af191287c1ac98360d8d06afb8dfa327",
+    "scope": "Model semantic audit with structurally checked evidence references; not independent task truth"
+  }
+]

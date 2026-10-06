@@ -1,0 +1,714 @@
+{
+  "arm": "repeat_goal",
+  "status": "repeat_round_limit",
+  "hermes_version": "0.21.3",
+  "host_python": "3.13",
+  "adapter_version": "intent-evidence-dev02",
+  "max_requests": 128,
+  "budget_seconds": 900.0,
+  "original_instruction_sha256": "ce36ee1f6c589f81ee6a6be4967e25c76a2ed697006928023f42dfb9f28a6750",
+  "control_id": "81b72ea0d163437daa04259195e65b23",
+  "official_verifier_visible": false,
+  "last_executor_claim": "Still complete — no remaining work. All deliverables in `/app`:\n\n- `cli_tool` (ELF executable): `./cli_tool weights.json image.png` → `2`\n- `weights.json` — weights extracted from `model.pth`\n- `prediction.txt` — contains `2`",
+  "artifact_image_id": "sha256:9fc379ee473fdb7b9f2459c41eb5b3cdffe813fc4ffd442363fd4580891c0976",
+  "artifact_image_tag": "sg-artifact:81b72ea0d163437daa04259195e65b23",
+  "artifact_snapshot_excludes_mounted_logs": true,
+  "rounds": [
+    {
+      "role": "executor",
+      "pid": 149501,
+      "exit_code": 0,
+      "seconds": 160.39453327,
+      "model_calls": 12,
+      "result_relative_path": "01-executor/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 163158,
+      "exit_code": 0,
+      "seconds": 19.68312852500003,
+      "model_calls": 2,
+      "result_relative_path": "02-executor/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 164017,
+      "exit_code": 0,
+      "seconds": 15.04519125500019,
+      "model_calls": 2,
+      "result_relative_path": "03-executor/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 165748,
+      "exit_code": 0,
+      "seconds": 19.342245001000265,
+      "model_calls": 2,
+      "result_relative_path": "04-executor/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 167314,
+      "exit_code": 0,
+      "seconds": 18.117064313000355,
+      "model_calls": 2,
+      "result_relative_path": "05-executor/result.json"
+    },
+    {
+      "role": "executor",
+      "pid": 168497,
+      "exit_code": 0,
+      "seconds": 14.365734926000187,
+      "model_calls": 2,
+      "result_relative_path": "06-executor/result.json"
+    }
+  ],
+  "requests": [
+    {
+      "index": 1,
+      "started": 1791289401.3391285,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 3620,
+        "output_tokens": 263,
+        "total_tokens": 3883,
+        "input_tokens_details": {
+          "cached_tokens": 1972
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_e7263e0d-407",
+      "status": "completed",
+      "seconds": 5.799327850341797
+    },
+    {
+      "index": 2,
+      "started": 1791289408.4542842,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4029,
+        "output_tokens": 223,
+        "total_tokens": 4252,
+        "input_tokens_details": {
+          "cached_tokens": 1972
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_2f01adcd-12f",
+      "status": "completed",
+      "seconds": 6.375138998031616
+    },
+    {
+      "index": 3,
+      "started": 1791289415.2269318,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 4626,
+        "output_tokens": 415,
+        "total_tokens": 5041,
+        "input_tokens_details": {
+          "cached_tokens": 4028
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3714ba60-519",
+      "status": "completed",
+      "seconds": 9.539650678634644
+    },
+    {
+      "index": 4,
+      "started": 1791289425.5743744,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 6526,
+        "output_tokens": 200,
+        "total_tokens": 6726,
+        "input_tokens_details": {
+          "cached_tokens": 4625
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_ea72734e-cf0",
+      "status": "completed",
+      "seconds": 7.812716722488403
+    },
+    {
+      "index": 5,
+      "started": 1791289463.4525325,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 23696,
+        "output_tokens": 674,
+        "total_tokens": 24370,
+        "input_tokens_details": {
+          "cached_tokens": 6525
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_aa32dd2b-a6e",
+      "status": "completed",
+      "seconds": 17.546717643737793
+    },
+    {
+      "index": 6,
+      "started": 1791289486.324769,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 24249,
+        "output_tokens": 1404,
+        "total_tokens": 25653,
+        "input_tokens_details": {
+          "cached_tokens": 23695
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_eb43682f-298",
+      "status": "completed",
+      "seconds": 18.894359350204468
+    },
+    {
+      "index": 7,
+      "started": 1791289505.7805178,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 25744,
+        "output_tokens": 569,
+        "total_tokens": 26313,
+        "input_tokens_details": {
+          "cached_tokens": 24248
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_988c63c0-98c",
+      "status": "completed",
+      "seconds": 8.1033456325531
+    },
+    {
+      "index": 8,
+      "started": 1791289514.7805753,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 26947,
+        "output_tokens": 101,
+        "total_tokens": 27048,
+        "input_tokens_details": {
+          "cached_tokens": 25743
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0e5fd74f-f5e",
+      "status": "completed",
+      "seconds": 3.495055913925171
+    },
+    {
+      "index": 9,
+      "started": 1791289518.9628272,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 27198,
+        "output_tokens": 153,
+        "total_tokens": 27351,
+        "input_tokens_details": {
+          "cached_tokens": 26946
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_6bddba5b-dc8",
+      "status": "completed",
+      "seconds": 4.534343242645264
+    },
+    {
+      "index": 10,
+      "started": 1791289528.7160552,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 27405,
+        "output_tokens": 331,
+        "total_tokens": 27736,
+        "input_tokens_details": {
+          "cached_tokens": 27197
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_791f0888-1d5",
+      "status": "completed",
+      "seconds": 7.880182504653931
+    },
+    {
+      "index": 11,
+      "started": 1791289537.2474818,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 27867,
+        "output_tokens": 141,
+        "total_tokens": 28008,
+        "input_tokens_details": {
+          "cached_tokens": 27404
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_19d93cf4-61d",
+      "status": "completed",
+      "seconds": 6.279697418212891
+    },
+    {
+      "index": 12,
+      "started": 1791289543.7255673,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 28108,
+        "output_tokens": 173,
+        "total_tokens": 28281,
+        "input_tokens_details": {
+          "cached_tokens": 27866
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3c394402-979",
+      "status": "completed",
+      "seconds": 8.850905418395996
+    },
+    {
+      "index": 13,
+      "started": 1791289561.0898247,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 28431,
+        "output_tokens": 112,
+        "total_tokens": 28543,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_a5f94d10-c2e",
+      "status": "completed",
+      "seconds": 4.93181848526001
+    },
+    {
+      "index": 14,
+      "started": 1791289566.4823663,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 28658,
+        "output_tokens": 118,
+        "total_tokens": 28776,
+        "input_tokens_details": {
+          "cached_tokens": 28430
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_4dd764ab-063",
+      "status": "completed",
+      "seconds": 5.634757995605469
+    },
+    {
+      "index": 15,
+      "started": 1791289581.3213394,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 28910,
+        "output_tokens": 140,
+        "total_tokens": 29050,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_bb1b3d24-eb8",
+      "status": "completed",
+      "seconds": 3.7955963611602783
+    },
+    {
+      "index": 16,
+      "started": 1791289585.5767925,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 29159,
+        "output_tokens": 85,
+        "total_tokens": 29244,
+        "input_tokens_details": {
+          "cached_tokens": 28864
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_c4e24d82-7cb",
+      "status": "completed",
+      "seconds": 1.8999807834625244
+    },
+    {
+      "index": 17,
+      "started": 1791289595.7093942,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 29397,
+        "output_tokens": 102,
+        "total_tokens": 29499,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_19bdf81c-a69",
+      "status": "completed",
+      "seconds": 6.678812742233276
+    },
+    {
+      "index": 18,
+      "started": 1791289602.8815646,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 29540,
+        "output_tokens": 86,
+        "total_tokens": 29626,
+        "input_tokens_details": {
+          "cached_tokens": 29396
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_3306b8e9-cbc",
+      "status": "completed",
+      "seconds": 4.13737940788269
+    },
+    {
+      "index": 19,
+      "started": 1791289615.1669028,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 29776,
+        "output_tokens": 99,
+        "total_tokens": 29875,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_7698e4f6-fcc",
+      "status": "completed",
+      "seconds": 5.350148439407349
+    },
+    {
+      "index": 20,
+      "started": 1791289621.006635,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 29988,
+        "output_tokens": 81,
+        "total_tokens": 30069,
+        "input_tokens_details": {
+          "cached_tokens": 29775
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_0a1c2cd7-101",
+      "status": "completed",
+      "seconds": 4.142606019973755
+    },
+    {
+      "index": 21,
+      "started": 1791289633.4431477,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 30216,
+        "output_tokens": 99,
+        "total_tokens": 30315,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_22992b00-838",
+      "status": "completed",
+      "seconds": 3.461134910583496
+    },
+    {
+      "index": 22,
+      "started": 1791289637.3666894,
+      "request_model": "devin/swe-2",
+      "stream": true,
+      "http_status": 200,
+      "terminal_event_received": true,
+      "terminal_event_type": "response.completed",
+      "usage": {
+        "input_tokens": 30427,
+        "output_tokens": 71,
+        "total_tokens": 30498,
+        "input_tokens_details": {
+          "cached_tokens": 30208
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_model": "devin/swe-2",
+      "response_id": "interaction_a2f4efde-ed6",
+      "status": "completed",
+      "seconds": 2.3532633781433105
+    }
+  ],
+  "proxy_rejections": [
+    {
+      "time": 1791289399.0633352,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289399.214586,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289559.0219436,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289559.1453393,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289579.1177988,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289579.251384,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289593.5784109,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289593.716756,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289613.0498745,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289613.1774106,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289631.3055263,
+      "path": "/api/show",
+      "model": "None"
+    },
+    {
+      "time": 1791289631.4349835,
+      "path": "/api/show",
+      "model": "None"
+    }
+  ],
+  "used_requests": 22,
+  "kernel_status": null,
+  "snapshot_lifecycle": [
+    {
+      "container_id": "788a859cbbe977706bde026f5a394fef1ea0fd4e625db148a8e9efc5e9bbcbd7",
+      "image_tag": "sg-artifact:81b72ea0d163437daa04259195e65b23",
+      "state_before": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 149044,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:23:11.950801755Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "owns_pause": true,
+      "detached_compose_labels": [
+        "com.docker.compose.config-hash",
+        "com.docker.compose.container-number",
+        "com.docker.compose.depends_on",
+        "com.docker.compose.image",
+        "com.docker.compose.oneoff",
+        "com.docker.compose.project",
+        "com.docker.compose.project.config_files",
+        "com.docker.compose.project.working_dir",
+        "com.docker.compose.service",
+        "com.docker.compose.version"
+      ],
+      "started_monotonic": 4029.284504671,
+      "status": "captured",
+      "image_id": "sha256:9fc379ee473fdb7b9f2459c41eb5b3cdffe813fc4ffd442363fd4580891c0976",
+      "state_after": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 149044,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-06T12:23:11.950801755Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "state_restored": true,
+      "finished_monotonic": 4035.387293901
+    }
+  ],
+  "goal_brief": null,
+  "coverage_audits": [],
+  "interpretation_attempts": [],
+  "policy": null
+}

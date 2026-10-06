@@ -1,0 +1,142 @@
+{
+  "rows": [
+    {
+      "row_index": 6,
+      "task_id": "dr3-014",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: decisive source judgment lacks a real source quote"
+    },
+    {
+      "row_index": 7,
+      "task_id": "dr3-024",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: invalid sampled report claim"
+    },
+    {
+      "row_index": 14,
+      "task_id": "dr3-014",
+      "status": "diagnostic_graded",
+      "original_inputs_preserved": true,
+      "request_coverage": 1.0,
+      "sampled_claim_counts": {
+        "supported": 4,
+        "contradicted": 0,
+        "unverifiable": 1
+      },
+      "criteria": [
+        {
+          "id": "C1",
+          "score": 1,
+          "reason": "The report explains the PAYG imbalance caused by aging and identifies the contribution-rate, replacement-rate, and retirement-age levers as the financial rationale for reform.",
+          "report_quote": "**Aging forces a three-way choice.** The corpus contains an unusually clean statement of the options. The i-MIP modeling note on France shows that a projected funding gap can be closed in only three ways: raise the contribution rate (30% → 39%), cut the replacement rate (60% → 46.2%), or raise the retirement age (63 → 66.3) (D0004, i-mip.eu)."
+        },
+        {
+          "id": "C2",
+          "score": 1,
+          "reason": "The report covers guiding restructuring principles including contribution-linked benefits, career-average earnings, longevity adjustment, and incentives to extend working life.",
+          "report_quote": "**Contribution-linking and career-average benefits.** Moving from final-salary to lifetime-average earnings bases is a standard restructuring step."
+        },
+        {
+          "id": "C3",
+          "score": 1,
+          "reason": "The report directly explains how lower per-retiree expenditure, longer contribution periods, shorter payout periods, and automatic adjustment support sustainability.",
+          "report_quote": "- **Cost containment on the benefit side.** The replacement-rate compression produced by the divisor formula directly reduces expenditure per retiree; the formula also automatically links benefit generosity to contribution history, so benefit promises scale with revenue actually collected.\n- **Revenue and duration gains from the later retirement age.** Each additional year of work both adds a contribution year and removes a payout year."
+        },
+        {
+          "id": "C4",
+          "score": 1,
+          "reason": "The report describes positive macroeconomic effects as well as distributional, fiscal, labor-market, poverty, and political-economy consequences.",
+          "report_quote": "- *Higher employment and output.* Raising retirement ages increases older workers' labor supply: in Austria, employment rose 9.75 pp among affected men and 11 pp among affected women (D0005)."
+        }
+      ],
+      "sampled_claims": [
+        {
+          "report_quote": "a worker with a 20-year average wage of 5,000 and 30 service years gets (5000 × 30)/140 ≈ 1,071/month, a ~21% replacement rate",
+          "source_id": "user_file:7.html",
+          "source_quote": "* Calculated using the formula: (Avg Wage × Service Years) / 140.",
+          "verdict": "supported",
+          "reason": "Applying the calculator's formula gives 5,000 × 30 / 140 = 1,071.43 per month; 1,071.43 / 5,000 is approximately 21.4%."
+        },
+        {
+          "report_quote": "markedly lower than typical final-salary accruals of ~1.5–2% per year of service (which would yield ~45–60%)",
+          "source_id": "D0071",
+          "source_quote": "A typical multiplier is 2%. So, if you work 30 years, and your final average salary is $75,000, then your pension would be 30 x 2% x $75,000 = $45,000 a year.",
+          "verdict": "unverifiable",
+          "reason": "The source supports a 2% multiplier and a 60% illustration, but it does not establish the claimed 1.5–2% range or that the entire 45–60% range is typical."
+        },
+        {
+          "report_quote": "a projected funding gap can be closed in only three ways: raise the contribution rate (30% → 39%), cut the replacement rate (60% → 46.2%), or raise the retirement age (63 → 66.3)",
+          "source_id": "D0004",
+          "source_quote": "For the pension system, this creates a funding need that can be resolved if:\n\n- the contribution rate increases from 30% in 2025 to 39% in 2085, while maintaining a replacement rate of 60% and a retirement age of 63;\n- or if the replacement rate is reduced from 60% in 2025 to 46.2% in 2085, while keeping the contribution rate at 30% and the retirement age at 63;\n- or if the retirement age rises from 63 in 2025 to 66.3 in 2085, while keeping the contribution rate at 30% and the replacement rate at 60%.",
+          "verdict": "supported",
+          "reason": "The source presents the same three adjustment options with matching numerical endpoints."
+        },
+        {
+          "report_quote": "a one-year increase in the early retirement age reduced net government expenditures by €107 million per cohort for men and €122 million for women, even after accounting for spillovers into unemployment insurance",
+          "source_id": "D0005",
+          "source_quote": "Taking spillover effects and additional tax revenues into account, we find that for a typical birth-year cohort a one year increase in the ERA resulted in a reduction of net government expenditures of 107 million euros for men and of 122 million euros for women.",
+          "verdict": "supported",
+          "reason": "The cited study reports the same per-cohort net expenditure reductions after accounting for spillovers and additional tax revenues."
+        },
+        {
+          "report_quote": "adjusting via retirement age alone would add ~0.2 percentage points of GDP growth per year, driven by higher employment and higher savings that fund investment",
+          "source_id": "D0004",
+          "source_quote": "The French economy would record a GDP growth surplus—of the order of 0.2 percentage points per year—if the adjustment of the pension system were made only through an increase in the legal retirement age (from 63 to 66.3 years). This additional growth (see Figure 1) is driven by a rise in employment, which is reinforced by greater incentives to save. Because individuals have more periods during which income is higher than in retirement, the increase in savings does not come at the expense of a drop in consumption. Moreover, the new savings can finance investment projects, increasing productive capital and therefore GDP growth.",
+          "verdict": "supported",
+          "reason": "The source gives the same approximately 0.2-percentage-point annual growth estimate and identifies employment, saving, and investment as the mechanisms."
+        }
+      ],
+      "report_sha256": "b7e6d0f13b42e79c40ca5af28f40129515c5b60b23211d5566b436dd1db7e4be",
+      "source_scope": {
+        "cited_documents_matched": 14,
+        "provided_documents": 14,
+        "excerpt_limits": [],
+        "source_matching": "exact corpus ID or original URL"
+      },
+      "judge_saw_arm": false
+    },
+    {
+      "row_index": 15,
+      "task_id": "dr3-024",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: decisive source judgment lacks a real source quote"
+    },
+    {
+      "row_index": 22,
+      "task_id": "dr3-014",
+      "status": "ungraded",
+      "original_inputs_preserved": false,
+      "error": "ValueError: positive coverage lacks an exact report quote"
+    },
+    {
+      "row_index": 23,
+      "task_id": "dr3-024",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: decisive source judgment lacks a real source quote"
+    },
+    {
+      "row_index": 30,
+      "task_id": "dr3-014",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: positive coverage lacks an exact report quote"
+    },
+    {
+      "row_index": 31,
+      "task_id": "dr3-024",
+      "status": "ungraded",
+      "original_inputs_preserved": true,
+      "error": "ValueError: decisive source judgment lacks a real source quote"
+    }
+  ],
+  "model": "devin/swe-2",
+  "same_base_model_as_solver": true,
+  "official_dr3_scores": false,
+  "human_validated": false,
+  "claim_selection": "judge-selected sample, not exhaustive or a prevalence estimate",
+  "automatic_grade_retries": 0
+}

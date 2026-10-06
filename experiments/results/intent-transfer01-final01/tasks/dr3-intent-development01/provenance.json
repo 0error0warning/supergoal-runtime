@@ -1,0 +1,24 @@
+{
+  "dataset": "NJU-LINK/DR3-Eval",
+  "revision": "4305f9129529d4510f485af6c997b69e1e85b88d",
+  "split": "development",
+  "tasks": [
+    {
+      "task_id": "dr3-015",
+      "path": "/var/lib/supergoal-lab/tasks/dr3-intent-development01/dr3-015",
+      "query_sha256": "b1ff29c03a688927062b569b9215fa62566a2db7caba3e55b039e02435c2ed2b",
+      "source_sha256": {
+        "8.txt": "430eba2d24d4ea7d2554c537a542a8a05da4b24a404f779b1c3f2d8ca2584da6",
+        "tex.pdf": "2197f1ef21656421b4f51491207b5ad363d38a8e80e5c8cc7d1b2c4b584d307e"
+      },
+      "original_corpus_sha256": "205f9f606e7db2e45e2d0ab3cfe7d06cbda39e7f1d223fe0bb6633dd8edb3b68",
+      "corpus_documents": 148,
+      "reference_reward_key": "delivery_present",
+      "solver_seconds": 900,
+      "verifier_seconds": 60
+    }
+  ],
+  "corpus_projection": "doc_id,title,url,page_body only; original task labels and keywords removed",
+  "adaptation": "terminal/file access to fixed 128k corpus and text/PDF inputs; no dense retrieval",
+  "reward_scope": "delivery_present is only an artifact probe, NOT task success or research quality"
+}

@@ -6,6 +6,27 @@ The [research findings](../../docs/research-findings-2026-10-06.md) and
 [cohort index](../public_benchmarks/README.md) describe the current GCP studies.
 Their sources and models are distinct from the earlier synthetic matrix below.
 
+The later [intent/evidence study](../../docs/intent-transfer01-study.md) has three
+separate raw capsules: `intent-evidence-dev01-final01` and
+`intent-evidence-dev02-final01` retain the six development runs, and
+`intent-transfer01-final01` retains all 32 registered transfer trials. Each has a
+SHA256 manifest. The final capsule includes source and task registrations,
+request journals, original verifier results, anonymous research diagnostics,
+failed setup/audit attempts, the successful identity audit, the 251-test real
+Hermes validation, and the separately declared 20-run serial timing diagnostic.
+Original grades are not replaced by timing results. Seven of eight research
+content grades remain invalid; file delivery is never counted as research quality.
+
+`intent-analysis01/manifest.json` pins the descriptive analyses, their source,
+regression tests, reproduction checks and final service status. All original
+research input bytes were retained; one solver added an extracted-text file,
+which is reported separately from changing an original input. Initial launch
+receipts record launch-time state; completed cohort receipts describe final state.
+Exports exclude private Hermes source, credentials, input corpora, raw full model
+traces and Docker layers. Trace hashes and benchmark provenance remain available.
+The GCP instance and experimental tunnel were stopped after verified export;
+both persistent disks and the existing production Hermes deployment remain.
+
 For `public-parallel24-v1`, `mechanism01` and `harness-transfer01`, the local
 `<cohort>-audited-bundle.json` contains the exported outcomes and any explicit
 adjudications; `<cohort>-analysis.json` is a regenerated descriptive analysis.

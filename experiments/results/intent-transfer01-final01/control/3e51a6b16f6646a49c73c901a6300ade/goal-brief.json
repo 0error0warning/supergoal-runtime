@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "policy": "evidence-v1",
+  "authority": "advisory_model_interpretation",
+  "original_request": "I've been reviewing Ostonia's new pension plan outlined in the attached PDF and the benefit calculator. It's a significant shift, especially the new formula. Can you help me understand the financial rationale behind these types of reforms? I'm interested in the general principles for this kind of restructuring, how such changes ensure long-term financial health, and what the typical economic consequences are for a country making these adjustments.\n\nAttached files are in /app/input/user_files. Use /app/input/corpus as the fixed research collection; index.json maps document IDs to titles and URLs. You can search and read these files with terminal/file tools; pdftotext is installed for PDFs. Use this supplied collection for the study, without external web retrieval. Write your research report to /app/report.md, with sources supporting specific claims, and state material limitations or unresolved uncertainties. Do not modify the input files.",
+  "request_sha256": "72cf3be34b7afbe85ba868c56fc494a22a25e2a68b211dec0e73139455fea81e",
+  "route": "inspect",
+  "route_reason": "The task is answerable from the supplied local corpus and attached files; the main missing information is what the Ostonia plan PDF and calculator actually contain, which local inspection resolves. External research is explicitly disallowed.",
+  "requirements": [
+    {
+      "id": "R1",
+      "requirement": "Explain the financial rationale behind pension reforms like Ostonia's, covering general principles for this kind of restructuring",
+      "source_quote": "the financial rationale behind these types of reforms",
+      "verification": "Report contains a section on reform principles (e.g., aging demographics, dependency ratios, pay-as-you-go financing strain) tied to corpus sources"
+    },
+    {
+      "id": "R2",
+      "requirement": "Explain how such changes ensure long-term financial health of the pension system",
+      "source_quote": "how such changes ensure long-term financial health",
+      "verification": "Report explains solvency mechanisms (e.g., benefit formula changes, retirement age adjustment, sustainability indexing) with cited sources"
+    },
+    {
+      "id": "R3",
+      "requirement": "Describe typical economic consequences for a country making these adjustments",
+      "source_quote": "the typical economic consequences are for a country making these adjustments",
+      "verification": "Report covers macro/distributional effects (labor supply, savings, equity impacts) supported by corpus documents"
+    },
+    {
+      "id": "R4",
+      "requirement": "Ground the analysis in the attached Ostonia pension plan PDF and benefit calculator",
+      "source_quote": "Ostonia's new pension plan outlined in the attached PDF and the benefit calculator",
+      "verification": "Report references the actual formula/parameters from the PDF and the calculator file as the motivating example"
+    },
+    {
+      "id": "R5",
+      "requirement": "Write the research report to /app/report.md with sources supporting specific claims",
+      "source_quote": "Write your research report to /app/report.md, with sources supporting specific claims",
+      "verification": "File exists at /app/report.md; claims are cited to corpus doc_ids/URLs from index.json"
+    },
+    {
+      "id": "R6",
+      "requirement": "State material limitations or unresolved uncertainties in the report",
+      "source_quote": "state material limitations or unresolved uncertainties",
+      "verification": "Report includes a limitations section"
+    },
+    {
+      "id": "R7",
+      "requirement": "Use only the supplied corpus; no external web retrieval",
+      "source_quote": "Use this supplied collection for the study, without external web retrieval",
+      "verification": "All citations resolve to /app/input/corpus entries; no network calls made"
+    },
+    {
+      "id": "R8",
+      "requirement": "Do not modify the input files",
+      "source_quote": "Do not modify the input files",
+      "verification": "Input files under /app/input unchanged after work completes"
+    }
+  ],
+  "assumptions": [
+    "The 'benefit calculator' is /app/input/user_files/7.html — validate by inspecting the HTML for calculator logic/inputs",
+    "tex.pdf is the Ostonia pension plan document despite the generic filename — validate by running pdftotext and checking contents",
+    "'General principles' and 'typical consequences' should be answered generically using corpus evidence (mostly US Social Security, French, Austrian reform literature), with Ostonia as the framing example — not a critique of Ostonia's specifics"
+  ],
+  "information_gaps": [
+    "Whether Ostonia's new formula is defined-benefit, notional defined contribution, or points-based — obtain by extracting tex.pdf text; consequence: determines which reform rationale (sustainability indexing vs. contribution-linking) is most relevant",
+    "Corpus relevance: index.json is dominated by US Social Security and actuarial material; whether it contains enough on macro consequences of reform — obtain by scanning corpus titles/full texts; consequence: may limit depth on country-level economic effects and must be disclosed as a limitation"
+  ],
+  "research_questions": [
+    "What does the corpus say about sustainability mechanisms (automatic balancing, retirement-age/benefit-indexation reforms) that can be applied to explain Ostonia's new formula?",
+    "Which corpus documents (e.g., French macro/distributional effects study, Austrian early-retirement reform study, NCPERS revenue-risk study) provide evidence on typical economic and distributional consequences?"
+  ],
+  "next_action": "Run pdftotext on /app/input/user_files/tex.pdf and inspect 7.html to identify the new formula's parameters, then scan corpus documents for relevant sections before drafting /app/report.md",
+  "initial_snapshot_id": "sha256:d73a88e706bc77195346ec3cbad7402b8e5636193da16674581122bbb7824e9e"
+}

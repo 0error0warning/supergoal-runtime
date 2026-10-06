@@ -1,0 +1,28 @@
+{
+  "original_request": "I've been reviewing Ostonia's new pension plan outlined in the attached PDF and the benefit calculator. It's a significant shift, especially the new formula. Can you help me understand the financial rationale behind these types of reforms? I'm interested in the general principles for this kind of restructuring, how such changes ensure long-term financial health, and what the typical economic consequences are for a country making these adjustments.",
+  "criteria": [
+    {
+      "id": "C1",
+      "description": "Explains the financial rationale underlying pension reforms of this type",
+      "source_quote": "understand the financial rationale behind these types of reforms"
+    },
+    {
+      "id": "C2",
+      "description": "Covers the general principles that guide this kind of pension restructuring",
+      "source_quote": "the general principles for this kind of restructuring"
+    },
+    {
+      "id": "C3",
+      "description": "Explains how such changes are intended to ensure long-term financial health",
+      "source_quote": "how such changes ensure long-term financial health"
+    },
+    {
+      "id": "C4",
+      "description": "Describes typical country-level economic consequences of making these pension adjustments",
+      "source_quote": "what the typical economic consequences are for a country making these adjustments"
+    }
+  ],
+  "prepared_before_reports": true,
+  "generator": "devin/swe-2",
+  "source": "request-only diagnostic rubric, not benchmark gold insights"
+}
